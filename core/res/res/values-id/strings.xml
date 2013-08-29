@@ -431,11 +431,11 @@
   <string name="permdesc_changeTetherState">"Mengizinkan aplikasi mengubah status konektivitas jaringan yang tertambat."</string>
   <string name="permlab_changeBackgroundDataSetting">"mengubah setelan penggunaan data latar belakang"</string>
   <string name="permdesc_changeBackgroundDataSetting">"Mengizinkan aplikasi mengubah setelan penggunaan data latar belakang."</string>
-  <string name="permlab_accessWifiState">"lihat kondisi Wi-Fi"</string>
-  <string name="permdesc_accessWifiState">"Mengizinkan aplikasi melihat informasi tentang kondisi Wi-Fi."</string>
-  <string name="permlab_changeWifiState">"ubah status Wi-Fi"</string>
-  <string name="permdesc_changeWifiState">"Mengizinkan aplikasi tersambung dan diputus dari titik akses Wi-Fi, dan melakukan perubahan pada jaringan Wi-Fi yang dikonfigurasi."</string>
-  <string name="permlab_changeWifiMulticastState">"Izinkan penerimaan Wi-Fi Multicast"</string>
+  <string name="permlab_accessWifiState">"lihat kondisi WLAN"</string>
+  <string name="permdesc_accessWifiState">"Mengizinkan aplikasi melihat informasi tentang kondisi WLAN."</string>
+  <string name="permlab_changeWifiState">"ubah status WLAN"</string>
+  <string name="permdesc_changeWifiState">"Mengizinkan aplikasi tersambung dan diputus dari titik akses WLAN, dan melakukan perubahan pada jaringan WLAN yang dikonfigurasi."</string>
+  <string name="permlab_changeWifiMulticastState">"Izinkan penerimaan WLAN Multicast"</string>
   <string name="permlab_accessWimaxState">"lihat status WiMAX"</string>
   <string name="permdesc_accessWimaxState">"Mengizinkan aplikasi melihat informasi tentang status WiMAX."</string>
   <string name="permlab_changeWimaxState">"Ganti status WiMAX"</string>
@@ -922,20 +922,20 @@
   <string name="ringtone_picker_title">"Nada dering"</string>
   <string name="ringtone_unknown">"Nada dering tidak dikenal"</string>
   <plurals name="wifi_available">
-        <item quantity="one">"Jaringan Wi-Fi tersedia"</item>
-        <item quantity="other">"Jaringan Wi-Fi"</item>
+        <item quantity="one">"Jaringan WLAN tersedia"</item>
+        <item quantity="other">"Jaringan WLAN"</item>
     </plurals>
   <plurals name="wifi_available_detailed">
-        <item quantity="one">"Jaringan Wi-Fi terbuka tersedia"</item>
-        <item quantity="other">"Jaringan Wi-Fi terbuka tersedia"</item>
+        <item quantity="one">"Jaringan WLAN terbuka tersedia"</item>
+        <item quantity="other">"Jaringan WLAN terbuka tersedia"</item>
     </plurals>
-  <string name="wifi_available_sign_in">"Masuk ke jaringan Wi-Fi"</string>
-  <string name="wifi_watchdog_network_disabled">"Tidak dapat tersambung ke Wi-Fi"</string>
+  <string name="wifi_available_sign_in">"Masuk ke jaringan WLAN"</string>
+  <string name="wifi_watchdog_network_disabled">"Tidak dapat tersambung ke WLAN"</string>
   <string name="wifi_watchdog_network_disabled_detailed">" memiliki sambungan internet yang buruk."</string>
-  <string name="wifi_p2p_dialog_title">"Wi-Fi Langsung"</string>
-  <string name="wifi_p2p_turnon_message">"Memulai operasi Wi-Fi Langsung. Opsi ini akan mematikan operasi hotspot/klien WiFi."</string>
-  <string name="wifi_p2p_failed_message">"Tidak dapat memulai Wi-Fi Langsung"</string>
-  <string name="wifi_p2p_enabled_notification_title">"Wi-Fi Langsung aktif"</string>
+  <string name="wifi_p2p_dialog_title">"WLAN Langsung"</string>
+  <string name="wifi_p2p_turnon_message">"Memulai operasi WLAN Langsung. Opsi ini akan mematikan operasi hotspot/klien WiFi."</string>
+  <string name="wifi_p2p_failed_message">"Tidak dapat memulai WLAN Langsung"</string>
+  <string name="wifi_p2p_enabled_notification_title">"WLAN Langsung aktif"</string>
   <string name="wifi_p2p_enabled_notification_message">"Sentuh untuk setelan"</string>
   <string name="select_character">"Sisipkan huruf"</string>
   <string name="sms_control_title">"Mengirim pesan SMS"</string>
@@ -1151,12 +1151,12 @@
   <string name="data_usage_3g_limit_title">"Data 2G-3G dinonaktifkan"</string>
   <string name="data_usage_4g_limit_title">"Data 4G dinonaktifkan"</string>
   <string name="data_usage_mobile_limit_title">"Data seluler dinonaktifkan"</string>
-  <string name="data_usage_wifi_limit_title">"Data Wi-Fi dinonaktifkan"</string>
+  <string name="data_usage_wifi_limit_title">"Data WLAN dinonaktifkan"</string>
   <string name="data_usage_limit_body">"Sentuh untuk mengaktifkan"</string>
   <string name="data_usage_3g_limit_snoozed_title">"Batas data 2G-3G terlampaui"</string>
   <string name="data_usage_4g_limit_snoozed_title">"Batas data 4G terlampaui"</string>
   <string name="data_usage_mobile_limit_snoozed_title">"Batas data seluler terlampaui"</string>
-  <string name="data_usage_wifi_limit_snoozed_title">"Batas data Wi-Fi terlampaui"</string>
+  <string name="data_usage_wifi_limit_snoozed_title">"Batas data WLAN terlampaui"</string>
   <string name="data_usage_limit_snoozed_body">"<xliff:g id="SIZE">%s</xliff:g> melebihi batas yang ditentukan"</string>
   <string name="data_usage_restricted_title">"Data latar belakang dibatasi"</string>
   <string name="data_usage_restricted_body">"Sentuh untuk menghapus pembatasan"</string>

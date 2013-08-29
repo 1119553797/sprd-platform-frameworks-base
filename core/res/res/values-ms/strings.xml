@@ -96,7 +96,7 @@
   <string msgid="50784596594403483" name="permdesc_updateAppOpsStats">"Membenarkan apl mengubah suai statistik operasi aplikasi yang dikumpul. Bukan untuk kegunaan apl biasa."</string>
   <string msgid="4708181184441880175" name="permlab_freezeScreen">"bekukan skrin"</string>
   <string msgid="8558923789222670064" name="permdesc_freezeScreen">"Membenarkan aplikasi membekukan sementara skrin untuk peralihan skrin penuh."</string>
-  <string msgid="5295047563564981250" name="permdesc_accessFineLocation">"Membenarkan apl mendapatkan lokasi tepat anda menggunakan Sistem Kedudukan Global (GPS) atau sumber lokasi rangkaian seperti menara sel dan Wi-Fi. Perkhidmatan lokasi ini mesti dihidupkan dan tersedia pada peranti anda untuk kegunaan apl. Apl boleh menggunakan ini untuk menentukan tempat anda berada dan mungkin menggunakan kuasa bateri tambahan."</string>
+  <string msgid="5295047563564981250" name="permdesc_accessFineLocation">"Membenarkan apl mendapatkan lokasi tepat anda menggunakan Sistem Kedudukan Global (GPS) atau sumber lokasi rangkaian seperti menara sel dan WLAN. Perkhidmatan lokasi ini mesti dihidupkan dan tersedia pada peranti anda untuk kegunaan apl. Apl boleh menggunakan ini untuk menentukan tempat anda berada dan mungkin menggunakan kuasa bateri tambahan."</string>
   <string msgid="5595661694746742168" name="permlab_configureWifiDisplay">"konfigurasikan paparan Wifi"</string>
   <string msgid="7916815158690218065" name="permdesc_configureWifiDisplay">"Membenarkan apl mengkonfigurasi dan menyambung ke paparan Wifi."</string>
   <string msgid="393641276723695496" name="permlab_controlWifiDisplay">"kawal paparan Wifi"</string>
@@ -152,8 +152,8 @@
   <string msgid="4653586947747330058" name="app_running_notification_text">"Sentuh untuk maklumat lanjut atau untuk menghentikan apl."</string>
   <string msgid="8495155593358054676" name="network_available_sign_in">"Log masuk ke rangkaian"</string>
   <!-- no translation found for network_available_sign_in_detailed (8000081941447976118) -->
-  <string msgid="8012981257742232475" product="tablet" name="wifi_p2p_frequency_conflict_message">"Sambungan tablet ke Wi-Fi akan diputuskan buat sementara waktu semasa tablet bersambung ke <xliff:g id="DEVICE_NAME">%1$s</xliff:g>"</string>
-  <string msgid="7363907213787469151" product="default" name="wifi_p2p_frequency_conflict_message">"Sambungan telefon ke Wi-Fi akan diputuskan buat sementara waktu semasa telefon bersambung ke <xliff:g id="DEVICE_NAME">%1$s</xliff:g>"</string>
+  <string msgid="8012981257742232475" product="tablet" name="wifi_p2p_frequency_conflict_message">"Sambungan tablet ke WLAN akan diputuskan buat sementara waktu semasa tablet bersambung ke <xliff:g id="DEVICE_NAME">%1$s</xliff:g>"</string>
+  <string msgid="7363907213787469151" product="default" name="wifi_p2p_frequency_conflict_message">"Sambungan telefon ke WLAN akan diputuskan buat sementara waktu semasa telefon bersambung ke <xliff:g id="DEVICE_NAME">%1$s</xliff:g>"</string>
   <string msgid="1645436466285310855" name="sms_short_code_confirm_message">"&lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; ingin menghantar mesej kepada &lt;b&gt;<xliff:g id="DEST_ADDRESS">%2$s</xliff:g>&lt;/b&gt;."</string>
   <string msgid="3492025719868078457" name="sms_short_code_details">"Ini akan menyebabkan akaun mudah alih anda "<font fgcolor="#ffffb060">"dikenakan caj"</font>"."</string>
   <string msgid="5523826349105123687" name="sms_premium_short_code_details">
@@ -756,11 +756,11 @@
   <string name="permdesc_changeTetherState">"Membenarkan aplikasi menukar keadaan kesambungan rangkaian tambatan."</string>
   <string name="permlab_changeBackgroundDataSetting">"tukar tetapan penggunaan data latar belakang"</string>
   <string name="permdesc_changeBackgroundDataSetting">"Membenarkan aplikasi menukar tetapan penggunaan data latar belakang."</string>
-  <string name="permlab_accessWifiState">"lihat keadaan Wi-Fi"</string>
-  <string name="permdesc_accessWifiState">"Membolehkan aplikasi melihat maklumat mengenai keadaan Wi-Fi."</string>
-  <string name="permlab_changeWifiState">"ubah keadaan Wi-Fi"</string>
-  <string name="permdesc_changeWifiState">"Membenarkan aplikasi menyambung ke dan memutuskan sambungan dari titik capaian Wi-Fi dan membuat perubahan pada rangkaian Wi-Fi yang telah dikonfigurasikan."</string>
-  <string name="permlab_changeWifiMulticastState">"benarkan penerimaan Wi-Fi Multisiar"</string>
+  <string name="permlab_accessWifiState">"lihat keadaan WLAN"</string>
+  <string name="permdesc_accessWifiState">"Membolehkan aplikasi melihat maklumat mengenai keadaan WLAN."</string>
+  <string name="permlab_changeWifiState">"ubah keadaan WLAN"</string>
+  <string name="permdesc_changeWifiState">"Membenarkan aplikasi menyambung ke dan memutuskan sambungan dari titik capaian WLAN dan membuat perubahan pada rangkaian WLAN yang telah dikonfigurasikan."</string>
+  <string name="permlab_changeWifiMulticastState">"benarkan penerimaan WLAN Multisiar"</string>
   <string name="permlab_accessWimaxState">"lihat keadaan WiMAX"</string>
   <string name="permdesc_accessWimaxState">"Membolehkan aplikasi melihat maklumat mengenai keadaan WiMAX."</string>
   <string name="permlab_changeWimaxState">"tukar keadaan WiMAX"</string>
@@ -1246,20 +1246,20 @@
   <string name="ringtone_picker_title">"Nada dering"</string>
   <string name="ringtone_unknown">"Nada dering tidak diketahui"</string>
   <plurals name="wifi_available">
-        <item quantity="one">"Rangkaian Wi-Fi tersedia"</item>
-        <item quantity="other">"Rangkaian Wi-Fi tersedia"</item>
+        <item quantity="one">"Rangkaian WLAN tersedia"</item>
+        <item quantity="other">"Rangkaian WLAN tersedia"</item>
     </plurals>
   <plurals name="wifi_available_detailed">
-        <item quantity="one">"Rangkaian Wi-Fi terbuka tersedia"</item>
-        <item quantity="other">"Rangkaian Wi-Fi terbuka tersedia"</item>
+        <item quantity="one">"Rangkaian WLAN terbuka tersedia"</item>
+        <item quantity="other">"Rangkaian WLAN terbuka tersedia"</item>
     </plurals>
-  <string name="wifi_available_sign_in">"Log masuk ke rangkaian Wi-Fi"</string>
-  <string name="wifi_watchdog_network_disabled">"Tidak boleh menyambung kepada Wi-Fi"</string>
+  <string name="wifi_available_sign_in">"Log masuk ke rangkaian WLAN"</string>
+  <string name="wifi_watchdog_network_disabled">"Tidak boleh menyambung kepada WLAN"</string>
   <string name="wifi_watchdog_network_disabled_detailed">" mempunyai sambungan internet yang kurang baik."</string>
-  <string name="wifi_p2p_dialog_title">"Wi-Fi Langsung"</string>
-  <string name="wifi_p2p_turnon_message">"Mulakan pengendalian Wi-Fi Langsung. Hal ini akan mematikan pengendalian klien Wi-Fi/titik panas."</string>
-  <string name="wifi_p2p_failed_message">"Tidak dapat memulakan Wi-Fi Direct"</string>
-  <string name="wifi_p2p_enabled_notification_title">"Wi-Fi Direct dihidupkan"</string>
+  <string name="wifi_p2p_dialog_title">"WLAN Langsung"</string>
+  <string name="wifi_p2p_turnon_message">"Mulakan pengendalian WLAN Langsung. Hal ini akan mematikan pengendalian klien WLAN/titik panas."</string>
+  <string name="wifi_p2p_failed_message">"Tidak dapat memulakan WLAN Direct"</string>
+  <string name="wifi_p2p_enabled_notification_title">"WLAN Direct dihidupkan"</string>
   <string name="wifi_p2p_enabled_notification_message">"Sentuh untuk tetapan"</string>
   <string name="select_character">"Masukkan aksara"</string>
   <string name="sms_control_title">"Menghantar mesej SMS"</string>
@@ -1479,12 +1479,12 @@
   <string name="data_usage_3g_limit_title">"Data 2G-3G dilumpuhkan"</string>
   <string name="data_usage_4g_limit_title">"Data 4G dilumpuhkan"</string>
   <string name="data_usage_mobile_limit_title">"Data mudah alih dilumpuhkan"</string>
-  <string name="data_usage_wifi_limit_title">"Data Wi-Fi dilumpuhkan"</string>
+  <string name="data_usage_wifi_limit_title">"Data WLAN dilumpuhkan"</string>
   <string name="data_usage_limit_body">"Sentuh untuk mendayakan"</string>
   <string name="data_usage_3g_limit_snoozed_title">"Melebihi had data 2G-3G"</string>
   <string name="data_usage_4g_limit_snoozed_title">"Melebihi had data 4G"</string>
   <string name="data_usage_mobile_limit_snoozed_title">"Melebihi had data mudah alih"</string>
-  <string name="data_usage_wifi_limit_snoozed_title">"Melebihi had data Wi-Fi"</string>
+  <string name="data_usage_wifi_limit_snoozed_title">"Melebihi had data WLAN"</string>
   <string name="data_usage_limit_snoozed_body">"<xliff:g id="SIZE">%s</xliff:g> melebihi had yang ditentukan"</string>
   <string name="data_usage_restricted_title">"Data latar belakang terhad"</string>
   <string name="data_usage_restricted_body">"Sentuh untuk membuang sekatan"</string>

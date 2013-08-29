@@ -96,11 +96,11 @@
   <string msgid="50784596594403483" name="permdesc_updateAppOpsStats">"Aplikaciji dovoli spreminjanje zbranih statističnih podatkov o delovanju aplikacij. Ni za uporabo v navadnih aplikacijah."</string>
   <string msgid="4708181184441880175" name="permlab_freezeScreen">"zamrzovanje zaslona"</string>
   <string msgid="8558923789222670064" name="permdesc_freezeScreen">"Omogoča aplikaciji začasno zamrznitev zaslona za prehod na celozaslonski način."</string>
-  <string msgid="5295047563564981250" name="permdesc_accessFineLocation">"Aplikaciji omogoča, da določi vašo natančno lokacijo na podlagi sistema GPS ali omrežnih lokacijskih virov, kot so bazne postaje mobilne telefonije ali Wi-Fi. Te lokacijske storitve morajo biti vklopljene in na voljo v napravi, če želite, da jih aplikacija uporablja. Aplikacije lahko na podlagi tega določijo vašo lokacijo in še dodatno izpraznijo akumulator."</string>
-  <string msgid="5595661694746742168" name="permlab_configureWifiDisplay">"konfiguriranje zaslonov Wi-Fi"</string>
-  <string msgid="7916815158690218065" name="permdesc_configureWifiDisplay">"Omogoča aplikaciji konfiguriranje zaslonov Wi-Fi in povezovanje z njimi."</string>
-  <string msgid="393641276723695496" name="permlab_controlWifiDisplay">"nadzor zaslonov Wi-Fi"</string>
-  <string msgid="4543912292681826986" name="permdesc_controlWifiDisplay">"Omogoča aplikaciji nadzor osnovnih funkcij zaslonov Wi-Fi."</string>
+  <string msgid="5295047563564981250" name="permdesc_accessFineLocation">"Aplikaciji omogoča, da določi vašo natančno lokacijo na podlagi sistema GPS ali omrežnih lokacijskih virov, kot so bazne postaje mobilne telefonije ali WLAN. Te lokacijske storitve morajo biti vklopljene in na voljo v napravi, če želite, da jih aplikacija uporablja. Aplikacije lahko na podlagi tega določijo vašo lokacijo in še dodatno izpraznijo akumulator."</string>
+  <string msgid="5595661694746742168" name="permlab_configureWifiDisplay">"konfiguriranje zaslonov WLAN"</string>
+  <string msgid="7916815158690218065" name="permdesc_configureWifiDisplay">"Omogoča aplikaciji konfiguriranje zaslonov WLAN in povezovanje z njimi."</string>
+  <string msgid="393641276723695496" name="permlab_controlWifiDisplay">"nadzor zaslonov WLAN"</string>
+  <string msgid="4543912292681826986" name="permdesc_controlWifiDisplay">"Omogoča aplikaciji nadzor osnovnih funkcij zaslonov WLAN."</string>
   <string msgid="2651072630501126222" name="permlab_cameraDisableTransmitLed">"onemogoči LED-indikator prenašanja, ko je fotoaparat v uporabi"</string>
   <string msgid="4764585465480295341" name="permdesc_cameraDisableTransmitLed">"Dovoli že nameščeni sistemski aplikaciji, da onemogoči LED-indikator uporabe fotoaparata."</string>
   <string msgid="8150613823900460576" name="permlab_sdcardAccessAll">"dostop do zunanje naprave za shranjevanje za vse uporabnike"</string>
@@ -152,8 +152,8 @@
   <string msgid="4653586947747330058" name="app_running_notification_text">"Dotaknite se, če želite izvedeti več ali ustaviti aplikacijo."</string>
   <string msgid="8495155593358054676" name="network_available_sign_in">"Prijava v omrežje"</string>
   <!-- no translation found for network_available_sign_in_detailed (8000081941447976118) -->
-  <string msgid="8012981257742232475" product="tablet" name="wifi_p2p_frequency_conflict_message">"Tablični računalnik bo začasno prekinil povezavo z Wi-Fi-jem, medtem ko je povezan z napravo <xliff:g id="DEVICE_NAME">%1$s</xliff:g>"</string>
-  <string msgid="7363907213787469151" product="default" name="wifi_p2p_frequency_conflict_message">"Telefon bo začasno prekinil povezavo z Wi-Fi-jem, ko je povezan z napravo <xliff:g id="DEVICE_NAME">%1$s</xliff:g>"</string>
+  <string msgid="8012981257742232475" product="tablet" name="wifi_p2p_frequency_conflict_message">"Tablični računalnik bo začasno prekinil povezavo z WLAN-jem, medtem ko je povezan z napravo <xliff:g id="DEVICE_NAME">%1$s</xliff:g>"</string>
+  <string msgid="7363907213787469151" product="default" name="wifi_p2p_frequency_conflict_message">"Telefon bo začasno prekinil povezavo z WLAN-jem, ko je povezan z napravo <xliff:g id="DEVICE_NAME">%1$s</xliff:g>"</string>
   <string msgid="1645436466285310855" name="sms_short_code_confirm_message">"&lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; želi poslati sporočilo na &lt;b&gt;<xliff:g id="DEST_ADDRESS">%2$s</xliff:g>&lt;/b&gt;."</string>
   <string msgid="3492025719868078457" name="sms_short_code_details">"S tem bo "<font fgcolor="#ffffb060">"morda bremenjen"</font>" vaš račun za mobilno napravo."</string>
   <string msgid="5523826349105123687" name="sms_premium_short_code_details">
@@ -1253,13 +1253,13 @@
     <item msgid="1634101450343277345" quantity="one">"Odpiranje razpoložljivega brezžičnega omrežja"</item>
     <item msgid="7915895323644292768" quantity="other">"Odpiranje razpoložljivih brezžičnih omrežij"</item>
   </plurals>
-  <string msgid="9157196203958866662" name="wifi_available_sign_in">"Prijavite se v omrežje Wi-Fi"</string>
-  <string msgid="7904214231651546347" name="wifi_watchdog_network_disabled">"Z omrežjem Wi-Fi se ni mogoče povezati"</string>
+  <string msgid="9157196203958866662" name="wifi_available_sign_in">"Prijavite se v omrežje WLAN"</string>
+  <string msgid="7904214231651546347" name="wifi_watchdog_network_disabled">"Z omrežjem WLAN se ni mogoče povezati"</string>
   <string msgid="4917472096696322767" name="wifi_watchdog_network_disabled_detailed">" ima slabo internetno povezavo."</string>
-  <string msgid="97611782659324517" name="wifi_p2p_dialog_title">"Wi-Fi Direct"</string>
-  <string msgid="2804722042556269129" name="wifi_p2p_turnon_message">"Začnite s postopkom Wi-Fi Direct. S tem bo izklopljen postopek odjemalca/dostopne točke Wi-Fi."</string>
-  <string msgid="1820097493844848281" name="wifi_p2p_failed_message">"Wi-Fi Direct ni mogoče zagnati"</string>
-  <string msgid="2068321881673734886" name="wifi_p2p_enabled_notification_title">"Wi-Fi Direct je vklopljen"</string>
+  <string msgid="97611782659324517" name="wifi_p2p_dialog_title">"WLAN Direct"</string>
+  <string msgid="2804722042556269129" name="wifi_p2p_turnon_message">"Začnite s postopkom WLAN Direct. S tem bo izklopljen postopek odjemalca/dostopne točke WLAN."</string>
+  <string msgid="1820097493844848281" name="wifi_p2p_failed_message">"WLAN Direct ni mogoče zagnati"</string>
+  <string msgid="2068321881673734886" name="wifi_p2p_enabled_notification_title">"WLAN Direct je vklopljen"</string>
   <string msgid="1638949953993894335" name="wifi_p2p_enabled_notification_message">"Dotaknite se za nastavitve"</string>
   <string msgid="3365550120617701745" name="select_character">"Vstavljanje znaka"</string>
   <string msgid="7296612781128917719" name="sms_control_title">"Pošiljanje sporočil SMS"</string>
@@ -1471,12 +1471,12 @@
   <string msgid="7093334419518706686" name="data_usage_3g_limit_title">"Podatki 2G-3G so onemogočeni"</string>
   <string msgid="7636489436819470761" name="data_usage_4g_limit_title">"Podatki 4G so onemogočeni"</string>
   <string msgid="7869402519391631884" name="data_usage_mobile_limit_title">"Mobilni podatki so onemogočeni"</string>
-  <string msgid="8992154736441284865" name="data_usage_wifi_limit_title">"Upor. podatk. Wi-Fi onemogočena"</string>
+  <string msgid="8992154736441284865" name="data_usage_wifi_limit_title">"Upor. podatk. WLAN onemogočena"</string>
   <string msgid="4313857592916426843" name="data_usage_limit_body">"Dotaknite se, da omogočite"</string>
   <string msgid="7026739121138005231" name="data_usage_3g_limit_snoozed_title">"Omejit. za podat. 2G-3G presež."</string>
   <string msgid="1106562779311209039" name="data_usage_4g_limit_snoozed_title">"Omejitev za podat. 4G presež."</string>
   <string msgid="279240572165412168" name="data_usage_mobile_limit_snoozed_title">"Omej. za pod. v mob. n. presež."</string>
-  <string msgid="8743856006384825974" name="data_usage_wifi_limit_snoozed_title">"Presež. omej. za podatke Wi-Fi"</string>
+  <string msgid="8743856006384825974" name="data_usage_wifi_limit_snoozed_title">"Presež. omej. za podatke WLAN"</string>
   <string msgid="2932736326652880660" name="data_usage_limit_snoozed_body">"<xliff:g id="SIZE">%s</xliff:g> nad določeno mejo"</string>
   <string msgid="5965157361036321914" name="data_usage_restricted_title">"Podatki v ozadju so omejeni"</string>
   <string msgid="5087354814839059798" name="data_usage_restricted_body">"Dotaknite se, da odstranite omejitev"</string>

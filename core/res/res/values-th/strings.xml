@@ -756,11 +756,11 @@
   <string name="permdesc_changeTetherState">"อนุญาตให้แอปพลิเคชันเปลี่ยนสถานะการเชื่อมต่อเครือข่ายที่ปล่อยสัญญาณไว้"</string>
   <string name="permlab_changeBackgroundDataSetting">"เปลี่ยนการตั้งค่าการใช้ข้อมูลพื้นหลัง"</string>
   <string name="permdesc_changeBackgroundDataSetting">"อนุญาตให้แอปพลิเคชันเปลี่ยนการตั้งค่าการใช้ข้อมูลพื้นหลัง"</string>
-  <string name="permlab_accessWifiState">"ดูสถานะ Wi-Fi"</string>
-  <string name="permdesc_accessWifiState">"อนุญาตให้แอปพลิเคชันดูข้อมูลสถานะของ Wi-Fi"</string>
-  <string name="permlab_changeWifiState">"เปลี่ยนสถานะ Wi-Fi"</string>
-  <string name="permdesc_changeWifiState">"อนุญาตให้แอปพลิเคชันเชื่อมต่อและตัดการเชื่อมต่อจากจุดเข้าใช้งาน Wi-Fi และเปลี่ยนแปลงเครือข่าย Wi-Fi ที่กำหนดค่าไว้"</string>
-  <string name="permlab_changeWifiMulticastState">"อนุญาตให้รับมัลติแคสต์ผ่าน Wi-Fi"</string>
+  <string name="permlab_accessWifiState">"ดูสถานะ WLAN"</string>
+  <string name="permdesc_accessWifiState">"อนุญาตให้แอปพลิเคชันดูข้อมูลสถานะของ WLAN"</string>
+  <string name="permlab_changeWifiState">"เปลี่ยนสถานะ WLAN"</string>
+  <string name="permdesc_changeWifiState">"อนุญาตให้แอปพลิเคชันเชื่อมต่อและตัดการเชื่อมต่อจากจุดเข้าใช้งาน WLAN และเปลี่ยนแปลงเครือข่าย WLAN ที่กำหนดค่าไว้"</string>
+  <string name="permlab_changeWifiMulticastState">"อนุญาตให้รับมัลติแคสต์ผ่าน WLAN"</string>
   <string name="permlab_accessWimaxState">"ดูสถานะของ WiMAX"</string>
   <string name="permdesc_accessWimaxState">"อนุญาตให้แอปพลิเคชันดูข้อมูลเกี่ยวกับสถานะของ WiMAX"</string>
   <string name="permlab_changeWimaxState">"เปลี่ยนสถานะของ WiMAX"</string>
@@ -1246,20 +1246,20 @@
   <string name="ringtone_picker_title">"เสียงเรียกเข้า"</string>
   <string name="ringtone_unknown">"ไม่ทราบเสียงเรียกเข้า"</string>
   <plurals name="wifi_available">
-        <item quantity="one">"เครือข่าย Wi-Fi ที่ใช้งานได้"</item>
-        <item quantity="other">"เครือข่าย Wi-Fi ใช้งานได้"</item>
+        <item quantity="one">"เครือข่าย WLAN ที่ใช้งานได้"</item>
+        <item quantity="other">"เครือข่าย WLAN ใช้งานได้"</item>
     </plurals>
   <plurals name="wifi_available_detailed">
-        <item quantity="one">"เปิดเครือข่าย Wi-Fi ที่ใช้งานได้"</item>
-        <item quantity="other">"เปิดเครือข่าย Wi-Fi ที่ใช้งานได้"</item>
+        <item quantity="one">"เปิดเครือข่าย WLAN ที่ใช้งานได้"</item>
+        <item quantity="other">"เปิดเครือข่าย WLAN ที่ใช้งานได้"</item>
     </plurals>
   <string name="wifi_available_sign_in">"ลงชื่อเข้าใช้เครือข่าย WiFi"</string>
-  <string name="wifi_watchdog_network_disabled">"ไม่สามารถเชื่อมต่อ Wi-Fi"</string>
+  <string name="wifi_watchdog_network_disabled">"ไม่สามารถเชื่อมต่อ WLAN"</string>
   <string name="wifi_watchdog_network_disabled_detailed">" มีสัญญาณอินเทอร์เน็ตไม่ดี"</string>
-  <string name="wifi_p2p_dialog_title">"Wi-Fi Direct"</string>
-  <string name="wifi_p2p_turnon_message">"เริ่มการทำงาน Wi-Fi Direct ซึ่งจะเป็นการปิดการทำงาน Wi-Fi ไคลเอ็นต์/ฮอตสปอต"</string>
-  <string name="wifi_p2p_failed_message">"ไม่สามารถเริ่ม Wi-Fi Direct ได้"</string>
-  <string name="wifi_p2p_enabled_notification_title">"เปิด Wi-Fi Direct อยู่"</string>
+  <string name="wifi_p2p_dialog_title">"WLAN Direct"</string>
+  <string name="wifi_p2p_turnon_message">"เริ่มการทำงาน WLAN Direct ซึ่งจะเป็นการปิดการทำงาน WLAN ไคลเอ็นต์/ฮอตสปอต"</string>
+  <string name="wifi_p2p_failed_message">"ไม่สามารถเริ่ม WLAN Direct ได้"</string>
+  <string name="wifi_p2p_enabled_notification_title">"เปิด WLAN Direct อยู่"</string>
   <string name="wifi_p2p_enabled_notification_message">"แตะเพื่อตั้งค่า"</string>
   <string name="select_character">"ใส่อักขระ"</string>
   <string name="sms_control_title">"กำลังส่งข้อความ SMS"</string>
@@ -1479,12 +1479,12 @@
   <string name="data_usage_3g_limit_title">"ปิดใช้งานข้อมูล 2G-3G"</string>
   <string name="data_usage_4g_limit_title">"ปิดใช้งานข้อมูล 4G"</string>
   <string name="data_usage_mobile_limit_title">"ปิดใช้งานข้อมูลมือถือ"</string>
-  <string name="data_usage_wifi_limit_title">"ปิดใช้งานข้อมูล Wi-Fi แล้ว"</string>
+  <string name="data_usage_wifi_limit_title">"ปิดใช้งานข้อมูล WLAN แล้ว"</string>
   <string name="data_usage_limit_body">"แตะเพื่อเปิดใช้งาน"</string>
   <string name="data_usage_3g_limit_snoozed_title">"เกินขีดจำกัดข้อมูล 2G - 3G"</string>
   <string name="data_usage_4g_limit_snoozed_title">"เกินขีดจำกัดของข้อมูล 4G"</string>
   <string name="data_usage_mobile_limit_snoozed_title">"เกินขีดจำกัดข้อมูลมือถือ"</string>
-  <string name="data_usage_wifi_limit_snoozed_title">"เกินขีดจำกัดข้อมูล Wi-Fi แล้ว"</string>
+  <string name="data_usage_wifi_limit_snoozed_title">"เกินขีดจำกัดข้อมูล WLAN แล้ว"</string>
   <string name="data_usage_limit_snoozed_body">"<xliff:g id="SIZE">%s</xliff:g> เกินขีดจำกัดที่ระบุไว้"</string>
   <string name="data_usage_restricted_title">"จำกัดข้อมูลแบ็กกราวด์"</string>
   <string name="data_usage_restricted_body">"แตะเพื่อนำข้อจำกัดออก"</string>

@@ -429,11 +429,11 @@
   <string name="permdesc_changeTetherState">Kan bada izini shiri ta canza halin harhaden talalar mahadin yana.</string>
   <string name="permlab_changeBackgroundDataSetting">canza saitin bayanin fuskar bayan hoto</string>
   <string name="permdesc_changeBackgroundDataSetting">Kan yarda shiri ta canza saituna amfani bayani na bayan kasa.</string>
-  <string name="permlab_accessWifiState">Duba yanayin Wi-Fi</string>
-  <string name="permdesc_accessWifiState">Kan bada izini shiri ta duba labari game da halin Wi-Fi.</string>
-  <string name="permlab_changeWifiState">canza halin Wi-Fi</string>
-  <string name="permdesc_changeWifiState">Kan bada izini shiri ta hade da kuma katse daga digogin shiga Wi-Fi, da yin  canje-canje ga tsararriyar mahadan yana.</string>
-  <string name="permlab_changeWifiMulticastState">yarda da kama tashar Wi-Fi mai yadawa dabam-dabam</string>
+  <string name="permlab_accessWifiState">Duba yanayin WLAN</string>
+  <string name="permdesc_accessWifiState">Kan bada izini shiri ta duba labari game da halin WLAN.</string>
+  <string name="permlab_changeWifiState">canza halin WLAN</string>
+  <string name="permdesc_changeWifiState">Kan bada izini shiri ta hade da kuma katse daga digogin shiga WLAN, da yin  canje-canje ga tsararriyar mahadan yana.</string>
+  <string name="permlab_changeWifiMulticastState">yarda da kama tashar WLAN mai yadawa dabam-dabam</string>
   <string name="permlab_accessWimaxState">duba halin WiMAX</string>
   <string name="permdesc_accessWimaxState">Yana bada dama ga shiri ya duba bayani game da halin WiMAX.</string>
   <string name="permlab_changeWimaxState">canja halin WiMAX</string>
@@ -948,12 +948,12 @@
   <string name="ringtone_picker_title">Sautukan kira</string>
   <string name="ringtone_unknown">Bakon sautin kira</string>
   <plurals name="wifi_available">
-        <item quantity="one">Hanyar sadarwar Wi-Fi a bude</item>
-        <item quantity="other">Hanyoyin sadarwar Wi-Fi a bude</item>
+        <item quantity="one">Hanyar sadarwar WLAN a bude</item>
+        <item quantity="other">Hanyoyin sadarwar WLAN a bude</item>
     </plurals>
   <plurals name="wifi_available_detailed">
-        <item quantity="one">Bude layin Wi-Fi da ya aiki yanzu</item>
-        <item quantity="other">Bude layukan Wi-Fi da suke aiki yanzu</item>
+        <item quantity="one">Bude layin WLAN da ya aiki yanzu</item>
+        <item quantity="other">Bude layukan WLAN da suke aiki yanzu</item>
     </plurals>
   <string name="wifi_available_sign_in">Shiga cikin hanyar sadarwar WLAN</string>
   <string name="wifi_watchdog_network_disabled">An kasa hadawa da WLAN</string>

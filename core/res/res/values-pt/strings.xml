@@ -96,11 +96,11 @@
   <string msgid="50784596594403483" name="permdesc_updateAppOpsStats">"Permite que o aplicativo modifique as estatísticas de operações de aplicativos. Não deve ser usado em aplicativos normais."</string>
   <string msgid="4708181184441880175" name="permlab_freezeScreen">"congelar tela"</string>
   <string msgid="8558923789222670064" name="permdesc_freezeScreen">"Permite que o aplicativo congele temporariamente a tela para uma transição de tela inteira."</string>
-  <string msgid="5295047563564981250" name="permdesc_accessFineLocation">"Permite que o aplicativo acesse sua localização exata por meio do sistema de posicionamento global (GPS) ou de fontes de localização da rede, como torres de celulares e redes Wi-Fi. Esses serviços de localização devem estar ativados e disponíveis para que sejam usados pelo aplicativo. O aplicativo pode usar esta permissão para determinar onde você está, além de consumir mais bateria."</string>
-  <string msgid="5595661694746742168" name="permlab_configureWifiDisplay">"configurar monitores Wi-Fi"</string>
-  <string msgid="7916815158690218065" name="permdesc_configureWifiDisplay">"Permite que o aplicativo configure e conecte a monitores Wi-Fi."</string>
-  <string msgid="393641276723695496" name="permlab_controlWifiDisplay">"controlar monitores Wi-Fi"</string>
-  <string msgid="4543912292681826986" name="permdesc_controlWifiDisplay">"Permite que o aplicativo controle recursos de baixo nível de monitores Wi-Fi."</string>
+  <string msgid="5295047563564981250" name="permdesc_accessFineLocation">"Permite que o aplicativo acesse sua localização exata por meio do sistema de posicionamento global (GPS) ou de fontes de localização da rede, como torres de celulares e redes WLAN. Esses serviços de localização devem estar ativados e disponíveis para que sejam usados pelo aplicativo. O aplicativo pode usar esta permissão para determinar onde você está, além de consumir mais bateria."</string>
+  <string msgid="5595661694746742168" name="permlab_configureWifiDisplay">"configurar monitores WLAN"</string>
+  <string msgid="7916815158690218065" name="permdesc_configureWifiDisplay">"Permite que o aplicativo configure e conecte a monitores WLAN."</string>
+  <string msgid="393641276723695496" name="permlab_controlWifiDisplay">"controlar monitores WLAN"</string>
+  <string msgid="4543912292681826986" name="permdesc_controlWifiDisplay">"Permite que o aplicativo controle recursos de baixo nível de monitores WLAN."</string>
   <string msgid="2651072630501126222" name="permlab_cameraDisableTransmitLed">"desativar a transmissão do LED indicador quando a câmera estiver em uso"</string>
   <string msgid="4764585465480295341" name="permdesc_cameraDisableTransmitLed">"Permite que um aplicativo do sistema pré-instalado desative o LED indicador de uso da câmera."</string>
   <string msgid="8150613823900460576" name="permlab_sdcardAccessAll">"acessar arm. ext. dos usuários"</string>
@@ -152,8 +152,8 @@
   <string msgid="4653586947747330058" name="app_running_notification_text">"Toque para mais informações ou para parar o aplicativo."</string>
   <string msgid="8495155593358054676" name="network_available_sign_in">"Acessar a rede"</string>
   <!-- no translation found for network_available_sign_in_detailed (8000081941447976118) -->
-  <string msgid="8012981257742232475" product="tablet" name="wifi_p2p_frequency_conflict_message">"O tablet desconectará temporariamente da rede Wi-Fi enquanto estiver conectado a <xliff:g id="DEVICE_NAME">%1$s</xliff:g>"</string>
-  <string msgid="7363907213787469151" product="default" name="wifi_p2p_frequency_conflict_message">"O telefone desconectará temporariamente da rede Wi-Fi enquanto estiver conectado a <xliff:g id="DEVICE_NAME">%1$s</xliff:g>"</string>
+  <string msgid="8012981257742232475" product="tablet" name="wifi_p2p_frequency_conflict_message">"O tablet desconectará temporariamente da rede WLAN enquanto estiver conectado a <xliff:g id="DEVICE_NAME">%1$s</xliff:g>"</string>
+  <string msgid="7363907213787469151" product="default" name="wifi_p2p_frequency_conflict_message">"O telefone desconectará temporariamente da rede WLAN enquanto estiver conectado a <xliff:g id="DEVICE_NAME">%1$s</xliff:g>"</string>
   <string msgid="1645436466285310855" name="sms_short_code_confirm_message">"&lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; deseja enviar uma mensagem para &lt;b&gt;<xliff:g id="DEST_ADDRESS">%2$s</xliff:g>&lt;/b&gt;."</string>
   <string msgid="3492025719868078457" name="sms_short_code_details">"Isto "<font fgcolor="#ffffb060">"poderá gerar cobranças"</font>" em sua conta de celular."</string>
   <string msgid="5523826349105123687" name="sms_premium_short_code_details">
@@ -756,11 +756,11 @@
   <string name="permdesc_changeTetherState">"Permite que um aplicativo altere o estado da conectividade de rede vinculada."</string>
   <string name="permlab_changeBackgroundDataSetting">"alterar configuração de uso dos dados de segundo plano"</string>
   <string name="permdesc_changeBackgroundDataSetting">"Permite que um aplicativo altere a configuração de uso dos dados de segundo plano."</string>
-  <string name="permlab_accessWifiState">"visualizar estado da rede Wi-Fi"</string>
-  <string name="permdesc_accessWifiState">"Permite que um aplicativo veja as informações sobre o estado de Wi-Fi."</string>
-  <string name="permlab_changeWifiState">"alterar o estado de Wi-Fi"</string>
-  <string name="permdesc_changeWifiState">"Permite que um aplicativo se conecte e desconecte dos pontos de acesso Wi-Fi e faça alterações nas redes Wi-Fi configuradas."</string>
-  <string name="permlab_changeWifiMulticastState">"permitir recebimento de multicast Wi-Fi"</string>
+  <string name="permlab_accessWifiState">"visualizar estado da rede WLAN"</string>
+  <string name="permdesc_accessWifiState">"Permite que um aplicativo veja as informações sobre o estado de WLAN."</string>
+  <string name="permlab_changeWifiState">"alterar o estado de WLAN"</string>
+  <string name="permdesc_changeWifiState">"Permite que um aplicativo se conecte e desconecte dos pontos de acesso WLAN e faça alterações nas redes WLAN configuradas."</string>
+  <string name="permlab_changeWifiMulticastState">"permitir recebimento de multicast WLAN"</string>
   <string name="permlab_accessWimaxState">"visualizar estado do WiMAX"</string>
   <string name="permdesc_accessWimaxState">"Permite que um aplicativo veja as informações sobre o estado do WiMAX."</string>
   <string name="permlab_changeWimaxState">"alterar estado do WiMAX"</string>
@@ -1246,20 +1246,20 @@
   <string name="ringtone_picker_title">"Toques"</string>
   <string name="ringtone_unknown">"Toque desconhecido"</string>
   <plurals name="wifi_available">
-        <item quantity="one">"Rede Wi-Fi disponível"</item>
-        <item quantity="other">"Redes Wi-Fi disponíveis"</item>
+        <item quantity="one">"Rede WLAN disponível"</item>
+        <item quantity="other">"Redes WLAN disponíveis"</item>
     </plurals>
   <plurals name="wifi_available_detailed">
-        <item quantity="one">"Rede Wi-Fi aberta disponível"</item>
-        <item quantity="other">"Redes Wi-Fi abertas disponíveis"</item>
+        <item quantity="one">"Rede WLAN aberta disponível"</item>
+        <item quantity="other">"Redes WLAN abertas disponíveis"</item>
     </plurals>
-  <string name="wifi_available_sign_in">"Fazer login na rede Wi-Fi"</string>
-  <string name="wifi_watchdog_network_disabled">"Não foi possível se conectar a redes Wi-Fi"</string>
+  <string name="wifi_available_sign_in">"Fazer login na rede WLAN"</string>
+  <string name="wifi_watchdog_network_disabled">"Não foi possível se conectar a redes WLAN"</string>
   <string name="wifi_watchdog_network_disabled_detailed">" tem uma conexão de baixa qualidade com a Internet."</string>
-  <string name="wifi_p2p_dialog_title">"Wi-Fi Direct"</string>
-  <string name="wifi_p2p_turnon_message">"Iniciar a operação do Wi-Fi Direct. Isso desligará a operação do ponto de acesso/cliente Wi-Fi."</string>
-  <string name="wifi_p2p_failed_message">"Não foi possível iniciar o Wi-Fi Direct"</string>
-  <string name="wifi_p2p_enabled_notification_title">"Wi-Fi Direct ativado"</string>
+  <string name="wifi_p2p_dialog_title">"WLAN Direct"</string>
+  <string name="wifi_p2p_turnon_message">"Iniciar a operação do WLAN Direct. Isso desligará a operação do ponto de acesso/cliente WLAN."</string>
+  <string name="wifi_p2p_failed_message">"Não foi possível iniciar o WLAN Direct"</string>
+  <string name="wifi_p2p_enabled_notification_title">"WLAN Direct ativado"</string>
   <string name="wifi_p2p_enabled_notification_message">"Tocar para acessar configurações"</string>
   <string name="select_character">"Inserir caractere"</string>
   <string name="sms_control_title">"Enviando mensagens SMS"</string>
@@ -1479,12 +1479,12 @@
   <string name="data_usage_3g_limit_title">"Dados 2G e 3G desativados"</string>
   <string name="data_usage_4g_limit_title">"Dados 4G desativados"</string>
   <string name="data_usage_mobile_limit_title">"Dados móveis desativados"</string>
-  <string name="data_usage_wifi_limit_title">"Dados Wi-Fi desativados"</string>
+  <string name="data_usage_wifi_limit_title">"Dados WLAN desativados"</string>
   <string name="data_usage_limit_body">"Toque para ativar"</string>
   <string name="data_usage_3g_limit_snoozed_title">"Limite de dados 2G-3G excedido"</string>
   <string name="data_usage_4g_limit_snoozed_title">"Limite de dados 4G excedido"</string>
   <string name="data_usage_mobile_limit_snoozed_title">"Limite de dados do celular excedido"</string>
-  <string name="data_usage_wifi_limit_snoozed_title">"Limite de dados Wi-Fi excedido"</string>
+  <string name="data_usage_wifi_limit_snoozed_title">"Limite de dados WLAN excedido"</string>
   <string name="data_usage_limit_snoozed_body">"<xliff:g id="SIZE">%s</xliff:g> acima do limite especificado"</string>
   <string name="data_usage_restricted_title">"Dados de segundo plano restritos"</string>
   <string name="data_usage_restricted_body">"Toque para remover a restrição"</string>

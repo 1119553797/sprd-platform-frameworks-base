@@ -96,11 +96,11 @@
   <string msgid="50784596594403483" name="permdesc_updateAppOpsStats">"للسماح للتطبيق بتعديل إحصاءات تشغيل التطبيق المجمّعة. ليس للاستخدام بواسطة التطبيقات العادية."</string>
   <string msgid="4708181184441880175" name="permlab_freezeScreen">"تجميد الشاشة"</string>
   <string msgid="8558923789222670064" name="permdesc_freezeScreen">"للسماح للتطبيق بتجميد الشاشة مؤقتًا لإجراء انتقال بملء الشاشة."</string>
-  <string msgid="5295047563564981250" name="permdesc_accessFineLocation">"للسماح للتطبيق بتحديد موقعك بدقة وهذا باستخدام نظام تحديد المواقع العالمي (GPS) أو مصادر المواقع التي تستخدم الشبكات مثل أبراج الجوال أو تقنية Wi-Fi. يتعين توفر خدمات المواقع هذه وتشغيلها على جهازك للتطبيق كي يستخدمها. وقد تستخدم التطبيقات هذا لتحديد موقعك وقد تستهلك مزيدًا من طاقة البطارية."</string>
-  <string msgid="5595661694746742168" name="permlab_configureWifiDisplay">"تهيئة شاشات Wi-Fi"</string>
-  <string msgid="7916815158690218065" name="permdesc_configureWifiDisplay">"للسماح للتطبيق بتهيئة شاشات Wi-Fi والاتصال بها."</string>
-  <string msgid="393641276723695496" name="permlab_controlWifiDisplay">"التحكم في شاشات Wi-Fi"</string>
-  <string msgid="4543912292681826986" name="permdesc_controlWifiDisplay">"للسماح للتطبيق بالتحكم في الميزات ذات المستوى المنخفض في شاشات Wi-Fi."</string>
+  <string msgid="5295047563564981250" name="permdesc_accessFineLocation">"للسماح للتطبيق بتحديد موقعك بدقة وهذا باستخدام نظام تحديد المواقع العالمي (GPS) أو مصادر المواقع التي تستخدم الشبكات مثل أبراج الجوال أو تقنية WLAN. يتعين توفر خدمات المواقع هذه وتشغيلها على جهازك للتطبيق كي يستخدمها. وقد تستخدم التطبيقات هذا لتحديد موقعك وقد تستهلك مزيدًا من طاقة البطارية."</string>
+  <string msgid="5595661694746742168" name="permlab_configureWifiDisplay">"تهيئة شاشات WLAN"</string>
+  <string msgid="7916815158690218065" name="permdesc_configureWifiDisplay">"للسماح للتطبيق بتهيئة شاشات WLAN والاتصال بها."</string>
+  <string msgid="393641276723695496" name="permlab_controlWifiDisplay">"التحكم في شاشات WLAN"</string>
+  <string msgid="4543912292681826986" name="permdesc_controlWifiDisplay">"للسماح للتطبيق بالتحكم في الميزات ذات المستوى المنخفض في شاشات WLAN."</string>
   <string msgid="2651072630501126222" name="permlab_cameraDisableTransmitLed">"تعطيل مؤشر LED للإرسال عندما تكون الكاميرا قيد الاستخدام"</string>
   <string msgid="4764585465480295341" name="permdesc_cameraDisableTransmitLed">"للسماح لتطبيق نظام مثبت مسبقًا لتعطيل مؤشر LED لاستخدام الكاميرا."</string>
   <string msgid="8150613823900460576" name="permlab_sdcardAccessAll">"الوصول إلى سعة التخزين الخارجية لجميع المستخدمين"</string>
@@ -152,8 +152,8 @@
   <string msgid="4653586947747330058" name="app_running_notification_text">"المس للحصول على مزيد من المعلومات أو لإيقاف التطبيق."</string>
   <string msgid="8495155593358054676" name="network_available_sign_in">"تسجيل الدخول إلى الشبكة"</string>
   <!-- no translation found for network_available_sign_in_detailed (8000081941447976118) -->
-  <string msgid="8012981257742232475" product="tablet" name="wifi_p2p_frequency_conflict_message">"سيتم قطع اتصال الجهاز اللوحي مؤقتًا بشبكة Wi-Fi في الوقت الذي يكون فيه متصلاً بـ <xliff:g id="DEVICE_NAME">%1$s</xliff:g>"</string>
-  <string msgid="7363907213787469151" product="default" name="wifi_p2p_frequency_conflict_message">"سيتم قطع اتصال الهاتف مؤقتًا بشبكة Wi-Fi في الوقت الذي يكون فيه متصلاً بـ <xliff:g id="DEVICE_NAME">%1$s</xliff:g>"</string>
+  <string msgid="8012981257742232475" product="tablet" name="wifi_p2p_frequency_conflict_message">"سيتم قطع اتصال الجهاز اللوحي مؤقتًا بشبكة WLAN في الوقت الذي يكون فيه متصلاً بـ <xliff:g id="DEVICE_NAME">%1$s</xliff:g>"</string>
+  <string msgid="7363907213787469151" product="default" name="wifi_p2p_frequency_conflict_message">"سيتم قطع اتصال الهاتف مؤقتًا بشبكة WLAN في الوقت الذي يكون فيه متصلاً بـ <xliff:g id="DEVICE_NAME">%1$s</xliff:g>"</string>
   <string msgid="1645436466285310855" name="sms_short_code_confirm_message">"هناك رغبة من &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; في إرسال رسالة إلى &lt;b&gt;<xliff:g id="DEST_ADDRESS">%2$s</xliff:g>&lt;/b&gt;."</string>
   <string msgid="3492025719868078457" name="sms_short_code_details">"هذا "<font fgcolor="#ffffb060">"قد يؤدي إلى فرض رسوم"</font>" على حسابك على الجوال."</string>
   <string msgid="5523826349105123687" name="sms_premium_short_code_details">
@@ -756,11 +756,11 @@
   <string name="permdesc_changeTetherState">"للسماح لتطبيق ما بتغيير حالة اتصال الشبكة المقيد."</string>
   <string name="permlab_changeBackgroundDataSetting">"تغيير إعداد استخدام بيانات الخلفية"</string>
   <string name="permdesc_changeBackgroundDataSetting">"للسماح لتطبيق ما بتغيير إعداد استخدام بيانات الخلفية."</string>
-  <string name="permlab_accessWifiState">"عرض حالة Wi-Fi"</string>
-  <string name="permdesc_accessWifiState">"للسماح لتطبيق ما بعرض معلومات حول حالة Wi-Fi."</string>
-  <string name="permlab_changeWifiState">"تغيير حالة Wi-Fi"</string>
-  <string name="permdesc_changeWifiState">"للسماح لتطبيق ما بالاتصال وفصل الاتصال بنقاط الدخول إلى Wi-Fi، وإجراء تغييرات على شبكات Wi-Fi المهيأة."</string>
-  <string name="permlab_changeWifiMulticastState">"السماح باستقبال بث Wi-Fi متعدد"</string>
+  <string name="permlab_accessWifiState">"عرض حالة WLAN"</string>
+  <string name="permdesc_accessWifiState">"للسماح لتطبيق ما بعرض معلومات حول حالة WLAN."</string>
+  <string name="permlab_changeWifiState">"تغيير حالة WLAN"</string>
+  <string name="permdesc_changeWifiState">"للسماح لتطبيق ما بالاتصال وفصل الاتصال بنقاط الدخول إلى WLAN، وإجراء تغييرات على شبكات WLAN المهيأة."</string>
+  <string name="permlab_changeWifiMulticastState">"السماح باستقبال بث WLAN متعدد"</string>
   <string name="permlab_accessWimaxState">"عرض حالة WiMAX"</string>
   <string name="permdesc_accessWimaxState">"للسماح لتطبيق ما بعرض معلومات حول حالة WiMAX."</string>
   <string name="permlab_changeWimaxState">"تغيير حالة WiMAX"</string>
@@ -1246,20 +1246,20 @@
   <string name="ringtone_picker_title">"نغمات الرنين"</string>
   <string name="ringtone_unknown">"نغمة رنين غير معروفة"</string>
   <plurals name="wifi_available">
-        <item quantity="one">"شبكة Wi-Fi متاحة"</item>
-        <item quantity="other">"شبكات Wi-Fi متاحة"</item>
+        <item quantity="one">"شبكة WLAN متاحة"</item>
+        <item quantity="other">"شبكات WLAN متاحة"</item>
     </plurals>
   <plurals name="wifi_available_detailed">
-        <item quantity="one">"هناك شبكة Wi-Fi مفتوحة متاحة"</item>
-        <item quantity="other">"هناك شبكات Wi-Fi مفتوحة متاحة"</item>
+        <item quantity="one">"هناك شبكة WLAN مفتوحة متاحة"</item>
+        <item quantity="other">"هناك شبكات WLAN مفتوحة متاحة"</item>
     </plurals>
-  <string name="wifi_available_sign_in">"تسجيل الدخول إلى شبكة Wi-Fi"</string>
-  <string name="wifi_watchdog_network_disabled">"تعذر الاتصال بـ Wi-Fi"</string>
+  <string name="wifi_available_sign_in">"تسجيل الدخول إلى شبكة WLAN"</string>
+  <string name="wifi_watchdog_network_disabled">"تعذر الاتصال بـ WLAN"</string>
   <string name="wifi_watchdog_network_disabled_detailed">" تحتوي على اتصال إنترنت ضعيف."</string>
-  <string name="wifi_p2p_dialog_title">"اتصال Wi-Fi مباشر"</string>
-  <string name="wifi_p2p_turnon_message">"ابدأ تشغيل اتصال Wi-Fi المباشر. يؤدي ذلك إلى إيقاف تشغيل عميل/نقطة اتصال Wi-Fi."</string>
-  <string name="wifi_p2p_failed_message">"تعذر بدء اتصال Wi-Fi مباشر"</string>
-  <string name="wifi_p2p_enabled_notification_title">"تم تشغيل اتصال Wi-Fi المباشر"</string>
+  <string name="wifi_p2p_dialog_title">"اتصال WLAN مباشر"</string>
+  <string name="wifi_p2p_turnon_message">"ابدأ تشغيل اتصال WLAN المباشر. يؤدي ذلك إلى إيقاف تشغيل عميل/نقطة اتصال WLAN."</string>
+  <string name="wifi_p2p_failed_message">"تعذر بدء اتصال WLAN مباشر"</string>
+  <string name="wifi_p2p_enabled_notification_title">"تم تشغيل اتصال WLAN المباشر"</string>
   <string name="wifi_p2p_enabled_notification_message">"المس للحصول على الإعدادات"</string>
   <string name="select_character">"إدراج حرف"</string>
   <string name="sms_control_title">"إرسال رسائل قصيرة SMS"</string>
@@ -1479,12 +1479,12 @@
   <string name="data_usage_3g_limit_title">"تم تعطيل بيانات شبكات الجيل الثاني والجيل الثالث"</string>
   <string name="data_usage_4g_limit_title">"تم تعطيل بيانات شبكة الجيل الرابع"</string>
   <string name="data_usage_mobile_limit_title">"تم تعطيل بيانات الجوال"</string>
-  <string name="data_usage_wifi_limit_title">"تم تعطيل بيانات Wi-Fi"</string>
+  <string name="data_usage_wifi_limit_title">"تم تعطيل بيانات WLAN"</string>
   <string name="data_usage_limit_body">"المس للتمكين"</string>
   <string name="data_usage_3g_limit_snoozed_title">"تم تجاوز حد بيانات شبكات 2G-3G"</string>
   <string name="data_usage_4g_limit_snoozed_title">"تم تجاوز حد بيانات 4G"</string>
   <string name="data_usage_mobile_limit_snoozed_title">"تم تجاوز حد بيانات الجوال"</string>
-  <string name="data_usage_wifi_limit_snoozed_title">"تم تجاوز حد بيانات شبكة Wi-Fi"</string>
+  <string name="data_usage_wifi_limit_snoozed_title">"تم تجاوز حد بيانات شبكة WLAN"</string>
   <string name="data_usage_limit_snoozed_body">"<xliff:g id="SIZE">%s</xliff:g> أكثر من الحد المعين"</string>
   <string name="data_usage_restricted_title">"تم تقييد بيانات الخلفية"</string>
   <string name="data_usage_restricted_body">"انقر لإزالة التقييد"</string>

@@ -96,11 +96,11 @@
   <string msgid="50784596594403483" name="permdesc_updateAppOpsStats">"Mengizinkan aplikasi memodifikasi statistik pengoperasian aplikasi yang dikumpulkan. Tidak untuk digunakan oleh aplikasi normal."</string>
   <string msgid="4708181184441880175" name="permlab_freezeScreen">"membekukan layar"</string>
   <string msgid="8558923789222670064" name="permdesc_freezeScreen">"Izinkan aplikasi membekukan layar untuk transisi layar penuh untuk sementara."</string>
-  <string msgid="5295047563564981250" name="permdesc_accessFineLocation">"Mengizinkan aplikasi memperoleh lokasi Anda yang akurat menggunakan Sistem Pemosisian Global (GPS) atau sumber lokasi jaringan, misalnya menara seluler dan Wi-Fi. Layanan lokasi ini harus diaktifkan dan tersedia untuk perangkat Anda agar aplikasi dapat menggunakannya. Aplikasi dapat menggunakan ini untuk menentukan perkiraan tempat Anda berada dan dapat menghabiskan daya baterai tambahan."</string>
-  <string msgid="5595661694746742168" name="permlab_configureWifiDisplay">"mengonfigurasi tampilan Wi-Fi"</string>
-  <string msgid="7916815158690218065" name="permdesc_configureWifiDisplay">"Izinkan aplikasi mengonfigurasi dan terhubung ke tampilan Wi-Fi."</string>
-  <string msgid="393641276723695496" name="permlab_controlWifiDisplay">"mengontrol tampilan Wi-Fi"</string>
-  <string msgid="4543912292681826986" name="permdesc_controlWifiDisplay">"Izinkan aplikasi mengontrol fitur tingkat rendah dari tampilan Wi-Fi."</string>
+  <string msgid="5295047563564981250" name="permdesc_accessFineLocation">"Mengizinkan aplikasi memperoleh lokasi Anda yang akurat menggunakan Sistem Pemosisian Global (GPS) atau sumber lokasi jaringan, misalnya menara seluler dan WLAN. Layanan lokasi ini harus diaktifkan dan tersedia untuk perangkat Anda agar aplikasi dapat menggunakannya. Aplikasi dapat menggunakan ini untuk menentukan perkiraan tempat Anda berada dan dapat menghabiskan daya baterai tambahan."</string>
+  <string msgid="5595661694746742168" name="permlab_configureWifiDisplay">"mengonfigurasi tampilan WLAN"</string>
+  <string msgid="7916815158690218065" name="permdesc_configureWifiDisplay">"Izinkan aplikasi mengonfigurasi dan terhubung ke tampilan WLAN."</string>
+  <string msgid="393641276723695496" name="permlab_controlWifiDisplay">"mengontrol tampilan WLAN"</string>
+  <string msgid="4543912292681826986" name="permdesc_controlWifiDisplay">"Izinkan aplikasi mengontrol fitur tingkat rendah dari tampilan WLAN."</string>
   <string msgid="2651072630501126222" name="permlab_cameraDisableTransmitLed">"nonaktifkan LED indikator transmisi saat kamera digunakan"</string>
   <string msgid="4764585465480295341" name="permdesc_cameraDisableTransmitLed">"Izinkan aplikasi sistem yang sudah dipasang sebelumnya menonaktifkan LED indikator penggunaan kamera."</string>
   <string msgid="8150613823900460576" name="permlab_sdcardAccessAll">"akses penyimpanan eksternal"</string>
@@ -152,8 +152,8 @@
   <string msgid="4653586947747330058" name="app_running_notification_text">"Sentuh untuk informasi selengkapnya atau hentikan aplikasi."</string>
   <string msgid="8495155593358054676" name="network_available_sign_in">"Masuk ke jaringan"</string>
   <!-- no translation found for network_available_sign_in_detailed (8000081941447976118) -->
-  <string msgid="8012981257742232475" product="tablet" name="wifi_p2p_frequency_conflict_message">"Sambungan tablet akan diputuskan dari Wi-Fi untuk sementara saat tersambung dengan <xliff:g id="DEVICE_NAME">%1$s</xliff:g>"</string>
-  <string msgid="7363907213787469151" product="default" name="wifi_p2p_frequency_conflict_message">"Ponsel akan terputus sementara dari Wi-Fi saat tersambung ke <xliff:g id="DEVICE_NAME">%1$s</xliff:g>"</string>
+  <string msgid="8012981257742232475" product="tablet" name="wifi_p2p_frequency_conflict_message">"Sambungan tablet akan diputuskan dari WLAN untuk sementara saat tersambung dengan <xliff:g id="DEVICE_NAME">%1$s</xliff:g>"</string>
+  <string msgid="7363907213787469151" product="default" name="wifi_p2p_frequency_conflict_message">"Ponsel akan terputus sementara dari WLAN saat tersambung ke <xliff:g id="DEVICE_NAME">%1$s</xliff:g>"</string>
   <string msgid="1645436466285310855" name="sms_short_code_confirm_message">"&lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; ingin mengirim pesan kepada &lt;b&gt;<xliff:g id="DEST_ADDRESS">%2$s</xliff:g>&lt;/b&gt;."</string>
   <string msgid="3492025719868078457" name="sms_short_code_details">"Hal ini "<font fgcolor="#ffffb060">"dapat menyebabkan akun ponsel Anda"</font>" mendapat tagihan."</string>
   <string msgid="5523826349105123687" name="sms_premium_short_code_details">
@@ -756,11 +756,11 @@
   <string name="permdesc_changeTetherState">"Mengizinkan aplikasi mengubah status konektivitas jaringan yang tertambat."</string>
   <string name="permlab_changeBackgroundDataSetting">"mengubah setelan penggunaan data latar belakang"</string>
   <string name="permdesc_changeBackgroundDataSetting">"Mengizinkan aplikasi mengubah setelan penggunaan data latar belakang."</string>
-  <string name="permlab_accessWifiState">"lihat kondisi Wi-Fi"</string>
-  <string name="permdesc_accessWifiState">"Mengizinkan aplikasi melihat informasi tentang kondisi Wi-Fi."</string>
-  <string name="permlab_changeWifiState">"ubah status Wi-Fi"</string>
-  <string name="permdesc_changeWifiState">"Mengizinkan aplikasi tersambung dan diputus dari titik akses Wi-Fi, dan melakukan perubahan pada jaringan Wi-Fi yang dikonfigurasi."</string>
-  <string name="permlab_changeWifiMulticastState">"Izinkan penerimaan Wi-Fi Multicast"</string>
+  <string name="permlab_accessWifiState">"lihat kondisi WLAN"</string>
+  <string name="permdesc_accessWifiState">"Mengizinkan aplikasi melihat informasi tentang kondisi WLAN."</string>
+  <string name="permlab_changeWifiState">"ubah status WLAN"</string>
+  <string name="permdesc_changeWifiState">"Mengizinkan aplikasi tersambung dan diputus dari titik akses WLAN, dan melakukan perubahan pada jaringan WLAN yang dikonfigurasi."</string>
+  <string name="permlab_changeWifiMulticastState">"Izinkan penerimaan WLAN Multicast"</string>
   <string name="permlab_accessWimaxState">"lihat status WiMAX"</string>
   <string name="permdesc_accessWimaxState">"Mengizinkan aplikasi melihat informasi tentang status WiMAX."</string>
   <string name="permlab_changeWimaxState">"Ganti status WiMAX"</string>
@@ -1246,20 +1246,20 @@
   <string name="ringtone_picker_title">"Nada dering"</string>
   <string name="ringtone_unknown">"Nada dering tidak dikenal"</string>
   <plurals name="wifi_available">
-        <item quantity="one">"Jaringan Wi-Fi tersedia"</item>
-        <item quantity="other">"Jaringan Wi-Fi"</item>
+        <item quantity="one">"Jaringan WLAN tersedia"</item>
+        <item quantity="other">"Jaringan WLAN"</item>
     </plurals>
   <plurals name="wifi_available_detailed">
-        <item quantity="one">"Jaringan Wi-Fi terbuka tersedia"</item>
-        <item quantity="other">"Jaringan Wi-Fi terbuka tersedia"</item>
+        <item quantity="one">"Jaringan WLAN terbuka tersedia"</item>
+        <item quantity="other">"Jaringan WLAN terbuka tersedia"</item>
     </plurals>
-  <string name="wifi_available_sign_in">"Masuk ke jaringan Wi-Fi"</string>
-  <string name="wifi_watchdog_network_disabled">"Tidak dapat tersambung ke Wi-Fi"</string>
+  <string name="wifi_available_sign_in">"Masuk ke jaringan WLAN"</string>
+  <string name="wifi_watchdog_network_disabled">"Tidak dapat tersambung ke WLAN"</string>
   <string name="wifi_watchdog_network_disabled_detailed">" memiliki sambungan internet yang buruk."</string>
-  <string name="wifi_p2p_dialog_title">"Wi-Fi Langsung"</string>
-  <string name="wifi_p2p_turnon_message">"Memulai operasi Wi-Fi Langsung. Opsi ini akan mematikan operasi hotspot/klien WiFi."</string>
-  <string name="wifi_p2p_failed_message">"Tidak dapat memulai Wi-Fi Langsung"</string>
-  <string name="wifi_p2p_enabled_notification_title">"Wi-Fi Langsung aktif"</string>
+  <string name="wifi_p2p_dialog_title">"WLAN Langsung"</string>
+  <string name="wifi_p2p_turnon_message">"Memulai operasi WLAN Langsung. Opsi ini akan mematikan operasi hotspot/klien WiFi."</string>
+  <string name="wifi_p2p_failed_message">"Tidak dapat memulai WLAN Langsung"</string>
+  <string name="wifi_p2p_enabled_notification_title">"WLAN Langsung aktif"</string>
   <string name="wifi_p2p_enabled_notification_message">"Sentuh untuk setelan"</string>
   <string name="select_character">"Sisipkan huruf"</string>
   <string name="sms_control_title">"Mengirim pesan SMS"</string>
@@ -1479,12 +1479,12 @@
   <string name="data_usage_3g_limit_title">"Data 2G-3G dinonaktifkan"</string>
   <string name="data_usage_4g_limit_title">"Data 4G dinonaktifkan"</string>
   <string name="data_usage_mobile_limit_title">"Data seluler dinonaktifkan"</string>
-  <string name="data_usage_wifi_limit_title">"Data Wi-Fi dinonaktifkan"</string>
+  <string name="data_usage_wifi_limit_title">"Data WLAN dinonaktifkan"</string>
   <string name="data_usage_limit_body">"Sentuh untuk mengaktifkan"</string>
   <string name="data_usage_3g_limit_snoozed_title">"Batas data 2G-3G terlampaui"</string>
   <string name="data_usage_4g_limit_snoozed_title">"Batas data 4G terlampaui"</string>
   <string name="data_usage_mobile_limit_snoozed_title">"Batas data seluler terlampaui"</string>
-  <string name="data_usage_wifi_limit_snoozed_title">"Batas data Wi-Fi terlampaui"</string>
+  <string name="data_usage_wifi_limit_snoozed_title">"Batas data WLAN terlampaui"</string>
   <string name="data_usage_limit_snoozed_body">"<xliff:g id="SIZE">%s</xliff:g> melebihi batas yang ditentukan"</string>
   <string name="data_usage_restricted_title">"Data latar belakang dibatasi"</string>
   <string name="data_usage_restricted_body">"Sentuh untuk menghapus pembatasan"</string>

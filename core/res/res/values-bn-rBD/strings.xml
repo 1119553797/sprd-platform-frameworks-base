@@ -328,11 +328,11 @@
   <string name="permlab_changeBackgroundDataSetting">পটভূমি ডাটা ব্যবহার সেটিং পরিবর্তন</string>
   <string name="permdesc_changeBackgroundDataSetting">একটি আবেদন পরিবর্তন করতে সক্ষম 
        পটভূমি ডাটা ব্যবহার সেটিং.</string>
-  <string name="permlab_accessWifiState">Wi-Fi অবস্থা প্রদর্শন</string>
-  <string name="permdesc_accessWifiState">একটি অ্যাপলিকেশন Wi-Fi এর অবস্থা সম্পর্কে তথ্য দেখার সুযোগ দেয়.</string>
-  <string name="permlab_changeWifiState">Wi-Fi অবস্থা পরিবর্তন</string>
-  <string name="permdesc_changeWifiState">একটি অ্যাপ্লিকেশনের সাথে সংযোগ স্থাপনের জন্য Wi-Fi অ্যাক্সেস পয়েন্ট থেকে সংযোগ বিচ্ছিন্ন, এবং পরিবর্তন Wi-Fi নেটওয়ার্কের কনফিগার করা যায়.</string>
-  <string name="permlab_changeWifiMulticastState">Wi-Fi মাল্টিকাস্ট অনুমোদন
+  <string name="permlab_accessWifiState">WLAN অবস্থা প্রদর্শন</string>
+  <string name="permdesc_accessWifiState">একটি অ্যাপলিকেশন WLAN এর অবস্থা সম্পর্কে তথ্য দেখার সুযোগ দেয়.</string>
+  <string name="permlab_changeWifiState">WLAN অবস্থা পরিবর্তন</string>
+  <string name="permdesc_changeWifiState">একটি অ্যাপ্লিকেশনের সাথে সংযোগ স্থাপনের জন্য WLAN অ্যাক্সেস পয়েন্ট থেকে সংযোগ বিচ্ছিন্ন, এবং পরিবর্তন WLAN নেটওয়ার্কের কনফিগার করা যায়.</string>
+  <string name="permlab_changeWifiMulticastState">WLAN মাল্টিকাস্ট অনুমোদন
        অভ্যর্থন</string>
   <string name="permlab_bluetoothAdmin">ব্লুটুথ প্রশাসন</string>
   <string name="permlab_bluetooth">ব্লুটুথ সংযোগ নির্মাণ</string>
@@ -607,12 +607,12 @@
   <string name="ringtone_silent">নীরব</string>
   <string name="ringtone_unknown">অজানা রিংটোন</string>
   <plurals name="wifi_available">
-    <item quantity="one">Wi-Fi নেটওয়ার্কের উপলব্ধ</item>
-    <item quantity="other">Wi-Fi নেটওয়ার্কের উপলব্ধ</item>
+    <item quantity="one">WLAN নেটওয়ার্কের উপলব্ধ</item>
+    <item quantity="other">WLAN নেটওয়ার্কের উপলব্ধ</item>
   </plurals>
   <plurals name="wifi_available_detailed">
-    <item quantity="one">Wi-Fi নেটওয়ার্কের উপলব্ধ খুলুন</item>
-    <item quantity="other">Wi-Fi  নেটওয়ার্কের ওপেন উপলব্ধ</item>
+    <item quantity="one">WLAN নেটওয়ার্কের উপলব্ধ খুলুন</item>
+    <item quantity="other">WLAN  নেটওয়ার্কের ওপেন উপলব্ধ</item>
   </plurals>
   <string name="select_character">অক্ষর ঢোকান</string>
   <string name="sms_control_title">SMS বার্তা প্রেরণ</string>

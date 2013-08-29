@@ -96,11 +96,11 @@
   <string msgid="50784596594403483" name="permdesc_updateAppOpsStats">"Lar appen endre innsamlet bruksstatistikk. Ikke beregnet på vanlige apper."</string>
   <string msgid="4708181184441880175" name="permlab_freezeScreen">"fryse skjermbildet"</string>
   <string msgid="8558923789222670064" name="permdesc_freezeScreen">"Tillater appen å midlertidig fryse skjermen for overgang til fullskjerm."</string>
-  <string msgid="5295047563564981250" name="permdesc_accessFineLocation">"Lar appen se den nøyaktige posisjonen din ved hjelp av GPS (Global Positioning System) eller posisjonstjenester for nettverk, som for eksempel basestasjoner og Wi-Fi. Disse posisjonstjenestene må være slått på og tilgjengelig for enheten din, for at appen skal kunne bruke dem. Apper kan bruke dette til å fastslå hvor du er, og funksjonen kan medføre økt batteribruk."</string>
-  <string msgid="5595661694746742168" name="permlab_configureWifiDisplay">"konfigurere Wi-Fi-skjermer"</string>
-  <string msgid="7916815158690218065" name="permdesc_configureWifiDisplay">"Tillater appen å konfigurere og koble til Wi-Fi-skjermer."</string>
-  <string msgid="393641276723695496" name="permlab_controlWifiDisplay">"kontrollere Wi-Fi-skjermer"</string>
-  <string msgid="4543912292681826986" name="permdesc_controlWifiDisplay">"Tillater appen å kontrollere lavnivåfunksjoner i Wi-Fi-skjermer."</string>
+  <string msgid="5295047563564981250" name="permdesc_accessFineLocation">"Lar appen se den nøyaktige posisjonen din ved hjelp av GPS (Global Positioning System) eller posisjonstjenester for nettverk, som for eksempel basestasjoner og WLAN. Disse posisjonstjenestene må være slått på og tilgjengelig for enheten din, for at appen skal kunne bruke dem. Apper kan bruke dette til å fastslå hvor du er, og funksjonen kan medføre økt batteribruk."</string>
+  <string msgid="5595661694746742168" name="permlab_configureWifiDisplay">"konfigurere WLAN-skjermer"</string>
+  <string msgid="7916815158690218065" name="permdesc_configureWifiDisplay">"Tillater appen å konfigurere og koble til WLAN-skjermer."</string>
+  <string msgid="393641276723695496" name="permlab_controlWifiDisplay">"kontrollere WLAN-skjermer"</string>
+  <string msgid="4543912292681826986" name="permdesc_controlWifiDisplay">"Tillater appen å kontrollere lavnivåfunksjoner i WLAN-skjermer."</string>
   <string msgid="2651072630501126222" name="permlab_cameraDisableTransmitLed">"deaktiver LED-lyset for indikering av overføring når kameraet er i bruk"</string>
   <string msgid="4764585465480295341" name="permdesc_cameraDisableTransmitLed">"Tillater at forhåndsinnstallerte systemapper deaktiverer LED-indikatoren for kamerabruk."</string>
   <string msgid="8150613823900460576" name="permlab_sdcardAccessAll">"åpne eksternlagring for alle brukere"</string>
@@ -152,8 +152,8 @@
   <string msgid="4653586947747330058" name="app_running_notification_text">"Trykk for mer informasjon, eller for å stoppe appen."</string>
   <string msgid="8495155593358054676" name="network_available_sign_in">"Logg deg på nettverket"</string>
   <!-- no translation found for network_available_sign_in_detailed (8000081941447976118) -->
-  <string msgid="8012981257742232475" product="tablet" name="wifi_p2p_frequency_conflict_message">"Nettbrettet frakobles Wi-Fi midlertidig mens den er tilkoblet <xliff:g id="DEVICE_NAME">%1$s</xliff:g>"</string>
-  <string msgid="7363907213787469151" product="default" name="wifi_p2p_frequency_conflict_message">"Telefonen frakobles Wi-Fi midlertidig mens den er tilkoblet <xliff:g id="DEVICE_NAME">%1$s</xliff:g>"</string>
+  <string msgid="8012981257742232475" product="tablet" name="wifi_p2p_frequency_conflict_message">"Nettbrettet frakobles WLAN midlertidig mens den er tilkoblet <xliff:g id="DEVICE_NAME">%1$s</xliff:g>"</string>
+  <string msgid="7363907213787469151" product="default" name="wifi_p2p_frequency_conflict_message">"Telefonen frakobles WLAN midlertidig mens den er tilkoblet <xliff:g id="DEVICE_NAME">%1$s</xliff:g>"</string>
   <string msgid="1645436466285310855" name="sms_short_code_confirm_message">"&lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; ønsker å sende en melding til &lt;b&gt;<xliff:g id="DEST_ADDRESS">%2$s</xliff:g>&lt;/b&gt;."</string>
   <string msgid="3492025719868078457" name="sms_short_code_details">"Dette "<font fgcolor="#ffffb060">"kan føre til belastninger"</font>" på mobilkontoen din."</string>
   <string msgid="5523826349105123687" name="sms_premium_short_code_details">
@@ -1253,13 +1253,13 @@
     <item msgid="1634101450343277345" quantity="one">"Åpent trådløsnett i nærheten"</item>
     <item msgid="7915895323644292768" quantity="other">"Åpne trådløsnett i nærheten"</item>
   </plurals>
-  <string msgid="9157196203958866662" name="wifi_available_sign_in">"Logg deg på Wi-Fi-nettverket"</string>
-  <string msgid="7904214231651546347" name="wifi_watchdog_network_disabled">"Kan ikke koble til Wi-Fi"</string>
+  <string msgid="9157196203958866662" name="wifi_available_sign_in">"Logg deg på WLAN-nettverket"</string>
+  <string msgid="7904214231651546347" name="wifi_watchdog_network_disabled">"Kan ikke koble til WLAN"</string>
   <string msgid="4917472096696322767" name="wifi_watchdog_network_disabled_detailed">" har en dårlig Internett-tilkobling."</string>
-  <string msgid="97611782659324517" name="wifi_p2p_dialog_title">"Wi-Fi Direct"</string>
-  <string msgid="2804722042556269129" name="wifi_p2p_turnon_message">"Start Wi-Fi Direct-handling. Dette deaktiverer Wi-Fi-klienten og -handlingen."</string>
-  <string msgid="1820097493844848281" name="wifi_p2p_failed_message">"Kunne ikke starte Wi-Fi Direct"</string>
-  <string msgid="2068321881673734886" name="wifi_p2p_enabled_notification_title">"Wi-Fi Direct er slått på"</string>
+  <string msgid="97611782659324517" name="wifi_p2p_dialog_title">"WLAN Direct"</string>
+  <string msgid="2804722042556269129" name="wifi_p2p_turnon_message">"Start WLAN Direct-handling. Dette deaktiverer WLAN-klienten og -handlingen."</string>
+  <string msgid="1820097493844848281" name="wifi_p2p_failed_message">"Kunne ikke starte WLAN Direct"</string>
+  <string msgid="2068321881673734886" name="wifi_p2p_enabled_notification_title">"WLAN Direct er slått på"</string>
   <string msgid="1638949953993894335" name="wifi_p2p_enabled_notification_message">"Berør for å se innstillinger"</string>
   <string msgid="3365550120617701745" name="select_character">"Sett inn tegn"</string>
   <string msgid="7296612781128917719" name="sms_control_title">"Sender SMS-meldinger"</string>
@@ -1469,12 +1469,12 @@
   <string msgid="7093334419518706686" name="data_usage_3g_limit_title">"2G–3G-data er deaktivert"</string>
   <string msgid="7636489436819470761" name="data_usage_4g_limit_title">"4G-data er deaktivert"</string>
   <string msgid="7869402519391631884" name="data_usage_mobile_limit_title">"Mobildata er deaktivert"</string>
-  <string msgid="8992154736441284865" name="data_usage_wifi_limit_title">"Wi-Fi-data deaktivert"</string>
+  <string msgid="8992154736441284865" name="data_usage_wifi_limit_title">"WLAN-data deaktivert"</string>
   <string msgid="4313857592916426843" name="data_usage_limit_body">"Trykk for å aktivere"</string>
   <string msgid="7026739121138005231" name="data_usage_3g_limit_snoozed_title">"Grense på 2G-3G data overskredet"</string>
   <string msgid="1106562779311209039" name="data_usage_4g_limit_snoozed_title">"Grensen på 4G data er overskredet"</string>
   <string msgid="279240572165412168" name="data_usage_mobile_limit_snoozed_title">"Grensen for mobildatabruk er overskredet"</string>
-  <string msgid="8743856006384825974" name="data_usage_wifi_limit_snoozed_title">"Wi-Fi-datagrense overskredet"</string>
+  <string msgid="8743856006384825974" name="data_usage_wifi_limit_snoozed_title">"WLAN-datagrense overskredet"</string>
   <string msgid="2932736326652880660" name="data_usage_limit_snoozed_body">"<xliff:g id="SIZE">%s</xliff:g> over angitt grense"</string>
   <string msgid="5965157361036321914" name="data_usage_restricted_title">"Bakgrunnsdata er begrenset"</string>
   <string msgid="5087354814839059798" name="data_usage_restricted_body">"Trykk for å fjerne begrensning"</string>

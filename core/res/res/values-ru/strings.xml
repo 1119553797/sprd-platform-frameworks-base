@@ -96,11 +96,11 @@
   <string msgid="50784596594403483" name="permdesc_updateAppOpsStats">"Приложение сможет изменять собранную статистику операций в приложениях. Это разрешение не используется обычными приложениями."</string>
   <string msgid="4708181184441880175" name="permlab_freezeScreen">"Приостановка изображения"</string>
   <string msgid="8558923789222670064" name="permdesc_freezeScreen">"Приложение сможет приостанавливать изображение на время перехода в полноэкранный режим."</string>
-  <string msgid="5295047563564981250" name="permdesc_accessFineLocation">"Разрешает приложению получать данные о вашем точном местоположении с помощью глобального позиционирования (GPS), вышек сотовой связи и точек доступа Wi-Fi. Эти службы должны быть включены на устройстве, а приложению должно быть разрешено их использовать. Это может вести к дополнительному расходу заряда батареи."</string>
-  <string msgid="5595661694746742168" name="permlab_configureWifiDisplay">"настраивать экраны, подключенные через Wi-Fi"</string>
-  <string msgid="7916815158690218065" name="permdesc_configureWifiDisplay">"Приложение сможет подключаться к экранам с помощью Wi-Fi и настраивать их."</string>
-  <string msgid="393641276723695496" name="permlab_controlWifiDisplay">"Управление мониторами, подключенными через Wi-Fi"</string>
-  <string msgid="4543912292681826986" name="permdesc_controlWifiDisplay">"Приложение сможет управлять низкоуровневыми функциями экранов, подключенных через Wi-Fi."</string>
+  <string msgid="5295047563564981250" name="permdesc_accessFineLocation">"Разрешает приложению получать данные о вашем точном местоположении с помощью глобального позиционирования (GPS), вышек сотовой связи и точек доступа WLAN. Эти службы должны быть включены на устройстве, а приложению должно быть разрешено их использовать. Это может вести к дополнительному расходу заряда батареи."</string>
+  <string msgid="5595661694746742168" name="permlab_configureWifiDisplay">"настраивать экраны, подключенные через WLAN"</string>
+  <string msgid="7916815158690218065" name="permdesc_configureWifiDisplay">"Приложение сможет подключаться к экранам с помощью WLAN и настраивать их."</string>
+  <string msgid="393641276723695496" name="permlab_controlWifiDisplay">"Управление мониторами, подключенными через WLAN"</string>
+  <string msgid="4543912292681826986" name="permdesc_controlWifiDisplay">"Приложение сможет управлять низкоуровневыми функциями экранов, подключенных через WLAN."</string>
   <string msgid="2651072630501126222" name="permlab_cameraDisableTransmitLed">"Отключать светодиодный индикатор во время использования камеры"</string>
   <string msgid="4764585465480295341" name="permdesc_cameraDisableTransmitLed">"Предустановленное системное приложение сможет отключать светодиодный индикатор использования камеры."</string>
   <string msgid="8150613823900460576" name="permlab_sdcardAccessAll">"Доступ к внешним накопителям из всех аккаунтов"</string>
@@ -152,8 +152,8 @@
   <string msgid="4653586947747330058" name="app_running_notification_text">"Нажмите, чтобы получить дополнительные данные или выключить приложение."</string>
   <string msgid="8495155593358054676" name="network_available_sign_in">"Войдите в сеть"</string>
   <!-- no translation found for network_available_sign_in_detailed (8000081941447976118) -->
-  <string msgid="8012981257742232475" product="tablet" name="wifi_p2p_frequency_conflict_message">"При подключении к устройству <xliff:g id="DEVICE_NAME">%1$s</xliff:g> планшетный ПК будет временно отключаться от сети Wi-Fi"</string>
-  <string msgid="7363907213787469151" product="default" name="wifi_p2p_frequency_conflict_message">"При подключении к устройству <xliff:g id="DEVICE_NAME">%1$s</xliff:g> телефон будет временно отключаться от сети Wi-Fi"</string>
+  <string msgid="8012981257742232475" product="tablet" name="wifi_p2p_frequency_conflict_message">"При подключении к устройству <xliff:g id="DEVICE_NAME">%1$s</xliff:g> планшетный ПК будет временно отключаться от сети WLAN"</string>
+  <string msgid="7363907213787469151" product="default" name="wifi_p2p_frequency_conflict_message">"При подключении к устройству <xliff:g id="DEVICE_NAME">%1$s</xliff:g> телефон будет временно отключаться от сети WLAN"</string>
   <string msgid="1645436466285310855" name="sms_short_code_confirm_message">"Приложение &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; собирается отправить сообщение на адрес &lt;b&gt;<xliff:g id="DEST_ADDRESS">%2$s</xliff:g>&lt;/b&gt;."</string>
   <string msgid="3492025719868078457" name="sms_short_code_details">"С вашего мобильного счета "<font fgcolor="#ffffb060">"могут быть списаны средства"</font>"."</string>
   <string msgid="5523826349105123687" name="sms_premium_short_code_details">
@@ -756,11 +756,11 @@
   <string name="permdesc_changeTetherState">"Позволяет программе изменять состояние подключенного сетевого канала."</string>
   <string name="permlab_changeBackgroundDataSetting">"изменять настройки использования данных в фоновом режиме"</string>
   <string name="permdesc_changeBackgroundDataSetting">"Позволяет приложению изменять настройку использования данных в фоновом режиме."</string>
-  <string name="permlab_accessWifiState">"просматривать состояние Wi-Fi"</string>
-  <string name="permdesc_accessWifiState">"Позволяет приложению просматривать сведения о состоянии Wi-Fi."</string>
-  <string name="permlab_changeWifiState">"изменять состояние Wi-Fi"</string>
-  <string name="permdesc_changeWifiState">"Позволяет приложению подключаться к точкам доступа Wi-Fi и отключаться от них, а также вносить изменения в конфигурацию сетей Wi-Fi."</string>
-  <string name="permlab_changeWifiMulticastState">"разрешить принимать многоадресный сигнал Wi-Fi"</string>
+  <string name="permlab_accessWifiState">"просматривать состояние WLAN"</string>
+  <string name="permdesc_accessWifiState">"Позволяет приложению просматривать сведения о состоянии WLAN."</string>
+  <string name="permlab_changeWifiState">"изменять состояние WLAN"</string>
+  <string name="permdesc_changeWifiState">"Позволяет приложению подключаться к точкам доступа WLAN и отключаться от них, а также вносить изменения в конфигурацию сетей WLAN."</string>
+  <string name="permlab_changeWifiMulticastState">"разрешить принимать многоадресный сигнал WLAN"</string>
   <string name="permlab_accessWimaxState">"получать сведения о состоянии WiMAX"</string>
   <string name="permdesc_accessWimaxState">"Позволяет приложению получать сведения о состоянии WiMAX."</string>
   <string name="permlab_changeWimaxState">"изменять состояние WiMAX"</string>
@@ -1246,20 +1246,20 @@
   <string name="ringtone_picker_title">"Мелодии"</string>
   <string name="ringtone_unknown">"Неизвестная мелодия"</string>
   <plurals name="wifi_available">
-        <item quantity="one">"Доступна сеть Wi-Fi"</item>
-        <item quantity="other">"Доступна сеть Wi-Fi"</item>
+        <item quantity="one">"Доступна сеть WLAN"</item>
+        <item quantity="other">"Доступна сеть WLAN"</item>
     </plurals>
   <plurals name="wifi_available_detailed">
-        <item quantity="one">"Найдена доступная сеть Wi-Fi"</item>
-        <item quantity="other">"Найдены доступные сети Wi-Fi"</item>
+        <item quantity="one">"Найдена доступная сеть WLAN"</item>
+        <item quantity="other">"Найдены доступные сети WLAN"</item>
     </plurals>
-  <string name="wifi_available_sign_in">"Подключение к Wi-Fi"</string>
-  <string name="wifi_watchdog_network_disabled">"Не удалось подключиться к сети Wi-Fi"</string>
+  <string name="wifi_available_sign_in">"Подключение к WLAN"</string>
+  <string name="wifi_watchdog_network_disabled">"Не удалось подключиться к сети WLAN"</string>
   <string name="wifi_watchdog_network_disabled_detailed">" – плохое интернет-соединение."</string>
-  <string name="wifi_p2p_dialog_title">"Wi-Fi Direct"</string>
-  <string name="wifi_p2p_turnon_message">"Начать соединение через Wi-Fi Direct. Клиент Wi-Fi и точка доступа будут отключены."</string>
-  <string name="wifi_p2p_failed_message">"Не удалось запустить Wi-Fi Direct"</string>
-  <string name="wifi_p2p_enabled_notification_title">"Wi-Fi Direct включен"</string>
+  <string name="wifi_p2p_dialog_title">"WLAN Direct"</string>
+  <string name="wifi_p2p_turnon_message">"Начать соединение через WLAN Direct. Клиент WLAN и точка доступа будут отключены."</string>
+  <string name="wifi_p2p_failed_message">"Не удалось запустить WLAN Direct"</string>
+  <string name="wifi_p2p_enabled_notification_title">"WLAN Direct включен"</string>
   <string name="wifi_p2p_enabled_notification_message">"Нажмите, чтобы открыть настройки"</string>
   <string name="select_character">"Введите символ"</string>
   <string name="sms_control_title">"Отправка SMS-сообщений"</string>
@@ -1378,7 +1378,7 @@
   <string name="submit">"Отправить"</string>
   <string name="car_mode_disable_notification_title">"Включен режим \"Штурман\""</string>
   <string name="car_mode_disable_notification_message">"Чтобы выйти, нажмите здесь."</string>
-  <string name="tethered_notification_title">"USB-модем/точка доступа Wi-Fi используется"</string>
+  <string name="tethered_notification_title">"USB-модем/точка доступа WLAN используется"</string>
   <string name="tethered_notification_message">"Нажмите для настройки"</string>
   <string name="back_button_label">"Назад"</string>
   <string name="next_button_label">"Далее"</string>
@@ -1479,12 +1479,12 @@
   <string name="data_usage_3g_limit_title">"Передача данных 2G/3G отключена"</string>
   <string name="data_usage_4g_limit_title">"Передача данных 4G отключена"</string>
   <string name="data_usage_mobile_limit_title">"Моб. Интернет отключен"</string>
-  <string name="data_usage_wifi_limit_title">"Передача данных через Wi-Fi отключена"</string>
+  <string name="data_usage_wifi_limit_title">"Передача данных через WLAN отключена"</string>
   <string name="data_usage_limit_body">"Нажмите, чтобы включить"</string>
   <string name="data_usage_3g_limit_snoozed_title">"Превышен лимита трафика 2G и 3G"</string>
   <string name="data_usage_4g_limit_snoozed_title">"Превышен лимит на трафик 4G"</string>
   <string name="data_usage_mobile_limit_snoozed_title">"Превышен лимит на моб. трафик"</string>
-  <string name="data_usage_wifi_limit_snoozed_title">"Превышен лимит трафика Wi-Fi"</string>
+  <string name="data_usage_wifi_limit_snoozed_title">"Превышен лимит трафика WLAN"</string>
   <string name="data_usage_limit_snoozed_body">"<xliff:g id="SIZE">%s</xliff:g> превышает установленный лимит"</string>
   <string name="data_usage_restricted_title">"Фоновый режим ограничен"</string>
   <string name="data_usage_restricted_body">"Нажмите, чтобы снять ограничение"</string>

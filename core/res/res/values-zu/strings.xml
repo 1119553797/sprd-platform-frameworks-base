@@ -96,11 +96,11 @@
   <string msgid="50784596594403483" name="permdesc_updateAppOpsStats">"Ivumela uhlelo lokusebenza ukuthi lishintshe izinombolo zokusebenza kohlelo lokusebenza lokuqoqiwe. Akufanele kusetshenziswe izinhlelo zokusebenza ezijwayelekile."</string>
   <string msgid="4708181184441880175" name="permlab_freezeScreen">"misa kancane isikrini"</string>
   <string msgid="8558923789222670064" name="permdesc_freezeScreen">"Ivumela uhlelo lokusebenza ukumisa okwesikhashana isikrini ngokushintshwa kwesikrini esigcwele."</string>
-  <string msgid="5295047563564981250" name="permdesc_accessFineLocation">"Ivumela uhlelo lokusebenza ukuthola indawo yakho uqobo isebenzisa i-Global Positioning System (GPS) noma imithombo yendawo yenethiwekhi njengama-cell tower ne-Wi-Fi. Lawa masevisi endawo kufanele akhanyiswe futhi atholakale kudivayisi yakho ukuze asetshenziswe uhlelo lokusebenza. Izinhlelo zokusebenza zingasebenzias lokhu ukucacisa lapho ukhona, futhi angasebenzisa ibhethri elingeziwe."</string>
-  <string msgid="5595661694746742168" name="permlab_configureWifiDisplay">"lungisa ukubukwa kwe-Wi-Fi"</string>
-  <string msgid="7916815158690218065" name="permdesc_configureWifiDisplay">"Ivumela uhlelo lokusebenza ukulungisa nokuxhuma ekubukisweni kwe-Wi-Fi."</string>
-  <string msgid="393641276723695496" name="permlab_controlWifiDisplay">"lawula ukubukwa kwe-Wi-Fi"</string>
-  <string msgid="4543912292681826986" name="permdesc_controlWifiDisplay">"Uvumela uhlelo lokusebenza ukulawula izici zeleveli ephansi zokuboniswa kwe-Wi-Fi."</string>
+  <string msgid="5295047563564981250" name="permdesc_accessFineLocation">"Ivumela uhlelo lokusebenza ukuthola indawo yakho uqobo isebenzisa i-Global Positioning System (GPS) noma imithombo yendawo yenethiwekhi njengama-cell tower ne-WLAN. Lawa masevisi endawo kufanele akhanyiswe futhi atholakale kudivayisi yakho ukuze asetshenziswe uhlelo lokusebenza. Izinhlelo zokusebenza zingasebenzias lokhu ukucacisa lapho ukhona, futhi angasebenzisa ibhethri elingeziwe."</string>
+  <string msgid="5595661694746742168" name="permlab_configureWifiDisplay">"lungisa ukubukwa kwe-WLAN"</string>
+  <string msgid="7916815158690218065" name="permdesc_configureWifiDisplay">"Ivumela uhlelo lokusebenza ukulungisa nokuxhuma ekubukisweni kwe-WLAN."</string>
+  <string msgid="393641276723695496" name="permlab_controlWifiDisplay">"lawula ukubukwa kwe-WLAN"</string>
+  <string msgid="4543912292681826986" name="permdesc_controlWifiDisplay">"Uvumela uhlelo lokusebenza ukulawula izici zeleveli ephansi zokuboniswa kwe-WLAN."</string>
   <string msgid="2651072630501126222" name="permlab_cameraDisableTransmitLed">"khubaza i-LED yesikhombi sokudlulisa uma ikhamera isebenza"</string>
   <string msgid="4764585465480295341" name="permdesc_cameraDisableTransmitLed">"Ivumela isistimu efakwe ngaphambili yohlelo lokusebenza ukuze ikhubaze i-LED yesikhombi sokusetshenziswa kwekhamera."</string>
   <string msgid="8150613823900460576" name="permlab_sdcardAccessAll">"ukufinyelela isilondolozi sangaphandle sabo bonke abasebenzisi"</string>
@@ -152,8 +152,8 @@
   <string msgid="4653586947747330058" name="app_running_notification_text">"Thinta ukuthola ulwazi oluningi noma ukumisa uhlelo lokusebenza."</string>
   <string msgid="8495155593358054676" name="network_available_sign_in">"Ngena ngemvume kunethiwekhi"</string>
   <!-- no translation found for network_available_sign_in_detailed (8000081941447976118) -->
-  <string msgid="8012981257742232475" product="tablet" name="wifi_p2p_frequency_conflict_message">"Ithebulethi izonqamuka okwesikhashana ku-Wi-Fi ngenkathi ixhumeke ku-<xliff:g id="DEVICE_NAME">%1$s</xliff:g>"</string>
-  <string msgid="7363907213787469151" product="default" name="wifi_p2p_frequency_conflict_message">"Ifoni izonqamuka okwesikhashana ku-Wi-Fi ngenkathi ixhumeke ku-<xliff:g id="DEVICE_NAME">%1$s</xliff:g>"</string>
+  <string msgid="8012981257742232475" product="tablet" name="wifi_p2p_frequency_conflict_message">"Ithebulethi izonqamuka okwesikhashana ku-WLAN ngenkathi ixhumeke ku-<xliff:g id="DEVICE_NAME">%1$s</xliff:g>"</string>
+  <string msgid="7363907213787469151" product="default" name="wifi_p2p_frequency_conflict_message">"Ifoni izonqamuka okwesikhashana ku-WLAN ngenkathi ixhumeke ku-<xliff:g id="DEVICE_NAME">%1$s</xliff:g>"</string>
   <string msgid="1645436466285310855" name="sms_short_code_confirm_message">"I-&lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; ingathanda ukuthumela umlayezo ku-&lt;b&gt;<xliff:g id="DEST_ADDRESS">%2$s</xliff:g>&lt;/b&gt;."</string>
   <string msgid="3492025719868078457" name="sms_short_code_details">"Lokhu "<font fgcolor="#ffffb060">"kungabangela amashaji"</font>" ku-akhawunti yakho yeselula."</string>
   <string msgid="5523826349105123687" name="sms_premium_short_code_details">
@@ -754,11 +754,11 @@
   <string msgid="8905815579146349568" name="permdesc_changeTetherState">"Ivumela uhlelo lokusebenza ukushintsha isimo soxhumano lwenethiwekhi lokusebenzisa ifoni njengemodemu."</string>
   <string msgid="1400666012671648741" name="permlab_changeBackgroundDataSetting">"shintsha idatha yasemuva yelungiselelo lokusebenzisa"</string>
   <string msgid="1001482853266638864" name="permdesc_changeBackgroundDataSetting">"Ivumela uhlelo lokusebenza ukushintsha isilungiselelo lokusebenzisa idatha yasemuva."</string>
-  <string msgid="8100926650211034400" name="permlab_accessWifiState">"buka isimo se-Wi-Fi"</string>
-  <string msgid="485796529139236346" name="permdesc_accessWifiState">"Ivumela uhlelo lokusebenza ukubuka ukwaziswa mayelana nesimo se-Wi-Fi."</string>
+  <string msgid="8100926650211034400" name="permlab_accessWifiState">"buka isimo se-WLAN"</string>
+  <string msgid="485796529139236346" name="permdesc_accessWifiState">"Ivumela uhlelo lokusebenza ukubuka ukwaziswa mayelana nesimo se-WLAN."</string>
   <string msgid="7280632711057112137" name="permlab_changeWifiState">"shintsha isimo se-WiFi"</string>
-  <string msgid="2950383153656873267" name="permdesc_changeWifiState">"Ivumela uhlelo lokusebena ukuxhuma futhi ingaxhumeki kumaphoyinti e-Wi-Fi, nokwenza izinguquko kumanethiwekhi e-Wi-Fi amisiwe."</string>
-  <string msgid="1368253871483254784" name="permlab_changeWifiMulticastState">"ivumela isamukeli se-Wi-Fi Multicast"</string>
+  <string msgid="2950383153656873267" name="permdesc_changeWifiState">"Ivumela uhlelo lokusebena ukuxhuma futhi ingaxhumeki kumaphoyinti e-WLAN, nokwenza izinguquko kumanethiwekhi e-WLAN amisiwe."</string>
+  <string msgid="1368253871483254784" name="permlab_changeWifiMulticastState">"ivumela isamukeli se-WLAN Multicast"</string>
   <string msgid="2800410363171809280" name="permlab_accessWimaxState">"Buka isimo se-WiMAX"</string>
   <string msgid="8298035866227524023" name="permdesc_accessWimaxState">"Ivumela uhlelo lokusebenza ukubuka ulwazi mayelana nesimo se-WiMAX."</string>
   <string msgid="340465839241528618" name="permlab_changeWimaxState">"shintsha isimo se-WiMAX"</string>
@@ -1246,20 +1246,20 @@
   <string msgid="3515143939175119094" name="ringtone_picker_title">"Amaringithoni"</string>
   <string msgid="5477919988701784788" name="ringtone_unknown">"Iringithoni engaziwa"</string>
   <plurals name="wifi_available">
-    <item msgid="6654123987418168693" quantity="one">"Inethiwekhi ye-Wi-Fi iyatholakala"</item>
-    <item msgid="4192424489168397386" quantity="other">"Amanethiwekhi e-Wi-Fi ayatholakala"</item>
+    <item msgid="6654123987418168693" quantity="one">"Inethiwekhi ye-WLAN iyatholakala"</item>
+    <item msgid="4192424489168397386" quantity="other">"Amanethiwekhi e-WLAN ayatholakala"</item>
   </plurals>
   <plurals name="wifi_available_detailed">
-    <item msgid="1634101450343277345" quantity="one">"Vula inethiwekhi ye-Wi-Fi etholakalayo"</item>
-    <item msgid="7915895323644292768" quantity="other">"Vula amanethiwekhi we-Wi-Fi atholakalayo"</item>
+    <item msgid="1634101450343277345" quantity="one">"Vula inethiwekhi ye-WLAN etholakalayo"</item>
+    <item msgid="7915895323644292768" quantity="other">"Vula amanethiwekhi we-WLAN atholakalayo"</item>
   </plurals>
-  <string msgid="9157196203958866662" name="wifi_available_sign_in">"Ngena ngemvume kunethiwekhi ye-Wi-Fi"</string>
-  <string msgid="7904214231651546347" name="wifi_watchdog_network_disabled">"Ayikwazanga ukuxhuma kwi-Wi-Fi"</string>
+  <string msgid="9157196203958866662" name="wifi_available_sign_in">"Ngena ngemvume kunethiwekhi ye-WLAN"</string>
+  <string msgid="7904214231651546347" name="wifi_watchdog_network_disabled">"Ayikwazanga ukuxhuma kwi-WLAN"</string>
   <string msgid="4917472096696322767" name="wifi_watchdog_network_disabled_detailed">" inoxhumano oluphansi lwe-inthanethi."</string>
   <string msgid="97611782659324517" name="wifi_p2p_dialog_title">"I-WiFi Eqondile"</string>
   <string msgid="2804722042556269129" name="wifi_p2p_turnon_message">"Qala ukusebenza kwe-WiFi Okuqondile. Lokhu kuzocima ikhasimende le-WiFi/Ukusebenza okwe-hotspot"</string>
-  <string msgid="1820097493844848281" name="wifi_p2p_failed_message">"Yehlulekile ukuqala i-Wi-Fi Ngqo"</string>
-  <string msgid="2068321881673734886" name="wifi_p2p_enabled_notification_title">"I-Wi-Fi Direct ivulekile"</string>
+  <string msgid="1820097493844848281" name="wifi_p2p_failed_message">"Yehlulekile ukuqala i-WLAN Ngqo"</string>
+  <string msgid="2068321881673734886" name="wifi_p2p_enabled_notification_title">"I-WLAN Direct ivulekile"</string>
   <string msgid="1638949953993894335" name="wifi_p2p_enabled_notification_message">"Thinta ukuze uthole izilungiselelo"</string>
   <string msgid="3365550120617701745" name="select_character">"Faka uhlamvu"</string>
   <string msgid="7296612781128917719" name="sms_control_title">"Ithumela imiyalezo ye-SMS"</string>
@@ -1471,12 +1471,12 @@
   <string msgid="7093334419518706686" name="data_usage_3g_limit_title">"Idatha ye-2G-3G ikhubasekisiwe"</string>
   <string msgid="7636489436819470761" name="data_usage_4g_limit_title">"Idatha ye-4G ikhubazekisiwe"</string>
   <string msgid="7869402519391631884" name="data_usage_mobile_limit_title">"Idatha yeselula ikhubazekile"</string>
-  <string msgid="8992154736441284865" name="data_usage_wifi_limit_title">"Umkhawulo wemininingwane ye-Wi-Fi ukhubaziwe"</string>
+  <string msgid="8992154736441284865" name="data_usage_wifi_limit_title">"Umkhawulo wemininingwane ye-WLAN ukhubaziwe"</string>
   <string msgid="4313857592916426843" name="data_usage_limit_body">"Cindezela ukuze isebenze"</string>
   <string msgid="7026739121138005231" name="data_usage_3g_limit_snoozed_title">"umkhawulo wedatha ye-2G-3G ufinyelelwe"</string>
   <string msgid="1106562779311209039" name="data_usage_4g_limit_snoozed_title">"Umkhawulo wedatha ye-4G ufinyelelwe"</string>
   <string msgid="279240572165412168" name="data_usage_mobile_limit_snoozed_title">"Umkhawulo wedatha yefoni ufinyelelwe"</string>
-  <string msgid="8743856006384825974" name="data_usage_wifi_limit_snoozed_title">"Kufinyelwe kunkhawulo we-Wi-Fi ongedlulwe"</string>
+  <string msgid="8743856006384825974" name="data_usage_wifi_limit_snoozed_title">"Kufinyelwe kunkhawulo we-WLAN ongedlulwe"</string>
   <string msgid="2932736326652880660" name="data_usage_limit_snoozed_body">"<xliff:g id="SIZE">%s</xliff:g> ngaphezu komkhawulo ocacisiwe"</string>
   <string msgid="5965157361036321914" name="data_usage_restricted_title">"Imininingo egciniwe ivinjelwe"</string>
   <string msgid="5087354814839059798" name="data_usage_restricted_body">"Cindezela ukuze ususe izivimbelo"</string>

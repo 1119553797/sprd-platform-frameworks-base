@@ -96,11 +96,11 @@
   <string msgid="50784596594403483" name="permdesc_updateAppOpsStats">"Permet que l\'aplicació modifiqui les estadístiques d\'ús de l\'aplicació recopilades. No indicat per a les aplicacions normals."</string>
   <string msgid="4708181184441880175" name="permlab_freezeScreen">"bloqueig de la pantalla"</string>
   <string msgid="8558923789222670064" name="permdesc_freezeScreen">"Permet a l\'aplicació bloquejar temporalment la pantalla per fer una transició de pantalla completa."</string>
-  <string msgid="5295047563564981250" name="permdesc_accessFineLocation">"Permet que l\'aplicació obtingui la teva ubicació precisa mitjançant un sistema de posicionament global (GPS) o fonts d\'ubicació de xarxa, com ara torres de telefonia mòbil i Wi-Fi. Aquests serveis d\'ubicació s\'han d\'activar i han d\'estar disponibles al dispositiu perquè l\'aplicació els pugui fer servir. Les aplicacions poden utilitzar aquestes dades per determinar aproximadament on et trobes i pot ser que consumeixin més bateria."</string>
-  <string msgid="5595661694746742168" name="permlab_configureWifiDisplay">"configuració de les pantalles Wi-Fi"</string>
-  <string msgid="7916815158690218065" name="permdesc_configureWifiDisplay">"Permet a l\'aplicació configurar-se i connectar-se a les pantalles Wi-Fi."</string>
-  <string msgid="393641276723695496" name="permlab_controlWifiDisplay">"control de les pantalles Wi-Fi"</string>
-  <string msgid="4543912292681826986" name="permdesc_controlWifiDisplay">"Permet a l\'aplicació controlar les funcions de baix nivell de les pantalles Wi-Fi."</string>
+  <string msgid="5295047563564981250" name="permdesc_accessFineLocation">"Permet que l\'aplicació obtingui la teva ubicació precisa mitjançant un sistema de posicionament global (GPS) o fonts d\'ubicació de xarxa, com ara torres de telefonia mòbil i WLAN. Aquests serveis d\'ubicació s\'han d\'activar i han d\'estar disponibles al dispositiu perquè l\'aplicació els pugui fer servir. Les aplicacions poden utilitzar aquestes dades per determinar aproximadament on et trobes i pot ser que consumeixin més bateria."</string>
+  <string msgid="5595661694746742168" name="permlab_configureWifiDisplay">"configuració de les pantalles WLAN"</string>
+  <string msgid="7916815158690218065" name="permdesc_configureWifiDisplay">"Permet a l\'aplicació configurar-se i connectar-se a les pantalles WLAN."</string>
+  <string msgid="393641276723695496" name="permlab_controlWifiDisplay">"control de les pantalles WLAN"</string>
+  <string msgid="4543912292681826986" name="permdesc_controlWifiDisplay">"Permet a l\'aplicació controlar les funcions de baix nivell de les pantalles WLAN."</string>
   <string msgid="2651072630501126222" name="permlab_cameraDisableTransmitLed">"desactiva la transmissió del LED indicador en fer servir la càmera"</string>
   <string msgid="4764585465480295341" name="permdesc_cameraDisableTransmitLed">"Permet que una aplicació dels sistema preinstal·lada desactivi el LED indicador d\'ús de la càmera."</string>
   <string msgid="8150613823900460576" name="permlab_sdcardAccessAll">"accedeix a l\'emmagatzematge extern per a tots els usuaris"</string>
@@ -152,8 +152,8 @@
   <string msgid="4653586947747330058" name="app_running_notification_text">"Toca per obtenir més informació o bé per aturar l\'aplicació."</string>
   <string msgid="8495155593358054676" name="network_available_sign_in">"Inicia la sessió a la xarxa"</string>
   <!-- no translation found for network_available_sign_in_detailed (8000081941447976118) -->
-  <string msgid="8012981257742232475" product="tablet" name="wifi_p2p_frequency_conflict_message">"La tauleta es desconnectarà temporalment de la Wi-Fi mentre estigui connectada a <xliff:g id="DEVICE_NAME">%1$s</xliff:g>"</string>
-  <string msgid="7363907213787469151" product="default" name="wifi_p2p_frequency_conflict_message">"El telèfon es desconnectarà temporalment de la Wi-Fi mentre estigui connectat a <xliff:g id="DEVICE_NAME">%1$s</xliff:g>"</string>
+  <string msgid="8012981257742232475" product="tablet" name="wifi_p2p_frequency_conflict_message">"La tauleta es desconnectarà temporalment de la WLAN mentre estigui connectada a <xliff:g id="DEVICE_NAME">%1$s</xliff:g>"</string>
+  <string msgid="7363907213787469151" product="default" name="wifi_p2p_frequency_conflict_message">"El telèfon es desconnectarà temporalment de la WLAN mentre estigui connectat a <xliff:g id="DEVICE_NAME">%1$s</xliff:g>"</string>
   <string msgid="1645436466285310855" name="sms_short_code_confirm_message">"&lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; vol enviar un missatge a &lt;b&gt;<xliff:g id="DEST_ADDRESS">%2$s</xliff:g>&lt;/b&gt;."</string>
   <string msgid="3492025719868078457" name="sms_short_code_details">"Aquesta acció "<font fgcolor="#ffffb060">"pot fer que s\'apliquin càrrecs"</font>" al compte del mòbil."</string>
   <string msgid="5523826349105123687" name="sms_premium_short_code_details">
@@ -1253,13 +1253,13 @@
     <item msgid="1634101450343277345" quantity="one">"Xarxa Wi-fi oberta disponible"</item>
     <item msgid="7915895323644292768" quantity="other">"Xarxes Wi-fi obertes disponibles"</item>
   </plurals>
-  <string msgid="9157196203958866662" name="wifi_available_sign_in">"Inicia la sessió a la xarxa Wi-Fi"</string>
-  <string msgid="7904214231651546347" name="wifi_watchdog_network_disabled">"No s\'ha pogut connectar a la Wi-Fi"</string>
+  <string msgid="9157196203958866662" name="wifi_available_sign_in">"Inicia la sessió a la xarxa WLAN"</string>
+  <string msgid="7904214231651546347" name="wifi_watchdog_network_disabled">"No s\'ha pogut connectar a la WLAN"</string>
   <string msgid="4917472096696322767" name="wifi_watchdog_network_disabled_detailed">" té una mala connexió a Internet."</string>
-  <string msgid="97611782659324517" name="wifi_p2p_dialog_title">"Wi-Fi Direct"</string>
-  <string msgid="2804722042556269129" name="wifi_p2p_turnon_message">"Inicia l\'operació Wi-Fi Direct. Això desactivarà l\'operació client/zona Wi-Fi."</string>
-  <string msgid="1820097493844848281" name="wifi_p2p_failed_message">"No s\'ha pogut iniciar Wi-Fi Direct"</string>
-  <string msgid="2068321881673734886" name="wifi_p2p_enabled_notification_title">"Wi-Fi Direct està activat"</string>
+  <string msgid="97611782659324517" name="wifi_p2p_dialog_title">"WLAN Direct"</string>
+  <string msgid="2804722042556269129" name="wifi_p2p_turnon_message">"Inicia l\'operació WLAN Direct. Això desactivarà l\'operació client/zona WLAN."</string>
+  <string msgid="1820097493844848281" name="wifi_p2p_failed_message">"No s\'ha pogut iniciar WLAN Direct"</string>
+  <string msgid="2068321881673734886" name="wifi_p2p_enabled_notification_title">"WLAN Direct està activat"</string>
   <string msgid="1638949953993894335" name="wifi_p2p_enabled_notification_message">"Toca per accedir a la configuració"</string>
   <string msgid="3365550120617701745" name="select_character">"Insereix un caràcter"</string>
   <string msgid="7296612781128917719" name="sms_control_title">"S\'estan enviant missatges SMS"</string>
@@ -1471,12 +1471,12 @@
   <string msgid="7093334419518706686" name="data_usage_3g_limit_title">"Dades 2G-3G desactivades"</string>
   <string msgid="7636489436819470761" name="data_usage_4g_limit_title">"Dades 4G desactivades"</string>
   <string msgid="7869402519391631884" name="data_usage_mobile_limit_title">"Dades mòbils desactivades"</string>
-  <string msgid="8992154736441284865" name="data_usage_wifi_limit_title">"S\'han desactivat les dades Wi-Fi"</string>
+  <string msgid="8992154736441284865" name="data_usage_wifi_limit_title">"S\'han desactivat les dades WLAN"</string>
   <string msgid="4313857592916426843" name="data_usage_limit_body">"Toca per activar"</string>
   <string msgid="7026739121138005231" name="data_usage_3g_limit_snoozed_title">"S\'ha superat el límit de dades 2G-3G"</string>
   <string msgid="1106562779311209039" name="data_usage_4g_limit_snoozed_title">"S\'ha superat el límit de dades 4G"</string>
   <string msgid="279240572165412168" name="data_usage_mobile_limit_snoozed_title">"S\'ha superat el límit de dades mòbils"</string>
-  <string msgid="8743856006384825974" name="data_usage_wifi_limit_snoozed_title">"S\'ha superat el límit de dades Wi-Fi"</string>
+  <string msgid="8743856006384825974" name="data_usage_wifi_limit_snoozed_title">"S\'ha superat el límit de dades WLAN"</string>
   <string msgid="2932736326652880660" name="data_usage_limit_snoozed_body">"<xliff:g id="SIZE">%s</xliff:g> per sobre del límit especificat"</string>
   <string msgid="5965157361036321914" name="data_usage_restricted_title">"Dades de referència restringides"</string>
   <string msgid="5087354814839059798" name="data_usage_restricted_body">"Toca per eliminar la restricció"</string>

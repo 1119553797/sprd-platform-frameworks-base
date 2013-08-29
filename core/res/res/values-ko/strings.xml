@@ -96,11 +96,11 @@
   <string msgid="50784596594403483" name="permdesc_updateAppOpsStats">"앱이 수집된 애플리케이션 운영 통계를 수정하도록 합니다. 일반 앱에서는 사용하지 않습니다."</string>
   <string msgid="4708181184441880175" name="permlab_freezeScreen">"화면 고정"</string>
   <string msgid="8558923789222670064" name="permdesc_freezeScreen">"앱이 전체 화면 전환을 위해 일시적으로 화면을 고정하도록 허용합니다."</string>
-  <string msgid="5295047563564981250" name="permdesc_accessFineLocation">"앱에서 GPS 또는 기지국 및 Wi-Fi와 같은 네트워크 위치 제공자를 사용하는 위치 서비스를 통해 내 정확한 위치를 알 수 있도록 합니다. 앱에서 이를 사용하도록 하려면 기기에서 이러한 위치 서비스는 사용하도록 설정해야 합니다. 앱에서 위치 서비스를 사용하여 내 위치를 파악할 수 있으며 배터리 소모량이 증가할 수 있습니다."</string>
-  <string msgid="5595661694746742168" name="permlab_configureWifiDisplay">"Wi-Fi 디스플레이 설정"</string>
-  <string msgid="7916815158690218065" name="permdesc_configureWifiDisplay">"앱이 Wi-Fi 디스플레이를 설정하고 연결하도록 허용합니다."</string>
-  <string msgid="393641276723695496" name="permlab_controlWifiDisplay">"Wi-Fi 디스플레이 제어"</string>
-  <string msgid="4543912292681826986" name="permdesc_controlWifiDisplay">"앱이 Wi-Fi 디스플레이의 하위 수준 기능을 제어하도록 허용합니다."</string>
+  <string msgid="5295047563564981250" name="permdesc_accessFineLocation">"앱에서 GPS 또는 기지국 및 WLAN와 같은 네트워크 위치 제공자를 사용하는 위치 서비스를 통해 내 정확한 위치를 알 수 있도록 합니다. 앱에서 이를 사용하도록 하려면 기기에서 이러한 위치 서비스는 사용하도록 설정해야 합니다. 앱에서 위치 서비스를 사용하여 내 위치를 파악할 수 있으며 배터리 소모량이 증가할 수 있습니다."</string>
+  <string msgid="5595661694746742168" name="permlab_configureWifiDisplay">"WLAN 디스플레이 설정"</string>
+  <string msgid="7916815158690218065" name="permdesc_configureWifiDisplay">"앱이 WLAN 디스플레이를 설정하고 연결하도록 허용합니다."</string>
+  <string msgid="393641276723695496" name="permlab_controlWifiDisplay">"WLAN 디스플레이 제어"</string>
+  <string msgid="4543912292681826986" name="permdesc_controlWifiDisplay">"앱이 WLAN 디스플레이의 하위 수준 기능을 제어하도록 허용합니다."</string>
   <string msgid="2651072630501126222" name="permlab_cameraDisableTransmitLed">"카메라를 사용할 때 전송 표시 LED 사용 중지"</string>
   <string msgid="4764585465480295341" name="permdesc_cameraDisableTransmitLed">"사전 설치된 시스템 애플리케이션에서 카메라 사용 표시 LED를 사용 중지하도록 허용합니다."</string>
   <string msgid="8150613823900460576" name="permlab_sdcardAccessAll">"모든 사용자의 외부 저장소에 액세스"</string>
@@ -152,8 +152,8 @@
   <string msgid="4653586947747330058" name="app_running_notification_text">"자세한 정보를 보거나 앱을 중지하려면 터치하세요."</string>
   <string msgid="8495155593358054676" name="network_available_sign_in">"네트워크에 로그인"</string>
   <!-- no translation found for network_available_sign_in_detailed (8000081941447976118) -->
-  <string msgid="8012981257742232475" product="tablet" name="wifi_p2p_frequency_conflict_message">"<xliff:g id="DEVICE_NAME">%1$s</xliff:g>에 연결되어 있는 동안 일시적으로 태블릿의 Wi-Fi 연결이 해제됩니다."</string>
-  <string msgid="7363907213787469151" product="default" name="wifi_p2p_frequency_conflict_message">"<xliff:g id="DEVICE_NAME">%1$s</xliff:g>에 연결되어 있는 동안 일시적으로 휴대전화의 Wi-Fi 연결이 해제됩니다."</string>
+  <string msgid="8012981257742232475" product="tablet" name="wifi_p2p_frequency_conflict_message">"<xliff:g id="DEVICE_NAME">%1$s</xliff:g>에 연결되어 있는 동안 일시적으로 태블릿의 WLAN 연결이 해제됩니다."</string>
+  <string msgid="7363907213787469151" product="default" name="wifi_p2p_frequency_conflict_message">"<xliff:g id="DEVICE_NAME">%1$s</xliff:g>에 연결되어 있는 동안 일시적으로 휴대전화의 WLAN 연결이 해제됩니다."</string>
   <string msgid="1645436466285310855" name="sms_short_code_confirm_message">"&lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; &lt;b&gt;<xliff:g id="DEST_ADDRESS">%2$s</xliff:g>&lt;/b&gt;(으)로 메시지를 보내시겠습니까?"</string>
   <string msgid="3492025719868078457" name="sms_short_code_details">"모바일 계정에 "<font fgcolor="#ffffb060">"요금이 부과될 수 있습니다"</font>"."</string>
   <string msgid="5523826349105123687" name="sms_premium_short_code_details">
@@ -754,11 +754,11 @@
   <string msgid="8905815579146349568" name="permdesc_changeTetherState">"애플리케이션이 테더링된 네트워크의 연결 상태를 변경할 수 있도록 합니다."</string>
   <string msgid="1400666012671648741" name="permlab_changeBackgroundDataSetting">"백그라운드 데이터 사용 설정 변경"</string>
   <string msgid="1001482853266638864" name="permdesc_changeBackgroundDataSetting">"애플리케이션이 백그라운드 데이터 사용 설정을 변경할 수 있도록 합니다."</string>
-  <string msgid="8100926650211034400" name="permlab_accessWifiState">"Wi-Fi 상태 보기"</string>
-  <string msgid="485796529139236346" name="permdesc_accessWifiState">"애플리케이션이 Wi-Fi의 상태에 대한 정보를 볼 수 있도록 합니다."</string>
-  <string msgid="7280632711057112137" name="permlab_changeWifiState">"Wi-Fi 상태 변경"</string>
-  <string msgid="2950383153656873267" name="permdesc_changeWifiState">"애플리케이션이 Wi-Fi 액세스포인트에 연결하거나 연결을 끊고, 구성된 Wi-Fi 네트워크를 변경할 수 있도록 합니다."</string>
-  <string msgid="1368253871483254784" name="permlab_changeWifiMulticastState">"Wi-Fi 멀티캐스트 수신 허용"</string>
+  <string msgid="8100926650211034400" name="permlab_accessWifiState">"WLAN 상태 보기"</string>
+  <string msgid="485796529139236346" name="permdesc_accessWifiState">"애플리케이션이 WLAN의 상태에 대한 정보를 볼 수 있도록 합니다."</string>
+  <string msgid="7280632711057112137" name="permlab_changeWifiState">"WLAN 상태 변경"</string>
+  <string msgid="2950383153656873267" name="permdesc_changeWifiState">"애플리케이션이 WLAN 액세스포인트에 연결하거나 연결을 끊고, 구성된 WLAN 네트워크를 변경할 수 있도록 합니다."</string>
+  <string msgid="1368253871483254784" name="permlab_changeWifiMulticastState">"WLAN 멀티캐스트 수신 허용"</string>
   <string msgid="2800410363171809280" name="permlab_accessWimaxState">"WiMAX 상태 보기"</string>
   <string msgid="8298035866227524023" name="permdesc_accessWimaxState">"애플리케이션이 WiMAX의 상태에 대한 정보를 볼 수 있도록 합니다."</string>
   <string msgid="340465839241528618" name="permlab_changeWimaxState">"WiMAX 상태 변경"</string>
@@ -1246,20 +1246,20 @@
   <string msgid="3515143939175119094" name="ringtone_picker_title">"벨소리"</string>
   <string msgid="5477919988701784788" name="ringtone_unknown">"알 수 없는 벨소리"</string>
   <plurals name="wifi_available">
-    <item msgid="6654123987418168693" quantity="one">"Wi-Fi 네트워크 사용 가능"</item>
-    <item msgid="4192424489168397386" quantity="other">"Wi-Fi 네트워크 사용 가능"</item>
+    <item msgid="6654123987418168693" quantity="one">"WLAN 네트워크 사용 가능"</item>
+    <item msgid="4192424489168397386" quantity="other">"WLAN 네트워크 사용 가능"</item>
   </plurals>
   <plurals name="wifi_available_detailed">
-    <item msgid="1634101450343277345" quantity="one">"개방형 Wi-Fi 네트워크 사용 가능"</item>
-    <item msgid="7915895323644292768" quantity="other">"개방형 Wi-Fi 네트워크 사용 가능"</item>
+    <item msgid="1634101450343277345" quantity="one">"개방형 WLAN 네트워크 사용 가능"</item>
+    <item msgid="7915895323644292768" quantity="other">"개방형 WLAN 네트워크 사용 가능"</item>
   </plurals>
-  <string msgid="9157196203958866662" name="wifi_available_sign_in">"Wi-Fi 네트워크에 로그인"</string>
-  <string msgid="7904214231651546347" name="wifi_watchdog_network_disabled">"Wi-Fi에 연결할 수 없습니다"</string>
+  <string msgid="9157196203958866662" name="wifi_available_sign_in">"WLAN 네트워크에 로그인"</string>
+  <string msgid="7904214231651546347" name="wifi_watchdog_network_disabled">"WLAN에 연결할 수 없습니다"</string>
   <string msgid="4917472096696322767" name="wifi_watchdog_network_disabled_detailed">" 인터넷 연결 상태가 좋지 않습니다."</string>
-  <string msgid="97611782659324517" name="wifi_p2p_dialog_title">"Wi-Fi Direct"</string>
-  <string msgid="2804722042556269129" name="wifi_p2p_turnon_message">"Wi-Fi Direct 작업을 시작합니다. 이 작업을 하면 Wi-Fi 클라이언트/핫스팟 작업이 중지됩니다."</string>
-  <string msgid="1820097493844848281" name="wifi_p2p_failed_message">"Wi-Fi Direct를 시작하지 못했습니다."</string>
-  <string msgid="2068321881673734886" name="wifi_p2p_enabled_notification_title">"Wi-Fi Direct 켜짐"</string>
+  <string msgid="97611782659324517" name="wifi_p2p_dialog_title">"WLAN Direct"</string>
+  <string msgid="2804722042556269129" name="wifi_p2p_turnon_message">"WLAN Direct 작업을 시작합니다. 이 작업을 하면 WLAN 클라이언트/핫스팟 작업이 중지됩니다."</string>
+  <string msgid="1820097493844848281" name="wifi_p2p_failed_message">"WLAN Direct를 시작하지 못했습니다."</string>
+  <string msgid="2068321881673734886" name="wifi_p2p_enabled_notification_title">"WLAN Direct 켜짐"</string>
   <string msgid="1638949953993894335" name="wifi_p2p_enabled_notification_message">"설정으로 이동하려면 터치하세요."</string>
   <string msgid="3365550120617701745" name="select_character">"문자 삽입"</string>
   <string msgid="7296612781128917719" name="sms_control_title">"SMS 메시지를 보내는 중"</string>
@@ -1471,12 +1471,12 @@
   <string msgid="7093334419518706686" name="data_usage_3g_limit_title">"2G-3G 데이터 사용중지됨"</string>
   <string msgid="7636489436819470761" name="data_usage_4g_limit_title">"4G 데이터 사용중지됨"</string>
   <string msgid="7869402519391631884" name="data_usage_mobile_limit_title">"모바일 데이터 사용중지됨"</string>
-  <string msgid="8992154736441284865" name="data_usage_wifi_limit_title">"Wi-Fi 데이터 사용중지됨"</string>
+  <string msgid="8992154736441284865" name="data_usage_wifi_limit_title">"WLAN 데이터 사용중지됨"</string>
   <string msgid="4313857592916426843" name="data_usage_limit_body">"사용하려면 터치하세요."</string>
   <string msgid="7026739121138005231" name="data_usage_3g_limit_snoozed_title">"2G - 3G 데이터 제한 초과됨"</string>
   <string msgid="1106562779311209039" name="data_usage_4g_limit_snoozed_title">"4GB의 데이터 제한 초과됨"</string>
   <string msgid="279240572165412168" name="data_usage_mobile_limit_snoozed_title">"모바일 데이터 제한 초과됨"</string>
-  <string msgid="8743856006384825974" name="data_usage_wifi_limit_snoozed_title">"Wi-Fi 데이터 한도 초과됨"</string>
+  <string msgid="8743856006384825974" name="data_usage_wifi_limit_snoozed_title">"WLAN 데이터 한도 초과됨"</string>
   <string msgid="2932736326652880660" name="data_usage_limit_snoozed_body">"<xliff:g id="SIZE">%s</xliff:g>의 지정된 한도를 초과했습니다."</string>
   <string msgid="5965157361036321914" name="data_usage_restricted_title">"백그라운드 데이터 사용이 제한됨"</string>
   <string msgid="5087354814839059798" name="data_usage_restricted_body">"제한 설정을 삭제하려면 터치하세요."</string>

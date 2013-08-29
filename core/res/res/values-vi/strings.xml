@@ -96,11 +96,11 @@
   <string msgid="50784596594403483" name="permdesc_updateAppOpsStats">"Cho phép ứng dụng sửa đổi số liệu thống kê hoạt động của ứng dụng đã thu thập. Không dành cho ứng dụng thông thường."</string>
   <string msgid="4708181184441880175" name="permlab_freezeScreen">"đóng băng màn hình"</string>
   <string msgid="8558923789222670064" name="permdesc_freezeScreen">"Cho phép ứng dụng tạm thời đóng băng màn hình để chuyển sang chế độ toàn màn hình."</string>
-  <string msgid="5295047563564981250" name="permdesc_accessFineLocation">"Cho phép ứng dụng nhận vị trí chính xác của bạn bằng cách sử dụng Hệ thống định vị toàn cầu (GPS) hoặc các nguồn vị trí mạng chẳng hạn như tháp điện thoại di động và Wi-Fi. Các dịch vụ vị trí này phải được bật và có sẵn cho thiết bị của bạn để ứng dụng sử dụng chúng. Ứng dụng có thể sử dụng dịch vụ vị trí này để xác định vị trí của bạn và có thể tiêu hao thêm nguồn pin."</string>
-  <string msgid="5595661694746742168" name="permlab_configureWifiDisplay">"định cấu hình màn hình Wi-Fi"</string>
-  <string msgid="7916815158690218065" name="permdesc_configureWifiDisplay">"Cho phép ứng dụng định cấu hình và kết nối với màn hình Wi-Fi."</string>
-  <string msgid="393641276723695496" name="permlab_controlWifiDisplay">"kiểm soát màn hình Wi-Fi"</string>
-  <string msgid="4543912292681826986" name="permdesc_controlWifiDisplay">"Cho phép ứng dụng kiểm soát các tính năng cấp thấp của màn hình Wi-Fi."</string>
+  <string msgid="5295047563564981250" name="permdesc_accessFineLocation">"Cho phép ứng dụng nhận vị trí chính xác của bạn bằng cách sử dụng Hệ thống định vị toàn cầu (GPS) hoặc các nguồn vị trí mạng chẳng hạn như tháp điện thoại di động và WLAN. Các dịch vụ vị trí này phải được bật và có sẵn cho thiết bị của bạn để ứng dụng sử dụng chúng. Ứng dụng có thể sử dụng dịch vụ vị trí này để xác định vị trí của bạn và có thể tiêu hao thêm nguồn pin."</string>
+  <string msgid="5595661694746742168" name="permlab_configureWifiDisplay">"định cấu hình màn hình WLAN"</string>
+  <string msgid="7916815158690218065" name="permdesc_configureWifiDisplay">"Cho phép ứng dụng định cấu hình và kết nối với màn hình WLAN."</string>
+  <string msgid="393641276723695496" name="permlab_controlWifiDisplay">"kiểm soát màn hình WLAN"</string>
+  <string msgid="4543912292681826986" name="permdesc_controlWifiDisplay">"Cho phép ứng dụng kiểm soát các tính năng cấp thấp của màn hình WLAN."</string>
   <string msgid="2651072630501126222" name="permlab_cameraDisableTransmitLed">"vô hiệu hóa tính năng phát đèn LED chỉ báo khi máy ảnh đang được sử dụng"</string>
   <string msgid="4764585465480295341" name="permdesc_cameraDisableTransmitLed">"Cho phép cài đặt trước ứng dụng hệ thống để vô hiệu hóa việc máy ảnh sử dụng đèn LED chỉ báo."</string>
   <string msgid="8150613823900460576" name="permlab_sdcardAccessAll">"truy cập bộ nhớ ngoài của tất cả người dùng"</string>
@@ -152,8 +152,8 @@
   <string msgid="4653586947747330058" name="app_running_notification_text">"Chạm để xem thêm thông tin hoặc dừng ứng dụng."</string>
   <string msgid="8495155593358054676" name="network_available_sign_in">"Đăng nhập vào mạng"</string>
   <!-- no translation found for network_available_sign_in_detailed (8000081941447976118) -->
-  <string msgid="8012981257742232475" product="tablet" name="wifi_p2p_frequency_conflict_message">"Máy tính bảng sẽ tạm thời ngắt kết nối khỏi Wi-Fi trong khi máy tính bảng được kết nối với <xliff:g id="DEVICE_NAME">%1$s</xliff:g>"</string>
-  <string msgid="7363907213787469151" product="default" name="wifi_p2p_frequency_conflict_message">"Điện thoại sẽ tạm thời ngắt kết nối khỏi Wi-Fi trong khi điện thoại được kết nối với <xliff:g id="DEVICE_NAME">%1$s</xliff:g>"</string>
+  <string msgid="8012981257742232475" product="tablet" name="wifi_p2p_frequency_conflict_message">"Máy tính bảng sẽ tạm thời ngắt kết nối khỏi WLAN trong khi máy tính bảng được kết nối với <xliff:g id="DEVICE_NAME">%1$s</xliff:g>"</string>
+  <string msgid="7363907213787469151" product="default" name="wifi_p2p_frequency_conflict_message">"Điện thoại sẽ tạm thời ngắt kết nối khỏi WLAN trong khi điện thoại được kết nối với <xliff:g id="DEVICE_NAME">%1$s</xliff:g>"</string>
   <string msgid="1645436466285310855" name="sms_short_code_confirm_message">"&lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; muốn gửi thư đến &lt;b&gt;<xliff:g id="DEST_ADDRESS">%2$s</xliff:g>&lt;/b&gt;."</string>
   <string msgid="3492025719868078457" name="sms_short_code_details">"Điều này "<font fgcolor="#ffffb060">"có thể gây ra các khoản phí"</font>" đối với tài khoản di động của bạn."</string>
   <string msgid="5523826349105123687" name="sms_premium_short_code_details">
@@ -756,11 +756,11 @@
   <string name="permdesc_changeTetherState">"Cho phép ứng dụng thay đổi trạng thái của kết nối mạng được dùng làm điểm truy cập Internet."</string>
   <string name="permlab_changeBackgroundDataSetting">"thay đổi cài đặt sử dụng dữ liệu nền"</string>
   <string name="permdesc_changeBackgroundDataSetting">"Cho phép ứng dụng thay đổi cài đặt sử dụng dữ liệu nền."</string>
-  <string name="permlab_accessWifiState">"xem trạng thái Wi-Fi"</string>
-  <string name="permdesc_accessWifiState">"Cho phép ứng dụng xem thông tin về trạng thái Wi-Fi."</string>
-  <string name="permlab_changeWifiState">"thay đổi trạng thái Wi-Fi"</string>
-  <string name="permdesc_changeWifiState">"Cho phép ứng dụng kết nối và ngắt kết nối khỏi điểm truy cập Wi-Fi cũng như thực hiện các thay đổi đối với mạng Wi-Fi đã được định cấu hình."</string>
-  <string name="permlab_changeWifiMulticastState">"cho phép thu tín hiệu Wi-Fi Đa hướng"</string>
+  <string name="permlab_accessWifiState">"xem trạng thái WLAN"</string>
+  <string name="permdesc_accessWifiState">"Cho phép ứng dụng xem thông tin về trạng thái WLAN."</string>
+  <string name="permlab_changeWifiState">"thay đổi trạng thái WLAN"</string>
+  <string name="permdesc_changeWifiState">"Cho phép ứng dụng kết nối và ngắt kết nối khỏi điểm truy cập WLAN cũng như thực hiện các thay đổi đối với mạng WLAN đã được định cấu hình."</string>
+  <string name="permlab_changeWifiMulticastState">"cho phép thu tín hiệu WLAN Đa hướng"</string>
   <string name="permlab_accessWimaxState">"xem trạng thái WiMAX"</string>
   <string name="permdesc_accessWimaxState">"Cho phép ứng dụng xem thông tin về trạng thái của WiMAX."</string>
   <string name="permlab_changeWimaxState">"thay đổi trạng thái WiMAX"</string>
@@ -1246,20 +1246,20 @@
   <string name="ringtone_picker_title">"Nhạc chuông"</string>
   <string name="ringtone_unknown">"Nhạc chuông không xác định"</string>
   <plurals name="wifi_available">
-        <item quantity="one">"Mạng Wi-Fi khả dụng"</item>
-        <item quantity="other">"Mạng Wi-Fi khả dụng"</item>
+        <item quantity="one">"Mạng WLAN khả dụng"</item>
+        <item quantity="other">"Mạng WLAN khả dụng"</item>
     </plurals>
   <plurals name="wifi_available_detailed">
-        <item quantity="one">"Mở mạng Wi-Fi khả dụng"</item>
-        <item quantity="other">"Mở mạng Wi-Fi khả dụng"</item>
+        <item quantity="one">"Mở mạng WLAN khả dụng"</item>
+        <item quantity="other">"Mở mạng WLAN khả dụng"</item>
     </plurals>
-  <string name="wifi_available_sign_in">"Đăng nhập vào mạng Wi-Fi"</string>
-  <string name="wifi_watchdog_network_disabled">"Không thể kết nối với Wi-Fi"</string>
+  <string name="wifi_available_sign_in">"Đăng nhập vào mạng WLAN"</string>
+  <string name="wifi_watchdog_network_disabled">"Không thể kết nối với WLAN"</string>
   <string name="wifi_watchdog_network_disabled_detailed">" có kết nối internet kém."</string>
-  <string name="wifi_p2p_dialog_title">"Wi-Fi Direct"</string>
-  <string name="wifi_p2p_turnon_message">"Bắt đầu hoạt động Wi-Fi Direct. Điều này sẽ tắt hoạt động của ứng dụng khách/điểm phát sóng Wi-Fi."</string>
-  <string name="wifi_p2p_failed_message">"Không thể khởi động Wi-Fi Direct"</string>
-  <string name="wifi_p2p_enabled_notification_title">"Wi-Fi Direct được bật"</string>
+  <string name="wifi_p2p_dialog_title">"WLAN Direct"</string>
+  <string name="wifi_p2p_turnon_message">"Bắt đầu hoạt động WLAN Direct. Điều này sẽ tắt hoạt động của ứng dụng khách/điểm phát sóng WLAN."</string>
+  <string name="wifi_p2p_failed_message">"Không thể khởi động WLAN Direct"</string>
+  <string name="wifi_p2p_enabled_notification_title">"WLAN Direct được bật"</string>
   <string name="wifi_p2p_enabled_notification_message">"Chạm để cài đặt"</string>
   <string name="select_character">"Chèn ký tự"</string>
   <string name="sms_control_title">"Đang gửi tin nhắn SMS"</string>
@@ -1479,12 +1479,12 @@
   <string name="data_usage_3g_limit_title">"Đã tắt dữ liệu 2G-3G"</string>
   <string name="data_usage_4g_limit_title">"4G dữ liệu bị vô hiệu hóa"</string>
   <string name="data_usage_mobile_limit_title">"Dữ liệu di động bị vô hiệu hóa"</string>
-  <string name="data_usage_wifi_limit_title">"Đã tắt dữ liệu Wi-Fi"</string>
+  <string name="data_usage_wifi_limit_title">"Đã tắt dữ liệu WLAN"</string>
   <string name="data_usage_limit_body">"Chạm để bật"</string>
   <string name="data_usage_3g_limit_snoozed_title">"Đã vượt quá g.hạn dữ liệu 2G-3G"</string>
   <string name="data_usage_4g_limit_snoozed_title">"Đã vượt quá giới hạn dữ liệu 4G"</string>
   <string name="data_usage_mobile_limit_snoozed_title">"Đã vượt quá g.hạn d.liệu d.động"</string>
-  <string name="data_usage_wifi_limit_snoozed_title">"Vượt quá g.hạn d.liệu Wi-Fi"</string>
+  <string name="data_usage_wifi_limit_snoozed_title">"Vượt quá g.hạn d.liệu WLAN"</string>
   <string name="data_usage_limit_snoozed_body">"<xliff:g id="SIZE">%s</xliff:g> vượt quá g.hạn đc chỉ định"</string>
   <string name="data_usage_restricted_title">"Dữ liệu nền bị giới hạn"</string>
   <string name="data_usage_restricted_body">"Chạm để xóa giới hạn"</string>

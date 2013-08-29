@@ -754,11 +754,11 @@
   <string msgid="8905815579146349568" name="permdesc_changeTetherState">"Staat een app toe de status van de getetherde netwerkverbinding te wijzigen."</string>
   <string msgid="1400666012671648741" name="permlab_changeBackgroundDataSetting">"instelling voor gebruik van achtergrondgegevens van gegevens wijzigen"</string>
   <string msgid="1001482853266638864" name="permdesc_changeBackgroundDataSetting">"Hiermee kan een app de instelling voor gebruik van achtergrondgegevens wijzigen."</string>
-  <string msgid="8100926650211034400" name="permlab_accessWifiState">"Wi-Fi-status bekijken"</string>
-  <string msgid="485796529139236346" name="permdesc_accessWifiState">"Hiermee kan een app informatie over de Wi-Fi-status bekijken."</string>
-  <string msgid="7280632711057112137" name="permlab_changeWifiState">"Wi-Fi-status wijzigen"</string>
-  <string msgid="2950383153656873267" name="permdesc_changeWifiState">"Hiermee kan een app zich koppelen aan en loskoppelen van Wi-Fi toegangspunten en wijzigingen aanbrengen in geconfigureerde Wi-Fi-netwerken."</string>
-  <string msgid="1368253871483254784" name="permlab_changeWifiMulticastState">"Wi-Fi Multicast-ontvangst toestaan"</string>
+  <string msgid="8100926650211034400" name="permlab_accessWifiState">"WLAN-status bekijken"</string>
+  <string msgid="485796529139236346" name="permdesc_accessWifiState">"Hiermee kan een app informatie over de WLAN-status bekijken."</string>
+  <string msgid="7280632711057112137" name="permlab_changeWifiState">"WLAN-status wijzigen"</string>
+  <string msgid="2950383153656873267" name="permdesc_changeWifiState">"Hiermee kan een app zich koppelen aan en loskoppelen van WLAN toegangspunten en wijzigingen aanbrengen in geconfigureerde WLAN-netwerken."</string>
+  <string msgid="1368253871483254784" name="permlab_changeWifiMulticastState">"WLAN Multicast-ontvangst toestaan"</string>
   <string msgid="2800410363171809280" name="permlab_accessWimaxState">"WiMAX-status bekijken"</string>
   <string msgid="8298035866227524023" name="permdesc_accessWimaxState">"Hiermee kan een app informatie over de WiMAX-status bekijken."</string>
   <string msgid="340465839241528618" name="permlab_changeWimaxState">"WiMAX-status wijzigen"</string>
@@ -1246,20 +1246,20 @@
   <string msgid="3515143939175119094" name="ringtone_picker_title">"Beltonen"</string>
   <string msgid="5477919988701784788" name="ringtone_unknown">"Onbekende beltoon"</string>
   <plurals name="wifi_available">
-    <item msgid="6654123987418168693" quantity="one">"Wi-Fi-netwerk beschikbaar"</item>
-    <item msgid="4192424489168397386" quantity="other">"Wi-Fi-netwerken beschikbaar"</item>
+    <item msgid="6654123987418168693" quantity="one">"WLAN-netwerk beschikbaar"</item>
+    <item msgid="4192424489168397386" quantity="other">"WLAN-netwerken beschikbaar"</item>
   </plurals>
   <plurals name="wifi_available_detailed">
-    <item msgid="1634101450343277345" quantity="one">"Open Wi-Fi-netwerk beschikbaar"</item>
-    <item msgid="7915895323644292768" quantity="other">"Open Wi-Fi-netwerken beschikbaar"</item>
+    <item msgid="1634101450343277345" quantity="one">"Open WLAN-netwerk beschikbaar"</item>
+    <item msgid="7915895323644292768" quantity="other">"Open WLAN-netwerken beschikbaar"</item>
   </plurals>
   <string msgid="9157196203958866662" name="wifi_available_sign_in">"Aanmelden bij wifi-netwerk"</string>
-  <string msgid="7904214231651546347" name="wifi_watchdog_network_disabled">"Kan geen verbinding maken met Wi-Fi"</string>
+  <string msgid="7904214231651546347" name="wifi_watchdog_network_disabled">"Kan geen verbinding maken met WLAN"</string>
   <string msgid="4917472096696322767" name="wifi_watchdog_network_disabled_detailed">" heeft een slechte internetverbinding."</string>
-  <string msgid="97611782659324517" name="wifi_p2p_dialog_title">"Wi-Fi Direct"</string>
-  <string msgid="2804722042556269129" name="wifi_p2p_turnon_message">"Bewerking van Wi-Fi Direct starten. Hierdoor wordt de bewerking van Wi-Fi-client/hotspot uitgeschakeld."</string>
-  <string msgid="1820097493844848281" name="wifi_p2p_failed_message">"Kan Wi-Fi Direct niet starten"</string>
-  <string msgid="2068321881673734886" name="wifi_p2p_enabled_notification_title">"Wi-Fi Direct is actief"</string>
+  <string msgid="97611782659324517" name="wifi_p2p_dialog_title">"WLAN Direct"</string>
+  <string msgid="2804722042556269129" name="wifi_p2p_turnon_message">"Bewerking van WLAN Direct starten. Hierdoor wordt de bewerking van WLAN-client/hotspot uitgeschakeld."</string>
+  <string msgid="1820097493844848281" name="wifi_p2p_failed_message">"Kan WLAN Direct niet starten"</string>
+  <string msgid="2068321881673734886" name="wifi_p2p_enabled_notification_title">"WLAN Direct is actief"</string>
   <string msgid="1638949953993894335" name="wifi_p2p_enabled_notification_message">"Aanraken voor instellingen"</string>
   <string msgid="3365550120617701745" name="select_character">"Teken invoegen"</string>
   <string msgid="7296612781128917719" name="sms_control_title">"SMS-berichten verzenden"</string>
@@ -1471,12 +1471,12 @@
   <string msgid="7093334419518706686" name="data_usage_3g_limit_title">"2G-/3G-gegevens uitgeschakeld"</string>
   <string msgid="7636489436819470761" name="data_usage_4g_limit_title">"4G-gegevens uitgeschakeld"</string>
   <string msgid="7869402519391631884" name="data_usage_mobile_limit_title">"Mobiele gegevens uitgeschakeld"</string>
-  <string msgid="8992154736441284865" name="data_usage_wifi_limit_title">"Wi-Fi-data uitgeschakeld"</string>
+  <string msgid="8992154736441284865" name="data_usage_wifi_limit_title">"WLAN-data uitgeschakeld"</string>
   <string msgid="4313857592916426843" name="data_usage_limit_body">"Raak aan om in te schakelen"</string>
   <string msgid="7026739121138005231" name="data_usage_3g_limit_snoozed_title">"Gegevenslimiet 2G-3G overschreden"</string>
   <string msgid="1106562779311209039" name="data_usage_4g_limit_snoozed_title">"Gegevenslimiet 4G overschreden"</string>
   <string msgid="279240572165412168" name="data_usage_mobile_limit_snoozed_title">"Mobiele datalimiet overschreden"</string>
-  <string msgid="8743856006384825974" name="data_usage_wifi_limit_snoozed_title">"Wi-Fi-datalimiet overschreden"</string>
+  <string msgid="8743856006384825974" name="data_usage_wifi_limit_snoozed_title">"WLAN-datalimiet overschreden"</string>
   <string msgid="2932736326652880660" name="data_usage_limit_snoozed_body">"<xliff:g id="SIZE">%s</xliff:g> meer dan limiet"</string>
   <string msgid="5965157361036321914" name="data_usage_restricted_title">"Achtergrondgegevens beperkt"</string>
   <string msgid="5087354814839059798" name="data_usage_restricted_body">"Raak aan voor opheffen beperking"</string>

@@ -1256,10 +1256,10 @@
   <string msgid="9157196203958866662" name="wifi_available_sign_in">"In WLAN-Netzwerk anmelden"</string>
   <string msgid="7904214231651546347" name="wifi_watchdog_network_disabled">"Es konnte keine WLAN-Verbindung hergestellt werden."</string>
   <string msgid="4917472096696322767" name="wifi_watchdog_network_disabled_detailed">" hat eine schlechte Internetverbindung."</string>
-  <string msgid="97611782659324517" name="wifi_p2p_dialog_title">"Wi-Fi Direct"</string>
-  <string msgid="2804722042556269129" name="wifi_p2p_turnon_message">"Wi-Fi Direct-Betrieb starten. Hierdurch wird der WLAN-Client-/-Hotspot-Betrieb deaktiviert."</string>
-  <string msgid="1820097493844848281" name="wifi_p2p_failed_message">"Starten von Wi-Fi Direct nicht möglich"</string>
-  <string msgid="2068321881673734886" name="wifi_p2p_enabled_notification_title">"Wi-Fi Direct ist aktiviert."</string>
+  <string msgid="97611782659324517" name="wifi_p2p_dialog_title">"WLAN Direct"</string>
+  <string msgid="2804722042556269129" name="wifi_p2p_turnon_message">"WLAN Direct-Betrieb starten. Hierdurch wird der WLAN-Client-/-Hotspot-Betrieb deaktiviert."</string>
+  <string msgid="1820097493844848281" name="wifi_p2p_failed_message">"Starten von WLAN Direct nicht möglich"</string>
+  <string msgid="2068321881673734886" name="wifi_p2p_enabled_notification_title">"WLAN Direct ist aktiviert."</string>
   <string msgid="1638949953993894335" name="wifi_p2p_enabled_notification_message">"Zum Aufrufen der Einstellungen berühren"</string>
   <string msgid="3365550120617701745" name="select_character">"Zeichen einfügen"</string>
   <string msgid="7296612781128917719" name="sms_control_title">"Kurznachrichten werden gesendet"</string>
