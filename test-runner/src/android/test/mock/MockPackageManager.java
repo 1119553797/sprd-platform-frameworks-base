@@ -47,7 +47,6 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 /* SPRD: update label and icon for app @{ */
 import android.os.RemoteException;
-import android.os.UserId;
 /* @} */
 
 import java.util.List;
