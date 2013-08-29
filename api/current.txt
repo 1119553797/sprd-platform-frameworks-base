@@ -30977,6 +30977,7 @@ package android.widget {
     method public int getCurrentPosition();
     method public int getDuration();
     method public boolean isPlaying();
+    method public boolean isStopPlaybackCompleted();
     method public void pause();
     method public int resolveAdjustedSize(int, int);
     method public void resume();
@@ -30986,6 +30987,8 @@ package android.widget {
     method public void setOnErrorListener(android.media.MediaPlayer.OnErrorListener);
     method public void setOnInfoListener(android.media.MediaPlayer.OnInfoListener);
     method public void setOnPreparedListener(android.media.MediaPlayer.OnPreparedListener);
+    method public void setOnSeekCompleteListener(android.media.MediaPlayer.OnSeekCompleteListener);
+    method public void setOnVideoSizeChangedListener(android.media.MediaPlayer.OnVideoSizeChangedListener);
     method public void setVideoPath(java.lang.String);
     method public void setVideoURI(android.net.Uri);
     method public void start();
