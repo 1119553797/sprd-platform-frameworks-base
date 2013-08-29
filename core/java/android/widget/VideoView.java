@@ -91,11 +91,6 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
     private boolean     mCanSeekBack;
     private boolean     mCanSeekForward;
 
-    /** SPRD : add new parameters @{ */
-    private MediaPlayer.OnSeekCompleteListener mOnSeekCompleteListener;
-    private MediaPlayer.OnVideoSizeChangedListener mOnVideoSizeChangedListener;
-    /** @} */
-
     public VideoView(Context context) {
         super(context);
         initVideoView();
@@ -303,6 +298,18 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
         }
     }
 
+    MediaPlayer.OnVideoSizeChangedListener mSizeChangedListener =
+        new MediaPlayer.OnVideoSizeChangedListener() {
+            public void onVideoSizeChanged(MediaPlayer mp, int width, int height) {
+                mVideoWidth = mp.getVideoWidth();
+                mVideoHeight = mp.getVideoHeight();
+                if (mVideoWidth != 0 && mVideoHeight != 0) {
+                    getHolder().setFixedSize(mVideoWidth, mVideoHeight);
+                    requestLayout();
+                }
+            }
+    };
+
     MediaPlayer.OnPreparedListener mPreparedListener = new MediaPlayer.OnPreparedListener() {
         public void onPrepared(MediaPlayer mp) {
             mCurrentState = STATE_PREPARED;
@@ -438,34 +445,6 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
         }
     };
 
-    /** SPRD : new Listener @{ */
-    MediaPlayer.OnSeekCompleteListener mSeekCompleteListener = new MediaPlayer.OnSeekCompleteListener() {
-        @Override
-        public void onSeekComplete(MediaPlayer mp) {
-            // TODO Auto-generated method stub
-            Log.d(TAG,"onSeekComplete");
-            if (mOnSeekCompleteListener != null) {
-                mOnSeekCompleteListener.onSeekComplete(mMediaPlayer);
-            }
-        }
-    };
-
-    MediaPlayer.OnVideoSizeChangedListener mSizeChangedListener =
-        new MediaPlayer.OnVideoSizeChangedListener() {
-            public void onVideoSizeChanged(MediaPlayer mp, int width, int height) {
-                mVideoWidth = mp.getVideoWidth();
-                mVideoHeight = mp.getVideoHeight();
-                if (mVideoWidth != 0 && mVideoHeight != 0) {
-                    getHolder().setFixedSize(mVideoWidth, mVideoHeight);
-                    requestLayout();
-                }
-                if(mOnVideoSizeChangedListener != null){
-                    mOnVideoSizeChangedListener.onVideoSizeChanged(mp, width, height);
-                 }
-            }
-    };
-    /** @} */
-
     /**
      * Register a callback to be invoked when the media file
      * is loaded and ready to go.
@@ -510,18 +489,6 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
     public void setOnInfoListener(OnInfoListener l) {
         mOnInfoListener = l;
     }
-
-    /** SPRD : new method @{ */
-    public void setOnVideoSizeChangedListener(MediaPlayer.OnVideoSizeChangedListener l)
-    {
-        mOnVideoSizeChangedListener = l;
-    }
-
-    public void setOnSeekCompleteListener(MediaPlayer.OnSeekCompleteListener l)
-    {
-        mOnSeekCompleteListener = l;
-    }
-    /** @} */
 
     SurfaceHolder.Callback mSHCallback = new SurfaceHolder.Callback()
     {
@@ -735,10 +702,4 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
         }
         return mAudioSession;
     }
-
-    /** SPRD : new method for playback check @{ */
-    public boolean isStopPlaybackCompleted() {
-        return mMediaPlayer == null && mCurrentState == STATE_IDLE && mTargetState == STATE_IDLE;
-    }
-    /** @} */
 }
