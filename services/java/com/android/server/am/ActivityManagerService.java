@@ -9466,9 +9466,9 @@ public final class ActivityManagerService extends ActivityManagerNative
 	 whiteList = new HashSet<String>();
 	 
 	 whiteList.add("com.android.phone");
-	 whiteList.add("com.android.contacts");
-	 whiteList.add("com.android.mms");
-	 whiteList.add("android.process.acore");
+	 //whiteList.add("com.android.contacts");
+	 //whiteList.add("com.android.mms");
+	 //whiteList.add("android.process.acore");
 	 whiteList.add("com.android.systemui");
 
 	 hasAlarmList = new HashSet<String>();
@@ -9492,7 +9492,7 @@ public final class ActivityManagerService extends ActivityManagerNative
         if (!mRestartingServices.contains(r)) {
             return;
         }
-        if (r.app == null || r.app.processName == null || !whiteList.contains(r.app.processName)) {
+        if (r.app == null || r.app.processName == null) {
             return;
         }	
        if (r.lowMemKilled && checkServicesDelayRestartLocked(r)) return;		
