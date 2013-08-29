@@ -430,11 +430,11 @@
     <string name="permdesc_changeTetherState">ఒక అప్లికేషన్ ని  నెట్ వర్క్ అనుసంధానం స్థితిని మార్చడానికి అనుమతిస్తుంది.</string>
     <string name="permlab_changeBackgroundDataSetting">నేపథ్య డేటా ఉపయోగ సెట్టింగును మార్చు</string>
     <string name="permdesc_changeBackgroundDataSetting">ఒక అప్లికేషన్ ని నేపథ్య డేటా ఉపయోగ అమరికను మార్చడానికి అనుమతిస్తుంది.</string>
-    <string name="permlab_accessWifiState">Wi-Fi స్థితి వీక్షించేందుకు</string>
+    <string name="permlab_accessWifiState">WLAN స్థితి వీక్షించేందుకు</string>
     <string name="permdesc_accessWifiState">ఒక అప్లికేషన్ ని చూసేందుకు అనుమతిస్తుంది WLAN స్థితి గురించి సమాచారం.</string>
-    <string name="permlab_changeWifiState">Wi-Fi స్థితి మార్చండి</string>
-    <string name="permdesc_changeWifiState">ఒక అప్లికేషన్ ని కనెక్ట్ అనుమతిస్తుందిమరియు Wi-Fi యాక్సెస్ పాయింట్లు నుండి డిస్కనెక్ట్ చెయ్యడానికి, మరియు మార్పులు చేయుటకు Wi-Fi నెట్ వర్క్లు కన్ఫిగర్.</string>
-    <string name="permlab_changeWifiMulticastState">Wi-Fi బహుళ ప్రసార స్వీకరణను అనుమతిస్తాయి</string>
+    <string name="permlab_changeWifiState">WLAN స్థితి మార్చండి</string>
+    <string name="permdesc_changeWifiState">ఒక అప్లికేషన్ ని కనెక్ట్ అనుమతిస్తుందిమరియు WLAN యాక్సెస్ పాయింట్లు నుండి డిస్కనెక్ట్ చెయ్యడానికి, మరియు మార్పులు చేయుటకు WLAN నెట్ వర్క్లు కన్ఫిగర్.</string>
+    <string name="permlab_changeWifiMulticastState">WLAN బహుళ ప్రసార స్వీకరణను అనుమతిస్తాయి</string>
     <string name="permlab_accessWimaxState">WiMAX రాష్ట్ర వీక్షించేందుకు</string>
     <string name="permdesc_accessWimaxState">ఒక అప్లికేషన్ చూసేందుకు అనుమతిస్తుంది
       డబ్ల్యు ఐ మాక్స్ రాష్ట్రంలో గురించి సమాచారం. </string>
@@ -931,12 +931,12 @@
     <string name="ringtone_picker_title">రింగ్ టోన్లు</string>
     <string name="ringtone_unknown">తెలియని రింగ్ టోన్</string>
     <plurals name="wifi_available">
-        <item quantity="one">అందుబాటులో Wi-Fi నెట్ వర్క్</item>
-        <item quantity="other">అందుబాటులో Wi-Fi నెట్వర్క్లు </item>
+        <item quantity="one">అందుబాటులో WLAN నెట్ వర్క్</item>
+        <item quantity="other">అందుబాటులో WLAN నెట్వర్క్లు </item>
     </plurals>
     <plurals name="wifi_available_detailed">
-        <item quantity="one">Wi-Fi  నెట్ వర్క్ సౌలభ్యాన్ని ఓపెన్ చేయండి </item>
-        <item quantity="other">Wi-Fi  నెట్ వర్క్ సౌలభ్యాన్ని ఓపెన్ చేయండి </item>
+        <item quantity="one">WLAN  నెట్ వర్క్ సౌలభ్యాన్ని ఓపెన్ చేయండి </item>
+        <item quantity="other">WLAN  నెట్ వర్క్ సౌలభ్యాన్ని ఓపెన్ చేయండి </item>
     </plurals>
     <string name="wifi_available_sign_in">WLAN నెట్వర్క్ సైన్ ఇన్ చేయి</string>
     <string name="wifi_watchdog_network_disabled">WLAN కనెక్ట్ చేయలేం</string>

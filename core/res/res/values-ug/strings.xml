@@ -427,8 +427,8 @@
     <string name="permdesc_changeTetherState">پىروگرامما توردىن بەھرىلەنگەن ۋاقىتتىكى بارلىق ئۇلىنىش ھالىتىنى ئۆزگەرتىسە بولىدۇ.</string>
     <string name="permlab_changeBackgroundDataSetting">ئارقا كۆرۈنۈشىدىكى سانلىق مەلوماتنىڭ ئىشلىتىلىش تەڭشىكىنى ئۆزگەرتىش</string>
     <string name="permdesc_changeBackgroundDataSetting">ئەمەلىي ئىشىلتىش پىروگراممىسنىڭ ئارقا كۆرۈنۈشتىكى سانلىق ئاساس لاھىيەسىنى ئۆزگەرتىشىگە رۇخسەت قىلىش.</string>
-    <string name="permlab_accessWifiState">Wi-Fiھالىتىنى كۆرۈش</string>
-    <string name="permdesc_accessWifiState">ئەمەلىي پروگىراممىنىڭ Wi-Fi ھالىتىگە ئائىت ئۇچۇرلارنى كۆرىشىكە رۇخسەت قىلىش.</string>
+    <string name="permlab_accessWifiState">WLANھالىتىنى كۆرۈش</string>
+    <string name="permdesc_accessWifiState">ئەمەلىي پروگىراممىنىڭ WLAN ھالىتىگە ئائىت ئۇچۇرلارنى كۆرىشىكە رۇخسەت قىلىش.</string>
     <string name="permlab_changeWifiState">WLAN ھالىتىنى ئۆزگەرتىش</string>
     <string name="permdesc_changeWifiState">پىروگراممىنىڭ سىمسىز ئۇلانمىنى ئۇلىشى ۋە ئۈزىشىگە ھەمدە سىمسىز تورنىڭ ئورۇنلاشتۇرۇشنىڭ ئۆزگىرشىگە رۇخسەت قىلىش.</string>
     <string name="permlab_changeWifiMulticastState">كۆپخىل سىمسىز تورنى قۇبۇللاشقا رۇخسەت قىلىش</string>
@@ -916,8 +916,8 @@
     <string name="ringtone_picker_title">قوڭغۇراق مۇزىكىلىرى</string>
     <string name="ringtone_unknown">نامەلۇم قوڭغۇراق مۇزىكىسى</string>
     <plurals name="wifi_available">
-        <item quantity="one">تورى بار Wi-Fi</item>
-        <item quantity="other">تورى بار Wi-Fi</item>
+        <item quantity="one">تورى بار WLAN</item>
+        <item quantity="other">تورى بار WLAN</item>
     </plurals>
     <plurals name="wifi_available_detailed">
         <item quantity="one">ئىشلەتكىلى بولىدىغانWLAN نى ئېچىش</item>

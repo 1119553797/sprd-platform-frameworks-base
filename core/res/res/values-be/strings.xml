@@ -96,11 +96,11 @@
   <string msgid="50784596594403483" name="permdesc_updateAppOpsStats">"Дазваляе прыкладанню змяняць сабраную статыстыку выкарыстання прыкладання. Не для выкарыстання звычайнымі прыкладаннямі."</string>
   <string msgid="4708181184441880175" name="permlab_freezeScreen">"замарозіць экран"</string>
   <string msgid="8558923789222670064" name="permdesc_freezeScreen">"Прыкладанне зможа часова замарозіць экран для пераходу ў поўнаэкранны рэжым."</string>
-  <string msgid="5295047563564981250" name="permdesc_accessFineLocation">"Дазваляе прыкладанню вызначаць дакладнае месцазнаходжанне з дапамогай GPS або сеткавых крынiц месцазнаходжання, напрыклад веж сотавай сувязi i Wi-Fi. Гэтыя службы вызначэння месцазнаходжання павiнны быць уключаны i даступныя для вашай прылады i прыкладання. Прыкладаннi могуць выкарыстоўваць гэта, каб вызначаць ваша прыблiзнае месцазнаходжанне, а таксама спажываць дадатковае сiлкаванне."</string>
-  <string msgid="5595661694746742168" name="permlab_configureWifiDisplay">"налада дысплеяў Wi-Fi"</string>
-  <string msgid="7916815158690218065" name="permdesc_configureWifiDisplay">"Дазволiць прыкладанню наладжвацца i падключацца да дысплеяў Wi-Fi."</string>
-  <string msgid="393641276723695496" name="permlab_controlWifiDisplay">"кіраванне дысплеямi Wi-Fi"</string>
-  <string msgid="4543912292681826986" name="permdesc_controlWifiDisplay">"Прыкладанне зможа кіраваць нізкім узроўнем функцый дысплеяў Wi-Fi."</string>
+  <string msgid="5295047563564981250" name="permdesc_accessFineLocation">"Дазваляе прыкладанню вызначаць дакладнае месцазнаходжанне з дапамогай GPS або сеткавых крынiц месцазнаходжання, напрыклад веж сотавай сувязi i WLAN. Гэтыя службы вызначэння месцазнаходжання павiнны быць уключаны i даступныя для вашай прылады i прыкладання. Прыкладаннi могуць выкарыстоўваць гэта, каб вызначаць ваша прыблiзнае месцазнаходжанне, а таксама спажываць дадатковае сiлкаванне."</string>
+  <string msgid="5595661694746742168" name="permlab_configureWifiDisplay">"налада дысплеяў WLAN"</string>
+  <string msgid="7916815158690218065" name="permdesc_configureWifiDisplay">"Дазволiць прыкладанню наладжвацца i падключацца да дысплеяў WLAN."</string>
+  <string msgid="393641276723695496" name="permlab_controlWifiDisplay">"кіраванне дысплеямi WLAN"</string>
+  <string msgid="4543912292681826986" name="permdesc_controlWifiDisplay">"Прыкладанне зможа кіраваць нізкім узроўнем функцый дысплеяў WLAN."</string>
   <string msgid="2651072630501126222" name="permlab_cameraDisableTransmitLed">"адключыць святлодыёдны індыкатар перадачы, калі камера выкарыстоўваецца"</string>
   <string msgid="4764585465480295341" name="permdesc_cameraDisableTransmitLed">"Дазваляе папярэдне ўсталяванаму сістэмнаму прыкладанню адключыць святлодыёдны індыкатар працы камеры."</string>
   <string msgid="8150613823900460576" name="permlab_sdcardAccessAll">"доступ да знешніх захоўвання для ўсіх карыстальнікаў"</string>
@@ -150,10 +150,10 @@
   </plurals>
   <string msgid="8718335121060787914" name="app_running_notification_title">"Прыкладанне <xliff:g id="APP_NAME">%1$s</xliff:g> працуе"</string>
   <string msgid="4653586947747330058" name="app_running_notification_text">"Націсніце, каб атрымаць дадатковую інфармацыю або спыніць праграму."</string>
-  <string msgid="8495155593358054676" name="network_available_sign_in">"Увайдзіце ў сетку Wi-Fi"</string>
+  <string msgid="8495155593358054676" name="network_available_sign_in">"Увайдзіце ў сетку WLAN"</string>
   <!-- no translation found for network_available_sign_in_detailed (8000081941447976118) -->
-  <string msgid="8012981257742232475" product="tablet" name="wifi_p2p_frequency_conflict_message">"Тэлефон будзе часова адключаны ад сеткі Wi-Fi, пакуль ён падлучаны да прылады <xliff:g id="DEVICE_NAME">%1$s</xliff:g>"</string>
-  <string msgid="7363907213787469151" product="default" name="wifi_p2p_frequency_conflict_message">"Тэлефон будзе часова адключаны ад Wi-Fi, пакуль ён падлучаны да прылады <xliff:g id="DEVICE_NAME">%1$s</xliff:g>"</string>
+  <string msgid="8012981257742232475" product="tablet" name="wifi_p2p_frequency_conflict_message">"Тэлефон будзе часова адключаны ад сеткі WLAN, пакуль ён падлучаны да прылады <xliff:g id="DEVICE_NAME">%1$s</xliff:g>"</string>
+  <string msgid="7363907213787469151" product="default" name="wifi_p2p_frequency_conflict_message">"Тэлефон будзе часова адключаны ад WLAN, пакуль ён падлучаны да прылады <xliff:g id="DEVICE_NAME">%1$s</xliff:g>"</string>
   <string msgid="1645436466285310855" name="sms_short_code_confirm_message">"&lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; хоча адправiць паведамленне на адрас &lt;b&gt;<xliff:g id="DEST_ADDRESS">%2$s</xliff:g>&lt;/b&gt;."</string>
   <string msgid="3492025719868078457" name="sms_short_code_details">"Гэта "<font fgcolor="#ffffb060">"можа прывесцi да дадатковых выдаткаванняў"</font>" з вашага мабiльнага ўлiковага запiсу."</string>
   <string msgid="5523826349105123687" name="sms_premium_short_code_details">
@@ -754,11 +754,11 @@
   <string msgid="8905815579146349568" name="permdesc_changeTetherState">"Дазваляе прыкладанню змяняць стан прывязанага сеткавага падключэння."</string>
   <string msgid="1400666012671648741" name="permlab_changeBackgroundDataSetting">"змяняць налады выкарыстання фонавых дадзеных"</string>
   <string msgid="1001482853266638864" name="permdesc_changeBackgroundDataSetting">"Дазваляе прыкладанням мяняць налады фонавай перадачы дадзеных."</string>
-  <string msgid="8100926650211034400" name="permlab_accessWifiState">"праглядаць стан Wi-Fi"</string>
-  <string msgid="485796529139236346" name="permdesc_accessWifiState">"Дазваляе прыкладанням праглядаць інфармацыю аб стане Wi-Fi."</string>
-  <string msgid="7280632711057112137" name="permlab_changeWifiState">"змяняць стан Wi-Fi"</string>
-  <string msgid="2950383153656873267" name="permdesc_changeWifiState">"Дазваляе прыкладанням падключацца да кропак доступу Wi-Fi і адключацца ад іх, а таксама ўносіць змены ў наладжаныя сеткі Wi-Fi."</string>
-  <string msgid="1368253871483254784" name="permlab_changeWifiMulticastState">"дазваляе прыём Wi-Fi Multicast"</string>
+  <string msgid="8100926650211034400" name="permlab_accessWifiState">"праглядаць стан WLAN"</string>
+  <string msgid="485796529139236346" name="permdesc_accessWifiState">"Дазваляе прыкладанням праглядаць інфармацыю аб стане WLAN."</string>
+  <string msgid="7280632711057112137" name="permlab_changeWifiState">"змяняць стан WLAN"</string>
+  <string msgid="2950383153656873267" name="permdesc_changeWifiState">"Дазваляе прыкладанням падключацца да кропак доступу WLAN і адключацца ад іх, а таксама ўносіць змены ў наладжаныя сеткі WLAN."</string>
+  <string msgid="1368253871483254784" name="permlab_changeWifiMulticastState">"дазваляе прыём WLAN Multicast"</string>
   <string msgid="2800410363171809280" name="permlab_accessWimaxState">"прагляд стану WiMAX"</string>
   <string msgid="8298035866227524023" name="permdesc_accessWimaxState">"Дазваляе выкарыстоўваць праграму для прагляду інфармацыі аб стане WiMAX."</string>
   <string msgid="340465839241528618" name="permlab_changeWimaxState">"Змяніць стан WiMAX"</string>
@@ -1246,20 +1246,20 @@
   <string msgid="3515143939175119094" name="ringtone_picker_title">"Рынгтоны"</string>
   <string msgid="5477919988701784788" name="ringtone_unknown">"Невядомы рынгтон"</string>
   <plurals name="wifi_available">
-    <item msgid="6654123987418168693" quantity="one">"Сетка Wi-Fi даступная"</item>
-    <item msgid="4192424489168397386" quantity="other">"Даступныя сеткі Wi-Fi"</item>
+    <item msgid="6654123987418168693" quantity="one">"Сетка WLAN даступная"</item>
+    <item msgid="4192424489168397386" quantity="other">"Даступныя сеткі WLAN"</item>
   </plurals>
   <plurals name="wifi_available_detailed">
-    <item msgid="1634101450343277345" quantity="one">"Адкрытая сетка Wi-Fi даступная"</item>
-    <item msgid="7915895323644292768" quantity="other">"Даступны адкрытыя сеткі Wi-Fi"</item>
+    <item msgid="1634101450343277345" quantity="one">"Адкрытая сетка WLAN даступная"</item>
+    <item msgid="7915895323644292768" quantity="other">"Даступны адкрытыя сеткі WLAN"</item>
   </plurals>
-  <string msgid="9157196203958866662" name="wifi_available_sign_in">"Уваход у сетку Wi-Fi"</string>
-  <string msgid="7904214231651546347" name="wifi_watchdog_network_disabled">"Немагчыма падключыцца да Wi-Fi"</string>
+  <string msgid="9157196203958866662" name="wifi_available_sign_in">"Уваход у сетку WLAN"</string>
+  <string msgid="7904214231651546347" name="wifi_watchdog_network_disabled">"Немагчыма падключыцца да WLAN"</string>
   <string msgid="4917472096696322767" name="wifi_watchdog_network_disabled_detailed">" дрэннае падключэнне да Інтэрнэту."</string>
-  <string msgid="97611782659324517" name="wifi_p2p_dialog_title">"Wi-Fi Direct"</string>
-  <string msgid="2804722042556269129" name="wifi_p2p_turnon_message">"Пачаць работу Wi-Fi Direct. Гэта адключыць Wi-Fi кліента/кропку доступу."</string>
-  <string msgid="1820097493844848281" name="wifi_p2p_failed_message">"Немагчыма запусціць Wi-Fi Direct"</string>
-  <string msgid="2068321881673734886" name="wifi_p2p_enabled_notification_title">"Wi-Fi Direct уключаны"</string>
+  <string msgid="97611782659324517" name="wifi_p2p_dialog_title">"WLAN Direct"</string>
+  <string msgid="2804722042556269129" name="wifi_p2p_turnon_message">"Пачаць работу WLAN Direct. Гэта адключыць WLAN кліента/кропку доступу."</string>
+  <string msgid="1820097493844848281" name="wifi_p2p_failed_message">"Немагчыма запусціць WLAN Direct"</string>
+  <string msgid="2068321881673734886" name="wifi_p2p_enabled_notification_title">"WLAN Direct уключаны"</string>
   <string msgid="1638949953993894335" name="wifi_p2p_enabled_notification_message">"Дакраніцеся, каб наладзіць"</string>
   <string msgid="3365550120617701745" name="select_character">"Уставіць сімвал"</string>
   <string msgid="7296612781128917719" name="sms_control_title">"Адпраўка SMS"</string>
@@ -1376,7 +1376,7 @@
   <string msgid="1602335572089911941" name="submit">"Перадаць"</string>
   <string msgid="3164768212003864316" name="car_mode_disable_notification_title">"Рэжым \"У машыне\" ўключаны"</string>
   <string msgid="668663626721675614" name="car_mode_disable_notification_message">"Выберыце, каб выйсці з рэжыму \"Ў аўтамабілі\"."</string>
-  <string msgid="3146694234398202601" name="tethered_notification_title">"USB-мадэм або кропка доступу Wi-Fi актыўныя"</string>
+  <string msgid="3146694234398202601" name="tethered_notification_title">"USB-мадэм або кропка доступу WLAN актыўныя"</string>
   <string msgid="3067108323903048927" name="tethered_notification_message">"Націсніце, каб змяніць налады"</string>
   <string msgid="2300470004503343439" name="back_button_label">"Назад"</string>
   <string msgid="1080555104677992408" name="next_button_label">"Далей"</string>
@@ -1471,12 +1471,12 @@
   <string msgid="7093334419518706686" name="data_usage_3g_limit_title">"Перадача дадз. 2G-3G выключана"</string>
   <string msgid="7636489436819470761" name="data_usage_4g_limit_title">"Перадача дадзеных 4G выключана"</string>
   <string msgid="7869402519391631884" name="data_usage_mobile_limit_title">"Мабільная перадача дадз. выкл."</string>
-  <string msgid="8992154736441284865" name="data_usage_wifi_limit_title">"Перад. дадз. Wi-Fi адключаная"</string>
+  <string msgid="8992154736441284865" name="data_usage_wifi_limit_title">"Перад. дадз. WLAN адключаная"</string>
   <string msgid="4313857592916426843" name="data_usage_limit_body">"Націсніце, каб уключыць"</string>
   <string msgid="7026739121138005231" name="data_usage_3g_limit_snoozed_title">"Перавышаны ліміт 2G-3G"</string>
   <string msgid="1106562779311209039" name="data_usage_4g_limit_snoozed_title">"Перавышаны ліміт дадзеных 4G"</string>
   <string msgid="279240572165412168" name="data_usage_mobile_limit_snoozed_title">"Перавышаны ліміт мабільных дадзеных"</string>
-  <string msgid="8743856006384825974" name="data_usage_wifi_limit_snoozed_title">"Перав. ліміт па дадзеным Wi-Fi"</string>
+  <string msgid="8743856006384825974" name="data_usage_wifi_limit_snoozed_title">"Перав. ліміт па дадзеным WLAN"</string>
   <string msgid="2932736326652880660" name="data_usage_limit_snoozed_body">"<xliff:g id="SIZE">%s</xliff:g> звыш устаноўленай мяжы"</string>
   <string msgid="5965157361036321914" name="data_usage_restricted_title">"Зыходныя дадзеныя абмежаваныя"</string>
   <string msgid="5087354814839059798" name="data_usage_restricted_body">"Націсніце, каб зняць абмежаванне"</string>

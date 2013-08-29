@@ -96,11 +96,11 @@
   <string msgid="50784596594403483" name="permdesc_updateAppOpsStats">"Laat die program toe om versamelde programwerking-statistieke te verander. Nie vir gebruik deur normale programme nie."</string>
   <string msgid="4708181184441880175" name="permlab_freezeScreen">"vries skerm"</string>
   <string msgid="8558923789222670064" name="permdesc_freezeScreen">"Laat die program toe om tydelik die skerm te vries vir \'n volskermoorgang."</string>
-  <string msgid="5295047563564981250" name="permdesc_accessFineLocation">"Laat die program toe om jou presiese ligging te kry met behulp van die globaleposisioneringstelsel (GPS) of netwerkliggingbronne soos seltorings en Wi-Fi. Hierdie liggingdienste moet aangeskakel en beskikbaar wees aan jou toestel vir die program om dit te gebruik. Programme kan dit gebruik om te bepaal waar jy is en kan batterylewe opgebruik."</string>
-  <string msgid="5595661694746742168" name="permlab_configureWifiDisplay">"stel Wi-Fi-skerms op"</string>
-  <string msgid="7916815158690218065" name="permdesc_configureWifiDisplay">"Laat die program toe om Wi-Fi-skerms op te stel en daaraan te koppel."</string>
-  <string msgid="393641276723695496" name="permlab_controlWifiDisplay">"beheer Wi-Fi-skerms"</string>
-  <string msgid="4543912292681826986" name="permdesc_controlWifiDisplay">"Laat die program toe om laevlak-kenmerke van Wi-Fi-skerms te beheer."</string>
+  <string msgid="5295047563564981250" name="permdesc_accessFineLocation">"Laat die program toe om jou presiese ligging te kry met behulp van die globaleposisioneringstelsel (GPS) of netwerkliggingbronne soos seltorings en WLAN. Hierdie liggingdienste moet aangeskakel en beskikbaar wees aan jou toestel vir die program om dit te gebruik. Programme kan dit gebruik om te bepaal waar jy is en kan batterylewe opgebruik."</string>
+  <string msgid="5595661694746742168" name="permlab_configureWifiDisplay">"stel WLAN-skerms op"</string>
+  <string msgid="7916815158690218065" name="permdesc_configureWifiDisplay">"Laat die program toe om WLAN-skerms op te stel en daaraan te koppel."</string>
+  <string msgid="393641276723695496" name="permlab_controlWifiDisplay">"beheer WLAN-skerms"</string>
+  <string msgid="4543912292681826986" name="permdesc_controlWifiDisplay">"Laat die program toe om laevlak-kenmerke van WLAN-skerms te beheer."</string>
   <string msgid="2651072630501126222" name="permlab_cameraDisableTransmitLed">"deaktiveer LED wat oordrag aandui wanneer kamera gebruik word"</string>
   <string msgid="4764585465480295341" name="permdesc_cameraDisableTransmitLed">"Laat \'n pre-geïnstalleerde stelselprogram toe om die LED wat kamera-gebruik aandui, te deaktiveer."</string>
   <string msgid="8150613823900460576" name="permlab_sdcardAccessAll">"verkry toegang tot alle gebruikers se eksterne berging"</string>
@@ -152,8 +152,8 @@
   <string msgid="4653586947747330058" name="app_running_notification_text">"Raak vir meer inligting of om die program te stop."</string>
   <string msgid="8495155593358054676" name="network_available_sign_in">"Meld aan by netwerk"</string>
   <!-- no translation found for network_available_sign_in_detailed (8000081941447976118) -->
-  <string msgid="8012981257742232475" product="tablet" name="wifi_p2p_frequency_conflict_message">"Die tablet sal tydelik van Wi-Fi ontkoppel terwyl dit aan <xliff:g id="DEVICE_NAME">%1$s</xliff:g> gekoppel is"</string>
-  <string msgid="7363907213787469151" product="default" name="wifi_p2p_frequency_conflict_message">"Die foon sal tydelik van Wi-Fi ontkoppel terwyl dit aan <xliff:g id="DEVICE_NAME">%1$s</xliff:g> gekoppel is"</string>
+  <string msgid="8012981257742232475" product="tablet" name="wifi_p2p_frequency_conflict_message">"Die tablet sal tydelik van WLAN ontkoppel terwyl dit aan <xliff:g id="DEVICE_NAME">%1$s</xliff:g> gekoppel is"</string>
+  <string msgid="7363907213787469151" product="default" name="wifi_p2p_frequency_conflict_message">"Die foon sal tydelik van WLAN ontkoppel terwyl dit aan <xliff:g id="DEVICE_NAME">%1$s</xliff:g> gekoppel is"</string>
   <string msgid="1645436466285310855" name="sms_short_code_confirm_message">"&lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; wil \'n boodskap na &lt;b&gt;<xliff:g id="DEST_ADDRESS">%2$s</xliff:g>&lt;/b&gt; stuur."</string>
   <string msgid="3492025719868078457" name="sms_short_code_details">"Hierdie "<font fgcolor="#ffffb060">"kan heffings veroorsaak"</font>" op jou selfoonrekening."</string>
   <string msgid="5523826349105123687" name="sms_premium_short_code_details">
@@ -754,11 +754,11 @@
   <string msgid="8905815579146349568" name="permdesc_changeTetherState">"Laat \'n program toe om die status van verbinde netwerk-konnektiwiteit te verander."</string>
   <string msgid="1400666012671648741" name="permlab_changeBackgroundDataSetting">"verander agtergronddata-gebruik-instelling"</string>
   <string msgid="1001482853266638864" name="permdesc_changeBackgroundDataSetting">"Laat \'n program toe om die instelling oor agtergronddatagebruik te verander."</string>
-  <string msgid="8100926650211034400" name="permlab_accessWifiState">"bekyk Wi-Fi-status"</string>
-  <string msgid="485796529139236346" name="permdesc_accessWifiState">"Laat \'n program toe om die inligting oor die status van Wi-Fi te sien."</string>
-  <string msgid="7280632711057112137" name="permlab_changeWifiState">"verander Wi-Fi-status"</string>
-  <string msgid="2950383153656873267" name="permdesc_changeWifiState">"Laat \'n program toe om aan Wi-Fi-toegangspunte te koppel of van te ontkoppel, en om wysigings aan opgestelde Wi-Fi-netwerke aan te bring."</string>
-  <string msgid="1368253871483254784" name="permlab_changeWifiMulticastState">"laat Wi-Fi-multisendontvangs toe"</string>
+  <string msgid="8100926650211034400" name="permlab_accessWifiState">"bekyk WLAN-status"</string>
+  <string msgid="485796529139236346" name="permdesc_accessWifiState">"Laat \'n program toe om die inligting oor die status van WLAN te sien."</string>
+  <string msgid="7280632711057112137" name="permlab_changeWifiState">"verander WLAN-status"</string>
+  <string msgid="2950383153656873267" name="permdesc_changeWifiState">"Laat \'n program toe om aan WLAN-toegangspunte te koppel of van te ontkoppel, en om wysigings aan opgestelde WLAN-netwerke aan te bring."</string>
+  <string msgid="1368253871483254784" name="permlab_changeWifiMulticastState">"laat WLAN-multisendontvangs toe"</string>
   <string msgid="2800410363171809280" name="permlab_accessWimaxState">"sien WiMAX-status"</string>
   <string msgid="8298035866227524023" name="permdesc_accessWimaxState">"Laat \'n program toe om die inligting oor die status van WiMAX te sien."</string>
   <string msgid="340465839241528618" name="permlab_changeWimaxState">"verander WiMAX-status"</string>
@@ -1246,20 +1246,20 @@
   <string msgid="3515143939175119094" name="ringtone_picker_title">"Luitone"</string>
   <string msgid="5477919988701784788" name="ringtone_unknown">"Onbekende luitoon"</string>
   <plurals name="wifi_available">
-    <item msgid="6654123987418168693" quantity="one">"Wi-Fi-netwerk beskikbaar"</item>
-    <item msgid="4192424489168397386" quantity="other">"Wi-Fi-netwerke beskikbaar"</item>
+    <item msgid="6654123987418168693" quantity="one">"WLAN-netwerk beskikbaar"</item>
+    <item msgid="4192424489168397386" quantity="other">"WLAN-netwerke beskikbaar"</item>
   </plurals>
   <plurals name="wifi_available_detailed">
-    <item msgid="1634101450343277345" quantity="one">"Oop Wi-Fi-netwerke beskikbaar"</item>
-    <item msgid="7915895323644292768" quantity="other">"Oop Wi-Fi-netwerke beskikbaar"</item>
+    <item msgid="1634101450343277345" quantity="one">"Oop WLAN-netwerke beskikbaar"</item>
+    <item msgid="7915895323644292768" quantity="other">"Oop WLAN-netwerke beskikbaar"</item>
   </plurals>
-  <string msgid="9157196203958866662" name="wifi_available_sign_in">"Meld aan by Wi-Fi-netwerk"</string>
-  <string msgid="7904214231651546347" name="wifi_watchdog_network_disabled">"Kon nie aan Wi-Fikoppel nie"</string>
+  <string msgid="9157196203958866662" name="wifi_available_sign_in">"Meld aan by WLAN-netwerk"</string>
+  <string msgid="7904214231651546347" name="wifi_watchdog_network_disabled">"Kon nie aan WLANkoppel nie"</string>
   <string msgid="4917472096696322767" name="wifi_watchdog_network_disabled_detailed">" het \'n swak internetverbinding."</string>
-  <string msgid="97611782659324517" name="wifi_p2p_dialog_title">"Wi-Fi Direct"</string>
-  <string msgid="2804722042556269129" name="wifi_p2p_turnon_message">"Begin Wi-Fi Direct-handeling. Dit sal Wi-Fi-kliënt/warmkol-werking afskakel."</string>
-  <string msgid="1820097493844848281" name="wifi_p2p_failed_message">"Kon nie Wi-Fi Direct begin nie"</string>
-  <string msgid="2068321881673734886" name="wifi_p2p_enabled_notification_title">"Wi-Fi Direk is aan"</string>
+  <string msgid="97611782659324517" name="wifi_p2p_dialog_title">"WLAN Direct"</string>
+  <string msgid="2804722042556269129" name="wifi_p2p_turnon_message">"Begin WLAN Direct-handeling. Dit sal WLAN-kliënt/warmkol-werking afskakel."</string>
+  <string msgid="1820097493844848281" name="wifi_p2p_failed_message">"Kon nie WLAN Direct begin nie"</string>
+  <string msgid="2068321881673734886" name="wifi_p2p_enabled_notification_title">"WLAN Direk is aan"</string>
   <string msgid="1638949953993894335" name="wifi_p2p_enabled_notification_message">"Raak vir instellings"</string>
   <string msgid="3365550120617701745" name="select_character">"Voeg karakter in"</string>
   <string msgid="7296612781128917719" name="sms_control_title">"Stuur SMS-boodskappe"</string>
@@ -1376,7 +1376,7 @@
   <string msgid="1602335572089911941" name="submit">"Dien in"</string>
   <string msgid="3164768212003864316" name="car_mode_disable_notification_title">"Motormodus geaktiveer"</string>
   <string msgid="668663626721675614" name="car_mode_disable_notification_message">"Kies om motormodus te verlaat."</string>
-  <string msgid="3146694234398202601" name="tethered_notification_title">"Verbinding of Wi-Fi-warmkol aktief"</string>
+  <string msgid="3146694234398202601" name="tethered_notification_title">"Verbinding of WLAN-warmkol aktief"</string>
   <string msgid="3067108323903048927" name="tethered_notification_message">"Raak om op te stel"</string>
   <string msgid="2300470004503343439" name="back_button_label">"Terug"</string>
   <string msgid="1080555104677992408" name="next_button_label">"Volgende"</string>
@@ -1471,12 +1471,12 @@
   <string msgid="7093334419518706686" name="data_usage_3g_limit_title">"2G-3G-data gedeaktiveer"</string>
   <string msgid="7636489436819470761" name="data_usage_4g_limit_title">"4G-data gedeaktiveer"</string>
   <string msgid="7869402519391631884" name="data_usage_mobile_limit_title">"Mobieldata gedeaktiveer"</string>
-  <string msgid="8992154736441284865" name="data_usage_wifi_limit_title">"Wi-Fi-data gedeaktiveer"</string>
+  <string msgid="8992154736441284865" name="data_usage_wifi_limit_title">"WLAN-data gedeaktiveer"</string>
   <string msgid="4313857592916426843" name="data_usage_limit_body">"Raak om te aktiveer"</string>
   <string msgid="7026739121138005231" name="data_usage_3g_limit_snoozed_title">"2G-3G-datalimiet oorskry"</string>
   <string msgid="1106562779311209039" name="data_usage_4g_limit_snoozed_title">"4G-datalimiet oorskry"</string>
   <string msgid="279240572165412168" name="data_usage_mobile_limit_snoozed_title">"Mobiele datalimiet oorskry"</string>
-  <string msgid="8743856006384825974" name="data_usage_wifi_limit_snoozed_title">"Wi-Fi se datalimiet oorskry"</string>
+  <string msgid="8743856006384825974" name="data_usage_wifi_limit_snoozed_title">"WLAN se datalimiet oorskry"</string>
   <string msgid="2932736326652880660" name="data_usage_limit_snoozed_body">"<xliff:g id="SIZE">%s</xliff:g> meer as gespesifiseerde limiet"</string>
   <string msgid="5965157361036321914" name="data_usage_restricted_title">"Agtergronddata is beperk"</string>
   <string msgid="5087354814839059798" name="data_usage_restricted_body">"Raak om beperking te verwyder"</string>

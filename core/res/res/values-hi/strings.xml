@@ -96,7 +96,7 @@
   <string msgid="50784596594403483" name="permdesc_updateAppOpsStats">"एप्लिकेशन को एप्लिकेशन कार्यवाही के एकत्रित आंकड़े बदलने देता है. सामान्य एप्लिकेशन के द्वारा उपयोग करने के लिए नहीं."</string>
   <string msgid="4708181184441880175" name="permlab_freezeScreen">"स्क्रीन को स्थिर करें"</string>
   <string msgid="8558923789222670064" name="permdesc_freezeScreen">"पूर्ण-स्क्रीन संक्रमण के लिए एप्लिकेशन को अस्थायी रूप से स्क्रीन को स्थिर करने देता है."</string>
-  <string msgid="5295047563564981250" name="permdesc_accessFineLocation">"एप्लिकेशन को ग्लोबल पोज़िशनिंग सिस्टम (GPS) या सेल टॉवर और Wi-Fi जैसे नेटवर्क स्थान स्रोतों का उपयोग करके आपका सटीक स्थान प्राप्त करने देती है. एप्लिकेशन द्वारा इन स्थान सेवाओं का उपयोग किए जाने के लिए इन्हें चालू होना चाहिए और आपके उपकरण पर उपलब्ध होना चाहिए. एप्लिकेशन इसका उपयोग यह पता करने में कर सकते हैं कि आप कहां पर हैं, और अतिरिक्त बैटरी की खपत कर सकते हैं."</string>
+  <string msgid="5295047563564981250" name="permdesc_accessFineLocation">"एप्लिकेशन को ग्लोबल पोज़िशनिंग सिस्टम (GPS) या सेल टॉवर और WLAN जैसे नेटवर्क स्थान स्रोतों का उपयोग करके आपका सटीक स्थान प्राप्त करने देती है. एप्लिकेशन द्वारा इन स्थान सेवाओं का उपयोग किए जाने के लिए इन्हें चालू होना चाहिए और आपके उपकरण पर उपलब्ध होना चाहिए. एप्लिकेशन इसका उपयोग यह पता करने में कर सकते हैं कि आप कहां पर हैं, और अतिरिक्त बैटरी की खपत कर सकते हैं."</string>
   <string msgid="5595661694746742168" name="permlab_configureWifiDisplay">"Wifi डिस्प्ले को कॉन्फ़िगर करें"</string>
   <string msgid="7916815158690218065" name="permdesc_configureWifiDisplay">"एप्लिकेशन को कॉन्फ़िगर करने देता है और Wifi डिस्प्ले से कनेक्ट करता है."</string>
   <string msgid="393641276723695496" name="permlab_controlWifiDisplay">"Wifi डिस्प्ले को नियंत्रित करें"</string>
@@ -152,8 +152,8 @@
   <string msgid="4653586947747330058" name="app_running_notification_text">"अधिक जानकारी के लिए या एप्लिकेशन रोकने के लिए स्पर्श करें."</string>
   <string msgid="8495155593358054676" name="network_available_sign_in">"नेटवर्क में साइन इन करें"</string>
   <!-- no translation found for network_available_sign_in_detailed (8000081941447976118) -->
-  <string msgid="8012981257742232475" product="tablet" name="wifi_p2p_frequency_conflict_message">"<xliff:g id="DEVICE_NAME">%1$s</xliff:g> से कनेक्ट रहने पर टेबलेट Wi-Fi से अस्थायी रूप से डिस्कनेक्ट हो जाएगा"</string>
-  <string msgid="7363907213787469151" product="default" name="wifi_p2p_frequency_conflict_message">"फ़ोन <xliff:g id="DEVICE_NAME">%1$s</xliff:g> से कनेक्ट रहते समय Wi-Fi से अस्थायी रूप से डिस्कनेक्ट हो जाएगा"</string>
+  <string msgid="8012981257742232475" product="tablet" name="wifi_p2p_frequency_conflict_message">"<xliff:g id="DEVICE_NAME">%1$s</xliff:g> से कनेक्ट रहने पर टेबलेट WLAN से अस्थायी रूप से डिस्कनेक्ट हो जाएगा"</string>
+  <string msgid="7363907213787469151" product="default" name="wifi_p2p_frequency_conflict_message">"फ़ोन <xliff:g id="DEVICE_NAME">%1$s</xliff:g> से कनेक्ट रहते समय WLAN से अस्थायी रूप से डिस्कनेक्ट हो जाएगा"</string>
   <string msgid="1645436466285310855" name="sms_short_code_confirm_message">"&lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt;, &lt;b&gt;<xliff:g id="DEST_ADDRESS">%2$s</xliff:g>&lt;/b&gt; पर संदेश भेजना चाहता है."</string>
   <string msgid="3492025719868078457" name="sms_short_code_details">"इससे आपके मोबाइल खाते पर "<font fgcolor="#ffffb060">"शुल्क लग सकते हैं"</font>"."</string>
   <string msgid="5523826349105123687" name="sms_premium_short_code_details">
@@ -756,11 +756,11 @@
   <string name="permdesc_changeTetherState">"किसी एप्‍लिकेशन को टेदर किए गए नेटवर्क कनेक्‍टिविटी की स्‍िथति बदलने की अनुमति देता है."</string>
   <string name="permlab_changeBackgroundDataSetting">"पृष्ठभूमि डेटा उपयोग सेटिंग बदलें"</string>
   <string name="permdesc_changeBackgroundDataSetting">"किसी एप्‍लिकेशन को पृष्ठभूमि डेटा उपयोग सेटिंग बदलने की अनुमति देता है."</string>
-  <string name="permlab_accessWifiState">"Wi-Fi स्‍थिति देखें"</string>
-  <string name="permdesc_accessWifiState">"किसी एप्‍लिकेशन को Wi-Fi की स्‍थिति के बारे में जानकारी देखने की अनुमति देता है."</string>
-  <string name="permlab_changeWifiState">"Wi-Fi स्‍थिति बदलें"</string>
-  <string name="permdesc_changeWifiState">"किसी एप्‍लिकेशन को Wi-Fi पहुंच बिंदु से कनेक्‍ट और डिस्‍कनेक्‍ट करने और कॉन्‍फ़िगर किए हुए Wi-Fi नेटवर्क में परिवर्तन करने की अनुमति देता है."</string>
-  <string name="permlab_changeWifiMulticastState">"Wi-Fi मल्‍टीकास्‍ट प्राप्ति को अनुमति दें"</string>
+  <string name="permlab_accessWifiState">"WLAN स्‍थिति देखें"</string>
+  <string name="permdesc_accessWifiState">"किसी एप्‍लिकेशन को WLAN की स्‍थिति के बारे में जानकारी देखने की अनुमति देता है."</string>
+  <string name="permlab_changeWifiState">"WLAN स्‍थिति बदलें"</string>
+  <string name="permdesc_changeWifiState">"किसी एप्‍लिकेशन को WLAN पहुंच बिंदु से कनेक्‍ट और डिस्‍कनेक्‍ट करने और कॉन्‍फ़िगर किए हुए WLAN नेटवर्क में परिवर्तन करने की अनुमति देता है."</string>
+  <string name="permlab_changeWifiMulticastState">"WLAN मल्‍टीकास्‍ट प्राप्ति को अनुमति दें"</string>
   <string name="permlab_accessWimaxState">"WiMAX स्‍थिति देखें"</string>
   <string name="permdesc_accessWimaxState">"किसी एप्‍लिकेशन को WiMAX की स्‍थिति की जानकारी देखने की सुविधा देता है."</string>
   <string name="permlab_changeWimaxState">"WiMAX स्‍थिति बदलें"</string>
@@ -1246,20 +1246,20 @@
   <string name="ringtone_picker_title">"रिंगटोन"</string>
   <string name="ringtone_unknown">"अज्ञात रिंगटोन"</string>
   <plurals name="wifi_available">
-        <item quantity="one">"Wi-Fi नेटवर्क उपलब्‍ध"</item>
-        <item quantity="other">"Wi-Fi नेटवर्क उपलब्‍ध"</item>
+        <item quantity="one">"WLAN नेटवर्क उपलब्‍ध"</item>
+        <item quantity="other">"WLAN नेटवर्क उपलब्‍ध"</item>
     </plurals>
   <plurals name="wifi_available_detailed">
-        <item quantity="one">"उपलब्‍ध Wi-Fi नेटवर्क खोलें"</item>
-        <item quantity="other">"खुले Wi-Fi नेटवर्क उपलब्‍ध है"</item>
+        <item quantity="one">"उपलब्‍ध WLAN नेटवर्क खोलें"</item>
+        <item quantity="other">"खुले WLAN नेटवर्क उपलब्‍ध है"</item>
     </plurals>
-  <string name="wifi_available_sign_in">"Wi-Fi नेटवर्क में साइन इन करें"</string>
-  <string name="wifi_watchdog_network_disabled">"Wi-Fi से कनेक्‍ट नहीं हो सका"</string>
+  <string name="wifi_available_sign_in">"WLAN नेटवर्क में साइन इन करें"</string>
+  <string name="wifi_watchdog_network_disabled">"WLAN से कनेक्‍ट नहीं हो सका"</string>
   <string name="wifi_watchdog_network_disabled_detailed">" के पास एक कमज़ोर इंटरनेट कनेक्‍शन है."</string>
-  <string name="wifi_p2p_dialog_title">"Wi-Fi प्रत्यक्ष"</string>
-  <string name="wifi_p2p_turnon_message">"Wi-Fi प्रत्‍यक्ष कार्यवाही प्रारंभ करें. इससे Wi-Fi क्‍लाइंट/हॉटस्पॉट कार्यवाही बंद हो जाएगी."</string>
-  <string name="wifi_p2p_failed_message">"Wi-Fi प्रत्‍यक्ष प्रारंभ नहीं हो सका"</string>
-  <string name="wifi_p2p_enabled_notification_title">"Wi-Fi प्रत्यक्ष चालू है"</string>
+  <string name="wifi_p2p_dialog_title">"WLAN प्रत्यक्ष"</string>
+  <string name="wifi_p2p_turnon_message">"WLAN प्रत्‍यक्ष कार्यवाही प्रारंभ करें. इससे WLAN क्‍लाइंट/हॉटस्पॉट कार्यवाही बंद हो जाएगी."</string>
+  <string name="wifi_p2p_failed_message">"WLAN प्रत्‍यक्ष प्रारंभ नहीं हो सका"</string>
+  <string name="wifi_p2p_enabled_notification_title">"WLAN प्रत्यक्ष चालू है"</string>
   <string name="wifi_p2p_enabled_notification_message">"सेटिंग के लिए स्‍पर्श करें"</string>
   <string name="select_character">"वर्ण सम्‍मिलित करें"</string>
   <string name="sms_control_title">"SMS संदेश भेज रहा है"</string>
@@ -1479,12 +1479,12 @@
   <string name="data_usage_3g_limit_title">"2G-3G डेटा अक्षम किया गया"</string>
   <string name="data_usage_4g_limit_title">"4G डेटा अक्षम किया गया"</string>
   <string name="data_usage_mobile_limit_title">"मोबाइल डेटा अक्षम किया गया"</string>
-  <string name="data_usage_wifi_limit_title">"Wi-Fi डेटा अक्षम हो गया"</string>
+  <string name="data_usage_wifi_limit_title">"WLAN डेटा अक्षम हो गया"</string>
   <string name="data_usage_limit_body">"सक्षम करने के लिए स्‍पर्श करें"</string>
   <string name="data_usage_3g_limit_snoozed_title">"2G-3G डेटा सीमा पार हो गई है"</string>
   <string name="data_usage_4g_limit_snoozed_title">"4G डेटा सीमा पार हो गई है"</string>
   <string name="data_usage_mobile_limit_snoozed_title">"मोबाइल डेटा सीमा पार हो गई है"</string>
-  <string name="data_usage_wifi_limit_snoozed_title">"Wi-Fi डेटा सीमा पार हो गई है"</string>
+  <string name="data_usage_wifi_limit_snoozed_title">"WLAN डेटा सीमा पार हो गई है"</string>
   <string name="data_usage_limit_snoozed_body">"<xliff:g id="SIZE">%s</xliff:g> निर्दिष्ट सीमा से अधिक"</string>
   <string name="data_usage_restricted_title">"पृष्ठभूमि डेटा प्रतिबंधित है"</string>
   <string name="data_usage_restricted_body">"प्रतिबंध निकालने के लिए स्‍पर्श करें"</string>

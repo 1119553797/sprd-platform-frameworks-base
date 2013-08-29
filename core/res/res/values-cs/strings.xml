@@ -96,11 +96,11 @@
   <string msgid="50784596594403483" name="permdesc_updateAppOpsStats">"Umožňuje aplikaci upravit shromážděné statistiky operací aplikace. Toto oprávnění není určeno pro běžné aplikace."</string>
   <string msgid="4708181184441880175" name="permlab_freezeScreen">"zmrazit obrazovku"</string>
   <string msgid="8558923789222670064" name="permdesc_freezeScreen">"Povoluje aplikaci dočasně zmrazit obrazovku pro přechod do režimu celé obrazovky."</string>
-  <string msgid="5295047563564981250" name="permdesc_accessFineLocation">"Umožňuje aplikaci zjistit vaši přesnou polohu pomocí systému GPS nebo síťových lokalizačních zdrojů, jako jsou vysílače mobilní sítě a sítě Wi-Fi. Aby aplikace mohla služby určování polohy použít, musejí být zapnuté a musejí být v zařízení k dispozici. Aplikace pomocí těchto informací mohou určit vaši přesnou polohu a mohou spotřebovávat více energie z baterie."</string>
-  <string msgid="5595661694746742168" name="permlab_configureWifiDisplay">"konfigurovat displeje přes Wi-Fi"</string>
-  <string msgid="7916815158690218065" name="permdesc_configureWifiDisplay">"Povoluje aplikaci připojit a konfigurovat displeje přes Wi-Fi."</string>
-  <string msgid="393641276723695496" name="permlab_controlWifiDisplay">"ovládat displeje přes Wi-Fi"</string>
-  <string msgid="4543912292681826986" name="permdesc_controlWifiDisplay">"Povoluje aplikaci ovládat základní funkce displejů přes Wi-Fi."</string>
+  <string msgid="5295047563564981250" name="permdesc_accessFineLocation">"Umožňuje aplikaci zjistit vaši přesnou polohu pomocí systému GPS nebo síťových lokalizačních zdrojů, jako jsou vysílače mobilní sítě a sítě WLAN. Aby aplikace mohla služby určování polohy použít, musejí být zapnuté a musejí být v zařízení k dispozici. Aplikace pomocí těchto informací mohou určit vaši přesnou polohu a mohou spotřebovávat více energie z baterie."</string>
+  <string msgid="5595661694746742168" name="permlab_configureWifiDisplay">"konfigurovat displeje přes WLAN"</string>
+  <string msgid="7916815158690218065" name="permdesc_configureWifiDisplay">"Povoluje aplikaci připojit a konfigurovat displeje přes WLAN."</string>
+  <string msgid="393641276723695496" name="permlab_controlWifiDisplay">"ovládat displeje přes WLAN"</string>
+  <string msgid="4543912292681826986" name="permdesc_controlWifiDisplay">"Povoluje aplikaci ovládat základní funkce displejů přes WLAN."</string>
   <string msgid="2651072630501126222" name="permlab_cameraDisableTransmitLed">"vypnutí indikátoru LED přenosu při použití fotoaparátu"</string>
   <string msgid="4764585465480295341" name="permdesc_cameraDisableTransmitLed">"Umožňuje předinstalované systémové aplikaci vypnout kontrolku LED fotoaparátu."</string>
   <string msgid="8150613823900460576" name="permlab_sdcardAccessAll">"přístup k externímu úložišti všech uživatelů"</string>
@@ -152,8 +152,8 @@
   <string msgid="4653586947747330058" name="app_running_notification_text">"Klepnutím zobrazíte další informace nebo ukončíte aplikaci."</string>
   <string msgid="8495155593358054676" name="network_available_sign_in">"Přihlášení k síti"</string>
   <!-- no translation found for network_available_sign_in_detailed (8000081941447976118) -->
-  <string msgid="8012981257742232475" product="tablet" name="wifi_p2p_frequency_conflict_message">"Tablet se při připojení k zařízení <xliff:g id="DEVICE_NAME">%1$s</xliff:g> dočasně odpojí od sítě Wi-Fi"</string>
-  <string msgid="7363907213787469151" product="default" name="wifi_p2p_frequency_conflict_message">"Telefon se při připojení k zařízení <xliff:g id="DEVICE_NAME">%1$s</xliff:g> dočasně odpojí od sítě Wi-Fi"</string>
+  <string msgid="8012981257742232475" product="tablet" name="wifi_p2p_frequency_conflict_message">"Tablet se při připojení k zařízení <xliff:g id="DEVICE_NAME">%1$s</xliff:g> dočasně odpojí od sítě WLAN"</string>
+  <string msgid="7363907213787469151" product="default" name="wifi_p2p_frequency_conflict_message">"Telefon se při připojení k zařízení <xliff:g id="DEVICE_NAME">%1$s</xliff:g> dočasně odpojí od sítě WLAN"</string>
   <string msgid="1645436466285310855" name="sms_short_code_confirm_message">"&lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; chce odeslat zprávu na adresu &lt;b&gt;<xliff:g id="DEST_ADDRESS">%2$s</xliff:g>&lt;/b&gt;."</string>
   <string msgid="3492025719868078457" name="sms_short_code_details"><font fgcolor="#ffffb060">"Mohou být účtovány poplatky"</font>" na váš mobilní účet."</string>
   <string msgid="5523826349105123687" name="sms_premium_short_code_details">
@@ -758,7 +758,7 @@
   <string msgid="485796529139236346" name="permdesc_accessWifiState">"Umožňuje aplikaci zobrazit informace o stavu připojení WiFi."</string>
   <string msgid="7280632711057112137" name="permlab_changeWifiState">"změna stavu WiFi"</string>
   <string msgid="2950383153656873267" name="permdesc_changeWifiState">"Umožňuje aplikaci připojit se k přístupovým bodům WiFi či se od nich odpojit a provádět změny nakonfigurovaných sítí WiFi."</string>
-  <string msgid="1368253871483254784" name="permlab_changeWifiMulticastState">"povolení příjmu Wi-Fi Multicast"</string>
+  <string msgid="1368253871483254784" name="permlab_changeWifiMulticastState">"povolení příjmu WLAN Multicast"</string>
   <string msgid="2800410363171809280" name="permlab_accessWimaxState">"zobrazit stav připojení WiMAX"</string>
   <string msgid="8298035866227524023" name="permdesc_accessWimaxState">"Umožňuje aplikaci zobrazit informace o stavu připojení WiMAX."</string>
   <string msgid="340465839241528618" name="permlab_changeWimaxState">"měnit stav připojení WiMAX"</string>
@@ -1253,13 +1253,13 @@
     <item msgid="1634101450343277345" quantity="one">"K dispozici je veřejná síť WiFi"</item>
     <item msgid="7915895323644292768" quantity="other">"Jsou k dispozici veřejné sítě WiFi"</item>
   </plurals>
-  <string msgid="9157196203958866662" name="wifi_available_sign_in">"Přihlásit se k síti Wi-Fi"</string>
-  <string msgid="7904214231651546347" name="wifi_watchdog_network_disabled">"Připojení k síti Wi-Fi se nezdařilo"</string>
+  <string msgid="9157196203958866662" name="wifi_available_sign_in">"Přihlásit se k síti WLAN"</string>
+  <string msgid="7904214231651546347" name="wifi_watchdog_network_disabled">"Připojení k síti WLAN se nezdařilo"</string>
   <string msgid="4917472096696322767" name="wifi_watchdog_network_disabled_detailed">" má pomalé připojení k internetu."</string>
-  <string msgid="97611782659324517" name="wifi_p2p_dialog_title">"Přímé připojení sítě Wi-Fi"</string>
-  <string msgid="2804722042556269129" name="wifi_p2p_turnon_message">"Spustit provoz přímého připojení sítě Wi-Fi. Tato možnost vypne provoz sítě Wi-Fi v režimu klient/hotspot."</string>
-  <string msgid="1820097493844848281" name="wifi_p2p_failed_message">"Přímé připojení sítě Wi-Fi se nepodařilo spustit."</string>
-  <string msgid="2068321881673734886" name="wifi_p2p_enabled_notification_title">"Přímé připojení sítě Wi-Fi je zapnuto"</string>
+  <string msgid="97611782659324517" name="wifi_p2p_dialog_title">"Přímé připojení sítě WLAN"</string>
+  <string msgid="2804722042556269129" name="wifi_p2p_turnon_message">"Spustit provoz přímého připojení sítě WLAN. Tato možnost vypne provoz sítě WLAN v režimu klient/hotspot."</string>
+  <string msgid="1820097493844848281" name="wifi_p2p_failed_message">"Přímé připojení sítě WLAN se nepodařilo spustit."</string>
+  <string msgid="2068321881673734886" name="wifi_p2p_enabled_notification_title">"Přímé připojení sítě WLAN je zapnuto"</string>
   <string msgid="1638949953993894335" name="wifi_p2p_enabled_notification_message">"Nastavení otevřete dotykem"</string>
   <string msgid="3365550120617701745" name="select_character">"Vkládání znaků"</string>
   <string msgid="7296612781128917719" name="sms_control_title">"Odesílání zpráv SMS"</string>
@@ -1471,12 +1471,12 @@
   <string msgid="7093334419518706686" name="data_usage_3g_limit_title">"Datové přenosy 2G a 3G zakázány"</string>
   <string msgid="7636489436819470761" name="data_usage_4g_limit_title">"Datové přenosy 4G jsou zakázány"</string>
   <string msgid="7869402519391631884" name="data_usage_mobile_limit_title">"Mobilní data jsou zakázána"</string>
-  <string msgid="8992154736441284865" name="data_usage_wifi_limit_title">"Přenos dat přes Wi-Fi zakázán"</string>
+  <string msgid="8992154736441284865" name="data_usage_wifi_limit_title">"Přenos dat přes WLAN zakázán"</string>
   <string msgid="4313857592916426843" name="data_usage_limit_body">"Dotykem povolte"</string>
   <string msgid="7026739121138005231" name="data_usage_3g_limit_snoozed_title">"Překročili jste limit dat 2G–3G"</string>
   <string msgid="1106562779311209039" name="data_usage_4g_limit_snoozed_title">"Překročili jste limit dat 4G."</string>
   <string msgid="279240572165412168" name="data_usage_mobile_limit_snoozed_title">"Překročili jste limit mobilních dat."</string>
-  <string msgid="8743856006384825974" name="data_usage_wifi_limit_snoozed_title">"Datový limit Wi-Fi byl překročen"</string>
+  <string msgid="8743856006384825974" name="data_usage_wifi_limit_snoozed_title">"Datový limit WLAN byl překročen"</string>
   <string msgid="2932736326652880660" name="data_usage_limit_snoozed_body">"<xliff:g id="SIZE">%s</xliff:g> nad stanoveným limitem"</string>
   <string msgid="5965157361036321914" name="data_usage_restricted_title">"Přenos dat na pozadí je omezen"</string>
   <string msgid="5087354814839059798" name="data_usage_restricted_body">"Dotykem odstraníte omezení"</string>

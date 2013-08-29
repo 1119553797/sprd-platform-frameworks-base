@@ -95,10 +95,10 @@
   <string msgid="50784596594403483" name="permdesc_updateAppOpsStats">"允許應用程式修改收集到的應用程式操作統計資料 (不建議一般應用程式使用)。"</string>
   <string msgid="4708181184441880175" name="permlab_freezeScreen">"凍結螢幕"</string>
   <string msgid="8558923789222670064" name="permdesc_freezeScreen">"允許應用程式暫時凍結螢幕畫面，顯示全螢幕轉場效果。"</string>
-  <string msgid="5595661694746742168" name="permlab_configureWifiDisplay">"設定 Wi-Fi 顯示裝置"</string>
-  <string msgid="7916815158690218065" name="permdesc_configureWifiDisplay">"允許應用程式設定及連接 Wi-Fi 顯示裝置。"</string>
-  <string msgid="393641276723695496" name="permlab_controlWifiDisplay">"控制 Wi-Fi 顯示裝置"</string>
-  <string msgid="4543912292681826986" name="permdesc_controlWifiDisplay">"允許應用程式控制 Wi-Fi 顯示裝置的低階功能。"</string>
+  <string msgid="5595661694746742168" name="permlab_configureWifiDisplay">"設定 WLAN 顯示裝置"</string>
+  <string msgid="7916815158690218065" name="permdesc_configureWifiDisplay">"允許應用程式設定及連接 WLAN 顯示裝置。"</string>
+  <string msgid="393641276723695496" name="permlab_controlWifiDisplay">"控制 WLAN 顯示裝置"</string>
+  <string msgid="4543912292681826986" name="permdesc_controlWifiDisplay">"允許應用程式控制 WLAN 顯示裝置的低階功能。"</string>
   <string msgid="2651072630501126222" name="permlab_cameraDisableTransmitLed">"使用攝影機時停用傳輸指示器 LED"</string>
   <string msgid="4764585465480295341" name="permdesc_cameraDisableTransmitLed">"允許預先安裝的系統應用程式停用攝影機指示器 LED。"</string>
   <string msgid="8150613823900460576" name="permlab_sdcardAccessAll">"存取外部儲存空間 (所有使用者)"</string>
@@ -150,8 +150,8 @@
   <string msgid="4653586947747330058" name="app_running_notification_text">"輕觸即可瞭解詳情或停止應用程式。"</string>
   <string msgid="8495155593358054676" name="network_available_sign_in">"登入網路"</string>
   <!-- no translation found for network_available_sign_in_detailed (8000081941447976118) -->
-  <string msgid="8012981257742232475" product="tablet" name="wifi_p2p_frequency_conflict_message">"平板電腦與 <xliff:g id="DEVICE_NAME">%1$s</xliff:g> 連線期間將暫時中斷 Wi-Fi 連線"</string>
-  <string msgid="7363907213787469151" product="default" name="wifi_p2p_frequency_conflict_message">"手機與 <xliff:g id="DEVICE_NAME">%1$s</xliff:g> 連線期間將暫時中斷 Wi-Fi 連線"</string>
+  <string msgid="8012981257742232475" product="tablet" name="wifi_p2p_frequency_conflict_message">"平板電腦與 <xliff:g id="DEVICE_NAME">%1$s</xliff:g> 連線期間將暫時中斷 WLAN 連線"</string>
+  <string msgid="7363907213787469151" product="default" name="wifi_p2p_frequency_conflict_message">"手機與 <xliff:g id="DEVICE_NAME">%1$s</xliff:g> 連線期間將暫時中斷 WLAN 連線"</string>
   <string msgid="1645436466285310855" name="sms_short_code_confirm_message">"&lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; 要求將訊息傳送至 &lt;b&gt;<xliff:g id="DEST_ADDRESS">%2$s</xliff:g>&lt;/b&gt;。"</string>
   <string msgid="3492025719868078457" name="sms_short_code_details">"這"<font fgcolor="#ffffb060">"可能會透過您的行動帳戶計費"</font>"。"</string>
   <string msgid="5523826349105123687" name="sms_premium_short_code_details">

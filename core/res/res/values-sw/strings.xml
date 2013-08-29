@@ -96,7 +96,7 @@
   <string msgid="50784596594403483" name="permdesc_updateAppOpsStats">"Inaruhusu programu kurekebisha takwimu za matumizi ya programu zilizokusanywa. Si ya kutumiwa na programu za kawaida."</string>
   <string msgid="4708181184441880175" name="permlab_freezeScreen">"lemaza skrini"</string>
   <string msgid="8558923789222670064" name="permdesc_freezeScreen">"Inaruhusu programu kulemaza kwa muda skrini kwa ajili ya mpito kamili wa skrinimaombi kwa muda kufungia screen kwa ajili ya mpito full-screen."</string>
-  <string msgid="5295047563564981250" name="permdesc_accessFineLocation">"Inaruhusu programu kupata eneo lako sahihi kwa kutumia Mfumo wa Mkao Ulimwenguni (GPS) au vyanzo vya mtandao vya eneo kama vile minara na Wi-Fi. Lazima huduma hizi za eneo ziwashwe na kupatikana kwenye kifaa chako ili programu izitumie. Huenda programu zikatumia hii kutambua ulipo, na zinaweza kutumia kawi ya ziada ya betri."</string>
+  <string msgid="5295047563564981250" name="permdesc_accessFineLocation">"Inaruhusu programu kupata eneo lako sahihi kwa kutumia Mfumo wa Mkao Ulimwenguni (GPS) au vyanzo vya mtandao vya eneo kama vile minara na WLAN. Lazima huduma hizi za eneo ziwashwe na kupatikana kwenye kifaa chako ili programu izitumie. Huenda programu zikatumia hii kutambua ulipo, na zinaweza kutumia kawi ya ziada ya betri."</string>
   <string msgid="5595661694746742168" name="permlab_configureWifiDisplay">"sanidi maonyesho ya Wifi"</string>
   <string msgid="7916815158690218065" name="permdesc_configureWifiDisplay">"Inaruhusu programu kusanidi na kuunganika kwenye maonyesho ya Wifi."</string>
   <string msgid="393641276723695496" name="permlab_controlWifiDisplay">"dhibiti maonyesho ya Wifi"</string>
@@ -152,8 +152,8 @@
   <string msgid="4653586947747330058" name="app_running_notification_text">"Gusa ili upate maelezo zaidi au usitishe programu."</string>
   <string msgid="8495155593358054676" name="network_available_sign_in">"Ingia kwenye mtandao"</string>
   <!-- no translation found for network_available_sign_in_detailed (8000081941447976118) -->
-  <string msgid="8012981257742232475" product="tablet" name="wifi_p2p_frequency_conflict_message">"Kompyuta ndogo itaukata muunganisho kwa muda kutoka kwenye Wi-Fi inapokuwa imeunganishwa kwenye <xliff:g id="DEVICE_NAME">%1$s</xliff:g>"</string>
-  <string msgid="7363907213787469151" product="default" name="wifi_p2p_frequency_conflict_message">"Simu itaukata muunganisho kwa muda kutoka kwenye Wi-Fi inapokuwa imeunganishwa kwenye <xliff:g id="DEVICE_NAME">%1$s</xliff:g>"</string>
+  <string msgid="8012981257742232475" product="tablet" name="wifi_p2p_frequency_conflict_message">"Kompyuta ndogo itaukata muunganisho kwa muda kutoka kwenye WLAN inapokuwa imeunganishwa kwenye <xliff:g id="DEVICE_NAME">%1$s</xliff:g>"</string>
+  <string msgid="7363907213787469151" product="default" name="wifi_p2p_frequency_conflict_message">"Simu itaukata muunganisho kwa muda kutoka kwenye WLAN inapokuwa imeunganishwa kwenye <xliff:g id="DEVICE_NAME">%1$s</xliff:g>"</string>
   <string msgid="1645436466285310855" name="sms_short_code_confirm_message">"&lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; ingependa kutuma ujumbe kwa &lt;b&gt;<xliff:g id="DEST_ADDRESS">%2$s</xliff:g>&lt;/b&gt;."</string>
   <string msgid="3492025719868078457" name="sms_short_code_details">"Hii "<font fgcolor="#ffffb060">"huenda ikasababisha gharama"</font>" kwenye akaunti yako ya simu."</string>
   <string msgid="5523826349105123687" name="sms_premium_short_code_details">
@@ -757,10 +757,10 @@
   <string name="permlab_changeBackgroundDataSetting">"badilisha mpangilio wa utumiaji data ya mandharinyuma"</string>
   <string name="permdesc_changeBackgroundDataSetting">"Huruhusu programu kubadilisha mpangilio wa utumiaji data ya mandharinyuma."</string>
   <string name="permlab_accessWifiState">"ona hali ya mtandao-hewa"</string>
-  <string name="permdesc_accessWifiState">"Huruhusu programu kuangalia maelezo kuhusu hali ya Wi-Fi."</string>
-  <string name="permlab_changeWifiState">"badilisha hali ya Wi-Fi"</string>
-  <string name="permdesc_changeWifiState">"Huruhusu programu kuunganisha na kutenganisha kutoka kwa pointi za ufikivu za Wi-Fi, na kufanya mabadiliko kwa mitandao ya Wi-Fi iliyosanidiwa."</string>
-  <string name="permlab_changeWifiMulticastState">"ruhusu upokeaji wa Wi-Fi Multicast"</string>
+  <string name="permdesc_accessWifiState">"Huruhusu programu kuangalia maelezo kuhusu hali ya WLAN."</string>
+  <string name="permlab_changeWifiState">"badilisha hali ya WLAN"</string>
+  <string name="permdesc_changeWifiState">"Huruhusu programu kuunganisha na kutenganisha kutoka kwa pointi za ufikivu za WLAN, na kufanya mabadiliko kwa mitandao ya WLAN iliyosanidiwa."</string>
+  <string name="permlab_changeWifiMulticastState">"ruhusu upokeaji wa WLAN Multicast"</string>
   <string name="permlab_accessWimaxState">"Tazama hali ya wiMAX"</string>
   <string name="permdesc_accessWimaxState">"Huruhusu programu kuangalia maelezo kuhusu hali ya WiMAX."</string>
   <string name="permlab_changeWimaxState">"badilisha hali ya WiMAX"</string>
@@ -1246,20 +1246,20 @@
   <string name="ringtone_picker_title">"Toni za mlio"</string>
   <string name="ringtone_unknown">"Mlio amabo haujulikani"</string>
   <plurals name="wifi_available">
-        <item quantity="one">"Mtandao wa Wi-Fi unapatikana"</item>
-        <item quantity="other">"Mitandao ya Wi-Fi inapatikana"</item>
+        <item quantity="one">"Mtandao wa WLAN unapatikana"</item>
+        <item quantity="other">"Mitandao ya WLAN inapatikana"</item>
     </plurals>
   <plurals name="wifi_available_detailed">
-        <item quantity="one">"Fungua mtandao wa Wi-Fi unaopatikana"</item>
-        <item quantity="other">"Fungua mitandao ya Wi-Fi inayopatikana"</item>
+        <item quantity="one">"Fungua mtandao wa WLAN unaopatikana"</item>
+        <item quantity="other">"Fungua mitandao ya WLAN inayopatikana"</item>
     </plurals>
-  <string name="wifi_available_sign_in">"Ingia kwa mtandao wa Wi-Fi"</string>
+  <string name="wifi_available_sign_in">"Ingia kwa mtandao wa WLAN"</string>
   <string name="wifi_watchdog_network_disabled">"Haikuweza kuunganisha kwa Mtandao-Hewa"</string>
   <string name="wifi_watchdog_network_disabled_detailed">" inao muunganisho duni wa wavuti."</string>
   <string name="wifi_p2p_dialog_title">"Mtandao hewa Moja kwa moja"</string>
   <string name="wifi_p2p_turnon_message">"Anza uendeshaji wa Moja kwa moja wa Mtando hewa. Hii inazima uendeshaji wa Mtandao hewa wa mteja/hotspot (umejaa)."</string>
   <string name="wifi_p2p_failed_message">"Haikuweza kuanza Mtandao hewa Moja kwa moja"</string>
-  <string name="wifi_p2p_enabled_notification_title">"Wi-Fi ya Moja kwa Moja imewashwa"</string>
+  <string name="wifi_p2p_enabled_notification_title">"WLAN ya Moja kwa Moja imewashwa"</string>
   <string name="wifi_p2p_enabled_notification_message">"Gusa kwa ajili ya mipangilio"</string>
   <string name="select_character">"Ingiza kibambo"</string>
   <string name="sms_control_title">"Inatuma ujumbe wa SMS"</string>

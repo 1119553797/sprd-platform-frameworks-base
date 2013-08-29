@@ -96,7 +96,7 @@
   <string msgid="50784596594403483" name="permdesc_updateAppOpsStats">"Binibigyang-daan ang app na baguhin ang mga nakolektang istatistika ng pagpapatakbo ng application. Hindi para sa paggamit ng normal na apps."</string>
   <string msgid="4708181184441880175" name="permlab_freezeScreen">"i-freeze ang screen"</string>
   <string msgid="8558923789222670064" name="permdesc_freezeScreen">"Pinapayagan ang application na pansamantalang i-freeze ang screen para sa isang full-screen na transition."</string>
-  <string msgid="5295047563564981250" name="permdesc_accessFineLocation">"Binibigyang-daan ang app na makuha ang iyong tumpak na lokasyon gamit ang Global Positioning System (GPS) o network ng mga pinagmulan ng lokasyon gaya ng mga cell tower at Wi-Fi. Dapat ay naka-on ang mga serbisyo ng lokasyon na ito at available sa iyong device upang magamit ng app ang mga ito. Maaaring gamitin ito ng apps upang matukoy kung nasaan ka, at maaaring gumamit ng karagdagang power ng baterya."</string>
+  <string msgid="5295047563564981250" name="permdesc_accessFineLocation">"Binibigyang-daan ang app na makuha ang iyong tumpak na lokasyon gamit ang Global Positioning System (GPS) o network ng mga pinagmulan ng lokasyon gaya ng mga cell tower at WLAN. Dapat ay naka-on ang mga serbisyo ng lokasyon na ito at available sa iyong device upang magamit ng app ang mga ito. Maaaring gamitin ito ng apps upang matukoy kung nasaan ka, at maaaring gumamit ng karagdagang power ng baterya."</string>
   <string msgid="5595661694746742168" name="permlab_configureWifiDisplay">"mag-configure ng mga Wifi display"</string>
   <string msgid="7916815158690218065" name="permdesc_configureWifiDisplay">"Pinapayagan ang app na mag-configure at kumonekta sa mga Wifi display."</string>
   <string msgid="393641276723695496" name="permlab_controlWifiDisplay">"magkontrol ng mga Wifi display"</string>
@@ -152,8 +152,8 @@
   <string msgid="4653586947747330058" name="app_running_notification_text">"Pindutin para sa higit pang impormasyon o upang ihinto ang app."</string>
   <string msgid="8495155593358054676" name="network_available_sign_in">"Mag-sign in sa network"</string>
   <!-- no translation found for network_available_sign_in_detailed (8000081941447976118) -->
-  <string msgid="8012981257742232475" product="tablet" name="wifi_p2p_frequency_conflict_message">"Pansamantalang madidiskoneta ang tablet sa Wi-Fi habang nakakonekta ito sa <xliff:g id="DEVICE_NAME">%1$s</xliff:g>"</string>
-  <string msgid="7363907213787469151" product="default" name="wifi_p2p_frequency_conflict_message">"Pansamantalang madidiskoneta ang telepono sa Wi-Fi habang nakakonekta ito sa <xliff:g id="DEVICE_NAME">%1$s</xliff:g>"</string>
+  <string msgid="8012981257742232475" product="tablet" name="wifi_p2p_frequency_conflict_message">"Pansamantalang madidiskoneta ang tablet sa WLAN habang nakakonekta ito sa <xliff:g id="DEVICE_NAME">%1$s</xliff:g>"</string>
+  <string msgid="7363907213787469151" product="default" name="wifi_p2p_frequency_conflict_message">"Pansamantalang madidiskoneta ang telepono sa WLAN habang nakakonekta ito sa <xliff:g id="DEVICE_NAME">%1$s</xliff:g>"</string>
   <string msgid="1645436466285310855" name="sms_short_code_confirm_message">"Gustong magpadala ng mensahe ng &lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; sa &lt;b&gt;<xliff:g id="DEST_ADDRESS">%2$s</xliff:g>&lt;/b&gt;."</string>
   <string msgid="3492025719868078457" name="sms_short_code_details">"Magsasanhi ito "<font fgcolor="#ffffb060">"ng mga pagsingil"</font>" sa iyong mobile account."</string>
   <string msgid="5523826349105123687" name="sms_premium_short_code_details">
@@ -756,11 +756,11 @@
   <string name="permdesc_changeTetherState">"Pinapayagan ang isang application na baguhin ang katayuan ng pinagsamang pagkakakonekta ng network."</string>
   <string name="permlab_changeBackgroundDataSetting">"baguhin ang setting ng paggamit ng data ng background"</string>
   <string name="permdesc_changeBackgroundDataSetting">"Pinapayagan ang isang application na baguhin ang setting ng paggamit ng data ng background."</string>
-  <string name="permlab_accessWifiState">"tingnan ang katayuan ng Wi-Fi"</string>
-  <string name="permdesc_accessWifiState">"Pinapayagan ang isang application na tingnan ang impormasyon tungkol sa katayuan ng Wi-Fi."</string>
-  <string name="permlab_changeWifiState">"baguhin ang katayuan ng Wi-Fi"</string>
-  <string name="permdesc_changeWifiState">"Pinapayagan ang isang application na kumonekta sa at i-disconnect mula sa mga Wi-Fi access point, at magsagawa ng mga pagbabago sa mga na-configure na Wi-Fi network."</string>
-  <string name="permlab_changeWifiMulticastState">"payagan ang pagtanggap ng Wi-Fi Multicast"</string>
+  <string name="permlab_accessWifiState">"tingnan ang katayuan ng WLAN"</string>
+  <string name="permdesc_accessWifiState">"Pinapayagan ang isang application na tingnan ang impormasyon tungkol sa katayuan ng WLAN."</string>
+  <string name="permlab_changeWifiState">"baguhin ang katayuan ng WLAN"</string>
+  <string name="permdesc_changeWifiState">"Pinapayagan ang isang application na kumonekta sa at i-disconnect mula sa mga WLAN access point, at magsagawa ng mga pagbabago sa mga na-configure na WLAN network."</string>
+  <string name="permlab_changeWifiMulticastState">"payagan ang pagtanggap ng WLAN Multicast"</string>
   <string name="permlab_accessWimaxState">"tingnan ang katayuan ng WiMAX"</string>
   <string name="permdesc_accessWimaxState">"Pinapayagan ang application na tingnan ang impormasyon tungkol sa katayuan ng WiMAX."</string>
   <string name="permlab_changeWimaxState">"baguhin ang katayuan ng WiMAX"</string>
@@ -1246,20 +1246,20 @@
   <string name="ringtone_picker_title">"Mga Ringtone"</string>
   <string name="ringtone_unknown">"Hindi kilalang ringtone"</string>
   <plurals name="wifi_available">
-        <item quantity="one">"Available ang Wi-Fi network"</item>
-        <item quantity="other">"Available ang mga Wi-Fi network"</item>
+        <item quantity="one">"Available ang WLAN network"</item>
+        <item quantity="other">"Available ang mga WLAN network"</item>
     </plurals>
   <plurals name="wifi_available_detailed">
-        <item quantity="one">"Available ang bukas na Wi-Fi network"</item>
-        <item quantity="other">"Buksan ang mga available na Wi-Fi network"</item>
+        <item quantity="one">"Available ang bukas na WLAN network"</item>
+        <item quantity="other">"Buksan ang mga available na WLAN network"</item>
     </plurals>
-  <string name="wifi_available_sign_in">"Mag-sign in sa Wi-Fi network"</string>
-  <string name="wifi_watchdog_network_disabled">"Hindi makakonekta sa Wi-Fi"</string>
+  <string name="wifi_available_sign_in">"Mag-sign in sa WLAN network"</string>
+  <string name="wifi_watchdog_network_disabled">"Hindi makakonekta sa WLAN"</string>
   <string name="wifi_watchdog_network_disabled_detailed">" ay mayroong mahinang koneksyon sa internet."</string>
-  <string name="wifi_p2p_dialog_title">"Wi-Fi Direct"</string>
-  <string name="wifi_p2p_turnon_message">"Simulan ang pagpapatakbo ng Wi-Fi Direct. I-o-off nito ang pagpapatakbo ng client/hotspot ng Wi-Fi."</string>
-  <string name="wifi_p2p_failed_message">"Hindi masimulan ang Wi-Fi Direct"</string>
-  <string name="wifi_p2p_enabled_notification_title">"Ang Wi-Fi Direct ay naka-on"</string>
+  <string name="wifi_p2p_dialog_title">"WLAN Direct"</string>
+  <string name="wifi_p2p_turnon_message">"Simulan ang pagpapatakbo ng WLAN Direct. I-o-off nito ang pagpapatakbo ng client/hotspot ng WLAN."</string>
+  <string name="wifi_p2p_failed_message">"Hindi masimulan ang WLAN Direct"</string>
+  <string name="wifi_p2p_enabled_notification_title">"Ang WLAN Direct ay naka-on"</string>
   <string name="wifi_p2p_enabled_notification_message">"Pindutin para sa mga setting"</string>
   <string name="select_character">"Magpasok ng character"</string>
   <string name="sms_control_title">"Nagpapadala ng mga SMS na mensahe"</string>
@@ -1478,12 +1478,12 @@
   <string name="data_usage_3g_limit_title">"Di pinagana ang data ng 2G-3G"</string>
   <string name="data_usage_4g_limit_title">"Di pinagana ang data ng 4G"</string>
   <string name="data_usage_mobile_limit_title">"Di pinagana ang data ng mobile"</string>
-  <string name="data_usage_wifi_limit_title">"Hindi pinagana ang data ng Wi-Fi"</string>
+  <string name="data_usage_wifi_limit_title">"Hindi pinagana ang data ng WLAN"</string>
   <string name="data_usage_limit_body">"Pindutin upang paganahin"</string>
   <string name="data_usage_3g_limit_snoozed_title">"lumampas sa 2G-3G na limitasyon ng data"</string>
   <string name="data_usage_4g_limit_snoozed_title">"Lumampas sa 4G na limitasyon ng data"</string>
   <string name="data_usage_mobile_limit_snoozed_title">"Lumampas sa limitasyon ng data sa mobile"</string>
-  <string name="data_usage_wifi_limit_snoozed_title">"Lumampas sa limitasyon ng data ng Wi-Fi"</string>
+  <string name="data_usage_wifi_limit_snoozed_title">"Lumampas sa limitasyon ng data ng WLAN"</string>
   <string name="data_usage_limit_snoozed_body">"Ang <xliff:g id="SIZE">%s</xliff:g> ay lumalampas sa tinukoy na limitasyon"</string>
   <string name="data_usage_restricted_title">"Pinaghihigpitan ang data ng background"</string>
   <string name="data_usage_restricted_body">"Pindutin upang alisin ang paghihigpit"</string>

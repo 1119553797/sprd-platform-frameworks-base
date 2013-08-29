@@ -96,11 +96,11 @@
   <string msgid="50784596594403483" name="permdesc_updateAppOpsStats">"מאפשר ליישום לשנות נתונים סטטיסטיים שנאספו לגבי הפעלתו. לא מיועד לשימוש על ידי יישומים רגילים."</string>
   <string msgid="4708181184441880175" name="permlab_freezeScreen">"הקפאת מסך"</string>
   <string msgid="8558923789222670064" name="permdesc_freezeScreen">"מאפשר ליישום להקפיא באופן זמני את המסך למעבר למסך מלא."</string>
-  <string msgid="5295047563564981250" name="permdesc_accessFineLocation">"מאפשר ליישום לקבל את המיקום המדויק שלך באמצעות מערכת המיקום הגלובלית (GPS) או מקורות מיקום ברשת כגון אנטנות סלולריות ו-Wi-Fi. שירותי מיקום אלה חייבים להיות מופעלים ונגישים למכשיר שלך כדי שהיישום ישתמש בהם. ייתכן שיישומים יעשו בכך שימוש כדי לקבוע היכן אתה נמצא ולגרום לצריכת סוללה מוגברת."</string>
-  <string msgid="5595661694746742168" name="permlab_configureWifiDisplay">"הגדר תצוגות Wi-Fi"</string>
-  <string msgid="7916815158690218065" name="permdesc_configureWifiDisplay">"מאפשר לאפליקציה להגדיר ולהתחבר לתצוגות Wi-Fi."</string>
-  <string msgid="393641276723695496" name="permlab_controlWifiDisplay">"שלוט בתצוגות Wi-Fi"</string>
-  <string msgid="4543912292681826986" name="permdesc_controlWifiDisplay">"מאפשר לאפליקציה לשלוט בתכונות ברמה נמוכה של תצוגות Wi-Fi."</string>
+  <string msgid="5295047563564981250" name="permdesc_accessFineLocation">"מאפשר ליישום לקבל את המיקום המדויק שלך באמצעות מערכת המיקום הגלובלית (GPS) או מקורות מיקום ברשת כגון אנטנות סלולריות ו-WLAN. שירותי מיקום אלה חייבים להיות מופעלים ונגישים למכשיר שלך כדי שהיישום ישתמש בהם. ייתכן שיישומים יעשו בכך שימוש כדי לקבוע היכן אתה נמצא ולגרום לצריכת סוללה מוגברת."</string>
+  <string msgid="5595661694746742168" name="permlab_configureWifiDisplay">"הגדר תצוגות WLAN"</string>
+  <string msgid="7916815158690218065" name="permdesc_configureWifiDisplay">"מאפשר לאפליקציה להגדיר ולהתחבר לתצוגות WLAN."</string>
+  <string msgid="393641276723695496" name="permlab_controlWifiDisplay">"שלוט בתצוגות WLAN"</string>
+  <string msgid="4543912292681826986" name="permdesc_controlWifiDisplay">"מאפשר לאפליקציה לשלוט בתכונות ברמה נמוכה של תצוגות WLAN."</string>
   <string msgid="2651072630501126222" name="permlab_cameraDisableTransmitLed">"השבת את נורית מצב השידור כשהמצלמה בשימוש"</string>
   <string msgid="4764585465480295341" name="permdesc_cameraDisableTransmitLed">"מתיר ליישום מערכת המותקן מראש להשבית את השימוש של המצלמה בנורית המצב."</string>
   <string msgid="8150613823900460576" name="permlab_sdcardAccessAll">"גישה לאחסון חיצוני, כל המשתמשים"</string>
@@ -152,8 +152,8 @@
   <string msgid="4653586947747330058" name="app_running_notification_text">"גע לקבלת מידע נוסף או כדי לעצור את היישום."</string>
   <string msgid="8495155593358054676" name="network_available_sign_in">"היכנס לרשת"</string>
   <!-- no translation found for network_available_sign_in_detailed (8000081941447976118) -->
-  <string msgid="8012981257742232475" product="tablet" name="wifi_p2p_frequency_conflict_message">"הטאבלט יתנתק מרשת ה-Wi-Fi באופן זמני בשעה שהוא מחובר אל <xliff:g id="DEVICE_NAME">%1$s</xliff:g>"</string>
-  <string msgid="7363907213787469151" product="default" name="wifi_p2p_frequency_conflict_message">"הטלפון יתנתק מרשת ה-Wi-Fi באופן זמני בשעה שהוא מחובר אל <xliff:g id="DEVICE_NAME">%1$s</xliff:g>"</string>
+  <string msgid="8012981257742232475" product="tablet" name="wifi_p2p_frequency_conflict_message">"הטאבלט יתנתק מרשת ה-WLAN באופן זמני בשעה שהוא מחובר אל <xliff:g id="DEVICE_NAME">%1$s</xliff:g>"</string>
+  <string msgid="7363907213787469151" product="default" name="wifi_p2p_frequency_conflict_message">"הטלפון יתנתק מרשת ה-WLAN באופן זמני בשעה שהוא מחובר אל <xliff:g id="DEVICE_NAME">%1$s</xliff:g>"</string>
   <string msgid="1645436466285310855" name="sms_short_code_confirm_message">"&lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; רוצה לשלוח הודעה אל &lt;b&gt;<xliff:g id="DEST_ADDRESS">%2$s</xliff:g>&lt;/b&gt;."</string>
   <string msgid="3492025719868078457" name="sms_short_code_details">"הפעולה "<font fgcolor="#ffffb060">"עשויה לגרום לחיובים"</font>" בחשבון המכשיר הנייד שלך."</string>
   <string msgid="5523826349105123687" name="sms_premium_short_code_details">
@@ -754,11 +754,11 @@
   <string msgid="8905815579146349568" name="permdesc_changeTetherState">"מאפשר ליישום לשנות את המצב של קישוריות רשת קשורה."</string>
   <string msgid="1400666012671648741" name="permlab_changeBackgroundDataSetting">"שנה את הגדרות השימוש בנתוני הרקע"</string>
   <string msgid="1001482853266638864" name="permdesc_changeBackgroundDataSetting">"מאפשר ליישום לשנות את הגדרות השימוש בנתוני הרקע."</string>
-  <string msgid="8100926650211034400" name="permlab_accessWifiState">"הצג מצב Wi-Fi"</string>
-  <string msgid="485796529139236346" name="permdesc_accessWifiState">"מאפשר ליישום להציג את המידע על המצב של Wi-Fi."</string>
-  <string msgid="7280632711057112137" name="permlab_changeWifiState">"שנה מצב Wi-Fi"</string>
-  <string msgid="2950383153656873267" name="permdesc_changeWifiState">"מאפשר ליישום להתחבר לנקודות גישה מסוג Wi-Fi ולהתנתק מהן, ולבצע שינויים ברשתות Wi-Fi מוגדרות."</string>
-  <string msgid="1368253871483254784" name="permlab_changeWifiMulticastState">"אפשר קבלת שידורים מרובים ב-Wi-Fi"</string>
+  <string msgid="8100926650211034400" name="permlab_accessWifiState">"הצג מצב WLAN"</string>
+  <string msgid="485796529139236346" name="permdesc_accessWifiState">"מאפשר ליישום להציג את המידע על המצב של WLAN."</string>
+  <string msgid="7280632711057112137" name="permlab_changeWifiState">"שנה מצב WLAN"</string>
+  <string msgid="2950383153656873267" name="permdesc_changeWifiState">"מאפשר ליישום להתחבר לנקודות גישה מסוג WLAN ולהתנתק מהן, ולבצע שינויים ברשתות WLAN מוגדרות."</string>
+  <string msgid="1368253871483254784" name="permlab_changeWifiMulticastState">"אפשר קבלת שידורים מרובים ב-WLAN"</string>
   <string msgid="2800410363171809280" name="permlab_accessWimaxState">"הצג את מצב WiMAX"</string>
   <string msgid="8298035866227524023" name="permdesc_accessWimaxState">"מאפשר ליישום להציג את המידע על המצב של WiMAX."</string>
   <string msgid="340465839241528618" name="permlab_changeWimaxState">"שנה את מצב WiMAX"</string>
@@ -1246,20 +1246,20 @@
   <string msgid="3515143939175119094" name="ringtone_picker_title">"רינגטונים"</string>
   <string msgid="5477919988701784788" name="ringtone_unknown">"רינגטון לא ידוע"</string>
   <plurals name="wifi_available">
-    <item msgid="6654123987418168693" quantity="one">"רשת Wi-Fi זמינה"</item>
-    <item msgid="4192424489168397386" quantity="other">"רשתות Wi-Fi זמינות"</item>
+    <item msgid="6654123987418168693" quantity="one">"רשת WLAN זמינה"</item>
+    <item msgid="4192424489168397386" quantity="other">"רשתות WLAN זמינות"</item>
   </plurals>
   <plurals name="wifi_available_detailed">
-    <item msgid="1634101450343277345" quantity="one">"רשת Wi-Fi פתוחה זמינה"</item>
-    <item msgid="7915895323644292768" quantity="other">"רשתות Wi-Fi פתוחות זמינות"</item>
+    <item msgid="1634101450343277345" quantity="one">"רשת WLAN פתוחה זמינה"</item>
+    <item msgid="7915895323644292768" quantity="other">"רשתות WLAN פתוחות זמינות"</item>
   </plurals>
   <string msgid="9157196203958866662" name="wifi_available_sign_in">"היכנס לרשת WiFi"</string>
-  <string msgid="7904214231651546347" name="wifi_watchdog_network_disabled">"אין אפשרות להתחבר ל-Wi-Fi"</string>
+  <string msgid="7904214231651546347" name="wifi_watchdog_network_disabled">"אין אפשרות להתחבר ל-WLAN"</string>
   <string msgid="4917472096696322767" name="wifi_watchdog_network_disabled_detailed">" בעל חיבור גרוע לאינטרנט."</string>
-  <string msgid="97611782659324517" name="wifi_p2p_dialog_title">"Wi-Fi ישיר"</string>
-  <string msgid="2804722042556269129" name="wifi_p2p_turnon_message">"התחל פעולה ישירה של Wi-Fi. פעולה זו תכבה את פעולת הלקוח/נקודה חמה של ה-Wi-Fi."</string>
-  <string msgid="1820097493844848281" name="wifi_p2p_failed_message">"לא ניתן להפעיל Wi-Fi ישיר"</string>
-  <string msgid="2068321881673734886" name="wifi_p2p_enabled_notification_title">"Wi-Fi ישיר מופעל"</string>
+  <string msgid="97611782659324517" name="wifi_p2p_dialog_title">"WLAN ישיר"</string>
+  <string msgid="2804722042556269129" name="wifi_p2p_turnon_message">"התחל פעולה ישירה של WLAN. פעולה זו תכבה את פעולת הלקוח/נקודה חמה של ה-WLAN."</string>
+  <string msgid="1820097493844848281" name="wifi_p2p_failed_message">"לא ניתן להפעיל WLAN ישיר"</string>
+  <string msgid="2068321881673734886" name="wifi_p2p_enabled_notification_title">"WLAN ישיר מופעל"</string>
   <string msgid="1638949953993894335" name="wifi_p2p_enabled_notification_message">"גע עבור הגדרות"</string>
   <string msgid="3365550120617701745" name="select_character">"הוסף תו"</string>
   <string msgid="7296612781128917719" name="sms_control_title">"שולח הודעות SMS"</string>
@@ -1471,12 +1471,12 @@
   <string msgid="7093334419518706686" name="data_usage_3g_limit_title">"נתוני 2G-3G מושבתים"</string>
   <string msgid="7636489436819470761" name="data_usage_4g_limit_title">"נתוני 4G מושבתים"</string>
   <string msgid="7869402519391631884" name="data_usage_mobile_limit_title">"נתונים לנייד מושבתים"</string>
-  <string msgid="8992154736441284865" name="data_usage_wifi_limit_title">"נתוני Wi-Fi הושבתו"</string>
+  <string msgid="8992154736441284865" name="data_usage_wifi_limit_title">"נתוני WLAN הושבתו"</string>
   <string msgid="4313857592916426843" name="data_usage_limit_body">"גע כדי להפעיל"</string>
   <string msgid="7026739121138005231" name="data_usage_3g_limit_snoozed_title">"אירעה חריגה ממגבלת הנתונים של 2G-3G"</string>
   <string msgid="1106562779311209039" name="data_usage_4g_limit_snoozed_title">"אירעה חריגה ממגבלת הנתונים של 4G"</string>
   <string msgid="279240572165412168" name="data_usage_mobile_limit_snoozed_title">"אירעה חריגה ממגבלת הנתונים לנייד"</string>
-  <string msgid="8743856006384825974" name="data_usage_wifi_limit_snoozed_title">"אירעה חריגה ממגבלת הנתונים של Wi-Fi"</string>
+  <string msgid="8743856006384825974" name="data_usage_wifi_limit_snoozed_title">"אירעה חריגה ממגבלת הנתונים של WLAN"</string>
   <string msgid="2932736326652880660" name="data_usage_limit_snoozed_body">"<xliff:g id="SIZE">%s</xliff:g> מעבר למגבלה שצוינה"</string>
   <string msgid="5965157361036321914" name="data_usage_restricted_title">"נתוני הרקע מוגבלים"</string>
   <string msgid="5087354814839059798" name="data_usage_restricted_body">"גע כדי להסיר הגבלה"</string>

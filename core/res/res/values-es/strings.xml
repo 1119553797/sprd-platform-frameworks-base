@@ -96,11 +96,11 @@
   <string msgid="50784596594403483" name="permdesc_updateAppOpsStats">"Permite que la aplicación modifique las estadísticas recopiladas sobre operaciones de aplicaciones. Las aplicaciones normales no deben usar este permiso."</string>
   <string msgid="4708181184441880175" name="permlab_freezeScreen">"bloquear pantalla"</string>
   <string msgid="8558923789222670064" name="permdesc_freezeScreen">"Permite que la aplicación bloquee la pantalla temporalmente para activar el modo de pantalla completa."</string>
-  <string msgid="5295047563564981250" name="permdesc_accessFineLocation">"Permite que la aplicación obtenga tu ubicación precisa mediante el Sistema de posicionamiento global (GPS) o fuentes de ubicación de red, como torres de telefonía y redes Wi-Fi. Estos servicios de ubicación deben estar activados y disponibles para que la aplicación pueda utilizarlos. Las aplicaciones pueden utilizar este permiso para determinar tu ubicación y es posible que el dispositivo consuma más batería."</string>
-  <string msgid="5595661694746742168" name="permlab_configureWifiDisplay">"configurar pantallas Wi-Fi"</string>
-  <string msgid="7916815158690218065" name="permdesc_configureWifiDisplay">"Permite que la aplicación configure pantallas Wi-Fi y se conecte a ellas."</string>
-  <string msgid="393641276723695496" name="permlab_controlWifiDisplay">"controlar pantallas Wi-Fi"</string>
-  <string msgid="4543912292681826986" name="permdesc_controlWifiDisplay">"Permite que la aplicación controle funciones de bajo nivel de pantallas Wi-Fi."</string>
+  <string msgid="5295047563564981250" name="permdesc_accessFineLocation">"Permite que la aplicación obtenga tu ubicación precisa mediante el Sistema de posicionamiento global (GPS) o fuentes de ubicación de red, como torres de telefonía y redes WLAN. Estos servicios de ubicación deben estar activados y disponibles para que la aplicación pueda utilizarlos. Las aplicaciones pueden utilizar este permiso para determinar tu ubicación y es posible que el dispositivo consuma más batería."</string>
+  <string msgid="5595661694746742168" name="permlab_configureWifiDisplay">"configurar pantallas WLAN"</string>
+  <string msgid="7916815158690218065" name="permdesc_configureWifiDisplay">"Permite que la aplicación configure pantallas WLAN y se conecte a ellas."</string>
+  <string msgid="393641276723695496" name="permlab_controlWifiDisplay">"controlar pantallas WLAN"</string>
+  <string msgid="4543912292681826986" name="permdesc_controlWifiDisplay">"Permite que la aplicación controle funciones de bajo nivel de pantallas WLAN."</string>
   <string msgid="2651072630501126222" name="permlab_cameraDisableTransmitLed">"inhabilitar el indicador LED de transmisión mientras se utiliza la cámara"</string>
   <string msgid="4764585465480295341" name="permdesc_cameraDisableTransmitLed">"Permite que una aplicación de sistema instalada previamente inhabilite el indicador LED que advierte del uso de la cámara."</string>
   <string msgid="8150613823900460576" name="permlab_sdcardAccessAll">"acceder al almacenamiento externo de todos los usuarios"</string>
@@ -152,8 +152,8 @@
   <string msgid="4653586947747330058" name="app_running_notification_text">"Toca para obtener más información o para detener la aplicación."</string>
   <string msgid="8495155593358054676" name="network_available_sign_in">"Iniciar sesión en la red"</string>
   <!-- no translation found for network_available_sign_in_detailed (8000081941447976118) -->
-  <string msgid="8012981257742232475" product="tablet" name="wifi_p2p_frequency_conflict_message">"El tablet se desconectará temporalmente de la red Wi-Fi mientras esté conectado a  <xliff:g id="DEVICE_NAME">%1$s</xliff:g>"</string>
-  <string msgid="7363907213787469151" product="default" name="wifi_p2p_frequency_conflict_message">"El teléfono se desconectará temporalmente de la red Wi-Fi mientras está conectado a <xliff:g id="DEVICE_NAME">%1$s</xliff:g>."</string>
+  <string msgid="8012981257742232475" product="tablet" name="wifi_p2p_frequency_conflict_message">"El tablet se desconectará temporalmente de la red WLAN mientras esté conectado a  <xliff:g id="DEVICE_NAME">%1$s</xliff:g>"</string>
+  <string msgid="7363907213787469151" product="default" name="wifi_p2p_frequency_conflict_message">"El teléfono se desconectará temporalmente de la red WLAN mientras está conectado a <xliff:g id="DEVICE_NAME">%1$s</xliff:g>."</string>
   <string msgid="1645436466285310855" name="sms_short_code_confirm_message">"&lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; quiere enviar un mensaje a &lt;b&gt;<xliff:g id="DEST_ADDRESS">%2$s</xliff:g>&lt;/b&gt;."</string>
   <string msgid="3492025719868078457" name="sms_short_code_details"><font fgcolor="#ffffb060">"Es posible que se apliquen cargos"</font>" en tu cuenta móvil."</string>
   <string msgid="5523826349105123687" name="sms_premium_short_code_details">
@@ -756,11 +756,11 @@
   <string name="permdesc_changeTetherState">"Permite que una aplicación cambie el estado de la conectividad de red de anclaje."</string>
   <string name="permlab_changeBackgroundDataSetting">"cambiar configuración de uso de datos de referencia"</string>
   <string name="permdesc_changeBackgroundDataSetting">"Permite a una aplicación cambiar la configuración de uso de los datos de referencia."</string>
-  <string name="permlab_accessWifiState">"ver estado de la conectividad Wi-Fi"</string>
-  <string name="permdesc_accessWifiState">"Permite que una aplicación vea la información sobre el estado de la conectividad Wi-Fi."</string>
-  <string name="permlab_changeWifiState">"cambiar estado de Wi-Fi"</string>
-  <string name="permdesc_changeWifiState">"Permite que una aplicación se conecte a puntos de acceso Wi-Fi y se desconecte de ellos, y realice modificaciones en las redes Wi-Fi configuradas."</string>
-  <string name="permlab_changeWifiMulticastState">"permitir recepción multidifusión Wi-Fi"</string>
+  <string name="permlab_accessWifiState">"ver estado de la conectividad WLAN"</string>
+  <string name="permdesc_accessWifiState">"Permite que una aplicación vea la información sobre el estado de la conectividad WLAN."</string>
+  <string name="permlab_changeWifiState">"cambiar estado de WLAN"</string>
+  <string name="permdesc_changeWifiState">"Permite que una aplicación se conecte a puntos de acceso WLAN y se desconecte de ellos, y realice modificaciones en las redes WLAN configuradas."</string>
+  <string name="permlab_changeWifiMulticastState">"permitir recepción multidifusión WLAN"</string>
   <string name="permlab_accessWimaxState">"ver estado de WiMAX"</string>
   <string name="permdesc_accessWimaxState">"Permite que una aplicación acceda a la información sobre el estado de la conectividad WiMAX."</string>
   <string name="permlab_changeWimaxState">"cambiar estado de WiMAX"</string>
@@ -1246,20 +1246,20 @@
   <string name="ringtone_picker_title">"Tonos"</string>
   <string name="ringtone_unknown">"Tono desconocido"</string>
   <plurals name="wifi_available">
-        <item quantity="one">"Red Wi-Fi disponible"</item>
-        <item quantity="other">"Redes Wi-Fi disponibles"</item>
+        <item quantity="one">"Red WLAN disponible"</item>
+        <item quantity="other">"Redes WLAN disponibles"</item>
     </plurals>
   <plurals name="wifi_available_detailed">
-        <item quantity="one">"Red Wi-Fi abierta disponible"</item>
-        <item quantity="other">"Redes Wi-Fi abiertas disponibles"</item>
+        <item quantity="one">"Red WLAN abierta disponible"</item>
+        <item quantity="other">"Redes WLAN abiertas disponibles"</item>
     </plurals>
-  <string name="wifi_available_sign_in">"Iniciar sesión en red Wi-Fi"</string>
-  <string name="wifi_watchdog_network_disabled">"No se ha podido establecer conexión con la red Wi-Fi."</string>
+  <string name="wifi_available_sign_in">"Iniciar sesión en red WLAN"</string>
+  <string name="wifi_watchdog_network_disabled">"No se ha podido establecer conexión con la red WLAN."</string>
   <string name="wifi_watchdog_network_disabled_detailed">" tiene una mala conexión a Internet."</string>
-  <string name="wifi_p2p_dialog_title">"Wi-Fi Direct"</string>
-  <string name="wifi_p2p_turnon_message">"Iniciar funcionamiento de Wi-Fi Direct. Se desactivará el funcionamiento de la zona o del cliente Wi-Fi."</string>
-  <string name="wifi_p2p_failed_message">"No se ha podido iniciar Wi-Fi Direct."</string>
-  <string name="wifi_p2p_enabled_notification_title">"Wi-Fi Direct activado"</string>
+  <string name="wifi_p2p_dialog_title">"WLAN Direct"</string>
+  <string name="wifi_p2p_turnon_message">"Iniciar funcionamiento de WLAN Direct. Se desactivará el funcionamiento de la zona o del cliente WLAN."</string>
+  <string name="wifi_p2p_failed_message">"No se ha podido iniciar WLAN Direct."</string>
+  <string name="wifi_p2p_enabled_notification_title">"WLAN Direct activado"</string>
   <string name="wifi_p2p_enabled_notification_message">"Toca para acceder a Ajustes"</string>
   <string name="select_character">"Insertar carácter"</string>
   <string name="sms_control_title">"Enviando mensajes SMS..."</string>
@@ -1378,7 +1378,7 @@
   <string name="submit">"Enviar"</string>
   <string name="car_mode_disable_notification_title">"Se ha habilitado el modo coche."</string>
   <string name="car_mode_disable_notification_message">"Selecciona esta opción para salir del modo coche."</string>
-  <string name="tethered_notification_title">"Anclaje a red/Zona Wi-Fi activo"</string>
+  <string name="tethered_notification_title">"Anclaje a red/Zona WLAN activo"</string>
   <string name="tethered_notification_message">"Toca para configurar"</string>
   <string name="back_button_label">"Atrás"</string>
   <string name="next_button_label">"Siguiente"</string>
@@ -1479,12 +1479,12 @@
   <string name="data_usage_3g_limit_title">"Datos 2G-3G inhabilitados"</string>
   <string name="data_usage_4g_limit_title">"Datos 4G inhabilitados"</string>
   <string name="data_usage_mobile_limit_title">"Datos móviles inhabilitados"</string>
-  <string name="data_usage_wifi_limit_title">"Datos Wi-Fi inhabilitados"</string>
+  <string name="data_usage_wifi_limit_title">"Datos WLAN inhabilitados"</string>
   <string name="data_usage_limit_body">"Tocar para habilitar"</string>
   <string name="data_usage_3g_limit_snoozed_title">"Límite de datos 2G-3G superado"</string>
   <string name="data_usage_4g_limit_snoozed_title">"Límite de datos 4G superado"</string>
   <string name="data_usage_mobile_limit_snoozed_title">"Límite de datos móviles superado"</string>
-  <string name="data_usage_wifi_limit_snoozed_title">"Límite de datos Wi-Fi superado"</string>
+  <string name="data_usage_wifi_limit_snoozed_title">"Límite de datos WLAN superado"</string>
   <string name="data_usage_limit_snoozed_body">"Límite superado en <xliff:g id="SIZE">%s</xliff:g>"</string>
   <string name="data_usage_restricted_title">"Datos de referencia restringidos"</string>
   <string name="data_usage_restricted_body">"Toca para quitar restricción"</string>

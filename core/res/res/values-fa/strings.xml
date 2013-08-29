@@ -96,7 +96,7 @@
   <string msgid="50784596594403483" name="permdesc_updateAppOpsStats">"به برنامه اجازه تغییر آمار کارکرد جمع‌آوری شده از برنامه را می‌دهد. برای استفاده توسط برنامه‌های معمولی نیست."</string>
   <string msgid="4708181184441880175" name="permlab_freezeScreen">"ثابت نگه داشتن صفحه"</string>
   <string msgid="8558923789222670064" name="permdesc_freezeScreen">"به برنامه کاربردی اجازه می‌دهد که موقتاً صفحه را برای یک انتقال تمام صفحه ثابت نگه دارد."</string>
-  <string msgid="5295047563564981250" name="permdesc_accessFineLocation">"به برنامه اجازه می‌دهد که موقعیت مکانی دقیق شما را با استفاده از سیستم موقعیت‌یاب جهانی (GPS) یا منابع موقعیت مکانی شبکه‌ای مانند برج‌های سلولی یا Wi-Fi دریافت کند. این سرویس‌های موقعیت مکانی باید در دستگاه شما برای برنامه‌ای که از آنها استفاده می‌کند، فعال و در دسترس باشد. برنامه‌ها ممکن است از آن برای تعیین جایی که هستید، استفاده کنند و ممکن است نیروی باتری بیشتری مصرف کنند."</string>
+  <string msgid="5295047563564981250" name="permdesc_accessFineLocation">"به برنامه اجازه می‌دهد که موقعیت مکانی دقیق شما را با استفاده از سیستم موقعیت‌یاب جهانی (GPS) یا منابع موقعیت مکانی شبکه‌ای مانند برج‌های سلولی یا WLAN دریافت کند. این سرویس‌های موقعیت مکانی باید در دستگاه شما برای برنامه‌ای که از آنها استفاده می‌کند، فعال و در دسترس باشد. برنامه‌ها ممکن است از آن برای تعیین جایی که هستید، استفاده کنند و ممکن است نیروی باتری بیشتری مصرف کنند."</string>
   <string msgid="5595661694746742168" name="permlab_configureWifiDisplay">"پیکربندی صفحه نمایش‌های Wi‑Fi"</string>
   <string msgid="7916815158690218065" name="permdesc_configureWifiDisplay">"به برنامه اجازه می‌دهد تا اتصال به صفحات نمایش Wi‑Fi را پیکربندی کند."</string>
   <string msgid="393641276723695496" name="permlab_controlWifiDisplay">"کنترل صفحه نمایش‌های Wi‑Fi"</string>
@@ -152,8 +152,8 @@
   <string msgid="4653586947747330058" name="app_running_notification_text">"برای کسب اطلاعات بیشتر یا توقف برنامه لمس کنید."</string>
   <string msgid="8495155593358054676" name="network_available_sign_in">"ورود به شبکه"</string>
   <!-- no translation found for network_available_sign_in_detailed (8000081941447976118) -->
-  <string msgid="8012981257742232475" product="tablet" name="wifi_p2p_frequency_conflict_message">"در حین اتصال به <xliff:g id="DEVICE_NAME">%1$s</xliff:g> ارتباط این رایانه لوحی با Wi-Fi موقتاً قطع خواهد شد."</string>
-  <string msgid="7363907213787469151" product="default" name="wifi_p2p_frequency_conflict_message">"این گوشی به‌طور موقت از Wi-Fi قطع خواهد شد، در حالی که به <xliff:g id="DEVICE_NAME">%1$s</xliff:g> وصل است"</string>
+  <string msgid="8012981257742232475" product="tablet" name="wifi_p2p_frequency_conflict_message">"در حین اتصال به <xliff:g id="DEVICE_NAME">%1$s</xliff:g> ارتباط این رایانه لوحی با WLAN موقتاً قطع خواهد شد."</string>
+  <string msgid="7363907213787469151" product="default" name="wifi_p2p_frequency_conflict_message">"این گوشی به‌طور موقت از WLAN قطع خواهد شد، در حالی که به <xliff:g id="DEVICE_NAME">%1$s</xliff:g> وصل است"</string>
   <string msgid="1645436466285310855" name="sms_short_code_confirm_message">"&lt;b&gt;<xliff:g id="APP_NAME">%1$s</xliff:g>&lt;/b&gt; مایل است پیامی به &lt;b&gt;<xliff:g id="DEST_ADDRESS">%2$s</xliff:g>&lt;/b&gt; ارسال کند."</string>
   <string msgid="3492025719868078457" name="sms_short_code_details">"این کار "<font fgcolor="#ffffb060">"می‌تواند منجر به شارژ"</font>" حساب تلفن همراه شما شود."</string>
   <string msgid="5523826349105123687" name="sms_premium_short_code_details">
@@ -756,11 +756,11 @@
   <string name="permdesc_changeTetherState">"به یک برنامه کاربردی اجازه می دهد تا وضعیت شبکه اتصال داده با سیم را تغییر دهد."</string>
   <string name="permlab_changeBackgroundDataSetting">"تغییر تنظیمات میزان استفاده داده در پس زمینه"</string>
   <string name="permdesc_changeBackgroundDataSetting">"به یک برنامه کاربردی اجازه می دهد تنظیمات مربوط به کاربرد اطلاعات پس زمینه را تغییر دهد."</string>
-  <string name="permlab_accessWifiState">"مشاهده وضعیت Wi-Fi"</string>
-  <string name="permdesc_accessWifiState">"به یک برنامه کاربردی امکان می دهد اطلاعات مربوط به وضعیت Wi-Fi را مشاهده کند."</string>
-  <string name="permlab_changeWifiState">"تغییر حالت Wi-Fi"</string>
-  <string name="permdesc_changeWifiState">"به یک برنامه کاربردی اجازه می دهد به نقاط دسترسی Wi-Fi متصل شده و از آنها جدا شود، همچنین تغییراتی را در مورد شبکه های Wi-Fi پیکربندی شده ایجاد کند."</string>
-  <string name="permlab_changeWifiMulticastState">"دریافت چندگانه Wi-Fi را مجاز می کند"</string>
+  <string name="permlab_accessWifiState">"مشاهده وضعیت WLAN"</string>
+  <string name="permdesc_accessWifiState">"به یک برنامه کاربردی امکان می دهد اطلاعات مربوط به وضعیت WLAN را مشاهده کند."</string>
+  <string name="permlab_changeWifiState">"تغییر حالت WLAN"</string>
+  <string name="permdesc_changeWifiState">"به یک برنامه کاربردی اجازه می دهد به نقاط دسترسی WLAN متصل شده و از آنها جدا شود، همچنین تغییراتی را در مورد شبکه های WLAN پیکربندی شده ایجاد کند."</string>
+  <string name="permlab_changeWifiMulticastState">"دریافت چندگانه WLAN را مجاز می کند"</string>
   <string name="permlab_accessWimaxState">"مشاهده وضعیت WiMAX"</string>
   <string name="permdesc_accessWimaxState">"به یک برنامه کاربردی امکان می دهد اطلاعات مربوط به وضعیت WiMAX را مشاهده کند."</string>
   <string name="permlab_changeWimaxState">"تغییر وضعیت WiMAX"</string>
@@ -1246,20 +1246,20 @@
   <string name="ringtone_picker_title">"آهنگ های زنگ"</string>
   <string name="ringtone_unknown">"آهنگ زنگ ناشناس"</string>
   <plurals name="wifi_available">
-        <item quantity="one">"شبکه Wi-Fi موجود است"</item>
-        <item quantity="other">"شبکه های Wi-Fi موجود هستند"</item>
+        <item quantity="one">"شبکه WLAN موجود است"</item>
+        <item quantity="other">"شبکه های WLAN موجود هستند"</item>
     </plurals>
   <plurals name="wifi_available_detailed">
-        <item quantity="one">"شبکه Wi-Fi موجود را باز کنید"</item>
-        <item quantity="other">"شبکه های Wi-Fi موجود را باز کنید"</item>
+        <item quantity="one">"شبکه WLAN موجود را باز کنید"</item>
+        <item quantity="other">"شبکه های WLAN موجود را باز کنید"</item>
     </plurals>
-  <string name="wifi_available_sign_in">"ورود به شبکه Wi-Fi"</string>
-  <string name="wifi_watchdog_network_disabled">"اتصال به Wi-Fi ممکن نیست"</string>
+  <string name="wifi_available_sign_in">"ورود به شبکه WLAN"</string>
+  <string name="wifi_watchdog_network_disabled">"اتصال به WLAN ممکن نیست"</string>
   <string name="wifi_watchdog_network_disabled_detailed">" اتصال اینترنتی ضعیفی دارد."</string>
-  <string name="wifi_p2p_dialog_title">"Wi-Fi Direct"</string>
-  <string name="wifi_p2p_turnon_message">"عملکرد Wi-Fi Direct شروع می‌شود. این کار عملکرد مشتری/نقطه دسترسی Wi-Fi را خاموش می‌کند."</string>
-  <string name="wifi_p2p_failed_message">"نمی‌توانید Wi-Fi Direct را شروع کنید"</string>
-  <string name="wifi_p2p_enabled_notification_title">"Wi-Fi Direct روشن است"</string>
+  <string name="wifi_p2p_dialog_title">"WLAN Direct"</string>
+  <string name="wifi_p2p_turnon_message">"عملکرد WLAN Direct شروع می‌شود. این کار عملکرد مشتری/نقطه دسترسی WLAN را خاموش می‌کند."</string>
+  <string name="wifi_p2p_failed_message">"نمی‌توانید WLAN Direct را شروع کنید"</string>
+  <string name="wifi_p2p_enabled_notification_title">"WLAN Direct روشن است"</string>
   <string name="wifi_p2p_enabled_notification_message">"لمس کردن برای تنظیمات"</string>
   <string name="select_character">"درج نویسه"</string>
   <string name="sms_control_title">"ارسال پیامک ها"</string>
@@ -1478,12 +1478,12 @@
   <string name="data_usage_3g_limit_title">"داده های 2G-3G غیرفعال شد"</string>
   <string name="data_usage_4g_limit_title">"داده 4G غیر فعال شده است"</string>
   <string name="data_usage_mobile_limit_title">"داده های تلفن همراه غیرفعال شد"</string>
-  <string name="data_usage_wifi_limit_title">"داده‌های Wi-Fi غیرفعال شد"</string>
+  <string name="data_usage_wifi_limit_title">"داده‌های WLAN غیرفعال شد"</string>
   <string name="data_usage_limit_body">"لمس برای فعال کردن"</string>
   <string name="data_usage_3g_limit_snoozed_title">"اطلاعات 2G-3G بیش از حد مجاز است"</string>
   <string name="data_usage_4g_limit_snoozed_title">"بیش از حد مجاز 4G است"</string>
   <string name="data_usage_mobile_limit_snoozed_title">"داده‌های تلفن همراه از مقدار مجاز بیشتر است"</string>
-  <string name="data_usage_wifi_limit_snoozed_title">"از محدوده مجاز داده‌های Wi-Fi بیشتر شد"</string>
+  <string name="data_usage_wifi_limit_snoozed_title">"از محدوده مجاز داده‌های WLAN بیشتر شد"</string>
   <string name="data_usage_limit_snoozed_body">"<xliff:g id="SIZE">%s</xliff:g> از حد مشخص شده بیشتر شد"</string>
   <string name="data_usage_restricted_title">"داده پس‌زمینه محدود شد"</string>
   <string name="data_usage_restricted_body">"لمس برای حذف محدودیت"</string>
