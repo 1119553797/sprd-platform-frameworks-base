@@ -473,6 +473,45 @@ static jlong android_os_Process_getTotalMemory(JNIEnv* env, jobject clazz)
     return getFreeMemoryImpl(sums, sumsLen, 1);
 }
 
+/**
+ * SPRD: clear cache. @{
+*/
+static jlong getZramByPath(char* path) {
+    char data[512];
+    jlong zram = 0;
+
+    FILE *fp = fopen(path, "r");
+    if (fp == 0) {
+    	ALOGW("Unable to open %s", path);
+    	return 0;
+    }
+    if (fgets(data, 512, fp) != 0) sscanf(data, "%ld", &zram);
+    fclose(fp);
+    return zram;
+}
+
+//S: For Zram
+static jlong android_os_Process_getZramComppressed(JNIEnv *env, jobject clazz)
+{
+    char path[] = "/sys/block/zram0/compr_data_size";
+    return getZramByPath(path);
+}
+
+//S: For Zram
+static jlong android_os_Process_getZramOriginal(JNIEnv *env, jobject clazz)
+{
+    char path[] = "/sys/block/zram0/orig_data_size";
+    return getZramByPath(path);
+}
+
+//S: For Zram
+static jlong android_os_Process_getZramTotal(JNIEnv *env, jobject clazz)
+{
+    char path[] = "/sys/block/zram0/disksize";
+    return getZramByPath(path);
+}
+/** @} */
+
 void android_os_Process_readProcLines(JNIEnv* env, jobject clazz, jstring fileStr,
                                       jobjectArray reqFields, jlongArray outFields)
 {
@@ -1010,6 +1049,13 @@ static const JNINativeMethod methods[] = {
     {"sendSignalQuiet", "(II)V", (void*)android_os_Process_sendSignalQuiet},
     {"getFreeMemory", "()J", (void*)android_os_Process_getFreeMemory},
     {"getTotalMemory", "()J", (void*)android_os_Process_getTotalMemory},
+    /**
+    * SPRD: clear cache. @{
+    */
+    {"getZramComppressed", "()J", (void*) android_os_Process_getZramComppressed},
+    {"getZramOriginal", "()J", (void*) android_os_Process_getZramOriginal},
+    {"getZramTotal", "()J", (void*) android_os_Process_getZramTotal},
+    /** @} */
     {"readProcLines", "(Ljava/lang/String;[Ljava/lang/String;[J)V", (void*)android_os_Process_readProcLines},
     {"getPids", "(Ljava/lang/String;[I)[I", (void*)android_os_Process_getPids},
     {"readProcFile", "(Ljava/lang/String;[I[Ljava/lang/String;[J[F)Z", (void*)android_os_Process_readProcFile},
