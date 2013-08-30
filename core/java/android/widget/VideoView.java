@@ -738,5 +738,11 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
     public boolean isStopPlaybackCompleted() {
         return mMediaPlayer == null && mCurrentState == STATE_IDLE && mTargetState == STATE_IDLE;
     }
+
+    public void setChannelVolume(float left, float right) {
+        if (mMediaPlayer != null) {
+            mMediaPlayer.setVolume(left, right);
+        }
+    }
     /** @} */
 }
