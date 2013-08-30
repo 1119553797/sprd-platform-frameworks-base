@@ -32,9 +32,11 @@ import android.provider.MediaStore;
 import android.provider.Settings;
 import android.provider.Settings.System;
 import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.List;
+import java.io.File;
+import android.database.sqlite.SQLiteException;
+import android.telephony.TelephonyManager;
 
 /**
  * RingtoneManager provides access to ringtones, notification, and other types
@@ -52,6 +54,18 @@ import java.util.List;
 public class RingtoneManager {
 
     private static final String TAG = "RingtoneManager";
+
+    /** SPRD: define some var @{ */
+    /** @hide */
+    public static final String EXTRA_RINGTONE_INCLUDE_EXTERNAL =
+            "android.intent.extra.ringtone.INCLUDE_EXTERNAL";
+
+    private Cursor[] mCursorArr;
+
+    private Cursor mCustomCursor;
+
+    private boolean mIncludeExternal;
+    /** @} */
 
     // Make sure these are in sync with attrs.xml:
     // <attr name="ringtoneType">
@@ -174,9 +188,8 @@ public class RingtoneManager {
      */
     public static final String EXTRA_RINGTONE_PICKED_URI =
             "android.intent.extra.ringtone.PICKED_URI";
-    
+
     // Make sure the column ordering and then ..._COLUMN_INDEX are in sync
-    
     private static final String[] INTERNAL_COLUMNS = new String[] {
         MediaStore.Audio.Media._ID, MediaStore.Audio.Media.TITLE,
         "\"" + MediaStore.Audio.Media.INTERNAL_CONTENT_URI + "\"",
@@ -215,7 +228,7 @@ public class RingtoneManager {
 
     private Activity mActivity;
     private Context mContext;
-    
+
     private Cursor mCursor;
 
     private int mType = TYPE_RINGTONE;
@@ -365,9 +378,12 @@ public class RingtoneManager {
         final Cursor internalCursor = getInternalRingtones();
         final Cursor drmCursor = mIncludeDrm ? getDrmRingtones() : null;
         final Cursor mediaCursor = getMediaRingtones();
-             
-        return mCursor = new SortCursor(new Cursor[] { internalCursor, drmCursor, mediaCursor },
+
+        /** SPRD: init the mCursorArr and save for after @{ */
+        mCursorArr = new Cursor[] { internalCursor, drmCursor, mediaCursor};
+        return mCursor = new SortCursor(mCursorArr,
                 MediaStore.Audio.Media.DEFAULT_SORT_ORDER);
+        /** @} */
     }
 
     /**
@@ -403,10 +419,17 @@ public class RingtoneManager {
     }
     
     private static Uri getUriFromCursor(Cursor cursor) {
-        return ContentUris.withAppendedId(Uri.parse(cursor.getString(URI_COLUMN_INDEX)), cursor
-                .getLong(ID_COLUMN_INDEX));
+        /** SPRD: Catch the Exception @{ */
+        Uri uri = null;
+        try {
+            uri = ContentUris.withAppendedId(Uri.parse(cursor.getString(URI_COLUMN_INDEX)), cursor.getLong(ID_COLUMN_INDEX));
+        } catch (android.database.StaleDataException e) {
+            Log.e(TAG, "Failed to getUriFromCursor " + e);
+        }
+        return uri;
+        /** @} */
     }
-    
+
     /**
      * Gets the position of a {@link Uri} within this {@link RingtoneManager}.
      * 
@@ -437,12 +460,12 @@ public class RingtoneManager {
                     .getLong(ID_COLUMN_INDEX)))) {
                 return i;
             }
-            
+
             cursor.move(1);
-            
+
             previousUriString = uriString;
         }
-        
+
         return -1;
     }
 
@@ -619,7 +642,7 @@ public class RingtoneManager {
 
         return null;
     }
-    
+
     /**
      * Gets the current default sound's {@link Uri}. This will give the actual
      * sound {@link Uri}, instead of using this, most clients can use
@@ -633,12 +656,10 @@ public class RingtoneManager {
      * @see #setActualDefaultRingtoneUri(Context, int, Uri)
      */
     public static Uri getActualDefaultRingtoneUri(Context context, int type) {
-        String setting = getSettingForType(type);
-        if (setting == null) return null;
-        final String uriString = Settings.System.getString(context.getContentResolver(), setting);
-        return uriString != null ? Uri.parse(uriString) : null;
+        // SPRD: change getActualDefaultRingtoneUri for phoneid
+        return getActualDefaultRingtoneUri(context, type, TelephonyManager.getDefaultPhoneId());
     }
-    
+
     /**
      * Sets the {@link Uri} of the default sound for a given sound type.
      * 
@@ -657,8 +678,11 @@ public class RingtoneManager {
     }
     
     private static String getSettingForType(int type) {
+        return getSettingForType(type, TelephonyManager.getDefaultPhoneId()); // SPRD: change get settingtype for phoneId
+    }
+    private static String getSettingForType(int type, int phoneId) {
         if ((type & TYPE_RINGTONE) != 0) {
-            return Settings.System.RINGTONE;
+            return TelephonyManager.getSetting(Settings.System.RINGTONE,phoneId);
         } else if ((type & TYPE_NOTIFICATION) != 0) {
             return Settings.System.NOTIFICATION_SOUND;
         } else if ((type & TYPE_ALARM) != 0) {
@@ -721,5 +745,264 @@ public class RingtoneManager {
             return null;
         }
     }
-    
+
+    /** SPRD: Add some method @{ */
+
+    /**
+    * @param type The ringtone type whose default should be returned.
+    * @param phoneid phoneid
+    * @return The {@link Uri} of the default ringtone for the given type.
+    * @hide
+    */
+    public static Uri getActualDefaultRingtoneUri(Context context, int type, int phoneId) {
+        String setting = getSettingForType(type, phoneId);
+        if (setting == null) return null;
+            final String uriString = Settings.System.getString(context.getContentResolver(), setting);
+            Uri uri = (uriString != null ? Uri.parse(uriString) : null);
+        Cursor cursor = null;
+        try {
+            cursor = context.getContentResolver().query(uri,
+                    new String[] {
+                            MediaStore.Audio.Media.TITLE, MediaStore.Audio.Media.DATA
+                    }, null, null, null);
+            if (cursor != null && cursor.getCount() > 0) {
+                if (cursor.moveToFirst()) {
+                    File filePath = new File(cursor.getString(1));
+                    if (!filePath.exists()) {
+                        uri = getProfileDefaultUri(context, type);
+                    }
+                }
+            } else {
+                uri = getProfileDefaultUri(context, type);
+            }
+        } catch (Exception sqle) {
+            Log.d(TAG, sqle.toString());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+                cursor = null;
+            }
+        }
+        /* Modify 20130306 by Spreadst for bug88517 end */
+        return uri;
+
+    }
+
+    /**
+    * @param type The ringtone type whose default should be returned.
+    * @param uri ringtone uri
+    * @param phoneid phoneid
+    * @return void
+    * @hide
+    */
+    public static void setActualDefaultRingtoneUri(Context context, int type, Uri ringtoneUri, int phoneId) {
+        String setting = getSettingForType(type, phoneId);
+        if (setting == null) return;
+            Settings.System.putString(context.getContentResolver(), setting,
+            ringtoneUri != null ? ringtoneUri.toString() : null);
+    }
+
+    /**
+    * @hide
+    */
+    public static int getRingtonePhoneId(Uri uri) {
+       int phoneId;
+       if(uri == null){
+           return TelephonyManager.getDefaultPhoneId();
+       }
+       String uriStr = uri.toString();
+       String ringtoneUriStr = Settings.System.DEFAULT_RINGTONE_URI.toString();
+       if(uriStr.startsWith((ringtoneUriStr))
+             && uriStr.length() !=  ringtoneUriStr.length()){
+           return Integer.parseInt(uriStr.substring(ringtoneUriStr.length(), ringtoneUriStr.length()+1));
+       }
+       return TelephonyManager.getDefaultPhoneId();
+    }
+
+    /**
+    * @hide
+    */
+    public void setIncludeExternal(boolean includeExternal) {
+        mIncludeExternal = includeExternal;
+    }
+
+    /**
+     * Gets the current default sound's {@link Uri}. This will give the actual
+     * sound {@link Uri}, instead of using this, most clients can use
+     * {@link System#DEFAULT_RINGTONE_URI}.
+     *
+     * @param context A context used for querying.
+     * @param type The type whose default sound should be returned. One of
+     *            {@link #TYPE_RINGTONE}, {@link #TYPE_NOTIFICATION}, or
+     *            {@link #TYPE_ALARM}.
+     * @return A {@link Uri} pointing to the default sound for the sound type.
+     * @see #setActualDefaultRingtoneUri(Context, int, Uri)
+     */
+    public static Uri getProfileDefaultUri(Context context, int type) {
+
+        String ringerUriString = Settings.System.getString(context.getContentResolver(),
+                Settings.System.RINGTONE);
+        Uri defaultRingtoneUri = (ringerUriString != null ? Uri.parse(ringerUriString) : null);
+        String notificationUriString = Settings.System.getString(context.getContentResolver(),
+                Settings.System.NOTIFICATION_SOUND);
+        Uri defaultNotificationUri = (notificationUriString != null ? Uri.parse(notificationUriString) : null);
+        String alarmUriString = Settings.System.getString(context.getContentResolver(),
+                Settings.System.ALARM_ALERT);
+        Uri defaultAlarmUri = (alarmUriString != null ? Uri.parse(alarmUriString) : null);
+        if ((type & TYPE_RINGTONE) != 0) {
+            return defaultRingtoneUri;
+        } else if ((type & TYPE_NOTIFICATION) != 0) {
+            return defaultNotificationUri;
+        } else if ((type & TYPE_ALARM) != 0) {
+            return defaultAlarmUri;
+        } else {
+            return null;
+        }
+
+    }
+
+    /**
+    * @hide
+    */
+    public Cursor getExternalMusics() {
+        // Get the external media cursor. First check to see if it is mounted.
+        final String status = Environment.getExternalStorageState();
+        if(!status.equals(Environment.MEDIA_MOUNTED) && !status.equals(Environment.MEDIA_MOUNTED_READ_ONLY)){
+            return null;
+        }
+
+        try {
+            if (mCustomCursor != null && !mCustomCursor.isClosed() && mCustomCursor.requery()) {
+                return mCustomCursor;
+            }
+        } catch (android.database.StaleDataException e) {
+            Log.e(TAG, "requery error: cursor is closed" + e);
+        }
+
+        // filter
+        StringBuilder where = new StringBuilder();
+        where.append(MediaStore.Audio.Media.TITLE + " != ''");
+        where.append(" AND " + MediaStore.Audio.Media.IS_MUSIC + "=1");
+
+        boolean hasExternalRingtone = false;
+        for (int i = mFilterColumns.size() - 1; i >= 0; i--) {
+            if(mFilterColumns.get(i).equals(
+                MediaStore.Audio.AudioColumns.IS_RINGTONE)) {
+                hasExternalRingtone = true;
+                break;
+            }
+        }
+        if (hasExternalRingtone) {
+            where.append(" AND (" + MediaStore.Audio.Media.IS_RINGTONE + "=0 or "
+                    + MediaStore.Audio.Media.IS_RINGTONE +" is null)");
+        }
+
+        return mCustomCursor = ((status.equals(Environment.MEDIA_MOUNTED) || status
+                .equals(Environment.MEDIA_MOUNTED_READ_ONLY)) ? query(
+                MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, MEDIA_COLUMNS,
+                where.toString(), null,
+                MediaStore.Audio.Media.DEFAULT_SORT_ORDER) : null);
+    }
+
+    /**
+    * @hide
+    */
+    public Ringtone getCustomRingtone(int position) {
+        if (mStopPreviousRingtone && mPreviousRingtone != null) {
+            mPreviousRingtone.stop();
+        }
+
+        mPreviousRingtone = getRingtone(mContext, getCustomRingtoneUri(position), inferStreamType());
+        return mPreviousRingtone;
+    }
+
+    /**
+    * @hide
+    */
+	public Uri getCustomRingtoneUri(int position) {
+        final Cursor cursor = getExternalMusics();
+        if(cursor == null){
+            return null;
+        }
+
+        if (!cursor.moveToPosition(position)) {
+            return null;
+        }
+
+        return getUriFromCursor(cursor);
+    }
+
+    /**
+    * @hide
+    */
+    public int getCunstomRingtonePosition(Uri ringtoneUri) {
+
+        if (ringtoneUri == null) return -1;
+
+        final Cursor cursor = getExternalMusics();
+
+        if (cursor == null) {
+            return -1;
+        }
+
+        final int cursorCount = cursor.getCount();
+
+        if (!cursor.moveToFirst()) {
+            return -1;
+        }
+
+        // Only create Uri objects when the actual URI changes
+        Uri currentUri = null;
+        String previousUriString = null;
+        for (int i = 0; i < cursorCount; i++) {
+            String uriString = cursor.getString(URI_COLUMN_INDEX);
+            if (currentUri == null || !uriString.equals(previousUriString)) {
+                currentUri = Uri.parse(uriString);
+            }
+
+            if (ringtoneUri.equals(ContentUris.withAppendedId(currentUri, cursor
+                    .getLong(ID_COLUMN_INDEX)))) {
+                return i;
+            }
+
+            cursor.move(1);
+
+            previousUriString = uriString;
+        }
+
+        return -1;
+    }
+
+    /**
+    * @hide
+    */
+    public void requery(){
+        if(mCursorArr != null && mCursorArr.length > 0){
+           for(Cursor c : mCursorArr){
+               if(c != null && !c.isClosed()){
+                   c.requery();
+               }
+            }
+         }
+    }
+
+    /**
+     * close all Cursors
+     *
+     * @hide
+     */
+    public void closeCursors(){
+        Log.e(TAG, "cursors will be close");
+        if(mCursorArr != null && mCursorArr.length > 0){
+           for(Cursor c : mCursorArr){
+               if(c != null && !c.isClosed()){
+                   c.close();
+               }
+            }
+         }
+        if(null != mCustomCursor && !mCustomCursor.isClosed()){
+            mCustomCursor.close();
+        }
+    }
+    /** @} */
 }
