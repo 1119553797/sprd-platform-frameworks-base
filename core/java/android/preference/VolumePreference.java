@@ -44,6 +44,8 @@ public class VolumePreference extends SeekBarDialogPreference implements
     private static final String TAG = "VolumePreference";
 
     private int mStreamType;
+    // SPRD:  use audiofocus
+    private boolean mHasAudioFocus = false;
 
     /** May be null if the dialog isn't visible. */
     private SeekBarVolumizer mSeekBarVolumizer;
@@ -330,12 +332,26 @@ public class VolumePreference extends SeekBarDialogPreference implements
 
         public void startSample() {
             onSampleStarting(this);
+            /* SPRD: add for interaction between music and clock @{ */
+            if (!mHasAudioFocus && mAudioManager != null) {
+                mAudioManager.requestAudioFocus(null, mStreamType, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
+                mHasAudioFocus = true;
+            }
+            /* @} */
+
             if (mRingtone != null) {
                 mRingtone.play();
             }
         }
 
         public void stopSample() {
+            /* SPRD: add for interaction between music and clock,  @{ */
+            if (mHasAudioFocus && mAudioManager != null) {
+                mAudioManager.abandonAudioFocus(null);
+                mHasAudioFocus = false;
+            }
+            /* @} */
+
             if (mRingtone != null) {
                 mRingtone.stop();
             }
