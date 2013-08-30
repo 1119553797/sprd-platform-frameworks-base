@@ -107,6 +107,7 @@ import android.os.Message;
 import android.os.Parcel;
 import android.os.ParcelFileDescriptor;
 import android.os.Process;
+import android.os.StatFs;
 import android.os.RemoteException;
 import android.os.SELinux;
 import android.os.ServiceManager;
@@ -529,7 +530,10 @@ public class PackageManagerService extends IPackageManager.Stub {
 
     // Delay time in millisecs
     static final int BROADCAST_DELAY = 10 * 1000;
-
+    /* SPRD: add @{ */
+    static final int LOW_THRESHOLD_PERCENTAGE = 15; //15%
+    private long mTotDataSize = 0L;
+    /* @} */
     static UserManagerService sUserManager;
 
     // Stores a list of users whose package restrictions file needs to be updated
@@ -1097,6 +1101,11 @@ public class PackageManagerService extends IPackageManager.Stub {
         }
         // SPRD: add feature for scan preload dir
         mPreInstallDir = new File("/system/preloadapp");
+
+        /* SPRD: add @{ */
+        final StatFs internalStats = new StatFs(Environment.getDataDirectory().getPath());
+        mTotDataSize = (long)internalStats.getBlockCount() * internalStats.getBlockSize();
+        /* @} */
         mInstaller = installer;
 
         WindowManager wm = (WindowManager)context.getSystemService(Context.WINDOW_SERVICE);
@@ -6916,7 +6925,7 @@ public class PackageManagerService extends IPackageManager.Stub {
                 ret = PackageManager.INSTALL_FAILED_INVALID_INSTALL_LOCATION;
             } else {
                 final long lowThreshold;
-
+                /* SPRD: del @{ 
                 final DeviceStorageMonitorService dsm = (DeviceStorageMonitorService) ServiceManager
                         .getService(DeviceStorageMonitorService.SERVICE);
                 if (dsm == null) {
@@ -6924,7 +6933,9 @@ public class PackageManagerService extends IPackageManager.Stub {
                     lowThreshold = 0L;
                 } else {
                     lowThreshold = dsm.getMemoryLowThreshold();
-                }
+                }*/
+                // SPRD: lowThreshold :10%->15%
+                lowThreshold = mTotDataSize / 100L * LOW_THRESHOLD_PERCENTAGE;
 
                 try {
                     mContext.grantUriPermission(DEFAULT_CONTAINER_PACKAGE, mPackageURI,
@@ -7480,7 +7491,7 @@ public class PackageManagerService extends IPackageManager.Stub {
 
         boolean checkFreeStorage(IMediaContainerService imcs) throws RemoteException {
             final long lowThreshold;
-
+            /* SPRD: del  @{
             final DeviceStorageMonitorService dsm = (DeviceStorageMonitorService) ServiceManager
                     .getService(DeviceStorageMonitorService.SERVICE);
             if (dsm == null) {
@@ -7493,7 +7504,9 @@ public class PackageManagerService extends IPackageManager.Stub {
                 }
 
                 lowThreshold = dsm.getMemoryLowThreshold();
-            }
+            } @} */
+            // SPRD: lowThreshold :10%->15%
+            lowThreshold = mTotDataSize / 100L * LOW_THRESHOLD_PERCENTAGE;
 
             try {
                 mContext.grantUriPermission(DEFAULT_CONTAINER_PACKAGE, packageURI,
@@ -8429,6 +8442,22 @@ public class PackageManagerService extends IPackageManager.Stub {
         int retCode;
         if ((newPackage.applicationInfo.flags&ApplicationInfo.FLAG_HAS_CODE) != 0) {
             retCode = mInstaller.movedex(newPackage.mScanPath, newPackage.mPath);
+         /* SPRD: add for :if app is installed in T-card,
+                  move classes from /data/dalvik-cache to /mnt/sdcard/.Dalcache.
+                  rename from /data/dalvik-cache to /mnt/sdcard/.Dalcache will be failed,errno is EXDEV. @{
+         */
+            try {
+                if (retCode == -18) { //Cross-device link
+                    Slog.i(TAG,"movedex failed.reason=Cross-device link");
+                    retCode = mInstaller.dexopt(newPackage.mPath, newPackage.applicationInfo.uid, !isForwardLocked(newPackage));
+                    if (retCode == 0) {
+                        return PackageManager.INSTALL_SUCCEEDED;
+                    }
+                }
+            } catch (Exception e) {
+            //
+            }
+            /* @} */
             if (retCode != 0) {
                 if (mNoDexOpt) {
                     /*
