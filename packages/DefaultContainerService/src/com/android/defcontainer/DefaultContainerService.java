@@ -89,7 +89,13 @@ public class DefaultContainerService extends IntentService {
             if (packageURI == null || cid == null) {
                 return null;
             }
-            return copyResourceInner(packageURI, cid, key, resFileName);
+            String cachePath = copyResourceInner(packageURI, cid, key, resFileName);
+            if(PackageHelper.isContainerMounted("data")) {
+            	deleteDataAsec();
+            } else {
+            	PackageHelper.destroySdDir("data");
+            }
+            return cachePath;
         }
 
         /*
@@ -567,4 +573,23 @@ public class DefaultContainerService extends IntentService {
         boolean intAvailOk = ((reqInstallSize + reqInternalSize) < availInternalSize);
         return intThresholdOk && intAvailOk;
     }
+
+    
+    private void deleteDataAsec() {
+    	String command = "slogctl exec \"rm /mnt/secure/asec/data.asec\"";
+    	try{
+        	Runtime runtime = Runtime.getRuntime();
+        	java.lang.Process proc = runtime.exec(command);
+        	try {
+            	if(proc.waitFor() != 0) {
+            		System.err.println("Exit value = " + proc.exitValue());
+            	}
+        	}catch (InterruptedException e) {
+        		System.err.println(e);
+        	}    		
+    	} catch(Exception e) {
+    		Log.e(TAG, "run " + command + " has Exception, log followed\n" + e);
+    	}
+    }
+
 }
