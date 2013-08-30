@@ -23,6 +23,7 @@ import com.android.internal.app.HeavyWeightSwitcherActivity;
 import com.android.internal.os.BatteryStatsImpl;
 import com.android.server.am.ActivityManagerService.PendingActivityLaunch;
 import com.android.server.wm.AppTransition;
+import com.sprd.android.config.OptConfig;
 
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -977,7 +978,17 @@ final class ActivityStack {
         mLastPausedActivity = prev;
         prev.state = ActivityState.PAUSING;
         prev.task.touchActiveTime();
-        prev.updateThumbnail(screenshotActivities(prev), null);
+        /**
+	 * SPRD: clear cache. @{
+	   for low cost case, optimize ram
+	*/
+        if (OptConfig.LC_RAM_SUPPORT) {
+        	if (!prev.isHomeActivity)
+        		prev.updateThumbnail(screenshotActivities(prev), null);
+        } else {
+        	prev.updateThumbnail(screenshotActivities(prev), null);
+        }
+	/** @} */
 
         mService.updateCpuStats();
         
