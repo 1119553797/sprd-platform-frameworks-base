@@ -65,6 +65,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import android.os.SystemProperties;
+
 /**
  * State and management of a single stack of activities.
  */
@@ -1883,6 +1885,10 @@ public class ActivityStack {
             boolean componentSpecified) {
 
         int err = START_SUCCESS;
+
+	if(intent.hasCategory(Intent.CATEGORY_HOME)) {
+		SystemProperties.set("persist.sys.launcher", aInfo.processName);
+	}
 
         ProcessRecord callerApp = null;
         if (caller != null) {

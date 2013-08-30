@@ -31,6 +31,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 
+import android.os.SystemProperties;
 /**
  * The Camera class is used to set image capture settings, start/stop preview,
  * snap pictures, and retrieve frames for encoding for video.  This class is a
@@ -217,6 +218,26 @@ public class Camera {
      *     example, if the camera is in use by another process).
      */
     public static Camera open(int cameraId) {
+	String launcher_process = null;
+	String command = null;
+	launcher_process = SystemProperties.get("persist.sys.launcher", "0");
+	if ( !launcher_process.equals("0") ) {
+		command = "slogctl exec busybox killall " + SystemProperties.get("persist.sys.launcher");
+		try {
+			Runtime runtime = Runtime.getRuntime();
+			Process proc = runtime.exec(command);
+			try {
+				if (proc.waitFor() != 0) {
+				System.err.println("Exit value=" + proc.exitValue());
+			    }
+			} catch (InterruptedException e) {
+				System.err.println(e);
+			}
+		} catch (Exception e) {
+			Log.e(TAG, "run " + command + " has Exception, log followed\n" + e);
+		}
+	}
+
         return new Camera(cameraId);
     }
 
