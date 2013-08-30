@@ -1939,7 +1939,12 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         // it handle it, because that gives us the correct 5 second
         // timeout.
         if (keyCode == KeyEvent.KEYCODE_HOME) {
-
+            /** SPRD: Determined to factory mode,shielded HOME key. @{ */
+            WindowManager.LayoutParams attrs = win != null ? win.getAttrs() : null;
+            if ((null != attrs.packageName) && (attrs.packageName.startsWith("com.spreadst.validationtools"))){
+                return 0;
+            }
+            /** @} */
             // If we have released the home key, and didn't do anything else
             // while it was pressed, then it is time to go home!
             if (!down) {
@@ -1987,7 +1992,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
             // If a system window has focus, then it doesn't make sense
             // right now to interact with applications.
-            WindowManager.LayoutParams attrs = win != null ? win.getAttrs() : null;
+            // SPRD: Already Definition
+            //WindowManager.LayoutParams attrs = win != null ? win.getAttrs() : null;
             if (attrs != null) {
                 final int type = attrs.type;
                 if (type == WindowManager.LayoutParams.TYPE_KEYGUARD
