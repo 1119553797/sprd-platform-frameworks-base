@@ -171,4 +171,7 @@
 
     <!-- Default for Settings.Secure.USER_SETUP_COMPLETE -->
     <bool name="def_user_setup_complete">false</bool>
+
+    <!-- SPRD: add Default value of default_input_method  -->
+    <string name="config_default_input_method" translatable="false"></string>
 </resources>
