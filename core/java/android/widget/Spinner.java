@@ -460,6 +460,12 @@ public class Spinner extends AbsSpinner implements OnClickListener {
         mInLayout = true;
         layout(0, false);
         mInLayout = false;
+
+        /* SPRD: refresh popupWindow when layout changed @{*/
+        if (changed && mPopup.isShowing()) {
+            mPopup.show(getTextDirection(), getTextAlignment());
+        }
+        /* @} */
     }
 
     /**
