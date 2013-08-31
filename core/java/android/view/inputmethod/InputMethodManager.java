@@ -1350,7 +1350,10 @@ public final class InputMethodManager {
                     + " softInputMode=" + softInputMode
                     + " first=" + first + " flags=#"
                     + Integer.toHexString(windowFlags));
-            if (mHasBeenInactive) {
+            // SPRD: When switching from Activities very fast, this client's setActive(true)
+            // process may be disturbed by another client, so the mActive & mHasBeenInactive
+            // both be false. Check both mActive & mHasBeenInactive's states for forceNewFocus.
+            if (mHasBeenInactive || !mActive) {
                 if (DEBUG) Log.v(TAG, "Has been inactive!  Starting fresh");
                 mHasBeenInactive = false;
                 forceNewFocus = true;
