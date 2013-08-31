@@ -27,6 +27,7 @@ import android.content.ClipData.Item;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -1533,6 +1534,11 @@ public class Editor {
 
     private boolean extractedTextModeWillBeStarted() {
         if (!(mTextView instanceof ExtractEditText)) {
+           /* SPRD: never show ExtractEditText on portrait screen @{*/
+           Configuration configuration = mTextView.getContext().getResources().getConfiguration();
+           if(configuration.orientation == Configuration.ORIENTATION_PORTRAIT)
+               return false;
+           /* @} */
             final InputMethodManager imm = InputMethodManager.peekInstance();
             return  imm != null && imm.isFullscreenMode();
         }
