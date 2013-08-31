@@ -1493,13 +1493,29 @@ public class PopupWindow {
         int x = p.x;
         int y = p.y;
 
+        /**
+         * SPRD: update p.width for findDropDownPosition,
+         * or it will get error position with the old value.
+         * @{
+         */
+        boolean update = false;
+        if (mClipToScreen) {
+            //update p.width for findDropDownPosition
+            int finalWidth = mWidthMode < 0 ? mWidthMode : width;
+            if (width != -1 && p.width != finalWidth) {
+                p.width = mLastWidth = finalWidth;
+                update = true;
+            }
+        }
+        /* @} */
+
         if (updateLocation) {
             updateAboveAnchor(findDropDownPosition(anchor, p, xoff, yoff));
         } else {
             updateAboveAnchor(findDropDownPosition(anchor, p, mAnchorXoff, mAnchorYoff));            
         }
 
-        update(p.x, p.y, width, height, x != p.x || y != p.y);
+        update(p.x, p.y, width, height, x != p.x || y != p.y || update);
     }
 
     /**
