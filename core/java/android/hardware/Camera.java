@@ -1736,6 +1736,8 @@ public class Camera {
         public static final String WHITE_BALANCE_CLOUDY_DAYLIGHT = "cloudy-daylight";
         public static final String WHITE_BALANCE_TWILIGHT = "twilight";
         public static final String WHITE_BALANCE_SHADE = "shade";
+        /** @hide */
+        private static final String KEY_ISO = "iso";
 
         // Values for color effect settings.
         public static final String EFFECT_NONE = "none";
@@ -2854,6 +2856,25 @@ public class Camera {
          */
         public List<String> getSupportedAntibanding() {
             String str = get(KEY_ANTIBANDING + SUPPORTED_VALUES_SUFFIX);
+            return split(str);
+        }
+
+        /** @hide */
+        public   void setISO(String value)
+        {
+            set(KEY_ISO, value);
+        }
+
+        /** @hide */
+        public  String getISO()
+        {
+            return get(KEY_ISO);
+        }
+
+	/** @hide */
+	public List<String> getSupportedISO()
+        {
+            String str = get(KEY_ISO + SUPPORTED_VALUES_SUFFIX);
             return split(str);
         }
 
