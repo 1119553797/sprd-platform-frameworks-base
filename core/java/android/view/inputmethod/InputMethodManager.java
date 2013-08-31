@@ -31,6 +31,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
+import android.os.PowerManager;
 import android.os.RemoteException;
 import android.os.ResultReceiver;
 import android.os.ServiceManager;
@@ -449,6 +450,13 @@ public final class InputMethodManager {
                             // Check focus again in case that "onWindowFocus" is called before
                             // handling this message.
                             if (mServedView != null && mServedView.hasWindowFocus()) {
+                                /* SPRD: don't check focus on screenOff @{*/
+                                PowerManager powerManager = (PowerManager) mServedView.getContext()
+                                                            .getSystemService(Context.POWER_SERVICE);
+                                if (!powerManager.isScreenOn())
+                                    return;
+                                /* @} */
+
                                 // "finishComposingText" has been already called above. So we
                                 // should not call mServedInputConnection.finishComposingText here.
                                 // Also, please note that this handler thread could be different
