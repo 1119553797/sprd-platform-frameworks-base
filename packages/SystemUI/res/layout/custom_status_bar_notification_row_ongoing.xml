@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Create by Spreadst -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
+
+    <View
+        android:id="@+id/top_glow"
+        android:alpha="0"
+        android:visibility="invisible"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/notification_divider_height"
+        android:layout_gravity="top|center_horizontal"
+        android:background="@drawable/top_divider_glow"
+        />
+
+    <Button
+        android:id="@+id/veto"
+        android:layout_width="48dp"
+        android:layout_height="match_parent"
+        android:gravity="right"
+        android:layout_marginRight="-80dp"
+        android:background="@null"
+        android:paddingRight="8dp"
+        android:paddingLeft="8dp"
+        />
+
+    <com.android.systemui.statusbar.LatestItemView android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="76dip"
+        android:focusable="true"
+        android:clickable="true"
+        >
+
+        <com.android.internal.widget.SizeAdaptiveLayout android:id="@+id/adaptive"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content" />
+
+    </com.android.systemui.statusbar.LatestItemView>
+
+    <Button
+        android:id="@+id/ongoing_exit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="6dip"
+        android:visibility="gone"
+        android:text="@string/status_bar_expanded_notification_stop_button_text"
+        android:textColor="@drawable/custom_default_text_color"
+        android:textSize="16sp"
+        android:background="@drawable/btn_default_small"
+        />
+
+    <View
+        android:id="@+id/devider"
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/custom_status_bar_hr_sprd" />
+
+    <View
+        android:id="@+id/bottom_glow"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/notification_divider_height"
+        android:layout_below="@id/devider"
+        android:layout_gravity="center_horizontal"
+        android:alpha="0"
+        android:background="@drawable/bottom_divider_glow"
+        android:visibility="invisible" />
+
+    <TextView
+        android:id="@+id/debug_info"
+        android:visibility="invisible"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:fontFamily="sans-serif-condensed"
+        android:textSize="9dp"
+        android:textStyle="bold"
+        android:textColor="#00A040"
+        android:padding="2dp"
+        />
+
+</RelativeLayout>

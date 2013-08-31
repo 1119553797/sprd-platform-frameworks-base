@@ -206,4 +206,13 @@
     <string name="quick_settings_brightness_dialog_auto_brightness_label" msgid="5064982743784071218">"自動"</string>
     <string name="status_bar_help_title" msgid="1199237744086469217">"系統會在這裡顯示通知"</string>
     <string name="status_bar_help_text" msgid="7874607155052076323">"向下滑動即可隨時存取通知。"\n"再次向下滑動即可使用系統控制項。"</string>
+    <!-- SPRD: ADD for universe_ui_support on 20130831 @{ -->
+    <string name="datanetwork_error_airplane">手機處於飛行模式下,您不能使用數據網絡業務.</string>
+    <string name="bluetooth_error_airplane">手機處於飛行模式下，您不能使用藍牙。</string>
+    <string name="status_bar_expanded_notification_stop_button_text" >停止</string>
+    <string name="status_bar_expanded_notification_hungup_button_text" >掛斷</string>
+    <string name="status_bar_expanded_notification_cancel_button_text" >取消</string>
+    <string name="status_bar_expanded_notification_latest_button_text" >通知消息</string>
+    <string name="status_bar_expanded_notification_ongoing_button_text" >正在運行</string>
+    <!-- @} -->
 </resources>

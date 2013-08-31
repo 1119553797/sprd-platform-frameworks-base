@@ -909,7 +909,8 @@ public class NetworkController extends BroadcastReceiver {
                 mWifiIconId = 0;
                 mQSWifiIconId = 0;
             } else {
-                mWifiIconId = mWifiEnabled ? R.drawable.stat_sys_wifi_signal_null : 0;
+                // SPRD：MODIFY for universe_ui_support on 20130831
+                mWifiIconId = mWifiEnabled ? R.drawable.stat_sys_wifi_signal_null_sprd : 0;
                 mQSWifiIconId = mWifiEnabled ? R.drawable.ic_qs_wifi_no_network : 0;
             }
             mContentDescriptionWifi = mContext.getString(R.string.accessibility_no_wifi);
@@ -1099,13 +1100,16 @@ public class NetworkController extends BroadcastReceiver {
                 }
                 switch (mWifiActivity) {
                     case WifiManager.DATA_ACTIVITY_IN:
-                        mWifiActivityIconId = R.drawable.stat_sys_wifi_in;
+                        // SPRD：MODIFY for universe_ui_support on 20130831
+                        mWifiActivityIconId = R.drawable.stat_sys_wifi_in_sprd;
                         break;
                     case WifiManager.DATA_ACTIVITY_OUT:
-                        mWifiActivityIconId = R.drawable.stat_sys_wifi_out;
+                        // SPRD：MODIFY for universe_ui_support on 20130831
+                        mWifiActivityIconId = R.drawable.stat_sys_wifi_out_sprd;
                         break;
                     case WifiManager.DATA_ACTIVITY_INOUT:
-                        mWifiActivityIconId = R.drawable.stat_sys_wifi_inout;
+                        // SPRD：MODIFY for universe_ui_support on 20130831
+                        mWifiActivityIconId = R.drawable.stat_sys_wifi_inout_sprd;
                         break;
                     case WifiManager.DATA_ACTIVITY_NONE:
                         mWifiActivityIconId = 0;

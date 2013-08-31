@@ -73,6 +73,11 @@ public class SignalClusterView
         super.onAttachedToWindow();
 
         mWifiGroup      = (ViewGroup) findViewById(R.id.wifi_combo);
+        /* SPRD：ADD for universe_ui_support on 20130831 @{ */
+        if (!mWifiVisible) {
+            mWifiGroup.setVisibility(View.GONE);
+        }
+        /* @} */
         mWifi           = (ImageView) findViewById(R.id.wifi_signal);
         mWifiActivity   = (ImageView) findViewById(R.id.wifi_inout);
         mMobileGroup    = (ViewGroup) findViewById(R.id.mobile_combo);

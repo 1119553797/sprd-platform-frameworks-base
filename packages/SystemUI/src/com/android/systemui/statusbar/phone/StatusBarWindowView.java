@@ -19,6 +19,7 @@ package com.android.systemui.statusbar.phone;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.os.SystemProperties;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -45,10 +46,22 @@ public class StatusBarWindowView extends FrameLayout
     private NotificationPanelView mNotificationPanel;
     private ScrollView mScrollView;
 
+    /* SPRD：ADD for universe_ui_support on 20130831 @{ */
+    protected boolean isUniverseSupport = false;
+    private static String universeSupportKey = "universe_ui_support";
+    private ExpandHelper mLatesExpandHelper;
+    private ExpandHelper mOngoingExpandHelper;
+    private NotificationRowLayout mLatestItems;
+    private NotificationRowLayout mOngoingItems;
+    private  boolean mCurrentIsLatestPile = true;
+    /* @} */
+
     PhoneStatusBar mService;
 
     public StatusBarWindowView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        // SPRD：ADD for universe_ui_support
+        isUniverseSupport = SystemProperties.getBoolean(universeSupportKey, false);
         setMotionEventSplittingEnabled(false);
         setWillNotDraw(!DEBUG);
     }
@@ -56,14 +69,30 @@ public class StatusBarWindowView extends FrameLayout
     @Override
     protected void onAttachedToWindow () {
         super.onAttachedToWindow();
-        latestItems = (NotificationRowLayout) findViewById(R.id.latestItems);
+        /* SPRD：ADD for universe_ui_support on 20130831 @{ */
+        if (isUniverseSupport) {
+            mLatestItems = (NotificationRowLayout)findViewById(R.id.custom_latestItems);
+            mOngoingItems = (NotificationRowLayout)findViewById(R.id.custom_ongoingItems);
+        } else {
+            latestItems = (NotificationRowLayout) findViewById(R.id.latestItems);
+        }
         mScrollView = (ScrollView) findViewById(R.id.scroll);
         mNotificationPanel = (NotificationPanelView) findViewById(R.id.notification_panel);
         int minHeight = getResources().getDimensionPixelSize(R.dimen.notification_row_min_height);
         int maxHeight = getResources().getDimensionPixelSize(R.dimen.notification_row_max_height);
-        mExpandHelper = new ExpandHelper(mContext, latestItems, minHeight, maxHeight);
-        mExpandHelper.setEventSource(this);
-        mExpandHelper.setScrollView(mScrollView);
+        if (isUniverseSupport) {
+            mLatesExpandHelper = new ExpandHelper(mContext, mLatestItems, minHeight, maxHeight);
+            mLatesExpandHelper.setEventSource(this);
+            mLatesExpandHelper.setScrollView(mScrollView);
+            mOngoingExpandHelper = new ExpandHelper(mContext, mOngoingItems, minHeight, maxHeight);
+            mOngoingExpandHelper.setEventSource(this);
+            mOngoingExpandHelper.setScrollView(mScrollView);
+        } else {
+            mExpandHelper = new ExpandHelper(mContext, latestItems, minHeight, maxHeight);
+            mExpandHelper.setEventSource(this);
+            mExpandHelper.setScrollView(mScrollView);
+        }
+        /* @} */
 
         // We really need to be able to animate while window animations are going on
         // so that activities may be started asynchronously from panel animations
@@ -89,31 +118,90 @@ public class StatusBarWindowView extends FrameLayout
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         boolean intercept = false;
-        if (mNotificationPanel.isFullyExpanded() && mScrollView.getVisibility() == View.VISIBLE) {
-            intercept = mExpandHelper.onInterceptTouchEvent(ev);
+        /* SPRD：ADD for universe_ui_support on 20130831 @{ */
+        if (isUniverseSupport) {
+            if (mCurrentIsLatestPile) {
+                if (mNotificationPanel.isFullyExpanded()
+                        && mScrollView.getVisibility() == View.VISIBLE) {
+                    intercept = mLatesExpandHelper.onInterceptTouchEvent(ev);
+                }
+                if (!intercept) {
+                    super.onInterceptTouchEvent(ev);
+                }
+                if (intercept) {
+                    MotionEvent cancellation = MotionEvent.obtain(ev);
+                    cancellation.setAction(MotionEvent.ACTION_CANCEL);
+                    mLatestItems.onInterceptTouchEvent(cancellation);
+                    cancellation.recycle();
+                }
+                return intercept;
+            } else {
+                if (mNotificationPanel.isFullyExpanded()
+                        && mScrollView.getVisibility() == View.VISIBLE) {
+                    intercept = mOngoingExpandHelper.onInterceptTouchEvent(ev);
+                }
+                if (!intercept) {
+                    super.onInterceptTouchEvent(ev);
+                }
+                if (intercept) {
+                    MotionEvent cancellation = MotionEvent.obtain(ev);
+                    cancellation.setAction(MotionEvent.ACTION_CANCEL);
+                    mOngoingItems.onInterceptTouchEvent(cancellation);
+                    cancellation.recycle();
+                }
+                return intercept;
+            }
+        } else {
+            if (mNotificationPanel.isFullyExpanded()
+                    && mScrollView.getVisibility() == View.VISIBLE) {
+                intercept = mExpandHelper.onInterceptTouchEvent(ev);
+            }
+            if (!intercept) {
+                super.onInterceptTouchEvent(ev);
+            }
+            if (intercept) {
+                MotionEvent cancellation = MotionEvent.obtain(ev);
+                cancellation.setAction(MotionEvent.ACTION_CANCEL);
+                latestItems.onInterceptTouchEvent(cancellation);
+                cancellation.recycle();
+            }
+            return intercept;
         }
-        if (!intercept) {
-            super.onInterceptTouchEvent(ev);
-        }
-        if (intercept) {
-            MotionEvent cancellation = MotionEvent.obtain(ev);
-            cancellation.setAction(MotionEvent.ACTION_CANCEL);
-            latestItems.onInterceptTouchEvent(cancellation);
-            cancellation.recycle();
-        }
-        return intercept;
+        /* @} */
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
         boolean handled = false;
-        if (mNotificationPanel.isFullyExpanded()) {
-            handled = mExpandHelper.onTouchEvent(ev);
+        /* SPRD：ADD for universe_ui_support on 20130831 @{ */
+        if (isUniverseSupport) {
+            if (mCurrentIsLatestPile) {
+                if (mNotificationPanel.isFullyExpanded()) {
+                    handled = mLatesExpandHelper.onTouchEvent(ev);
+                }
+                if (!handled) {
+                    handled = super.onTouchEvent(ev);
+                }
+                return handled;
+            } else {
+                if (mNotificationPanel.isFullyExpanded()) {
+                    handled = mOngoingExpandHelper.onTouchEvent(ev);
+                }
+                if (!handled) {
+                    handled = super.onTouchEvent(ev);
+                }
+                return handled;
+            }
+        } else {
+            if (mNotificationPanel.isFullyExpanded()) {
+                handled = mExpandHelper.onTouchEvent(ev);
+            }
+            if (!handled) {
+                handled = super.onTouchEvent(ev);
+            }
+            return handled;
         }
-        if (!handled) {
-            handled = super.onTouchEvent(ev);
-        }
-        return handled;
+        /* @} */
     }
 
     @Override
@@ -133,5 +221,14 @@ public class StatusBarWindowView extends FrameLayout
             mExpandHelper.cancel();
         }
     }
+
+    /**
+      * SPRD：set current pile @{ 
+      * param value the currentpile
+      */
+    public void setCurrentIsLatestPile(boolean value) {
+        mCurrentIsLatestPile = value;
+    }
+    /** @} */
 }
 

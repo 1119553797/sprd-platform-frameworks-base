@@ -29,6 +29,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.ImageSwitcher;
+import android.os.SystemProperties;
 
 import java.util.ArrayList;
 
@@ -166,9 +167,12 @@ public abstract class Ticker {
                     AnimationUtils.loadAnimation(context, com.android.internal.R.anim.push_up_in));
         mIconSwitcher.setOutAnimation(
                     AnimationUtils.loadAnimation(context, com.android.internal.R.anim.push_up_out));
-        mIconSwitcher.setScaleX(mIconScale);
-        mIconSwitcher.setScaleY(mIconScale);
-
+        /* SPRD：ADD for ticker icon looks smaller on uui on 20130831 @{ */
+        if (!SystemProperties.getBoolean("universe_ui_support", false)) {
+            mIconSwitcher.setScaleX(mIconScale);
+            mIconSwitcher.setScaleY(mIconScale);
+        }
+        /* @} */
         mTextSwitcher = (TextSwitcher)sb.findViewById(R.id.tickerText);
         mTextSwitcher.setInAnimation(
                     AnimationUtils.loadAnimation(context, com.android.internal.R.anim.push_up_in));

@@ -31,6 +31,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.database.ContentObserver;
@@ -49,6 +51,9 @@ import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.SystemClock;
 import android.os.UserHandle;
+import android.os.SystemProperties;
+import android.text.TextUtils;
+import android.content.res.Configuration;
 import android.provider.Settings;
 import android.service.dreams.DreamService;
 import android.service.dreams.IDreamManager;
@@ -65,6 +70,8 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.ViewPropertyAnimator;
 import android.view.ViewStub;
+import android.view.LayoutInflater;
+import android.widget.RemoteViews;
 import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
@@ -86,6 +93,7 @@ import com.android.systemui.statusbar.NotificationData;
 import com.android.systemui.statusbar.NotificationData.Entry;
 import com.android.systemui.statusbar.SignalClusterView;
 import com.android.systemui.statusbar.StatusBarIconView;
+import com.android.systemui.statusbar.phone.CloseDragHandle;
 import com.android.systemui.statusbar.policy.BatteryController;
 import com.android.systemui.statusbar.policy.BluetoothController;
 import com.android.systemui.statusbar.policy.DateView;
@@ -99,6 +107,10 @@ import com.android.systemui.statusbar.policy.Prefs;
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+
+import com.sprd.systemui.QuickSwitchLayout;
+import com.sprd.systemui.CustomClock;
+import com.sprd.systemui.CustomDateView;
 
 public class PhoneStatusBar extends BaseStatusBar {
     static final String TAG = "PhoneStatusBar";
@@ -265,6 +277,28 @@ public class PhoneStatusBar extends BaseStatusBar {
         ? new GestureRecorder("/sdcard/statusbar_gestures.dat") 
         : null;
 
+    /* SPRD：ADD for universe_ui_support on 20130831 @{ */
+    View mCustomExpanded;
+    View mCustomExpandedBottom;
+    View mCloseView;
+    View mLatestTextView;
+    View mOngoingTextView;
+    TextView mLatestView;
+    TextView mOngoingView;
+
+    // SPRD：the date time view
+    CustomDateView mCustomDateView;
+    CustomClock mCustomClock;
+
+    // SPRD：QuickSwitchLayout
+    QuickSwitchLayout mQuickSwitchLayout;
+
+    private float mCurrentFontScale = 1.0f; // SPRD：default systemm FontSize
+    private float mNotificationSwitchTextSize = 16f; // SPRD: is as same as dimen/custom_status_bar_expanded_notification_switch_text_size
+    private final Configuration mCurConfig = new Configuration();
+    private boolean mCurrentIsLatestPile = true;
+    /* @} */
+
     private int mNavigationIconHints = 0;
     private final Animator.AnimatorListener mMakeIconsInvisible = new AnimatorListenerAdapter() {
         @Override
@@ -306,6 +340,8 @@ public class PhoneStatusBar extends BaseStatusBar {
 
     @Override
     public void start() {
+        // SPRD：ADD for universe_ui_support on 20130831
+        mCurrentFontScale = getSystemFontScale();
         mDisplay = ((WindowManager)mContext.getSystemService(Context.WINDOW_SERVICE))
                 .getDefaultDisplay();
 
@@ -322,6 +358,64 @@ public class PhoneStatusBar extends BaseStatusBar {
         mIconPolicy = new PhoneStatusBarPolicy(mContext);
     }
 
+    /* SPRD：ADD for universe_ui_support on 20130831 @{ */
+    View.OnClickListener mLatestViewListener = new View.OnClickListener() {
+
+        @Override
+        public void onClick(View v) {
+            mCurrentIsLatestPile = true;
+            mStatusBarWindow.setCurrentIsLatestPile(true);
+            mExpandedContents = mLatestPile;
+            mLatestTextView.setVisibility(View.VISIBLE);
+            mOngoingTextView.setVisibility(View.GONE);
+            mStatusBarWindow.findViewById(R.id.carriergroup).setVisibility(View.VISIBLE);
+            mQuickSwitchLayout.setVisibility(View.VISIBLE);
+            mOngoingPile.setVisibility(View.GONE);
+            mLatestPile.setVisibility(View.VISIBLE);
+            mLatestView.setBackgroundResource(R.drawable.custom_notification_switch_on_sprd);
+            mOngoingView.setBackgroundResource(R.drawable.custom_notification_switch_off_sprd);
+            mLatestView.setTextColor(mContext.getResources().getColor(R.color.custom_notification_switch_on_text_color));
+            mOngoingView.setTextColor(mContext.getResources().getColor(R.color.custom_notification_switch_off_text_color));
+        }
+    };
+
+    View.OnClickListener mOngoingViewListener = new View.OnClickListener() {
+
+        @Override
+        public void onClick(View v) {
+            mCurrentIsLatestPile = false;
+            mStatusBarWindow.setCurrentIsLatestPile(false);
+            mExpandedContents = mOngoingPile;
+            mLatestTextView.setVisibility(View.GONE);
+            mOngoingTextView.setVisibility(View.VISIBLE);
+            mStatusBarWindow.findViewById(R.id.carriergroup).setVisibility(View.GONE);
+            mQuickSwitchLayout.setVisibility(View.GONE);
+            mOngoingPile.setVisibility(View.VISIBLE);
+            mLatestPile.setVisibility(View.GONE);
+            mLatestView.setBackgroundResource(R.drawable.custom_notification_switch_off_sprd);
+            mOngoingView.setBackgroundResource(R.drawable.custom_notification_switch_on_sprd);
+            mLatestView.setTextColor(mContext.getResources().getColor(R.color.custom_notification_switch_off_text_color));
+            mOngoingView.setTextColor(mContext.getResources().getColor(R.color.custom_notification_switch_on_text_color));
+        }
+    };
+
+    private void updateViewWhenLanguageChange() {
+        ((TextView) mStatusBarWindow.findViewById(R.id.latestTitletv)).setText(R.string.status_bar_expanded_notification_latest_button_text);
+        ((TextView) mStatusBarWindow.findViewById(R.id.ongoingTitletv)).setText(R.string.status_bar_expanded_notification_ongoing_button_text);
+        mLatestView.setText(R.string.status_bar_expanded_notification_latest_button_text);
+        mOngoingView.setText(R.string.status_bar_expanded_notification_ongoing_button_text);
+    }
+
+    private float getSystemFontScale() {
+        try {
+            mCurConfig.updateFrom(ActivityManagerNative.getDefault().getConfiguration());
+        } catch (RemoteException e) {
+            Log.w(TAG, "Unable to retrieve font size");
+        }
+        return mCurConfig.fontScale;
+    }
+    /* @} */
+
     // ================================================================================
     // Constructing the view
     // ================================================================================
@@ -335,8 +429,16 @@ public class PhoneStatusBar extends BaseStatusBar {
 
         mIconSize = res.getDimensionPixelSize(com.android.internal.R.dimen.status_bar_icon_size);
 
-        mStatusBarWindow = (StatusBarWindowView) View.inflate(context,
-                R.layout.super_status_bar, null);
+        /* SPRD：ADD for universe_ui_support on 20130831 @{ */
+        if (isUniverseSupport) {
+            mStatusBarWindow = (StatusBarWindowView) View.inflate(context,
+                    R.layout.custom_super_status_bar, null);
+        } else {
+            mStatusBarWindow = (StatusBarWindowView) View.inflate(context,
+                    R.layout.super_status_bar, null);
+        }
+        /* @} */
+
         mStatusBarWindow.mService = this;
         mStatusBarWindow.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -412,10 +514,21 @@ public class PhoneStatusBar extends BaseStatusBar {
         mStatusBarContents = (LinearLayout)mStatusBarView.findViewById(R.id.status_bar_contents);
         mTickerView = mStatusBarView.findViewById(R.id.ticker);
 
-        mPile = (NotificationRowLayout)mStatusBarWindow.findViewById(R.id.latestItems);
-        mPile.setLayoutTransitionsEnabled(false);
-        mPile.setLongPressListener(getNotificationLongClicker());
-        mExpandedContents = mPile; // was: expanded.findViewById(R.id.notificationLinearLayout);
+        /* SPRD：ADD for universe_ui_support on 20130831 @{ */
+        if (!isUniverseSupport) {
+            mPile = (NotificationRowLayout)mStatusBarWindow.findViewById(R.id.latestItems);
+            mPile.setLayoutTransitionsEnabled(false);
+            mPile.setLongPressListener(getNotificationLongClicker());
+        } else {
+            mOngoingPile = (NotificationRowLayout)mStatusBarWindow.findViewById(R.id.custom_ongoingItems);
+            mLatestPile = (NotificationRowLayout)mStatusBarWindow.findViewById(R.id.custom_latestItems);
+        }
+        if (!isUniverseSupport) {
+            mExpandedContents = mPile; // was: expanded.findViewById(R.id.notificationLinearLayout);
+        } else {
+            mExpandedContents = mLatestPile;
+        }
+        /* @} */
 
         mNotificationPanelHeader = mStatusBarWindow.findViewById(R.id.header);
 
@@ -424,7 +537,16 @@ public class PhoneStatusBar extends BaseStatusBar {
         mClearButton.setAlpha(0f);
         mClearButton.setVisibility(View.INVISIBLE);
         mClearButton.setEnabled(false);
-        mDateView = (DateView)mStatusBarWindow.findViewById(R.id.date);
+        /* SPRD：ADD for universe_ui_support on 20130831 @{ */
+        if (!isUniverseSupport) {
+            mDateView = (DateView)mStatusBarWindow.findViewById(R.id.date);
+        } else {
+            mCustomDateView = (CustomDateView)mStatusBarWindow.findViewById(R.id.custom_date);
+            mCustomClock = (CustomClock)mStatusBarWindow.findViewById(R.id.custom_clock);
+            mQuickSwitchLayout = (QuickSwitchLayout)mStatusBarWindow.findViewById(R.id.status_bar_qucik_switch);
+            mQuickSwitchLayout.setBackgroundDrawable(mContext.getResources().getDrawable(R.drawable.custom_default_status_expanded_bg));
+        }
+        /* @} */
 
         mHasSettingsPanel = res.getBoolean(R.bool.config_hasSettingsPanel);
         mHasFlipSettings = res.getBoolean(R.bool.config_hasFlipSettingsPanel);
@@ -478,6 +600,20 @@ public class PhoneStatusBar extends BaseStatusBar {
         TickerView tickerView = (TickerView)mStatusBarView.findViewById(R.id.tickerText);
         tickerView.mTicker = mTicker;
 
+        /* SPRD：ADD for universe_ui_support on 20130831 @{ */
+        if (isUniverseSupport) {
+            mCustomExpanded = mStatusBarWindow.findViewById(R.id.custom_expanded);
+            mCustomExpandedBottom = mStatusBarWindow.findViewById(R.id.custom_expanded_bottom);
+            mCloseView = mStatusBarWindow.findViewById(R.id.close);
+            mLatestTextView = mStatusBarWindow.findViewById(R.id.latestTitle);
+            mOngoingTextView = mStatusBarWindow.findViewById(R.id.ongoingTitle);
+            mLatestView =(TextView)mCloseView.findViewById(R.id.notification_icon);
+            mOngoingView = (TextView)mCloseView.findViewById(R.id.runapps_icon);
+            mLatestView.setOnClickListener(mLatestViewListener);
+            mOngoingView.setOnClickListener(mOngoingViewListener);
+        }
+        /* @} */
+
         mEdgeBorder = res.getDimensionPixelSize(R.dimen.status_bar_edge_ignore);
 
         // set the inital view visibility
@@ -527,13 +663,17 @@ public class PhoneStatusBar extends BaseStatusBar {
                 mNetworkController.addCombinedLabelView(mCarrierLabel);
             }
 
-            // set up the dynamic hide/show of the label
-            mPile.setOnSizeChangedListener(new OnSizeChangedListener() {
-                @Override
-                public void onSizeChanged(View view, int w, int h, int oldw, int oldh) {
-                    updateCarrierLabelVisibility(false);
-                }
-            });
+            /* SPRD：ADD for universe_ui_support on 20130831 @{ */
+            if (!isUniverseSupport) {
+                // set up the dynamic hide/show of the label
+                mPile.setOnSizeChangedListener(new OnSizeChangedListener() {
+                    @Override
+                    public void onSizeChanged(View view, int w, int h, int oldw, int oldh) {
+                        updateCarrierLabelVisibility(false);
+                    }
+                });
+            }
+            /* @} */
         }
 
         // Quick Settings (where available, some restrictions apply)
@@ -702,8 +842,15 @@ public class PhoneStatusBar extends BaseStatusBar {
     }
 
     public int getStatusBarHeight() {
+        /* SPRD：ADD for universe_ui_support on 20130831 @{ */
+        final Resources res = mContext.getResources();
+        if (isUniverseSupport) {
+            return res.getDimensionPixelSize(R.dimen.custom_status_bar_height);
+        }
+        /* @} */
         if (mNaturalBarHeight < 0) {
-            final Resources res = mContext.getResources();
+            // SPRD：REMOVE move the code to the first line
+            //final Resources res = mContext.getResources();
             mNaturalBarHeight =
                     res.getDimensionPixelSize(com.android.internal.R.dimen.status_bar_height);
         }
@@ -957,7 +1104,11 @@ public class PhoneStatusBar extends BaseStatusBar {
             }
 
             if (CLOSE_PANEL_WHEN_EMPTIED && mNotificationData.size() == 0) {
-                animateCollapsePanels();
+                /* SPRD：ADD for universe_ui_support on 20130831 @{ */
+                if (!isUniverseSupport) {
+                    animateCollapsePanels();
+                }
+                /* @} */
             }
         }
 
@@ -997,39 +1148,106 @@ public class PhoneStatusBar extends BaseStatusBar {
     }
 
     private void loadNotificationShade() {
-        if (mPile == null) return;
-
-        int N = mNotificationData.size();
-
-        ArrayList<View> toShow = new ArrayList<View>();
+        /* SPRD：ADD for universe_ui_support on 20130831 @{ */
+        if (isUniverseSupport) {
+            if (mOngoingPile == null || mLatestPile == null) return;
+        } else {
+            if (mPile == null) return;
+        }
 
         final boolean provisioned = isDeviceProvisioned();
-        // If the device hasn't been through Setup, we only show system notifications
-        for (int i=0; i<N; i++) {
-            Entry ent = mNotificationData.get(N-i-1);
-            if (!(provisioned || showNotificationEvenIfUnprovisioned(ent.notification))) continue;
-            if (!notificationIsForCurrentUser(ent.notification)) continue;
-            toShow.add(ent.row);
-        }
+        if (!isUniverseSupport) {
+            int N = mNotificationData.size();
 
-        ArrayList<View> toRemove = new ArrayList<View>();
-        for (int i=0; i<mPile.getChildCount(); i++) {
-            View child = mPile.getChildAt(i);
-            if (!toShow.contains(child)) {
-                toRemove.add(child);
+            ArrayList<View> toShow = new ArrayList<View>();
+
+            // If the device hasn't been through Setup, we only show system notifications
+            for (int i=0; i<N; i++) {
+                Entry ent = mNotificationData.get(N-i-1);
+                if (!(provisioned || showNotificationEvenIfUnprovisioned(ent.notification))) continue;
+                if (!notificationIsForCurrentUser(ent.notification)) continue;
+                toShow.add(ent.row);
+            }
+
+            ArrayList<View> toRemove = new ArrayList<View>();
+            for (int i=0; i<mPile.getChildCount(); i++) {
+                View child = mPile.getChildAt(i);
+                if (!toShow.contains(child)) {
+                    toRemove.add(child);
+                }
+            }
+
+            for (View remove : toRemove) {
+                mPile.removeView(remove);
+            }
+
+            for (int i=0; i<toShow.size(); i++) {
+                View v = toShow.get(i);
+                if (v.getParent() == null) {
+                    mPile.addView(v, i);
+                }
+            }
+        } else {
+            int ongoingN = mOngoingNotificationData.size();
+            int latestN = mLatestNotificationData.size();
+            Log.i("baiyuliang","ongoingN = " + ongoingN + ",latestN = " + latestN);
+
+            ArrayList<View> toShowOngoing = new ArrayList<View>();
+            ArrayList<View> toShowLatest = new ArrayList<View>();
+
+            for (int i=0; i<ongoingN; i++) {
+                Entry ent = mOngoingNotificationData.get(ongoingN-i-1);
+                if (!(provisioned || showNotificationEvenIfUnprovisioned(ent.notification))) continue;
+                if (!notificationIsForCurrentUser(ent.notification)) continue;
+                toShowOngoing.add(ent.row);
+            }
+
+            for (int i=0; i<latestN; i++) {
+                Entry ent = mLatestNotificationData.get(latestN-i-1);
+                if (!(provisioned || showNotificationEvenIfUnprovisioned(ent.notification))) continue;
+                if (!notificationIsForCurrentUser(ent.notification)) continue;
+                toShowLatest.add(ent.row);
+            }
+
+            ArrayList<View> toRemoveOngoing = new ArrayList<View>();
+            for (int i=0; i<mOngoingPile.getChildCount(); i++) {
+                View child = mOngoingPile.getChildAt(i);
+                if (!toShowOngoing.contains(child)) {
+                    toRemoveOngoing.add(child);
+                }
+            }
+
+            ArrayList<View> toRemoveLatest = new ArrayList<View>();
+            for (int i=0; i<mLatestPile.getChildCount(); i++) {
+                View child = mLatestPile.getChildAt(i);
+                if (!toShowLatest.contains(child)) {
+                    toRemoveLatest.add(child);
+                }
+            }
+
+            for (View remove : toRemoveOngoing) {
+                mOngoingPile.removeView(remove);
+            }
+
+            for (View remove : toRemoveLatest) {
+                mLatestPile.removeView(remove);
+            }
+
+            for (int i=0; i<toShowOngoing.size(); i++) {
+                View v = toShowOngoing.get(i);
+                if (v.getParent() == null) {
+                    mOngoingPile.addView(v, 0); // the notification shade has newest at the top
+                }
+            }
+
+            for (int i=0; i<toShowLatest.size(); i++) {
+                View v = toShowLatest.get(i);
+                if (v.getParent() == null) {
+                    mLatestPile.addView(v, 0); // the notification shade has newest at the top
+                }
             }
         }
-
-        for (View remove : toRemove) {
-            mPile.removeView(remove);
-        }
-
-        for (int i=0; i<toShow.size(); i++) {
-            View v = toShow.get(i);
-            if (v.getParent() == null) {
-                mPile.addView(v, i);
-            }
-        }
+        /* @} */
 
         if (mSettingsButton != null) {
             mSettingsButton.setEnabled(isDeviceProvisioned());
@@ -1042,26 +1260,54 @@ public class PhoneStatusBar extends BaseStatusBar {
 
         loadNotificationShade();
 
+        /* SPRD：ADD for universe_ui_support on 20130831 @{ */
         final LinearLayout.LayoutParams params
-            = new LinearLayout.LayoutParams(mIconSize + 2*mIconHPadding, mNaturalBarHeight);
+            = new LinearLayout.LayoutParams(mIconSize, mNaturalBarHeight);
 
-        int N = mNotificationData.size();
-
-        if (DEBUG) {
-            Slog.d(TAG, "refreshing icons: " + N + " notifications, mNotificationIcons=" + mNotificationIcons);
-        }
 
         ArrayList<View> toShow = new ArrayList<View>();
-
+        //add for universe_ui_support
         final boolean provisioned = isDeviceProvisioned();
         // If the device hasn't been through Setup, we only show system notifications
-        for (int i=0; i<N; i++) {
-            Entry ent = mNotificationData.get(N-i-1);
-            if (!((provisioned && ent.notification.getScore() >= HIDE_ICONS_BELOW_SCORE)
+        if (!isUniverseSupport) {
+            int N = mNotificationData.size();
+
+            if (DEBUG) {
+                Slog.d(TAG, "refreshing icons: " + N + " notifications, mNotificationIcons=" + mNotificationIcons);
+            }
+
+            for (int i=0; i<N; i++) {
+                Entry ent = mNotificationData.get(N-i-1);
+                if (!((provisioned && ent.notification.getScore() >= HIDE_ICONS_BELOW_SCORE)
                     || showNotificationEvenIfUnprovisioned(ent.notification))) continue;
-            if (!notificationIsForCurrentUser(ent.notification)) continue;
-            toShow.add(ent.icon);
+                if (!notificationIsForCurrentUser(ent.notification)) continue;
+                toShow.add(ent.icon);
+            }
+        } else {
+            int ongoingN = mOngoingNotificationData.size();
+            int latestN = mLatestNotificationData.size();
+
+            if (DEBUG) {
+                Slog.d(TAG, "refreshing ongoingN icons: " + ongoingN + " notifications, mNotificationIcons=" + mNotificationIcons);
+                Slog.d(TAG, "refreshing latestN icons: " + latestN + " notifications, mNotificationIcons=" + mNotificationIcons);
+            }
+
+            for (int i=0; i<ongoingN; i++) {
+                Entry ongoingent = mOngoingNotificationData.get(ongoingN-i-1);
+                if (!((provisioned && ongoingent.notification.getScore() >= HIDE_ICONS_BELOW_SCORE)
+                    || showNotificationEvenIfUnprovisioned(ongoingent.notification))) continue;
+                if (!notificationIsForCurrentUser(ongoingent.notification)) continue;
+                toShow.add(ongoingent.icon);
+            }
+            for (int i=0; i<latestN; i++) {
+                Entry latestent = mLatestNotificationData.get(latestN-i-1);
+                if (!((provisioned && latestent.notification.getScore() >= HIDE_ICONS_BELOW_SCORE)
+                    || showNotificationEvenIfUnprovisioned(latestent.notification))) continue;
+                if (!notificationIsForCurrentUser(latestent.notification)) continue;
+                toShow.add(latestent.icon);
+            }
         }
+        /* @} */
 
         ArrayList<View> toRemove = new ArrayList<View>();
         for (int i=0; i<mNotificationIcons.getChildCount(); i++) {
@@ -1085,6 +1331,8 @@ public class PhoneStatusBar extends BaseStatusBar {
 
     protected void updateCarrierLabelVisibility(boolean force) {
         if (!mShowCarrierInPanel) return;
+        // SPRD：ADD for universe_ui_support on 20130831
+        if (isUniverseSupport) return;
         // The idea here is to only show the carrier label when there is enough room to see it, 
         // i.e. when there aren't enough notifications to fill the panel.
         if (DEBUG) {
@@ -1127,14 +1375,25 @@ public class PhoneStatusBar extends BaseStatusBar {
 
     @Override
     protected void setAreThereNotifications() {
-        final boolean any = mNotificationData.size() > 0;
-
-        final boolean clearable = any && mNotificationData.hasClearableItems();
+        /* SPRD：ADD for universe_ui_support on 20130831 @{ */
+        boolean any = false;
+        if (!isUniverseSupport) {
+            any = mNotificationData.size() > 0;
+        } else {
+            any = mLatestNotificationData.size() > 0;
+        }
+        boolean clearable = false;
+        if (!isUniverseSupport) {
+            clearable = any && mNotificationData.hasClearableItems();
+        } else {
+            clearable = any && mLatestNotificationData.hasClearableItems();
+        }
 
         if (DEBUG) {
-            Slog.d(TAG, "setAreThereNotifications: N=" + mNotificationData.size()
+            Slog.d(TAG, "setAreThereNotifications: N=" + (isUniverseSupport ? mNotificationData.size() : mNotificationData.size())
                     + " any=" + any + " clearable=" + clearable);
         }
+        /* @} */
 
         if (mHasFlipSettings 
                 && mFlipSettingsView != null 
@@ -1365,7 +1624,15 @@ public class PhoneStatusBar extends BaseStatusBar {
         }
 
         mExpandedVisible = true;
-        mPile.setLayoutTransitionsEnabled(true);
+        /* SPRD：ADD for universe_ui_support on 20130831 @{ */
+        if (isUniverseSupport) {
+            mCustomExpanded.setVisibility(View.VISIBLE);
+            mCustomExpandedBottom.setVisibility(View.VISIBLE);
+            mLatestPile.setLayoutTransitionsEnabled(true);
+        } else {
+            mPile.setLayoutTransitionsEnabled(true);
+        }
+        /* @} */
         if (mNavigationBarView != null)
             mNavigationBarView.setSlippery(true);
 
@@ -1485,6 +1752,12 @@ public class PhoneStatusBar extends BaseStatusBar {
         if (mClearButtonAnim != null) mClearButtonAnim.cancel();
 
         mScrollView.setVisibility(View.VISIBLE);
+        /* SPRD：ADD for universe_ui_support on 20130831 @{ */
+        if (isUniverseSupport) {
+            mCustomExpanded.setVisibility(View.VISIBLE);
+            mCustomExpandedBottom.setVisibility(View.VISIBLE);
+        }
+        /* @} */
         mScrollViewAnim = start(
             startDelay(FLIP_DURATION_OUT,
                 interpolator(mDecelerateInterpolator,
@@ -1563,6 +1836,12 @@ public class PhoneStatusBar extends BaseStatusBar {
         if (mNotificationButtonAnim != null) mNotificationButtonAnim.cancel();
         if (mClearButtonAnim != null) mClearButtonAnim.cancel();
 
+        /* SPRD：ADD for universe_ui_support on 20130831 @{ */
+        if (isUniverseSupport) {
+            mCustomExpanded.setVisibility(View.GONE);
+            mCustomExpandedBottom.setVisibility(View.GONE);
+        }
+        /* @} */
         mFlipSettingsView.setVisibility(View.VISIBLE);
         mFlipSettingsView.setScaleX(0f);
         mFlipSettingsViewAnim = start(
@@ -1647,7 +1926,13 @@ public class PhoneStatusBar extends BaseStatusBar {
         }
 
         mExpandedVisible = false;
-        mPile.setLayoutTransitionsEnabled(false);
+        /* SPRD：ADD for universe_ui_support on 20130831 @{ */
+        if(isUniverseSupport) {
+            mLatestPile.setLayoutTransitionsEnabled(false);
+        } else {
+            mPile.setLayoutTransitionsEnabled(false);
+        }
+        /* @} */
         if (mNavigationBarView != null)
             mNavigationBarView.setSlippery(false);
         visibilityChanged(false);
@@ -1684,12 +1969,25 @@ public class PhoneStatusBar extends BaseStatusBar {
      * @param layerType {@link View#LAYER_TYPE_NONE} or {@link View#LAYER_TYPE_HARDWARE}
      */
     private void setPileLayers(int layerType) {
-        final int count = mPile.getChildCount();
+        /* SPRD：ADD for universe_ui_support on 20130831 @{ */
+        int count = 0;
+        if (!isUniverseSupport) {
+            count = mPile.getChildCount();
+        } else {
+            count = mLatestPile.getChildCount();
+        }
+        /* @} */
 
         switch (layerType) {
             case View.LAYER_TYPE_NONE:
                 for (int i = 0; i < count; i++) {
-                    mPile.getChildAt(i).setLayerType(layerType, null);
+                    /* SPRD：ADD for universe_ui_support on 20130831 @{ */
+                    if (!isUniverseSupport) {
+                        mPile.getChildAt(i).setLayerType(layerType, null);
+                    } else {
+                        mLatestPile.getChildAt(i).setLayerType(layerType, null);
+                    }
+                    /* @} */
                 }
                 break;
             case View.LAYER_TYPE_HARDWARE:
@@ -1704,7 +2002,14 @@ public class PhoneStatusBar extends BaseStatusBar {
                 final Rect childBounds = new Rect();
 
                 for (int i = 0; i < count; i++) {
-                    final View view = mPile.getChildAt(i);
+                    /* SPRD：ADD for universe_ui_support on 20130831 @{ */
+                    View view = null;
+                    if (!isUniverseSupport) {
+                        view = mPile.getChildAt(i);
+                    } else {
+                        view = mLatestPile.getChildAt(i);;
+                    }
+                    /* @} */
                     view.getLocationInWindow(location);
 
                     childBounds.set(location[0], location[1],
@@ -2023,6 +2328,11 @@ public class PhoneStatusBar extends BaseStatusBar {
     }
 
     public static String viewInfo(View v) {
+        /* SPRD：ADD for universe_ui_support on 20130831 @{ */
+        if (v == null) {
+            return null;
+        }
+        /* @} */
         return "[(" + v.getLeft() + "," + v.getTop() + ")(" + v.getRight() + "," + v.getBottom()
                 + ") " + v.getWidth() + "x" + v.getHeight() + "]";
     }
@@ -2063,18 +2373,47 @@ public class PhoneStatusBar extends BaseStatusBar {
         }
 
         if (DUMPTRUCK) {
-            synchronized (mNotificationData) {
-                int N = mNotificationData.size();
-                pw.println("  notification icons: " + N);
-                for (int i=0; i<N; i++) {
-                    NotificationData.Entry e = mNotificationData.get(i);
-                    pw.println("    [" + i + "] key=" + e.key + " icon=" + e.icon);
-                    StatusBarNotification n = e.notification;
-                    pw.println("         pkg=" + n.getPackageName() + " id=" + n.getId() + " score=" + n.getScore());
-                    pw.println("         notification=" + n.getNotification());
-                    pw.println("         tickerText=\"" + n.getNotification().tickerText + "\"");
+            /* SPRD：ADD for universe_ui_support on 20130831 @{ */
+            if (!isUniverseSupport) {
+                synchronized (mNotificationData) {
+                    int N = mNotificationData.size();
+                    pw.println("  notification icons: " + N);
+                    for (int i=0; i<N; i++) {
+                        NotificationData.Entry e = mNotificationData.get(i);
+                        pw.println("    [" + i + "] key=" + e.key + " icon=" + e.icon);
+                        StatusBarNotification n = e.notification;
+                        pw.println("         pkg=" + n.getPackageName() + " id=" + n.getId() + " score=" + n.getScore());
+                        pw.println("         notification=" + n.getNotification());
+                        pw.println("         tickerText=\"" + n.getNotification().tickerText + "\"");
+                    }
+                }
+            } else {
+                synchronized (mOngoingNotificationData) {
+                    int N = mOngoingNotificationData.size();
+                    pw.println("  notification icons: " + N);
+                    for (int i=0; i<N; i++) {
+                        NotificationData.Entry e = mOngoingNotificationData.get(i);
+                        pw.println("    [" + i + "] key=" + e.key + " icon=" + e.icon);
+                        StatusBarNotification n = e.notification;
+                        pw.println("         pkg=" + n.getPackageName() + " id=" + n.getId() + " score=" + n.getScore());
+                        pw.println("         notification=" + n.getNotification());
+                        pw.println("         tickerText=\"" + n.getNotification().tickerText + "\"");
+                    }
+                }
+                synchronized (mLatestNotificationData) {
+                    int N = mLatestNotificationData.size();
+                    pw.println("  notification icons: " + N);
+                    for (int i=0; i<N; i++) {
+                        NotificationData.Entry e = mLatestNotificationData.get(i);
+                        pw.println("    [" + i + "] key=" + e.key + " icon=" + e.icon);
+                        StatusBarNotification n = e.notification;
+                        pw.println("         pkg=" + n.getPackageName() + " id=" + n.getId() + " score=" + n.getScore());
+                        pw.println("         notification=" + n.getNotification());
+                        pw.println("         tickerText=\"" + n.getNotification().tickerText + "\"");
+                    }
                 }
             }
+            /* @} */
 
             int N = mStatusIcons.getChildCount();
             pw.println("  system icons: " + N);
@@ -2193,81 +2532,99 @@ public class PhoneStatusBar extends BaseStatusBar {
 
     private View.OnClickListener mClearButtonListener = new View.OnClickListener() {
         public void onClick(View v) {
-            synchronized (mNotificationData) {
-                // animate-swipe all dismissable notifications, then animate the shade closed
-                int numChildren = mPile.getChildCount();
-
-                int scrollTop = mScrollView.getScrollY();
-                int scrollBottom = scrollTop + mScrollView.getHeight();
-                final ArrayList<View> snapshot = new ArrayList<View>(numChildren);
-                for (int i=0; i<numChildren; i++) {
-                    final View child = mPile.getChildAt(i);
-                    if (mPile.canChildBeDismissed(child) && child.getBottom() > scrollTop &&
-                            child.getTop() < scrollBottom) {
-                        snapshot.add(child);
-                    }
+            /* SPRD：ADD for universe_ui_support on 20130831 @{ */
+            if (!isUniverseSupport) {
+                synchronized (mNotificationData) {
+                    cleanNotification(mPile);
                 }
-                if (snapshot.isEmpty()) {
-                    animateCollapsePanels(CommandQueue.FLAG_EXCLUDE_NONE);
-                    return;
+            } else {
+                synchronized (mLatestNotificationData) {
+                    cleanNotification(mLatestPile);
                 }
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        // Decrease the delay for every row we animate to give the sense of
-                        // accelerating the swipes
-                        final int ROW_DELAY_DECREMENT = 10;
-                        int currentDelay = 140;
-                        int totalDelay = 0;
-
-                        // Set the shade-animating state to avoid doing other work during
-                        // all of these animations. In particular, avoid layout and
-                        // redrawing when collapsing the shade.
-                        mPile.setViewRemoval(false);
-
-                        mPostCollapseCleanup = new Runnable() {
-                            @Override
-                            public void run() {
-                                if (DEBUG) {
-                                    Slog.v(TAG, "running post-collapse cleanup");
-                                }
-                                try {
-                                    mPile.setViewRemoval(true);
-                                    mBarService.onClearAllNotifications();
-                                } catch (Exception ex) { }
-                            }
-                        };
-
-                        View sampleView = snapshot.get(0);
-                        int width = sampleView.getWidth();
-                        final int dir = sampleView.isLayoutRtl() ? -1 : +1;
-                        final int velocity = dir * width * 8; // 1000/8 = 125 ms duration
-                        for (final View _v : snapshot) {
-                            mHandler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    mPile.dismissRowAnimated(_v, velocity);
-                                }
-                            }, totalDelay);
-                            currentDelay = Math.max(50, currentDelay - ROW_DELAY_DECREMENT);
-                            totalDelay += currentDelay;
-                        }
-                        // Delay the collapse animation until after all swipe animations have
-                        // finished. Provide some buffer because there may be some extra delay
-                        // before actually starting each swipe animation. Ideally, we'd
-                        // synchronize the end of those animations with the start of the collaps
-                        // exactly.
-                        mHandler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                animateCollapsePanels(CommandQueue.FLAG_EXCLUDE_NONE);
-                            }
-                        }, totalDelay + 225);
-                    }
-                }).start();
+                mClearButton.setAlpha(0.0f);
             }
+            /* @} */
         }
     };
+
+    /**
+     * SPRD： ADD for universe_ui_support on 20130831  @{
+     *
+     */
+    private void cleanNotification(final NotificationRowLayout pile) {
+        // animate-swipe all dismissable notifications, then animate the shade closed
+        int numChildren = pile.getChildCount();
+
+        int scrollTop = mScrollView.getScrollY();
+        int scrollBottom = scrollTop + mScrollView.getHeight();
+        final ArrayList<View> snapshot = new ArrayList<View>(numChildren);
+        for (int i=0; i<numChildren; i++) {
+            final View child = pile.getChildAt(i);
+            if (pile.canChildBeDismissed(child) && child.getBottom() > scrollTop &&
+                    child.getTop() < scrollBottom) {
+                snapshot.add(child);
+            }
+        }
+        if (snapshot.isEmpty()) {
+            animateCollapsePanels(CommandQueue.FLAG_EXCLUDE_NONE);
+            return;
+        }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                // Decrease the delay for every row we animate to give the sense of
+                // accelerating the swipes
+                final int ROW_DELAY_DECREMENT = 10;
+                int currentDelay = 140;
+                int totalDelay = 0;
+
+                // Set the shade-animating state to avoid doing other work during
+                // all of these animations. In particular, avoid layout and
+                // redrawing when collapsing the shade.
+                pile.setViewRemoval(false);
+
+                mPostCollapseCleanup = new Runnable() {
+                    @Override
+                    public void run() {
+                        if (DEBUG) {
+                            Slog.v(TAG, "running post-collapse cleanup");
+                        }
+                        try {
+                            pile.setViewRemoval(true);
+                            mBarService.onClearAllNotifications();
+                        } catch (Exception ex) { }
+                    }
+                };
+
+                View sampleView = snapshot.get(0);
+                int width = sampleView.getWidth();
+                final int dir = sampleView.isLayoutRtl() ? -1 : +1;
+                final int velocity = dir * width * 8; // 1000/8 = 125 ms duration
+                for (final View _v : snapshot) {
+                    mHandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            pile.dismissRowAnimated(_v, velocity);
+                        }
+                    }, totalDelay);
+                    currentDelay = Math.max(50, currentDelay - ROW_DELAY_DECREMENT);
+                    totalDelay += currentDelay;
+                }
+                // Delay the collapse animation until after all swipe animations have
+                // finished. Provide some buffer because there may be some extra delay
+                // before actually starting each swipe animation. Ideally, we'd
+                // synchronize the end of those animations with the start of the collaps
+                // exactly.
+                mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        animateCollapsePanels(CommandQueue.FLAG_EXCLUDE_NONE);
+                    }
+                }, totalDelay + 225);
+            }
+        }).start();
+    }
+    /** @} */
 
     public void startActivityDismissingKeyguard(Intent intent, boolean onlyProvisioned) {
         if (onlyProvisioned && !isDeviceProvisioned()) return;
@@ -2330,12 +2687,24 @@ public class PhoneStatusBar extends BaseStatusBar {
                 }
                 mDisplay.getSize(mCurrentDisplaySize);
 
+                /* SPRD：ADD for universe_ui_support on 20130831 @{ */
+                float getSystemFontScale = getSystemFontScale();
+                if (mCurrentFontScale != getSystemFontScale) {
+                    mCurrentFontScale = getSystemFontScale;
+                }
+                /* @} */
+
                 updateResources();
                 repositionNavigationBar();
                 updateExpandedViewPos(EXPANDED_LEAVE_ALONE);
                 updateShowSearchHoldoff();
-            }
-            else if (Intent.ACTION_SCREEN_ON.equals(action)) {
+                /* SPRD：ADD for universe_ui_support on 20130831 @{ */
+            } else if (Intent.ACTION_LOCALE_CHANGED.equals(action)){
+                if (isUniverseSupport) {
+                    updateViewWhenLanguageChange();
+                }
+            } else if (Intent.ACTION_SCREEN_ON.equals(action)) {
+                /* @} */
                 // work around problem where mDisplay.getRotation() is not stable while screen is off (bug 7086018)
                 repositionNavigationBar();
                 notifyNavigationBarScreenOn(true);
@@ -2407,11 +2776,22 @@ public class PhoneStatusBar extends BaseStatusBar {
 
         mNaturalBarHeight = res.getDimensionPixelSize(
                 com.android.internal.R.dimen.status_bar_height);
-
+        /* SPRD：ADD for universe_ui_support on 20130831 @{ */
+        if (isUniverseSupport) {
+            mNaturalBarHeight = res.getDimensionPixelSize(
+                    R.dimen.custom_status_bar_height);
+        }
+        /* @} */
         int newIconSize = res.getDimensionPixelSize(
             com.android.internal.R.dimen.status_bar_icon_size);
         int newIconHPadding = res.getDimensionPixelSize(
             R.dimen.status_bar_icon_padding);
+        /* SPRD：ADD for universe_ui_support on 20130831 @{ */
+        if (isUniverseSupport) {
+            newIconHPadding = res.getDimensionPixelSize(
+                    R.dimen.custom_status_bar_icon_padding);
+        }
+        /* @} */
 
         if (newIconHPadding != mIconHPadding || newIconSize != mIconSize) {
 //            Slog.d(TAG, "size=" + newIconSize + " padding=" + newIconHPadding);

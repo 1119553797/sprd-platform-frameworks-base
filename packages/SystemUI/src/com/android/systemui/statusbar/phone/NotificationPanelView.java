@@ -54,8 +54,15 @@ public class NotificationPanelView extends PanelView {
         super.onFinishInflate();
 
         Resources resources = getContext().getResources();
-        mHandleBar = resources.getDrawable(R.drawable.status_bar_close);
-        mHandleBarHeight = resources.getDimensionPixelSize(R.dimen.close_handle_height);
+        /* SPRD：ADD for universe_ui_support on 20130831 @{ */
+        if (!isUniverseSupport) {
+            mHandleBar = resources.getDrawable(R.drawable.status_bar_close);
+            mHandleBarHeight = resources.getDimensionPixelSize(R.dimen.close_handle_height);
+        } else {
+            mHandleBar = resources.getDrawable(R.drawable.custom_status_bar_close_on_bg_sprd);
+            mHandleBarHeight = resources.getDimensionPixelSize(R.dimen.close_handle_height);
+        }
+        /* @} */
         mHandleView = findViewById(R.id.handle);
     }
 
@@ -86,9 +93,15 @@ public class NotificationPanelView extends PanelView {
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
         if (changed) {
-            final int pl = getPaddingLeft();
-            final int pr = getPaddingRight();
-            mHandleBar.setBounds(pl, 0, getWidth() - pr, (int) mHandleBarHeight);
+            /* SPRD：ADD for universe_ui_support on 20130831 @{ */
+            if (!isUniverseSupport) {
+                final int pl = getPaddingLeft();
+                final int pr = getPaddingRight();
+                mHandleBar.setBounds(pl, 0, getWidth() - pr, (int) mHandleBarHeight);
+            } else {
+                mHandleBar.setBounds(0, 10, getWidth(), (int) mHandleBarHeight);
+            }
+            /* @} */
         }
     }
 
