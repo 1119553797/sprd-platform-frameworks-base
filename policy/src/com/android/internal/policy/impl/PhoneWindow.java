@@ -685,6 +685,8 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
         if ((wm != null) && st.isOpen) {
             if (st.decorView != null) {
                 wm.removeView(st.decorView);
+                /* SPRD: destroy decorView, we'll create a new one on next show*/
+                st.decorView = null;
                 // Log.v(TAG, "Removing main menu from window manager.");
                 if (st.isCompact) {
                     sRotationWatcher.removeWindow(this);
