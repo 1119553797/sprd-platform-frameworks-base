@@ -40,6 +40,7 @@ import android.content.pm.ServiceInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.UserInfo;
 import android.content.res.Resources;
+import android.graphics.Point;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.Environment;
@@ -1127,13 +1128,35 @@ class WallpaperManagerService extends IWallpaperManager.Stub {
         // We always want to have some reasonable width hint.
         WindowManager wm = (WindowManager)mContext.getSystemService(Context.WINDOW_SERVICE);
         Display d = wm.getDefaultDisplay();
+
+        /* SPRD: set the size of wallpapaer especially for the first time. @{*/
+        Point size = new Point();
+        d.getRealSize(size);
+        int rawWidth = size.x;
+        int rawHeight = size.y;
+        int w;
+        int h;
+        if (rawWidth < rawHeight) {
+            w = rawWidth * 2;
+            h = rawHeight;
+        } else {
+            w = rawHeight * 2;
+            h = rawWidth;
+        }
+        if (wallpaper.width < w)
+            wallpaper.width = w;
+        if (wallpaper.height < h)
+            wallpaper.height = h;
+
+        /* @orig
         int baseSize = d.getMaximumSizeDimension();
         if (wallpaper.width < baseSize) {
             wallpaper.width = baseSize;
         }
         if (wallpaper.height < baseSize) {
             wallpaper.height = baseSize;
-        }
+        }*/
+        /* @} */
     }
 
     // Called by SystemBackupAgent after files are restored to disk.
