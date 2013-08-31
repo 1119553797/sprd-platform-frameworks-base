@@ -19,5 +19,9 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Date format for display: should match the lockscreen in /policy.  -->
     <string name="system_ui_date_pattern">@*android:string/system_ui_date_pattern</string>
-
+    <!-- SPRD: ADD for universe_ui_support on 20130831 @{ -->
+    <string name="custom_status_bar_date_formatter">%2$s\n%1$s</string>
+    <string name="custom_twenty_four_hour_time_format">HH:mm</string>
+    <string name="custom_twelve_hour_time_format">h:mm a</string>
+    <!-- @} -->
 </resources>

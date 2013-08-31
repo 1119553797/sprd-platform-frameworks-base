@@ -26,6 +26,7 @@ import android.animation.TimeAnimator;
 import android.animation.TimeAnimator.TimeListener;
 import android.content.Context;
 import android.content.res.Resources;
+import android.os.SystemProperties;
 import android.util.AttributeSet;
 import android.util.Slog;
 import android.view.MotionEvent;
@@ -81,6 +82,11 @@ public class PanelView extends FrameLayout {
     private TimeAnimator mTimeAnimator;
     private ObjectAnimator mPeekAnimator;
     private FlingTracker mVelocityTracker;
+
+    /* SPRD：ADD for universe_ui_support on 20130831 @{ */
+    protected boolean isUniverseSupport = false;
+    private static String universeSupportKey = "universe_ui_support";
+    /* @} */
 
     /**
      * A very simple low-pass velocity filter for motion events; not nearly as sophisticated as
@@ -317,6 +323,10 @@ public class PanelView extends FrameLayout {
 
         mTimeAnimator = new TimeAnimator();
         mTimeAnimator.setTimeListener(mAnimationCallback);
+
+        /* SPRD：ADD for universe_ui_support on 20130831 @{ */
+        isUniverseSupport = SystemProperties.getBoolean(universeSupportKey, false);
+        /* @} */
     }
 
     private void loadDimens() {
