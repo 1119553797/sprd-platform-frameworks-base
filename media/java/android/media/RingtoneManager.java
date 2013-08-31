@@ -837,6 +837,7 @@ public class RingtoneManager {
      *            {@link #TYPE_ALARM}.
      * @return A {@link Uri} pointing to the default sound for the sound type.
      * @see #setActualDefaultRingtoneUri(Context, int, Uri)
+     * @hide
      */
     public static Uri getProfileDefaultUri(Context context, int type) {
 
