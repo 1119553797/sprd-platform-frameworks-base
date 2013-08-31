@@ -350,6 +350,7 @@ public class ActionBarView extends AbsActionBarView {
     public void setSplitActionBar(boolean splitActionBar) {
         if (mSplitActionBar != splitActionBar) {
             if (mMenuView != null) {
+                boolean isOverFlowMenuShowing = isOverflowMenuShowing();
                 final ViewGroup oldParent = (ViewGroup) mMenuView.getParent();
                 if (oldParent != null) {
                     oldParent.removeView(mMenuView);
@@ -364,6 +365,11 @@ public class ActionBarView extends AbsActionBarView {
                     mMenuView.getLayoutParams().width = LayoutParams.WRAP_CONTENT;
                 }
                 mMenuView.requestLayout();
+                /* SPRD: if overflow has shown before rotation, reshow it. @{*/
+                if (isOverFlowMenuShowing) {
+                    showOverflowMenu();
+                }
+                /* @} */
             }
             if (mSplitView != null) {
                 mSplitView.setVisibility(splitActionBar ? VISIBLE : GONE);
