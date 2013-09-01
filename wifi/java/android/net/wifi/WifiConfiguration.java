@@ -46,6 +46,11 @@ public class WifiConfiguration implements Parcelable {
     /** {@hide} */
     public static final int INVALID_NETWORK_ID = -1;
     /**
+     * SPRD: add a flag for cucc home ap
+     * {@hide}
+     */
+    public static final String homeApVarName = "home_ap";
+    /**
      * Recognized key management schemes.
      */
     public static class KeyMgmt {
@@ -279,6 +284,12 @@ public class WifiConfiguration implements Parcelable {
      * certificates and other settings associated with the EAP.
      */
     public WifiEnterpriseConfig enterpriseConfig;
+    /**
+     * SPRD: add for cucc home ap
+     * home_ap be set 1 or 0 to indicate wether the ap is home network or not
+     * @hide
+     */
+    public int home_ap;
 
     /**
      * @hide
@@ -341,6 +352,8 @@ public class WifiConfiguration implements Parcelable {
         ipAssignment = IpAssignment.UNASSIGNED;
         proxySettings = ProxySettings.UNASSIGNED;
         linkProperties = new LinkProperties();
+        // SPRD: modified for cucc
+        home_ap = -1;
     }
 
     @Override
@@ -576,6 +589,9 @@ public class WifiConfiguration implements Parcelable {
             ipAssignment = source.ipAssignment;
             proxySettings = source.proxySettings;
             linkProperties = new LinkProperties(source.linkProperties);
+
+            // SPRD: modified for cucc
+            home_ap = source.home_ap;
         }
     }
 
@@ -605,6 +621,10 @@ public class WifiConfiguration implements Parcelable {
         dest.writeString(ipAssignment.name());
         dest.writeString(proxySettings.name());
         dest.writeParcelable(linkProperties, flags);
+
+
+        // SPRD: modified for cucc
+        dest.writeInt(home_ap);
     }
 
     /** Implement the Parcelable interface {@hide} */
@@ -635,6 +655,9 @@ public class WifiConfiguration implements Parcelable {
                 config.ipAssignment = IpAssignment.valueOf(in.readString());
                 config.proxySettings = ProxySettings.valueOf(in.readString());
                 config.linkProperties = in.readParcelable(null);
+
+                // SPRD: modified for cucc
+                config.home_ap = in.readInt();
 
                 return config;
             }

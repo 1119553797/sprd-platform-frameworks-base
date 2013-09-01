@@ -1157,6 +1157,18 @@ class WifiConfigStore {
                         }
                 }
             }
+
+            /* SPRD: modified for cucc home ap @{ */
+            if (config.home_ap != -1 && !mWifiNative.setNetworkVariable(
+                    netId,
+                    WifiConfiguration.homeApVarName,
+                    Integer.toString(config.home_ap))) {
+                loge(config.SSID + ": failed to set home_ap: "
+                        +config.home_ap);
+                break setVariables;
+            }
+            /* @} */
+
             updateFailed = false;
         } //end of setVariables
 
@@ -1375,6 +1387,17 @@ class WifiConfigStore {
             } catch (NumberFormatException ignore) {
             }
         }
+
+        /* SPRD: modified for cucc home ap @{ */
+        value = mWifiNative.getNetworkVariable(netId, WifiConfiguration.homeApVarName);
+        config.home_ap = -1;
+        if (!TextUtils.isEmpty(value)) {
+            try {
+                config.home_ap = Integer.parseInt(value);
+            } catch (NumberFormatException ignore) {
+            }
+        }
+        /* @} */
 
         for (int i = 0; i < 4; i++) {
             value = mWifiNative.getNetworkVariable(netId,

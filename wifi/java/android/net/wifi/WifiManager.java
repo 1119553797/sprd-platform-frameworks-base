@@ -16,28 +16,28 @@
 
 package android.net.wifi;
 
+import java.util.List;
+import java.util.concurrent.CountDownLatch;
+
 import android.annotation.SdkConstant;
 import android.annotation.SdkConstant.SdkConstantType;
 import android.content.Context;
 import android.net.DhcpInfo;
 import android.os.Binder;
-import android.os.IBinder;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
-import android.os.RemoteException;
-import android.os.WorkSource;
 import android.os.Messenger;
+import android.os.RemoteException;
+import android.os.SystemProperties;
+import android.os.WorkSource;
 import android.util.Log;
 import android.util.SparseArray;
 
-import java.util.concurrent.CountDownLatch;
-
 import com.android.internal.util.AsyncChannel;
 import com.android.internal.util.Protocol;
-
-import java.util.List;
 
 /**
  * This class provides the primary API for managing all aspects of Wi-Fi
@@ -68,6 +68,12 @@ public class WifiManager {
      * The error code if there was a problem authenticating.
      */
     public static final int ERROR_AUTHENTICATING = 1;
+
+    /**
+     * SPRD: get the system support vesion (cmcc, cucc or normal).
+     * @hide
+     */
+    public static final String SUPPORT_VERSION =  SystemProperties.get("ro.operator");
 
     /**
      * Broadcast intent action indicating whether Wi-Fi scanning is allowed currently
