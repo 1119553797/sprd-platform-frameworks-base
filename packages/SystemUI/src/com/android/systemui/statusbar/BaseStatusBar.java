@@ -1150,10 +1150,11 @@ public abstract class BaseStatusBar extends SystemUI implements
             if (oldEntry == null) {
                 oldEntry = mLatestNotificationData.findByKey(key);
             }
-            if (oldEntry == null) {
-                Slog.w(TAG, "updateNotification for unknown key: " + key);
-                return;
-            }
+        }
+        /* SPRD：ADD to avoid NullPointerException @{ */
+        if (oldEntry == null) {
+            Slog.w(TAG, "updateNotification for unknown key: " + key);
+            return;
         }
         /* @} */
 
