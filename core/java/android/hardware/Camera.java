@@ -1673,6 +1673,20 @@ public class Camera {
         private static final String KEY_PREVIEW_FPS_RANGE = "preview-fps-range";
         private static final String KEY_PICTURE_SIZE = "picture-size";
         private static final String KEY_PICTURE_FORMAT = "picture-format";
+        /** sprd add **/
+        private static final String KEY_BRIGHTNESS = "brightness";
+        private static final String KEY_CONTRAST = "contrast";
+        private static final String KEY_ISO = "iso";
+        private static final String KEY_SATURATION = "saturation";
+        private static final String KEY_SMILE_SNAP_MODE = "smile_snap_mode";
+        private static final String KEY_SHARPNESS = "sharpness";
+        private static final String KEY_ZSL = "zsl";
+        private static final String KEY_SLOWMOTION = "slow-motion";
+        private static final String KEY_PREVIEW_ENV = "preview-env";
+        private static final String KEY_AUTO_EXPOSURE = "auto-exposure";
+        private static final String KEY_HDR_SUPPORTED = "hdr-supported";
+        private static final String KEY_ZSL_SUPPORTED = "zsl-supported";
+        /** sprd add end **/
         private static final String KEY_JPEG_THUMBNAIL_SIZE = "jpeg-thumbnail-size";
         private static final String KEY_JPEG_THUMBNAIL_WIDTH = "jpeg-thumbnail-width";
         private static final String KEY_JPEG_THUMBNAIL_HEIGHT = "jpeg-thumbnail-height";
@@ -1712,6 +1726,7 @@ public class Camera {
         private static final String KEY_SMOOTH_ZOOM_SUPPORTED = "smooth-zoom-supported";
         private static final String KEY_FOCUS_DISTANCES = "focus-distances";
         private static final String KEY_VIDEO_SIZE = "video-size";
+        private static final String KEY_VIDEO_PICTURE_SIZE = "video-picture-size";
         private static final String KEY_PREFERRED_PREVIEW_SIZE_FOR_VIDEO =
                                             "preferred-preview-size-for-video";
         private static final String KEY_MAX_NUM_DETECTED_FACES_HW = "max-num-detected-faces-hw";
@@ -1727,6 +1742,11 @@ public class Camera {
         private static final String TRUE = "true";
         private static final String FALSE = "false";
 
+        // Values for auto exposure settings.
+        public static final String AUTO_EXPOSURE_FRAME_AVG = "frame-average";
+        public static final String AUTO_EXPOSURE_CENTER_WEIGHTED = "center-weighted";
+        public static final String AUTO_EXPOSURE_SPOT_METERING = "spot-metering";
+
         // Values for white balance settings.
         public static final String WHITE_BALANCE_AUTO = "auto";
         public static final String WHITE_BALANCE_INCANDESCENT = "incandescent";
@@ -1736,8 +1756,6 @@ public class Camera {
         public static final String WHITE_BALANCE_CLOUDY_DAYLIGHT = "cloudy-daylight";
         public static final String WHITE_BALANCE_TWILIGHT = "twilight";
         public static final String WHITE_BALANCE_SHADE = "shade";
-        /** @hide */
-        private static final String KEY_ISO = "iso";
 
         // Values for color effect settings.
         public static final String EFFECT_NONE = "none";
@@ -2572,6 +2590,131 @@ public class Camera {
             return formats;
         }
 
+
+    /** sprd add */
+	public   void setBrightness(String value)
+	{
+		set(KEY_BRIGHTNESS, value);
+	}
+
+	public  String getBrightness()
+	{
+		return get(KEY_BRIGHTNESS);
+	}
+
+	public List<String> getSupportedBrightness() {
+		String str = get(KEY_BRIGHTNESS + SUPPORTED_VALUES_SUFFIX);
+		return split(str);
+	}
+
+	public   void setSlowmotion(String value)
+	{
+		set(KEY_SLOWMOTION, value);
+	}
+
+	public  String getSlowmotion()
+	{
+		return get(KEY_SLOWMOTION);
+	}
+
+	public List<String> getSupportedSlowmotion() {
+		String str = get(KEY_SLOWMOTION + SUPPORTED_VALUES_SUFFIX);
+		return split(str);
+	}
+
+	public   void setPreviewEnv(String value)
+	{
+		set(KEY_PREVIEW_ENV, value);
+	}
+
+	public   void setSharpness(String value)
+	{
+		set(KEY_SHARPNESS, value);
+	}
+
+	public  String getSharpness()
+	{
+		return get(KEY_SHARPNESS);
+	}
+
+	public List<String> getSupportedSharpness() {
+		String str = get(KEY_SHARPNESS + SUPPORTED_VALUES_SUFFIX);
+		return split(str);
+	}
+
+	public   void setAutoExposureMode(String value)
+	{
+		set(KEY_AUTO_EXPOSURE, value);
+	}
+
+	public  String getAutoExposureMode()
+	{
+		return get(KEY_AUTO_EXPOSURE);
+	}
+
+	public List<String> getSupportedAutoExposureModes() {
+		String str = get(KEY_AUTO_EXPOSURE + SUPPORTED_VALUES_SUFFIX);
+		return split(str);
+	}
+
+	public   void setContrast(String value)
+	{
+		set(KEY_CONTRAST, value);
+	}
+
+	public  String getContrast()
+	{
+		return get(KEY_CONTRAST);
+	}
+
+	public List<String> getSupportedContrast() {
+		String str = get(KEY_CONTRAST + SUPPORTED_VALUES_SUFFIX);
+		return split(str);
+	}
+
+	public   void setISO(String value)
+	{
+	        set(KEY_ISO, value);
+	}
+
+	public  String getISO()
+	{
+	        return get(KEY_ISO);
+	}
+
+	public List<String> getSupportedISO()
+	{
+	        String str = get(KEY_ISO + SUPPORTED_VALUES_SUFFIX);
+	        return split(str);
+	}
+
+	public void setSaturation(String value)
+	{
+		set(KEY_SATURATION, value);
+	}
+
+	public String getSaturation()
+	{
+		return get(KEY_SATURATION);
+	}
+
+	public List<String> getSupportedSaturation()
+	{
+		String str = get(KEY_SATURATION + SUPPORTED_VALUES_SUFFIX);
+		return split(str);
+	}
+
+        public boolean isCaptureHdrSupported() {
+            String str = get(KEY_HDR_SUPPORTED);
+            return TRUE.equals(str);
+        }
+
+        public boolean isCaptureZslSupported() {
+            String str = get(KEY_ZSL_SUPPORTED);
+            return TRUE.equals(str);
+        }
+        /** sprd add end **/
+
         private String cameraFormatForPixelFormat(int pixel_format) {
             switch(pixel_format) {
             case ImageFormat.NV16:      return PIXEL_FORMAT_YUV422SP;
@@ -2856,25 +2999,6 @@ public class Camera {
          */
         public List<String> getSupportedAntibanding() {
             String str = get(KEY_ANTIBANDING + SUPPORTED_VALUES_SUFFIX);
-            return split(str);
-        }
-
-        /** @hide */
-        public   void setISO(String value)
-        {
-            set(KEY_ISO, value);
-        }
-
-        /** @hide */
-        public  String getISO()
-        {
-            return get(KEY_ISO);
-        }
-
-	/** @hide */
-	public List<String> getSupportedISO()
-        {
-            String str = get(KEY_ISO + SUPPORTED_VALUES_SUFFIX);
             return split(str);
         }
 
