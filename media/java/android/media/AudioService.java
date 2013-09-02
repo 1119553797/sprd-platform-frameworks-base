@@ -3911,17 +3911,21 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
     private void onSetWiredDeviceConnectionState(int device, int state, String name)
     {
         synchronized (mConnectedDevices) {
-            if ((state == 0) && ((device == AudioSystem.DEVICE_OUT_WIRED_HEADSET) ||
+            /** SPRD: not change bluetooth state when wired device conn  @{ */
+            /** if ((state == 0) && ((device == AudioSystem.DEVICE_OUT_WIRED_HEADSET) ||
                     (device == AudioSystem.DEVICE_OUT_WIRED_HEADPHONE))) {
                 setBluetoothA2dpOnInt(true);
-            }
+            } */
             boolean isUsb = ((device & AudioSystem.DEVICE_OUT_ALL_USB) != 0);
+            if (!isUsb) {
+                sendDeviceConnectionIntent(device, state, name);
+            }
             handleDeviceConnection((state == 1), device, (isUsb ? name : ""));
             if (state != 0) {
-                if ((device == AudioSystem.DEVICE_OUT_WIRED_HEADSET) ||
+                /** if ((device == AudioSystem.DEVICE_OUT_WIRED_HEADSET) ||
                     (device == AudioSystem.DEVICE_OUT_WIRED_HEADPHONE)) {
                     setBluetoothA2dpOnInt(false);
-                }
+                } */
                 if ((device & mSafeMediaVolumeDevices) != 0) {
                     sendMsg(mAudioHandler,
                             MSG_CHECK_MUSIC_ACTIVE,
@@ -3932,9 +3936,7 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
                             MUSIC_ACTIVE_POLL_PERIOD_MS);
                 }
             }
-            if (!isUsb) {
-                sendDeviceConnectionIntent(device, state, name);
-            }
+            /** @} */
         }
     }
 
