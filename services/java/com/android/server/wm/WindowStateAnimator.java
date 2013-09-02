@@ -1440,6 +1440,8 @@ class WindowStateAnimator {
                         // loop, this will cause it to restart with a new
                         // layout.
                         c.mDisplayContent.layoutNeeded = true;
+                        /* SPRD: Request WMS to update window focus*/
+                        mService.mFocusMayChange = true;
                     }
                 }
             }
