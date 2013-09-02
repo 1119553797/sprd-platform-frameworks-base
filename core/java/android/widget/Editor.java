@@ -2232,12 +2232,26 @@ public class Editor {
             positionX = Math.min(displayMetrics.widthPixels - width, positionX);
             positionX = Math.max(0, positionX);
 
+            /* SPRD: dismiss selection cursor if the textView is invisible. @{*/
+            if (mTextView.getWindowVisibility() == View.VISIBLE) {
+                if (isShowing()) {
+                    mPopupWindow.update(positionX, positionY, -1, -1);
+                } else {
+                    mPopupWindow.showAtLocation(mTextView, Gravity.NO_GRAVITY, positionX, positionY);
+                }
+            } else {
+                if (isShowing())
+                    mPopupWindow.dismiss();
+            }
+
+            /* @orig
             if (isShowing()) {
                 mPopupWindow.update(positionX, positionY, -1, -1);
             } else {
                 mPopupWindow.showAtLocation(mTextView, Gravity.NO_GRAVITY,
                         positionX, positionY);
-            }
+            }*/
+            /* @} */
         }
 
         public void hide() {
