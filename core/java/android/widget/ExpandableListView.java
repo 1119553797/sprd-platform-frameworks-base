@@ -218,6 +218,7 @@ public class ExpandableListView extends ListView {
 
     // Bounds of the indicator to be drawn
     private final Rect mIndicatorRect = new Rect();
+    private int mInvisibleIndicatorGroupId = -1;
 
     public ExpandableListView(Context context) {
         this(context, null);
@@ -448,11 +449,14 @@ public class ExpandableListView extends ListView {
                 }
                 
                 // Get the indicator (with its state set to the item's state)
+                if(!(pos.position.type ==  ExpandableListPosition.GROUP
+                    && pos.position.groupPos == mInvisibleIndicatorGroupId)){
                 indicator = getIndicator(pos);
                 if (indicator != null) {
                     // Draw the indicator
                     indicator.setBounds(indicatorRect);
                     indicator.draw(canvas);
+                }
                 }
             }
             pos.recycle();
@@ -463,6 +467,12 @@ public class ExpandableListView extends ListView {
         }
     }
 
+    /**
+     * @hide
+     */
+    public void setInvisibleIndicatorGroupId(int id){
+           mInvisibleIndicatorGroupId = id;
+    }
     /**
      * Gets the indicator for the item at the given position. If the indicator
      * is stateful, the state will be given to the indicator.
