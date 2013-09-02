@@ -71,6 +71,8 @@ public class IccCardConstants {
         PUK_REQUIRED,
         NETWORK_LOCKED,
         READY,
+        BLOCKED,//SPRD: add
+        SIM_LOCKED,//SPRD: add
         NOT_READY,
         PERM_DISABLED;
 
