@@ -553,7 +553,16 @@ public abstract class ActivityManagerNative extends Binder implements IActivityM
             reply.writeNoException();
             return true;
         }
-
+        //add for change process adj
+        case SET_PROCESS_ADJ_TRANSACTION: {
+            data.enforceInterface(IActivityManager.descriptor);
+            int pid = data.readInt();
+            int adj = data.readInt();
+                boolean reset = data.readInt() != 0;
+            setProcessAdj(pid,adj, reset);
+            reply.writeNoException();
+            return true;
+        }
         case GET_CONTENT_PROVIDER_TRANSACTION: {
             data.enforceInterface(IActivityManager.descriptor);
             IBinder b = data.readStrongBinder();
@@ -1492,6 +1501,21 @@ class ActivityManagerProxy implements IActivityManager
         reply.recycle();
         return res;
     }
+
+    //add for change process adj
+    public void setProcessAdj(int pid, int adj, boolean reset) throws RemoteException
+    {
+        Parcel data = Parcel.obtain();
+        Parcel reply = Parcel.obtain();
+        data.writeInterfaceToken(IActivityManager.descriptor);
+        data.writeInt(pid);
+        data.writeInt(adj);
+	data.writeInt(reset ? 1 : 0);
+        mRemote.transact(SET_PROCESS_ADJ_TRANSACTION, data, reply, 0);
+        reply.readException();
+        data.recycle();
+        reply.recycle();
+    }	
     public Intent registerReceiver(IApplicationThread caller,
             IIntentReceiver receiver,
             IntentFilter filter, String perm) throws RemoteException
