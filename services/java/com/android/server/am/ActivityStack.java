@@ -1222,7 +1222,10 @@ final class ActivityStack {
                 }
             }
         }
-        prev.cpuTimeAtResume = 0; // reset it
+
+        /* SPRD: check prev is not null*/
+        if (prev != null)
+            prev.cpuTimeAtResume = 0; // reset it
     }
 
     /**
