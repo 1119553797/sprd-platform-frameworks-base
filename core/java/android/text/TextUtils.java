@@ -1068,8 +1068,12 @@ public class TextUtils {
                                          EllipsizeCallback callback) {
 
         final String ellipsis = (where == TruncateAt.END_SMALL) ?
-                Resources.getSystem().getString(R.string.ellipsis_two_dots) :
-                Resources.getSystem().getString(R.string.ellipsis);
+                /* SPRD: always use latin ellipsis @{*/
+                "\u2025" : "\u2026";
+                /*@orig*/
+                //Resources.getSystem().getString(R.string.ellipsis_two_dots) :
+                //Resources.getSystem().getString(R.string.ellipsis);
+                /* @} */
 
         return ellipsize(text, paint, avail, where, preserveLength, callback,
                 TextDirectionHeuristics.FIRSTSTRONG_LTR,
