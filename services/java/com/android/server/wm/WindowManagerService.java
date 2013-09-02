@@ -8555,6 +8555,13 @@ public class WindowManagerService extends IWindowManager.Stub
                             + " interesting=" + numInteresting
                             + " drawn=" + wtoken.numDrawnWindows);
                     wtoken.allDrawn = true;
+
+                    /* SPRD: set mAppAnimator.allDrawn false,
+                     * let WindowAnimator.testTokenMayBeDrawnLocked unset AppFreezing @{*/
+                    if (wtoken.mAppAnimator.allDrawn) {
+                        wtoken.mAppAnimator.allDrawn = false;
+                    }
+                    /* @} */
                 }
             }
         }
