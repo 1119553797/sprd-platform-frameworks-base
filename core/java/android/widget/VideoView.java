@@ -282,6 +282,15 @@ public class VideoView extends SurfaceView implements MediaPlayerControl ,SetCan
             MediaPlayerStateCallback(mCurrentState,mTargetState);
             mErrorListener.onError(mMediaPlayer, MediaPlayer.MEDIA_ERROR_UNKNOWN, 0);
             return;
+            /* fixed bug 209278 @{ */
+        } catch (IllegalStateException ex) {
+            Log.w(TAG, "Unable to open content: " + mUri, ex);
+            mCurrentState = STATE_ERROR;
+            mTargetState = STATE_ERROR;
+            MediaPlayerStateCallback(mCurrentState,mTargetState);
+            mErrorListener.onError(mMediaPlayer, MediaPlayer.MEDIA_ERROR_UNKNOWN, 0);
+            return;
+            /* @} */
         } catch (NullPointerException ex) {
             Log.w(TAG, "Stop when open: " + mUri, ex);
             return;
@@ -340,6 +349,15 @@ public class VideoView extends SurfaceView implements MediaPlayerControl ,SetCan
             MediaPlayerStateCallback(mCurrentState,mTargetState);
             mErrorListener.onError(mMediaPlayer, MediaPlayer.MEDIA_ERROR_UNKNOWN, 0);
             return;
+            /* fixed bug 209278 @{ */
+        } catch (IllegalStateException ex) {
+            Log.w(TAG, "Unable to open content: " + mUri, ex);
+            mCurrentState = STATE_ERROR;
+            mTargetState = STATE_ERROR;
+            MediaPlayerStateCallback(mCurrentState,mTargetState);
+            mErrorListener.onError(mMediaPlayer, MediaPlayer.MEDIA_ERROR_UNKNOWN, 0);
+            return;
+            /* @} */
         } catch (NullPointerException ex) {
             Log.w(TAG, "Stop when open: " + mUri, ex);
             return;
