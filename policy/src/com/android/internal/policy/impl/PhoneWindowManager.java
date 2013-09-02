@@ -44,6 +44,7 @@ import android.media.AudioManager;
 import android.media.IAudioService;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.FactoryTest;
 import android.os.Handler;
@@ -63,6 +64,7 @@ import android.os.Vibrator;
 import android.provider.Settings;
 import android.service.dreams.DreamService;
 import android.service.dreams.IDreamManager;
+import com.sprd.android.config.OptConfig;
 import android.util.DisplayMetrics;
 import android.util.EventLog;
 import android.util.Log;
@@ -4734,7 +4736,15 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
     void startDockOrHome() {
         awakenDreams();
-
+		/* SPRD: add for kill-stop in call incoming @{ */
+        if (Build.IS_LOWMEM_VERSION && OptConfig.KILL_FRONT_APP) {
+            try {
+                ActivityManagerNative.getDefault().startHomePre();
+            } catch (RemoteException re) {
+                // ignor
+            }
+        }
+		/* @} */
         Intent dock = createHomeDockIntent();
         if (dock != null) {
             try {
