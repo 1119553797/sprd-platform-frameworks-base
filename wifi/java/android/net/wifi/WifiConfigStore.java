@@ -1001,6 +1001,17 @@ class WifiConfigStore {
                 break setVariables;
             }
 
+            /** SPRD: Set wpa2KeyManagementExt in WifiConfiguration. @{ */
+            if (config.wpa2KeyManagementExt != null &&
+                    !mWifiNative.setNetworkVariable(
+                            netId,
+                            WifiConfiguration.wpa2KeyManagementExtVarName,
+                            config.wpa2KeyManagementExt)) {
+                loge("failed to set wpa2KeyManagementExt: " + config.wpa2KeyManagementExt);
+                break setVariables;
+            }
+            /** @} */
+
             String allowedProtocolsString =
                 makeString(config.allowedProtocols, WifiConfiguration.Protocol.strings);
             if (config.allowedProtocols.cardinality() != 0 &&
@@ -1441,6 +1452,16 @@ class WifiConfigStore {
                 }
             }
         }
+
+        /* SPRD: Set the wpa2KeyManagementExt of WifiConfiguration. @{ */
+        value = mWifiNative.getNetworkVariable(config.networkId,
+                WifiConfiguration.wpa2KeyManagementExtVarName);
+        if (!TextUtils.isEmpty(value)) {
+            config.wpa2KeyManagementExt = removeDoubleQuotes(value);
+        } else {
+            config.wpa2KeyManagementExt = null;
+        }
+        /* }@ */
 
         value = mWifiNative.getNetworkVariable(config.networkId,
                 WifiConfiguration.AuthAlgorithm.varName);
