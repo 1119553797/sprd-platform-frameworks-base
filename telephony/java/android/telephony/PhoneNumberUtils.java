@@ -2675,4 +2675,60 @@ public class PhoneNumberUtils
     }
 
     //==== End of utility methods used only in compareStrictly() =====
+    /**
+     * SPRD: exchange P & W to , & ;
+     * @hide
+     */
+    public final static String pAndwToCommaAndSemicolon(String str) {
+        if (null != str) {
+            StringBuilder strBlder = new StringBuilder();
+            int len = str.length();
+            for (int i = 0; i < len; i++) {
+                switch (str.charAt(i)) {
+                    case 'p':
+                    case 'P': {
+                    strBlder.append(PAUSE);
+                    }
+                    break;
+                    case 'w':
+                    case 'W': {
+                    strBlder.append(WAIT);
+                    }
+                    break;
+                    default:
+                    strBlder.append(str.charAt(i));
+                }
+            }
+            return strBlder.toString();
+        } else {
+            return null;
+        }
+    }
+ /**
+  * SPRD:exchange , & ; to P & W
+  * @hide
+  */
+    public final static String CommaAndSemicolonTopAndw(String str) {
+        if (null != str) {
+            StringBuilder strBlder = new StringBuilder();
+            int len = str.length();
+            for (int i = 0; i < len; i++) {
+                switch (str.charAt(i)) {
+                    case PAUSE: {
+                    strBlder.append('P');
+                    }
+                    break;
+                    case WAIT: {
+                    strBlder.append('W');
+                    }
+                    break;
+                    default:
+                    strBlder.append(str.charAt(i));
+                }
+            }
+            return strBlder.toString();
+        } else {
+            return null;
+        }
+    }
 }
