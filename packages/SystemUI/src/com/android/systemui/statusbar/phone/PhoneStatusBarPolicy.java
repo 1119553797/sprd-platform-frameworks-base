@@ -132,6 +132,16 @@ public class PhoneStatusBarPolicy {
             else if (action.equals(TtyIntent.TTY_ENABLED_CHANGE_ACTION)) {
                 updateTTY(intent);
             }
+            /* SPRD：ADD headset icon in statusbar on 20130902 @{ */
+            else if (action.equals(Intent.ACTION_HEADSET_PLUG)) {
+                int state = intent.getIntExtra("state", -1);
+                if (state == 1) {
+                    updateHeadSet(true);
+                } else {
+                    updateHeadSet(false);
+                }
+            }
+            /* @} */
         }
     };
 
@@ -148,6 +158,8 @@ public class PhoneStatusBarPolicy {
         filter.addAction(BluetoothAdapter.ACTION_CONNECTION_STATE_CHANGED);
         filter.addAction(TelephonyIntents.ACTION_SIM_STATE_CHANGED);
         filter.addAction(TtyIntent.TTY_ENABLED_CHANGE_ACTION);
+        // SPRD：ADD headset icon in statusbar on 20130902
+        filter.addAction(Intent.ACTION_HEADSET_PLUG);
         mContext.registerReceiver(mIntentReceiver, filter, null, mHandler);
 
         // storage
@@ -188,6 +200,10 @@ public class PhoneStatusBarPolicy {
         // volume
         mService.setIcon("volume", R.drawable.stat_sys_ringer_silent, 0, null);
         mService.setIconVisibility("volume", false);
+        /* SPRD：ADD headset icon in statusbar on 20130902 @{ */
+        mService.setIcon("headset", com.android.internal.R.drawable.stat_sys_headset, 0, null);
+        mService.setIconVisibility("headset", false);
+        /* @} */
         updateVolume();
     }
 
@@ -298,4 +314,13 @@ public class PhoneStatusBarPolicy {
             mService.setIconVisibility("tty", false);
         }
     }
+
+    /**
+     * SPRD： ADD headset icon in statusbar on 20130902  @{
+     * param show weather or not to show the headset icon
+     */
+    private final void updateHeadSet(boolean show) {
+        mService.setIconVisibility("headset", show);
+    }
+    /** @} */
 }
