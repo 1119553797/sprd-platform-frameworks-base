@@ -817,8 +817,16 @@ public class ConnectivityService extends IConnectivityManager.Stub {
         if (mNetTrackers[mNetworkPreference].getNetworkInfo().isConnected())
             return;
 
-        if (!mNetTrackers[mNetworkPreference].isAvailable())
+        /* SPRD:  add for CUCC case 5.1.1.1 WLAN & HSPA priority adjustment @{ */
+        //if (!mNetTrackers[mNetworkPreference].isAvailable())
+        if (!mNetTrackers[mNetworkPreference].isAvailable()) {
             return;
+        } else if(ConnectivityManager.getDefaultNetworkType(mNetworkPreference) != ConnectivityManager.TYPE_WIFI) {
+            if(!getMobileDataEnabled()) {
+                return;
+            }
+        }
+        /* @} */
 
         for (int t=0; t <= ConnectivityManager.MAX_RADIO_TYPE; t++) {
             if (t != mNetworkPreference && mNetTrackers[t] != null &&
@@ -2207,6 +2215,15 @@ public class ConnectivityService extends IConnectivityManager.Stub {
         boolean isFailover = info.isFailover();
         final NetworkStateTracker thisNet = mNetTrackers[newNetType];
         final String thisIface = thisNet.getLinkProperties().getInterfaceName();
+
+        /* SPRD: add for CUCC case 5.1.1.1 WLAN & HSPA priority adjustment @{*/
+        if(newNetType != ConnectivityManager.TYPE_WIFI &&
+                mNetworkPreference != ConnectivityManager.DEFAULT_NETWORK_PREFERENCE) {
+            mNetworkPreference = newNetType;
+            final ContentResolver cr = mContext.getContentResolver();
+            Settings.Secure.putInt(cr, Settings.Secure.NETWORK_PREFERENCE, mNetworkPreference);
+        }
+        /* @} */
 
         // if this is a default net and other default is running
         // kill the one not preferred
