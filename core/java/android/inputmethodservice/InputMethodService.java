@@ -969,7 +969,9 @@ public class InputMethodService extends AbstractInputMethodService {
             return false;
         }
         if (mInputEditorInfo != null
-                && (mInputEditorInfo.imeOptions & EditorInfo.IME_FLAG_NO_FULLSCREEN) != 0) {
+                && ((mInputEditorInfo.imeOptions & EditorInfo.IME_FLAG_NO_FULLSCREEN) != 0
+                    /* SPRD: On NoExtractUi we still want mFullscreenArea visible to show candidate view*/
+                    || (mInputEditorInfo.imeOptions & EditorInfo.IME_FLAG_NO_EXTRACT_UI) != 0)) {
             return false;
         }
         return true;
