@@ -1002,10 +1002,9 @@ public class ConnectivityService extends IConnectivityManager.Stub {
         final ArrayList<NetworkState> result = Lists.newArrayList();
         synchronized (mRulesLock) {
             for (NetworkStateTracker tracker : mNetTrackers) {
-                // SPRD : add by spreadst
-                tracker = getRealNetworkTracker(tracker);
-
                 if (tracker != null) {
+                    // SPRD: add by spreadst
+                    tracker = getRealNetworkTracker(tracker);
                     final NetworkInfo info = getFilteredNetworkInfo(tracker, uid);
                     result.add(new NetworkState(
                             info, tracker.getLinkProperties(), tracker.getLinkCapabilities()));
