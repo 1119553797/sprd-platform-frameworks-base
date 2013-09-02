@@ -45,6 +45,8 @@ public class WifiConfiguration implements Parcelable {
     public static final String hiddenSSIDVarName = "scan_ssid";
     /** {@hide} */
     public static final int INVALID_NETWORK_ID = -1;
+    /** SPRD: {@hide} */
+    public static final String wpa2KeyManagementExtVarName = "wpa2_kmgt_ext";
     /**
      * SPRD: add a flag for cucc home ap
      * {@hide}
@@ -285,6 +287,10 @@ public class WifiConfiguration implements Parcelable {
      */
     public WifiEnterpriseConfig enterpriseConfig;
     /**
+     * SPRD: Ext wpa2 flag {@hide}
+     */
+    public String wpa2KeyManagementExt;
+    /**
      * SPRD: add for cucc home ap
      * home_ap be set 1 or 0 to indicate wether the ap is home network or not
      * @hide
@@ -349,6 +355,8 @@ public class WifiConfiguration implements Parcelable {
             wepKeys[i] = null;
         }
         enterpriseConfig = new WifiEnterpriseConfig();
+        // SPRD: Initialize wpa2KeyManagementExt.
+        wpa2KeyManagementExt = null;
         ipAssignment = IpAssignment.UNASSIGNED;
         proxySettings = ProxySettings.UNASSIGNED;
         linkProperties = new LinkProperties();
@@ -429,7 +437,13 @@ public class WifiConfiguration implements Parcelable {
         if (this.preSharedKey != null) {
             sbuf.append('*');
         }
-
+        /* SPRD: Add wpa2KeyManagementExt to Buffer. @{ */
+        sbuf.append('\n');
+        if (this.wpa2KeyManagementExt != null) {
+            sbuf.append(" Wpa2KeyManagementExt: ").append(this.wpa2KeyManagementExt);
+            sbuf.append('\n');
+        }
+        /* @} */
         sbuf.append(enterpriseConfig);
         sbuf.append('\n');
 
@@ -578,6 +592,8 @@ public class WifiConfiguration implements Parcelable {
             wepTxKeyIndex = source.wepTxKeyIndex;
             priority = source.priority;
             hiddenSSID = source.hiddenSSID;
+            // SPRD:Set wpa2KeyManagementExt'value from source.
+            wpa2KeyManagementExt = source.wpa2KeyManagementExt;
             allowedKeyManagement   = (BitSet) source.allowedKeyManagement.clone();
             allowedProtocols       = (BitSet) source.allowedProtocols.clone();
             allowedAuthAlgorithms  = (BitSet) source.allowedAuthAlgorithms.clone();
@@ -615,6 +631,8 @@ public class WifiConfiguration implements Parcelable {
         writeBitSet(dest, allowedAuthAlgorithms);
         writeBitSet(dest, allowedPairwiseCiphers);
         writeBitSet(dest, allowedGroupCiphers);
+        // SPRD: Set wpa2KeyManagementExt to Parcel.
+        dest.writeString(wpa2KeyManagementExt);
 
         dest.writeParcelable(enterpriseConfig, flags);
 
@@ -650,6 +668,8 @@ public class WifiConfiguration implements Parcelable {
                 config.allowedPairwiseCiphers = readBitSet(in);
                 config.allowedGroupCiphers    = readBitSet(in);
 
+                //SPRD:Set the wpa2KeyManagementExt of config from Parcel.
+                config.wpa2KeyManagementExt = in.readString();
                 config.enterpriseConfig = in.readParcelable(null);
 
                 config.ipAssignment = IpAssignment.valueOf(in.readString());
