@@ -6948,8 +6948,11 @@ public class WindowManagerService extends IWindowManager.Stub
                                             + " startingData=" + wtoken.startingData);
                                     wtoken.startingWindow = null;
                                     wtoken.startingData = null;
-                                    abort = true;
+                                /* SPRD: abort starting-widnow once wtoken ws removed @{*/
+                                    //abort = true;
                                 }
+                                abort = true;
+                                /* @} */
                             } else {
                                 wtoken.startingView = view;
                             }
