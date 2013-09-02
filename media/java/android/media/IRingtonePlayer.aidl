@@ -27,6 +27,7 @@ interface IRingtonePlayer {
     void play(IBinder token, in Uri uri, int streamType);
     void stop(IBinder token);
     boolean isPlaying(IBinder token);
+    void setLooping(IBinder token, boolean loop); // SPRD: Enable or disable ringtone's loop playback
 
     /** Used for Notification sound playback. */
     void playAsync(in Uri uri, in UserHandle user, boolean looping, int streamType);
