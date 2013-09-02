@@ -913,6 +913,8 @@ public class NumberPicker extends LinearLayout {
                         ensureScrollWheelAdjusted();
                     }
                     onScrollStateChange(OnScrollListener.SCROLL_STATE_IDLE);
+                    /* SPRD: refresh the view*/
+                    invalidate();
                 }
                 mVelocityTracker.recycle();
                 mVelocityTracker = null;
