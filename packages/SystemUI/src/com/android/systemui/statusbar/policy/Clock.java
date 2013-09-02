@@ -16,36 +16,25 @@
 
 package com.android.systemui.statusbar.policy;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.res.Resources;
-import android.content.res.TypedArray;
-import android.graphics.Canvas;
-import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
-import android.text.Spannable;
-import android.text.SpannableStringBuilder;
-import android.text.format.DateFormat;
-import android.text.style.CharacterStyle;
-import android.text.style.ForegroundColorSpan;
-import android.text.style.RelativeSizeSpan;
-import android.text.style.RelativeSizeSpan;
-import android.text.style.StyleSpan;
-import android.util.AttributeSet;
-import android.util.Slog;
-import android.view.View;
-import android.widget.TextView;
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 import java.util.TimeZone;
 
 import libcore.icu.LocaleData;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.format.DateFormat;
+import android.text.style.CharacterStyle;
+import android.text.style.RelativeSizeSpan;
+import android.util.AttributeSet;
+import android.widget.TextView;
 
-import com.android.internal.R;
+import com.android.systemui.R;
 
 /**
  * Digital clock for the status bar.
@@ -143,11 +132,23 @@ public class Clock extends TextView {
         boolean is24 = DateFormat.is24HourFormat(context);
         LocaleData d = LocaleData.get(context.getResources().getConfiguration().locale);
 
+        /* SPRD：ADD to adjust the statusbar clock view on 20130902 @{ */
+        int res;
+        if (is24) {
+            res = R.string.expanded_twenty_four_hour_time_format;
+        } else {
+            res = R.string.expanded_twelve_hour_time_format;
+        }
+        /* @} */
+
         final char MAGIC1 = '\uEF00';
         final char MAGIC2 = '\uEF01';
 
         SimpleDateFormat sdf;
-        String format = is24 ? d.timeFormat24 : d.timeFormat12;
+        // SPRD：REMOVE because of useless
+        //String format = is24 ? d.timeFormat24 : d.timeFormat12;
+        // SPRD：ADD to adjust the statusbar clock view on 20130902
+        String format = context.getString(res);
         if (!format.equals(mClockFormatString)) {
             /*
              * Search for an unquoted "a" in the format string, so we can
@@ -201,12 +202,20 @@ public class Clock extends TextView {
                     formatted.delete(magic1, magic2+1);
                 } else {
                     if (AM_PM_STYLE == AM_PM_STYLE_SMALL) {
-                        CharacterStyle style = new RelativeSizeSpan(0.7f);
+                        // SPRD：ADD to adjust the statusbar clock view on 20130902
+                        CharacterStyle style = new RelativeSizeSpan(0.8f);
                         formatted.setSpan(style, magic1, magic2,
                                           Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
                     }
-                    formatted.delete(magic2, magic2 + 1);
-                    formatted.delete(magic1, magic1 + 1);
+                    /* SPRD：ADD to adjust the statusbar clock view on 20130902 @{ */
+                    for(int i=0;i<formatted.length();i++){
+                        char c = formatted.charAt(i);
+                        if (c == MAGIC1 || c == MAGIC2)
+                            formatted.delete(i, i + 1);
+                    }
+//                  formatted.delete(magic2, magic2 + 1);
+//                  formatted.delete(magic1, magic1 + 1);
+                    /* @} */
                 }
                 return formatted;
             }

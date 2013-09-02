@@ -67,12 +67,14 @@
 
     <style name="TextAppearance.StatusBar.Expanded" parent="@*android:style/TextAppearance.StatusBar" />
 
+    <!-- SPRD: MODIFIED to adjust the statusbar clock view on 20130902 @{ -->
     <style name="TextAppearance.StatusBar.Expanded.Clock">
-        <item name="android:textSize">32dp</item>
+        <item name="android:textSize">20dp</item>
         <item name="android:fontFamily">sans-serif-light</item>
         <item name="android:textStyle">normal</item>
         <item name="android:textColor">#ffffff</item>
     </style>
+    <!-- @} -->
 
     <style name="TextAppearance.StatusBar.Expanded.Date">
         <item name="android:textSize">12dp</item>

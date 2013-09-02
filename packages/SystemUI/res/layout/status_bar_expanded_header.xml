@@ -35,15 +35,17 @@
         android:background="@drawable/ic_notify_button_bg"
         android:enabled="false"
         >
+        <!-- SPRD: MODIFIED to adjust the statusbar clock view on 20130902 @{ -->
         <com.android.systemui.statusbar.policy.Clock
             android:id="@+id/clock"
-            android:layout_width="wrap_content"
+            android:layout_width="100dip"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:singleLine="true"
             android:textAppearance="@style/TextAppearance.StatusBar.Expanded.Clock"
             android:layout_centerVertical="true"
             />
+        <!-- @} -->
 
         <com.android.systemui.statusbar.policy.DateView android:id="@+id/date"
             android:layout_width="wrap_content"
