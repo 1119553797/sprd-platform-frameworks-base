@@ -59,6 +59,8 @@ class ProcessRecord {
     int curAdj;                 // Current OOM adjustment for this process
     int setAdj;                 // Last set OOM adjustment for this process
     static final int TMP_CUR_ADJ_DEFAULT = 100;
+    int tmpCurRawAdj = TMP_CUR_ADJ_DEFAULT; // Set by application to change it's oom_adj tempropraly
+    int tmpCurAdj = TMP_CUR_ADJ_DEFAULT;    // Set by application to change it's oom_adj tempropraly	
     static final int TMP_FIX_ADJ_DEFAULT = 1000;
      int fixAdj = TMP_FIX_ADJ_DEFAULT;        
     int curSchedGroup;          // Currently desired scheduling class

@@ -139,6 +139,8 @@ public interface IActivityManager extends IInterface {
     public boolean moveActivityTaskToBack(IBinder token, boolean nonRoot) throws RemoteException;
     public void moveTaskBackwards(int task) throws RemoteException;
     public int getTaskForActivity(IBinder token, boolean onlyRoot) throws RemoteException;
+    //add for change process adj
+    public void setProcessAdj(int pid, int adj, boolean reset) throws RemoteException;
     public void finishOtherInstances(IBinder token, ComponentName className) throws RemoteException;
     /* oneway */
     public void reportThumbnail(IBinder token,
@@ -531,4 +533,5 @@ public interface IActivityManager extends IInterface {
     int NEW_URI_PERMISSION_OWNER_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+115;
     int GRANT_URI_PERMISSION_FROM_OWNER_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+116;
     int REVOKE_URI_PERMISSION_FROM_OWNER_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+117;
+    int SET_PROCESS_ADJ_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+200;
 }

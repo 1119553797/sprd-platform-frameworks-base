@@ -8501,7 +8501,8 @@ public final class ActivityManagerService extends ActivityManagerNative
             ProcessRecord capp = cit.next();
             if (!capp.persistent && capp.thread != null
                     && capp.pid != 0
-                    && capp.pid != MY_PID) {
+                    && capp.pid != MY_PID
+                    && capp.tmpCurAdj == ProcessRecord.TMP_CUR_ADJ_DEFAULT) {
                 Slog.e(TAG, "Kill " + capp.processName
                         + " (pid " + capp.pid + "): provider " + cpr.info.name
                         + " in dying process " + proc.processName);
@@ -9931,7 +9932,29 @@ public final class ActivityManagerService extends ActivityManagerNative
             Binder.restoreCallingIdentity(origId);
         }
     }
-
+    // Used by application to change it's oom_adj tempropraly
+    public void setProcessAdj(int pid, int adj, boolean reset) {
+        for (int j = mLruProcesses.size() - 1; j >= 0; j--) {
+            ProcessRecord app = mLruProcesses.get(j);
+	    int def = ProcessRecord.TMP_CUR_ADJ_DEFAULT;
+            if (app.pid == pid) {
+                if(reset) {
+                    app.curAdj = app.tmpCurAdj;
+                    app.curRawAdj = app.tmpCurRawAdj;
+                    app.tmpCurAdj = def;
+                    app.tmpCurRawAdj = def;
+                } else {
+                    if (adj < -1) adj = -1;
+                    if (adj == def) adj = def - 1;
+                    app.tmpCurAdj = app.curAdj;
+                    app.tmpCurRawAdj = app.curRawAdj;
+                    app.curAdj = adj;
+                    app.curRawAdj = adj;
+                }
+                break;
+            }
+        }
+    }
     public void updateServiceForegroundLocked(ProcessRecord proc, boolean oomAdj) {
         boolean anyForeground = false;
         for (ServiceRecord sr : proc.services) {
