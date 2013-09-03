@@ -3593,7 +3593,16 @@ public final class ActivityThread {
                         r.mPendingRemoveWindow = v;
                         r.mPendingRemoveWindowManager = wm;
                     } else {
-                        wm.removeViewImmediate(v);
+                        // SPRD: add exception catch for monkey test exception @{
+                        // when run mokey, app com.android.magicsmoke appear IllegalArgumentException
+                        // @orig
+                        //     wm.removeViewImmediate(v);
+                        try {
+                            wm.removeViewImmediate(v);
+                        } catch (IllegalArgumentException ex) {
+                            Slog.v(TAG, "Remove view failed when handle destroy activity!", ex);
+                        }
+                        // @}
                     }
                 }
                 if (wtoken != null && r.mPendingRemoveWindow == null) {
