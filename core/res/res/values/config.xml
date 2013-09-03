@@ -1150,5 +1150,11 @@
     <string-array name="config_disabledUntilUsedPreinstalledImes" translatable="false">
         <item>com.android.inputmethod.latin</item>
     </string-array>
-
+    <string-array translatable="false" name="numeric_to_operator_names">
+        <item>46000=中国移动</item>
+        <item>46001=中国联通</item>
+        <item>46002=中国移动</item>
+        <item>46003=中国电信</item>
+        <item>46007=中国移动</item>
+    </string-array>
 </resources>
