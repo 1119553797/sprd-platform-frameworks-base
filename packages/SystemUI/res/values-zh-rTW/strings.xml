@@ -215,4 +215,14 @@
     <string name="status_bar_expanded_notification_latest_button_text" >通知消息</string>
     <string name="status_bar_expanded_notification_ongoing_button_text" >正在運行</string>
     <!-- @} -->
+
+    <!-- SPRD: add for cmcc wifi case @{ -->
+    <string name="weak_signal_title">信號弱</string>
+    <string name="weak_signal_message">當前WLAN的信號較弱，建議您選擇信號較好的無線存取點</string>
+    <string name="auto_connect">不再詢問，總是自動連接其他信任無線存取點</string>
+    <string name="mobile_data_connect_disable">否</string>
+    <string name="mobile_data_connect_enable">是</string>
+    <string name="network_disconnect_title">通知</string>
+    <string name="network_disconnect_message">WLAN網絡已經斷開。\n通過3G網絡進行連接? \n如果您沒有訂購數據業務套餐，將會產生一些費用</string>
+    <!-- @} -->
 </resources>

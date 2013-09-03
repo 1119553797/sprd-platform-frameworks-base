@@ -2258,6 +2258,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             }
             /* @} */
 
+            /* SPRD: Modify for CMCC case: set the defaut value for WIFI_AUTO_CONNECT @{ */
+            loadBooleanSetting(stmt, Settings.Global.WIFI_AUTO_CONNECT,
+                    R.bool.def_wifi_auto_connect);
+            /* @} */
+
             // --- New global settings start here
         } finally {
             if (stmt != null) stmt.close();

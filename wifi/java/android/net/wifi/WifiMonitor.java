@@ -86,6 +86,9 @@ public class WifiMonitor {
     private static final String WPS_OVERLAP_STR = "WPS-OVERLAP-DETECTED";
     private static final String WPS_TIMEOUT_STR = "WPS-TIMEOUT";
 
+    // SPRD: add for cmcc wifi feature
+    private static final String EVENT_SCAN_RESULTS_AVAILABLE_POPUP = "SCAN_RESULTS_AVAILABLE_POPUP";
+
     /**
      * Names of events from wpa_supplicant (minus the prefix). In the
      * format descriptions, * &quot;<code>x</code>&quot;
@@ -398,6 +401,24 @@ public class WifiMonitor {
                     } else if (eventStr.startsWith(HOST_AP_EVENT_PREFIX_STR)) {
                         handleHostApEvents(eventStr);
                     }
+                    /* SPRD: add for cmcc wifi features @{ */
+                    else if (eventStr.contains(EVENT_SCAN_RESULTS_AVAILABLE_POPUP)) {
+                        String ssid = "";
+                        int networkId = -1;
+                        if(eventStr.length() > EVENT_SCAN_RESULTS_AVAILABLE_POPUP.length()) {
+                            String[] connectInfo = (eventStr.substring(EVENT_SCAN_RESULTS_AVAILABLE_POPUP.length())).trim().split(" ");
+                            if(connectInfo.length >= 2) {
+                                networkId = Integer.parseInt(connectInfo[0]);
+                                ssid = connectInfo[1];
+                            }
+                        }
+                        Log.d(TAG,"networkId = " + networkId);
+                        Log.d(TAG,"ssid = " + ssid);
+                        if(!("".equals(ssid))) {
+                            WifiStateMachine.notifyMobileToWlanEvent(ssid,networkId);
+                        }
+                    }
+                    /* @} */
                     continue;
                 }
 

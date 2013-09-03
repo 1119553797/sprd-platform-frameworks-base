@@ -1233,4 +1233,16 @@ public final class WifiService extends IWifiManager.Stub {
             return (mMulticasters.size() > 0);
         }
     }
+
+    /** SPRD: add for cmcc wifi feature @{ */
+    public void setAutoConnect(boolean autoconnect){
+        enforceChangePermission();
+        mWifiStateMachine.setAutoConnect(autoconnect);
+    }
+
+    public boolean setMobileToWifiPolicy(int policy) {
+        enforceChangePermission();
+        return mWifiStateMachine.setMobileToWifiPolicy(policy);
+    }
+    /** @} */
 }

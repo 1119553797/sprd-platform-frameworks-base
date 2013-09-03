@@ -1634,6 +1634,19 @@ public final class Settings {
 
 
         /**
+         * SPRD: add for cmcc feature @{
+         * @hide
+         */
+        public static final String MOBILE_TO_WLAN_POLICY = "mobile_to_wlan_policy";
+        /** @hide */
+        public static final int MOBILE_TO_WLAN_POLICY_AUTO = 0;
+        /** @hide */
+        public static final int MOBILE_TO_WLAN_POLICY_MANUAL = 1;
+        /** @hide */
+        public static final int MOBILE_TO_WLAN_POLICY_POPUP = 2;
+        /** @} */
+
+        /**
          * Determines whether remote devices may discover and/or connect to
          * this device.
          * <P>Type: INT</P>
@@ -2380,7 +2393,8 @@ public final class Settings {
             SIP_CALL_OPTIONS,
             SIP_RECEIVE_CALLS,
             POINTER_SPEED,
-            VIBRATE_WHEN_RINGING
+            VIBRATE_WHEN_RINGING,
+            MOBILE_TO_WLAN_POLICY      // SPRD: add for cmcc feature
         };
 
         // Settings moved to Settings.Secure
@@ -2745,6 +2759,7 @@ public final class Settings {
             MOVED_TO_GLOBAL.add(Settings.Global.WIFI_SUSPEND_OPTIMIZATIONS_ENABLED);
             MOVED_TO_GLOBAL.add(Settings.Global.WIFI_WATCHDOG_ON);
             MOVED_TO_GLOBAL.add(Settings.Global.WIFI_WATCHDOG_POOR_NETWORK_TEST_ENABLED);
+            MOVED_TO_GLOBAL.add(Settings.Global.WIFI_AUTO_CONNECT); //SPRD add for cmcc wifi feature
             MOVED_TO_GLOBAL.add(Settings.Global.WIMAX_NETWORKS_AVAILABLE_NOTIFICATION_ON);
             MOVED_TO_GLOBAL.add(Settings.Global.PACKAGE_VERIFIER_ENABLE);
             MOVED_TO_GLOBAL.add(Settings.Global.PACKAGE_VERIFIER_TIMEOUT);
@@ -4910,6 +4925,14 @@ public final class Settings {
                "wifi_watchdog_poor_network_test_enabled";
 
        /**
+        * SPRD: add for cmcc case
+        * Whether the wifi is auto connect. Feature is enabled by default and
+        * the setting needs to be set to 0 to disable it.
+        * @hide
+        */
+       public static final String WIFI_AUTO_CONNECT = "wifi_auto_connect";
+
+       /**
         * Setting to turn on suspend optimizations at screen off on Wi-Fi. Enabled by default and
         * needs to be set to 0 to disable it.
         * @hide
@@ -5512,6 +5535,8 @@ public final class Settings {
             WIFI_NETWORKS_AVAILABLE_REPEAT_DELAY,
             WIFI_WATCHDOG_POOR_NETWORK_TEST_ENABLED,
             WIFI_NUM_OPEN_NETWORKS_KEPT,
+            // SPRD: add for cmcc wifi feature
+            WIFI_AUTO_CONNECT,
             EMERGENCY_TONE,
             CALL_AUTO_RETRY,
             DOCK_AUDIO_MEDIA_ENABLED

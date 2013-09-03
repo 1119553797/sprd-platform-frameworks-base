@@ -189,7 +189,10 @@ public class WifiStateMachine extends StateMachine {
     // Wakelock held during wifi start/stop and driver load/unload
     private PowerManager.WakeLock mWakeLock;
 
-    private Context mContext;
+    /* SPRD: changed for cmcc feature */
+    //private Context mContext;
+    private static Context mContext;
+    /* @} */
 
     private final Object mDhcpResultsLock = new Object();
     private DhcpResults mDhcpResults;
@@ -2969,6 +2972,13 @@ public class WifiStateMachine extends StateMachine {
                     break;
                 case WifiMonitor.NETWORK_DISCONNECTION_EVENT:
                     if (DBG) log("Network connection lost");
+                    /* SPRD: add for cmcc wifi feature */
+                    SupplicantState mSupplicantState = mWifiInfo.getSupplicantState();
+                    if("cmcc".equals(WifiManager.SUPPORT_VERSION) && (mSupplicantState == SupplicantState.COMPLETED)) {
+                        Intent interruptIntent = new Intent(WifiManager.ACTION_WLAN_DISCONNECT);
+                        interruptIntent.putExtra("xtra_networkInfo", mWifiInfo);
+                        mContext.sendBroadcast(interruptIntent);
+                    }
                     handleNetworkDisconnect();
                     transitionTo(mDisconnectedState);
                     break;
@@ -3781,4 +3791,20 @@ public class WifiStateMachine extends StateMachine {
         msg.arg2 = srcMsg.arg2;
         return msg;
     }
+
+    /** SPRD: add for cmcc wifi feature @{*/
+    public void setAutoConnect(boolean autoconnect){
+        mWifiNative.setAutoConnectCommand(autoconnect);
+    }
+    public boolean setMobileToWifiPolicy(int policy){
+        return mWifiNative.setMobileToWifiPolicy(policy);
+    }
+    static void notifyMobileToWlanEvent(String ssid,int networkId) {
+       Intent mIntent = new Intent(WifiManager.ACTION_MOBLIE_TO_WLAN);
+       mIntent.addFlags(Intent.FLAG_RECEIVER_REGISTERED_ONLY_BEFORE_BOOT);
+       mIntent.putExtra("ssid", ssid);
+       mIntent.putExtra("networkid", networkId);
+       mContext.sendBroadcast(mIntent);
+   }
+    /** @} */
 }

@@ -110,5 +110,10 @@ interface IWifiManager
     String getConfigFile();
 
     void captivePortalCheckComplete();
+
+    /** SPRD: add wifi api for cmcc feature @{ */
+    void setAutoConnect(boolean autoconnect);
+    boolean setMobileToWifiPolicy(int policy);
+    /** @} */
 }
 
