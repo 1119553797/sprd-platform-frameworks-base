@@ -94,6 +94,8 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
     /** SPRD : add new parameters @{ */
     private MediaPlayer.OnSeekCompleteListener mOnSeekCompleteListener;
     private MediaPlayer.OnVideoSizeChangedListener mOnVideoSizeChangedListener;
+    private String scheme;
+    private boolean mIsStream=false;
     /** @} */
 
     public VideoView(Context context) {
@@ -216,6 +218,10 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
      */
     public void setVideoURI(Uri uri, Map<String, String> headers) {
         mUri = uri;
+        /** SPRD : new method @{ */
+        scheme = mUri.getScheme();
+        mIsStream=isStream();
+        /** @} */
         mHeaders = headers;
         mSeekWhenPrepared = 0;
         openVideo();
@@ -355,7 +361,14 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
                     // we need), so we won't get a "surface changed" callback, so
                     // start the video here instead of in the callback.
                     if (mTargetState == STATE_PLAYING) {
-                        start();
+                        /** SPRD : new method @{ */
+                        Log.d(TAG,"mIsStream AA "+mIsStream);
+                        Log.d(TAG, " seekToPosition AA " +seekToPosition);
+                        if(!mIsStream ||seekToPosition==0){
+                            start();
+                        }
+//                        start();
+                        /** @} */
                         if (mMediaController != null) {
                             mMediaController.show();
                         }
@@ -371,7 +384,15 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
                 // We don't know the video size yet, but should start anyway.
                 // The video size might be reported to us later.
                 if (mTargetState == STATE_PLAYING) {
-                    start();
+                    /** SPRD : new method @{ */
+//                    start();
+                    Log.d(TAG,"onPrepared BB");
+                    Log.d(TAG,"mIsStream BB "+mIsStream);
+                    Log.d(TAG, " seekToPosition BB " +seekToPosition);
+                    if(!mIsStream ||seekToPosition==0){
+                        start();
+                    }
+                    /** @} */
                 }
             }
         }
@@ -459,6 +480,14 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
             if (mOnSeekCompleteListener != null) {
                 mOnSeekCompleteListener.onSeekComplete(mMediaPlayer);
             }
+            /** SPRD : new method @{ */
+            if(mIsStream){
+                if (mTargetState == STATE_PLAYING) {
+                    Log.d(TAG,"onSeekComplete and start()");
+                    start();
+                }
+            }
+            /** @} */
         }
     };
 
@@ -742,6 +771,15 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
     public void setChannelVolume(float left, float right) {
         if (mMediaPlayer != null) {
             mMediaPlayer.setVolume(left, right);
+        }
+    }
+
+    private boolean isStream(){
+        if ("http".equalsIgnoreCase(scheme) || "rtsp".equalsIgnoreCase(scheme)) {
+            Log.d(TAG,"isStream");
+            return true;
+        }else{
+            return false;
         }
     }
     /** @} */
