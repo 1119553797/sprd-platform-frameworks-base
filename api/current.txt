@@ -31060,6 +31060,7 @@ package android.widget {
     method public boolean isPlaying();
     method public boolean isStopPlaybackCompleted();
     method public void pause();
+    method public void resize(boolean);
     method public int resolveAdjustedSize(int, int);
     method public void resume();
     method public void seekTo(int);
