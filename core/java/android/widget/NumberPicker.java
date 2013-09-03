@@ -1980,6 +1980,11 @@ public class NumberPicker extends LinearLayout {
                     return filtered;
                 }
             } else {
+                /* SPRD: remove last selection command @{*/
+                if(mSetSelectionCommand != null) {
+                    removeCallbacks(mSetSelectionCommand);
+                }
+                /* @} */
                 CharSequence filtered = String.valueOf(source.subSequence(start, end));
                 if (TextUtils.isEmpty(filtered)) {
                     return "";
