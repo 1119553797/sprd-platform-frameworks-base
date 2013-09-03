@@ -854,10 +854,24 @@ public abstract class ViewGroup extends View implements ViewParent, ViewManager 
             return this;
         }
 
-        if (mFocused != null) {
+        // SPRD: Only the descendant of this ViewGroup can get focus
+        if (mFocused != null && isDescendant(this, mFocused)) {
             return mFocused.findFocus();
         }
         return null;
+    }
+
+    /**
+     * SPRD: Check wether the view is a descendant of the viewGroup
+     *
+     * @return true if the view is a descendant of the viewGroup
+     */
+    private boolean isDescendant(ViewGroup viewGroup, View view) {
+        ViewParent parent = view.getParent();
+        while (parent != null && parent != viewGroup && parent instanceof View) {
+            parent = ((View) parent).getParent();
+        }
+        return parent == viewGroup;
     }
 
     /**
