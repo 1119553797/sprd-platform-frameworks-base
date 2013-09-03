@@ -75,6 +75,17 @@ public class WifiManager {
      */
     public static final String SUPPORT_VERSION =  SystemProperties.get("ro.operator");
 
+    /** SPRD: add for cmcc wifi features */
+    /** @hide */
+    public static final String ACTION_MOBLIE_TO_WLAN = "action.mobile.to.wlan";
+    /** @hide */
+    public static final String ACTION_WLAN_DISCONNECT = "action.wifi.ap.disconnect";
+    /** @hide */
+    public static final String ERROR_ACTION = "android.net.wifi.ERROR";
+    /** @hide */
+    public static final String EXTRA_ERROR_CODE = "errorCode";
+    /**@} */
+
     /**
      * Broadcast intent action indicating whether Wi-Fi scanning is allowed currently
      * @hide
@@ -235,6 +246,12 @@ public class WifiManager {
      * @hide
      */
     public static final int WIFI_AP_STATE_FAILED = 14;
+
+    /**
+     * SPRD: WPA auth:pre-shared key may be incorrect
+     * @hide
+     */
+    public static final int WPA_SUPPLICANT_KEY_INCORRECT = 15;
 
     /**
      * Broadcast intent action indicating that a connection to the supplicant has
@@ -2023,6 +2040,38 @@ public class WifiManager {
             }
         } finally {
             super.finalize();
+        }
+    }
+    /**
+     * SPRD: add wifi api for cmcc wifi feature
+     * @param autoconnect The type of connect user set
+     * @return the commond result
+     * @hide
+     */
+    public boolean setAutoConnect(boolean autoconnect){
+        try {
+            mService.setAutoConnect(autoconnect);
+            return true;
+        } catch (RemoteException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
+     * SPRD: add wifi api for cmcc wifi feature
+     * @param policy The type of policy user want
+     * @return the commond result
+     * @hide
+     */
+    public boolean setMobileToWifiPolicy (int policy) {
+        try {
+            return mService.setMobileToWifiPolicy(policy);
+        } catch (RemoteException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return false;
         }
     }
 }

@@ -803,4 +803,13 @@ public class WifiNative {
         // Note: optional feature on the driver. It is ok for this to fail.
         doBooleanCommand("DRIVER MIRACAST " + mode);
     }
+
+    /** SPRD: add for cmcc wifi feature */
+    public boolean setAutoConnectCommand(boolean autoconnect) {
+        return doBooleanCommand(autoconnect ? "CONNECT_MODE 1" : "CONNECT_MODE 0");
+    }
+    public boolean setMobileToWifiPolicy(int policy) {
+        return doBooleanCommand("MOBILE2WLAN_POLICY "+policy);
+    }
+    /** @} */
 }

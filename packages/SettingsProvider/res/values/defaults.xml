@@ -22,9 +22,9 @@
     <bool name="def_airplane_mode_on">false</bool>
     <!-- Comma-separated list of bluetooth, wifi, and cell. -->
     <string name="def_airplane_mode_radios" translatable="false">cell,bluetooth,wifi,nfc,wimax</string>
-    <!-- SPRD: modified for makesure bluetooth should process airplane mode action -->
+    <!-- SPRD: modified for makesure bluetooth wifi should process airplane mode action -->
     <!-- <string name="airplane_mode_toggleable_radios" translatable="false">bluetooth,wifi,nfc</string> -->
-    <string name="airplane_mode_toggleable_radios" translatable="false">wifi,nfc</string>
+    <string name="airplane_mode_toggleable_radios" translatable="false">nfc</string>
     <bool name="def_auto_time">true</bool>
     <bool name="def_auto_time_zone">true</bool>
     <bool name="def_accelerometer_rotation">true</bool>
@@ -174,4 +174,7 @@
 
     <!-- SPRD: add Default value of default_input_method  -->
     <string name="config_default_input_method" translatable="false"></string>
+
+    <!-- SPRD: add Default value of def_wifi_auto_connect -->
+    <bool name="def_wifi_auto_connect">true</bool>
 </resources>

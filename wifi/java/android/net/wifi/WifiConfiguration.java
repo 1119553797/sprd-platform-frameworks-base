@@ -74,10 +74,25 @@ public class WifiConfiguration implements Parcelable {
           */
         public static final int WPA2_PSK = 4;
 
+        /**
+         * SPRD: WAPI pre-shared key (requires {@code preSharedKey} to be specified).
+         * @hide
+         */
+        public static final int WAPI_PSK = 5;
+
+        /**
+         * SPRD: WAPI certificate to be specified.
+         * @hide
+         */
+        public static final int WAPI_CERT = 6;
+
         public static final String varName = "key_mgmt";
 
         public static final String[] strings = { "NONE", "WPA_PSK", "WPA_EAP", "IEEE8021X",
-                "WPA2_PSK" };
+                "WPA2_PSK"
+                // SPRD: Add for WAPI
+                , "WAPI_PSK", "WAPI_CERT"
+        };
     }
 
     /**

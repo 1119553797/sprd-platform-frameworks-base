@@ -16,14 +16,27 @@
 
 package com.android.systemui.statusbar.policy;
 
+import java.io.FileDescriptor;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Resources;
+import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.wifi.ScanResult;
 import android.net.wifi.WifiConfiguration;
+import android.net.wifi.WifiConfiguration.KeyMgmt;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.net.wimax.WimaxManagerConstants;
@@ -32,29 +45,31 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
+import android.provider.Downloads;
 import android.provider.Settings;
 import android.telephony.PhoneStateListener;
 import android.telephony.ServiceState;
 import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.util.Slog;
 import android.view.View;
+import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.android.internal.app.IBatteryStats;
 import com.android.internal.telephony.IccCardConstants;
+import com.android.internal.telephony.PhoneFactory;
 import com.android.internal.telephony.TelephonyIntents;
 import com.android.internal.telephony.cdma.EriInfo;
 import com.android.internal.util.AsyncChannel;
 import com.android.server.am.BatteryStatsService;
 import com.android.systemui.R;
-
-import java.io.FileDescriptor;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
 
 public class NetworkController extends BroadcastReceiver {
     // debug
@@ -169,6 +184,25 @@ public class NetworkController extends BroadcastReceiver {
     // yuck -- stop doing this here and put it in the framework
     IBatteryStats mBatteryStats;
 
+    /** SPRD: add for cmcc feature @{ */
+    static final int SECURITY_NONE = 0;
+    static final int SECURITY_WEP = 1;
+    static final int SECURITY_PSK = 2;
+    static final int SECURITY_EAP = 3;
+    static final int SECURITY_WAPI_PSK = 4;
+    static final int SECURITY_WAPI_CERT = 5;
+
+    private int mIndex = 0;
+    private AlertDialog weakSignalDialog = null;
+    private AlertDialog wlan2MobileDialog = null;
+    private ConnectivityManager mConnectivityManager;
+    private static String WHERE = "(" + Downloads.Impl.COLUMN_STATUS + " > '"+(Downloads.Impl.STATUS_PENDING - 1)
+        + "') AND (" + Downloads.Impl.COLUMN_STATUS + " < '" + (Downloads.Impl.STATUS_WAITING_FOR_NETWORK + 1) + "')";
+    private Timer timer;
+    private TimerTask timerTask;
+    /** @} */
+
+
     public interface SignalCluster {
         void setWifiIndicators(boolean visible, int strengthIcon, int activityIcon,
                 String contentDescription);
@@ -223,6 +257,8 @@ public class NetworkController extends BroadcastReceiver {
 
         // wifi
         mWifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+        // SPRD: add for cmcc feature
+        mConnectivityManager = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
         Handler handler = new WifiHandler();
         mWifiChannel = new AsyncChannel();
         Messenger wifiMessenger = mWifiManager.getWifiServiceMessenger();
@@ -234,6 +270,7 @@ public class NetworkController extends BroadcastReceiver {
         IntentFilter filter = new IntentFilter();
         filter.addAction(WifiManager.RSSI_CHANGED_ACTION);
         filter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
+        filter.addAction(WifiManager.ACTION_WLAN_DISCONNECT); // SPRD: add for cmcc feature
         filter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
         filter.addAction(TelephonyIntents.ACTION_SIM_STATE_CHANGED);
         filter.addAction(TelephonyIntents.SPN_STRINGS_UPDATED_ACTION);
@@ -423,6 +460,18 @@ public class NetworkController extends BroadcastReceiver {
             updateWimaxState(intent);
             refreshViews();
         }
+        /* SPRD: add for cmcc feature @{ */
+        else if (action.equals(WifiManager.ACTION_WLAN_DISCONNECT)) {
+            WifiInfo mWifiInfo = (WifiInfo) intent.getExtra("xtra_networkInfo");
+            if (Settings.Secure.getInt(mContext.getContentResolver(),
+                    Settings.Global.WIFI_AUTO_CONNECT,0) == 0) {
+                showDialog(mWifiInfo);
+             }
+             if (requireShowDisconnDialog(mWifiInfo,true)) {
+                 wlan2MobileDialog();
+             }
+        }
+        /* @} */
     }
 
 
@@ -1539,4 +1588,235 @@ public class NetworkController extends BroadcastReceiver {
         }
     }
 
+    /* SPRD: add for cmcc wifi feature */
+    private void showDialog(WifiInfo mWifiInfo) {
+        final List<WifiConfiguration> otherConfigs = availableApConfigs(mWifiInfo);
+
+        final String []otherTrustSsids = getAvailableSsids(otherConfigs);
+        if(otherTrustSsids == null) return;
+        View warningView = View.inflate(mContext, R.layout.weak_signal_warning, null);
+
+        final ListView mList = (ListView)warningView.findViewById(R.id.trusted_list);
+        mList.setOnItemClickListener(new OnItemClickListener(){
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                mIndex = position;
+            }
+        });
+
+        ArrayAdapter<?> mArrayAdapter = new ArrayAdapter<Object>(mContext,
+                android.R.layout.simple_list_item_single_choice,
+                android.R.id.text1, otherTrustSsids);
+        mList.setAdapter(mArrayAdapter);
+        mList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        mList.setItemChecked(mIndex, true);
+
+        AlertDialog.Builder weakSignalDialogBuilder = new AlertDialog.Builder(mContext);
+        weakSignalDialogBuilder.setCancelable(true);
+        weakSignalDialogBuilder.setView(warningView);
+        weakSignalDialogBuilder.setTitle(R.string.weak_signal_title);
+        weakSignalDialogBuilder.setIcon(android.R.drawable.ic_dialog_alert);
+        weakSignalDialogBuilder.setPositiveButton(android.R.string.ok,
+            new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    mWifiManager.connect(otherConfigs.get(mIndex), null);
+                }
+        });
+        weakSignalDialogBuilder.setNegativeButton(android.R.string.cancel, null);
+        weakSignalDialog = weakSignalDialogBuilder.create();
+        weakSignalDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+        weakSignalDialog.show();
+    }
+
+    static String removeDoubleQuotes(String string) {
+        int length = string.length();
+        if ((length > 1) && (string.charAt(0) == '"')
+                && (string.charAt(length - 1) == '"')) {
+            return string.substring(1, length - 1);
+        }
+        return string;
+    }
+
+    private List<WifiConfiguration> availableApConfigs(WifiInfo mWifiInfo) {
+
+        List<ScanResult> results = mWifiManager.getScanResults();
+        if (results == null || results.size() == 0) {
+            return null;
+        }
+
+        final List<WifiConfiguration> configs = mWifiManager.getConfiguredNetworks();
+        if(configs == null) {
+            return null;
+        }
+
+        List<WifiConfiguration> availableConfigs = new ArrayList<WifiConfiguration>();
+        for(WifiConfiguration config : configs) {
+            for(ScanResult result : results) {
+                if((config.networkId != mWifiInfo.getNetworkId()) &&
+                        config.SSID != null &&
+                        (removeDoubleQuotes(config.SSID)).equals(result.SSID) &&
+                        getSecurity(config) == getSecurity(result)) {
+                    availableConfigs.add(config);
+                    Log.d(TAG, "availableApConfigs add: " + config.SSID);
+                    break;
+                }
+            }
+        }
+
+        return availableConfigs;
+    }
+
+    private String[] getAvailableSsids(List<WifiConfiguration> configs) {
+        if (configs.size() <= 0) {
+            return null;
+        }
+        String[] filterSsids = new String[configs.size()];
+        int num = 0;
+        for (WifiConfiguration config : configs) {
+            filterSsids[num++] = removeDoubleQuotes(config.SSID);
+        }
+        return filterSsids;
+    }
+
+    private int getSecurity(WifiConfiguration config) {
+        if (config.allowedKeyManagement.get(KeyMgmt.WPA_PSK)) {
+            return SECURITY_PSK;
+        }
+        if (config.allowedKeyManagement.get(KeyMgmt.WPA_EAP) ||
+                config.allowedKeyManagement.get(KeyMgmt.IEEE8021X)) {
+            return SECURITY_EAP;
+        }
+        for (int i = 0; i < config.wepKeys.length; i++) {
+            if (config.wepKeys[i] != null)
+                return SECURITY_WEP;
+        }
+        if (config.allowedKeyManagement.get(KeyMgmt.WAPI_PSK)) {
+            return SECURITY_WAPI_PSK;
+        }
+        if (config.allowedKeyManagement.get(KeyMgmt.WAPI_CERT)) {
+            return SECURITY_WAPI_CERT;
+        }
+        return SECURITY_NONE;
+    }
+
+    private int getSecurity(ScanResult result) {
+        if (result.capabilities.contains("WAPI-PSK")) {
+            return SECURITY_WAPI_PSK;
+        } else if (result.capabilities.contains("WAPI-CERT")) {
+            return SECURITY_WAPI_CERT;
+        } else if (result.capabilities.contains("WEP")) {
+            return SECURITY_WEP;
+        } else if (result.capabilities.contains("PSK")) {
+            return SECURITY_PSK;
+        } else if (result.capabilities.contains("EAP")) {
+            return SECURITY_EAP;
+        }
+        return SECURITY_NONE;
+    }
+
+    private void wlan2MobileDialog() {
+       if (wlan2MobileDialog != null && wlan2MobileDialog.isShowing()) {
+           return;
+       }
+
+       NetworkInfo info = mConnectivityManager.getActiveNetworkInfo();
+       if (info != null && info.getType() == ConnectivityManager.TYPE_MOBILE) {
+           return;
+       }
+
+       mConnectivityManager.setMobileDataEnabled(false);
+       int phoneId = 0;
+       if (PhoneFactory.isMultiSim()) {
+           phoneId = TelephonyManager.getDefaultDataPhoneId(mContext);
+       }
+       TelephonyManager mTeleMgr = (TelephonyManager) mContext.getSystemService(PhoneFactory
+               .getServiceName(Context.TELEPHONY_SERVICE, phoneId));
+
+       if (mTeleMgr.getDataState() != TelephonyManager.DATA_DISCONNECTED) {
+           startTimer();
+       } else {
+           showWifiDisconnDialog();
+       }
+    }
+
+    private void showWifiDisconnDialog() {
+        final boolean mMobileDateStatus = mConnectivityManager.getMobileDataEnabled();
+        AlertDialog.Builder b = new AlertDialog.Builder(mContext);
+        b.setCancelable(true);
+        b.setTitle(R.string.network_disconnect_title);
+        b.setMessage(R.string.network_disconnect_message);
+        b.setPositiveButton(R.string.mobile_data_connect_enable,
+            new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    mConnectivityManager.setMobileDataEnabled(true);
+                }
+        });
+        b.setNegativeButton(R.string.mobile_data_connect_disable,
+            new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    mConnectivityManager.setMobileDataEnabled(mMobileDateStatus);
+                    mContext.sendBroadcast(new Intent("android.download.spstoptask"));
+                }
+        });
+        wlan2MobileDialog = b.create();
+        wlan2MobileDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+        wlan2MobileDialog.show();
+    }
+
+    private boolean requireShowDisconnDialog(WifiInfo mWifiInfo,boolean isDisconnect) {
+        if (isDisconnect) {
+            if(availableApConfigs(mWifiInfo) != null && availableApConfigs(mWifiInfo).size() != 0) {
+                return false;
+            }
+        }
+
+        boolean isDownload = false;
+        Cursor cursor = mContext.getContentResolver().query(Downloads.Impl.ALL_DOWNLOADS_CONTENT_URI,
+                new String[]{Downloads.Impl._ID}, WHERE, null, null);
+        if(cursor != null) {
+            if(cursor.moveToNext()) {
+                isDownload = true;
+            }
+            cursor.close();
+        }
+        return isDownload;
+    }
+
+    private void startTimer() {
+       closeTimer();
+       timer = new Timer(true);
+       timerTask = new TimerTask() {
+           public void run() {
+               mHandler.sendEmptyMessage(0);
+            }
+        };
+        timer.schedule(timerTask, 4000);
+    }
+
+    private void closeTimer() {
+        if (timerTask != null) {
+            timerTask.cancel();
+            timerTask = null;
+        }
+        if (timer != null) {
+            timer.cancel();
+            timer.purge();
+            timer = null;
+        }
+    }
+
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+
+            switch (msg.what) {
+                case 0:
+                    showWifiDisconnDialog();
+                    break;
+                default:
+                    //TODO:
+                    break;
+            }
+        }
+    };
+    /** @} */
 }
