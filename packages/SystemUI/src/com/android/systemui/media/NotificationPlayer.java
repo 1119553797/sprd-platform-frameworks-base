@@ -20,6 +20,7 @@ import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
+import android.media.AudioManager.OnAudioFocusChangeListener;
 import android.net.Uri;
 import android.os.Looper;
 import android.os.PowerManager;
@@ -40,6 +41,16 @@ public class NotificationPlayer implements OnCompletionListener {
     private static final int PLAY = 1;
     private static final int STOP = 2;
     private static final boolean mDebug = false;
+
+    /** SPRD: add AudioFocusChangeListener @{ */
+    OnAudioFocusChangeListener mAudioFocusListener = new OnAudioFocusChangeListener() {
+        public void onAudioFocusChange(int focusChange) {
+            if (focusChange < 0) {
+                stop();
+            }
+        }
+    };
+    /** @} */
 
     private static final class Command {
         int code;
@@ -91,10 +102,12 @@ public class NotificationPlayer implements OnCompletionListener {
                                 if (mAudioManagerWithAudioFocus == null) {
                                     if (mDebug) Log.d(mTag, "requesting AudioFocus");
                                     if (mCmd.looping) {
-                                        audioManager.requestAudioFocus(null, mCmd.stream,
+                                        // SPRD: Add listener
+                                        audioManager.requestAudioFocus(mAudioFocusListener, mCmd.stream,
                                                 AudioManager.AUDIOFOCUS_GAIN);
                                     } else {
-                                        audioManager.requestAudioFocus(null, mCmd.stream,
+                                        // SPRD: Add listener
+                                        audioManager.requestAudioFocus(mAudioFocusListener, mCmd.stream,
                                                 AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK);
                                     }
                                     mAudioManagerWithAudioFocus = audioManager;
@@ -191,7 +204,8 @@ public class NotificationPlayer implements OnCompletionListener {
                         mPlayer = null;
                         synchronized(mQueueAudioFocusLock) {
                             if (mAudioManagerWithAudioFocus != null) {
-                                mAudioManagerWithAudioFocus.abandonAudioFocus(null);
+                                // SPRD: Abandon listener
+                                mAudioManagerWithAudioFocus.abandonAudioFocus(mAudioFocusListener);
                                 mAudioManagerWithAudioFocus = null;
                             }
                         }
@@ -224,7 +238,8 @@ public class NotificationPlayer implements OnCompletionListener {
         synchronized(mQueueAudioFocusLock) {
             if (mAudioManagerWithAudioFocus != null) {
                 if (mDebug) Log.d(mTag, "onCompletion() abandonning AudioFocus");
-                mAudioManagerWithAudioFocus.abandonAudioFocus(null);
+                // SPRD: Abandon listener
+                mAudioManagerWithAudioFocus.abandonAudioFocus(mAudioFocusListener);
                 mAudioManagerWithAudioFocus = null;
             } else {
                 if (mDebug) Log.d(mTag, "onCompletion() no need to abandon AudioFocus");
