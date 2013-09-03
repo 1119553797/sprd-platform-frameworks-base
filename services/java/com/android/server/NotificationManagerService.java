@@ -95,6 +95,7 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 
 import libcore.io.IoUtils;
+import android.media.MediaPlayer;
 
 
 /** {@hide} */
@@ -1802,6 +1803,20 @@ public class NotificationManagerService extends INotificationManager.Stub
                            Settings.System.NOTIFICATION_SOUND) != null;
                 } else if (notification.sound != null) {
                     soundUri = notification.sound;
+                    /** SPRD: use MediaPlayer's setDataSource() method to check the file's existency @{ */
+                    MediaPlayer player = null;
+                    try {
+                        player = new MediaPlayer();
+                        player.setDataSource(soundUri.toString());
+                    } catch (Exception ex) {
+                        Slog.d(TAG, "default notification will be used");
+                        soundUri = Settings.System.DEFAULT_NOTIFICATION_URI;
+                    } finally {
+                        if (player != null) {
+                           player.release();
+                        }
+                    }
+                    /** @} */
                     hasValidSound = (soundUri != null);
                 }
 
