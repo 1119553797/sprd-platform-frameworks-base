@@ -105,6 +105,7 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
     private int mTargetHeight;
     private int mWinWidth;
     private int mWinHeight;
+    private boolean isPlaying = false;
     /** @} */
 
     public VideoView(Context context) {
@@ -306,6 +307,7 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
 
     public void stopPlayback() {
         if (mMediaPlayer != null) {
+            isPlaying = false;//SPRD: add for playing
             mMediaPlayer.stop();
             mMediaPlayer.release();
             mMediaPlayer = null;
@@ -387,6 +389,7 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
     MediaPlayer.OnVideoSizeChangedListener mSizeChangedListener =
         new MediaPlayer.OnVideoSizeChangedListener() {
         public void onVideoSizeChanged(MediaPlayer mp, int width, int height) {
+            isPlaying = true;//SPRD: add for playing
             mVideoWidth = mp.getVideoWidth();
             mVideoHeight = mp.getVideoHeight();
             /** SPRD : new method @{ */
@@ -752,6 +755,7 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
     @Override
     public void start() {
         if (isInPlaybackState()) {
+            isPlaying = true;//SPRD: add for playing
             mMediaPlayer.start();
             mCurrentState = STATE_PLAYING;
         }
@@ -762,6 +766,7 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
     public void pause() {
         if (isInPlaybackState()) {
             if (mMediaPlayer.isPlaying()) {
+                isPlaying = false;//SPRD: add for playing
                 mMediaPlayer.pause();
                 mCurrentState = STATE_PAUSED;
             }
@@ -770,6 +775,7 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
     }
 
     public void suspend() {
+        isPlaying = false;//SPRD: add for playing
         release(false);
     }
 
@@ -796,6 +802,11 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
 
     @Override
     public void seekTo(int msec) {
+        Log.d(TAG,"seekTo() msec="+msec);
+        Log.d(TAG,"seekTo() isInPlaybackState="+isInPlaybackState());
+        if(isStream()){
+            isPlaying = false;//SPRD: add for playing
+        }
         if (isInPlaybackState()) {
             mMediaPlayer.seekTo(msec);
             mSeekWhenPrepared = 0;
@@ -896,6 +907,10 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
         getHolder().setFixedSize(targetWidth, targetHeight);
         mTargetWidth = targetWidth;
         mTargetHeight = targetHeight;
+    }
+
+    public boolean isPlay() {
+        return isPlaying;
     }
     /** @} */
 }
