@@ -167,8 +167,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 // SPRD: add home-key pressed interface
 import com.android.internal.policy.impl.PhoneWindowManager;
-// SPRD: add for kill-stop in call incoming
-import static com.sprd.android.config.OptConfig.KILL_FRONT_APP;
 
 public final class ActivityManagerService  extends ActivityManagerNative
         implements Watchdog.Monitor, BatteryStatsImpl.BatteryCallback {
@@ -6183,86 +6181,6 @@ public final class ActivityManagerService  extends ActivityManagerNative
             Binder.restoreCallingIdentity(origId);
         }
     }
-
-    /**
-	 * add for kill-stop in call incoming. @{
-     * Incall,kill stop the front app func: 1 stop the front app ; 0 continue
-     * the stopped app; 2 Incall screen is displayed,remove the killstop timeout
-     * msg
-     * 
-     * @hide
-     */
-    public void killStopFrontApp(int func) {
-        if (!Build.IS_LOWMEM_VERSION) {
-            Slog.w(TAG, "is not lowmem version,will not killStop the front app,just return.");
-            return;
-        }
-
-        if (mIsKillStop && func == 1) {
-            Slog.w(TAG,
-                    "other thread is already call killStopFrontApp,return.");
-            return;
-        }
-
-        // mIsInCall = (func == 1) ? true : ((func == 0) ? false : true);
-
-        if (func == ActivityManager.KILL_STOP_FRONT_APP
-                && mMainStack.mResumedActivity != null
-                && (mMainStack.mResumedActivity.app.info.flags & (ApplicationInfo.FLAG_SYSTEM)) == 0
-                && !mMainStack.mResumedActivity.isHomeActivity) {
-            mIsKillStop = true;
-            int pid = mMainStack.mResumedActivity.app.pid;
-            Slog.w(TAG, "KILL_STOP_FRONT_APP.activity="
-                    + mMainStack.mResumedActivity.packageName + " pid=" + pid);
-		if(mMainStack.mResumedActivity.packageName.contains("FishGame") ||        //
-			mMainStack.mResumedActivity.packageName.contains("GloftAsphalt5")  //
-			&& pid > 0)
-		{
-			Slog.w(TAG, "kill "+mMainStack.mResumedActivity.packageName);
-			Process.sendSignal(pid, Process.SIGNAL_KILL);
-		} else if (pid > 0) {
-                boolean hasBackApp = false;
-                if (KILL_FRONT_APP) {
-                    for (int i = mLruProcesses.size() - 1; i >= 0; i--) {
-                        ProcessRecord pr = mLruProcesses.get(i);
-                        if (pr.thread != null &&
-                                (pr.curAdj >= ProcessList.HOME_APP_ADJ)) {
-                            hasBackApp = true;
-                            break;
-                        }
-                    }
-                    if (!hasBackApp) {
-                        Slog.w(TAG, "kill the front app anyway");
-                        Process.killProcessQuiet(pid);
-                        return;
-                    }
-                }
-                mStopingPid = pid;
-                //Process.sendSignal(pid, Process.SIGNAL_STOP);
-
-                if (!mHandler.hasMessages(KILL_STOP_TIMEOUT)) {
-                    Slog.w(TAG, "send kill_stop_timeout");
-                    Message msg = mHandler.obtainMessage(KILL_STOP_TIMEOUT);
-                    mHandler.sendMessageDelayed(msg, KILL_STOP_TIMEOUT_DELAY);
-                }
-            }
-        } else if (func == ActivityManager.KILL_CONT_STOPPED_APP) {
-            mIsKillStop = false;
-            Slog.w(TAG, "KILL_CONT_STOPPED_APP.mStopingPid=" + mStopingPid);
-            if (mStopingPid > 0) {
-                //Process.sendSignal(mStopingPid, Process.SIGNAL_CONT);
-                mHandler.removeMessages(KILL_STOP_TIMEOUT);
-                mStopingPid = -1;
-            }
-        } else if (func == ActivityManager.CANCEL_KILL_STOP_TIMEOUT) {
-            // Incall Screen is displayed,remove msg
-            Slog.w(TAG, "CANCEL_KILL_STOP_TIMEOUT,mStopingPid=" + mStopingPid);
-            mHandler.removeMessages(KILL_STOP_TIMEOUT);
-        } else {
-            Slog.w(TAG, "mResumeActivity is null or app is system app");
-        }
-    }
-	/** @} */
 
     /**
      * Moves an activity, and all of the other activities within the same task, to the bottom
@@ -15178,40 +15096,4 @@ public final class ActivityManagerService  extends ActivityManagerNative
         return PhoneWindowManager.mIsHomeKeyPressed.getAndSet(false);
     }
     /* @} */
-
-	/* SPRD: add for kill-stop in call incoming 
-	 */
-    //decide whether to kill front app or not
-    public void startHomePre() {
-        if (!Build.IS_LOWMEM_VERSION || !KILL_FRONT_APP) {
-            return;
-        }
-
-        if (mMainStack.mResumedActivity == null
-                || (mMainStack.mResumedActivity.app.info.flags & (ApplicationInfo.FLAG_SYSTEM)) != 0
-                || mMainStack.mResumedActivity.isHomeActivity) {
-            return;
-        }
-        boolean hasBackApp = false;
-        boolean hasHome = false;
-        for (int i = mLruProcesses.size() - 1; i >= 0; i--) {
-            ProcessRecord pr = mLruProcesses.get(i);
-            if (pr.thread != null) {
-               if(pr.curAdj >= ProcessList.HOME_APP_ADJ){
-			if (pr.curAdj == ProcessList.HOME_APP_ADJ){
-				hasHome = true;
-			}else{
-				hasBackApp = true;
-			}
-		}
-            }
-            if (hasHome && hasBackApp) break;
-        }
-
-        if (!hasHome && !hasBackApp) {
-            Slog.w(TAG, "kill front app pid=" + mMainStack.mResumedActivity.app.pid);
-            Process.killProcessQuiet(mMainStack.mResumedActivity.app.pid);
-        }
-    }
-	/** @} */
 }
