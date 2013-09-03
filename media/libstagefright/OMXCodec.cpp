@@ -17,7 +17,6 @@
 //#define LOG_NDEBUG 0
 #define LOG_TAG "OMXCodec"
 #include <utils/Log.h>
-#include <cutils/properties.h>
 
 #include "include/AACDecoder.h"
 #ifdef BUILD_SPRD_AAC
@@ -1688,17 +1687,6 @@ status_t OMXCodec::allocateBuffersOnPort(OMX_U32 portIndex) {
     OMX_PARAM_PORTDEFINITIONTYPE def;
     InitOMXParams(&def);
     def.nPortIndex = portIndex;
-
-    char buffer[128];
-    char value[PROPERTY_VALUE_MAX];
-
-    CODEC_LOGI("kill launcher for using pmem.");
-    property_get("persist.sys.launcher", value, "0");
-    if (strcmp(value, "0")) {
-       sprintf(buffer, "slogctl exec busybox killall %s", value);
-       system(buffer);
-       usleep(50000);
-    }
 
     status_t err = mOMX->getParameter(
             mNode, OMX_IndexParamPortDefinition, &def, sizeof(def));
