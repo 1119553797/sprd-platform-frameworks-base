@@ -54,6 +54,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.os.RemoteException;
 import android.os.ServiceManager;
+import android.os.SystemProperties;
 import android.util.AndroidRuntimeException;
 import android.util.DisplayMetrics;
 import android.util.EventLog;
@@ -178,6 +179,8 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
 
     private boolean mAlwaysReadCloseOnTouchAttr = false;
     
+    private boolean mHasFloatKeyView = SystemProperties.getBoolean("ro.floatkey.show", false);
+
     private ContextMenuBuilder mContextMenu;
     private MenuDialogHelper mContextMenuHelper;
     private boolean mClosingActionMenu;
@@ -531,7 +534,6 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
 
     private void openPanel(PanelFeatureState st, KeyEvent event) {
         // System.out.println("Open panel: isOpen=" + st.isOpen);
-
         // Already open, return
         if (st.isOpen || isDestroyed()) {
             return;
@@ -645,7 +647,6 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
         }
 
         lp.windowAnimations = st.windowAnimations;
-        
         wm.addView(st.decorView, lp);
         // Log.v(TAG, "Adding main menu to window manager.");
     }
@@ -860,6 +861,13 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
                     }
                 }
             }
+
+            /* SPRD: If we have float keys, don't play sound effect here,
+             * the FloatKeyView will do it. @{*/
+            if (mHasFloatKeyView) {
+                playSoundEffect = false;
+            }
+            /*@}*/
 
             if (playSoundEffect) {
                 AudioManager audioManager = (AudioManager) getContext().getSystemService(
