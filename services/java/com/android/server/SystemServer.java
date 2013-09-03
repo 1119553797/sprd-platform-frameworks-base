@@ -39,6 +39,7 @@ import android.os.StrictMode;
 import android.os.SystemClock;
 import android.os.SystemProperties;
 import android.os.UserHandle;
+import android.sim.SimManagerService;
 import android.service.dreams.DreamService;
 import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
@@ -294,7 +295,17 @@ class ServerThread extends Thread {
             } catch (Throwable e) {
                 Slog.e(TAG, "Failure starting Account Manager", e);
             }
-
+            /**
+             * SPRD:
+             * @{
+             */
+            try {
+                Slog.i(TAG, "Sim Manager");
+                ServiceManager.addService("sim_manager",
+                        new SimManagerService(context));
+            } catch (Throwable e) {
+                Slog.e(TAG, "Failure starting Sim Manager", e);
+            }
             try {
                 Slog.i(TAG, "Theme Manager");
                 ServiceManager.addService(Context.THEME_SERVICE,
@@ -302,7 +313,9 @@ class ServerThread extends Thread {
             } catch (Throwable e) {
                 Slog.e(TAG, "Failure starting Theme Manager", e);
             }
-
+            /**
+             * @}
+             */
             Slog.i(TAG, "Content Manager");
             contentService = ContentService.main(context,
                     factoryTest == SystemServer.FACTORY_TEST_LOW_LEVEL);
