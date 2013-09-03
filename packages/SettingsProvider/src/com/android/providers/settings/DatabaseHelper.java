@@ -1982,6 +1982,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
             loadIntegerSetting(stmt, Settings.System.POINTER_SPEED,
                     R.integer.def_pointer_speed);
+
+            /* SPRD: Add for sms validity setting. @{ */
+            for (int phoneid = 0; phoneid < TelephonyManager.getPhoneCount(); phoneid ++) {
+                loadStringSetting(stmt, Settings.System.SMS_VALIDITY_SIM + phoneid,
+                        R.integer.def_sms_validity);
+            }
+            /* @} */
         } finally {
             if (stmt != null) stmt.close();
         }

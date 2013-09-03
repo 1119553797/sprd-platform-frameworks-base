@@ -177,4 +177,7 @@
 
     <!-- SPRD: add Default value of def_wifi_auto_connect -->
     <bool name="def_wifi_auto_connect">true</bool>
+
+    <!-- SPRD: Default value of Sms Validity -->
+    <integer name="def_sms_validity">255</integer>
 </resources>

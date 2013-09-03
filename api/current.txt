@@ -18188,6 +18188,7 @@ package android.provider {
     method public static final void deleteHistoryTimeFrame(android.content.ContentResolver, long, long);
     method public static final android.database.Cursor getAllBookmarks(android.content.ContentResolver) throws java.lang.IllegalStateException;
     method public static final android.database.Cursor getAllVisitedUrls(android.content.ContentResolver) throws java.lang.IllegalStateException;
+    method public static final android.database.Cursor getVisitedLikeInterface(android.content.ContentResolver, java.lang.String);
     method public static final void requestAllIcons(android.content.ContentResolver, java.lang.String, android.webkit.WebIconDatabase.IconListener);
     method public static final void saveBookmark(android.content.Context, java.lang.String, java.lang.String);
     method public static final void sendString(android.content.Context, java.lang.String);
