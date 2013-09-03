@@ -95,6 +95,8 @@ public class Environment {
         // TODO: generalize further to create package-specific environment
 
         private final File mExternalStorage;
+        private final File mSecondStorage; // SPRD: temp
+        private final File mPrimaryStorage;// SPRD: temp
         private final File mExternalStorageAndroidData;
         private final File mExternalStorageAndroidMedia;
         private final File mExternalStorageAndroidObb;
@@ -118,6 +120,8 @@ public class Environment {
 
                 // /storage/emulated/0
                 mExternalStorage = buildPath(emulatedBase, rawUserId);
+                mSecondStorage = mExternalStorage ; // SPRD: temp
+                mPrimaryStorage = mExternalStorage; // SPRD: temp
                 // /data/media/0
                 mMediaStorage = buildPath(mediaBase, rawUserId);
 
@@ -130,6 +134,8 @@ public class Environment {
 
                 // /storage/sdcard0
                 mExternalStorage = new File(rawExternalStorage);
+                mSecondStorage = mExternalStorage ; // SPRD: temp
+                mPrimaryStorage = mExternalStorage; // SPRD: temp
                 // /data/media
                 mMediaStorage = new File(rawMediaStorage);
             }
@@ -178,6 +184,17 @@ public class Environment {
         public File getMediaStorageDirectory() {
             return mMediaStorage;
         }
+
+        /*
+         * SPRD: add multi-user support @{
+         */
+        public  File getSecondStorageDirectory(){
+              return mSecondStorage;
+        }
+        public  File getPrimaryStorageDirectory(){
+              return mPrimaryStorage;
+        }
+        /*  @}  */
     }
 
     /**
@@ -710,4 +727,105 @@ public class Environment {
         // Unable to translate to internal path; use original
         return path;
     }
+
+    /*
+     * SPRD: The double T card support  @{
+     */
+   // SPRD: nand
+    public static final int STORAGE_TYPE_NAND = 0;
+    //  SPRD:  built-in cannot be moved
+    public static final int STORAGE_TYPE_EMMC_INTERNAL = 2;
+    //  SPRD:  external removable
+    public static final int STORAGE_TYPE_EMMC_EXTERNAL = 1;
+    // SPRD: The T scheme of the current system
+    public static int getStorageType(){
+         return STORAGE_TYPE_EMMC_EXTERNAL;
+    }
+    /**
+     * SPRD: Gets the path of internal T card
+     * Hide the current system T card scheme for application
+     * @return
+     */
+    public static File getInternalStoragePath(){
+          throwIfUserRequired();
+          int type = getStorageType();
+          File path = null;
+         switch(type){
+             case STORAGE_TYPE_EMMC_EXTERNAL:
+             case STORAGE_TYPE_NAND:
+                 path = getSecondStorageDirectory();
+                  break;
+             case STORAGE_TYPE_EMMC_INTERNAL:
+                 path = getPrimaryStorageDirectory();
+                 break;
+          }
+        return path;
+    }
+    /**
+     * SPRD: Gets the state of internal T card
+     * Hide the current system T card scheme for application
+     * @return
+     */
+    public static String getInternalStoragePathState(){
+          return getExternalStorageState();
+    }
+    /**
+     * SPRD: Gets the path of external T card
+     * Hide the current system T card scheme for application
+     * @return
+     */
+    public static File getExternalStoragePath(){
+         throwIfUserRequired();
+         int type = getStorageType();
+         File path = null;
+         switch(type){
+            case STORAGE_TYPE_EMMC_EXTERNAL:
+            case STORAGE_TYPE_NAND:
+                path = getPrimaryStorageDirectory();
+                break;
+            case STORAGE_TYPE_EMMC_INTERNAL:
+                path = getSecondStorageDirectory();
+                break;
+           }
+        return path;
+    }
+    /**
+     * SPRD: Gets the state of external T card
+     * Hide the current system T card scheme for application
+     * @return
+     */
+    public static String getExternalStoragePathState(){
+          return getExternalStorageState();
+    }
+    /**
+     * SPRD: Gets the current primary card path
+     * @return
+     */
+    public static File getPrimaryStorageDirectory(){
+             throwIfUserRequired();
+          return sCurrentUser.getPrimaryStorageDirectory();
+    }
+    /**
+     * SPRD: Gets the current primary card state
+     * @return
+     */
+    public static String getPrimaryStorageState(){
+         return getExternalStorageState();
+    }
+    /**
+     * SPRD: Gets the current second card state
+     * @return
+     */
+    public static String getSecondStorageState(){
+        return getExternalStorageState();
+    }
+    /**
+     * SPRD: Gets the current second card path
+     * @return
+     */
+    public static File getSecondStorageDirectory(){
+            throwIfUserRequired();
+          return sCurrentUser.getSecondStorageDirectory();
+    }
+    /* @} */
 }
