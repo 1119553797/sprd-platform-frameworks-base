@@ -65,4 +65,13 @@ interface IAccountManager {
     boolean addSharedAccountAsUser(in Account account, int userId);
     Account[] getSharedAccountsAsUser(int userId);
     boolean removeSharedAccountAsUser(in Account account, int userId);
+    /**
+    * SPRD:
+    * add for Contacts App
+    * @{
+    */
+    String getUserDataPrivileged(in Account account, String key);
+    /**
+    * @}
+    */
 }

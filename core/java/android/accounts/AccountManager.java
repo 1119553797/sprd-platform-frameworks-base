@@ -2101,4 +2101,24 @@ public class AccountManager {
             }
         }
     }
+    /**
+    * SPRD:
+    * merge from 4.1: added for Contacts app
+    * @{
+    */
+    public String getUserDataPrivileged(final Account account, final String key) {
+        if (account == null)
+            throw new IllegalArgumentException("account is null");
+        if (key == null)
+            throw new IllegalArgumentException("key is null");
+        try {
+            return mService.getUserDataPrivileged(account, key);
+        } catch (RemoteException e) {
+            // will never happen
+            throw new RuntimeException(e);
+        }
+    }
+    /**
+     * @}
+     */
 }

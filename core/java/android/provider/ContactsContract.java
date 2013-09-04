@@ -519,7 +519,16 @@ public final class ContactsContract {
          * <p>TYPE: text</p>
          */
         public static final String ACCOUNT_NAME = "accountName";
-
+        /**
+         * SPRD:
+         * added for Contacts
+         * @{
+         */
+         public static final String DISPLAY_ACCOUNT_TYPE = "account_type";
+         public static final String DISPLAY_ACCOUNT_NAME = "account_name";
+         /**
+          * @}
+          */
         /**
          * One of {@link #EXPORT_SUPPORT_NONE}, {@link #EXPORT_SUPPORT_ANY_ACCOUNT},
          * {@link #EXPORT_SUPPORT_SAME_ACCOUNT_ONLY}. This is the expectation the
@@ -1475,6 +1484,16 @@ public final class ContactsContract {
         public static final Uri CONTENT_MULTI_VCARD_URI = Uri.withAppendedPath(CONTENT_URI,
                 "as_multi_vcard");
 
+        /**
+         * SPRD:
+         * added for Contacts
+         * @{
+         */
+         public static final String DISPLAY_ACCOUNT_TYPE = "account_type";
+         public static final String DISPLAY_ACCOUNT_NAME = "account_name";
+         /**
+          * @}
+          */
         /**
          * Builds a {@link #CONTENT_LOOKUP_URI} style {@link Uri} describing the
          * requested {@link Contacts} entry.
@@ -7602,6 +7621,15 @@ public final class ContactsContract {
          * @hide
          */
         public static final int STATUS_NO_ACCOUNTS_NO_CONTACTS = 4;
+        /**
+         * SPRD:
+         * added for Contacts
+         * @{
+         */
+         public static final int STATUS_IMPORTING = 5;
+         /**
+          * @}
+          */
 
         /**
          * Additional data associated with the status.
@@ -8217,6 +8245,16 @@ public final class ContactsContract {
              */
             public static final String FILTER_TEXT_EXTRA_KEY =
                     "com.android.contacts.extra.FILTER_TEXT";
+            /**
+             * SPRD:
+             * added for Contacts
+             * @{
+             */
+                public static final String MULTI_PICK_ACTION =
+                        "com.android.contacts.action.MULTI_PICK";
+             /**
+              * @}
+              */
         }
 
         /**
@@ -8554,7 +8592,17 @@ public final class ContactsContract {
                         sb.append(markedToken);
                         if (i < lastToken - 1) {
                             // Add the characters that appeared between this token and the next.
-                            sb.append(contentLine.substring(
+                            /**
+                             * SPRD:
+                             *
+                             * Original Android code:
+                             *    sb.append(contentLine.substring(
+                             * @{
+                             */
+                            sb.append(contentLine.trim().substring(
+                            /**
+                             * @}
+                             */
                                     tokenOffsets.get(i) + originalToken.length(),
                                     tokenOffsets.get(i + 1)));
                         }

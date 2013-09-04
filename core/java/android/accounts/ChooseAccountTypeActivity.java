@@ -81,6 +81,17 @@ public class ChooseAccountTypeActivity extends Activity {
                     && !setOfAllowableAccountTypes.contains(type)) {
                 continue;
             }
+            /**
+             * SPRD:
+             * add for multi sim
+             * @{
+             */
+            if (type.startsWith("sprd")) {
+                continue;
+            }
+            /**
+             * @}
+             */
             mAuthenticatorInfosToDisplay.add(info);
         }
 
