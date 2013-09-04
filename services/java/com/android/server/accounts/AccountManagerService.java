@@ -2972,4 +2972,31 @@ public class AccountManagerService
         }
         return authTokensForAccount;
     }
+    /**
+    * SPRD:
+    * added for Contacts App
+    * @{
+    */
+    public String getUserDataPrivileged(Account account, String key) {
+        if (Log.isLoggable(TAG, Log.VERBOSE)) {
+            Log.v(TAG, "getUserData: " + account
+                    + ", key " + key
+                    + ", caller's uid " + Binder.getCallingUid()
+                    + ", pid " + Binder.getCallingPid());
+        }
+        if (account == null) throw new IllegalArgumentException("account is null");
+        if (key == null) throw new IllegalArgumentException("key is null");
+
+        long identityToken = clearCallingIdentity();
+        UserAccounts accounts = getUserAccountsForCaller();
+
+        try {
+            return readUserDataInternal(accounts,account, key);
+        } finally {
+            restoreCallingIdentity(identityToken);
+        }
+    }
+    /**
+    * @}
+    */
 }
