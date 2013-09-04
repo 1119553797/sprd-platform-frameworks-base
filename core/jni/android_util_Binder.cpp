@@ -275,8 +275,14 @@ protected:
         //printf("Transact from %p to Java code sending: ", this);
         //data.print();
         //printf("\n");
-        jboolean res = env->CallBooleanMethod(mObject, gBinderOffsets.mExecTransact,
-            code, (int32_t)&data, (int32_t)reply, flags);
+        jboolean res;
+        if(NULL != mObject) {
+            res = env->CallBooleanMethod(mObject, gBinderOffsets.mExecTransact,
+                code, (int32_t)&data, (int32_t)reply, flags);
+        } else {
+            res = JNI_FALSE;
+            LOGE("!!! mObject == NULL, binder transact failed !!!\n");
+        }
         jthrowable excep = env->ExceptionOccurred();
 
         // Restore the Java binder thread's state if it changed while
