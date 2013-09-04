@@ -43,7 +43,8 @@ public class EmergencyButton extends Button {
     KeyguardUpdateMonitorCallback mInfoCallback = new KeyguardUpdateMonitorCallback() {
 
         @Override
-        public void onSimStateChanged(State simState) {
+        // SPRD: Modify 20130904 Spreadst of 210537 keyguard support multi-card
+        public void onSimStateChanged(State simState,int subscription) {
             int phoneState = KeyguardUpdateMonitor.getInstance(mContext).getPhoneState();
             updateEmergencyCallButton(simState, phoneState);
         }

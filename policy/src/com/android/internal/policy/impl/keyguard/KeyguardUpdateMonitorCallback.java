@@ -45,7 +45,10 @@ class KeyguardUpdateMonitorCallback {
      *   be displayed.
      * @param spn The service provider name.  May be null if it shouldn't be displayed.
      */
-    void onRefreshCarrierInfo(CharSequence plmn, CharSequence spn) { }
+    /* SPRD: Modify 20130904 Spreadst of 210537 keyguard support multi-card
+    void onRefreshCarrierInfo(CharSequence plmn, CharSequence spn) { } @{ */
+    void onRefreshCarrierInfo(CharSequence plmn, CharSequence spn, int subscription) { }
+    /* @} */
 
     /**
      * Called when the ringer mode changes.
@@ -99,8 +102,10 @@ class KeyguardUpdateMonitorCallback {
      * Called when the SIM state changes.
      * @param simState
      */
-    void onSimStateChanged(IccCardConstants.State simState) { }
-
+    /* SPRD: Modify 20130904 Spreadst of 210537 keyguard support multi-card
+    void onSimStateChanged(IccCardConstants.State simState) { } @{ */
+    void onSimStateChanged(IccCardConstants.State simState, int subscription) { }
+    /* @} */
     /**
      * Called when a user is removed.
      */
@@ -131,4 +136,18 @@ class KeyguardUpdateMonitorCallback {
      */
     public void onMusicPlaybackStateChanged(int playbackState, long eventTime) { }
 
+    /* SPRD: Modify 20130904 Spreadst of 210537 keyguard add method @{ */
+    /**
+     * Called when recevie the new Sms/Mms
+     *
+     * @param messagecount The count of unread Message
+     */
+    void onMessageCountChanged(int messageCount) { };
+
+    /**
+     * Called when receive the new Missed Call
+     * @param count The count of missed call
+     */
+    void onMissedCallCountChanged(int count) { };
+    /* @} */
 }

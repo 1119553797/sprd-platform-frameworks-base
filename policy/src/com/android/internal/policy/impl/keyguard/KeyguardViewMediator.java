@@ -375,9 +375,10 @@ public class KeyguardViewMediator {
         }
 
         @Override
-        public void onSimStateChanged(IccCardConstants.State simState) {
-            if (DEBUG) Log.d(TAG, "onSimStateChanged: " + simState);
-
+        /* SPRD: Modify 20130904 Spreadst of 210537 keyguard support multi-card @{ */
+        public void onSimStateChanged(IccCardConstants.State simState, int subscription) {
+            if (DEBUG) Log.d(TAG, "onSimStateChanged: " + simState + " , subscription: " + subscription);
+        /* @} */
             switch (simState) {
                 case NOT_READY:
                 case ABSENT:
