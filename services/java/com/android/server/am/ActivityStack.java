@@ -1688,6 +1688,8 @@ final class ActivityStack {
             // This activity is now becoming visible.
             mService.mWindowManager.setAppVisibility(next.appToken, true);
 
+            int lastOrientation = next.configuration.orientation;
+
             // schedule launch ticks to collect information about slow apps.
             next.startLaunchTickingLocked();
 
@@ -1720,6 +1722,13 @@ final class ActivityStack {
                     updated = mService.updateConfigurationLocked(config, next, false, false);
                 }
             }
+
+            /* SPRD: relayout the resumed app's window if its orientation has changed @{*/
+            if (lastOrientation != next.configuration.orientation) {
+                mService.mWindowManager.requestAppLayout(next.appToken);
+            }
+            /*@}*/
+
             if (!updated) {
                 // The configuration update wasn't able to keep the existing
                 // instance of the activity, and instead started a new one.
