@@ -358,11 +358,7 @@ public class ToggleListener extends BroadcastReceiver implements View.OnClickLis
     private String judgeSoundMode(int ringerMode,int vibrateOn,int vibrateMMS){
         String mode=null;
         if (AudioManager.RINGER_MODE_SILENT == ringerMode) {
-            if (0 == vibrateOn && 0 == vibrateMMS) {
-                mode = SOUND_MODE_SILENT;
-            } else {
-                mode = SOUND_MODE_VIBRATE;
-            }
+	    mode = SOUND_MODE_SILENT;
         } else if (AudioManager.RINGER_MODE_VIBRATE == ringerMode) {
             mode = SOUND_MODE_VIBRATE;
         } else if (AudioManager.RINGER_MODE_NORMAL == ringerMode) {
