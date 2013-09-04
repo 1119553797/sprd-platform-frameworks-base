@@ -246,16 +246,21 @@ int free_cache(int64_t free_size)
 static int is_valid_apk_path(const char *path)
 {
     int len = strlen(APK_DIR_PREFIX);
-int nosubdircheck = 0;
+    int nosubdircheck = 0;
     if (strncmp(path, APK_DIR_PREFIX, len)) {
         len = strlen(PROTECTED_DIR_PREFIX);
-        if (strncmp(path, PROTECTED_DIR_PREFIX, len)) {
-            len = strlen(SDCARD_DIR_PREFIX);
-            if (strncmp(path, SDCARD_DIR_PREFIX, len)) {
-                LOGE("invalid apk path '%s' (bad prefix)\n", path);
-                return 0;
-            } else {
-                nosubdircheck = 1;
+        if (strncmp(path, PROTECTED_DIR_PREFIX, len)) {            
+            //modify for bug#140293 
+            len = strlen(PRELOAD_DIR_PREFIX);
+            if(strncmp(path, PRELOAD_DIR_PREFIX, len)) {
+            //end modify
+                len = strlen(SDCARD_DIR_PREFIX);
+                if (strncmp(path, SDCARD_DIR_PREFIX, len)) {
+                    LOGE("invalid apk path '%s' (bad prefix)\n", path);
+                    return 0;                
+                } else {
+                    nosubdircheck = 1;
+                }
             }
         }
     }

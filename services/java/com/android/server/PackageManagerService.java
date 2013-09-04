@@ -105,6 +105,9 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.io.FileWriter;
+import java.io.BufferedReader;
+
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -221,6 +224,10 @@ class PackageManagerService extends IPackageManager.Stub {
     // This is where all application persistent data goes.
     final File mAppDataDir;
 
+    // add for bug#140293
+    final File mPreInstallDir;
+    final FileObserver mPreInstallObserver;
+    // end add
     // If Encrypted File System feature is enabled, all application persistent data
     // should go here instead.
     final File mSecureAppDataDir;
@@ -999,6 +1006,14 @@ class PackageManagerService extends IPackageManager.Stub {
                 mAppInstallDir.getPath(), OBSERVER_EVENTS, false);
             mAppInstallObserver.startWatching();
             scanDirLI(mAppInstallDir, 0, scanMode, 0);
+
+            // add for bug#140293
+            mPreInstallDir = new File(Environment.getRootDirectory(),"preloadapp");
+            mPreInstallObserver = new AppDirObserver(
+                    mPreInstallDir.getPath(), OBSERVER_EVENTS,false);
+            mPreInstallObserver.startWatching();
+            scanDirLI(mPreInstallDir, 0, scanMode, 0);
+            // end add
 
             mDrmAppInstallObserver = new AppDirObserver(
                 mDrmAppPrivateInstallDir.getPath(), OBSERVER_EVENTS, false);
@@ -2629,6 +2644,57 @@ class PackageManagerService extends IPackageManager.Stub {
         return true;
     }
 
+
+    // add for bug#140293 
+    private boolean isPreloadApp(String path)
+    {
+        if(path.equals("/system/preloadapp"))
+            return true;
+
+        return false;
+    }
+
+    private boolean isPreloadApp(ApplicationInfo info) {
+        if(info.sourceDir != null) {
+            return info.sourceDir.startsWith("/system/preloadapp/");
+        }
+        return false;
+    }
+
+    private boolean isDeleteApp(String packageName)
+    {
+        File unInstallRecord = new File("/data/app/.delrecord");
+        try{
+            BufferedReader br = new BufferedReader(new FileReader(unInstallRecord));
+            String lineContent = null;
+            while( (lineContent = br.readLine()) != null){
+                if(packageName.equals(lineContent)){
+                    br.close();
+                    return true;
+                }
+            } 
+
+        }catch(IOException e){
+            Log.e(TAG, " isDeleteApp IOException");
+        }
+        return false;
+    }
+
+    private boolean delAppRecord(String packageName,int parseFlags)
+    {
+        File delRecord = new File("/data/app/.delrecord");
+        try{
+            FileWriter writer = new FileWriter(delRecord, true);
+            writer.write(packageName +"\n");
+            writer.flush();
+            writer.close();
+        }catch(IOException e){
+            Log.e(TAG, "preloadapp unInstall record:  IOException");
+        }
+        return true; 
+    }
+    // end add for bug#140293
+    
     /*
      *  Scan a package and return the newly parsed package.
      *  Returns null in case of errors and the error code is stored in mLastScanError
@@ -2646,6 +2712,12 @@ class PackageManagerService extends IPackageManager.Stub {
             mLastScanError = pp.getParseError();
             return null;
         }
+        // add for bug#140293
+        File delRecord = new File("/data/app/.delrecord");
+        if(isPreloadApp(scanFile.getParent()) && delRecord.exists()){
+            if(isDeleteApp(pkg.packageName))return pkg;
+        }
+        // end add
         PackageSetting ps = null;
         PackageSetting updatedPkg;
         synchronized (mPackages) {
@@ -3203,7 +3275,10 @@ class PackageManagerService extends IPackageManager.Stub {
                 // problem (unless we're running in the simulator.)
                 if (mOutPermissions[1] != pkg.applicationInfo.uid && Process.supportsProcesses()) {
                     boolean recovered = false;
-                    if ((parseFlags&PackageParser.PARSE_IS_SYSTEM) != 0) {
+                    //modify for bug#140293 
+                    if ((parseFlags&PackageParser.PARSE_IS_SYSTEM) != 0 ||
+                            isPreloadApp(pkg.applicationInfo)) {
+                    //end modify
                         // If this is a system app, we can at least delete its
                         // current data so the application will still work.
                         if (mInstaller != null) {
@@ -6411,6 +6486,11 @@ class PackageManagerService extends IPackageManager.Stub {
             Log.i(TAG, "Removing non-system package:"+p.packageName);
             // Kill application pre-emptively especially for apps on sd.
             killApplication(packageName, p.applicationInfo.uid);
+            //add for bug#140293
+            //add delete preload app record
+            String path = p.mPath.substring(0, p.mPath.lastIndexOf("/"));
+            if(isPreloadApp(path)) delAppRecord(p.packageName, flags);
+            // end add for bug#140293
             ret = deleteInstalledPackageLI(p, deleteCodeAndResources, flags, outInfo,
                     writeSettings);
         }

@@ -72,7 +72,9 @@
 
 #define PROTECTED_DIR_PREFIX  "/data/app-private/"
 #define SDCARD_DIR_PREFIX  getenv("ASEC_MOUNTPOINT")
-
+//add for bug#140293
+#define PRELOAD_DIR_PREFIX "/system/preloadapp/"
+//end add
 #define DALVIK_CACHE_PREFIX   "/data/dalvik-cache/"
 #define DALVIK_CACHE_POSTFIX  "/classes.dex"
 
