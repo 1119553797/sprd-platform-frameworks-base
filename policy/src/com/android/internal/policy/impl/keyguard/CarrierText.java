@@ -37,14 +37,16 @@ public class CarrierText extends TextView {
         private State mSimState;
 
         @Override
-        public void onRefreshCarrierInfo(CharSequence plmn, CharSequence spn) {
+        // SPRD: Modify 20130904 Spreadst of 210537 keyguard support multi-card
+        public void onRefreshCarrierInfo(CharSequence plmn, CharSequence spn, int subscription) {
             mPlmn = plmn;
             mSpn = spn;
             updateCarrierText(mSimState, mPlmn, mSpn);
         }
 
         @Override
-        public void onSimStateChanged(IccCardConstants.State simState) {
+        // SPRD: Modify 20130904 Spreadst of 210537 keyguard support multi-card
+        public void onSimStateChanged(IccCardConstants.State simState, int subscription) {
             mSimState = simState;
             updateCarrierText(mSimState, mPlmn, mSpn);
         }

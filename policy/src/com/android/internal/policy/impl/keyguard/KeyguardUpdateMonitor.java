@@ -92,16 +92,39 @@ public class KeyguardUpdateMonitor {
     private static final int MSG_SET_CURRENT_CLIENT_ID = 315;
     protected static final int MSG_SET_PLAYBACK_STATE = 316;
     protected static final int MSG_USER_INFO_CHANGED = 317;
+    /* SPRD: Modify 20130904 Spreadst of 210537 add method @{ */
+    private static final int MSG_UNREAD_MESSAGE_COUNT = 320;
+    private static final int MSG_DELETE_UNREAD_MESSAGE_COUNT = 321;
+    private static final String ACTION_UNREAD_MESSAGE_COUNT = "com.android.mms.NEW_MASSAGE_RECEVICE_COUNT";
+    private static final String EXTRA_MESSAGE_COUNT = "newMessagecount";
+    private static final String ACTION_DELETE_UNREAD_MESSAGE_COUNT = "com.android.mms.DELETE_UNREAD_MESSAGE_COUNT";
 
+    private static final int MSG_MISSED_CALL_COUNT = 322;
+    private static final int MSG_MISSED_CALL_CANCEL = 323;
+    public final static String ACTION_MISSED_CALL_COUNT = "com.android.call.MISSED_CALL";
+    public final static String ACTION_MISSED_CALL_CANCEL = "com.android.call.MISSED_CALL_CANCEL";
+    public int mMissedCallCount = 0;
+    private int mUnreadMessageCount;
 
+    public static final String EXTRA_MISSED_CALL_KEY = "EXTRA_MISSED_CALL_KEY";
+    /* @} */
     private static KeyguardUpdateMonitor sInstance;
 
     private final Context mContext;
 
     // Telephony state
+    /* SPRD: Modify 20130904 Spreadst of 210537 keyguard support multi-card
     private IccCardConstants.State mSimState = IccCardConstants.State.READY;
     private CharSequence mTelephonyPlmn;
-    private CharSequence mTelephonySpn;
+    private CharSequence mTelephonySpn; @{ */
+    private int mPhoneId;
+    protected static final String EXTRA_PHONE_ID = "phone_id";
+    private IccCardConstants.State[] mSimState = {
+        IccCardConstants.State.READY
+    };
+    private CharSequence[] mTelephonyPlmn;
+    private CharSequence[] mTelephonySpn;
+    /* @} */
     private int mRingMode;
     private int mPhoneState;
     private boolean mKeyguardIsVisible;
@@ -138,7 +161,10 @@ public class KeyguardUpdateMonitor {
                     handleBatteryUpdate((BatteryStatus) msg.obj);
                     break;
                 case MSG_CARRIER_INFO_UPDATE:
-                    handleCarrierInfoUpdate();
+                    /* SPRD: Modify 20130904 Spreadst of 210537 keyguard support multi-card
+                    handleCarrierInfoUpdate(); @{ */
+                    handleCarrierInfoUpdate(msg.arg1);
+                    /* @} */
                     break;
                 case MSG_SIM_STATE_CHANGE:
                     handleSimStateChange((SimArgs) msg.obj);
@@ -182,6 +208,15 @@ public class KeyguardUpdateMonitor {
                 case MSG_USER_INFO_CHANGED:
                     handleUserInfoChanged(msg.arg1);
                     break;
+                /* SPRD: Modify 20130904 Spreadst of 210537 add method @{ */
+                case MSG_UNREAD_MESSAGE_COUNT:
+                    handleMessageCountChanged(msg.arg1);
+                    break;
+                case MSG_MISSED_CALL_COUNT:
+                case MSG_MISSED_CALL_CANCEL:
+                    handeleMissedCallCountChanged(msg.arg1);
+                    break;
+                /* @} */
             }
         }
     };
@@ -248,9 +283,17 @@ public class KeyguardUpdateMonitor {
                     || Intent.ACTION_TIMEZONE_CHANGED.equals(action)) {
                 mHandler.sendMessage(mHandler.obtainMessage(MSG_TIME_UPDATE));
             } else if (TelephonyIntents.SPN_STRINGS_UPDATED_ACTION.equals(action)) {
+                /* SPRD: Modify 20130904 Spreadst of 210537 keyguard support multi-card
                 mTelephonyPlmn = getTelephonyPlmnFrom(intent);
                 mTelephonySpn = getTelephonySpnFrom(intent);
-                mHandler.sendMessage(mHandler.obtainMessage(MSG_CARRIER_INFO_UPDATE));
+                mHandler.sendMessage(mHandler.obtainMessage(MSG_CARRIER_INFO_UPDATE)); @{ */
+                mPhoneId = intent.getIntExtra(EXTRA_PHONE_ID, 0);
+                mTelephonyPlmn[mPhoneId] = getTelephonyPlmnFrom(intent);
+                mTelephonySpn[mPhoneId] = getTelephonySpnFrom(intent);
+                final Message msg = mHandler.obtainMessage(MSG_CARRIER_INFO_UPDATE);
+                msg.arg1 = mPhoneId;
+                mHandler.sendMessage(msg);
+                /* @} */
             } else if (Intent.ACTION_BATTERY_CHANGED.equals(action)) {
                 final int status = intent.getIntExtra(EXTRA_STATUS, BATTERY_STATUS_UNKNOWN);
                 final int plugged = intent.getIntExtra(EXTRA_PLUGGED, 0);
@@ -280,7 +323,33 @@ public class KeyguardUpdateMonitor {
                        intent.getIntExtra(Intent.EXTRA_USER_HANDLE, 0), 0));
             } else if (Intent.ACTION_BOOT_COMPLETED.equals(action)) {
                 mHandler.sendMessage(mHandler.obtainMessage(MSG_BOOT_COMPLETED));
+            /* SPRD: Modify 20130904 Spreadst of 210537 add method @{ */
+            } else if (action.equals(ACTION_UNREAD_MESSAGE_COUNT)) {
+                int messagecount = intent.getIntExtra(EXTRA_MESSAGE_COUNT, 0);
+                mUnreadMessageCount = messagecount;
+                if (DEBUG) {
+                    Log.d(TAG, "ACTION_UNREAD_MESSAGE_COUNT:get num of unread message :"
+                            + messagecount);
+                }
+                mHandler.sendMessage(mHandler.obtainMessage(MSG_UNREAD_MESSAGE_COUNT, messagecount,
+                        0));
+            } else if (action.equals(ACTION_DELETE_UNREAD_MESSAGE_COUNT)) {
+                mUnreadMessageCount = 0;
+                mHandler.sendMessage(mHandler.obtainMessage(MSG_DELETE_UNREAD_MESSAGE_COUNT));
+            } else if (action.equals(ACTION_MISSED_CALL_COUNT)) {
+                int mMissedCallCount = intent.getIntExtra(EXTRA_MISSED_CALL_KEY, 0);
+                if (DEBUG) {
+                    Log.d(TAG, "ACTION_MISSED_CALL_COUNT:get num of unread message :"
+                            + mMissedCallCount);
+                }
+                mHandler.sendMessage(mHandler.obtainMessage(MSG_MISSED_CALL_COUNT,
+                        mMissedCallCount, 0));
+            } else if (action.equals(ACTION_MISSED_CALL_CANCEL)) {
+                int mMissedCallCount = intent.getIntExtra(EXTRA_MISSED_CALL_KEY, 0);
+                mHandler.sendMessage(mHandler.obtainMessage(MSG_MISSED_CALL_CANCEL,
+                        mMissedCallCount, 0));
             }
+            /* @} */
         }
     };
 
@@ -303,14 +372,26 @@ public class KeyguardUpdateMonitor {
      * the intent and provide a {@link SimCard.State} result.
      */
     private static class SimArgs {
+        /* SPRD: Modify 20130904 Spreadst of 210537 keyguard support multi-card
         public final IccCardConstants.State simState;
 
         SimArgs(IccCardConstants.State state) {
             simState = state;
+        } @{ */
+
+        public final IccCardConstants.State[] simState;
+        public final int subscription;
+
+        SimArgs(IccCardConstants.State[] state, int sub) {
+            simState = state;
+            subscription = sub;
         }
 
         static SimArgs fromIntent(Intent intent) {
-            IccCardConstants.State state;
+            // IccCardConstants.State state;
+            IccCardConstants.State[] state = new IccCardConstants.State[TelephonyManager
+                    .getPhoneCount()];
+            int simSubscription = intent.getIntExtra(EXTRA_PHONE_ID, 0);
             if (!TelephonyIntents.ACTION_SIM_STATE_CHANGED.equals(intent.getAction())) {
                 throw new IllegalArgumentException("only handles intent ACTION_SIM_STATE_CHANGED");
             }
@@ -321,33 +402,35 @@ public class KeyguardUpdateMonitor {
 
                 if (IccCardConstants.INTENT_VALUE_ABSENT_ON_PERM_DISABLED.equals(
                         absentReason)) {
-                    state = IccCardConstants.State.PERM_DISABLED;
+                    state[simSubscription] = IccCardConstants.State.PERM_DISABLED;
                 } else {
-                    state = IccCardConstants.State.ABSENT;
+                    state[simSubscription] = IccCardConstants.State.ABSENT;
                 }
             } else if (IccCardConstants.INTENT_VALUE_ICC_READY.equals(stateExtra)) {
-                state = IccCardConstants.State.READY;
+                state[simSubscription] = IccCardConstants.State.READY;
             } else if (IccCardConstants.INTENT_VALUE_ICC_LOCKED.equals(stateExtra)) {
                 final String lockedReason = intent
                         .getStringExtra(IccCardConstants.INTENT_KEY_LOCKED_REASON);
                 if (IccCardConstants.INTENT_VALUE_LOCKED_ON_PIN.equals(lockedReason)) {
-                    state = IccCardConstants.State.PIN_REQUIRED;
+                    state[simSubscription] = IccCardConstants.State.PIN_REQUIRED;
                 } else if (IccCardConstants.INTENT_VALUE_LOCKED_ON_PUK.equals(lockedReason)) {
-                    state = IccCardConstants.State.PUK_REQUIRED;
+                    state[simSubscription] = IccCardConstants.State.PUK_REQUIRED;
                 } else {
-                    state = IccCardConstants.State.UNKNOWN;
+                    state[simSubscription] = IccCardConstants.State.UNKNOWN;
                 }
             } else if (IccCardConstants.INTENT_VALUE_LOCKED_NETWORK.equals(stateExtra)) {
-                state = IccCardConstants.State.NETWORK_LOCKED;
+                state[simSubscription] = IccCardConstants.State.NETWORK_LOCKED;
             } else if (IccCardConstants.INTENT_VALUE_ICC_LOADED.equals(stateExtra)
                         || IccCardConstants.INTENT_VALUE_ICC_IMSI.equals(stateExtra)) {
                 // This is required because telephony doesn't return to "READY" after
                 // these state transitions. See bug 7197471.
-                state = IccCardConstants.State.READY;
+                state[simSubscription] = IccCardConstants.State.READY;
             } else {
-                state = IccCardConstants.State.UNKNOWN;
+                state[simSubscription] = IccCardConstants.State.UNKNOWN;
             }
-            return new SimArgs(state);
+            // return new SimArgs(state);
+            return new SimArgs(state,simSubscription);
+            /* @} */
         }
 
         public String toString() {
@@ -456,9 +539,25 @@ public class KeyguardUpdateMonitor {
         }
 
         // Take a guess at initial SIM state, battery status and PLMN until we get an update
-        mSimState = IccCardConstants.State.NOT_READY;
+        /* SPRD: Modify 20130904 Spreadst of 210537 keyguard support multi-card
+        mSimState = IccCardConstants.State.NOT_READY; @{ */
         mBatteryStatus = new BatteryStatus(BATTERY_STATUS_UNKNOWN, 100, 0, 0);
-        mTelephonyPlmn = getDefaultPlmn();
+        // mTelephonyPlmn = getDefaultPlmn();
+
+        int phoneCount = TelephonyManager.getPhoneCount();
+        mTelephonyPlmn = new CharSequence[phoneCount];
+        mTelephonySpn = new CharSequence[phoneCount];
+        mSimState = new IccCardConstants.State[phoneCount];
+        if (phoneCount > 1) {
+            for (int i = 0; i < phoneCount; i++) {
+                mTelephonyPlmn[i] = getDefaultPlmn();
+                mSimState[i] = IccCardConstants.State.READY;
+            }
+        } else {
+            mTelephonyPlmn[phoneCount - 1] = getDefaultPlmn();
+            mSimState[phoneCount - 1] = IccCardConstants.State.READY;
+        }
+        /* @} */
 
         // Watch for interesting updates
         final IntentFilter filter = new IntentFilter();
@@ -472,6 +571,12 @@ public class KeyguardUpdateMonitor {
         filter.addAction(AudioManager.RINGER_MODE_CHANGED_ACTION);
         filter.addAction(DevicePolicyManager.ACTION_DEVICE_POLICY_MANAGER_STATE_CHANGED);
         filter.addAction(Intent.ACTION_USER_REMOVED);
+        /* SPRD: Modify 20130904 Spreadst of 210537 add method @{ */
+        filter.addAction(ACTION_UNREAD_MESSAGE_COUNT);
+        filter.addAction(ACTION_DELETE_UNREAD_MESSAGE_COUNT);
+        filter.addAction(ACTION_MISSED_CALL_COUNT);
+        filter.addAction(ACTION_MISSED_CALL_CANCEL);
+        /* @} */
         context.registerReceiver(mBroadcastReceiver, filter);
 
         final IntentFilter bootCompleteFilter = new IntentFilter();
@@ -697,6 +802,7 @@ public class KeyguardUpdateMonitor {
     /**
      * Handle {@link #MSG_CARRIER_INFO_UPDATE}
      */
+    /* SPRD: Modify 20130904 Spreadst of 210537 keyguard support multi-card
     private void handleCarrierInfoUpdate() {
         if (DEBUG) Log.d(TAG, "handleCarrierInfoUpdate: plmn = " + mTelephonyPlmn
             + ", spn = " + mTelephonySpn);
@@ -707,28 +813,48 @@ public class KeyguardUpdateMonitor {
                 cb.onRefreshCarrierInfo(mTelephonyPlmn, mTelephonySpn);
             }
         }
+    } @{ */
+
+    /**
+     * Handle {@link #MSG_CARRIER_INFO_UPDATE}
+     */
+    private void handleCarrierInfoUpdate(int subscription) {
+        if (DEBUG) Log.d(TAG, "handleCarrierInfoUpdate: plmn = " + mTelephonyPlmn
+            + ", spn = " + mTelephonySpn);
+
+        for (int i = 0; i < mCallbacks.size(); i++) {
+            KeyguardUpdateMonitorCallback cb = mCallbacks.get(i).get();
+            if (cb != null) {
+                cb.onRefreshCarrierInfo(mTelephonyPlmn[subscription], mTelephonySpn[subscription], subscription);
+            }
+        }
     }
+    /* @} */
 
     /**
      * Handle {@link #MSG_SIM_STATE_CHANGE}
      */
     private void handleSimStateChange(SimArgs simArgs) {
-        final IccCardConstants.State state = simArgs.simState;
+        /* SPRD: Modify 20130904 Spreadst of 210537 keyguard support multi-card
+        final IccCardConstants.State state = simArgs.simState;  @{ */
+        final IccCardConstants.State[] state = simArgs.simState;
+        final int subscription = simArgs.subscription;
 
         if (DEBUG) {
             Log.d(TAG, "handleSimStateChange: intentValue = " + simArgs + " "
                     + "state resolved to " + state.toString());
         }
 
-        if (state != IccCardConstants.State.UNKNOWN && state != mSimState) {
-            mSimState = state;
+        if (state[subscription] != IccCardConstants.State.UNKNOWN /* && state != mSimState */) {
+            mSimState[subscription] = state[subscription];
             for (int i = 0; i < mCallbacks.size(); i++) {
                 KeyguardUpdateMonitorCallback cb = mCallbacks.get(i).get();
                 if (cb != null) {
-                    cb.onSimStateChanged(state);
+                    cb.onSimStateChanged(state[subscription], subscription);
                 }
             }
         }
+        /* @} */
     }
 
     /**
@@ -864,9 +990,19 @@ public class KeyguardUpdateMonitor {
         callback.onTimeChanged();
         callback.onRingerModeChanged(mRingMode);
         callback.onPhoneStateChanged(mPhoneState);
-        callback.onRefreshCarrierInfo(mTelephonyPlmn, mTelephonySpn);
+        /* SPRD: Modify 20130904 Spreadst of 210537 keyguard support multi-card
+        callback.onRefreshCarrierInfo(mTelephonyPlmn, mTelephonySpn); @{ */
+        for (int i = 0; i < TelephonyManager.getPhoneCount(); i++) {
+            callback.onRefreshCarrierInfo(mTelephonyPlmn[i], mTelephonySpn[i], i);
+        }
         callback.onClockVisibilityChanged();
-        callback.onSimStateChanged(mSimState);
+        // callback.onSimStateChanged(mSimState);
+        for (int i = 0; i < TelephonyManager.getPhoneCount(); i++) {
+            callback.onSimStateChanged(mSimState[i], i);
+        }
+        callback.onMessageCountChanged(mUnreadMessageCount);
+        callback.onMissedCallCountChanged(mMissedCallCount);
+        /* @} */
         callback.onMusicClientIdChanged(
                 mDisplayClientState.clientGeneration,
                 mDisplayClientState.clearing,
@@ -888,8 +1024,21 @@ public class KeyguardUpdateMonitor {
     }
 
     public IccCardConstants.State getSimState() {
-        return mSimState;
+        /* SPRD: Modify 20130904 Spreadst of 210537 keyguard support multi-card
+        return mSimState;  @{ */
+        return mSimState[0];
+        /* @} */
     }
+
+    /**
+     * Get the simstate for the subscription.
+     * @param subscription the subscription for which sim state is requested.
+     */
+    /* SPRD: Modify 20130904 Spreadst of 210537 keyguard support multi-card @{ */
+    public IccCardConstants.State getSimState(int subscription) {
+        return mSimState[subscription];
+    }
+    /* @} */
 
     /**
      * Report that the user successfully entered the SIM PIN or PUK/SIM PIN so we
@@ -899,6 +1048,7 @@ public class KeyguardUpdateMonitor {
      * NOTE: Because handleSimStateChange() invokes callbacks immediately without going
      * through mHandler, this *must* be called from the UI thread.
      */
+    /* SPRD: Modify 20130904 Spreadst of 210537 keyguard support multi-card
     public void reportSimUnlocked() {
         handleSimStateChange(new SimArgs(IccCardConstants.State.READY));
     }
@@ -909,7 +1059,21 @@ public class KeyguardUpdateMonitor {
 
     public CharSequence getTelephonySpn() {
         return mTelephonySpn;
+    } @{ */
+
+    public void reportSimUnlocked(int subscription) {
+        mSimState[subscription] = IccCardConstants.State.READY;
+        handleSimStateChange(new SimArgs(mSimState, subscription));
     }
+
+    public CharSequence[] getTelephonyPlmn() {
+        return mTelephonyPlmn;
+    }
+
+    public CharSequence[] getTelephonySpn() {
+        return mTelephonySpn;
+    }
+    /* @} */
 
     /**
      * @return Whether the device is provisioned (whether they have gone through
@@ -959,25 +1123,106 @@ public class KeyguardUpdateMonitor {
     public boolean isSimLocked() {
         return isSimLocked(mSimState);
     }
-
+    /* SPRD: Modify 20130904 Spreadst of 210537 keyguard support multi-card
     public static boolean isSimLocked(IccCardConstants.State state) {
         return state == IccCardConstants.State.PIN_REQUIRED
         || state == IccCardConstants.State.PUK_REQUIRED
         || state == IccCardConstants.State.PERM_DISABLED;
+    } @{ */
+
+    public static boolean isSimLocked(IccCardConstants.State[] state) {
+        boolean isSimLocked = false;
+        for (int i = 0; i < TelephonyManager.getPhoneCount(); i++) {
+            isSimLocked = (state[i] == IccCardConstants.State.PIN_REQUIRED
+                    || state[i] == IccCardConstants.State.PUK_REQUIRED
+                    || state[i] == IccCardConstants.State.PERM_DISABLED);
+            if (isSimLocked)
+                break;
+        }
+        return isSimLocked;
     }
+    /* @} */
 
     public boolean isSimPinSecure() {
         return isSimPinSecure(mSimState);
     }
-
+    /* SPRD: Modify 20130904 Spreadst of 210537 keyguard support multi-card
     public static boolean isSimPinSecure(IccCardConstants.State state) {
         final IccCardConstants.State simState = state;
         return (simState == IccCardConstants.State.PIN_REQUIRED
                 || simState == IccCardConstants.State.PUK_REQUIRED
                 || simState == IccCardConstants.State.PERM_DISABLED);
+    } @{ */
+
+    public static boolean isSimPinSecure(IccCardConstants.State[] state) {
+        boolean isSimPinSecure = false;
+        final IccCardConstants.State[] simState = state;
+
+        for (int i = 0; i < TelephonyManager.getPhoneCount(); i++) {
+            isSimPinSecure = (simState[i] == IccCardConstants.State.PIN_REQUIRED
+                    || simState[i] == IccCardConstants.State.PUK_REQUIRED
+                    || simState[i] == IccCardConstants.State.PERM_DISABLED);
+            if (isSimPinSecure)
+                break;
+        }
+        return isSimPinSecure;
     }
+    /* @} */
 
     public DisplayClientState getCachedDisplayClientState() {
         return mDisplayClientState;
     }
+
+    /* SPRD: Modify 20130904 Spreadst of 210537 add method @{ */
+    private void handleMessageCountChanged(int messageCount) {
+        if (DEBUG)
+            Log.d(TAG, "handleMessageCountChanged() :" + messageCount);
+        for (int i = 0; i < mCallbacks.size(); i++) {
+            KeyguardUpdateMonitorCallback cb = mCallbacks.get(i).get();
+            if (cb != null) {
+                cb.onMessageCountChanged(messageCount);
+            }
+        }
+    }
+
+    private void handeleMissedCallCountChanged(int count) {
+        mMissedCallCount = count;
+        for (int i = 0; i < mCallbacks.size(); i++) {
+            KeyguardUpdateMonitorCallback cb = mCallbacks.get(i).get();
+            if (cb != null) {
+                cb.onMissedCallCountChanged(count);
+            }
+        }
+    }
+
+    public boolean isDevicePluggedIn() {
+        return isPluggedIn(mBatteryStatus);
+    }
+
+    public boolean isDeviceCharged() {
+        return mBatteryStatus.status == BATTERY_STATUS_FULL
+                || mBatteryStatus.level >= 100; // in case particular device doesn't flag it
+    }
+
+    public int getBatteryLevel() {
+        return mBatteryStatus.level;
+    }
+
+    public boolean shouldShowBatteryInfo() {
+        return isPluggedIn(mBatteryStatus) || isBatteryLow(mBatteryStatus);
+    }
+
+    /**
+     * @param pluggedIn state from {@link android.os.BatteryManager#EXTRA_PLUGGED}
+     * @return Whether the device is considered "plugged in."
+     */
+    private static boolean isPluggedIn(BatteryStatus status) {
+        return status.plugged == BatteryManager.BATTERY_PLUGGED_AC
+                || status.plugged == BatteryManager.BATTERY_PLUGGED_USB;
+    }
+
+    private static boolean isBatteryLow(BatteryStatus status) {
+        return status.level < LOW_BATTERY_THRESHOLD;
+    }
+    /* @} */
 }
