@@ -19,6 +19,7 @@ package com.google.android.gles_jni;
 
 import javax.microedition.khronos.egl.*;
 
+import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceView;
 import android.view.SurfaceHolder;
@@ -84,6 +85,12 @@ public class EGLImpl implements EGL10 {
                 "eglCreateWindowSurface() can only be called with an instance of " +
                 "SurfaceView or SurfaceHolder at the moment, this will be fixed later.");
         }
+
+        // S: for bug 209130, need to know sur is null or not
+        if (null == sur) {
+            Log.w("EGLImpl", "Surface sur is null");
+        }
+
         int eglSurfaceId = _eglCreateWindowSurface(display, config, sur, attrib_list);
         if (eglSurfaceId == 0) {
             return EGL10.EGL_NO_SURFACE;
