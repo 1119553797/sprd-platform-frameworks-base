@@ -1287,8 +1287,10 @@
   <string msgid="295583804361236288" name="smv_application">"应用程序<xliff:g id="APPLICATION">%1$s</xliff:g>（<xliff:g id="PROCESS">%2$s</xliff:g> 进程）违反了自我强制执行的严格模式 (StrictMode) 政策。"</string>
   <string msgid="5120397012047462446" name="smv_process">"进程 <xliff:g id="PROCESS">%1$s</xliff:g> 违反了自我强制执行的严格模式 (StrictMode) 政策。"</string>
   <string msgid="378740715658358071" name="android_upgrading_title">"Android 正在升级..."</string>
+  <!-- SPRD: add for clear dalvik cache when last shutdown abnormal -->
   <string name="android_checking_file_system_title">"Android 正在检查文件系统..."</string>
   <string msgid="274409861603566003" name="android_upgrading_apk">"正在优化第 <xliff:g id="NUMBER_0">%1$d</xliff:g> 个应用程序，共 <xliff:g id="NUMBER_1">%2$d</xliff:g> 个。"</string>
+  <!-- SPRD: add for clear dalvik cache when last shutdown abnormal -->
   <string name="android_checking_file_system">"异常关机,正在检测文件系统 ..." </string>
   <string msgid="7959542881906488763" name="android_upgrading_starting_apps">"正在启动应用程序。"</string>
   <string msgid="1405954754112999229" name="android_upgrading_complete">"即将完成启动。"</string>

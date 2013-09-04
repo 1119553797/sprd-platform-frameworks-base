@@ -3761,18 +3761,43 @@ public class PackageManagerService extends IPackageManager.Stub {
             pkgs = mDeferredDexOpt;
             mDeferredDexOpt = null;
         }
+
+        // SPRD: clear dalvik cache when last shutdown abnormal
+        boolean isNormal = SystemProperties.get("persist.sys.lastbootflagbak", "unnormal").equals("normal");
+
         if (pkgs != null) {
             int i = 0;
             for (PackageParser.Package pkg : pkgs) {
                 if (!isFirstBoot()) {
                     i++;
-                    try {
-                        ActivityManagerNative.getDefault().showBootMessage(
+                    /** SPRD: clear dalvik cache when last shutdown abnormal @{
+                     * @orig
+                     * try {
+                     *     ActivityManagerNative.getDefault().showBootMessage(
+                     *             mContext.getResources().getString(
+                     *                     com.android.internal.R.string.android_upgrading_apk,
+                     *                     i, pkgs.size()), true);
+                     * } catch (RemoteException e) {
+                     * }
+                     */
+                    if (!isNormal) {
+                        try {
+                            ActivityManagerNative.getDefault().showBootMessage(
+                                mContext.getResources().getString(
+                                    com.android.internal.R.string.android_checking_file_system)
+                                , true);
+                        } catch (RemoteException e) {
+                        }
+                    } else {
+                        try {
+                            ActivityManagerNative.getDefault().showBootMessage(
                                 mContext.getResources().getString(
                                         com.android.internal.R.string.android_upgrading_apk,
                                         i, pkgs.size()), true);
-                    } catch (RemoteException e) {
+                        } catch (RemoteException e) {
+                        }
                     }
+                    /** @} */
                 }
                 PackageParser.Package p = pkg;
                 synchronized (mInstallLock) {

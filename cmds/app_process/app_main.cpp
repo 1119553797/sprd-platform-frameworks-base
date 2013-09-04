@@ -7,6 +7,13 @@
 
 #define LOG_TAG "appproc"
 
+/** SPRD: clear dalvik cache when last shutdown abnormal @{ */
+#define DEXPREOPT_PATH "/data/dalvik-cache"
+#define BOOT_LAST_FLAG  "persist.sys.lastbootflag"
+#define BOOT_LAST_FLAG_BAK  "persist.sys.lastbootflagbak"
+#define BUILD_TYPE "ro.build.type"
+/** @} */
+
 #include <cutils/properties.h>
 #include <binder/IPCThreadState.h>
 #include <binder/ProcessState.h>
@@ -20,6 +27,17 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
+
+/** SPRD: clear dalvik cache when last shutdown abnormal @{ */
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <sys/stat.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <stdlib.h>
+#include <dirent.h>
+#include <string.h>
+/** @} */
 
 namespace android {
 
@@ -135,6 +153,78 @@ static void setArgv0(const char *argv0, const char *newArgv0)
     strlcpy(const_cast<char *>(argv0), newArgv0, strlen(argv0));
 }
 
+/** SPRD: clear dalvik cache when last shutdown abnormal @{ */
+//delete files in /data/dalvik-cache dir
+void doDelCache()
+{
+    char debugbuf[PROPERTY_VALUE_MAX];
+    int typelen;
+    char file_path[PATH_MAX];
+    DIR *d;
+    struct dirent *file;
+
+    typelen = property_get((const char*)(BUILD_TYPE), debugbuf, "");
+    if (typelen > 0) {
+        ALOGV("doDelCache/debugbuf:%s \n", debugbuf);
+    }
+    if (typelen > 0 && !strcmp(debugbuf, "userdebug")) {
+        ALOGV(" no clear dalvik cache becasue of userdebug mode! \n");
+        return;
+    }
+
+    if (access(DEXPREOPT_PATH, F_OK) == -1)
+    {
+        return;
+    }
+    if(!(d = opendir(DEXPREOPT_PATH)))
+    {
+        return;
+    }
+
+    while ((file = readdir(d)) != NULL)
+    {
+        if (strncmp(file->d_name, ".", 1) == 0 || strncmp(file->d_name, "..", 1) == 0)
+            continue;
+
+        strcpy(file_path, DEXPREOPT_PATH);
+        strcat(file_path, "/");
+        strcat(file_path, file->d_name);
+
+        remove(file_path);
+    }
+}
+
+void doLastShutDownCheck()
+{
+    char buf[PROPERTY_VALUE_MAX];
+    int len;
+
+    len = property_get((const char*)(BOOT_LAST_FLAG), buf, "");
+    if (len > 0) {
+        if (!strcmp(buf, "normal")) { // last shutdown normally
+            ALOGV(" last time boot normally! \n");
+        } else if (!strcmp(buf, "unnormal")) { // last shutdown unnormally
+            ALOGV(" last shutdown unnormal, it will cause reloading dalvik-cache");
+            doDelCache();
+        } else { // would never come here
+            ALOGE(" shutdown bad occation happens ! \n");
+            doDelCache();
+        }
+    } else {
+        if (!strcmp(buf, "")) {
+            ALOGV(" checking ... first boot  \n");
+            doDelCache();
+        } else { // would never come here
+            ALOGE(" shutdown bad occation happens ! \n");
+            doDelCache();
+        }
+    }
+    property_set((const char*)(BOOT_LAST_FLAG_BAK), buf);
+    property_set((const char*)(BOOT_LAST_FLAG), "unnormal");
+}
+/** @} */
+
+
 int main(int argc, char* const argv[])
 {
 #ifdef __arm__
@@ -220,6 +310,11 @@ int main(int argc, char* const argv[])
     runtime.mParentDir = parentDir;
 
     if (zygote) {
+        /** SPRD: clear dalvik cache when last shutdown abnormal @{ */
+        // do last shutdown check
+        ALOGV("doLastShutDownCheck");
+        doLastShutDownCheck();
+        /** @} */
         runtime.start("com.android.internal.os.ZygoteInit",
                 startSystemServer ? "start-system-server" : "");
     } else if (className) {
