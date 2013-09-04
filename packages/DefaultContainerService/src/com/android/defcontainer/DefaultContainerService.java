@@ -673,7 +673,19 @@ public class DefaultContainerService extends IntentService {
                 prefer = PREFER_EXTERNAL;
                 break check_inner;
             }
-
+            /* SPRD: Modify Bug 209961, add install location @{ */
+            int installPreference = Settings.System.getInt(getApplicationContext()
+                    .getContentResolver(),
+                    Settings.Global.DEFAULT_INSTALL_LOCATION,
+                    PackageHelper.APP_INSTALL_AUTO);
+            if (installPreference == PackageHelper.APP_INSTALL_INTERNAL) {
+                prefer = PREFER_INTERNAL;
+                break check_inner;
+            } else if (installPreference == PackageHelper.APP_INSTALL_EXTERNAL) {
+                prefer = PREFER_EXTERNAL;
+                break check_inner;
+            }
+            /* @} */
             /* No install flags. Check for manifest option. */
             if (installLocation == PackageInfo.INSTALL_LOCATION_INTERNAL_ONLY) {
                 prefer = PREFER_INTERNAL;
@@ -688,7 +700,7 @@ public class DefaultContainerService extends IntentService {
                 checkBoth = true;
                 break check_inner;
             }
-
+            /* SPRD: Modify Bug 209961, add install location @{
             // Pick user preference
             int installPreference = Settings.Global.getInt(getApplicationContext()
                     .getContentResolver(),
@@ -701,6 +713,7 @@ public class DefaultContainerService extends IntentService {
                 prefer = PREFER_EXTERNAL;
                 break check_inner;
             }
+            @} */
 
             /*
              * Fall back to default policy of internal-only if nothing else is
