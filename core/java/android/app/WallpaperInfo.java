@@ -71,7 +71,12 @@ public final class WallpaperInfo implements Parcelable {
      * Resource identifier for a string containing a short description of the wallpaper.
      */
     final int mDescriptionResource;
-
+    /* @{ SPRD: fix bug211017 add wallpaper settings for LockScreen and Launcher appsView*/
+    public static final String WALLPAPER_TARGET_ID = "wallpaper_target_id";
+    public static final int WALLPAPER_LOCKSCREEN_TYPE = 1;
+    public static final int WALLPAPER_MAINMENU_TYPE = 2;
+    public static final int WALLPAPER_DEFAULT_TYPE = 0;
+    /* @}*/
     /**
      * Constructor.
      * 

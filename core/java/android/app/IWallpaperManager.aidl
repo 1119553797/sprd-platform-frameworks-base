@@ -71,4 +71,7 @@ interface IWallpaperManager {
      * Returns the desired minimum height for the wallpaper.
      */
     int getHeightHint();
+    ParcelFileDescriptor setWallpaperByTarget(String name, int toTarget);
+    void clearLockScreenWallpaper();
+    ParcelFileDescriptor getWallpaperByTarget(IWallpaperManagerCallback cb,out Bundle outParams, int toTarget);
 }

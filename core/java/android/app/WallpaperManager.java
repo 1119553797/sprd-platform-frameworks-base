@@ -49,6 +49,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+
 /**
  * Provides access to the system wallpaper. With WallpaperManager, you can
  * get the current wallpaper, get the desired dimensions for the wallpaper, set
@@ -201,11 +202,14 @@ public class WallpaperManager {
         private IWallpaperManager mService;
         private Bitmap mWallpaper;
         private Bitmap mDefaultWallpaper;
-        
+        /* @{ SPRD: fix bug211017 add wallpaper settings for LockScreen and Launcher appsView*/
+        private Bitmap mLockScreenWallpaper;
+        private Bitmap mMainMenuScreenWallpaper;
+        private static final int MSG_CLEAR_WALLPAPER_BY_LOCKSCREEN = 2;
+        private static final int MSG_CLEAR_WALLPAPER_BY_MAINMENU = 3;
+        /* @}*/
         private static final int MSG_CLEAR_WALLPAPER = 1;
-        
         private final Handler mHandler;
-        
         Globals(Looper looper) {
             IBinder b = ServiceManager.getService(Context.WALLPAPER_SERVICE);
             mService = IWallpaperManager.Stub.asInterface(b);
@@ -219,6 +223,18 @@ public class WallpaperManager {
                                 mDefaultWallpaper = null;
                             }
                             break;
+                            /* @{ SPRD: fix bug211017 add wallpaper settings for LockScreen and Launcher appsView*/
+                        case MSG_CLEAR_WALLPAPER_BY_LOCKSCREEN:
+                            synchronized (this) {
+                                mLockScreenWallpaper = null;
+                            }
+                            break;
+                        case MSG_CLEAR_WALLPAPER_BY_MAINMENU:
+                            synchronized (this) {
+                                mMainMenuScreenWallpaper = null;
+                            }
+                            break;
+                            /* @}*/
                     }
                 }
             };
@@ -232,6 +248,17 @@ public class WallpaperManager {
              */
             mHandler.sendEmptyMessage(MSG_CLEAR_WALLPAPER);
         }
+        /* @{ SPRD: fix bug211017 add wallpaper settings for LockScreen and Launcher appsView*/
+        public void onWallpaperChangedByLockScreen() {
+           mHandler.sendEmptyMessage(MSG_CLEAR_WALLPAPER_BY_LOCKSCREEN);
+        }
+        public void onWallpaperChangedByMainMenu() {
+           mHandler.sendEmptyMessage(MSG_CLEAR_WALLPAPER_BY_MAINMENU);
+        }
+        public Handler getHandler() {
+           return mHandler;
+        }
+        /* @}*/
 
         public Bitmap peekWallpaperBitmap(Context context, boolean returnDefault) {
             synchronized (this) {
@@ -263,8 +290,91 @@ public class WallpaperManager {
             synchronized (this) {
                 mWallpaper = null;
                 mDefaultWallpaper = null;
+                mLockScreenWallpaper = null;
+                mLockScreenWallpaper = null;
             }
         }
+        /* @{ SPRD: fix bug211017 add wallpaper settings for LockScreen and Launcher appsView*/
+        private Bitmap getCurrentWallpaperLocked(Context context,int target) {
+            try {
+                Bundle params = new Bundle();
+                ParcelFileDescriptor fd = mService.getWallpaperByTarget(this, params,target);
+                if (fd != null) {
+                    int width = params.getInt("width", 0);
+                    int height = params.getInt("height", 0);
+
+                    try {
+                        BitmapFactory.Options options = new BitmapFactory.Options();
+                        Bitmap bm = BitmapFactory.decodeFileDescriptor(
+                                fd.getFileDescriptor(), null, options);
+                        return generateBitmap(context, bm,width, height);
+                    } catch (OutOfMemoryError e) {
+                        Log.w(TAG, "Can't decode file", e);
+                    } finally {
+                        try {
+                            fd.close();
+                        } catch (IOException e) {
+                            // Ignore
+                        }
+                    }
+                }
+            } catch (RemoteException e) {
+                // Ignore
+            }
+         return null;
+       }
+
+        public Bitmap peekWallpaperBitmap(Context context,
+                boolean returnDefault, int target) {
+            switch (target) {
+                case WallpaperInfo.WALLPAPER_LOCKSCREEN_TYPE: {
+                    synchronized (this) {
+                        if (mLockScreenWallpaper != null) {
+                            return mLockScreenWallpaper;
+                        }
+                        try {
+                            mLockScreenWallpaper = getCurrentWallpaperLocked(context,target);
+                        } catch (OutOfMemoryError e) {
+                            Log.w(TAG, "No memory load current wallpaper", e);
+                        }
+                        if (returnDefault) {
+                            if (mLockScreenWallpaper == null) {
+                                mDefaultWallpaper = getDefaultWallpaperLocked(context);
+                                return mDefaultWallpaper;
+                            } else {
+                                mDefaultWallpaper = null;
+                            }
+                        }
+                        return mLockScreenWallpaper;
+                    }
+                }
+                case WallpaperInfo.WALLPAPER_MAINMENU_TYPE: {
+                    synchronized (this) {
+                        if (mMainMenuScreenWallpaper != null) {
+                            return mMainMenuScreenWallpaper;
+                        }
+                        try {
+                            mMainMenuScreenWallpaper = getCurrentWallpaperLocked(context,target);
+                        } catch (OutOfMemoryError e) {
+                            Log.w(TAG, "No memory load current wallpaper", e);
+                        }
+                        if (returnDefault) {
+                            if (mMainMenuScreenWallpaper == null) {
+                                mDefaultWallpaper = getDefaultWallpaperLocked(context);
+                                return mDefaultWallpaper;
+                            } else {
+                                mDefaultWallpaper = null;
+                            }
+                        }
+                        return mMainMenuScreenWallpaper;
+                    }
+                }
+                default:
+                    return peekWallpaperBitmap(context, returnDefault);
+            }
+
+        }
+        /* @}*/
 
         private Bitmap getCurrentWallpaperLocked(Context context) {
             try {
@@ -503,7 +613,55 @@ public class WallpaperManager {
             // Ignore
         }
     }
-    
+    /* @{ SPRD: fix bug211017 add wallpaper settings for LockScreen and Launcher appsView*/
+    public void setResource(int resid,int toTarget) throws IOException {
+        try {
+            Resources resources = mContext.getResources();
+            /* Set the wallpaper to the default values */
+            ParcelFileDescriptor fd = sGlobals.mService.setWallpaperByTarget(
+                    "res:" + resources.getResourceName(resid),toTarget);
+            if (fd != null) {
+                FileOutputStream fos = null;
+                try {
+                    fos = new ParcelFileDescriptor.AutoCloseOutputStream(fd);
+                    setWallpaper(resources.openRawResource(resid), fos);
+                } finally {
+                    if (fos != null) {
+                        fos.close();
+                    }
+                }
+            }
+        } catch (RemoteException e) {
+            // Ignore
+        }
+    }
+    public void clearLockScreenWallpaper() {
+        try {
+            sGlobals.mService.clearLockScreenWallpaper();
+        } catch (RemoteException e) {
+
+        }
+    }
+
+    /**
+     * Retrieve the current system wallpaper; if
+     * no wallpaper is set, the system default wallpaper is returned.
+     * This is returned as an
+     * abstract Drawable that you can install in a View to display whatever
+     * wallpaper the user has currently set.
+     *
+     * @return Returns a Drawable object that will draw the wallpaper.
+     */
+    public Drawable getDrawable(int target) {
+        Bitmap bm = sGlobals.peekWallpaperBitmap(mContext, false, target);
+        if (bm != null) {
+            Drawable dr = new BitmapDrawable(mContext.getResources(), bm);
+            dr.setDither(false);
+            return dr;
+        }
+        return null;
+    }
+    /* @}*/
     /**
      * Change the current system wallpaper to a bitmap.  The given bitmap is
      * converted to a PNG and stored as the wallpaper.  On success, the intent

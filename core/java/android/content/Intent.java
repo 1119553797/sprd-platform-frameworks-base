@@ -2602,7 +2602,25 @@ public class Intent implements Parcelable, Cloneable {
     // ---------------------------------------------------------------------
     // ---------------------------------------------------------------------
     // Standard intent categories (see addCategory()).
-
+/**
+ * Activity Action: Show settings for choosing spread wallpaper
+ * <p>Input: Nothing.
+ * <p>Output: Nothing.
+ */
+  @SdkConstant(SdkConstantType.ACTIVITY_INTENT_ACTION)
+  public static final String ACTION_SET_SPREAD_WALLPAPER = "android.intent.action.SET_SPREAD_WALLPAPER";
+  /**
+  * Broadcast Action:  The current system wallpaper has changed.  See
+  * {@link android.app.WallpaperManager} for retrieving the new wallpaper.
+  */
+  @SdkConstant(SdkConstantType.BROADCAST_INTENT_ACTION)
+  public static final String ACTION_LOCKSCREEN_WALLPAPER_CHANGED = "android.intent.action.LOCKSCREEN_WALLPAPER_CHANGED";
+  /**
+  * Broadcast Action:  The current system wallpaper has changed.  See
+  * {@link android.app.WallpaperManager} for retrieving the new wallpaper.
+ */
+  @SdkConstant(SdkConstantType.BROADCAST_INTENT_ACTION)
+  public static final String ACTION_MAINMENU_WALLPAPER_CHANGED = "android.intent.action.MAINMENU_WALLPAPER_CHANGED";
     /**
      * Set if the activity should be an option for the default action
      * (center press) to perform on a piece of data.  Setting this will

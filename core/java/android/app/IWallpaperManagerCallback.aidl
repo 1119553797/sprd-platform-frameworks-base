@@ -28,4 +28,6 @@ oneway interface IWallpaperManagerCallback {
      * Called when the wallpaper has changed
      */
     void onWallpaperChanged();
+    void onWallpaperChangedByLockScreen();
+    void onWallpaperChangedByMainMenu();
 }
