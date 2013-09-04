@@ -51,6 +51,9 @@ class AppWindowToken extends WindowToken {
     int requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
     boolean showWhenLocked;
 
+    /* SPRD: if this is true, WindowManagerService should relayout the window attached to this app.*/
+    boolean layoutNeeded = false;
+
     // The input dispatching timeout for this application token in nanoseconds.
     long inputDispatchingTimeoutNanos;
 

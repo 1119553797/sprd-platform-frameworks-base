@@ -7895,6 +7895,25 @@ public class WindowManagerService extends IWindowManager.Stub
         Trace.traceEnd(Trace.TRACE_TAG_WINDOW_MANAGER);
     }
 
+    /**
+     * SPRD: Activity want to relayout its window frame
+     *
+     * @param token the appToken who want to relayout its window frame
+     */
+    public void requestAppLayout(IBinder token) {
+        AppWindowToken wtoken;
+        synchronized(mWindowMap) {
+            wtoken = findAppWindowToken(token);
+            if (wtoken != null) {
+                wtoken.layoutNeeded = true;
+                final DisplayContent displayContent = getDefaultDisplayContentLocked();
+                displayContent.layoutNeeded = true;
+                performLayoutLockedInner(displayContent, false, false);
+                wtoken.layoutNeeded = false;
+            }
+        }
+    }
+
     private final void performLayoutLockedInner(final DisplayContent displayContent,
                                     boolean initial, boolean updateInputWindows) {
         if (!displayContent.layoutNeeded) {
@@ -7968,6 +7987,13 @@ public class WindowManagerService extends IWindowManager.Stub
                         + (atoken != null && atoken.hiddenRequested)
                         + " mAttachedHidden=" + win.mAttachedHidden);
             }
+
+            /* SPRD: the Activity has requested to relayout its window @{*/
+            if (win.mAppToken != null && win.mAppToken.layoutNeeded
+                    && win.mAttrs.type == TYPE_BASE_APPLICATION) {
+                win.mLayoutNeeded = true;
+            }
+            /*@}*/
 
             // If this view is GONE, then skip it -- keep the current
             // frame, and let the caller know so they can ignore it
