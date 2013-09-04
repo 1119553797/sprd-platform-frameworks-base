@@ -29,6 +29,8 @@ import android.util.Log;
 
 import java.lang.Thread;
 import java.util.LinkedList;
+import android.os.SystemProperties;
+
 
 /**
  * @hide
@@ -101,6 +103,8 @@ public class NotificationPlayer implements OnCompletionListener {
                             synchronized(mQueueAudioFocusLock) {
                                 if (mAudioManagerWithAudioFocus == null) {
                                     if (mDebug) Log.d(mTag, "requesting AudioFocus");
+                                    // SPRD: set prop
+                                    SystemProperties.set("persist.sys.fm.notifyplayer", "true");
                                     if (mCmd.looping) {
                                         // SPRD: Add listener
                                         audioManager.requestAudioFocus(mAudioFocusListener, mCmd.stream,
@@ -204,7 +208,8 @@ public class NotificationPlayer implements OnCompletionListener {
                         mPlayer = null;
                         synchronized(mQueueAudioFocusLock) {
                             if (mAudioManagerWithAudioFocus != null) {
-                                // SPRD: Abandon listener
+                                // SPRD: Abandon listener and set prop
+                                SystemProperties.set("persist.sys.fm.notifyplayer", "false");
                                 mAudioManagerWithAudioFocus.abandonAudioFocus(mAudioFocusListener);
                                 mAudioManagerWithAudioFocus = null;
                             }
