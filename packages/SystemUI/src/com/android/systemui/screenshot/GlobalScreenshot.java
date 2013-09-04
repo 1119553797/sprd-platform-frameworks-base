@@ -123,8 +123,15 @@ class SaveImageInBackgroundTask extends AsyncTask<SaveImageInBackgroundData, Voi
         String imageDate = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(new Date(mImageTime));
         mImageFileName = String.format(SCREENSHOT_FILE_NAME_TEMPLATE, imageDate);
 
+        /* SPRD: REMOVE because of useless @{
         mScreenshotDir = new File(Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_PICTURES), SCREENSHOTS_DIR_NAME);
+        @} */
+        /* SPRD：ADD to support double T card on 20130904 @{ */
+        mScreenshotDir = new File(GlobalScreenshot.getImageDir()
+                + File.separator + Environment.DIRECTORY_PICTURES,
+                SCREENSHOTS_DIR_NAME);
+        /* @} */
         mImageFilePath = new File(mScreenshotDir, mImageFileName).getAbsolutePath();
 
         // Create the large notification icon
@@ -673,4 +680,16 @@ class GlobalScreenshot {
                 .build();
         nManager.notify(SCREENSHOT_NOTIFICATION_ID, n);
     }
+
+    /**
+     * SPRD： ADD to support double T card on 20130904  @{
+     */
+    static String getImageDir() {
+        if (Environment.getExternalStoragePathState().equals(Environment.MEDIA_MOUNTED)) {
+            return Environment.getExternalStoragePath().getAbsolutePath();
+        }
+        return Environment.getInternalStoragePath().getAbsolutePath();
+    }
+    /** @} */
+
 }
