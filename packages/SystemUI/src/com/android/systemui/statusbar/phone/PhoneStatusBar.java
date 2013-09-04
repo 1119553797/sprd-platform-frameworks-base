@@ -57,6 +57,7 @@ import android.content.res.Configuration;
 import android.provider.Settings;
 import android.service.dreams.DreamService;
 import android.service.dreams.IDreamManager;
+import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
 import android.util.EventLog;
 import android.util.Log;
@@ -221,6 +222,7 @@ public class PhoneStatusBar extends BaseStatusBar {
 
     // carrier/wifi label
     private TextView mCarrierLabel;
+    private TextView mCarrierLabel1;
     private boolean mCarrierLabelVisible = false;
     private int mCarrierLabelHeight;
     private TextView mEmergencyCallLabel;
@@ -642,7 +644,7 @@ public class PhoneStatusBar extends BaseStatusBar {
         mNetworkController.addSignalCluster(signalCluster);
         signalCluster.setNetworkController(mNetworkController);
 
-        final boolean isAPhone = mNetworkController.hasVoiceCallingFeature();
+        final boolean isAPhone = mNetworkController.hasVoiceCallingFeature(-1);
         if (isAPhone) {
             mEmergencyCallLabel =
                     (TextView) mStatusBarWindow.findViewById(R.id.emergency_calls_only);
@@ -660,19 +662,26 @@ public class PhoneStatusBar extends BaseStatusBar {
         }
 
         mCarrierLabel = (TextView)mStatusBarWindow.findViewById(R.id.carrier_label);
-        mShowCarrierInPanel = (mCarrierLabel != null);
+        /* SPRD: for multi-sim @{ */
+        mCarrierLabel1 = (TextView) mStatusBarWindow.findViewById(R.id.carrier_label1);
+        mShowCarrierInPanel = (mCarrierLabel != null) || (mCarrierLabel1 != null);
         if (DEBUG) Slog.v(TAG, "carrierlabel=" + mCarrierLabel + " show=" + mShowCarrierInPanel);
         if (mShowCarrierInPanel) {
             mCarrierLabel.setVisibility(mCarrierLabelVisible ? View.VISIBLE : View.INVISIBLE);
-
+            mCarrierLabel1.setVisibility(mCarrierLabelVisible ? View.VISIBLE : View.INVISIBLE);
             // for mobile devices, we always show mobile connection info here (SPN/PLMN)
             // for other devices, we show whatever network is connected
+            if (!TelephonyManager.isMultiSim()) {
+                mCarrierLabel1.setVisibility(View.GONE);
+            }
             if (mNetworkController.hasMobileDataFeature()) {
                 mNetworkController.addMobileLabelView(mCarrierLabel);
+                mNetworkController.addMobileLabelView1(mCarrierLabel1);
             } else {
                 mNetworkController.addCombinedLabelView(mCarrierLabel);
+                mNetworkController.addCombinedLabelView(mCarrierLabel1);
             }
-
+            /* @} */
             /* SPRD：ADD for universe_ui_support on 20130831 @{ */
             if (!isUniverseSupport) {
                 // set up the dynamic hide/show of the label
@@ -683,6 +692,15 @@ public class PhoneStatusBar extends BaseStatusBar {
                     }
                 });
             }
+            /* @} */
+            /* SPRD: for multi-sim @{ */
+            // set up the dynamic hide/show of the label
+            mPile.setOnSizeChangedListener(new OnSizeChangedListener() {
+                @Override
+                public void onSizeChanged(View view, int w, int h, int oldw, int oldh) {
+                    updateCarrierLabelVisibility(false);
+                }
+            });
             /* @} */
         }
 
@@ -1364,8 +1382,10 @@ public class PhoneStatusBar extends BaseStatusBar {
                 Slog.d(TAG, "making carrier label " + (makeVisible?"visible":"invisible"));
             }
             mCarrierLabel.animate().cancel();
+            mCarrierLabel1.animate().cancel();
             if (makeVisible) {
                 mCarrierLabel.setVisibility(View.VISIBLE);
+                mCarrierLabel1.setVisibility(View.VISIBLE);
             }
             mCarrierLabel.animate()
                 .alpha(makeVisible ? 1f : 0f)
@@ -1382,6 +1402,23 @@ public class PhoneStatusBar extends BaseStatusBar {
                     }
                 })
                 .start();
+            /* SPRD: for multi-sim @{ */
+            mCarrierLabel1.animate()
+            .alpha(makeVisible ? 1f : 0f)
+            //.setStartDelay(makeVisible ? 500 : 0)
+            //.setDuration(makeVisible ? 750 : 100)
+            .setDuration(150)
+            .setListener(makeVisible ? null : new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    if (!mCarrierLabelVisible) { // race
+                        mCarrierLabel1.setVisibility(View.INVISIBLE);
+                        mCarrierLabel1.setAlpha(0f);
+                    }
+                }
+            })
+            .start();
+            /* @} */
         }
     }
 

@@ -16,15 +16,33 @@
 ** limitations under the License.
 */
 -->
-
-<TextView
-    xmlns:android="http://schemas.android.com/apk/res/android"    
-    android:id="@+id/carrier_label"
-    android:textAppearance="@style/TextAppearance.StatusBar.Expanded.Network"
-    android:layout_height="@dimen/carrier_label_height"
-    android:layout_width="match_parent"
-    android:layout_gravity="bottom"
-    android:layout_marginBottom="@dimen/close_handle_height"
-    android:gravity="center"
-    android:visibility="invisible"
-    />
+<!-- SPRD: for multi-sim @{  -->
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:animateLayoutChanges="false">
+    <TextView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/carrier_label"
+        android:textAppearance="@style/TextAppearance.StatusBar.Expanded.Network"
+        android:layout_height="@dimen/carrier_label_height"
+        android:layout_width="match_parent"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="20dp"
+        android:gravity="center"
+         />
+    <TextView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/carrier_label1"
+        android:textAppearance="@style/TextAppearance.StatusBar.Expanded.Network"
+        android:layout_height="@dimen/carrier_label_height"
+        android:layout_width="match_parent"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="@dimen/close_handle_height"
+        android:gravity="center"
+        android:visibility="invisible"
+        />
+</LinearLayout>
+<!-- @} -->
