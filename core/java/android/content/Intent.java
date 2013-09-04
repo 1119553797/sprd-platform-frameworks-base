@@ -3167,6 +3167,12 @@ public class Intent implements Parcelable, Cloneable {
             "android.intent.extra.client_intent";
 
     /**
+     * SPRD: add for "fonts setting"
+     * @hide
+     */
+    public static final String ACTION_TYPEFACE_CHANGED = "android.intent.action.TYPEFACE_CHANGED";
+
+    /**
      * Used to indicate that a {@link #ACTION_GET_CONTENT} intent should only return
      * data that is on the local device.  This is a boolean extra; the default
      * is false.  If true, an implementation of ACTION_GET_CONTENT should only allow

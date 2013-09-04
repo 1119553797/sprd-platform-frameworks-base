@@ -47,7 +47,8 @@ public class DateView extends TextView {
             if (Intent.ACTION_TIME_TICK.equals(action)
                     || Intent.ACTION_TIME_CHANGED.equals(action)
                     || Intent.ACTION_TIMEZONE_CHANGED.equals(action)
-                    || Intent.ACTION_LOCALE_CHANGED.equals(action)) {
+                    || Intent.ACTION_LOCALE_CHANGED.equals(action)
+                    || Intent.ACTION_TYPEFACE_CHANGED.equals(action)) {// SPRD: add for "fonts setting"
                 updateClock();
             }
         }
@@ -124,6 +125,8 @@ public class DateView extends TextView {
                 filter.addAction(Intent.ACTION_TIME_CHANGED);
                 filter.addAction(Intent.ACTION_TIMEZONE_CHANGED);
                 filter.addAction(Intent.ACTION_LOCALE_CHANGED);
+                // SPRD: add for "fonts setting"
+                filter.addAction(Intent.ACTION_TYPEFACE_CHANGED);
                 mContext.registerReceiver(mIntentReceiver, filter, null, null);
                 updateClock();
             } else {

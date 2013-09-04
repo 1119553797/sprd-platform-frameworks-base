@@ -17,6 +17,7 @@
 package android.content.res;
 
 import android.content.pm.ActivityInfo;
+import android.graphics.Typeface;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextUtils;
@@ -71,6 +72,21 @@ public final class Configuration implements Parcelable, Comparable<Configuration
      * @hide
      */
     public boolean userSetLocale;
+
+    /**
+     * SPRD: add for "fonts setting":bUserSetTypeface=true,means a new font is set.
+     * bUserSetTypeface=false,means user reset to system default font.
+     * @hide
+     */
+    public boolean bUserSetTypeface;
+
+    /**
+     * SPRD: add for "fonts setting":keep the user typeface path.
+     * *.ttf would be in /data/fonts,if user add *.ttf from sdcard,
+     * system-back *.ttf would be in /system/user_fonts,
+     * @hide
+     */
+    public String sUserTypeface;
 
     /** Constant for {@link #screenLayout}: bits that encode the size. */
     public static final int SCREENLAYOUT_SIZE_MASK = 0x0f;
@@ -578,6 +594,10 @@ public final class Configuration implements Parcelable, Comparable<Configuration
         compatScreenHeightDp = o.compatScreenHeightDp;
         compatSmallestScreenWidthDp = o.compatSmallestScreenWidthDp;
         seq = o.seq;
+        /* SPRD: add for "fonts setting" @{ */
+        sUserTypeface = o.sUserTypeface;
+        bUserSetTypeface = o.bUserSetTypeface;
+        /* @} */
     }
     
     public String toString() {
@@ -739,6 +759,12 @@ public final class Configuration implements Parcelable, Comparable<Configuration
         smallestScreenWidthDp = compatSmallestScreenWidthDp = SMALLEST_SCREEN_WIDTH_DP_UNDEFINED;
         densityDpi = DENSITY_DPI_UNDEFINED;
         seq = 0;
+        /* SPRD: add for "fonts setting":we set the deafult values according to Typeface.mUserSetTf. @{ */
+        if (Typeface.mUserSetTf != null) {
+            sUserTypeface = Typeface.mUserSetTfPath;
+            bUserSetTypeface = true;
+        }
+        /* @} */
     }
 
     /** {@hide} */
@@ -784,6 +810,18 @@ public final class Configuration implements Parcelable, Comparable<Configuration
             userSetLocale = true;
             changed |= ActivityInfo.CONFIG_LOCALE;
         }
+        /* SPRD: add for "fonts setting" @{ */
+        if ((delta.sUserTypeface != null) &&
+                (sUserTypeface == null || !sUserTypeface.equals(delta.sUserTypeface))) {
+            sUserTypeface = delta.sUserTypeface;
+            bUserSetTypeface = true;
+            changed |= ActivityInfo.CONFIG_TYPEFACE;
+        } else if (sUserTypeface != null && delta.sUserTypeface == null) {
+            sUserTypeface = null;
+            bUserSetTypeface = false;
+            changed |= ActivityInfo.CONFIG_TYPEFACE;
+        }
+        /* @} */
         if (delta.touchscreen != TOUCHSCREEN_UNDEFINED
                 && touchscreen != delta.touchscreen) {
             changed |= ActivityInfo.CONFIG_TOUCHSCREEN;
@@ -978,7 +1016,15 @@ public final class Configuration implements Parcelable, Comparable<Configuration
                 && densityDpi != delta.densityDpi) {
             changed |= ActivityInfo.CONFIG_DENSITY;
         }
+        /* SPRD: add for "fonts setting" @{ */
+        if ((delta.sUserTypeface != null) &&
+                (sUserTypeface == null || !sUserTypeface.equals(delta.sUserTypeface))) {
+            changed |= ActivityInfo.CONFIG_TYPEFACE;
+        } else if (sUserTypeface != null && delta.sUserTypeface == null) {
 
+            changed |= ActivityInfo.CONFIG_TYPEFACE;
+        }
+        /* @} */
         return changed;
     }
 
@@ -1067,6 +1113,19 @@ public final class Configuration implements Parcelable, Comparable<Configuration
         dest.writeInt(compatScreenHeightDp);
         dest.writeInt(compatSmallestScreenWidthDp);
         dest.writeInt(seq);
+        /* SPRD: add for "fonts setting" @{ */
+        if (sUserTypeface == null) {
+            dest.writeInt(0);
+        } else {
+            dest.writeInt(1);
+            dest.writeString(sUserTypeface);
+        }
+        if (bUserSetTypeface) {
+            dest.writeInt(1);
+        } else {
+            dest.writeInt(0);
+        }
+        /* @} */
     }
 
     public void readFromParcel(Parcel source) {
@@ -1095,6 +1154,12 @@ public final class Configuration implements Parcelable, Comparable<Configuration
         compatScreenHeightDp = source.readInt();
         compatSmallestScreenWidthDp = source.readInt();
         seq = source.readInt();
+        /* SPRD: add for "fonts setting" @{ */
+        if (source.readInt() != 0) {
+            sUserTypeface = source.readString();
+        }
+        bUserSetTypeface = (source.readInt() == 1);
+        /* @} */
     }
     
     public static final Parcelable.Creator<Configuration> CREATOR

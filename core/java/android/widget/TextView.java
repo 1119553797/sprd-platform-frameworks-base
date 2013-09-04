@@ -1420,7 +1420,13 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
             if (tf == null) {
                 tf = Typeface.defaultFromStyle(style);
             } else {
-                tf = Typeface.create(tf, style);
+                /* SPRD: modify for "fonts setting" @{ */
+                if (Typeface.mUserSetTf != null && (tf == Typeface.DEFAULT || tf == Typeface.DEFAULT_BOLD)) {
+                    tf = Typeface.create(Typeface.DEFAULT_USER, style);
+                } else {
+                    tf = Typeface.create(tf, style);
+                }
+                /* @} */
             }
 
             setTypeface(tf);
@@ -1432,6 +1438,12 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
         } else {
             mTextPaint.setFakeBoldText(false);
             mTextPaint.setTextSkewX(0);
+            /* SPRD: add for "fonts setting":
+            we set with the default typeface, if user change the system default font. @} */
+            if (Typeface.mUserSetTf != null && (tf == null || tf == Typeface.DEFAULT || tf == Typeface.DEFAULT_BOLD)) {
+                tf = Typeface.mUserSetTf;
+            }
+            /* @} */
             setTypeface(tf);
         }
     }
@@ -3635,6 +3647,22 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
 
     private void setText(CharSequence text, BufferType type,
                          boolean notifyBefore, int oldlen) {
+        /* SPRD: add for "fonts setting"
+         configuration changed, textview in status-bar will reset the text-value,but will not reset the typeface,
+         so,here we should reset the typeface @{ */
+        if ((Typeface.mUserSetTf != null && getTypeface() == null) ||//set a new font
+            (getTypeface() != null
+                     && !getTypeface().equals(Typeface.MONOSPACE)
+                     && !getTypeface().equals(Typeface.SANS_SERIF)
+                     && !getTypeface().equals(Typeface.SERIF)
+                     && (Typeface.mUserSetTf == null || (Typeface.mUserSetTf != null && !getTypeface().equals(Typeface.mUserSetTf))))) {
+            if (Typeface.mUserSetTf == null && getTypeface() != null) {//set to default/dont setfont
+                setTypeface(getTypeface(), getTypeface().getStyle());
+            } else {
+                setTypeface(Typeface.mUserSetTf , 0);
+            }
+        }
+        /* @} */
         if (text == null) {
             text = "";
         }

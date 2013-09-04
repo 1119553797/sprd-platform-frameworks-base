@@ -93,6 +93,7 @@ import android.content.pm.ServiceInfo;
 import android.content.res.CompatibilityInfo;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.graphics.Typeface;
 import android.net.Proxy;
 import android.net.ProxyProperties;
 import android.net.Uri;
@@ -12677,7 +12678,14 @@ public final class ActivityManagerService  extends ActivityManagerNative
                                      !values.locale.equals(mConfiguration.locale),
                                      values.userSetLocale);
                 }
-
+                /* SPRD: add for "fonts setting" @{ */
+                if ((changes & ActivityInfo.CONFIG_TYPEFACE) != 0) {
+                    SystemProperties.set("persist.sys.settypeface", values.bUserSetTypeface ? "1"
+                            : "0");
+                    SystemProperties.set("persist.sys.usertf.path",
+                            values.sUserTypeface != null ? values.sUserTypeface : "");
+                }
+                /* @} */
                 mConfigurationSeq++;
                 if (mConfigurationSeq <= 0) {
                     mConfigurationSeq = 1;
@@ -12737,6 +12745,15 @@ public final class ActivityManagerService  extends ActivityManagerNative
                             null, null, 0, null, null, null, AppOpsManager.OP_NONE,
                             false, false, MY_PID, Process.SYSTEM_UID, UserHandle.USER_ALL);
                 }
+                /* SPRD: add for "fonts setting" @{ */
+                if ((changes&ActivityInfo.CONFIG_TYPEFACE) != 0) {
+                    intent = new Intent(Intent.ACTION_TYPEFACE_CHANGED);
+                    intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
+                    broadcastIntentLocked(null, null,intent,
+                             null, null, 0, null, null, null, AppOpsManager.OP_NONE,
+                            false, false, MY_PID, Process.SYSTEM_UID, UserHandle.USER_ALL);
+                }
+                /* @} */
             }
         }
         

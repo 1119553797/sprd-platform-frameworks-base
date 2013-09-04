@@ -49,6 +49,7 @@ import android.database.sqlite.SQLiteDebug;
 import android.database.sqlite.SQLiteDebug.DbStats;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Typeface;
 import android.hardware.display.DisplayManagerGlobal;
 import android.net.IConnectivityManager;
 import android.net.Proxy;
@@ -4064,6 +4065,12 @@ public final class ActivityThread {
             
             if (DEBUG_CONFIGURATION) Slog.v(TAG, "Handle configuration changed: "
                     + config);
+            /* SPRD: add for "fonts setting":if fonts changed,set the system default typeface to new typeface @{*/
+            int diff = mConfiguration != null ? mConfiguration.diff(config) : 0;
+            if ((diff & ActivityInfo.CONFIG_TYPEFACE) != 0) {
+                Typeface.reloadDefaultTf(config.bUserSetTypeface, config.sUserTypeface);
+            }
+            /* @} */
         
             applyConfigurationToResourcesLocked(config, compat);
             
@@ -4310,7 +4317,19 @@ public final class ActivityThread {
          * Initialize the default locale in this process for the reasons we set the time zone.
          */
         Locale.setDefault(data.config.locale);
-
+        
+        /* SPRD: add for "fonts setting": @{ */        
+        if (mConfiguration.bUserSetTypeface) {
+            if (Typeface.mUserSetTf == null ||
+                (Typeface.mUserSetTf != null && !mConfiguration.sUserTypeface.equals(Typeface.mUserSetTfPath))) {
+                //set a new font or change a font
+                Typeface.reloadDefaultTf(true, mConfiguration.sUserTypeface);
+            }
+        } else if (Typeface.mUserSetTf != null){
+            // reset the system default font
+            Typeface.reloadDefaultTf(false, null);
+        }
+        /* @} */
         /*
          * Update the system configuration since its preloaded and might not
          * reflect configuration changes. The configuration object passed

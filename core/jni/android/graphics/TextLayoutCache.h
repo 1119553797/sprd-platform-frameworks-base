@@ -204,7 +204,7 @@ private:
     SkTypeface* typefaceForScript(const SkPaint* paint, SkTypeface* typeface,
         hb_script_t script);
 
-    size_t shapeFontRun(const SkPaint* paint);
+    size_t shapeFontRun(const SkPaint* paint, const void* textData, size_t byteLength);
 
     void computeValues(const SkPaint* paint, const UChar* chars,
             size_t start, size_t count, size_t contextCount, int dirFlags,

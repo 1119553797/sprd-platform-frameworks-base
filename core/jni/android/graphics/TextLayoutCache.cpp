@@ -731,7 +731,8 @@ void TextLayoutShaper::computeRunValues(const SkPaint* paint, const UChar* conte
 
         // Initialize Harfbuzz Shaper and get the base glyph count for offsetting the glyphIDs
         // and shape the Font run
-        size_t glyphBaseCount = shapeFontRun(paint);
+        // SPRD: modify for "fonts setting"
+        size_t glyphBaseCount = shapeFontRun(paint, chars, count * sizeof(HB_UChar16));
         unsigned int numGlyphs;
         hb_glyph_info_t* info = hb_buffer_get_glyph_infos(mBuffer, &numGlyphs);
         hb_glyph_position_t* positions = hb_buffer_get_glyph_positions(mBuffer, NULL);
@@ -800,7 +801,29 @@ bool TextLayoutShaper::isComplexScript(hb_script_t script) {
     }
 }
 
-size_t TextLayoutShaper::shapeFontRun(const SkPaint* paint) {
+/* SPRD: add for "fonts setting":check whether to find the glyph of text in original typeface(current typeface) @{ */
+static bool useOrigTypeface(const void* textData, size_t byteLength, SkTypeface* typeface)
+{
+    SkPaint paint;
+
+    if (typeface == NULL)
+    {
+        return false;
+    }
+
+    paint.setTypeface(typeface);
+    paint.setTextEncoding(SkPaint::kUTF16_TextEncoding);    
+
+    /*int start = shaperItem.item.pos;
+    int count = shaperItem.item.length;
+
+    bool tmp = paint.textAvailableInCurrentTf(textData, byteLength);
+    LOGD("systemTypefaceUsable string = %s; typeface=%08x; result=%d", String8(shaperItem.string + start, count).string() ,typeface, tmp);*/
+    return paint.textAvailableInCurrentTf(textData, byteLength);
+}
+/* @} */
+// SPRD: modify
+size_t TextLayoutShaper::shapeFontRun(const SkPaint* paint, const void* textData, size_t byteLength) {
     // Update Harfbuzz Shaper
 
     SkTypeface* typeface = paint->getTypeface();
@@ -824,7 +847,8 @@ size_t TextLayoutShaper::shapeFontRun(const SkPaint* paint) {
     }
 
     SkTypeface* scriptTypeface = NULL;
-    if (baseGlyphCount != 0) {
+    // SPRD: add for "fonts setting"
+    if (baseGlyphCount != 0 && !useOrigTypeface(textData, byteLength, typeface)) {
         scriptTypeface = typefaceForScript(paint, typeface,
             hb_buffer_get_script(mBuffer));
 #if DEBUG_GLYPHS

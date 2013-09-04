@@ -3528,6 +3528,10 @@ public class WindowManagerService extends IWindowManager.Stub
             // the value of the previous configuration.
             mTempConfiguration.setToDefaults();
             mTempConfiguration.fontScale = currentConfig.fontScale;
+            /* SPRD: add for "fonts setting" @{ */
+            mTempConfiguration.sUserTypeface = currentConfig.sUserTypeface;
+            mTempConfiguration.bUserSetTypeface = currentConfig.bUserSetTypeface;
+            /* @} */
             if (computeScreenConfigurationLocked(mTempConfiguration)) {
                 if (currentConfig.diff(mTempConfiguration) != 0) {
                     mWaitingForConfig = true;
@@ -7567,6 +7571,10 @@ public class WindowManagerService extends IWindowManager.Stub
         boolean configChanged = updateOrientationFromAppTokensLocked(false);
         mTempConfiguration.setToDefaults();
         mTempConfiguration.fontScale = mCurConfiguration.fontScale;
+        /* SPRD: add for "fonts setting" @{ */
+        mTempConfiguration.sUserTypeface = mCurConfiguration.sUserTypeface;
+        mTempConfiguration.bUserSetTypeface = mCurConfiguration.bUserSetTypeface;
+        /* @} */
         if (computeScreenConfigurationLocked(mTempConfiguration)) {
             if (mCurConfiguration.diff(mTempConfiguration) != 0) {
                 configChanged = true;

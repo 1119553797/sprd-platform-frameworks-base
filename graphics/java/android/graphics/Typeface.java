@@ -18,6 +18,8 @@ package android.graphics;
 
 import android.content.res.AssetManager;
 import android.util.SparseArray;
+import android.os.SystemProperties;
+import android.util.Log;
 
 import java.io.File;
 
@@ -31,6 +33,30 @@ public class Typeface {
 
     /** The default NORMAL typeface object */
     public static final Typeface DEFAULT;
+    /**
+     * SPRD: add for "fonts setting":user set typeface @{
+     * @hide
+     */
+    public static Typeface mUserSetTf;
+    /**
+     * SPRD: add for "fonts setting": path of *.ttf that user set
+     * @hide
+     */
+    public static String mUserSetTfPath;
+    /*SPRD: add for "fonts setting":system default typeface backup */
+    /**
+     *  @hide
+     */ 
+    public static  Typeface DEFAULT_USER;
+    /** @hide 
+     * 
+     */
+    public static  Typeface DEFAULT_BOLD_USER;
+    
+    private static  Typeface[]  sDefaults_user;
+    private static Typeface mPreUserSetTf;
+    private static String mPreUserSetTfPath;
+    /* @} */
     /**
      * The default BOLD typeface object. Note: this may be not actually be
      * bold, depending on what fonts are installed. Call getStyle() to know
@@ -136,7 +162,8 @@ public class Typeface {
      * @return the default typeface that corresponds to the style
      */
     public static Typeface defaultFromStyle(int style) {
-        return sDefaults[style];
+        // SPRD: modify for "fonts setting"
+        return mUserSetTf != null ? sDefaults_user[style] : sDefaults[style];
     }
     
     /**
@@ -178,21 +205,135 @@ public class Typeface {
         native_instance = ni;
         mStyle = nativeGetStyle(ni);
     }
-    
+    /* SPRD: modify for "font setting" @{ */    
     static {
-        DEFAULT         = create((String) null, 0);
-        DEFAULT_BOLD    = create((String) null, Typeface.BOLD);
-        SANS_SERIF      = create("sans-serif", 0);
-        SERIF           = create("serif", 0);
-        MONOSPACE       = create("monospace", 0);
-        
+        DEFAULT = create((String) null, 0);
+        DEFAULT_BOLD = create((String) null, Typeface.BOLD);
+
         sDefaults = new Typeface[] {
-            DEFAULT,
-            DEFAULT_BOLD,
-            create((String) null, Typeface.ITALIC),
-            create((String) null, Typeface.BOLD_ITALIC),
+                DEFAULT,
+                DEFAULT_BOLD,
+                create((String) null, Typeface.ITALIC),
+                create((String) null, Typeface.BOLD_ITALIC),
         };
+        SANS_SERIF = create("sans-serif", 0);
+        SERIF = create("serif", 0);
+        MONOSPACE = create("monospace", 0);
+
+        boolean userSet = "1".equals(SystemProperties.get("persist.sys.settypeface", "0"));
+        String path = SystemProperties.get("persist.sys.usertf.path", "");
+        // if user set the font,use the user typeface
+        if (userSet && path != null && (new File(path)).exists()) {
+            DEFAULT_USER = createFromFile(path);
+            DEFAULT_BOLD_USER = DEFAULT_USER;
+
+            sDefaults_user = new Typeface[] {
+                        DEFAULT_USER,
+                        DEFAULT_USER,
+                        DEFAULT_USER,
+                        DEFAULT_USER,
+                };
+            mUserSetTf = DEFAULT_USER;
+            mUserSetTfPath = path;
+
+        } else {
+            DEFAULT_USER = DEFAULT;
+            DEFAULT_BOLD_USER = DEFAULT_BOLD;
+
+            sDefaults_user = sDefaults;
+        }
     }
+
+    /**
+     * add for "fonts setting":check the *.ttf is ok
+     * @hide
+     * @param path
+     * @return true:is ok; false:*.ttf is invalid
+     */
+    static public boolean isTypefaceOk(String path) {
+        boolean ret = false;
+        if (path == null || (path != null && !(new File(path)).exists())) {
+            return ret;
+        }
+        try {
+            Typeface tf = new Typeface(nativeCreateFromFile(path));
+            if (tf != null) {
+                ret = true;
+            }
+        } catch (RuntimeException re) {
+            ret = false;
+        }
+        return ret;
+    }
+    /**
+     * add for "fonts setting":userSetFlag is true,replace the default typeface with user typeface
+     * reset the system default typeface when userSetFalg is false
+     * @hide
+     * @param userSetFlag
+     * @param path
+     */
+    static public void reloadDefaultTf(boolean userSetFlag, String path) {
+        Typeface tmpTf = null;
+        String tmpPath = null;
+        if (userSetFlag) {
+            if (mUserSetTf != null && path != null && path.equals(mUserSetTfPath))
+                return;
+
+            if (mUserSetTf != null && path != null && !path.equals(mUserSetTfPath)
+                    && path.equals(mPreUserSetTfPath)) {
+                //change a new font(pre user font)
+                tmpTf = mPreUserSetTf;
+                tmpPath = mPreUserSetTfPath;
+                mPreUserSetTf = mUserSetTf;
+                mPreUserSetTfPath = mUserSetTfPath;
+                mUserSetTf = tmpTf;
+                mUserSetTfPath = tmpPath;
+                return;
+            } else if (mUserSetTf != null && path != null && !path.equals(mUserSetTfPath)
+                    && !path.equals(mPreUserSetTfPath)) {
+                //change a new font,but not pre user font
+                mPreUserSetTf = mUserSetTf;
+                mPreUserSetTfPath = mUserSetTfPath;
+            }
+
+            if (mUserSetTf == null && path != null && path.equals(mPreUserSetTfPath)) {
+                // set a pre user font
+                mUserSetTf = mPreUserSetTf;
+                mUserSetTfPath = mPreUserSetTfPath;
+                return;
+            }
+            if (path != null && !(new File(path)).exists()) {
+                Log.w("Typeface","error:process could not accress file (path= " + path + ")");
+                return;
+            }
+            DEFAULT_USER = createFromFile(path);
+            DEFAULT_BOLD_USER = DEFAULT_USER;
+
+            sDefaults_user = new Typeface[] {
+                    DEFAULT_USER,
+                    DEFAULT_USER,
+                    DEFAULT_USER,
+                    DEFAULT_USER,
+            };
+            mUserSetTf = DEFAULT_USER;
+            mUserSetTfPath = path;
+
+        } else {
+            if (mUserSetTf == null) {
+                return;
+            }
+            mPreUserSetTf = mUserSetTf;
+            mPreUserSetTfPath = mUserSetTfPath;
+
+            DEFAULT_USER = DEFAULT;
+            DEFAULT_BOLD_USER = DEFAULT_BOLD;
+
+            sDefaults_user = sDefaults;
+            mUserSetTf = null;
+            mUserSetTfPath = null;
+        }
+    }
+    /* @} */
 
     protected void finalize() throws Throwable {
         try {

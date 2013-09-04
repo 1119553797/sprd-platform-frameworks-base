@@ -431,6 +431,12 @@ public class ActivityInfo extends ComponentInfo
      */
     public static final int CONFIG_FONT_SCALE = 0x40000000;
     
+    /**
+     * SPRD: add for "fonts setting"
+     * @hide
+     */
+    public static final int CONFIG_TYPEFACE = 0x8000;
+
     /** @hide
      * Unfortunately the constants for config changes in native code are
      * different from ActivityInfo. :(  Here are the values we should use for the

@@ -26,6 +26,8 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.UserHandle;
+import android.content.IntentFilter;
+import android.content.BroadcastReceiver;
 import android.os.storage.StorageEventListener;
 import android.os.storage.StorageManager;
 import android.provider.Settings;
@@ -79,7 +81,22 @@ public class StorageNotification extends StorageEventListener {
         mAsyncEventHandler = new Handler(thr.getLooper());
 
         onUsbMassStorageConnectionChanged(connected);
+        /* SPRD: add for "fonts setting" @{ */
+        IntentFilter filter = new IntentFilter();        
+        filter.addAction(Intent.ACTION_TYPEFACE_CHANGED);
+
+        mContext.registerReceiver(mLocalChangeReceiver,filter);
     }
+
+    private final BroadcastReceiver mLocalChangeReceiver = new BroadcastReceiver() {
+        public void onReceive(Context context, Intent intent) {
+            if (DEBUG) {
+                Slog.d(TAG, "language is change....");
+            }
+            updateUsbMassStorageNotification(mUmsAvailable);
+        }
+    };
+    /* @} */
 
     /*
      * @override com.android.os.storage.StorageEventListener
