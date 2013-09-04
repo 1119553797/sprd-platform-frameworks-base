@@ -105,6 +105,8 @@ class WallpaperManagerService extends IWallpaperManager.Stub {
     static final File LOCKSCRENN_FILE = new File(WALLPAPER_DIR, LOCKSCREEN_WALLPAPER);
     static final String MAINMENU_WALLPAPER = "mainmenu";
     static final File MAINMENU_FILE = new File(WALLPAPER_DIR, MAINMENU_WALLPAPER);
+    static final File WALLPAPER_FILE = new File(WALLPAPER_DIR, WALLPAPER);
+
     /* @}*/
     /**
      * Name of the component used to display bitmap wallpapers from either the gallery or
@@ -1297,6 +1299,59 @@ class WallpaperManagerService extends IWallpaperManager.Stub {
         synchronized (mLock) {
             saveSettingsLocked(wallpaper);
         }
+    }
+    public void clearLockScreenWallpaper() {
+		File f = LOCKSCRENN_FILE;
+		if (f.exists()) {
+			f.delete();
+			f = null;
+		}
+	}
+    public ParcelFileDescriptor setWallpaperByTarget(String name, int target) {
+        if (DEBUG) Slog.v(TAG, "setWallpaper");
+
+        checkPermission(android.Manifest.permission.SET_WALLPAPER);
+        synchronized (mLock) {
+            final long ident = Binder.clearCallingIdentity();
+            try {
+                ParcelFileDescriptor pfd = updateWallpaperBitmapLocked(name, target);
+                return pfd;
+            } finally {
+                Binder.restoreCallingIdentity(ident);
+            }
+        }
+    }
+    ParcelFileDescriptor updateWallpaperBitmapLocked(String name, int target) {
+        if (name == null)
+            name = "";
+        try {
+            if (!WALLPAPER_DIR.exists()) {
+                WALLPAPER_DIR.mkdir();
+                FileUtils.setPermissions(
+                        WALLPAPER_DIR.getPath(),
+                        FileUtils.S_IRWXU | FileUtils.S_IRWXG | FileUtils.S_IXOTH,
+                        -1, -1);
+            }
+            ParcelFileDescriptor fd = null;
+            switch (target) {
+                case WallpaperInfo.WALLPAPER_LOCKSCREEN_TYPE:
+                    fd = ParcelFileDescriptor.open(LOCKSCRENN_FILE, MODE_CREATE
+                            | MODE_READ_WRITE);
+                    break;
+                case WallpaperInfo.WALLPAPER_MAINMENU_TYPE:
+                    fd = ParcelFileDescriptor.open(MAINMENU_FILE, MODE_CREATE
+                            | MODE_READ_WRITE);
+                    break;
+                default:
+                    fd = ParcelFileDescriptor.open(WALLPAPER_FILE, MODE_CREATE
+                            | MODE_READ_WRITE);
+                    break;
+            }
+            return fd;
+        } catch (FileNotFoundException e) {
+            Slog.w(TAG, "Error setting wallpaper", e);
+        }
+        return null;
     }
 
     boolean restoreNamedResourceLocked(WallpaperData wallpaper) {
