@@ -932,8 +932,7 @@ public final class Settings {
                 CALL_METHOD_GET_SYSTEM,
                 CALL_METHOD_PUT_SYSTEM);
 
-       /* SPRD: add this var @{ */ 
-
+       /** SPRD: add this var @{ @hide */ 
         public static final String LONG_PRESS_POWER_KEY="Long_Press_Power_Key_NotShowDialog";
        /* @} */
 
