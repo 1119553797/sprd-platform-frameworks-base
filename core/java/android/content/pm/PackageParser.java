@@ -157,7 +157,19 @@ public class PackageParser {
 
     private static boolean sCompatibilityModeEnabled = true;
     private static final int PARSE_DEFAULT_INSTALL_LOCATION = PackageInfo.INSTALL_LOCATION_UNSPECIFIED;
-
+    
+    //add by Jonathan these app will ignore parse some Intent 
+    private static boolean mParseIgnore =false;
+    private static final String[] mIgnorePackageName = {"com.sohu.newsclient",
+							"com.sina.weibopro",
+							"com.sohu.inputmethod.sogou"
+							};
+    /*7710 cucc preLoadApp PackageName
+    baiduMap  com.baidu.BaiduMap
+    weibo     com.sina.weibopro
+    wo store  com.infinit.wostore.ui
+    device register com.chinaunicom.deviceregister*/
+    
     static class ParsePackageItemArgs {
         final Package owner;
         final String[] outError;
@@ -1873,6 +1885,14 @@ public class PackageParser {
 
         final int innerDepth = parser.getDepth();
 
+        //add by Jonathan for ignore some intent-filter
+        mParseIgnore = false;
+        for(String packagename : mIgnorePackageName){
+            if(pkgName.equals(packagename)){
+                mParseIgnore = true;
+            }
+        }
+
         int type;
         while ((type = parser.next()) != XmlPullParser.END_DOCUMENT
                 && (type != XmlPullParser.END_TAG || parser.getDepth() > innerDepth)) {
@@ -2233,6 +2253,7 @@ public class PackageParser {
 
             if (parser.getName().equals("intent-filter")) {
                 ActivityIntentInfo intent = new ActivityIntentInfo(a);
+                if(DEBUG_PARSER) Slog.d(TAG,"packagename"+pkgName);
                 if (!parseIntent(res, parser, attrs, flags, intent, outError, !receiver)) {
                     return null;
                 }
@@ -3026,6 +3047,17 @@ public class PackageParser {
                     outError[0] = "No value supplied for <android:name>";
                     return false;
                 }
+                
+               //add by Jonathan 
+               //donot add some intent action  when app is not system app and mParseIgnore is true
+               if((flags&PARSE_IS_SYSTEM) == 0 && mParseIgnore 
+                                               &&(value.equals("android.appwidget.action.APPWIDGET_UPDATE") 
+                                               || value.equals("android.net.conn.CONNECTIVITY_CHANGE")
+                                               || value.equals(Intent.ACTION_BOOT_COMPLETED))){                        
+                   if(DEBUG_PARSER) Slog.d(TAG,"parseIntent  action  is "+value+"   and flags is "+flags);
+                   continue;
+               }
+                
                 XmlUtils.skipCurrentTag(parser);
 
                 outInfo.addAction(value);
