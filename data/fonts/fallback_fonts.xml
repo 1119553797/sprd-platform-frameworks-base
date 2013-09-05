@@ -126,6 +126,36 @@
     </family>
     <family>
         <fileset>
+            <file>KhmerOS.ttf</file>
+        </fileset>
+    </family>
+    <family>
+        <fileset>
+            <file>Lohit-Punjabi.ttf</file>
+        </fileset>
+    </family>
+    <family>
+        <fileset>
+            <file>Tibetan.ttf</file>
+        </fileset>
+    </family>
+    <family>
+        <fileset>
+            <file>ZawgyiOne.ttf</file>
+        </fileset>
+    </family>
+    <family>
+        <fileset>
+            <file>Lohit-Gujarati.ttf</file>
+        </fileset>
+    </family>
+    <family>
+        <fileset>
+            <file>Phetsarath_OT.ttf</file>
+        </fileset>
+    </family>
+    <family>
+        <fileset>
             <file>NanumGothic.ttf</file>
         </fileset>
     </family>

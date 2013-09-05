@@ -128,6 +128,12 @@ font_src_files := \
     Clockopia.ttf \
     AndroidClock.ttf \
     AndroidClock_Highlight.ttf \
+    KhmerOS.ttf \
+    Lohit-Punjabi.ttf \
+    Tibetan.ttf \
+    ZawgyiOne.ttf \
+    Lohit-Gujarati.ttf \
+    Phetsarath_OT.ttf \
     AndroidClock_Solid.ttf
 
 ifeq ($(MINIMAL_FONT_FOOTPRINT),true)
