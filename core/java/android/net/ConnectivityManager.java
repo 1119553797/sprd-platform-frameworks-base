@@ -356,21 +356,30 @@ public class ConnectivityManager {
      */
     public static final int TYPE_WIFI_P2P    = 13;
 
+    /** SPRD : add by spreadst. @{ */
+    /** {@hide} */
+    public static final int TYPE_MOBILE_DM = 14;
+
+    /** {@hide} */
+    public static final int TYPE_MOBILE_STK = 15;
+
+    /** {@hide} */
+    public static final int TYPE_MOBILE_WAP = 35;
+
 //    /** {@hide} */
 //    public static final int MAX_RADIO_TYPE   = TYPE_WIFI_P2P;
 //
 //    /** {@hide} */
 //    public static final int MAX_NETWORK_TYPE = TYPE_WIFI_P2P;
 
-    /** SPRD : add by spreadst. @{ */
     /** {@hide} */
     public static final int MAX_TYPE_FOR_ONE_SIM = 100;
 
     /** {@hide} */
-    public static final int MAX_RADIO_TYPE   = TYPE_WIFI_P2P + TelephonyManager.getPhoneCount() * MAX_TYPE_FOR_ONE_SIM;
+    public static final int MAX_RADIO_TYPE   = TYPE_MOBILE_WAP + TelephonyManager.getPhoneCount() * MAX_TYPE_FOR_ONE_SIM;
 
     /** {@hide} */
-    public static final int MAX_NETWORK_TYPE = TYPE_WIFI_P2P + TelephonyManager.getPhoneCount() * MAX_TYPE_FOR_ONE_SIM;
+    public static final int MAX_NETWORK_TYPE = TYPE_MOBILE_WAP + TelephonyManager.getPhoneCount() * MAX_TYPE_FOR_ONE_SIM;
     /** @} */
 
     /**
