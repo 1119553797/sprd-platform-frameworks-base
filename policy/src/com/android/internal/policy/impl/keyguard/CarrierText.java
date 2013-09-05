@@ -121,7 +121,9 @@ public class CarrierText extends TextView {
                 break;
 
             case SimNotReady:
-                carrierText = null; // nothing to display yet.
+                /* SPRD: Modify 20130905 Spreadst of 212023 carrier show wrong when airplane mode
+                carrierText = null; // nothing to display yet. @{ */
+                carrierText = concatenate(plmn, spn);
                 break;
 
             case NetworkLocked:
