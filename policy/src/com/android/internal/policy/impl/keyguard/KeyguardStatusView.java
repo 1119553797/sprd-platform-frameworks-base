@@ -19,7 +19,9 @@ package com.android.internal.policy.impl.keyguard;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Typeface;
+import android.os.SystemProperties;
 import android.text.TextUtils;
+import android.text.format.DateFormat;
 import android.util.AttributeSet;
 import android.util.Slog;
 import android.view.View;
@@ -50,6 +52,10 @@ public class KeyguardStatusView extends GridLayout {
     private TextView mDateView;
     private TextView mAlarmStatusView;
     private ClockView mClockView;
+    /* SPRD: Modify 20130905 Spreadst of Bug 211795 date format is different from LockSettings style @{ */
+    private static String universeSupportKey = "universe_ui_support";
+    private boolean isUniverseSupport = false;
+    /* @} */
 
     private KeyguardUpdateMonitorCallback mInfoCallback = new KeyguardUpdateMonitorCallback() {
 
@@ -82,6 +88,9 @@ public class KeyguardStatusView extends GridLayout {
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
+        // SPRD: Modify 20130905 Spreadst of Bug 211795 date format is different from LockSettings style
+        isUniverseSupport = SystemProperties.getBoolean(universeSupportKey, true);
+
         Resources res = getContext().getResources();
         final Locale locale = Locale.getDefault();
         final String datePattern =
@@ -127,7 +136,20 @@ public class KeyguardStatusView extends GridLayout {
     }
 
     void refreshDate() {
-        maybeSetUpperCaseText(mDateView, mDateFormat.format(new Date()));
+        /* SPRD: Modify 20130905 Spreadst of Bug 211795 date format is different from LockSettings style @{ */
+        if (mDateView != null) {
+            if (isUniverseSupport) {
+                final Context context = getContext();
+                Date now = new Date();
+                CharSequence dow = DateFormat.format("EEEE", now);
+                java.text.DateFormat shortDateFormat = DateFormat.getDateFormat(context);
+                CharSequence date = shortDateFormat.format(now.getTime());
+                mDateView.setText(date + "\n" + dow);
+            } else {
+                maybeSetUpperCaseText(mDateView, mDateFormat.format(new Date()));
+            }
+        }
+        /* @} */
     }
 
     @Override
