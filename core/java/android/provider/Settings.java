@@ -932,6 +932,11 @@ public final class Settings {
                 CALL_METHOD_GET_SYSTEM,
                 CALL_METHOD_PUT_SYSTEM);
 
+       /* SPRD: add this var @{ */ 
+
+        public static final String LONG_PRESS_POWER_KEY="Long_Press_Power_Key_NotShowDialog";
+       /* @} */
+
         private static final HashSet<String> MOVED_TO_SECURE;
         static {
             MOVED_TO_SECURE = new HashSet<String>(30);

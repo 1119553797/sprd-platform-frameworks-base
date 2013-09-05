@@ -722,7 +722,15 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     performAuditoryFeedbackForAccessibilityIfNeed();
                 }
                 sendCloseSystemWindows(SYSTEM_DIALOG_REASON_GLOBAL_ACTIONS);
-                showGlobalActionsDialog();
+                /* SPRD: add judge condition @{ */
+                if( Settings.System.getInt(mContext.getContentResolver(), Settings.System.LONG_PRESS_POWER_KEY, 0)==0){
+                    showGlobalActionsDialog();
+                }
+                else
+                {
+                    mWindowManagerFuncs.shutdown(false);
+                }
+                /* @} */
                 break;
             case LONG_PRESS_POWER_SHUT_OFF:
             case LONG_PRESS_POWER_SHUT_OFF_NO_CONFIRM:
