@@ -90,9 +90,7 @@ public class DefaultContainerService extends IntentService {
                 return null;
             }
             String cachePath = copyResourceInner(packageURI, cid, key, resFileName);
-            if(PackageHelper.isContainerMounted("data")) {
-            	deleteDataAsec();
-            } else {
+            if(!PackageHelper.isContainerMounted("data")) {
             	PackageHelper.destroySdDir("data");
             }
             return cachePath;
