@@ -2931,11 +2931,22 @@ public final class ActivityManagerService extends ActivityManagerNative
                 mController = null;
             }
         }
+        Boolean  needdump = false;
+	String bulidtype = SystemProperties.get( "ro.build.type");
+	if((bulidtype != null &&bulidtype.equals("eng"))
+	   ||app.isInterestingToUserLocked() )
+	{
+		needdump = true;
+	}
 
-        long anrTime = SystemClock.uptimeMillis();
-        if (MONITOR_CPU_USAGE) {
-            updateCpuStatsNow();
-        }
+	long anrTime = 0;
+	if(needdump)
+	{
+	        anrTime = SystemClock.uptimeMillis();
+	        if (MONITOR_CPU_USAGE) {
+	            updateCpuStatsNow();
+	        }
+	}
         
         synchronized (this) {
             // PowerManager.reboot() can block for a long time, so ignore ANRs while shutting down.
@@ -2997,30 +3008,30 @@ public final class ActivityManagerService extends ActivityManagerNative
             info.append("Parent: ").append(parent.shortComponentName).append("\n");
         }
 
-        final ProcessStats processStats = new ProcessStats(true);
+	if(needdump)
+	{
+		final ProcessStats processStats = new ProcessStats(true);
+		File tracesFile = dumpStackTraces(true, firstPids, processStats, lastPids);
+		String cpuInfo = null;
+		if (MONITOR_CPU_USAGE) {
+			updateCpuStatsNow();
+			synchronized (mProcessStatsThread) {
+			    cpuInfo = mProcessStats.printCurrentState(anrTime);
+			}
+			info.append(processStats.printCurrentLoad());
+			info.append(cpuInfo);
+		}
 
-        File tracesFile = dumpStackTraces(true, firstPids, processStats, lastPids);
+		info.append(processStats.printCurrentState(anrTime));
 
-        String cpuInfo = null;
-        if (MONITOR_CPU_USAGE) {
-            updateCpuStatsNow();
-            synchronized (mProcessStatsThread) {
-                cpuInfo = mProcessStats.printCurrentState(anrTime);
-            }
-            info.append(processStats.printCurrentLoad());
-            info.append(cpuInfo);
-        }
+		Slog.e(TAG, info.toString());
 
-        info.append(processStats.printCurrentState(anrTime));
-
-        Slog.e(TAG, info.toString());
-        if (tracesFile == null) {
-            // There is no trace file, so dump (only) the alleged culprit's threads to the log
-            Process.sendSignal(app.pid, Process.SIGNAL_QUIT);
-        }
-
-        addErrorToDropBox("anr", app, activity, parent, annotation, cpuInfo, tracesFile, null);
-
+		if (tracesFile == null) {
+		// There is no trace file, so dump (only) the alleged culprit's threads to the log
+			Process.sendSignal(app.pid, Process.SIGNAL_QUIT);
+		}		
+		addErrorToDropBox("anr", app, activity, parent, annotation, cpuInfo, tracesFile, null);
+	}
         if (mController != null) {
             try {
                 // 0 == show dialog, 1 = keep waiting, -1 = kill process immediately
