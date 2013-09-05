@@ -1463,6 +1463,9 @@ public class StatusBarPolicy {
         } else {
             subscription = 0;
         }
+        Slog.d(TAG, "TelephonyManager.getDefaultDataPhoneId(mContext)="+TelephonyManager.getDefaultDataPhoneId(mContext)+"  subscription="+subscription);
+        Slog.d(TAG, "mSimState="+mSimState[subscription]+ "  hasService="+hasService(subscription)
+                      + "  mDataState="+mDataState[subscription]+"  mDataActivity="+mDataActivity);
         if (!isCdma(subscription)) {
             // GSM case, we have to check also the sim state
             if (mSimState[subscription] == IccCard.State.READY || mSimState[subscription]  == IccCard.State.UNKNOWN) {
