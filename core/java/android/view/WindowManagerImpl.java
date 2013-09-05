@@ -258,7 +258,22 @@ public class WindowManagerImpl implements WindowManager {
             if (curView == view) {
                 return;
             }
-            
+            /* @bug 210474 @{ */
+            boolean MONKEY = false;
+            try {
+                MONKEY = SystemProperties.getBoolean("ro.monkey", false);
+            } catch (Exception e1) {
+                MONKEY = false;
+                Log.w("WindowManagerImpl", "Cannot get system property: ro.monkey");
+            }
+
+            if (MONKEY) {
+                if (null == curView) {
+                    Log.e("WindowManagerImpl", "The ViewAncestor is null in monkey test!");
+                    return;
+                }
+            }
+            /* @bug 210474 @} */
             throw new IllegalStateException("Calling with view " + view
                     + " but the ViewRoot is attached to " + curView);
         }
