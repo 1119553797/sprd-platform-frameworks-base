@@ -17,11 +17,16 @@
 package com.android.internal.policy.impl.keyguard;
 
 import android.app.Activity;
+import android.app.WallpaperInfo;
+import android.app.WallpaperManager;
 import android.content.Context;
+import android.content.res.Configuration;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
 import android.graphics.PixelFormat;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.media.IAudioService;
@@ -29,9 +34,11 @@ import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.telephony.TelephonyManager;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.Slog;
 import android.view.KeyEvent;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 
 /**
@@ -55,8 +62,14 @@ public abstract class KeyguardViewBase extends FrameLayout {
     // the audio service will bring up the volume dialog.
     private static final boolean KEYGUARD_MANAGES_VOLUME = true;
 
+    /* SPRD: Modify 20130905 Spreadst of Bug 211956 can not set lockscreen wallpaper @{ */
+    private static final String TAG = "KeyguardViewBase";
+    private WindowManager mWindowManager;
+    private WallpaperManager mWallpaperManager;
+
     // This is a faster way to draw the background on devices without hardware acceleration
-    private static final Drawable mBackgroundDrawable = new Drawable() {
+    Drawable mBackgroundDrawable = new Drawable() {
+    /* @} */
         @Override
         public void draw(Canvas canvas) {
             canvas.drawColor(BACKGROUND_COLOR, PorterDuff.Mode.SRC);
@@ -82,6 +95,30 @@ public abstract class KeyguardViewBase extends FrameLayout {
 
     public KeyguardViewBase(Context context, AttributeSet attrs) {
         super(context, attrs);
+        /* SPRD: Modify 20130905 Spreadst of Bug 211956 can not set lockscreen wallpaper @{ */
+        Configuration configuration = context.getResources().getConfiguration();
+        DisplayMetrics metric = new DisplayMetrics();
+        if (mWindowManager == null) {
+            mWindowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        }
+        if (mWallpaperManager == null) {
+            mWallpaperManager = (WallpaperManager) context
+                    .getSystemService(Context.WALLPAPER_SERVICE);
+        }
+        Drawable drawable = mWallpaperManager.getDrawable(WallpaperInfo.WALLPAPER_LOCKSCREEN_TYPE);
+        mWindowManager.getDefaultDisplay().getMetrics(metric);
+        int width = metric.widthPixels;
+        int height = metric.heightPixels;
+
+        if (configuration != null) {
+            if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                width = metric.heightPixels;
+                height = metric.widthPixels;
+            }
+        }
+
+        mBackgroundDrawable = this.getDestDrawale(drawable, width, height);
+        /* @} */
         resetBackground();
     }
 
@@ -240,10 +277,10 @@ public abstract class KeyguardViewBase extends FrameLayout {
             try {
                 audioService.dispatchMediaKeyEvent(keyEvent);
             } catch (RemoteException e) {
-                Log.e("KeyguardViewBase", "dispatchMediaKeyEvent threw exception " + e);
+                Log.e(TAG, "dispatchMediaKeyEvent threw exception " + e);
             }
         } else {
-            Slog.w("KeyguardViewBase", "Unable to find IAudioService for media key event");
+            Slog.w(TAG, "Unable to find IAudioService for media key event");
         }
     }
 
@@ -260,5 +297,26 @@ public abstract class KeyguardViewBase extends FrameLayout {
             KeyguardViewMediator.ViewMediatorCallback viewMediatorCallback) {
         mViewMediatorCallback = viewMediatorCallback;
     }
+
+    /* SPRD: Modify 20130905 Spreadst of Bug 211956 can not set lockscreen wallpaper @{ */
+    private Drawable getDestDrawale(Drawable drawable, int width, int height) {
+        if (drawable == null) {
+            return null;
+        }
+        int sourceWidth = ((BitmapDrawable) drawable).getBitmap().getWidth();
+        int sourceHeight = ((BitmapDrawable) drawable).getBitmap().getHeight();
+        if (sourceWidth < width || sourceHeight < height) {
+            return drawable;
+        }
+        int destX = (sourceWidth - width) / 2;
+        int dextY = (sourceHeight - height) / 2;
+        BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
+        Bitmap bitmap = bitmapDrawable.getBitmap();
+
+        Bitmap destBitmap = Bitmap.createBitmap(bitmap, destX, dextY, width, height);
+
+        return new BitmapDrawable(destBitmap);
+    }
+    /* @} */
 
 }
