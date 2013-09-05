@@ -36,6 +36,9 @@ import android.util.Log;
 import android.util.Slog;
 import android.util.TimeUtils;
 import android.view.IApplicationToken;
+//add for Bug#212506
+import android.os.Debug;
+//end add for Bug#212506
 
 import java.io.PrintWriter;
 import java.lang.ref.WeakReference;
@@ -442,6 +445,9 @@ class ActivityRecord extends IApplicationToken.Stub {
                         sb.append(")");
                     }
                     Log.i(ActivityManagerService.TAG, sb.toString());
+                    //add for Bug#212506
+                    printMemoryInfo();
+                    //end add for Bug#212506
                 }
                 stack.reportActivityLaunchedLocked(false, this, thisTime, totalTime);
                 if (totalTime > 0) {
@@ -585,4 +591,30 @@ class ActivityRecord extends IApplicationToken.Stub {
         sb.append('}');
         return stringName = sb.toString();
     }
+
+    //add for Bug#212506
+    private void printMemoryInfo() {
+    	Debug.MemoryInfo memInfo = new Debug.MemoryInfo(); 
+    	if(app == null) {
+    		Log.e(ActivityManagerService.TAG, "MemoryInfo: activity--" + info + ", the ProcessRecord is null");
+    		return;
+    	}
+    	Debug.getMemoryInfo(app.pid, memInfo);    		
+    	StringBuilder sb = new StringBuilder(256);
+    	sb.append("processName: ");
+    	sb.append(app.processName);
+    	sb.append(",pid: ");
+    	sb.append(app.pid);
+    	sb.append(",uid: ");
+    	sb.append(app.info.uid);
+    	sb.append(",total PSS memory usage: ");
+    	sb.append(memInfo.getTotalPss());
+    	sb.append("KB,total private dirty memory usage(USS): ");
+    	sb.append(memInfo.getTotalPrivateDirty());
+    	sb.append("KB,total shared dirty memory usage(RSS): ");
+		sb.append(memInfo.getTotalSharedDirty());
+		sb.append("KB");
+    	Log.d(ActivityManagerService.TAG, "MemoryInfo: " + sb);
+    }
+    //end add for Bug#212506
 }
