@@ -401,9 +401,15 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
         new MediaPlayer.OnVideoSizeChangedListener() {
         public void onVideoSizeChanged(MediaPlayer mp, int width, int height) {
             isPlaying = true;//SPRD: add for playing
-            mVideoWidth = mp.getVideoWidth();
-            mVideoHeight = mp.getVideoHeight();
             /** SPRD : new method @{ */
+            /*mVideoWidth = mp.getVideoWidth();
+            mVideoHeight = mp.getVideoHeight();*/
+            try {
+                mVideoWidth = mp.getVideoWidth();
+                mVideoHeight = mp.getVideoHeight();
+            } catch (IllegalStateException e) {
+                e.printStackTrace();
+            }
             if (mVideoWidth != 0 && mVideoHeight != 0) {
 //                getHolder().setFixedSize(mVideoWidth, mVideoHeight);
 //                requestLayout();
@@ -447,8 +453,16 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
             if (mMediaController != null) {
                 mMediaController.setEnabled(true);
             }
-            mVideoWidth = mp.getVideoWidth();
-            mVideoHeight = mp.getVideoHeight();
+            /** SPRD : new method @{ */
+            /*mVideoWidth = mp.getVideoWidth();
+            mVideoHeight = mp.getVideoHeight();*/
+            try {
+                mVideoWidth = mp.getVideoWidth();
+                mVideoHeight = mp.getVideoHeight();
+            } catch (IllegalStateException e) {
+                e.printStackTrace();
+            }
+            /** @} */
 
             int seekToPosition = mSeekWhenPrepared;  // mSeekWhenPrepared may be changed after seekTo() call
             if (seekToPosition != 0) {
