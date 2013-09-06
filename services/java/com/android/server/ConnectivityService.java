@@ -2490,6 +2490,15 @@ public class ConnectivityService extends IConnectivityManager.Stub {
             }
         }
 
+        /* SPRD: To improve access @{ */
+        if (ConnectivityManager.getDefaultNetworkType(netType) == ConnectivityManager.TYPE_MOBILE) {
+            if (mNetTrackers[netType].getNetworkInfo().isConnected()) {
+                SystemProperties.set("sys.gprs.attached", "true");
+            } else {
+                SystemProperties.set("sys.gprs.attached", "false");
+            }
+        }
+        /* @} */
         // TODO: Temporary notifying upstread change to Tethering.
         //       @see bug/4455071
         /** Notify TetheringService if interface name has been changed. */
