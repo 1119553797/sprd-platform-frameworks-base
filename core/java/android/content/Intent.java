@@ -3170,7 +3170,16 @@ public class Intent implements Parcelable, Cloneable {
      * SPRD: add for "fonts setting"
      * @hide
      */
+
     public static final String ACTION_TYPEFACE_CHANGED = "android.intent.action.TYPEFACE_CHANGED";
+
+
+    /**
+     * SPRD: add low mem alert
+     * @hide
+     */
+    public static final String ACTION_SHOW_STORAGE = "android.intent.action.show_storage";
+
 
     /**
      * Used to indicate that a {@link #ACTION_GET_CONTENT} intent should only return

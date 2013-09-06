@@ -22,10 +22,13 @@ import android.app.PendingIntent;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.IPackageDataObserver;
 import android.content.pm.IPackageManager;
 import android.content.pm.PackageManager;
 import android.os.Binder;
+import android.os.Bundle;
+import android.os.Debug;
 import android.os.Environment;
 import android.os.FileObserver;
 import android.os.Handler;
@@ -47,6 +50,22 @@ import android.util.TimeUtils;
 import java.io.File;
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
+/* SPRD: add low mem alert @{ */
+import android.content.BroadcastReceiver;
+
+import android.content.pm.PackageInfo;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageStats;
+import android.content.pm.IPackageStatsObserver;
+
+import android.content.pm.ParceledListSlice;
+import java.util.ArrayList;
+
+import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+/* @} */
 
 /**
  * This class implements a service to monitor the amount of disk
@@ -69,7 +88,8 @@ import java.io.PrintWriter;
 public class DeviceStorageMonitorService extends Binder {
     private static final String TAG = "DeviceStorageMonitorService";
 
-    private static final boolean DEBUG = false;
+    private static final boolean DEBUG = Debug.isDebug();
+
     private static final boolean localLOGV = false;
 
     private static final int DEVICE_MEMORY_WHAT = 1;
@@ -79,7 +99,8 @@ public class DeviceStorageMonitorService extends Binder {
     private static final int DEFAULT_FREE_STORAGE_LOG_INTERVAL_IN_MINUTES = 12*60; //in minutes
     private static final long DEFAULT_DISK_FREE_CHANGE_REPORTING_THRESHOLD = 2 * 1024 * 1024; // 2MB
     private static final long DEFAULT_CHECK_INTERVAL = MONITOR_INTERVAL*60*1000;
-
+    // SPRD: add for low mem alert
+    private static final int DEFAULT_FULL_THRESHOLD_BYTES = 5*1024*1024; // 1MB
     private long mFreeMem;  // on /data
     private long mFreeMemAfterLastCacheClear;  // on /data
     private long mLastReportedFreeMem;
@@ -111,6 +132,7 @@ public class DeviceStorageMonitorService extends Binder {
     // This is the raw threshold that has been set at which we consider
     // storage to be low.
     private long mMemLowThreshold;
+
     // This is the threshold at which we start trying to flush caches
     // to get below the low threshold limit.  It is less than the low
     // threshold; we will allow storage to get a bit beyond the limit
@@ -122,6 +144,15 @@ public class DeviceStorageMonitorService extends Binder {
     // flushing takes place.
     private long mMemCacheTrimToThreshold;
     private long mMemFullThreshold;
+    /* SPRD: add low mem alert @{ */
+    private static final int DEFAULT_THRESHOLD_CRITICAL = 10*1024*1024; //10MB
+    private boolean mUpdateMemory = false;
+    private boolean bootCompleted = false;
+    private static final int GET_MEMORY_ERROR = -1;
+    private static final int GET_MEMORY_SUCCUESS = 0;
+    private boolean mIsCheckingMemory = false;
+    private boolean mUpdateStorageData = false;
+    /* @} */
 
     /**
      * This string is used for ServiceManager access to this class.
@@ -140,9 +171,35 @@ public class DeviceStorageMonitorService extends Binder {
                 Slog.e(TAG, "Will not process invalid message");
                 return;
             }
-            checkMemory(msg.arg1 == _TRUE);
+            /* SPRD: modify for adding low mem alert @{ */
+            final boolean tmp = (msg.arg1 == _TRUE);
+            new Thread(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        checkMemory(tmp);
+                    }
+                }
+            ).start();
+            /* @} */
         }
     };
+    /* SPRD: add low mem alert @{ */
+    private final BroadcastReceiver bootCompletedReceiver = new BroadcastReceiver(){
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            if(Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction()))
+            {
+                bootCompleted = true;
+            } else if (Intent.ACTION_SHOW_STORAGE.equals(intent.getAction())){
+                //show storage
+                postCheckMemoryMsg(true, 0);
+            }
+        }
+    };
+    /* @} */
 
     class CachePackageDataObserver extends IPackageDataObserver.Stub {
         public void onRemoveCompleted(String packageName, boolean succeeded) {
@@ -224,6 +281,14 @@ public class DeviceStorageMonitorService extends Binder {
     }
 
     private final void checkMemory(boolean checkCache) {
+        /* SPRD: add low mem alert @{ */
+        if(mIsCheckingMemory == true) {
+            Slog.i(TAG, "other thread is checking memory now ,return");
+            return;
+        }
+        mIsCheckingMemory = true;
+        /* @} */
+
         //if the thread that was started to clear cache is still running do nothing till its
         //finished clearing cache. Ideally this flag could be modified by clearCache
         // and should be accessed via a lock but even if it does this test will fail now and
@@ -241,6 +306,15 @@ public class DeviceStorageMonitorService extends Binder {
 
             //post intent to NotificationManager to display icon if necessary
             if (mFreeMem < mMemLowThreshold) {
+                /* SPRD: add low mem alert @{ */
+                if (!mUpdateMemory && mFreeMem < DEFAULT_THRESHOLD_CRITICAL) {
+                    Slog.w(TAG, "Risk, Running low on memory. Start activity automaticly.");   
+                    startShowStorageActivity();
+                }
+                
+                mUpdateMemory = false;
+                /* @} */
+
                 if (checkCache) {
                     // We are allowed to clear cache files at this point to
                     // try to get down below the limit, because this is not
@@ -277,6 +351,7 @@ public class DeviceStorageMonitorService extends Binder {
                 }
             } else {
                 mFreeMemAfterLastCacheClear = mFreeMem;
+
                 if (mLowMemFlag) {
                     Slog.i(TAG, "Memory available. Cancelling notification");
                     cancelNotification();
@@ -298,6 +373,8 @@ public class DeviceStorageMonitorService extends Binder {
         if(localLOGV) Slog.i(TAG, "Posting Message again");
         //keep posting messages to itself periodically
         postCheckMemoryMsg(true, DEFAULT_CHECK_INTERVAL);
+        // SPRD: add low mem alert
+        mIsCheckingMemory = false;
     }
 
     private void postCheckMemoryMsg(boolean clearCache, long delay) {
@@ -341,7 +418,16 @@ public class DeviceStorageMonitorService extends Binder {
         mMemCacheTrimToThreshold = mMemLowThreshold
                 + ((mMemLowThreshold-mMemCacheStartTrimThreshold)*2);
         mFreeMemAfterLastCacheClear = mTotalMemory;
-        checkMemory(true);
+
+        /* SPRD: add low mem alert @{ */
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Intent.ACTION_BOOT_COMPLETED);
+        filter.addAction(Intent.ACTION_SHOW_STORAGE);
+        mContext.registerReceiver(bootCompletedReceiver, filter);
+
+        postCheckMemoryMsg(true, 0);
+        //checkMemory(true);
+        /* @} */
 
         mCacheFileDeletedObserver = new CacheFileDeletedObserver();
         mCacheFileDeletedObserver.startWatching();
@@ -356,12 +442,19 @@ public class DeviceStorageMonitorService extends Binder {
         if(localLOGV) Slog.i(TAG, "Sending low memory notification");
         //log the event to event log with the amount of free storage(in bytes) left on the device
         EventLog.writeEvent(EventLogTags.LOW_STORAGE, mFreeMem);
-        //  Pack up the values and broadcast them to everyone
-        Intent lowMemIntent = new Intent(Environment.isExternalStorageEmulated()
+
+        /* SPRD: Pack up the values and broadcast them to everyone @{ */
+        /*Intent lowMemIntent = new Intent(Environment.isExternalStorageEmulated()
                 ? Settings.ACTION_INTERNAL_STORAGE_SETTINGS
                 : Intent.ACTION_MANAGE_PACKAGE_STORAGE);
-        lowMemIntent.putExtra("memory", mFreeMem);
+        lowMemIntent.putExtra("memory", mFreeMem);*/
+
+
+        Intent lowMemIntent = new Intent(mContext, com.android.server.ShowStorage.class);
+        /* @} */
+
         lowMemIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
         NotificationManager mNotificationMgr =
                 (NotificationManager)mContext.getSystemService(
                         Context.NOTIFICATION_SERVICE);
@@ -369,12 +462,16 @@ public class DeviceStorageMonitorService extends Binder {
                 com.android.internal.R.string.low_internal_storage_view_title);
         CharSequence details = mContext.getText(
                 com.android.internal.R.string.low_internal_storage_view_text);
+
         PendingIntent intent = PendingIntent.getActivityAsUser(mContext, 0,  lowMemIntent, 0,
                 null, UserHandle.CURRENT);
+
         Notification notification = new Notification();
         notification.icon = com.android.internal.R.drawable.stat_notify_disk_full;
         notification.tickerText = title;
         notification.flags |= Notification.FLAG_NO_CLEAR;
+        // SPRD: add low mem alert
+        notification.flags |= Notification.FLAG_ONGOING_EVENT;
         notification.setLatestEventInfo(mContext, title, details, intent);
         mNotificationMgr.notifyAsUser(null, LOW_MEMORY_NOTIFICATION_ID, notification,
                 UserHandle.ALL);
@@ -418,9 +515,273 @@ public class DeviceStorageMonitorService extends Binder {
         if(callingUid != Process.SYSTEM_UID) {
             return;
         }
+        // SPRD: add low mem alert
+        mUpdateMemory = true;
         // force an early check
         postCheckMemoryMsg(true, 0);
     }
+    /* SPRD: add low mem alert @{*/
+    private void startShowStorageActivity(){
+        if (bootCompleted) {
+            Intent showStorageIntent = new Intent(mContext,com.android.server.ShowStorage.class);
+            showStorageIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            mContext.startActivity(showStorageIntent);
+        }
+    }
+
+    /** 
+     * This class implements a service to observer the action of get PackageSize
+     */
+    private class SizeObserver extends IPackageStatsObserver.Stub {
+        private CountDownLatch mCount;
+
+        PackageStats stats;
+
+        boolean succeeded;
+
+        public void invokeGetSize(String packageName, CountDownLatch count) {
+            mCount = count;
+            try {
+                myPm.getPackageSizeInfo(packageName, UserHandle.USER_ALL, this);
+            } catch (RemoteException e) {
+                // TODO Auto-generated catch block
+                Slog.e(TAG, "RemoteException e");
+            }
+        }
+
+        public void onGetStatsCompleted(PackageStats pStats, boolean pSucceeded) {
+            succeeded = pSucceeded;
+            stats = pStats;
+            mCount.countDown();
+        }
+    }
+
+    IPackageManager myPm = IPackageManager.Stub.asInterface(ServiceManager.getService("package"));
+    
+    public List<PackageInfo> getInstalledPackages(int flags) {
+            ParceledListSlice<PackageInfo> slice;
+            try {
+                slice = myPm.getInstalledPackages(flags, UserHandle.USER_ALL);
+            } catch (Exception e) {
+                Slog.e(TAG,"getInstalledPackages error");
+                return null;
+            }
+            return slice.getList();
+    }
+    
+    public void setUpdateStorageDataFlag(boolean updateFlag) {
+        mUpdateStorageData = updateFlag;
+        postCheckMemoryMsg(true, 0);
+    }
+    private static GetShowStorageData gssdInstance = null;
+
+    private class GetShowStorageData implements Runnable {
+        long myApplicationSize = 0;
+        long myMailSize = 0;
+        long mySmsMmsSize = 0;
+        final String mMAILPACKAGE = "com.android.email";
+        final String mMMSPACKAGE = "com.android.mms";
+        List<PackageInfo> packages = null;
+        int pkgsCount = 0;
+        int pkgIndex = -1;
+        PackageInfo pkgInfo;
+        CountDownLatch count1 = new CountDownLatch(1);
+
+        private long myTotalMemory = 0;
+        private long myFreeMemory = 0;
+        private long myApplicationMemory = 0;
+        private long myMailMemory = 0;
+        private long mySmsMmsMemory = 0;
+        private long mySystemMemory = 0;
+
+        static final int GET_SIZE_NEXT = 0;
+        static final int GET_SIZE_WAIT = 1;
+        static final int GET_SIZE_OK = 2;
+        int mGetSizeState = GET_SIZE_NEXT;
+
+        private boolean mRunning = false;
+
+        PackageStats myPackageStats;
+        SizeObserver mSizeObserver = new SizeObserver();
+
+        private GetShowStorageData() {
+        }
+
+        synchronized public long[] result() {
+            if (mRunning) {
+                return null;
+            }
+
+            final int mTOTALLOCATION = 0;
+            final int mFREELOCATION = 1;
+            final int mAPPLICATIONLOCATION = 2;
+            final int mMAILLOCATION = 3;
+            final int mSMSMMSLOCATION = 4;
+            final int mSYSTEMLOCATION = 5;
+            final int mELEMENTCOUNT = 6;
+
+            long mySize[] = new long[mELEMENTCOUNT];
+            mySize[mTOTALLOCATION] = myTotalMemory;
+            mySize[mFREELOCATION] = myFreeMemory;
+            mySize[mAPPLICATIONLOCATION] = myApplicationMemory;
+            mySize[mMAILLOCATION] = myMailMemory;
+            mySize[mSMSMMSLOCATION] = mySmsMmsMemory;
+            mySize[mSYSTEMLOCATION] = mySystemMemory;
+
+            return mySize;
+        }
+
+        synchronized public void start() {
+            if(DEBUG)Slog.w(TAG, "start() mRunning is " + mRunning);
+            if (mRunning)
+                return;
+            mRunning = true;
+            myTotalMemory = -1;
+            myFreeMemory = 0;
+            if(DEBUG)Slog.w(TAG, "really start()");
+
+            try {
+                mDataFileStats.restat(DATA_PATH.getAbsolutePath());
+                myFreeMemory = (long) mDataFileStats.getAvailableBlocks() *  mDataFileStats.getBlockSize();
+                myTotalMemory = (long) (mDataFileStats.getBlockCount() * mDataFileStats.getBlockSize());
+            } catch (IllegalArgumentException e) {
+                // use the old value of mFreeMem
+            }
+
+            myApplicationSize = 0;
+            myMailSize = 0;
+            mySmsMmsSize = 0;
+            packages = getInstalledPackages(PackageManager.GET_UNINSTALLED_PACKAGES);
+            pkgsCount = packages.size();
+            pkgIndex = -1;
+            mGetSizeState = GET_SIZE_NEXT;
+            nextRun();
+        }
+
+        synchronized private void end() {
+            if(DEBUG)Slog.w(TAG, "end() mRunning is " + mRunning);
+            myApplicationMemory = myApplicationSize;
+            myMailMemory = myMailSize;
+            mySmsMmsMemory = mySmsMmsSize;
+            mySystemMemory = myTotalMemory - myFreeMemory - myMailMemory - mySmsMmsMemory
+                             - myApplicationMemory;
+            if(DEBUG)Slog.w(TAG, "end()[myFreeMemory:"+myFreeMemory+
+                                "myApplicationMemory:"+myApplicationMemory+
+                                ",myMailMemory:"+myMailMemory+
+                                ",mySmsMmsMemory:"+mySmsMmsMemory+
+                                ",mySystemMemory:"+mySystemMemory+"]");
+            if(mySystemMemory < 0)
+            {
+                mySystemMemory = 0;
+            }
+            mRunning = false;
+        }
+
+        private void nextRun() {
+            mHandler.post(this);
+        }
+
+        public void run() {
+            if (mGetSizeState == GET_SIZE_NEXT) {
+                pkgIndex++;
+                if (pkgIndex >= pkgsCount) {
+                    end();
+                    return;
+                }
+                pkgInfo = packages.get(pkgIndex);
+
+                if(DEBUG)Slog.w(TAG, "package:["+pkgInfo.packageName+"]");
+
+                if("android".equals(pkgInfo.packageName)) {
+                    nextRun();
+                    return;
+                }
+
+                if ((pkgInfo.applicationInfo.flags & ApplicationInfo.FLAG_EXTERNAL_STORAGE) != 0) {
+                    nextRun();
+                    return;
+                }
+                count1 = new CountDownLatch(1);
+                mSizeObserver.invokeGetSize(pkgInfo.packageName, count1);
+                mGetSizeState = GET_SIZE_WAIT;
+            }
+            if (mGetSizeState == GET_SIZE_WAIT) {
+                boolean waitOK = true;
+                try {
+                    waitOK = count1.await(500, TimeUnit.MILLISECONDS);
+                } catch (InterruptedException e) {
+                    Slog.e(TAG, "Failed computing size for pkg : " + pkgInfo.packageName);
+                }
+                if (waitOK) {
+                    mGetSizeState = GET_SIZE_OK;
+                }
+            }
+            if (mGetSizeState == GET_SIZE_OK && pkgInfo != null) {
+                // Process the package statistics
+                myPackageStats = mSizeObserver.stats;
+                boolean succeeded = mSizeObserver.succeeded;
+                if (myPackageStats == null) {
+                    if (succeeded)
+                        Slog.v(TAG, "Failed getting size for pkg : " + pkgInfo.packageName);
+                    else
+                        Slog.v(TAG, "Time out getting size for pkg : " + pkgInfo.packageName);
+                    nextRun();
+                    return;
+                }
+                if(DEBUG) {
+                    boolean isSystemApp = (pkgInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0;
+
+                    String msg = "";
+                    if (isSystemApp)
+                        msg += "is system app";
+                    else
+                        msg += "is data app";
+                    if (myPackageStats.dataSize != 0) {
+                        msg += ", dataSize:["+myPackageStats.dataSize+"]";
+                    }
+                    if (!isSystemApp && myPackageStats.codeSize != 0) {
+                        msg += ", codeSize:["+myPackageStats.codeSize+"]";
+                    }
+                    Slog.w(TAG, msg);
+                }
+
+                if ((pkgInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0) {
+                    if ( mMAILPACKAGE.equals(pkgInfo.packageName)) {
+                        myMailSize += myPackageStats.dataSize;
+                    } else if (mMMSPACKAGE.equals(pkgInfo.packageName)) {
+                        mySmsMmsSize += myPackageStats.dataSize;
+                    } else {
+                        myApplicationSize += myPackageStats.dataSize;
+                    }
+                } else {
+                    if (mMAILPACKAGE.equals(pkgInfo.packageName)) {
+                        myMailSize += myPackageStats.dataSize + myPackageStats.codeSize;
+                    } else if (mMMSPACKAGE.equals(pkgInfo.packageName)) {
+                        mySmsMmsSize += myPackageStats.dataSize + myPackageStats.codeSize;
+                    } else {
+                        myApplicationSize += myPackageStats.dataSize + myPackageStats.codeSize;
+                    }
+                }
+                if(DEBUG)Slog.w(TAG, "myApplicationSize:"+myApplicationSize+
+                                    ",myMailSize:"+myMailSize+
+                                    ",mySmsMmsSize:"+mySmsMmsSize);
+                mGetSizeState = GET_SIZE_NEXT;
+            }
+            nextRun();
+        }
+    }
+
+    public void beginGetShowStorageData() {
+        if (gssdInstance == null) {
+            gssdInstance = new GetShowStorageData();
+        }
+        gssdInstance.start();
+    }
+
+    public long[] getShowStorageDataOK() {
+        return gssdInstance.result();
+    }
+    /* @} */
 
     /**
      * Callable from other things in the system service to obtain the low memory

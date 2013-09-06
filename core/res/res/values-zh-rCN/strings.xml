@@ -298,10 +298,6 @@
   <string msgid="8655887539089910577" product="tablet" name="enable_explore_by_touch_warning_message">"<xliff:g id="ACCESSIBILITY_SERVICE_NAME">%1$s</xliff:g>想要启用“触摸浏览”。“触摸浏览”启用后，您可以听到或看到所触摸内容的说明，还可以通过手势操作与手机互动。"</string>
   <string msgid="2708199672852373195" product="default" name="enable_explore_by_touch_warning_message">"<xliff:g id="ACCESSIBILITY_SERVICE_NAME">%1$s</xliff:g>想要启用“触摸浏览”。“触摸浏览”启用后，您可以听到或看到所触摸内容的说明，还可以通过手势操作与手机互动。"</string>
   <string msgid="6640505817617414371" name="low_internal_storage_view_text">"某些系统功能可能无法正常使用"</string>
-  <string name="low_internal_storage_ignore">"忽略"</string>
-  <string name="low_internal_storage_display_details">"查看详情"</string>
-  <string name="low_internal_storage_wait">"请等待…"</string>
-  <string name="low_internal_storage_updating_details">"正在更新详情…"</string>
   <string msgid="3272758351138122503" name="webpage_unresponsive">"该网页已无响应。"\n\n"要将其关闭吗？"</string>
   <string msgid="1645267259272829559" name="accept">"接受"</string>
   <string msgid="2112225451706137894" name="decline">"拒绝"</string>
@@ -338,20 +334,6 @@
   <string name="lockscreen_sim_network_locked_message">网络已锁</string>
   <string name="lockscreen_sim_card_locked_message">sim卡已锁</string>
   <string name="ringtone_waning">错误的文件，请重新选择</string>
-  <string name="Low_Memory_Alert">手机存储空间即将告罄，您必须删除某些数据以确保手机的稳定</string>
-  <string name="Low_Memory_Free">空闲</string>
-  <string name="Low_Memory_Application">应用</string>
-  <string name="Low_Memory_Mail">邮件</string>
-  <string name="Low_Memory_Sms_Mms">短信/彩信</string>
-  <string name="Low_Memory_System">系统</string>
-  <string name="Btn_Select_Clear">选择并清除</string>
-  <string name="myAppTip">请选择要删除的应用</string>
-  <string name="myApp_Start_Btn">开始</string>
-  <string name="myApp_Move2Sd_ChkBox">迁移到SD卡</string>
-  <string name="myApp_ClearData_ChkBox">清除数据</string>
-  <string name="myApp_Uninstall_ChkBox">卸载应用</string>
-  <string name="myAppLoading">加载中\u2026</string>
-  <string name="myAppProcessing">处理中\u2026</string>
   <string msgid="8340973892742019101" name="byteShort">"B"</string>
   <string msgid="5973789783504771878" name="kilobyteShort">"KB"</string>
   <string msgid="6355851576770428922" name="megabyteShort">"MB"</string>
@@ -1613,4 +1595,28 @@
   <string name="usim_recommanded_for_cucc_app">该业务为中国联通自有业务，推荐使用中国联通 USIM 卡进行数据连接，是否继续？</string>
   <string name="pick_yes">继续</string>
   <string name="pick_no">取消</string>
+  <!-- SPRD: Strings for ShowStorage Activity @{-->
+  <string name="Low_Memory_Alert">手机存储空间即将告罄，您必须删除某些数据以确保手机的稳定</string>
+  <string name="Low_Memory_Free">空闲</string>
+  <string name="Low_Memory_Application">应用</string>
+  <string name="Low_Memory_Mail">邮件</string>
+  <string name="Low_Memory_Sms_Mms">短信/彩信</string>
+  <string name="Low_Memory_System">系统</string>
+  <string name="Btn_Select_Clear">选择并清除</string>
+
+  <!-- Strings for AppManage Activity -->
+  <string name="myAppTip">请选择要删除的应用</string>
+  <string name="myApp_Start_Btn">开始</string>
+
+  <string name="myApp_Move2Sd_ChkBox">迁移到SD卡</string>
+  <string name="myApp_ClearData_ChkBox">清除数据</string>
+  <string name="myApp_Uninstall_ChkBox">卸载应用</string>
+  <string name="myAppLoading">加载中\u2026</string>
+  <string name="myAppProcessing">处理中\u2026</string>
+
+  <string name="low_internal_storage_ignore">"忽略"</string>
+  <string name="low_internal_storage_display_details">"查看详情"</string>
+  <string name="low_internal_storage_wait">"请等待…"</string>
+  <string name="low_internal_storage_updating_details">"正在更新详情…"</string>
+  <!-- @} -->
 </resources>

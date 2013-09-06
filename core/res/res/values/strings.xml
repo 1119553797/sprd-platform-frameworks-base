@@ -3042,7 +3042,12 @@
          a bad bad notification for itself. -->
     <string name="app_running_notification_text">Touch for more information
         or to stop the app.</string>
-
+    <!-- SPRD: add low mem alert @{-->
+    <string name="low_internal_storage_ignore">Ignore</string>
+    <string name="low_internal_storage_display_details">Details</string>
+    <string name="low_internal_storage_wait">"Waiting…"</string>
+    <string name="low_internal_storage_updating_details">"Updating Details…"</string>
+    <!-- @} -->
     <!-- Preference framework strings. -->
     <string name="ok">OK</string>
     <!-- Preference framework strings. -->
@@ -3618,6 +3623,25 @@
     <!-- Shown when the users bandwidth is reduced because of excessive data use -->
     <string name="throttled_notification_title">Mobile data limit exceeded</string>
     <string name="throttled_notification_message">Touch to learn more about mobile data use.</string>
+
+    <!-- SPRD: Strings for ShowStorage Activity @{-->
+    <string name="Low_Memory_Alert">Phone storage space is going low. Please remove some data to ensure the stability of the phone.</string>
+    <string name="Low_Memory_Free">Free</string>
+    <string name="Low_Memory_Application">Applications</string>
+    <string name="Low_Memory_Mail">Mail</string>
+    <string name="Low_Memory_Sms_Mms">SMS/MMS</string>
+    <string name="Low_Memory_System">System</string>
+    <string name="Btn_Select_Clear">Select/Clear</string>
+
+    <!-- Strings for AppManage Activity -->
+    <string name="myAppTip">Select applications to handle</string>
+    <string name="myApp_Start_Btn">Start</string>
+    <string name="myApp_Move2Sd_ChkBox">MoveToSD</string>
+    <string name="myApp_ClearData_ChkBox">ClearData</string>
+    <string name="myApp_Uninstall_ChkBox">Uninstall</string>
+    <string name="myAppLoading">loading\u2026</string>
+    <string name="myAppProcessing">processing\u2026</string>
+    <!-- @}-->
 
     <!-- Displayed on the Find dialog when there are no matches [CHAR LIMIT=NONE]-->
     <string name="no_matches">No matches</string>
