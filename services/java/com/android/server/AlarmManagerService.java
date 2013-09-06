@@ -335,26 +335,28 @@ class AlarmManagerService extends IAlarmManager.Stub {
         }
     }
 
-    public void removeAlarmLocked(PendingIntent operation) {
-               ArrayList<Alarm> alarmList = mPoweroffAlarms;
-               if (alarmList.size() <= 0) {
-                       return;
-               }
+	public void removeAlarmLocked(PendingIntent operation) {
+		ArrayList<Alarm> alarmList = mPoweroffAlarms;
+		if (alarmList.size() <= 0) {
+			return;
+		}
 
-        // iterator over the list removing any it where the intent match
-        Iterator<Alarm> it = alarmList.iterator();
+		// iterator over the list removing any it where the intent match
+		Iterator<Alarm> it = alarmList.iterator();
 
-        while (it.hasNext()) {
-            Alarm alarm = it.next();
-                       Slog.v(TAG, "remove" + alarm);
-                       it.remove();
-               }
-               if (alarmList.size() <= 0) {
-                       Slog.v(TAG, "Power off alarmList is empty");
-                       clear(mDescriptor, AlarmManager.POWER_OFF_WAKEUP);
-                       return;
-        }
-    }
+		while (it.hasNext()) {
+			Alarm alarm = it.next();
+			Slog.v(TAG, "remove" + alarm);
+			if(alarm.operation.getTargetPackage().equals(operation.getTargetPackage())){
+				it.remove();
+			}
+		}
+		if (alarmList.size() <= 0) {
+			Slog.v(TAG, "Power off alarmList is empty");
+			clear(mDescriptor, AlarmManager.POWER_OFF_WAKEUP);
+			return;
+		}
+	}
 /* Add 20121218 Spreadst of 105993  Regular boot development end */
     
     public void removeLocked(PendingIntent operation) {
@@ -414,7 +416,7 @@ class AlarmManagerService extends IAlarmManager.Stub {
                 || lookForPackageLocked(mElapsedRealtimeWakeupAlarms, packageName)
 /* Add 20121218 Spreadst of 105993  Regular boot development start */
                 || lookForPackageLocked(mElapsedRealtimeAlarms, packageName)
-                                  || lookForPackageLocked(mPoweroffAlarms, packageName);
+                || lookForPackageLocked(mPoweroffAlarms, packageName);
 /* Add 20121218 Spreadst of 105993  Regular boot development end */
     }
 
@@ -894,16 +896,14 @@ class AlarmManagerService extends IAlarmManager.Stub {
         }
         
         public void scheduleTimeTickEvent() {
-            Calendar calendar = Calendar.getInstance();
+            // Bug 207731 start
             final long currentTime = System.currentTimeMillis();
-            calendar.setTimeInMillis(currentTime);
-            calendar.add(Calendar.MINUTE, 1);
-            calendar.set(Calendar.SECOND, 0);
-            calendar.set(Calendar.MILLISECOND, 0);
+            final long nextTime = 60000 * ((currentTime / 60000) + 1);
 
             // Schedule this event for the amount of time that it would take to get to
             // the top of the next minute.
-            final long tickEventDelay = calendar.getTimeInMillis() - currentTime;
+            final long tickEventDelay = nextTime - currentTime;
+            // Bug 207731 end
 
             set(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime() + tickEventDelay,
                     mTimeTickSender);
