@@ -106,6 +106,7 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
     private int mWinWidth;
     private int mWinHeight;
     private boolean isPlaying = false;
+    private boolean mIsVideoTrackUnsupport = false;
     /** @} */
 
     public VideoView(Context context) {
@@ -173,6 +174,11 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
                     }
                 }
             }
+            if (mIsVideoTrackUnsupport) {
+                width = 0;
+                height = 0;
+            }
+            Log.i(TAG, "end setting size: " + width + 'x' + height);
             setMeasuredDimension(width, height);
         }else{
             int width = mTargetWidth;
@@ -185,6 +191,10 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
                     width = getDefaultSize(mVideoWidth, widthMeasureSpec);
                     height = getDefaultSize(mVideoHeight, heightMeasureSpec);
                 }
+            }
+            if (mIsVideoTrackUnsupport) {
+                width = 0;
+                height = 0;
             }
                 setMeasuredDimension(width, height);
         }
@@ -337,6 +347,7 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
             } else {
                 mAudioSession = mMediaPlayer.getAudioSessionId();
             }
+            mIsVideoTrackUnsupport = false;  //SPRD: add
             mMediaPlayer.setOnPreparedListener(mPreparedListener);
             mMediaPlayer.setOnVideoSizeChangedListener(mSizeChangedListener);
             mMediaPlayer.setOnCompletionListener(mCompletionListener);
@@ -397,6 +408,11 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
 //                getHolder().setFixedSize(mVideoWidth, mVideoHeight);
 //                requestLayout();
                 resize(mIsFullScreen);
+            }
+            if (width == 0 && height == 0) {
+                Log.w(TAG, "-------- Unsupport video track that no image to display ---------");
+                mIsVideoTrackUnsupport = true;
+                setMeasuredDimension(width, height); // reset measure dimension to 0 to clear previous video image
             }
             if (mOnVideoSizeChangedListener != null) {
                 mOnVideoSizeChangedListener.onVideoSizeChanged(mp, width,
