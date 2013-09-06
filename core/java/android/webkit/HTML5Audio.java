@@ -48,6 +48,18 @@ class HTML5Audio extends Handler
     // Logging tag.
     private static final String LOGTAG = "HTML5Audio";
 
+    /**
+     * SPRD:
+     * FUNCTION:add for bug 120319
+     * make the HTML audio play only if it was played
+     * DATE:2013-08-15
+     * @{
+     */
+    private boolean mIsAFLossPause = false;
+    /**
+     * @}
+     */
+
     private MediaPlayer mMediaPlayer;
 
     // The C++ MediaPlayerPrivateAndroid object.
@@ -255,9 +267,20 @@ class HTML5Audio extends Handler
             // resume playback
             if (mMediaPlayer == null) {
                 resetMediaPlayer();
-            } else if (mState == PAUSED_TRANSITORILY && !mMediaPlayer.isPlaying()) {
+            } else if (mState == PAUSED_TRANSITORILY && !mMediaPlayer.isPlaying()&& mIsAFLossPause) {
                 mMediaPlayer.start();
                 mState = STARTED;
+                /**
+                 * SPRD:
+                 * FUNCTION:add for bug 120319
+                 * make the HTML audio play only if it was played
+                 * DATE:2013-08-15
+                 * @{
+                 */
+                mIsAFLossPause = false;
+                /**
+                 * @}
+                 */
             }
             break;
 
@@ -275,6 +298,17 @@ class HTML5Audio extends Handler
             // playback.
             if (mState != ERROR && mMediaPlayer.isPlaying()) {
                 pause(PAUSED_TRANSITORILY);
+                /**
+                 * SPRD:
+                 * FUNCTION:add for bug 172602
+                 * resolved the problem of alternate between local mediaplayer and html5Audio
+                 * DATE:2013-08-15
+                 * @{
+                 */
+				mIsAFLossPause = true;
+				/**
+				 * @}
+				 */
             }
             break;
         }
@@ -295,14 +329,33 @@ class HTML5Audio extends Handler
             mAskToPlay = true;
         }
 
-        if (mState >= PREPARED) {
-            AudioManager audioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
+        /**
+         * SPRD:
+         * FUNCTION:modify for bug 179033
+         * resolved the problem of alternate between local mediaplayer and html5Audio
+         * Android oringin:if (mState >= PREPARED) {
+         * DATE:2013-08-15
+         * @{
+         */
+        if (mState >= PREPARED || (mState == STOPPED && mIsAFLossPause)) {
+        	AudioManager audioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
             int result = audioManager.requestAudioFocus(this, AudioManager.STREAM_MUSIC,
-                AudioManager.AUDIOFOCUS_GAIN);
+            		AudioManager.AUDIOFOCUS_GAIN);
 
             if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
                 mMediaPlayer.start();
                 mState = STARTED;
+                /**
+                 * SPRD:
+                 * FUNCTION:add for bug 179033
+                 * resolved the problem of alternate between local mediaplayer and html5Audio
+                 * DATE:2013-08-15
+                 * @{
+                 */
+                mIsAFLossPause = false;
+                /**
+                 * @}
+                 */
             }
         }
     }

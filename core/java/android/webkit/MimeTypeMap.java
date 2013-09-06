@@ -59,7 +59,7 @@ public class MimeTypeMap {
             // if the filename contains special characters, we don't
             // consider it valid for our matching purposes:
             if (!filename.isEmpty() &&
-                Pattern.matches("[a-zA-Z_0-9\\.\\-\\(\\)\\%]+", filename)) {
+                Pattern.matches("[a-zA-Z_0-9\\.\\-\\(\\)\\%\u4e00-\u9fa5]+", filename)) {
                 int dotPos = filename.lastIndexOf('.');
                 if (0 <= dotPos) {
                     return filename.substring(dotPos + 1);
@@ -146,7 +146,17 @@ public class MimeTypeMap {
             }
         } else if ("text/vnd.wap.wml".equals(mimeType)) {
             // As we don't support wml, render it as plain text
-            mimeType = "text/plain";
+        	 /**
+             * SPRD:
+             * FUNCTION:delete for bug 100056
+             * Input stream media test website ,tips for choosing the download path.
+             * DATE:2013-08-15
+             * @{
+             */
+            //mimeType = "text/plain";
+        	/**
+        	 * @}
+        	 */
         } else {
             // It seems that xhtml+xml and vnd.wap.xhtml+xml mime
             // subtypes are used interchangeably. So treat them the same.

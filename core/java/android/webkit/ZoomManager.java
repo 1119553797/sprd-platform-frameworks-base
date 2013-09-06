@@ -410,6 +410,18 @@ class ZoomManager {
         mZoomCenterY = mWebView.getViewHeight() * .5f;
         mAnchorX = mWebView.viewToContentX((int) mZoomCenterX + mWebView.getScrollX());
         mAnchorY = mWebView.viewToContentY((int) mZoomCenterY + mWebView.getScrollY());
+        /**
+         * SPRD:
+         * FUNCTION:modify for NullPointerException
+         * DATE:2013-08-15
+         * @{
+         */
+        if(mWebView.getSettings() == null){
+            return false;
+        }
+        /**
+         * @}
+         */
         return startZoomAnimation(mActualScale * zoomMultiplier, 
             !mWebView.getSettings().getUseFixedViewport());
     }
@@ -557,7 +569,7 @@ class ZoomManager {
             mInZoomOverview = !exceedsMinScaleIncrement(scale, getZoomOverviewScale());
         }
 
-        if (reflowText && !mWebView.getSettings().getUseFixedViewport()) {
+        if (reflowText && (mWebView.getSettings() != null && !mWebView.getSettings().getUseFixedViewport())) {
             mTextWrapScale = scale;
         }
 

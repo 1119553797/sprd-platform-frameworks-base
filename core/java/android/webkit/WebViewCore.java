@@ -45,6 +45,8 @@ import com.android.internal.os.SomeArgs;
 
 import junit.framework.Assert;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -438,6 +440,24 @@ public final class WebViewCore {
                 filePath = uri.getLastPathSegment();
             }
             String uriString = uri.toString();
+            /**
+             * SPRD:
+             * FUNCTION: add for bug 126061
+             * <163 mail upload files display error>
+             * DATE:2013-08-15
+             * @{
+             */
+            if(uriString != null && uriString.startsWith("file:")){
+                try {
+                    uriString = URLDecoder.decode(uriString,"UTF-8");
+                } catch (UnsupportedEncodingException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+            /**
+             * @}
+             */
             BrowserFrame.sJavaBridge.storeFilePathForContentUri(filePath, uriString);
             return uriString;
         }
@@ -1857,7 +1877,19 @@ public final class WebViewCore {
             if (mBlockMessages) {
                 return;
             }
-            mHandler.sendMessageDelayed(msg, delay);
+            
+            /**
+             * SPRD:
+             * FUNCTION:modify for NullPointerException
+             * DATE:2013-08-15
+             * @{
+             */
+            if (mHandler != null) {
+                mHandler.sendMessageDelayed(msg, delay);
+            }
+            /**
+             * @}
+             */
         }
 
         /**
