@@ -2648,7 +2648,10 @@ public final class Settings {
 
         /** SPRD: */
         public static final String POWER_ON_STANDBY_SELECT = "power_on_standby_select";
-        
+
+        /** SPRD: Add for new sim card pop */
+        public static final String AVALIABLE_CARD_COUNTS = "avaliable_cards_counts";
+
         /** SPRD: Whether Standby_Select is show,ever. */
         public static final String Standby_Select_Card_Show = "Is_Standby_Select_Card_Show";
 
