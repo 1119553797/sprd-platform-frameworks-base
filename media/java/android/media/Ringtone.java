@@ -69,6 +69,7 @@ public class Ringtone {
 
     private int mStreamType = AudioManager.STREAM_RING;
     private boolean mLoop = false; // SPRD: add for setLooping()
+	private Uri mDefaultRingtoneUri;
 
     /** {@hide} */
     public Ringtone(Context context, boolean allowRemote) {
@@ -201,6 +202,32 @@ public class Ringtone {
             if (!mAllowRemote) {
                 Log.w(TAG, "Remote playback not allowed: " + e);
             }
+            /** SPRD: getDefaultUri then set to ringtone when IOexception @{ */
+            if (mStreamType == AudioManager.STREAM_RING) {
+                String ringerUriString = Settings.System.getString(mContext.getContentResolver(),
+                        Settings.System.DEFAULT_RINGTONE);
+                mDefaultRingtoneUri = (ringerUriString != null ? Uri.parse(ringerUriString) : null);
+            } else if (mStreamType == AudioManager.STREAM_NOTIFICATION) {
+                String notifiUriString = Settings.System.getString(mContext.getContentResolver(),
+                        Settings.System.DEFAULT_NOTIFICATION);
+                mDefaultRingtoneUri = (notifiUriString != null ? Uri.parse(notifiUriString) : null);
+            } else if (mStreamType == AudioManager.STREAM_ALARM) {
+                String alarmUriString = Settings.System.getString(mContext.getContentResolver(),
+                        Settings.System.DEFAULT_ALARM);
+                mDefaultRingtoneUri = (alarmUriString != null ? Uri.parse(alarmUriString) : null);
+            }
+            mUri = mDefaultRingtoneUri;
+            mLocalPlayer = new MediaPlayer();
+            try {
+                mLocalPlayer.setDataSource(mContext, mUri);
+                mLocalPlayer.setAudioStreamType(mStreamType);
+                mLocalPlayer.prepare();
+            } catch (SecurityException ex) {
+                destroyLocalPlayer();
+            } catch (IOException ex) {
+                destroyLocalPlayer();
+            }
+            /** @} */
         }
 
         if (LOGD) {

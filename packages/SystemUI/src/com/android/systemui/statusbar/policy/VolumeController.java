@@ -50,8 +50,9 @@ public class VolumeController implements ToggleSlider.Listener {
         mHasVibrator = vibrator == null ? false : vibrator.hasVibrator();
 
         mAudioManager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
-
-        mMute = mAudioManager.getRingerMode() != AudioManager.RINGER_MODE_NORMAL;
+        //SPRD:add outdoor mode
+        mMute = (mAudioManager.getRingerMode() != AudioManager.RINGER_MODE_NORMAL && mAudioManager
+                .getRingerMode() != AudioManager.RINGER_MODE_OUTDOOR);
         mVolume = mAudioManager.getStreamVolume(STREAM);
 
         control.setOnChangedListener(this);

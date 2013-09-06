@@ -71,6 +71,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+import android.content.ContentResolver;
 
 /**
  * Helper to show the global actions dialog.  Each item is an {@link Action} that
@@ -403,7 +404,8 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
     private void refreshSilentMode() {
         if (!mHasVibrator) {
             final boolean silentModeOn =
-                    mAudioManager.getRingerMode() != AudioManager.RINGER_MODE_NORMAL;
+                    ((mAudioManager.getRingerMode() != AudioManager.RINGER_MODE_NORMAL) && (mAudioManager
+                            .getRingerMode() != AudioManager.RINGER_MODE_OUTDOOR));
             ((ToggleAction)mSilentModeAction).updateState(
                     silentModeOn ? ToggleAction.State.On : ToggleAction.State.Off);
         }
@@ -737,7 +739,13 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
             if (on) {
                 mAudioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
             } else {
-                mAudioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+                /** SPRD: add outdoorMode @{ */
+                if (mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_OUTDOOR) {
+                    mAudioManager.setRingerMode(AudioManager.RINGER_MODE_OUTDOOR);
+                } else {
+                    mAudioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+                }
+                /** @} */
             }
         }
 
@@ -779,9 +787,16 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
             View v = inflater.inflate(R.layout.global_actions_silent_mode, parent, false);
 
             int selectedIndex = ringerModeToIndex(mAudioManager.getRingerMode());
-            for (int i = 0; i < 3; i++) {
+            for (int i = 0; i < ITEM_IDS.length; i++) {
                 View itemView = v.findViewById(ITEM_IDS[i]);
                 itemView.setSelected(selectedIndex == i);
+                /** SPRD: add outdoorMode @{ */
+                if (i == ITEM_IDS.length - 1) {
+                    if (selectedIndex >= AudioManager.RINGER_MODE_NORMAL) {
+                        itemView.setSelected(true);
+                    }
+                }
+                /** @} */
                 // Set up click handler
                 itemView.setTag(i);
                 itemView.setOnClickListener(this);
@@ -815,7 +830,41 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
             if (!(v.getTag() instanceof Integer)) return;
 
             int index = (Integer) v.getTag();
-            mAudioManager.setRingerMode(indexToRingerMode(index));
+           // int ringerMode = mAudioManager.getRingerMode();
+            ContentResolver resolver = mContext.getContentResolver();
+            Vibrator vibrator = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
+            boolean hasVibrator = vibrator == null ? false : vibrator.hasVibrator();
+            if (AudioManager.RINGER_MODE_SILENT == indexToRingerMode(index)) {
+                Settings.System.putInt(resolver,
+                        Settings.System.SOUND_EFFECTS_ENABLED, 0);
+                mAudioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
+                if (hasVibrator) {
+                    mAudioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER,
+                            AudioManager.VIBRATE_SETTING_OFF);
+                    mAudioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION,
+                            AudioManager.VIBRATE_SETTING_OFF);
+                }
+            } else if (AudioManager.RINGER_MODE_VIBRATE == indexToRingerMode(index)) {
+
+                if (hasVibrator) {
+                    Settings.System.putInt(resolver,
+                            Settings.System.SOUND_EFFECTS_ENABLED, 0);
+                    mAudioManager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
+                    mAudioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER,
+                            AudioManager.VIBRATE_SETTING_ON);
+                    mAudioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION,
+                            AudioManager.VIBRATE_SETTING_ON);
+                } else {
+                    Settings.System.putInt(resolver,
+                            Settings.System.SOUND_EFFECTS_ENABLED, 1);
+                    mAudioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+                }
+
+            } else if (AudioManager.RINGER_MODE_NORMAL == indexToRingerMode(index)) {
+                Settings.System.putInt(resolver,
+                        Settings.System.SOUND_EFFECTS_ENABLED, 1);
+                mAudioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+            }
             mHandler.sendEmptyMessageDelayed(MESSAGE_DISMISS, DIALOG_DISMISS_DELAY);
         }
     }

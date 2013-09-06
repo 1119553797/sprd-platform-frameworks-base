@@ -1001,12 +1001,21 @@ public class MediaScanner
             if(needToSetSettings) {
                 if (notifications) {
                     setSettingIfNotSet(Settings.System.NOTIFICATION_SOUND, tableUri, rowId);
+                    // SPRD: save notification default uri to system dataBase when scanner media file 
+                    Settings.System.putString(mContext.getContentResolver(), Settings.System.DEFAULT_NOTIFICATION, 
+                                    ContentUris.withAppendedId(tableUri, rowId).toString());
                     mDefaultNotificationSet = true;
                 } else if (ringtones) {
                     setSettingIfNotSet(Settings.System.RINGTONE, tableUri, rowId);
                     mDefaultRingtoneSet = true;
+                    // SPRD: save ringtones default uri to system dataBase when scanner media file 
+                    Settings.System.putString(mContext.getContentResolver(), Settings.System.DEFAULT_RINGTONE, 
+                                    ContentUris.withAppendedId(tableUri, rowId).toString());
                 } else if (alarms) {
                     setSettingIfNotSet(Settings.System.ALARM_ALERT, tableUri, rowId);
+                    // SPRD: save alarms default uri to system dataBase when scanner media file 
+                    Settings.System.putString(mContext.getContentResolver(), Settings.System.DEFAULT_ALARM, 
+                            ContentUris.withAppendedId(tableUri, rowId).toString());
                     mDefaultAlarmSet = true;
                 }
             }

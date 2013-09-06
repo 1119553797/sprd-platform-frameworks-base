@@ -1924,7 +1924,10 @@ public final class Settings {
          * @see #DEFAULT_RINGTONE_URI
          */
         public static final String RINGTONE = "ringtone";
-
+        /** SPRD: add default ringtone uriString to system dataBase @{ */
+        public static final String DEFAULT_RINGTONE = "default_ringtone";
+        public static final String DEFAULT_NOTIFICATION = "default_notification";
+        public static final String DEFAULT_ALARM = "default_alarm";
         /**
          * A {@link Uri} that will point to the current default ringtone at any
          * given time.
