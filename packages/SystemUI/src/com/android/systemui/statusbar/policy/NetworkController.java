@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
-
+import android.os.SystemProperties;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -214,7 +214,7 @@ public class NetworkController extends BroadcastReceiver {
         void setWifiIndicators(boolean visible, int strengthIcon, int activityIcon,
                 String contentDescription);
         void setMobileDataIndicators(boolean visible, int strengthIcon, boolean mDataConnected, int activityIcon,
-                int typeIcon, String contentDescription, String typeContentDescription, int phoneId);
+                int typeIcon, String contentDescription, String typeContentDescription, int cardIcon, int phoneId);
         void setIsAirplaneMode(boolean is, int airplaneIcon);
     }
 
@@ -456,6 +456,7 @@ public class NetworkController extends BroadcastReceiver {
                 mWifiActivityIconId,
                 mContentDescriptionWifi);
         /* SPRD: for multi-sim @{ */
+        Log.d("tag", "@@1"+" mIsWimaxEnabled :"+mIsWimaxEnabled+"  mWimaxConnected :"+mWimaxConnected);
         if (mIsWimaxEnabled && mWimaxConnected) {
             // wimax is special
             cluster.setMobileDataIndicators(
@@ -465,7 +466,7 @@ public class NetworkController extends BroadcastReceiver {
                     mMobileActivityIconId[mDDS],
                     mDataTypeIconId[mDDS],
                     mContentDescriptionWimax,
-                    mContentDescriptionDataType[mDDS],mDDS);
+                    mContentDescriptionDataType[mDDS],TelephonyIcons.DEFAULT_CARD, mDDS);
         } else {
             // normal mobile data
           for (int i=0; i < numPhones; i++) {
@@ -477,7 +478,7 @@ public class NetworkController extends BroadcastReceiver {
                     mMobileActivityIconId[i],
                     mDataTypeIconId[i],
                     mContentDescriptionPhoneSignal[i],
-                    mContentDescriptionDataType[i],i);
+                    mContentDescriptionDataType[i],TelephonyIcons.CARD[i], i);
           }
         }
         /* @} */
@@ -720,9 +721,15 @@ public class NetworkController extends BroadcastReceiver {
         Slog.d(TAG, "phoneid=" + phoneId + " isexist=" + mPhone[phoneId].hasIccCard() + "  "
                 + mPhone[phoneId].getSimState());
         if (mPhone[phoneId].getSimState() == TelephonyManager.SIM_STATE_ABSENT) {
-
-                mPhoneSignalIconId[phoneId] = R.drawable.stat_sys_no_sim_sprd;
-                mDataSignalIconId[phoneId] = R.drawable.stat_sys_no_sim_sprd;
+            /** SPRD: add for cucc no sim signal icon @{  */
+            if ("cucc".equals(SystemProperties.get("ro.operator", ""))) {
+               mPhoneSignalIconId[phoneId] = R.drawable.stat_sys_no_sim_sprd_cucc;
+               mDataSignalIconId[phoneId] = R.drawable.stat_sys_no_sim_sprd_cucc;
+            /** @}  */
+            } else {
+               mPhoneSignalIconId[phoneId] = R.drawable.stat_sys_no_sim_sprd;
+               mDataSignalIconId[phoneId] = R.drawable.stat_sys_no_sim_sprd;
+            }
             return;
         }
         if (Settings.System.getInt(mContext.getContentResolver(), TelephonyManager.getSetting(
@@ -1502,6 +1509,8 @@ public class NetworkController extends BroadcastReceiver {
         }
 
         // the phone icon on phones
+        Log.d("tag", "mLastPhoneSignalIconId[phoneId] "+phoneId+"  "+ mLastPhoneSignalIconId[phoneId] +
+                " mPhoneSignalIconId[phoneId] "+mPhoneSignalIconId[phoneId]);
         if (mLastPhoneSignalIconId[phoneId] != mPhoneSignalIconId[phoneId]) {
             mLastPhoneSignalIconId[phoneId] = mPhoneSignalIconId[phoneId];
             N = mPhoneSignalIconViews.size();
