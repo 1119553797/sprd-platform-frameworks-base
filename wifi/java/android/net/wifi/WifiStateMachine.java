@@ -192,6 +192,7 @@ public class WifiStateMachine extends StateMachine {
     /* SPRD: changed for cmcc feature */
     //private Context mContext;
     private static Context mContext;
+    private boolean manualDisconnect = false;
     /* @} */
 
     private final Object mDhcpResultsLock = new Object();
@@ -758,6 +759,8 @@ public class WifiStateMachine extends StateMachine {
         if (enable) {
             sendMessage(CMD_START_SUPPLICANT);
         } else {
+            // SPRD: changed for cmcc feature
+            manualDisconnect = false;
             sendMessage(CMD_STOP_SUPPLICANT);
         }
     }
@@ -892,6 +895,8 @@ public class WifiStateMachine extends StateMachine {
      * Disconnect from Access Point
      */
     public void disconnectCommand() {
+        // SPRD: changed for cmcc feature
+        manualDisconnect = true;
         sendMessage(CMD_DISCONNECT);
     }
 
@@ -2454,7 +2459,12 @@ public class WifiStateMachine extends StateMachine {
             } else {
                 /* Driver stop may have disabled networks, enable right after start */
                 mWifiConfigStore.enableAllNetworks();
-                mWifiNative.reconnect();
+                /* SPRD: changed for cmcc feature @{ */
+                //mWifiNative.reconnect();
+                if (!manualDisconnect) {
+                    mWifiNative.reassociate();
+                }
+                /* @} */
                 // Status pulls in the current supplicant state and network connection state
                 // events over the monitor connection. This helps framework sync up with
                 // current supplicant state
@@ -2896,6 +2906,8 @@ public class WifiStateMachine extends StateMachine {
                         netId = result.getNetworkId();
                     }
 
+                    // SPRD: changed for cmcc feature
+                    manualDisconnect = false;
                     if (mWifiConfigStore.selectNetwork(netId) &&
                             mWifiNative.reconnect()) {
                         /* The state tracker handles enabling networks upon completion/failure */
