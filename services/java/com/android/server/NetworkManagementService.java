@@ -60,6 +60,7 @@ import com.android.internal.util.Preconditions;
 import com.android.server.NativeDaemonConnector.Command;
 import com.android.server.NativeDaemonConnector.SensitiveArg;
 import com.android.server.net.LockdownVpnTracker;
+import com.google.android.collect.Lists;
 import com.google.android.collect.Maps;
 
 import java.io.BufferedReader;
@@ -78,6 +79,7 @@ import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
@@ -128,6 +130,14 @@ public class NetworkManagementService extends INetworkManagementService.Stub
         public static final int InterfaceChange           = 600;
         public static final int BandwidthControl          = 601;
         public static final int InterfaceClassActivity    = 613;
+
+        /** SPRD: add for usb function @{ */
+        public static final int UsbRNDISStatusResult      = 215;
+        public static final int UsbUdcpowerStatusResult   = 223;
+        public static final int UsbConnectStatusResult    = 224;
+        public static final int UsbGserStatusResult       = 225;
+        public static final int UsbVserStatusResult       = 226;
+        /** @} */
     }
 
     /**
@@ -1551,4 +1561,105 @@ public class NetworkManagementService extends INetworkManagementService.Stub
 
         pw.print("Firewall enabled: "); pw.println(mFirewallEnabled);
     }
+
+    /** SPRD: add for usb funtion @{ */
+    public void startUsbUdcpower() throws IllegalStateException{
+        mContext.enforceCallingOrSelfPermission(
+                android.Manifest.permission.CHANGE_NETWORK_STATE,"NetworkManagementService");
+        try {
+            doCommand("usb startudcpower");
+        } catch (Exception e) {
+            Slog.e(TAG," Send Command usb startudcpower",e);
+        }
+    }
+
+    public void stopUsbUdcpower() throws IllegalStateException {
+        mContext.enforceCallingOrSelfPermission(
+                android.Manifest.permission.CHANGE_NETWORK_STATE,"NetworkManagementService");
+        try {
+            doCommand("usb stopudcpower");
+        } catch (Exception e) {
+            Slog.e(TAG," Send Command usb stopudcpower",e);
+        }
+    }
+
+    public boolean isUsbUdcpowerStarted() throws IllegalStateException {
+        mContext.enforceCallingOrSelfPermission(
+                android.Manifest.permission.ACCESS_NETWORK_STATE, "NetworkManagementService");
+        ArrayList<String> rsp = null;
+        try {
+            rsp = doCommand("usb udcpowerstatus");
+        } catch (Exception e) {
+            Slog.e(TAG," Send Command usb udcpowerstatus ",e);
+        }
+        for (String line : rsp) {
+            String []tok = line.split(" ");
+            int code = Integer.parseInt(tok[0]);
+            if (code == NetdResponseCode.UsbUdcpowerStatusResult) {
+                if (tok[4].equals("started"))
+                    return true;
+                return false;
+            } else {
+                throw new IllegalStateException(String.format(Locale.US,"Unexpected response code %d", code));
+            }
+        }
+        throw new IllegalStateException("Got an empty response");
+    }
+
+    public boolean isUsbRNDISStarted() throws IllegalStateException {
+        mContext.enforceCallingOrSelfPermission(
+                android.Manifest.permission.ACCESS_NETWORK_STATE, "NetworkManagementService");
+        ArrayList<String> rsp;
+        try {
+            rsp = doCommand("usb rndisstatus");
+        } catch (NativeDaemonConnectorException e) {
+            throw new IllegalStateException(
+                    "Error communicating to native daemon to check RNDIS status", e);
+        }
+        for (String line : rsp) {
+            String []tok = line.split(" ");
+            int code = Integer.parseInt(tok[0]);
+            if (code == NetdResponseCode.UsbRNDISStatusResult) {
+                if (tok[4].equals("started"))
+                    return true;
+                return false;
+            } else {
+                throw new IllegalStateException(String.format("Unexpected response code %d", code));
+            }
+        }
+        throw new IllegalStateException("Got an empty response");
+    }
+
+    public boolean isUsbConnected() throws IllegalStateException{
+        mContext.enforceCallingOrSelfPermission(
+                android.Manifest.permission.ACCESS_NETWORK_STATE, "NetworkManagementService");
+        ArrayList<String> rsp = null;
+        try {
+            rsp = doCommand("usb status");
+        } catch (Exception e) {
+            Slog.e(TAG,"Send Command usb status");
+        }
+        for (String line : rsp) {
+            String []tok = line.split(" ");
+            int code = Integer.parseInt(tok[0]);
+            if (code == NetdResponseCode.UsbConnectStatusResult) {
+                if (tok[4].equals("connected"))
+                    return true;
+                return false;
+            } else {
+                throw new IllegalStateException(String.format(Locale.US,"Unexpected response code %d", code));
+            }
+        }
+        throw new IllegalStateException("Got an empty response");
+    }
+
+    private ArrayList<String> doCommand(String cmd) throws NativeDaemonConnectorException {
+        final ArrayList<String> rawEvents = Lists.newArrayList();
+        final NativeDaemonEvent[] events = mConnector.executeForList(cmd);
+        for (NativeDaemonEvent event : events) {
+            rawEvents.add(event.getRawEvent());
+        }
+        return rawEvents;
+    }
+    /** @ */
 }

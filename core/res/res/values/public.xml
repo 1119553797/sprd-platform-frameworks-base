@@ -2128,4 +2128,6 @@
   <java-symbol type="string" name="low_internal_storage_wait" />
   <java-symbol type="string" name="low_internal_storage_updating_details" />
   <!-- @} -->
+  <!-- SPRD: add for usb function -->
+  <java-symbol type="string" name="usb_cdrom_notification_title" />
 </resources>

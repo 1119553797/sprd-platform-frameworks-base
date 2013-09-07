@@ -367,4 +367,32 @@ interface INetworkManagementService
      * Determine whether the clatd (464xlat) service has been started
      */
     boolean isClatdStarted();
+
+
+    /** SPRD: add for usb api @{ */
+    /**
+     * Turn on udcpower
+     */
+    void startUsbUdcpower();
+
+    /**
+     * Turn off udcpower
+     */
+    void stopUsbUdcpower();
+
+    /**
+     * Check the status of udcpower
+     */
+    boolean isUsbUdcpowerStarted();
+
+    /**
+     * Check the status of rndis
+     */
+    boolean isUsbRNDISStarted();
+
+    /**
+     * Check the status of usb connection
+     */
+    boolean isUsbConnected();
+    /** @} */
 }

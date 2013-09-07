@@ -1475,4 +1475,39 @@ public class ConnectivityManager {
         }
     }
     /** @} */
+
+    /** SPRD: add usb api @{ */
+    /** @hide */
+    public boolean enableUdcpower(boolean enabled){
+          try {
+            return mService.enableUdcpower(enabled);
+          }catch (RemoteException e) {
+              return false;
+          }
+      }
+    /** @hide */
+    public boolean isUsbUdcpowerStarted(){
+        try {
+            return mService.isUsbUdcpowerStarted();
+        }catch (RemoteException e) {
+            return false;
+        }
+    }
+    /** @hide */
+    public boolean isUsbRNDISStarted(){
+        try {
+            return mService.isUsbRNDISStarted();
+        }catch (RemoteException e) {
+            return false;
+        }
+    }
+    /** @hide */
+    public boolean isUsbConnected(){
+        try {
+            return mService.isUsbConnected();
+        }catch (RemoteException e) {
+            return false;
+        }
+    }
+    /** @}*/
 }

@@ -4436,4 +4436,22 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                 (enabled ? ENABLED : DISABLED), phoneId));
     }
     /** @} */
+
+    /** SPRD: add for usb api @{ */
+    public boolean enableUdcpower(boolean enabled){
+        return mTethering.enableUsbUdcpower(enabled);
+    }
+
+    public boolean isUsbUdcpowerStarted(){
+        return mTethering.isUsbUdcpowerStarted();
+    }
+
+    public boolean isUsbRNDISStarted(){
+        return mTethering.isUsbRNDISStarted();
+    }
+
+    public boolean isUsbConnected(){
+        return mTethering.isUsbConnected();
+    }
+    /** @} */
 }

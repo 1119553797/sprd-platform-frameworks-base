@@ -16,6 +16,16 @@
 
 package com.android.server.connectivity;
 
+import java.io.FileDescriptor;
+import java.io.PrintWriter;
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
+
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -38,12 +48,10 @@ import android.net.NetworkUtils;
 import android.net.RouteInfo;
 import android.os.Binder;
 import android.os.HandlerThread;
-import android.os.IBinder;
 import android.os.INetworkManagementService;
 import android.os.Looper;
 import android.os.Message;
 import android.os.RemoteException;
-import android.os.ServiceManager;
 import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.Log;
@@ -54,16 +62,6 @@ import com.android.internal.util.IState;
 import com.android.internal.util.State;
 import com.android.internal.util.StateMachine;
 import com.google.android.collect.Lists;
-
-import java.io.FileDescriptor;
-import java.io.PrintWriter;
-import java.net.InetAddress;
-import java.net.Inet4Address;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Set;
 
 /**
  * @hide
@@ -133,6 +131,9 @@ public class Tethering extends INetworkManagementEventObserver.Stub {
     private boolean mRndisEnabled;       // track the RNDIS function enabled state
     private boolean mUsbTetherRequested; // true if USB tethering should be started
                                          // when RNDIS is enabled
+
+    // SPRD: add for usb tether function
+    private boolean mUsbConnected;
 
     public Tethering(Context context, INetworkManagementService nmService,
             INetworkStatsService statsService, IConnectivityManager connService, Looper looper) {
@@ -500,12 +501,16 @@ public class Tethering extends INetworkManagementEventObserver.Stub {
             String action = intent.getAction();
             if (action.equals(UsbManager.ACTION_USB_STATE)) {
                 synchronized (Tethering.this.mPublicSync) {
-                    boolean usbConnected = intent.getBooleanExtra(UsbManager.USB_CONNECTED, false);
+                    /* SPRD: changed for usb tether function @{ */
+                    // boolean usbConnected = intent.getBooleanExtra(UsbManager.USB_CONNECTED, false);
+                    mUsbConnected = intent.getBooleanExtra(UsbManager.USB_CONNECTED, false);
                     mRndisEnabled = intent.getBooleanExtra(UsbManager.USB_FUNCTION_RNDIS, false);
                     // start tethering if we have a request pending
-                    if (usbConnected && mRndisEnabled && mUsbTetherRequested) {
+                    if (mUsbConnected && mRndisEnabled && mUsbTetherRequested) {
+                    // if (usbConnected && mRndisEnabled && mUsbTetherRequested) {
                         tetherUsb(true);
                     }
+                    /* @} */
                     mUsbTetherRequested = false;
                 }
             } else if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
@@ -1605,4 +1610,53 @@ public class Tethering extends INetworkManagementEventObserver.Stub {
         pw.println();
         return;
     }
+
+    /** SPRD: Add for usb api @{ */
+    public boolean enableUsbUdcpower(boolean enabled){
+        if(VDBG) Log.d(TAG,"enableUsbUdcpower("+enabled+")");
+        try {
+            if(enabled && !mNMService.isUsbUdcpowerStarted())
+                mNMService.startUsbUdcpower();
+            else if(!enabled && mNMService.isUsbUdcpowerStarted())
+                mNMService.stopUsbUdcpower();
+        } catch(Exception e) {
+            Log.e(TAG,"Error toggling usb Udcpower:" + e);
+            return false;
+        }
+        return true;
+    }
+
+    public boolean isUsbUdcpowerStarted(){
+        try {
+            return mNMService.isUsbUdcpowerStarted();
+        } catch(Exception e) {
+            Log.e(TAG,"Fail to exec isUsbUdcpowerStarted:" + e);
+            return false;
+        }
+    }
+
+    public boolean isUsbConnected() {
+        boolean udcEnabled = isUsbUdcpowerStarted();
+        Log.i(TAG,"udcEnabled=" + udcEnabled);
+        if (!udcEnabled) {
+            try{
+                return mNMService.isUsbConnected();
+            } catch (Exception e) {
+                Log.e(TAG, "Error toggling usb Status :" + e);
+                return false;
+            }
+        } else {
+            return mUsbConnected;
+        }
+    }
+
+    public boolean isUsbRNDISStarted() {
+        try{
+            return mNMService.isUsbRNDISStarted();
+        } catch (Exception e) {
+            Log.e(TAG, "Error toggling usb RNDIS :" + e);
+            return false;
+        }
+    }
+    /** @} */
 }

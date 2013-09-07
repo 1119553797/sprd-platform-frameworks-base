@@ -16,6 +16,17 @@
 
 package com.android.server.usb;
 
+import java.io.File;
+import java.io.FileDescriptor;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
+
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -30,6 +41,7 @@ import android.content.res.Resources;
 import android.database.ContentObserver;
 import android.hardware.usb.UsbAccessory;
 import android.hardware.usb.UsbManager;
+import android.os.Debug;
 import android.os.FileUtils;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -49,24 +61,13 @@ import android.util.Slog;
 
 import com.android.internal.annotations.GuardedBy;
 
-import java.io.File;
-import java.io.FileDescriptor;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
-
 /**
  * UsbDeviceManager manages USB state in device mode.
  */
 public class UsbDeviceManager {
 
     private static final String TAG = UsbDeviceManager.class.getSimpleName();
-    private static final boolean DEBUG = false;
+    private static final boolean DEBUG = Debug.isDebug();
 
     private static final String USB_STATE_MATCH =
             "DEVPATH=/devices/virtual/android_usb/android0";
@@ -96,7 +97,11 @@ public class UsbDeviceManager {
     // Delay for debouncing USB disconnects.
     // We often get rapid connect/disconnect events when enabling USB functions,
     // which need debouncing.
-    private static final int UPDATE_DELAY = 1000;
+    /* SPRD: delay 5s when switch funtions @{ */
+    // private static final int UPDATE_DELAY = 1000;
+    private static final int UPDATE_DELAY = 5000;
+    private boolean mFuctionSwitch = false;
+    /* @} */
 
     private static final String BOOT_MODE_PROPERTY = "ro.bootmode";
 
@@ -117,6 +122,69 @@ public class UsbDeviceManager {
     private Map<String, List<Pair<String, String>>> mOemModeMap;
     private String[] mAccessoryStrings;
     private UsbDebuggingManager mDebuggingManager;
+
+
+    /* SPRD: add for usb functions @{ */
+    private static final int MSG_ENABLE_USB_MASS_STORAGE = 6;
+    private static final int MSG_ENABLE_TETHER = 7;
+    private static final int MSG_ENABLE_CDROM = 8;
+    private static final int MSG_LOCAL_CHANGE = 9;
+    private static final int MSG_ENABLE_VSER_GSER = 10;
+
+    private boolean mUmsEnabled;
+    private boolean mCdromEnabled;
+    private boolean mTetherEnabled;
+    private boolean mVserGserEnabled;
+    /* @} */
+
+    /** SPRD: add for usb functions @{ */
+    private class CdromSettingsObserver extends ContentObserver {
+        public CdromSettingsObserver() {
+            super(null);
+        }
+        @Override
+        public void onChange(boolean selfChange) {
+            boolean enable = (Settings.Global.getInt(mContentResolver,
+                    Settings.Global.CDROM_ENABLED, 0) > 0);
+            mHandler.sendMessage(MSG_ENABLE_CDROM, enable);
+        }
+    }
+
+    private class VserGserSettingsObserver extends ContentObserver {
+        public VserGserSettingsObserver() {
+            super(null);
+        }
+        @Override
+        public void onChange(boolean selfChange) {
+            boolean enable = (Settings.Global.getInt(mContentResolver,
+                    Settings.Global.VSER_GSER_ENABLED, 0) > 0);
+            mHandler.sendMessage(MSG_ENABLE_VSER_GSER, enable);
+        }
+    }
+    private class MassStorageSettingsObserver extends ContentObserver {
+        public MassStorageSettingsObserver() {
+            super(null);
+        }
+        @Override
+        public void onChange(boolean selfChange) {
+            boolean enable = (Settings.Global.getInt(mContentResolver,
+                    Settings.Global.USB_MASS_STORAGE_ENABLED, 0) > 0);
+            mHandler.sendMessage(MSG_ENABLE_USB_MASS_STORAGE, enable);
+        }
+    }
+
+    private class TetherSettingsObserver extends ContentObserver {
+        public TetherSettingsObserver() {
+            super(null);
+        }
+        @Override
+        public void onChange(boolean selfChange) {
+            boolean enable = (Settings.Global.getInt(mContentResolver,
+                    Settings.Global.USB_TETHERED, 0) > 0);
+            mHandler.sendMessage(MSG_ENABLE_TETHER, enable);
+        }
+    }
+    /** @} */
 
     private class AdbSettingsObserver extends ContentObserver {
         public AdbSettingsObserver() {
@@ -155,6 +223,20 @@ public class UsbDeviceManager {
         PackageManager pm = mContext.getPackageManager();
         mHasUsbAccessory = pm.hasSystemFeature(PackageManager.FEATURE_USB_ACCESSORY);
         initRndisAddress();
+
+        /* SPRD: add for usb function @{ */
+        Settings.Global.putInt(context.getContentResolver(),
+                Settings.Global.USB_TETHERED, 0);
+        Settings.Global.putInt(context.getContentResolver(),
+                Settings.Global.CDROM_ENABLED, 0);
+        if (Settings.Global.getInt(context.getContentResolver(),
+                Settings.Global.USB_REMEMBER_CHOICE, 0) == 0
+                && Settings.Global.getInt(context.getContentResolver(),
+                        Settings.Global.USB_CURRENT_FUNCTION, 0) < 5) {
+            Settings.Global.putInt(context.getContentResolver(),
+                    Settings.Global.USB_CURRENT_FUNCTION, 0);
+        }
+        /* @} */
 
         readOemUsbOverrideConfig();
 
@@ -203,7 +285,14 @@ public class UsbDeviceManager {
         mUseUsbNotification = !massStorageSupported;
 
         // make sure the ADB_ENABLED setting value matches the current state
-        Settings.Global.putInt(mContentResolver, Settings.Global.ADB_ENABLED, mAdbEnabled ? 1 : 0);
+        /* SPRD: make sure the adb current state matches the ADB_ENABLED setting value @{ */
+        // Settings.Global.putInt(mContentResolver, Settings.Global.ADB_ENABLED, mAdbEnabled ? 1 : 0);
+        boolean adbEnabled = Settings.Global.getInt(mContentResolver,
+                Settings.Global.ADB_ENABLED, 0) != 0;
+        if (adbEnabled != mAdbEnabled) {
+            mHandler.sendMessage(MSG_ENABLE_ADB, adbEnabled);
+        }
+        /* @} */
 
         mHandler.sendEmptyMessage(MSG_SYSTEM_READY);
     }
@@ -327,6 +416,15 @@ public class UsbDeviceManager {
             }
         };
 
+        /* SPRD: add for updating the notification */
+        private final BroadcastReceiver mLocalChangeReceiver = new BroadcastReceiver() {
+            public void onReceive(Context context, Intent intent) {
+                if (DEBUG)
+                    Slog.d(TAG, "language is change....");
+                mHandler.sendEmptyMessage(MSG_LOCAL_CHANGE);
+            }
+        };
+
         public UsbHandler(Looper looper) {
             super(looper);
             try {
@@ -344,11 +442,34 @@ public class UsbDeviceManager {
                     Slog.w(TAG, "resetting config to persistent property: " + mDefaultFunctions);
                     SystemProperties.set("sys.usb.config", mDefaultFunctions);
                 }
-
                 mCurrentFunctions = mDefaultFunctions;
+
+                /* SPRD: add for usb functions @{ */
+                if (mCurrentFunctions.contains("vser,gser")) {
+                    Settings.Global.putInt(mContext.getContentResolver(),
+                            Settings.Global.VSER_GSER_ENABLED, 1);
+                } else {
+                    Settings.Global.putInt(mContext.getContentResolver(),
+                            Settings.Global.VSER_GSER_ENABLED, 0);
+                }
+                if (mCurrentFunctions.contains("mass_storage")) {
+                    Settings.Global.putInt(mContext.getContentResolver(),
+                            Settings.Global.USB_MASS_STORAGE_ENABLED, 1);
+                } else {
+                    Settings.Global.putInt(mContext.getContentResolver(),
+                            Settings.Global.USB_MASS_STORAGE_ENABLED, 0);
+                }
+                /* @} */
                 String state = FileUtils.readTextFile(new File(STATE_PATH), 0, null).trim();
                 updateState(state);
                 mAdbEnabled = containsFunction(mCurrentFunctions, UsbManager.USB_FUNCTION_ADB);
+
+                /* SPRD: add for usb functions @{ */
+                mUmsEnabled = containsFunction(mCurrentFunctions, UsbManager.USB_FUNCTION_MASS_STORAGE);
+                mTetherEnabled = containsFunction(mCurrentFunctions, UsbManager.USB_FUNCTION_RNDIS);
+                mCdromEnabled = containsFunction(mCurrentFunctions, UsbManager.USB_FUNCTION_CDROM);
+                mVserGserEnabled = containsFunction(mCurrentFunctions, "vser,gser");
+                /* @} */
 
                 // Upgrade step for previous versions that used persist.service.adb.enable
                 String value = SystemProperties.get("persist.service.adb.enable", "");
@@ -366,6 +487,26 @@ public class UsbDeviceManager {
                 mContentResolver.registerContentObserver(
                         Settings.Global.getUriFor(Settings.Global.ADB_ENABLED),
                                 false, new AdbSettingsObserver());
+
+                /* SPRD: add for usb functions @{ */
+                mContentResolver.registerContentObserver(
+                        Settings.Global.getUriFor(Settings.Global.CDROM_ENABLED),
+                                false, new CdromSettingsObserver());
+                mContentResolver.registerContentObserver(
+                        Settings.Global.getUriFor(Settings.Global.USB_MASS_STORAGE_ENABLED),
+                        false, new MassStorageSettingsObserver());
+                mContentResolver.registerContentObserver(
+                        Settings.Global.getUriFor(Settings.Global.USB_TETHERED),
+                        false, new TetherSettingsObserver());
+                mContentResolver.registerContentObserver(
+                        Settings.Global.getUriFor(Settings.Global.VSER_GSER_ENABLED),
+                                false, new VserGserSettingsObserver());
+
+                IntentFilter filter = new IntentFilter();
+                filter.addAction(Intent.ACTION_LOCALE_CHANGED);
+                filter.addAction(Intent.ACTION_TYPEFACE_CHANGED);
+                mContext.registerReceiver(mLocalChangeReceiver, filter);
+                /* @} */
 
                 // Watch for USB configuration changes
                 mUEventObserver.startObserving(USB_STATE_MATCH);
@@ -423,7 +564,10 @@ public class UsbDeviceManager {
             msg.arg1 = connected;
             msg.arg2 = configured;
             // debounce disconnects to avoid problems bringing up USB tethering
-            sendMessageDelayed(msg, (connected == 0) ? UPDATE_DELAY : 0);
+            /* SPRD: changed for switching usb funtion @{ */
+            //sendMessageDelayed(msg, (connected == 0) ? UPDATE_DELAY : 0);
+            sendMessageDelayed(msg, (connected == 0 && mFuctionSwitch) ? UPDATE_DELAY : 0);
+            /* @} */
         }
 
         private boolean waitForState(String state) {
@@ -459,18 +603,125 @@ public class UsbDeviceManager {
             }
         }
 
+        /* SPRD: add for usb functions @{ */
+        private void setCdromEnabled(boolean enable) {
+            if (enable != mCdromEnabled) {
+                mCdromEnabled = enable;
+                if (mCdromEnabled) {
+                    setEnabledFunctions("cdrom", true);
+                } else {
+                    setEnabledFunctions("mass_storage", true);
+                }
+            }
+        }
+
+        private void setVserGserEnabled(boolean enable) {
+            if (DEBUG)
+                Slog.d(TAG, "setVserGserEnabled: " + enable);
+            if (enable != mVserGserEnabled) {
+                mVserGserEnabled = enable;
+                if (mVserGserEnabled) {
+                    setEnabledFunctions("vser,gser", true);
+                } else {
+                    setEnabledFunctions("mass_storage", true);
+                }
+            }
+        }
+
+        private void setMassStorageEnabled(boolean enable) {
+            if (enable != mUmsEnabled) {
+                mUmsEnabled = enable;
+                // Due to the persist.sys.usb.config property trigger, changing adb state requires
+                // switching to default function
+                setEnabledFunctions("mass_storage", mUmsEnabled);
+            }
+        }
+
+        private void setTetherEnabled(boolean enable) {
+            if (enable != mTetherEnabled) {
+                mTetherEnabled = enable;
+                // Due to the persist.sys.usb.config property trigger, changing adb state requires
+                // switching to default function
+                if (mTetherEnabled) {
+                    setEnabledFunctions("rndis", true);
+                } else {
+                    setEnabledFunctions("mass_storage", true);
+                }
+            }
+        }
+
+        private String switchUsbFunctions(String functions) {
+
+            boolean mMtpEnaled = false;
+            boolean mPtpEnabled = false;
+            // Caution: We need UI to obey the same rule. It is hard to be handled only in this function
+            if (DEBUG)
+                Slog.d(TAG, "setEnabledFunctions:" + functions);
+            if (functions.equalsIgnoreCase(UsbManager.USB_FUNCTION_RNDIS)) {
+                mTetherEnabled = true;
+            } else if (functions.equalsIgnoreCase(UsbManager.USB_FUNCTION_MASS_STORAGE)) {
+                mUmsEnabled = true;
+            } else if (functions.equalsIgnoreCase(UsbManager.USB_FUNCTION_CDROM)) {
+                mCdromEnabled = true;
+            } else {
+                if (functions.equalsIgnoreCase(UsbManager.USB_FUNCTION_MTP)) {
+                    mMtpEnaled = true;
+                } else if (functions.equalsIgnoreCase(UsbManager.USB_FUNCTION_PTP)) {
+                    mPtpEnabled = true;
+                }
+                mTetherEnabled = mUmsEnabled = mCdromEnabled == false;
+            }
+
+            functions = removeFunction(functions, UsbManager.USB_FUNCTION_MTP);
+            functions = removeFunction(functions, UsbManager.USB_FUNCTION_PTP);
+            functions = removeFunction(functions, UsbManager.USB_FUNCTION_MASS_STORAGE);
+            functions = removeFunction(functions, UsbManager.USB_FUNCTION_RNDIS);
+            functions = removeFunction(functions, UsbManager.USB_FUNCTION_ADB);
+            functions = removeFunction(functions, UsbManager.USB_FUNCTION_CDROM);
+            functions = removeFunction(functions, UsbManager.USB_FUNCTION_VSER);
+            functions = removeFunction(functions, UsbManager.USB_FUNCTION_GSER);
+
+            if (mTetherEnabled) {
+                functions = addFunction(functions, UsbManager.USB_FUNCTION_RNDIS);
+            } else if (mUmsEnabled) {
+                functions = addFunction(functions, UsbManager.USB_FUNCTION_MASS_STORAGE);
+            } else if (mCdromEnabled) {
+                functions = addFunction(functions, UsbManager.USB_FUNCTION_CDROM);
+            } else {
+                if (mMtpEnaled) {
+                    functions = addFunction(functions, UsbManager.USB_FUNCTION_MTP);
+                } else if (mPtpEnabled) {
+                    functions = addFunction(functions, UsbManager.USB_FUNCTION_PTP);
+                }
+            }
+
+            if (mAdbEnabled && !mCdromEnabled) {
+                functions = addFunction(functions, UsbManager.USB_FUNCTION_ADB);
+            }
+
+            if (mVserGserEnabled && mUmsEnabled) {
+                functions = addFunction(functions, UsbManager.USB_FUNCTION_VSER);
+                functions = addFunction(functions, UsbManager.USB_FUNCTION_GSER);
+            }
+            return functions;
+        }
+        /* @} */
+
         private void setEnabledFunctions(String functions, boolean makeDefault) {
 
             // Do not update persystent.sys.usb.config if the device is booted up
             // with OEM specific mode.
             if (functions != null && makeDefault && !needsOemUsbOverride()) {
 
-                if (mAdbEnabled) {
-                    functions = addFunction(functions, UsbManager.USB_FUNCTION_ADB);
-                } else {
-                    functions = removeFunction(functions, UsbManager.USB_FUNCTION_ADB);
-                }
-                if (!mDefaultFunctions.equals(functions)) {
+                /* SPRD: changed for usb function @{ */
+                // if (mAdbEnabled) {
+                //     functions = addFunction(functions, UsbManager.USB_FUNCTION_ADB);
+                // } else {
+                //     functions = removeFunction(functions, UsbManager.USB_FUNCTION_ADB);
+                // }
+                // if (!mDefaultFunctions.equals(functions)) {
+                functions = switchUsbFunctions(functions);
+                if (!mCurrentFunctions.equals(functions)) {
                     if (!setUsbConfig("none")) {
                         Slog.e(TAG, "Failed to disable USB");
                         // revert to previous configuration if we fail
@@ -479,16 +730,17 @@ public class UsbDeviceManager {
                     }
                     // setting this property will also change the current USB state
                     // via a property trigger
-                    SystemProperties.set("persist.sys.usb.config", functions);
+                    // SystemProperties.set("persist.sys.usb.config", functions);
                     if (waitForState(functions)) {
                         mCurrentFunctions = functions;
-                        mDefaultFunctions = functions;
+                        // mDefaultFunctions = functions;
                     } else {
                         Slog.e(TAG, "Failed to switch persistent USB config to " + functions);
                         // revert to previous configuration if we fail
-                        SystemProperties.set("persist.sys.usb.config", mDefaultFunctions);
+                        // SystemProperties.set("persist.sys.usb.config", mDefaultFunctions);
                     }
                 }
+                /* @} */
             } else {
                 if (functions == null) {
                     functions = mDefaultFunctions;
@@ -497,11 +749,15 @@ public class UsbDeviceManager {
                 // Override with bootmode specific usb mode if needed
                 functions = processOemUsbOverride(functions);
 
-                if (mAdbEnabled) {
-                    functions = addFunction(functions, UsbManager.USB_FUNCTION_ADB);
-                } else {
-                    functions = removeFunction(functions, UsbManager.USB_FUNCTION_ADB);
-                }
+                /* SPRD: changed for usb function @{ */
+                // if (mAdbEnabled) {
+                //     functions = addFunction(functions, UsbManager.USB_FUNCTION_ADB);
+                // } else {
+                //     functions = removeFunction(functions, UsbManager.USB_FUNCTION_ADB);
+                // }
+                functions = switchUsbFunctions(functions);
+                /* @} */
+
                 if (!mCurrentFunctions.equals(functions)) {
                     if (!setUsbConfig("none")) {
                         Slog.e(TAG, "Failed to disable USB");
@@ -649,6 +905,20 @@ public class UsbDeviceManager {
                     mCurrentUser = msg.arg1;
                     break;
                 }
+                /* SPRD: add for usb functions @{ */
+                case MSG_ENABLE_USB_MASS_STORAGE:
+                    setMassStorageEnabled(msg.arg1 == 1);
+                    break;
+                case MSG_ENABLE_TETHER:
+                    setTetherEnabled(msg.arg1 == 1);
+                    break;
+                case MSG_ENABLE_CDROM:
+                    setCdromEnabled(msg.arg1 == 1);
+                    break;
+                case MSG_ENABLE_VSER_GSER:
+                    setVserGserEnabled(msg.arg1 == 1);
+                    break;
+                /* @} */
             }
         }
 
@@ -665,11 +935,12 @@ public class UsbDeviceManager {
                     id = com.android.internal.R.string.usb_mtp_notification_title;
                 } else if (containsFunction(mCurrentFunctions, UsbManager.USB_FUNCTION_PTP)) {
                     id = com.android.internal.R.string.usb_ptp_notification_title;
-                } else if (containsFunction(mCurrentFunctions,
-                        UsbManager.USB_FUNCTION_MASS_STORAGE)) {
+                } else if (containsFunction(mCurrentFunctions, UsbManager.USB_FUNCTION_MASS_STORAGE)) {
                     id = com.android.internal.R.string.usb_cd_installer_notification_title;
                 } else if (containsFunction(mCurrentFunctions, UsbManager.USB_FUNCTION_ACCESSORY)) {
                     id = com.android.internal.R.string.usb_accessory_notification_title;
+                } else if (containsFunction(mCurrentFunctions, UsbManager.USB_FUNCTION_CDROM)) {
+                    id = com.android.internal.R.string.usb_cdrom_notification_title;
                 } else {
                     // There is a different notification for USB tethering so we don't need one here
                     //if (!containsFunction(mCurrentFunctions, UsbManager.USB_FUNCTION_RNDIS)) {
@@ -699,9 +970,24 @@ public class UsbDeviceManager {
                     notification.vibrate = null;
                     notification.priority = Notification.PRIORITY_MIN;
 
-                    Intent intent = Intent.makeRestartActivityTask(
-                            new ComponentName("com.android.settings",
-                                    "com.android.settings.UsbSettings"));
+                    /* SPRD: add for usb functions @{ */
+                    // Intent intent = Intent.makeRestartActivityTask(
+                    //         new ComponentName("com.android.settings",
+                    //                 "com.android.settings.UsbSettings"));
+                    Intent intent;
+                    if (id == com.android.internal.R.string.usb_mtp_notification_title
+                            || id == com.android.internal.R.string.usb_ptp_notification_title) {
+                        intent = Intent
+                                .makeRestartActivityTask(new ComponentName(
+                                        "com.android.settings",
+                                        "com.android.settings.UsbSettings"));
+                    } else {
+                        intent = Intent
+                                .makeRestartActivityTask(new ComponentName(
+                                        "com.android.settings",
+                                        "com.sprd.settings.SprdUsbSettings"));
+                    }
+                    /* @} */
                     PendingIntent pi = PendingIntent.getActivityAsUser(mContext, 0,
                             intent, 0, null, UserHandle.CURRENT);
                     notification.setLatestEventInfo(mContext, title, message, pi);

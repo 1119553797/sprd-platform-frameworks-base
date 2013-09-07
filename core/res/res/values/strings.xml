@@ -4173,4 +4173,6 @@
     <string name="revoke">Revoke</string>
     <!-- SPRD: Modify Bug 208839, Regular boot developmen  -->
     <string name="shutdown_after_seconds">Phone will shut down after <xliff:g id="NUMBER">%d</xliff:g> seconds</string>
+    <!-- SPRD: add for usb function -->
+    <string name="usb_cdrom_notification_title">Virtual Driver is on</string>
 </resources>

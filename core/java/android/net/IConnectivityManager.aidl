@@ -144,4 +144,11 @@ interface IConnectivityManager
     void setMobileDataEnabledByPhoneId(int phoneId, boolean enabled);
 
     /** @} */
+
+    /** SPRD: add for usb api @{ */
+    boolean enableUdcpower(boolean enabled);
+    boolean isUsbUdcpowerStarted();
+    boolean isUsbRNDISStarted();
+    boolean isUsbConnected();
+    /** @} */
 }
