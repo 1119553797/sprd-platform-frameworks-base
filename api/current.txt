@@ -11387,6 +11387,7 @@ package android.media {
     field public static final java.lang.String PROPERTY_OUTPUT_SAMPLE_RATE = "android.media.property.OUTPUT_SAMPLE_RATE";
     field public static final java.lang.String RINGER_MODE_CHANGED_ACTION = "android.media.RINGER_MODE_CHANGED";
     field public static final int RINGER_MODE_NORMAL = 2; // 0x2
+    field public static final int RINGER_MODE_OUTDOOR = 3; // 0x3
     field public static final int RINGER_MODE_SILENT = 0; // 0x0
     field public static final int RINGER_MODE_VIBRATE = 1; // 0x1
     field public static final deprecated int ROUTE_ALL = -1; // 0xffffffff
@@ -20162,8 +20163,11 @@ package android.provider {
     field public static final deprecated java.lang.String DATA_ROAMING = "data_roaming";
     field public static final java.lang.String DATE_FORMAT = "date_format";
     field public static final deprecated java.lang.String DEBUG_APP = "debug_app";
+    field public static final java.lang.String DEFAULT_ALARM = "default_alarm";
     field public static final android.net.Uri DEFAULT_ALARM_ALERT_URI;
+    field public static final java.lang.String DEFAULT_NOTIFICATION = "default_notification";
     field public static final android.net.Uri DEFAULT_NOTIFICATION_URI;
+    field public static final java.lang.String DEFAULT_RINGTONE = "default_ringtone";
     field public static final android.net.Uri DEFAULT_RINGTONE_URI;
     field public static final deprecated java.lang.String DEVICE_PROVISIONED = "device_provisioned";
     field public static final deprecated java.lang.String DIM_SCREEN = "dim_screen";

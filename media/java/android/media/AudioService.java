@@ -20,6 +20,7 @@ import static android.Manifest.permission.REMOTE_AUDIO_PLAYBACK;
 import static android.media.AudioManager.RINGER_MODE_NORMAL;
 import static android.media.AudioManager.RINGER_MODE_SILENT;
 import static android.media.AudioManager.RINGER_MODE_VIBRATE;
+import static android.media.AudioManager.RINGER_MODE_OUTDOOR;
 
 import android.app.Activity;
 import android.app.ActivityManagerNative;
@@ -689,7 +690,13 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
         // sanity check in case the settings are restored from a device with incompatible
         // ringer modes
         if (!AudioManager.isValidRingerMode(ringerMode)) {
-            ringerMode = AudioManager.RINGER_MODE_NORMAL;
+            /** SPRD: add outdoorMode @{ */
+            if (ringerModeFromSettings == AudioManager.RINGER_MODE_OUTDOOR) {
+                ringerMode = AudioManager.RINGER_MODE_OUTDOOR;
+            } else {
+                ringerMode = AudioManager.RINGER_MODE_NORMAL;
+            }
+            /** @} */
         }
         if ((ringerMode == AudioManager.RINGER_MODE_VIBRATE) && !mHasVibrator) {
             ringerMode = AudioManager.RINGER_MODE_SILENT;
@@ -956,13 +963,12 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
         // setting volume on master stream type also controls silent mode
         if (((flags & AudioManager.FLAG_ALLOW_RINGER_MODES) != 0) ||
                 (mStreamVolumeAlias[streamType] == getMasterStreamType())) {
-            int newRingerMode;
+            //SPRD:add for outdoor mode
+            int newRingerMode = getRingerMode();
             if (index == 0) {
                 newRingerMode = mHasVibrator ? AudioManager.RINGER_MODE_VIBRATE
                                               : AudioManager.RINGER_MODE_SILENT;
-            } else {
-                newRingerMode = AudioManager.RINGER_MODE_NORMAL;
-            }
+            } 
             setRingerMode(newRingerMode);
         }
     }
@@ -1346,7 +1352,7 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
     }
 
     /** @see AudioManager#setRingerMode(int) */
-    public void setRingerMode(int ringerMode) {
+    public void setRingerMode(int ringerMode) {  
         if (mUseFixedVolume) {
             return;
         }
@@ -1384,7 +1390,7 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
         for (int streamType = numStreamTypes - 1; streamType >= 0; streamType--) {
             if (isStreamMutedByRingerMode(streamType)) {
                 if (!isStreamAffectedByRingerMode(streamType) ||
-                    ringerMode == AudioManager.RINGER_MODE_NORMAL) {
+                    ringerMode == AudioManager.RINGER_MODE_NORMAL||ringerMode == AudioManager.RINGER_MODE_OUTDOOR) { //SPRD: add outdoorMode 
                     // ring and notifications volume should never be 0 when not silenced
                     // on voice capable devices
                     if (mVoiceCapable &&
@@ -1405,7 +1411,8 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
                 }
             } else {
                 if (isStreamAffectedByRingerMode(streamType) &&
-                    ringerMode != AudioManager.RINGER_MODE_NORMAL) {
+                        ringerMode != AudioManager.RINGER_MODE_NORMAL
+                        && ringerMode != AudioManager.RINGER_MODE_OUTDOOR) {//SPRD: add outdoorMode
                    mStreamStates[streamType].mute(null, true);
                    mRingerModeMutedStreams |= (1 << streamType);
                }
@@ -2460,62 +2467,79 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
      */
     private boolean checkForRingerModeChange(int oldIndex, int direction,  int step) {
         boolean adjustVolumeIndex = true;
-        int ringerMode = getRingerMode();
-
-        switch (ringerMode) {
-        case RINGER_MODE_NORMAL:
-            if (direction == AudioManager.ADJUST_LOWER) {
-                if (mHasVibrator) {
-                    // "step" is the delta in internal index units corresponding to a
-                    // change of 1 in UI index units.
-                    // Because of rounding when rescaling from one stream index range to its alias
-                    // index range, we cannot simply test oldIndex == step:
-                    //   (step <= oldIndex < 2 * step) is equivalent to: (old UI index == 1)
-                    if (step <= oldIndex && oldIndex < 2 * step) {
-                        ringerMode = RINGER_MODE_VIBRATE;
-                    }
-                } else {
-                    // (oldIndex < step) is equivalent to (old UI index == 0)
-                    if ((oldIndex < step) && mPrevVolDirection != AudioManager.ADJUST_LOWER) {
-                        ringerMode = RINGER_MODE_SILENT;
-                    }
-                }
-            }
-            break;
-        case RINGER_MODE_VIBRATE:
-            if (!mHasVibrator) {
-                Log.e(TAG, "checkForRingerModeChange() current ringer mode is vibrate" +
-                        "but no vibrator is present");
-                break;
-            }
-            if ((direction == AudioManager.ADJUST_LOWER)) {
-                if (mPrevVolDirection != AudioManager.ADJUST_LOWER) {
-                    ringerMode = RINGER_MODE_SILENT;
-                }
-            } else if (direction == AudioManager.ADJUST_RAISE) {
-                ringerMode = RINGER_MODE_NORMAL;
-            }
-            adjustVolumeIndex = false;
-            break;
-        case RINGER_MODE_SILENT:
-            if (direction == AudioManager.ADJUST_RAISE) {
-                if (mHasVibrator) {
-                    ringerMode = RINGER_MODE_VIBRATE;
-                } else {
+        /** SPRD: when change volume ned to check whether need to change Mode @{ */
+        int originalRingerMode = getRingerMode();
+        int ringerMode = -1;
+        switch (originalRingerMode) {
+            case RINGER_MODE_OUTDOOR:
+                if (direction == AudioManager.ADJUST_LOWER) {
                     ringerMode = RINGER_MODE_NORMAL;
                 }
-            }
-            adjustVolumeIndex = false;
-            break;
-        default:
-            Log.e(TAG, "checkForRingerModeChange() wrong ringer mode: "+ringerMode);
-            break;
+                adjustVolumeIndex = false;
+                break;
+            case RINGER_MODE_NORMAL:
+                if (direction == AudioManager.ADJUST_LOWER) {
+                    if (mHasVibrator) {
+                        // "step" is the delta in internal index units
+                        // corresponding to a
+                        // change of 1 in UI index units.
+                        // Because of rounding when rescaling from one stream
+                        // index range to its alias
+                        // index range, we cannot simply test oldIndex == step:
+                        // (step <= oldIndex < 2 * step) is equivalent to: (old
+                        // UI index == 1)
+                        if (step <= oldIndex && oldIndex < 2 * step) {
+                            ringerMode = RINGER_MODE_VIBRATE;
+                        }
+                    } else {
+                        // (oldIndex < step) is equivalent to (old UI index ==
+                        // 0)
+                        if ((oldIndex < step) && mPrevVolDirection != AudioManager.ADJUST_LOWER) {
+                            ringerMode = RINGER_MODE_SILENT;
+                        }
+                    }
+                }
+                break;
+            case RINGER_MODE_VIBRATE:
+                if (!mHasVibrator) {
+                    Log.e(TAG, "checkForRingerModeChange() current ringer mode is vibrate" +
+                            "but no vibrator is present");
+                    break;
+                }
+                if ((direction == AudioManager.ADJUST_LOWER)) {
+                    if (mPrevVolDirection != AudioManager.ADJUST_LOWER) {
+                        ringerMode = RINGER_MODE_SILENT;
+                    }
+                } else if (direction == AudioManager.ADJUST_RAISE) {
+                    ringerMode = RINGER_MODE_NORMAL;
+                    adjustVolumeIndex = true;
+                }
+                adjustVolumeIndex = false;
+                break;
+            case RINGER_MODE_SILENT:
+                if (direction == AudioManager.ADJUST_RAISE) {
+                    if (mHasVibrator) {
+                        ringerMode = RINGER_MODE_VIBRATE;
+                    } else {
+                        ringerMode = RINGER_MODE_NORMAL;
+                    }
+                }
+                adjustVolumeIndex = false;
+                break;
+            default:
+                Log.e(TAG, "checkForRingerModeChange() wrong ringer mode: " + ringerMode);
+                break;
         }
-
-        setRingerMode(ringerMode);
-
+        if (ringerMode != -1) {
+            if ((originalRingerMode == RINGER_MODE_SILENT || originalRingerMode == RINGER_MODE_VIBRATE)
+                    && ringerMode == RINGER_MODE_NORMAL) {
+                setStreamVolume(AudioSystem.STREAM_RING, getStreamMaxVolume(AudioSystem.STREAM_RING) / 7, 0);
+                setStreamVolume(AudioSystem.STREAM_NOTIFICATION, getStreamMaxVolume(AudioSystem.STREAM_NOTIFICATION) / 7, 0);
+            }
+            setRingerMode(ringerMode);
+        }
         mPrevVolDirection = direction;
-
+        /** @} */
         return adjustVolumeIndex;
     }
 
