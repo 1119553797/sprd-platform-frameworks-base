@@ -56,6 +56,8 @@ import android.os.WorkSource;
 import android.provider.Settings;
 import android.provider.Telephony.Carriers;
 import android.provider.Telephony.Sms.Intents;
+import android.telephony.PhoneStateListener;
+import android.telephony.ServiceState;
 import android.telephony.SmsMessage;
 import android.telephony.TelephonyManager;
 import android.telephony.gsm.GsmCellLocation;
@@ -323,6 +325,10 @@ public class GpsLocationProvider implements LocationProviderInterface {
 
     private GeofenceHardwareImpl mGeofenceHardwareImpl;
 
+    // SPRD: add new variable
+    private int mPhoneIsRegistered;
+    private TelephonyManager mTelephonyManager;
+
     private final IGpsStatusProvider mGpsStatusProvider = new IGpsStatusProvider.Stub() {
         @Override
         public void addGpsStatusListener(IGpsStatusListener listener) throws RemoteException {
@@ -499,9 +505,16 @@ public class GpsLocationProvider implements LocationProviderInterface {
                 LocationManager locManager =
                         (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
                 locManager.requestLocationUpdates(LocationManager.PASSIVE_PROVIDER,
-                        0, 0, new NetworkLocationListener(), mHandler.getLooper());                
+                        0, 0, new NetworkLocationListener(), mHandler.getLooper());
             }
         });
+
+        /* SPRD: Add double SIM judge @{ */
+        int phoneId = TelephonyManager.getDefaultDataPhoneId(mContext);
+        mTelephonyManager = (TelephonyManager) mContext.getSystemService(
+            TelephonyManager.getServiceName(Context.TELEPHONY_SERVICE, phoneId));
+        mTelephonyManager.listen(mPhoneStateListener(phoneId), PhoneStateListener.LISTEN_SERVICE_STATE);
+        /* @} */
     }
 
     private void listenForBroadcasts() {
@@ -1035,6 +1048,19 @@ public class GpsLocationProvider implements LocationProviderInterface {
                 }
                 Log.d(TAG, "setting position_mode to " + mode);
             }
+
+            /* SPRD: Add double SIM judge @{ */
+            int enableOption = Settings.Secure.getInt(mContext.getContentResolver(), "assisted_gps_enable_option", 0);
+            if (DEBUG) Log.d(TAG, "get the agps enable option is " + enableOption);
+            if (enableOption == 2) {
+                mPositionMode = GPS_POSITION_MODE_STANDALONE;
+            } else if (enableOption == 0) {
+                if (mTelephonyManager.isNetworkRoaming() || mPhoneIsRegistered != ServiceState.STATE_IN_SERVICE) {
+                    mPositionMode = GPS_POSITION_MODE_STANDALONE;
+                }
+            }
+            if (DEBUG) Log.d(TAG, "after set mPositionMode = " + mPositionMode);
+            /* @} */
 
             int interval = (hasCapability(GPS_CAPABILITY_SCHEDULING) ? mFixInterval : 1000);
             if (!native_set_position_mode(mPositionMode, GPS_POSITION_RECURRENCE_PERIODIC,
@@ -1638,6 +1664,18 @@ public class GpsLocationProvider implements LocationProviderInterface {
         mWakeLock.acquire();
         mHandler.obtainMessage(message, arg, 1, obj).sendToTarget();
     }
+
+    /* SPRD: Add double SIM judge @{ */
+    private PhoneStateListener mPhoneStateListener(int phoneId) {
+        PhoneStateListener mPhoneStateListener = new PhoneStateListener() {
+            @Override
+            public void onServiceStateChanged(ServiceState serviceState) {
+                mPhoneIsRegistered = serviceState.getState();
+            }
+        };
+        return mPhoneStateListener;
+    }
+    /* @} */
 
     private final class ProviderHandler extends Handler {
         public ProviderHandler(Looper looper) {
