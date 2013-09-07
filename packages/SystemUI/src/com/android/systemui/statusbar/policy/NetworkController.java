@@ -536,10 +536,13 @@ public class NetworkController extends BroadcastReceiver {
             refreshViews(phoneId);
         } else if (action.equals(TelephonyIntents.SPN_STRINGS_UPDATED_ACTION)) {
             final int phoneId = intent.getIntExtra(TelephonyIntents.EXTRA_PHONE_ID, 0);
-            updateNetworkName(intent.getBooleanExtra(TelephonyIntents.EXTRA_SHOW_SPN, false),
+            /** SPRD: add for splmn @{ */
+            updateNetworkNewName(intent.getBooleanExtra(TelephonyIntents.EXTRA_SHOW_SPN, false),
                         intent.getStringExtra(TelephonyIntents.EXTRA_SPN),
                         intent.getBooleanExtra(TelephonyIntents.EXTRA_SHOW_PLMN, false),
-                        intent.getStringExtra(TelephonyIntents.EXTRA_PLMN), phoneId);
+                        intent.getStringExtra(TelephonyIntents.EXTRA_PLMN),
+                        intent.getStringExtra(TelephonyIntents.EXTRA_SHORT_PLMN),phoneId);
+            /** @} */
             refreshViews(phoneId);
         } else if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION) ||
                  action.equals(ConnectivityManager.INET_CONDITION_ACTION)) {
@@ -1032,7 +1035,59 @@ public class NetworkController extends BroadcastReceiver {
             mNetworkName[phoneId] = mNetworkNameDefault;
         }
     }
+    /** SPRD: add for splmn @{ */
+    void updateNetworkNewName(boolean showSpn, String spn, boolean showPlmn, String plmn, String splmn,int phoneId){
+        if (true) {
+            Slog.d("CarrierLabel", "updateNetworkNewName showSpn=" + showSpn + " spn=" + spn
+                    + " showPlmn=" + showPlmn + " plmn=" + plmn +" splmn=" + splmn + " phoneId" + phoneId);
+        }
 
+        StringBuilder str = new StringBuilder();
+
+        boolean something = false;
+        if (showPlmn && plmn != null) {
+            str.append(plmn);
+        if(splmn !=null )
+            {
+        str.append("(");
+        str.append(splmn);
+        str.append(") ");
+            }
+            something = true;
+        }
+        if (showSpn && spn != null) {
+            if (something) {
+                str.append(" | ");
+            }
+            str.append(spn);
+            something = true;
+        }
+
+        if (something) {
+            // SPRD: add judgement of 'plmn.equals(emergency_calls_only)' for bug207967
+            if (showPlmn
+                    && plmn != null
+                    && (plmn.equals(mContext
+                            .getString(com.android.internal.R.string.lockscreen_carrier_default))
+                                ||plmn.equals(mContext.getString(com.android.internal.R.string.emergency_calls_only)))){
+                if (!mPhone[phoneId].hasIccCard()) {
+                    str.append(" | ");
+                    str.append(mContext
+                            .getString(com.android.internal.R.string.lockscreen_missing_sim_message_short));
+                }
+            }
+            mNetworkName[phoneId] = str.toString();
+        } else {
+            str.append(mContext.getString(com.android.internal.R.string.lockscreen_carrier_default));
+            if (!mPhone[phoneId].hasIccCard()) {
+                str.append(" | ");
+                str.append(mContext
+                        .getString(com.android.internal.R.string.lockscreen_missing_sim_message_short));
+            }
+            mNetworkName[phoneId] = str.toString();
+        }
+    }
+    /** @} */
     // ===== Wifi ===================================================================
 
     class WifiHandler extends Handler {
