@@ -1504,6 +1504,14 @@ public class MediaPlayer
         p.recycle();
         return ret;
     }
+/** SPRD : add function @{*/
+    /**
+         * set position of last interrupt position
+         * @param position last interrupt position.
+         * @hide
+         */
+        public native void setLastInterruptPosition(long position);
+/** SPRD : @}*/
 
     /*
      * Gets the value of the parameter indicated by key.
