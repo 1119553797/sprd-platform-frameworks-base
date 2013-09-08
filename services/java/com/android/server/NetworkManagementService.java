@@ -133,10 +133,10 @@ public class NetworkManagementService extends INetworkManagementService.Stub
 
         /** SPRD: add for usb function @{ */
         public static final int UsbRNDISStatusResult      = 215;
-        public static final int UsbUdcpowerStatusResult   = 223;
-        public static final int UsbConnectStatusResult    = 224;
-        public static final int UsbGserStatusResult       = 225;
-        public static final int UsbVserStatusResult       = 226;
+        public static final int UsbUdcpowerStatusResult   = 224;G
+        public static final int UsbConnectStatusResult    = 225;
+        public static final int UsbGserStatusResult       = 226;
+        public static final int UsbVserStatusResult       = 227;
         /** @} */
     }
 
@@ -1567,7 +1567,7 @@ public class NetworkManagementService extends INetworkManagementService.Stub
         mContext.enforceCallingOrSelfPermission(
                 android.Manifest.permission.CHANGE_NETWORK_STATE,"NetworkManagementService");
         try {
-            doCommand("usb startudcpower");
+            doUsbCommand("startudcpower");
         } catch (Exception e) {
             Slog.e(TAG," Send Command usb startudcpower",e);
         }
@@ -1577,7 +1577,7 @@ public class NetworkManagementService extends INetworkManagementService.Stub
         mContext.enforceCallingOrSelfPermission(
                 android.Manifest.permission.CHANGE_NETWORK_STATE,"NetworkManagementService");
         try {
-            doCommand("usb stopudcpower");
+            doUsbCommand("stopudcpower");
         } catch (Exception e) {
             Slog.e(TAG," Send Command usb stopudcpower",e);
         }
@@ -1588,7 +1588,7 @@ public class NetworkManagementService extends INetworkManagementService.Stub
                 android.Manifest.permission.ACCESS_NETWORK_STATE, "NetworkManagementService");
         ArrayList<String> rsp = null;
         try {
-            rsp = doCommand("usb udcpowerstatus");
+            rsp = doUsbCommand("udcpowerstatus");
         } catch (Exception e) {
             Slog.e(TAG," Send Command usb udcpowerstatus ",e);
         }
@@ -1611,7 +1611,7 @@ public class NetworkManagementService extends INetworkManagementService.Stub
                 android.Manifest.permission.ACCESS_NETWORK_STATE, "NetworkManagementService");
         ArrayList<String> rsp;
         try {
-            rsp = doCommand("usb rndisstatus");
+            rsp = doUsbCommand("rndisstatus");
         } catch (NativeDaemonConnectorException e) {
             throw new IllegalStateException(
                     "Error communicating to native daemon to check RNDIS status", e);
@@ -1635,7 +1635,7 @@ public class NetworkManagementService extends INetworkManagementService.Stub
                 android.Manifest.permission.ACCESS_NETWORK_STATE, "NetworkManagementService");
         ArrayList<String> rsp = null;
         try {
-            rsp = doCommand("usb status");
+            rsp = doUsbCommand("status");
         } catch (Exception e) {
             Slog.e(TAG,"Send Command usb status");
         }
@@ -1653,9 +1653,9 @@ public class NetworkManagementService extends INetworkManagementService.Stub
         throw new IllegalStateException("Got an empty response");
     }
 
-    private ArrayList<String> doCommand(String cmd) throws NativeDaemonConnectorException {
+    private ArrayList<String> doUsbCommand(String cmd) throws NativeDaemonConnectorException {
         final ArrayList<String> rawEvents = Lists.newArrayList();
-        final NativeDaemonEvent[] events = mConnector.executeForList(cmd);
+        final NativeDaemonEvent[] events = mConnector.executeForList("usb", cmd);
         for (NativeDaemonEvent event : events) {
             rawEvents.add(event.getRawEvent());
         }
