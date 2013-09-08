@@ -29,6 +29,7 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.drm.DrmManagerClient;
 import android.graphics.BitmapFactory;
+//import android.graphics.Bitmap; //Fix Bug 208488
 import android.mtp.MtpConstants;
 import android.net.Uri;
 import android.os.Environment;
@@ -555,6 +556,20 @@ public class MediaScanner
                 FileEntry entry = beginFile(path, mimeType, lastModified,
                         fileSize, isDirectory, noMedia);
 
+                //Fix Bug 208488
+                /*Log.e(TAG, "doScanFile, path = " + path);
+                if(MediaFile.isImageFileType(mFileType)) {
+                    Bitmap bmp = BitmapFactory.decodeFile(path, mBitmapOptions);
+                    if(mBitmapOptions.outWidth > 4092 && mBitmapOptions.outHeight > 4092) {
+                        Log.e(TAG, "doScanFile, path = " + path);
+                        Log.e(TAG, "options.outWidth =  " + mBitmapOptions.outWidth);
+                        Log.e(TAG, "options.outHeight =  " + mBitmapOptions.outHeight);
+                        Log.e(TAG, "result =  " + result);
+                        return result;
+                    }
+                }*/
+                //Fix Bug 208488
+
                 // if this file was just inserted via mtp, set the rowid to zero
                 // (even though it already exists in the database), to trigger
                 // the correct code path for updating its entry
@@ -583,6 +598,13 @@ public class MediaScanner
 
                         if (MediaFile.isImageFileType(mFileType)) {
                             processImageFile(path);
+                            //Fix Bug 208488
+                            long px = mWidth * mHeight;
+                            if(px > 4092 * 4092) {
+                                Log.e(TAG, "find huge/unsupport image, path = " + path + ", mWidth = " + mWidth + ", mHeight = " + mHeight);
+                                return result;
+                            }
+                            //Fix Bug 208488
                         }
 
                         result = endFile(entry, ringtones, notifications, alarms, music, podcasts);
