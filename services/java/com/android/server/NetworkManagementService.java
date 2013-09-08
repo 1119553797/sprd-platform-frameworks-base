@@ -133,7 +133,7 @@ public class NetworkManagementService extends INetworkManagementService.Stub
 
         /** SPRD: add for usb function @{ */
         public static final int UsbRNDISStatusResult      = 215;
-        public static final int UsbUdcpowerStatusResult   = 224;G
+        public static final int UsbUdcpowerStatusResult   = 224;
         public static final int UsbConnectStatusResult    = 225;
         public static final int UsbGserStatusResult       = 226;
         public static final int UsbVserStatusResult       = 227;
