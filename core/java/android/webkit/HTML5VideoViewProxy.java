@@ -182,12 +182,14 @@ class HTML5VideoViewProxy extends Handler
 
         public static void exitFullScreenVideo(HTML5VideoViewProxy proxy,
                 WebViewClassic webView) {
+if(null != mHTML5VideoView){//fixbug 200097
             if (!mHTML5VideoView.fullScreenExited() && mHTML5VideoView.isFullScreenMode()) {
                 WebChromeClient client = webView.getWebChromeClient();
                 if (client != null) {
                     client.onHideCustomView();
                 }
             }
+}
         }
 
         // This is on the UI thread.
