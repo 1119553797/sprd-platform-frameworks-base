@@ -103,8 +103,28 @@ static void recorderCallback(int event, void* user, void *info) {
     }
     if (event == AudioRecord::EVENT_MORE_DATA) {
         // set size to 0 to signal we're not using the callback to read more data
-        AudioRecord::Buffer* pBuff = (AudioRecord::Buffer*)info;
-        pBuff->size = 0;
+        //AudioRecord::Buffer* pBuff = (AudioRecord::Buffer*)info;
+        //pBuff->size = 0;
+        JNIEnv *env = AndroidRuntime::getJNIEnv();
+        if (user && env) {
+            AudioRecord::Buffer * pBuffer = (AudioRecord::Buffer *) info;
+            //CHECK_EQ(pBuffer->size & 1, 0u);
+            if (pBuffer->size == 0) {
+                ALOGE("Nothing is available from AudioRecord callback buffer");
+                return;
+            }
+
+            jobject drectBuffer = env->NewDirectByteBuffer(pBuffer->i16, pBuffer->size);
+            env->CallStaticVoidMethod(
+                callbackInfo->audioRecord_class,
+                javaAudioRecordFields.postNativeEventInJava,
+                callbackInfo->audioRecord_ref, event, 0, pBuffer->size, drectBuffer);
+            if (env->ExceptionCheck()) {
+                env->ExceptionDescribe();
+                env->ExceptionClear();
+            }
+            env->DeleteLocalRef(drectBuffer);
+        }
 
     } else if (event == AudioRecord::EVENT_MARKER) {
         JNIEnv *env = AndroidRuntime::getJNIEnv();

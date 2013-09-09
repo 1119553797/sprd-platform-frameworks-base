@@ -11460,6 +11460,10 @@ package android.media {
     method public abstract void onPeriodicNotification(android.media.AudioRecord);
   }
 
+  public static abstract interface AudioRecord.OnRecordPositionUpdateListenerEx implements android.media.AudioRecord.OnRecordPositionUpdateListener {
+    method public abstract void onMoreData(android.media.AudioRecord, java.nio.ByteBuffer, int);
+  }
+
   public class AudioTrack {
     ctor public AudioTrack(int, int, int, int, int, int) throws java.lang.IllegalArgumentException;
     ctor public AudioTrack(int, int, int, int, int, int, int) throws java.lang.IllegalArgumentException;

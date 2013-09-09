@@ -98,7 +98,11 @@ public class AudioRecord
      * Event id denotes when previously set update period has elapsed during recording.
      */
     private static final int NATIVE_EVENT_NEW_POS = 3;
-
+    /**
+     * Event id denotes when data of PCM buffer is available
+     */
+    private static final int NATIVE_EVENT_MORE_DATA = 0;
+    
     private final static String TAG = "AudioRecord-Java";
 
 
@@ -730,6 +734,12 @@ public class AudioRecord
          */
         void onPeriodicNotification(AudioRecord recorder);
     }
+    public interface OnRecordPositionUpdateListenerEx extends OnRecordPositionUpdateListener{
+    /**
+    * Called on the listener to periodically notify it when the data of PCM buffer is available
+    */
+        void onMoreData(AudioRecord recorder, ByteBuffer data, int size);
+    }
 
 
 
@@ -767,6 +777,14 @@ public class AudioRecord
                 if (listener != null) {
                     listener.onPeriodicNotification(mAudioRecord);
                 }
+                break;
+            case NATIVE_EVENT_MORE_DATA:
+               if (listener != null) {
+                   if(listener instanceof OnRecordPositionUpdateListenerEx)
+                   {
+                       ((OnRecordPositionUpdateListenerEx)listener).onMoreData(mAudioRecord, (ByteBuffer)msg.obj, msg.arg2);
+                   }
+               }
                 break;
             default:
                 Log.e(TAG, "[ android.media.AudioRecord.NativeEventHandler ] " +
