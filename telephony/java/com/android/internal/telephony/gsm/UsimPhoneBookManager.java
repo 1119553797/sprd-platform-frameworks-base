@@ -142,6 +142,8 @@ public class UsimPhoneBookManager extends IccThreadHandler implements IccConstan
     private LinkedList<SubjectIndexOfAdn> mEmailInfoFromPBR = new LinkedList<SubjectIndexOfAdn>();
     private boolean mAnrPresentInIap = false;
     private int mDoneAdnCount = 0;
+    //owen.chen modify for 208192
+    private boolean mReUpdateRecordNum= false;
 
     public class SubjectIndexOfAdn {
 
@@ -2182,15 +2184,21 @@ public class UsimPhoneBookManager extends IccThreadHandler implements IccConstan
 
 
     private void updateAdnRecordNum(){
-        
-        
+
         int numAdnRecs = mPhoneBookRecords.size();
         log( "updateAdnRecord Num and grp info, adn size:" + numAdnRecs);
         for(int i=0;i<numAdnRecs;i++){
             AdnRecord adn = mPhoneBookRecords.get(i);
             if(adn == null) continue;
             adn.setRecordNumber(i+1);
-            adn.setGrp(getGrp(i));
+            //owen.chen modify for 208192
+            try {
+                adn.setGrp(getGrp(i));
+            } catch (IndexOutOfBoundsException e) {
+                Log.e(LOG_TAG, "Error: IndexOutOfBoundsException: updateAdnRecordNum getGrp("+i+") fail, numAdnRecs= "+ numAdnRecs);
+                mReUpdateRecordNum= true;
+                break;
+            }
         }
     }
     private void updateAdnRecord(int num) {
@@ -2535,6 +2543,15 @@ public class UsimPhoneBookManager extends IccThreadHandler implements IccConstan
 
                     mGrpFileRecord.addAll((ArrayList<byte[]>) ar.result);
                     log("Loading USIM Grp records done size "+ mGrpFileRecord.size());
+                }
+
+                Log.e(LOG_TAG, "EVENT_GRP_LOAD_DONE: mReUpdateRecordNum= "+ mReUpdateRecordNum);
+
+                //owen.chen modify for 208192
+                if (mReUpdateRecordNum) {
+                   Log.e(LOG_TAG, "EVENT_GRP_LOAD_DONE: redoing updateAdnRecordNum");
+                    updateAdnRecordNum();
+                    mReUpdateRecordNum = false;
                 }
 
                 synchronized (mLock) {
