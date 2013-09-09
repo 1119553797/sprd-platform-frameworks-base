@@ -22,6 +22,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.os.SystemProperties;
 import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.AttributeSet;
@@ -53,34 +54,78 @@ public class KeyguardSelectorView extends LinearLayout implements KeyguardSecuri
     private SecurityMessageDisplay mSecurityMessageDisplay;
     private Drawable mBouncerFrame;
 
+    /* SPRD: Modify 20130909 Spreadst of Bug 213683 original lockscreen change by UUI @{ */
+    private static String universeSupportKey = "universe_ui_support";
+    boolean isUniverseSupport = SystemProperties.getBoolean(universeSupportKey, true);
+    /* @} */
+
     OnTriggerListener mOnTriggerListener = new OnTriggerListener() {
 
         public void onTrigger(View v, int target) {
             final int resId = mGlowPadView.getResourceIdForTarget(target);
-            switch (resId) {
-                case com.android.internal.R.drawable.ic_action_assist_generic:
-                    Intent assistIntent =
-                            ((SearchManager) mContext.getSystemService(Context.SEARCH_SERVICE))
-                            .getAssistIntent(mContext, true, UserHandle.USER_CURRENT);
-                    if (assistIntent != null) {
-                        mActivityLauncher.launchActivity(assistIntent, false, true, null, null);
-                    } else {
-                        Log.w(TAG, "Failed to get intent for assist activity");
-                    }
-                    mCallback.userActivity(0);
-                    break;
+            /* SPRD: Modify 20130909 Spreadst of Bug 213683 original lockscreen change by UUI @{ */
+            if (isUniverseSupport){
+                switch (resId) {
+                    case com.android.internal.R.drawable.ic_lockscreen_call:
+                        Intent callIntent = new Intent();
+                        callIntent.setAction(Intent.ACTION_DIAL);
+                        if (callIntent != null) {
+                            mActivityLauncher.launchActivity(callIntent, false, true, null, null);
+                        } else {
+                            Log.w(TAG, "Failed to get intent for assist activity");
+                        }
+                        mCallback.userActivity(0);
+                        break;
 
-                case com.android.internal.R.drawable.ic_lockscreen_camera:
-                    mActivityLauncher.launchCamera(null, null);
-                    mCallback.userActivity(0);
-                    break;
+                    case com.android.internal.R.drawable.ic_lockscreen_sms:
+                        Intent smsIntent = new Intent(Intent.ACTION_MAIN);
+                        smsIntent.setType("vnd.android.cursor.dir/mms");
+                        if (smsIntent != null) {
+                            mActivityLauncher.launchActivity(smsIntent, false, true, null, null);
+                        } else {
+                            Log.w(TAG, "Failed to get intent for assist activity");
+                        }
+                        mCallback.userActivity(0);
+                        break;
 
-                case com.android.internal.R.drawable.ic_lockscreen_unlock_phantom:
-                case com.android.internal.R.drawable.ic_lockscreen_unlock:
-                    mCallback.userActivity(0);
-                    mCallback.dismiss(false);
-                break;
+                    case com.android.internal.R.drawable.ic_lockscreen_camera:
+                        mActivityLauncher.launchCamera(null, null);
+                        mCallback.userActivity(0);
+                        break;
+
+                    case com.android.internal.R.drawable.ic_lockscreen_unlock_phantom:
+                    case com.android.internal.R.drawable.ic_lockscreen_unlock:
+                        mCallback.userActivity(0);
+                        mCallback.dismiss(false);
+                        break;
+                }
+            } else {
+                switch (resId) {
+                    case com.android.internal.R.drawable.ic_action_assist_generic:
+                        Intent assistIntent =
+                        ((SearchManager) mContext.getSystemService(Context.SEARCH_SERVICE))
+                        .getAssistIntent(mContext, true, UserHandle.USER_CURRENT);
+                        if (assistIntent != null) {
+                            mActivityLauncher.launchActivity(assistIntent, false, true, null, null);
+                        } else {
+                            Log.w(TAG, "Failed to get intent for assist activity");
+                        }
+                        mCallback.userActivity(0);
+                        break;
+
+                    case com.android.internal.R.drawable.ic_lockscreen_camera:
+                        mActivityLauncher.launchCamera(null, null);
+                        mCallback.userActivity(0);
+                        break;
+
+                    case com.android.internal.R.drawable.ic_lockscreen_unlock_phantom:
+                    case com.android.internal.R.drawable.ic_lockscreen_unlock:
+                        mCallback.userActivity(0);
+                        mCallback.dismiss(false);
+                        break;
+                }
             }
+            /* @} */
         }
 
         public void onReleased(View v, int handle) {
@@ -147,7 +192,15 @@ public class KeyguardSelectorView extends LinearLayout implements KeyguardSecuri
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        mGlowPadView = (GlowPadView) findViewById(R.id.glow_pad_view);
+        /* SPRD: Modify 20130909 Spreadst of Bug 213683 original lockscreen change by UUI @{ */
+        if (isUniverseSupport){
+            mGlowPadView = (GlowPadView) findViewById(R.id.glow_pad_view_uui);
+            findViewById(R.id.glow_pad_view).setVisibility(View.GONE);
+        } else {
+            mGlowPadView = (GlowPadView) findViewById(R.id.glow_pad_view);
+            findViewById(R.id.glow_pad_view_uui).setVisibility(View.GONE);
+        }
+        /* @} */
         mGlowPadView.setOnTriggerListener(mOnTriggerListener);
         updateTargets();
 
@@ -205,6 +258,17 @@ public class KeyguardSelectorView extends LinearLayout implements KeyguardSecuri
     }
 
     public void updateResources() {
+        int resId;
+        /* SPRD: Modify 20130909 Spreadst of Bug 213683 original lockscreen change by UUI @{ */
+        if (isUniverseSupport) {
+            resId = R.array.lockscreen_targets_with_camera_uui;
+        } else {
+            resId = R.array.lockscreen_targets_with_camera;
+        }
+        if (mGlowPadView.getTargetResourceId() != resId) {
+            mGlowPadView.setTargetResources(resId);
+        }
+        /* @} */
         // Update the search icon with drawable from the search .apk
         if (!mSearchDisabled) {
             Intent intent = ((SearchManager) mContext.getSystemService(Context.SEARCH_SERVICE))

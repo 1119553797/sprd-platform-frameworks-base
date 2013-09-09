@@ -2130,4 +2130,18 @@
   <!-- @} -->
   <!-- SPRD: add for usb function -->
   <java-symbol type="string" name="usb_cdrom_notification_title" />
+  <!-- SPRD: Modify 20130909 Spreadst of Bug 213683 original lockscreen change by UUI @{ -->
+  <java-symbol type="layout" name="keyguard_glow_pad_view_uui" />
+  <java-symbol type="id" name="glow_pad_view_uui" />
+  <java-symbol type="array" name="lockscreen_targets_with_camera_uui" />
+  <java-symbol type="array" name="lockscreen_target_descriptions_with_camera_uui" />
+  <java-symbol type="drawable" name="ic_lockscreen_call" />
+  <java-symbol type="drawable" name="ic_lockscreen_call_normal" />
+  <java-symbol type="drawable" name="ic_lockscreen_call_activated" />
+  <java-symbol type="drawable" name="ic_lockscreen_sms" />
+  <java-symbol type="drawable" name="ic_lockscreen_sms_normal" />
+  <java-symbol type="drawable" name="ic_lockscreen_sms_activated" />
+  <java-symbol type="string" name="description_target_call" />
+  <java-symbol type="string" name="description_target_sms" />
+  <!-- @} -->
 </resources>

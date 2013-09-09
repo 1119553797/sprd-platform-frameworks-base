@@ -4175,4 +4175,9 @@
     <string name="shutdown_after_seconds">Phone will shut down after <xliff:g id="NUMBER">%d</xliff:g> seconds</string>
     <!-- SPRD: add for usb function -->
     <string name="usb_cdrom_notification_title">Virtual Driver is on</string>
+
+    <!-- SPRD: Modify 20130909 Spreadst of Bug 213683 original lockscreen change by UUI @{ -->
+    <string name="description_target_call">Call</string>
+    <string name="description_target_sms">Sms</string>
+    <!-- @} -->
 </resources>
