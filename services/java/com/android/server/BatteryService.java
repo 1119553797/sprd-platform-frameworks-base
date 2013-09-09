@@ -256,6 +256,8 @@ public final class BatteryService extends Binder {
                         Intent intent = new Intent(Intent.ACTION_REQUEST_SHUTDOWN);
                         intent.putExtra(Intent.EXTRA_KEY_CONFIRM, false);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        // SPRD: Add can_be_cancel attributes to distinguish between low-battery shutdown.
+                        intent.putExtra("can_be_cancel", true);
                         mContext.startActivityAsUser(intent, UserHandle.CURRENT);
                     }
                 }
