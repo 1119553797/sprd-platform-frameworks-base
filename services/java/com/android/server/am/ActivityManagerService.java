@@ -318,6 +318,10 @@ public final class ActivityManagerService extends ActivityManagerNative
 	        whiteList.add("com.android.contacts");
 	        whiteList.add("com.android.mms");
 	        //whiteList.add("android.process.acore");
+              //owen.chen modify for 207332, 207333
+              if (SystemProperties.get("ro.operator").equals("cucc")) {
+                 whiteList.add("com.chinaunicom.deviceregister");
+              }
 	        whiteList.add("com.android.systemui");
 	        hasAlarmList.add("com.baidu.searchbox");
 	        hasAlarmList.add("com.baidu.searchbox:pushservice_v1");
