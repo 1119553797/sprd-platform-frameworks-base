@@ -823,11 +823,20 @@ public class NetworkController extends BroadcastReceiver {
                     }
                 case TelephonyManager.NETWORK_TYPE_EDGE:
                     if (!mShowAtLeastThreeGees) {
-                        mDataIconList[phoneId] = TelephonyIcons.DATA_E[mDataCondition];
-                        mDataTypeIconId[phoneId] = R.drawable.stat_sys_data_connected_e;
-                        mQSDataTypeIconId[phoneId] = R.drawable.ic_qs_signal_e;
-                        mContentDescriptionDataType[phoneId] = mContext.getString(
-                                R.string.accessibility_data_connection_edge);
+                        // * SPRD: add by spreadst for cucc case
+                        if ("cucc".equals(SystemProperties.get("ro.operator", ""))) {
+                            mDataIconList[phoneId] = TelephonyIcons.DATA_G[mDataCondition];
+                            mDataTypeIconId[phoneId] = R.drawable.stat_sys_data_connected_g;
+                            mQSDataTypeIconId[phoneId] = R.drawable.ic_qs_signal_g;
+                            mContentDescriptionDataType[phoneId] = mContext.getString(
+                                    R.string.accessibility_data_connection_gprs);
+                        } else {
+                            mDataIconList[phoneId] = TelephonyIcons.DATA_E[mDataCondition];
+                            mDataTypeIconId[phoneId] = R.drawable.stat_sys_data_connected_e;
+                            mQSDataTypeIconId[phoneId] = R.drawable.ic_qs_signal_e;
+                            mContentDescriptionDataType[phoneId] = mContext.getString(
+                                    R.string.accessibility_data_connection_edge);
+                        }
                         break;
                     } else {
                         // fall through
@@ -842,13 +851,39 @@ public class NetworkController extends BroadcastReceiver {
                 case TelephonyManager.NETWORK_TYPE_HSDPA:
                 case TelephonyManager.NETWORK_TYPE_HSUPA:
                 case TelephonyManager.NETWORK_TYPE_HSPA:
+                     /* SPRD: add by spreadst for cucc case @{ */
+                     if (mHspaDataDistinguishable
+                             && "cucc".equals(SystemProperties.get("ro.operator", ""))) {
+                         mDataIconList[phoneId] = TelephonyIcons.DATA_H[mDataCondition];
+                         mDataTypeIconId[phoneId] = R.drawable.stat_sys_data_connected_h;
+                         mQSDataTypeIconId[phoneId] = R.drawable.ic_qs_signal_h;
+                         mContentDescriptionDataType[phoneId] = mContext.getString(
+                                     R.string.accessibility_data_connection_3_5g);
+                     } else {
+                         mDataIconList[phoneId] = TelephonyIcons.DATA_3G[mDataCondition];
+                         mDataTypeIconId[phoneId] = R.drawable.stat_sys_data_connected_3g;
+                         mQSDataTypeIconId[phoneId] = R.drawable.ic_qs_signal_3g;
+                         mContentDescriptionDataType[phoneId] = mContext.getString(
+                                 R.string.accessibility_data_connection_3g);
+                     }
+                     break;
+                     /* @} */
                 case TelephonyManager.NETWORK_TYPE_HSPAP:
                     if (mHspaDataDistinguishable) {
-                        mDataIconList[phoneId] = TelephonyIcons.DATA_H[mDataCondition];
-                        mDataTypeIconId[phoneId] = R.drawable.stat_sys_data_connected_h;
-                        mQSDataTypeIconId[phoneId] = R.drawable.ic_qs_signal_h;
-                        mContentDescriptionDataType[phoneId] = mContext.getString(
-                                R.string.accessibility_data_connection_3_5g);
+                         //* SPRD: add by spreadst for cucc case
+                         if ("cucc".equals(SystemProperties.get("ro.operator", ""))) {
+                             mDataIconList[phoneId] = TelephonyIcons.DATA_H[mDataCondition];
+                             mDataTypeIconId[phoneId] = R.drawable.stat_sys_data_connected_hp;
+                             mQSDataTypeIconId[phoneId] = R.drawable.ic_qs_signal_h;
+                             mContentDescriptionDataType[phoneId] = mContext.getString(
+                                     R.string.accessibility_data_connection_3_5g);
+                         } else {
+                             mDataIconList[phoneId] = TelephonyIcons.DATA_H[mDataCondition];
+                             mDataTypeIconId[phoneId] = R.drawable.stat_sys_data_connected_h;
+                             mQSDataTypeIconId[phoneId] = R.drawable.ic_qs_signal_h;
+                             mContentDescriptionDataType[phoneId] = mContext.getString(
+                                     R.string.accessibility_data_connection_3_5g);
+                         }
                     } else {
                         mDataIconList[phoneId] = TelephonyIcons.DATA_3G[mDataCondition];
                         mDataTypeIconId[phoneId] = R.drawable.stat_sys_data_connected_3g;
