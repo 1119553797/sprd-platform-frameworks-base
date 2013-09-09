@@ -858,6 +858,12 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
                                    device,
                                    false,
                                    true);
+            } else {
+                if (getRingerMode() == RINGER_MODE_OUTDOOR) {
+                    newRingerMode = AudioManager.RINGER_MODE_OUTDOOR;
+                } else {
+                    newRingerMode = AudioManager.RINGER_MODE_NORMAL;
+                }
             }
             setRingerMode(newRingerMode);
         }
@@ -1173,7 +1179,7 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
     }
 
     /** @see AudioManager#setRingerMode(int) */
-    public void setRingerMode(int ringerMode) { 
+    public void setRingerMode(int ringerMode) {
         if ((ringerMode == AudioManager.RINGER_MODE_VIBRATE) && !mHasVibrator) {
             ringerMode = AudioManager.RINGER_MODE_SILENT;
         }
@@ -2176,15 +2182,14 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
                     break;
                 }
 
-                adjustVolumeIndex = false;
                 if ((direction == AudioManager.ADJUST_LOWER)) {
                     if (mPrevVolDirection != AudioManager.ADJUST_LOWER) {
                         ringerMode = RINGER_MODE_SILENT;
                     }
                 } else if (direction == AudioManager.ADJUST_RAISE) {
                     ringerMode = RINGER_MODE_NORMAL;
-                    adjustVolumeIndex = true;
                 }
+                adjustVolumeIndex = false;
 
                 break;
             case RINGER_MODE_SILENT:
