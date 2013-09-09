@@ -32,7 +32,7 @@
   <string name="status_bar_accessibility_dismiss_recents">সাম্প্রতিক এপস খারিজ</string>
   <plurals name="status_bar_accessibility_recent_apps">
         <item quantity="one">1 সাম্প্রতিক অ্যাপ্লিকেশন</item>
-        <item quantity="other">% ঘ সাম্প্রতিক আবেদন</item>
+        <item quantity="other">%d সাম্প্রতিক আবেদন</item>
     </plurals>
   <string name="invalid_charger">ইউএসবি সমর্থিত নয় ব্যার্থতার.\nশুধুমাত্র সরবরাহকৃত চার্জার ব্যবহার করুন.</string>
   <string name="status_bar_settings_settings_button">সেটিংস</string>
