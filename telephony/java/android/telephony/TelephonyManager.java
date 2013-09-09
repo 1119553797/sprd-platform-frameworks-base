@@ -1655,22 +1655,34 @@ public class TelephonyManager {
         SharedPreferences settings = getPhoneSetting(context);
         String phoneIdKey = "";
 
+        // modify by Candice.Chen for bug201305 start
+        int DefaultId = settings.getInt(phoneIdKey, PhoneFactory.DEFAULT_DUAL_SIM_INIT_PHONE_ID);
+        // modify by Candice.Chen for bug201305 end
+
         switch (mode) {
             case MODE_VOICE:
                 phoneIdKey = simCardFavoriteVoicekey;
+                // modify by Candice.Chen for bug201305 start
+                DefaultId = settings.getInt(phoneIdKey, PhoneFactory.DEFAULT_DUAL_SIM_INIT_PHONE_ID);
+                // modify by Candice.Chen for bug201305 end
                 break;
             case MODE_VEDIO:
                 phoneIdKey = simCardFavoriteVideokey;
+                // modify by Candice.Chen for bug201305 start
+                DefaultId = settings.getInt(phoneIdKey, PhoneFactory.DEFAULT_DUAL_SIM_INIT_PHONE_ID);
+                // modify by Candice.Chen for bug201305 end
                 break;
             case MODE_MMS:
                 phoneIdKey = simCardFavoriteMmskey;
+                // modify by Candice.Chen for bug201305 start
+                DefaultId = settings.getInt(phoneIdKey, PhoneFactory.DEFAULT_DUAL_SIM_INIT_MMS_PHONE_ID);
+                // modify by Candice.Chen for bug201305 end
                 break;
             default:
                 break;
         }
         Log.d(TAG, "setDefaultSim:phoneIdKey " + phoneIdKey + " phoneId " + setPhoneId);
 
-        int DefaultId = settings.getInt(phoneIdKey, PhoneFactory.DEFAULT_DUAL_SIM_INIT_PHONE_ID);
         if (setPhoneId != DefaultId) {
             SharedPreferences.Editor editor = settings.edit();
             editor.putInt(phoneIdKey, setPhoneId);
