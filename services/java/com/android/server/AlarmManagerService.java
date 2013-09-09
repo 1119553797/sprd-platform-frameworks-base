@@ -158,7 +158,8 @@ class AlarmManagerService extends IAlarmManager.Stub {
             mBlackList.add("com.sina.weibopro");
             mBlackList.add("com.sohu.newsclient");
             mBlackList.add("com.sohu.inputmethod.sogou");
-            mBlackList.add("com.chinaunicom.deviceregister");
+            //owen.chen modify for 207332, 207333
+            //mBlackList.add("com.chinaunicom.deviceregister");
 
             mBlackList.add("cn.wps.moffice_eng");
             mBlackList.add("com.infinit.wostore.ui");
