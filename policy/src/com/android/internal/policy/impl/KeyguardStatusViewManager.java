@@ -351,15 +351,22 @@ class KeyguardStatusViewManager implements OnClickListener {
     private boolean canEmergencyCall(){
         boolean isEmergencyOnly = false;
         boolean hasService = false;
+        boolean isFlightMode = false;
+        boolean isStandbyMode = false;
+
         for (int i = 0; i < this.numPhones; i++) {
             if (mServiceState[i] != null) {
-                isEmergencyOnly = isEmergencyOnly ? true : mServiceState[i].isEmergencyOnly();
+                isEmergencyOnly = mServiceState[i].isEmergencyOnly();
                 hasService = hasService(i);
-                Log.d(TAG, "canEmergencyCall i = "+ i +"| isEmergencyOnly = " + isEmergencyOnly + "|hasService = " + hasService);
+                isStandbyMode = (Settings.System.getInt(getContext().getContentResolver(), PhoneFactory.getSetting(
+                                 Settings.System.SIM_STANDBY, i), 1) == 0);
+                isFlightMode =  (Settings.System.getInt(getContext().getContentResolver(),
+                                 Settings.System.AIRPLANE_MODE_ON, 0) == 1);
+                Log.d(TAG, "canEmergencyCall i = "+ i +"| isEmergencyOnly = " + isEmergencyOnly + "|hasService = " + hasService + "|isStandbyMode = " + isStandbyMode + "|isFlightMode = " + isFlightMode);
                 if(hasService){
                     return true;
                 } else {
-                    if(isEmergencyOnly){
+                    if(isEmergencyOnly || isStandbyMode || isFlightMode){
                         return true;
                     }
                 }
