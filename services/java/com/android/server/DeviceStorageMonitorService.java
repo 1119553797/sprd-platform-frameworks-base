@@ -777,6 +777,7 @@ public class DeviceStorageMonitorService extends Binder {
                     nextRun();
                     return;
                 }
+		count1 = new CountDownLatch(1);
                 mSizeObserver.invokeGetSize(pkgInfo.packageName, count1);
                 mGetSizeState = GET_SIZE_WAIT;
             }
