@@ -5313,8 +5313,10 @@ public class WebView extends AbsoluteLayout
                             + "mPreventDefault = " + mPreventDefault
                             + " mDeferTouchProcess = " + mDeferTouchProcess
                             + " mTouchMode = " + mTouchMode);
-                }
-                mVelocityTracker.addMovement(ev);
+                }else {
+                	//modify for bug213734 NullPointerException
+                	mVelocityTracker.addMovement(ev);
+				}
                 if (mSelectingText && mSelectionStarted) {
                     if (DebugFlags.WEB_VIEW) {
                         Log.v(LOGTAG, "extend=" + contentX + "," + contentY);
