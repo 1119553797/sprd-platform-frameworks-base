@@ -347,9 +347,10 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
             } else {
                 mAudioSession = mMediaPlayer.getAudioSessionId();
             }
-            mIsVideoTrackUnsupport = false;  //SPRD: add
+            mIsVideoTrackUnsupport = false;  // SPRD: add
             mMediaPlayer.setOnPreparedListener(mPreparedListener);
             mMediaPlayer.setOnVideoSizeChangedListener(mSizeChangedListener);
+            mMediaPlayer.setOnSeekCompleteListener(mSeekCompleteListener);  // SPRD: add
             mMediaPlayer.setOnCompletionListener(mCompletionListener);
             mMediaPlayer.setOnErrorListener(mErrorListener);
             mMediaPlayer.setOnInfoListener(mOnInfoListener);
@@ -400,7 +401,7 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
     MediaPlayer.OnVideoSizeChangedListener mSizeChangedListener =
         new MediaPlayer.OnVideoSizeChangedListener() {
         public void onVideoSizeChanged(MediaPlayer mp, int width, int height) {
-            isPlaying = true;//SPRD: add for playing
+            isPlaying = true;// SPRD: add for playing
             /** SPRD : new method @{ */
             /*mVideoWidth = mp.getVideoWidth();
             mVideoHeight = mp.getVideoHeight();*/
@@ -497,7 +498,7 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
                            mMediaController.show(0);
                        }
                    }
-                    //SPRD: remove
+                    // SPRD: remove
 //                }
             } else {
                 // We don't know the video size yet, but should start anyway.
@@ -785,7 +786,7 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
     @Override
     public void start() {
         if (isInPlaybackState()) {
-            isPlaying = true;//SPRD: add for playing
+            isPlaying = true;// SPRD: add for playing
             mMediaPlayer.start();
             mCurrentState = STATE_PLAYING;
         }
@@ -796,7 +797,7 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
     public void pause() {
         if (isInPlaybackState()) {
             if (mMediaPlayer.isPlaying()) {
-                isPlaying = false;//SPRD: add for playing
+                isPlaying = false;// SPRD: add for playing
                 mMediaPlayer.pause();
                 mCurrentState = STATE_PAUSED;
             }
