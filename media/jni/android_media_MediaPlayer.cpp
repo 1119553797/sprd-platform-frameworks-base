@@ -402,6 +402,19 @@ android_media_MediaPlayer_seekTo(JNIEnv *env, jobject thiz, int msec)
     process_media_player_call( env, thiz, mp->seekTo(msec), NULL, NULL );
 }
 
+/** SPRD : set position @{*/
+static void
+android_media_MediaPlayer_setLastInterruptPosition(JNIEnv *env, jobject thiz, jlong msec)
+{
+    sp<MediaPlayer> mp = getMediaPlayer(env, thiz);
+    if (mp == NULL ) {
+        jniThrowException(env, "java/lang/IllegalStateException", NULL);
+        return;
+    }
+    ALOGV("setLasrtInterruptPosition: %d(msec)", msec);
+    mp->setLastInterruptPosition(msec);
+}
+/** SPRD : @}*/
 static int
 android_media_MediaPlayer_getVideoWidth(JNIEnv *env, jobject thiz)
 {
@@ -929,6 +942,7 @@ static JNINativeMethod gMethods[] = {
     {"native_setRetransmitEndpoint", "(Ljava/lang/String;I)I",  (void *)android_media_MediaPlayer_setRetransmitEndpoint},
     {"setNextMediaPlayer",  "(Landroid/media/MediaPlayer;)V",   (void *)android_media_MediaPlayer_setNextMediaPlayer},
     {"updateProxyConfig", "(Landroid/net/ProxyProperties;)V", (void *)android_media_MediaPlayer_updateProxyConfig},
+    {"setLastInterruptPosition", "(J)V",                        (void *)android_media_MediaPlayer_setLastInterruptPosition},
 };
 
 static const char* const kClassPathName = "android/media/MediaPlayer";
