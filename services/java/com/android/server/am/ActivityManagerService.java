@@ -2934,11 +2934,10 @@ public final class ActivityManagerService extends ActivityManagerNative
         Boolean  needdump = false;
 	String bulidtype = SystemProperties.get( "ro.build.type");
 	if((bulidtype != null &&bulidtype.equals("eng"))
-	   ||app.isInterestingToUserLocked() )
+	   ||isTopApp(app) )
 	{
 		needdump = true;
 	}
-
 	long anrTime = 0;
 	if(needdump)
 	{
@@ -8725,14 +8724,29 @@ public final class ActivityManagerService extends ActivityManagerNative
     // =========================================================
     // Add for performance optimization of services restarting
     // =========================================================
+    private ProcessRecord lastLaunchEndApp = null;
+    private ActivityRecord lastResumeRecord = null;
+	
+    void resumeLaunch(ActivityRecord ar) {
+        lastResumeRecord = ar;
+    }
 
     void launchEnd(ActivityRecord ar) {
+        if (ar == lastResumeRecord) {
+            lastLaunchEndApp = ar.app;
+        }		
         if (ar.isHomeActivity) {
             //Slog.v(TAG, "[lom]Lunch home activity end");
             ReduceServicesRestartDelay();
         }
     }
-
+    private boolean isTopApp(ProcessRecord app) {
+		
+		if(app != null && lastLaunchEndApp != null && lastLaunchEndApp == app){
+                         return true;
+		}
+		return false;
+    }
     void ReduceServicesRestartDelay() {
         final ArrayList<ServiceRecord> restartingServices = mRestartingServices;
         final long now1 = SystemClock.uptimeMillis();
@@ -12114,7 +12128,6 @@ public final class ActivityManagerService extends ActivityManagerNative
             raiseToFixAdj(app);
             return app.curAdj;
         }
-
         if (app.thread == null) {
             app.adjSeq = mAdjSeq;
             app.curSchedGroup = Process.THREAD_GROUP_BG_NONINTERACTIVE;
@@ -12123,7 +12136,7 @@ public final class ActivityManagerService extends ActivityManagerNative
             raiseToFixAdj(app);
             return app.curAdj;
         }
-
+       
         if (app.maxAdj <= FOREGROUND_APP_ADJ) {
             // The max adjustment doesn't allow this app to be anything
             // below foreground, so it is not worth doing work for it.
@@ -12224,7 +12237,6 @@ public final class ActivityManagerService extends ActivityManagerNative
             app.adjType = "bg-empty";
         }
 
-        //Slog.i(TAG, "OOM " + app + ": initial adj=" + adj);
         
         // By default, we use the computed adjustment.  It may be changed if
         // there are applications dependent on our services or providers, but
@@ -12236,7 +12248,6 @@ public final class ActivityManagerService extends ActivityManagerNative
         if (mBackupTarget != null && app == mBackupTarget.app) {
             // If possible we want to avoid killing apps while they're being backed up
             if (adj > BACKUP_APP_ADJ) {
-                if (DEBUG_BACKUP) Slog.v(TAG, "oom BACKUP_APP_ADJ for " + app);
                 adj = BACKUP_APP_ADJ;
                 app.adjType = "backup";
                 app.hidden = false;

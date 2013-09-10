@@ -1136,10 +1136,11 @@ public class ActivityStack {
         // can be resumed...
         if (mResumedActivity != null) {
             if (DEBUG_SWITCH) Slog.v(TAG, "Skip resume: need to start pausing");
+	   mService.resumeLaunch(mResumedActivity);
             startPausingLocked(userLeaving, false);
             return true;
         }
-
+        mService.resumeLaunch(next);
         if (prev != null && prev != next) {
             if (!prev.waitingVisible && next != null && !next.nowVisible) {
                 prev.waitingVisible = true;
