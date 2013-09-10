@@ -40,6 +40,7 @@ import android.os.Looper;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.os.SystemClock;
+import android.os.SystemProperties;
 import android.os.UserHandle;
 import android.os.UserManager;
 import android.provider.Settings;
@@ -56,8 +57,11 @@ import android.widget.RemoteViews.OnClickHandler;
 
 import com.android.internal.R;
 import com.android.internal.policy.impl.keyguard.KeyguardSecurityModel.SecurityMode;
+import com.android.internal.policy.impl.keyguard.RemoteLockView;
 import com.android.internal.policy.impl.keyguard.KeyguardUpdateMonitor.DisplayClientState;
 import com.android.internal.widget.LockPatternUtils;
+
+import dalvik.system.PathClassLoader;
 
 import java.io.File;
 import java.util.List;
@@ -119,6 +123,11 @@ public class KeyguardHostView extends KeyguardViewBase {
     private KeyguardMultiUserSelectorView mKeyguardMultiUserSelectorView;
 
     protected int mClientGeneration;
+    /* SPRD: Modify 20130909 Spreadst of Bug 213750 add UUI lockscreen @{ */
+    private boolean mUniverseui_support = false;
+    KeyguardSecurityView lockView;
+    private static LockClassLoader mLockClassLoader = null;
+    /* @} */
 
     /*package*/ interface UserSwitcherCallback {
         void hideSecurityView(int duration);
@@ -140,6 +149,8 @@ public class KeyguardHostView extends KeyguardViewBase {
         super(context, attrs);
 
         if (DEBUG) Log.e(TAG, "KeyguardHostView()");
+        // SPRD: Modify 20130909 Spreadst of Bug 213750 add UUI lockscreen
+        mUniverseui_support = SystemProperties.getBoolean("universe_ui_support", true);
 
         mLockPatternUtils = new LockPatternUtils(context);
 
@@ -317,7 +328,11 @@ public class KeyguardHostView extends KeyguardViewBase {
     public boolean onTouchEvent(MotionEvent ev) {
         boolean result = super.onTouchEvent(ev);
         mTempRect.set(0, 0, 0, 0);
-        offsetRectIntoDescendantCoords(mSecurityViewContainer, mTempRect);
+        /* SPRD: Modify 20130909 Spreadst of Bug 213750 add UUI lockscreen @{ */
+        if (mSecurityViewContainer != null && mSecurityViewContainer.getParent() == this) {
+            offsetRectIntoDescendantCoords(mSecurityViewContainer, mTempRect);
+        }
+        /* @} */
         ev.offsetLocation(mTempRect.left, mTempRect.top);
         result = mSecurityViewContainer.dispatchTouchEvent(ev) || result;
         ev.offsetLocation(-mTempRect.left, -mTempRect.top);
@@ -390,6 +405,24 @@ public class KeyguardHostView extends KeyguardViewBase {
 
         showPrimarySecurityScreen(false);
         updateSecurityViews();
+        /* SPRD: Modify 20130909 Spreadst of Bug 213750 add UUI lockscreen @{ */
+        if (mUniverseui_support){
+            if (mLockClassLoader == null) {
+                mLockClassLoader = new LockClassLoader();
+            }
+
+            this.removeView(mSlidingChallengeLayout);
+
+            try {
+                lockView = new RemoteLockView(mContext, mLockPatternUtils, mLockClassLoader);
+                lockView.setKeyguardCallback(mCallback);
+                this.addView((View)lockView);
+            } catch (Exception e) {
+                Log.d(TAG, e.toString());
+                this.addView(mSlidingChallengeLayout);
+            }
+        }
+        /* @} */
     }
 
     private void setBackButtonEnabled(boolean enabled) {
@@ -732,66 +765,141 @@ public class KeyguardHostView extends KeyguardViewBase {
     private void showNextSecurityScreenOrFinish(boolean authenticated) {
         if (DEBUG) Log.d(TAG, "showNextSecurityScreenOrFinish(" + authenticated + ")");
         boolean finish = false;
-        if (SecurityMode.None == mCurrentSecuritySelection) {
-            SecurityMode securityMode = mSecurityModel.getSecurityMode();
-            // Allow an alternate, such as biometric unlock
-            securityMode = mSecurityModel.getAlternateFor(securityMode);
-            if (SecurityMode.None == securityMode) {
-                finish = true; // no security required
-            } else {
-                showSecurityScreen(securityMode); // switch to the alternate security view
-            }
-        } else if (authenticated) {
-            switch (mCurrentSecuritySelection) {
-                case Pattern:
-                case Password:
-                case PIN:
-                case Account:
-                case Biometric:
-                    finish = true;
-                    break;
-
-                case SimPin:
-                case SimPuk:
-                    // Shortcut for SIM PIN/PUK to go to directly to user's security screen or home
-                    SecurityMode securityMode = mSecurityModel.getSecurityMode();
-                    if (securityMode != SecurityMode.None) {
-                        showSecurityScreen(securityMode);
-                    } else {
-                        finish = true;
-                    }
-                    break;
-
-                default:
-                    Log.v(TAG, "Bad security screen " + mCurrentSecuritySelection + ", fail safe");
-                    showPrimarySecurityScreen(false);
-                    break;
-            }
-        } else {
-            showPrimarySecurityScreen(false);
-        }
-        if (finish) {
-            // If the alternate unlock was suppressed, it can now be safely
-            // enabled because the user has left keyguard.
-            KeyguardUpdateMonitor.getInstance(mContext).setAlternateUnlockEnabled(true);
-
-            // If there's a pending runnable because the user interacted with a widget
-            // and we're leaving keyguard, then run it.
-            boolean deferKeyguardDone = false;
-            if (mDismissAction != null) {
-                deferKeyguardDone = mDismissAction.onDismiss();
-                mDismissAction = null;
-            }
-            if (mViewMediatorCallback != null) {
-                if (deferKeyguardDone) {
-                    mViewMediatorCallback.keyguardDonePending();
+        /* SPRD: Modify 20130909 Spreadst of Bug 213750 add UUI lockscreen @{ */
+        if (mUniverseui_support) {
+            if (SecurityMode.None == mCurrentSecuritySelection) {
+                SecurityMode securityMode = mSecurityModel.getSecurityMode();
+                // Allow an alternate, such as biometric unlock
+                securityMode = mSecurityModel.getAlternateFor(securityMode);
+                if (SecurityMode.None == securityMode) {
+                    finish = true; // no security required
                 } else {
-                    mViewMediatorCallback.keyguardDone(true);
+                    showSecurityScreen(securityMode); // switch to the alternate security view
                 }
+            } else if (authenticated) {
+                switch (mCurrentSecuritySelection) {
+                    case Pattern:
+                    case Password:
+                    case PIN:
+                    case Account:
+                    case Biometric:
+                        finish = true;
+                        break;
+
+                    case SimPin:
+                    case SimPuk:
+                        // Shortcut for SIM PIN/PUK to go to directly to user's security screen or home
+                        SecurityMode securityMode = mSecurityModel.getSecurityMode();
+                        if (securityMode != SecurityMode.None) {
+                            showSecurityScreen(securityMode);
+                        } else {
+                            finish = true;
+                        }
+                        break;
+
+                    default:
+                        Log.v(TAG, "Bad security screen " + mCurrentSecuritySelection + ", fail safe");
+                        showPrimarySecurityScreen(false);
+                        break;
+                }
+            } else {
+                if (lockView != null){
+                    removeView((View)lockView);
+                }
+                if (mSlidingChallengeLayout != null){
+                    removeView(mSlidingChallengeLayout);
+                    addView(mSlidingChallengeLayout);
+                }
+
+                SecurityMode securityMode = mSecurityModel.getSecurityMode();
+                showSecurityScreen(securityMode);
+            }
+
+            if (finish) {
+                // If the alternate unlock was suppressed, it can now be safely
+                // enabled because the user has left keyguard.
+                KeyguardUpdateMonitor.getInstance(mContext).setAlternateUnlockEnabled(true);
+
+                // If there's a pending runnable because the user interacted with a widget
+                // and we're leaving keyguard, then run it.
+                boolean deferKeyguardDone = false;
+                if (mDismissAction != null) {
+                    deferKeyguardDone = mDismissAction.onDismiss();
+                    mDismissAction = null;
+                }
+                if (mViewMediatorCallback != null) {
+                    if (deferKeyguardDone) {
+                        mViewMediatorCallback.keyguardDonePending();
+                    } else {
+                        mViewMediatorCallback.keyguardDone(true);
+                    }
+                }
+            } else {
+                mViewStateManager.showBouncer(true);
             }
         } else {
-            mViewStateManager.showBouncer(true);
+            if (SecurityMode.None == mCurrentSecuritySelection) {
+                SecurityMode securityMode = mSecurityModel.getSecurityMode();
+                // Allow an alternate, such as biometric unlock
+                securityMode = mSecurityModel.getAlternateFor(securityMode);
+                if (SecurityMode.None == securityMode) {
+                    finish = true; // no security required
+                } else {
+                    showSecurityScreen(securityMode); // switch to the alternate security view
+                }
+            } else if (authenticated) {
+                switch (mCurrentSecuritySelection) {
+                    case Pattern:
+                    case Password:
+                    case PIN:
+                    case Account:
+                    case Biometric:
+                        finish = true;
+                        break;
+
+                    case SimPin:
+                    case SimPuk:
+                        // Shortcut for SIM PIN/PUK to go to directly to user's security screen or home
+                        SecurityMode securityMode = mSecurityModel.getSecurityMode();
+                        if (securityMode != SecurityMode.None) {
+                            showSecurityScreen(securityMode);
+                        } else {
+                            finish = true;
+                        }
+                        break;
+
+                    default:
+                        Log.v(TAG, "Bad security screen " + mCurrentSecuritySelection + ", fail safe");
+                        showPrimarySecurityScreen(false);
+                        break;
+                }
+            } else {
+                showPrimarySecurityScreen(false);
+            }
+            if (finish) {
+                // If the alternate unlock was suppressed, it can now be safely
+                // enabled because the user has left keyguard.
+                KeyguardUpdateMonitor.getInstance(mContext).setAlternateUnlockEnabled(true);
+
+                // If there's a pending runnable because the user interacted with a widget
+                // and we're leaving keyguard, then run it.
+                boolean deferKeyguardDone = false;
+                if (mDismissAction != null) {
+                    deferKeyguardDone = mDismissAction.onDismiss();
+                    mDismissAction = null;
+                }
+                if (mViewMediatorCallback != null) {
+                    if (deferKeyguardDone) {
+                        mViewMediatorCallback.keyguardDonePending();
+                    } else {
+                        mViewMediatorCallback.keyguardDone(true);
+                    }
+                }
+            } else {
+                mViewStateManager.showBouncer(true);
+            }
         }
+        /* @} */
     }
 
     private OnClickHandler mOnClickHandler = new OnClickHandler() {
@@ -1681,4 +1789,14 @@ public class KeyguardHostView extends KeyguardViewBase {
         mActivityLauncher.launchActivityWithAnimation(
                 intent, false, opts.toBundle(), null, null);
     }
+
+    /* SPRD: Modify 20130909 Spreadst of Bug 213750 add UUI lockscreen @{ */
+    private static class LockClassLoader extends PathClassLoader {
+        private static final String LOCKSCREEN_APK_PATH = "/system/app/lockscreen.apk";
+
+        public LockClassLoader() {
+            super(LOCKSCREEN_APK_PATH, ClassLoader.getSystemClassLoader());
+        }
+    }
+    /* @} */
 }
