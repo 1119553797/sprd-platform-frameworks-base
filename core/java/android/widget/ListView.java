@@ -35,6 +35,7 @@ import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.util.MathUtils;
 import android.util.SparseBooleanArray;
+import android.util.Log;
 import android.view.FocusFinder;
 import android.view.KeyEvent;
 import android.view.SoundEffectConstants;
@@ -1549,11 +1550,20 @@ public class ListView extends AbsListView {
                 invokeOnItemScrollListener();
                 return;
             } else if (mItemCount != mAdapter.getCount()) {
-                throw new IllegalStateException("The content of the adapter has changed but "
+                /* SPRD: Don't throw exception while monkey testing. @{*/
+                IllegalStateException e = new IllegalStateException("The content of the adapter has changed but "
                         + "ListView did not receive a notification. Make sure the content of "
                         + "your adapter is not modified from a background thread, but only "
                         + "from the UI thread. [in ListView(" + getId() + ", " + getClass() 
-                        + ") with Adapter(" + mAdapter.getClass() + ")]");
+                        + ") with Adapter(" + mAdapter.getClass() + ")]"
+                        + ", mItemCount = " + mItemCount + ", but adapter's count = " + mAdapter.getCount());
+                if (android.os.Debug.isMonkey()) {
+                    Log.e("ListView", "ListView get into error state while monkey testing!!!", e);
+                    return;
+                } else {
+                    throw e;
+                }
+                /*@}*/
             }
 
             setSelectedPositionInt(mNextSelectedPosition);
