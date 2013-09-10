@@ -19,6 +19,7 @@ package com.android.systemui.usb;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -82,7 +83,7 @@ public class StorageNotification extends StorageEventListener {
 
         onUsbMassStorageConnectionChanged(connected);
         /* SPRD: add for "fonts setting" @{ */
-        IntentFilter filter = new IntentFilter();        
+        IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_TYPEFACE_CHANGED);
 
         mContext.registerReceiver(mLocalChangeReceiver,filter);
@@ -154,7 +155,11 @@ public class StorageNotification extends StorageEventListener {
              * for stopping UMS.
              */
             Intent intent = new Intent();
-            intent.setClass(mContext, com.android.systemui.usb.UsbStorageActivity.class);
+            /* SPRD: add for usb function @{ */
+            // intent.setClass(mContext, com.android.systemui.usb.UsbStorageActivity.class);
+            intent.setComponent(new ComponentName("com.android.settings", "com.sprd.settings.SprdUsbSettings"));
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            /* @} */
             PendingIntent pi = PendingIntent.getActivity(mContext, 0, intent, 0);
             setUsbStorageNotification(
                     com.android.internal.R.string.usb_storage_stop_notification_title,
@@ -278,7 +283,10 @@ public class StorageNotification extends StorageEventListener {
 
         if (available) {
             Intent intent = new Intent();
-            intent.setClass(mContext, com.android.systemui.usb.UsbStorageActivity.class);
+            /* SPRD: add for usb function @{ */
+            //intent.setClass(mContext, com.android.systemui.usb.UsbStorageActivity.class);
+            intent.setComponent(new ComponentName("com.android.settings", "com.sprd.settings.SprdUsbSettings"));
+            /* @} */
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
             PendingIntent pi = PendingIntent.getActivity(mContext, 0, intent, 0);
