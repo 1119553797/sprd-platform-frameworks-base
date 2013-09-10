@@ -461,8 +461,16 @@ public class Tethering extends INetworkManagementEventObserver.Stub {
         }
 
         Intent intent = new Intent();
-        intent.setClassName("com.android.settings", "com.android.settings.TetherSettings");
-        intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        /* SPRD: changed for usb feature @{ */
+        // intent.setClassName("com.android.settings", "com.android.settings.TetherSettings");
+        // intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        if(icon == com.android.internal.R.drawable.stat_sys_tether_usb){
+            intent.setClassName("com.android.settings", "com.sprd.settings.SprdUsbSettings");
+        }else{
+            intent.setClassName("com.android.settings", "com.android.settings.TetherSettings");
+        }
+        intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_TASK);
+        /* @} */
 
         PendingIntent pi = PendingIntent.getActivityAsUser(mContext, 0, intent, 0,
                 null, UserHandle.CURRENT);
