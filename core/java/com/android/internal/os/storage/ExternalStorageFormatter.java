@@ -2,10 +2,12 @@ package com.android.internal.os.storage;
 
 import android.app.ProgressDialog;
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
@@ -16,6 +18,7 @@ import android.os.storage.IMountService;
 import android.os.storage.StorageEventListener;
 import android.os.storage.StorageManager;
 import android.os.storage.StorageVolume;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.WindowManager;
 import android.widget.Toast;
@@ -158,6 +161,31 @@ public class ExternalStorageFormatter extends Service
         return mExternalStoragePath;
     }
 
+    // Bug 211387 start
+    private BroadcastReceiver mBroadCastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+            // last known state of the cellular connection
+            String mPhoneState = TelephonyManager.EXTRA_STATE_IDLE;
+
+            if (TelephonyManager.ACTION_PHONE_STATE_CHANGED.equals(action)) {
+                mPhoneState = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
+
+                if (TelephonyManager.EXTRA_STATE_RINGING.equals(mPhoneState)) {
+                    if (mProgressDialog != null) {
+                        mProgressDialog.hide();
+                    }
+                } else if (TelephonyManager.EXTRA_STATE_IDLE.equals(mPhoneState)) {
+                    if (mProgressDialog != null) {
+                        mProgressDialog.show();
+                    }
+                }
+            }
+        }
+    };
+    // Bug 211387 end
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
@@ -243,6 +271,12 @@ public class ExternalStorageFormatter extends Service
             }
             updateProgressState();
             mProgressDialog.show();
+
+            // Bug 211387 start
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(TelephonyManager.ACTION_PHONE_STATE_CHANGED);
+            registerReceiver(mBroadCastReceiver, filter);
+            // Bug 211387 end
         }
 
         return Service.START_REDELIVER_INTENT;
