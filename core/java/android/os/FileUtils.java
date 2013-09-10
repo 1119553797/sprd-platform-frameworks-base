@@ -25,6 +25,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.regex.Pattern;
 
+import android.util.Log;
+
 
 /**
  * Tools for managing files.  Not for public consumption.
@@ -47,7 +49,7 @@ public class FileUtils
     public static final int S_IWOTH = 00002;
     public static final int S_IXOTH = 00001;
     
-    
+    public static final String TAG = "FileUtils";
     /**
      * File status information. This class maps directly to the POSIX stat structure.
      * @hide
@@ -120,6 +122,8 @@ public class FileUtils
             }
         } catch (IOException e) {
             result = false;
+            Log.e(TAG, "copyFile srcFile: " + srcFile + " destFile: " + destFile + " failed!");
+            e.printStackTrace();
         }
         return result;
     }
@@ -150,6 +154,8 @@ public class FileUtils
             }
             return true;
         } catch (IOException e) {
+        	Log.e(TAG, "copyToFile destFile: " + destFile + " failed");
+        	e.printStackTrace();
             return false;
         }
     }
