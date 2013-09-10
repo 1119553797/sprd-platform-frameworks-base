@@ -5101,7 +5101,16 @@ public final class ViewRootImpl implements ViewParent,
             return mWindowSession.performHapticFeedback(mWindow, effectId, always);
         } catch (RemoteException e) {
             return false;
-        }
+     /* add these handing cases @{ */
+        } catch (NullPointerException e) {
+          if (android.os.Debug.isMonkey()) {
+            Log.e(TAG, "nullPointerException", e);
+               return false;
+          } else {
+             throw e;
+          }
+         }
+     /* SPRD: @} */
     }
 
     /**
