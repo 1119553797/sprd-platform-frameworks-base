@@ -199,21 +199,21 @@ public class ToggleListener extends BroadcastReceiver implements View.OnClickLis
                 }
                 break;
             case R.id.quick_operation_sound:
-                ComponentName con = ComponentName.unflattenFromString("com.android.settings/.SoundSettings");
-                Intent localIntent = new Intent("android.intent.action.MAIN");
-                localIntent.setComponent(con);
-                localIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-                        | Intent.FLAG_ACTIVITY_SINGLE_TOP
-                        | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
-                this.mContext.startActivity(localIntent);
-                try {
-                    StatusBarManager statusBarManager = (StatusBarManager) mContext
-                            .getSystemService(Context.STATUS_BAR_SERVICE);
-                    statusBarManager.collapse();
-                } catch (Exception ex) {
-                    Slog.e(TAG, ex.toString());
-                }
-//                toggleSoundMode();
+                //ComponentName con = ComponentName.unflattenFromString("com.android.settings/.SoundSettings");
+                //Intent localIntent = new Intent("android.intent.action.MAIN");
+                //localIntent.setComponent(con);
+                //localIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                //        | Intent.FLAG_ACTIVITY_SINGLE_TOP
+                //        | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+                //this.mContext.startActivity(localIntent);
+                //try {
+                //    StatusBarManager statusBarManager = (StatusBarManager) mContext
+                //            .getSystemService(Context.STATUS_BAR_SERVICE);
+                //    statusBarManager.collapse();
+                //} catch (Exception ex) {
+                //    Slog.e(TAG, ex.toString());
+                //}
+                toggleSoundMode();
                 break;
             case R.id.quick_operation_mobile_net:
                 toggleDataNetwork();
@@ -315,28 +315,49 @@ public class ToggleListener extends BroadcastReceiver implements View.OnClickLis
         if (!mSoundModeClickable) {
             return;
         }
-        Intent intent = new Intent("android.settings.action.soundmode");
-        String soundModeValue = getCurrentSoundMode();
-        if (DEBUG) {
-            Slog.i(TAG,"soundModeValue is " + soundModeValue);
+        //Intent intent = new Intent("android.settings.action.soundmode");
+        //String soundModeValue = getCurrentSoundMode();
+        //if (DEBUG) {
+        //    Slog.i(TAG,"soundModeValue is " + soundModeValue);
+        //}
+
+        //if (TextUtils.isEmpty(soundModeValue)) {
+        //   Slog.i(TAG,"toggle vibrate failed because getting sound mode is null");
+        //    return;
+        //}
+
+        //if (soundModeValue.equals(SOUND_MODE_OUTDOOR)) {
+        //    intent.putExtra(SOUND_MODE, SOUND_MODE_SILENT);
+        //} else if (soundModeValue.equals(SOUND_MODE_VIBRATE)){
+        //   intent.putExtra(SOUND_MODE, SOUND_MODE_NORMAL);
+        //} else if (soundModeValue.equals(SOUND_MODE_SILENT)) {
+        //    intent.putExtra(SOUND_MODE, SOUND_MODE_VIBRATE);
+        //} else if (soundModeValue.equals(SOUND_MODE_NORMAL)) {
+        //    intent.putExtra(SOUND_MODE, SOUND_MODE_OUTDOOR);
+        //}
+
+        //this.mContext.sendBroadcast(intent);
+
+        int ringerMode = mAudioManager.getRingerMode();
+        ContentResolver mResolver = mContext.getContentResolver();
+
+        if (AudioManager.RINGER_MODE_SILENT == ringerMode) {
+            Settings.System.putInt(mResolver,Settings.System.SOUND_EFFECTS_ENABLED, 0);
+            mAudioManager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
+            mAudioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER,
+                    AudioManager.VIBRATE_SETTING_ON);
+            mAudioManager.setVibrateSetting(AudioManager.VIBRATE_TYPE_NOTIFICATION,
+                    AudioManager.VIBRATE_SETTING_ON);
+        } else if (AudioManager.RINGER_MODE_VIBRATE == ringerMode) {
+            Settings.System.putInt(mResolver,
+                    Settings.System.SOUND_EFFECTS_ENABLED, 0);
+            mAudioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+        } else {
+            Settings.System.putInt(mResolver,
+                    Settings.System.SOUND_EFFECTS_ENABLED, 0);
+            mAudioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
         }
 
-        if (TextUtils.isEmpty(soundModeValue)) {
-            Slog.i(TAG,"toggle vibrate failed because getting sound mode is null");
-            return;
-        }
-
-        if (soundModeValue.equals(SOUND_MODE_OUTDOOR)) {
-            intent.putExtra(SOUND_MODE, SOUND_MODE_SILENT);
-        } else if (soundModeValue.equals(SOUND_MODE_VIBRATE)){
-            intent.putExtra(SOUND_MODE, SOUND_MODE_NORMAL);
-        } else if (soundModeValue.equals(SOUND_MODE_SILENT)) {
-            intent.putExtra(SOUND_MODE, SOUND_MODE_VIBRATE);
-        } else if (soundModeValue.equals(SOUND_MODE_NORMAL)) {
-            intent.putExtra(SOUND_MODE, SOUND_MODE_OUTDOOR);
-        }
-
-        this.mContext.sendBroadcast(intent);
         mSoundModeClickable = false;
     }
 
@@ -386,22 +407,22 @@ public class ToggleListener extends BroadcastReceiver implements View.OnClickLis
             return;
         }
 
-        if (soundMode.equals(SOUND_MODE_VIBRATE)) {
-            i = R.drawable.quick_operation_vibrate_on;
-            imagebarId = R.drawable.bottom_bar_icon_on;
-            mSoundModeText = R.string.mode_vibrate_name;
-        } else if (soundMode.equals(SOUND_MODE_OUTDOOR)) {
-            i = R.drawable.quick_operation_sound_on;
-            imagebarId = R.drawable.bottom_bar_icon_off;
-            mSoundModeText = R.string.mode_sound_name;
-        } else if (soundMode.equals(SOUND_MODE_NORMAL)) {
-            i = R.drawable.quick_operation_sound_on;
-            imagebarId = R.drawable.bottom_bar_icon_off;
-            mSoundModeText = R.string.mode_sound_name;
-        } else if (soundMode.equals(SOUND_MODE_SILENT)) {
+        if (soundMode.equals(SOUND_MODE_SILENT)) {
             i = R.drawable.quick_operation_sound_off;
             imagebarId = R.drawable.bottom_bar_icon_on;
             mSoundModeText = R.string.mode_silent_name;
+        }else if (soundMode.equals(SOUND_MODE_VIBRATE)) {
+            i = R.drawable.quick_operation_vibrate_on;
+            imagebarId = R.drawable.bottom_bar_icon_on;
+            mSoundModeText = R.string.mode_vibrate_name;
+        }else if (soundMode.equals(SOUND_MODE_OUTDOOR)) {
+            i = R.drawable.quick_operation_sound_on;
+            imagebarId = R.drawable.bottom_bar_icon_off;
+            mSoundModeText = R.string.mode_sound_name;
+        }else {
+            i = R.drawable.quick_operation_sound_on;
+            imagebarId = R.drawable.bottom_bar_icon_off;
+            mSoundModeText = R.string.mode_sound_name;
         }
 
         updateButtonImageAndText(R.id.quick_operation_sound_icon, R.id.quick_operation_sound_name, i, mSoundModeText);
