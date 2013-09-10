@@ -2144,4 +2144,8 @@
   <java-symbol type="string" name="description_target_call" />
   <java-symbol type="string" name="description_target_sms" />
   <!-- @} -->
+  <!-- SPRD: Modify 20130909 Spreadst of Bug 210096 Symbol not found build fail @{ -->
+  <java-symbol type="string" name="twenty_four_hour_time_format" />
+  <java-symbol type="string" name="twelve_hour_time_format" />
+  <!-- @} -->
 </resources>
