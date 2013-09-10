@@ -1288,13 +1288,14 @@ class MountService extends IMountService.Stub
     }
 
     private void addVolumeLocked(StorageVolume volume) {
-        Slog.d(TAG, "addVolumeLocked() " + volume);
         /* SPRD: support double T card @{ */
+        Slog.d(TAG, volume.isPrimary()+" addVolumeLocked() " + volume);
         if(volume.isPrimary()){
           mVolumes.add(0,volume);
         }else{
           mVolumes.add(volume);
         }
+
         /* @} */
         final StorageVolume existing = mVolumesByPath.put(volume.getPath(), volume);
         if (existing != null) {
@@ -2141,6 +2142,7 @@ class MountService extends IMountService.Stub
                 final UserHandle owner = volume.getOwner();
                 final boolean ownerMatch = owner == null || owner.getIdentifier() == callingUserId;
                 if (accessAll || ownerMatch) {
+                    Log.w(TAG, "getVolumeList --> "+volume); // SPRD: log
                     filtered.add(volume);
                 }
             }
