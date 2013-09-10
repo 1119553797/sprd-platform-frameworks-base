@@ -55,6 +55,7 @@ import android.os.storage.StorageResultCode;
 import android.os.storage.StorageVolume;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.Slog;
 import android.util.Xml;
 
@@ -111,6 +112,8 @@ class MountService extends IMountService.Stub
     private static final boolean DEBUG_UNMOUNT = false;
     private static final boolean DEBUG_EVENTS = false;
     private static final boolean DEBUG_OBB = false;
+    private static final boolean DEBUG_STORAGE = false;
+
 
     // Disable this since it messes up long-running cryptfs operations.
     private static final boolean WATCHDOG_ENABLE = false;
@@ -175,7 +178,7 @@ class MountService extends IMountService.Stub
         public static final int VolumeDiskInserted             = 630;
         public static final int VolumeDiskRemoved              = 631;
         public static final int VolumeBadRemoval               = 632;
-
+        public static final int VolumeLinkChange               = 640; // support link
         /*
          * 700 series - fstrim
          */
@@ -210,6 +213,9 @@ class MountService extends IMountService.Stub
     private final CountDownLatch mConnectedSignal = new CountDownLatch(1);
     private final CountDownLatch mAsecsScanned = new CountDownLatch(1);
     private boolean                               mSendUmsConnectedOnBoot = false;
+        private String                                linkPath = "/mnt/shell/emulated" ; // SPRD: init value
+    /* SPRD: curr system storage type  , default 1*/
+    private int storage_type = Environment.STORAGE_TYPE_EMMC_EXTERNAL;
 
     /**
      * Private hash of currently mounted secure containers.
@@ -799,7 +805,12 @@ class MountService extends IMountService.Stub
             notifyVolumeStateChange(
                     cooked[2], cooked[3], Integer.parseInt(cooked[7]),
                             Integer.parseInt(cooked[10]));
-        } else if ((code == VoldResponseCode.VolumeDiskInserted) ||
+         /* SPRD: support link @{ */
+        } else if (code == VoldResponseCode.VolumeLinkChange) {
+            Slog.i(TAG, "link from "+cooked[6]+" to "+cooked[8]);
+            linkPath = cooked[8];
+        }/* @} */
+        else if ((code == VoldResponseCode.VolumeDiskInserted) ||
                    (code == VoldResponseCode.VolumeDiskRemoved) ||
                    (code == VoldResponseCode.VolumeBadRemoval)) {
             // FMT: NNN Volume <label> <mountpoint> disk inserted (<major>:<minor>)
@@ -1165,6 +1176,11 @@ class MountService extends IMountService.Stub
         Resources resources = mContext.getResources();
 
         int id = com.android.internal.R.xml.storage_list;
+        /* SPRD: Support for different solutions @{ */
+        if(storage_type == Environment.STORAGE_TYPE_EMMC_INTERNAL){
+           id = com.android.internal.R.xml.storage_list0;
+        }
+        /* @} */
         XmlResourceParser parser = resources.getXml(id);
         AttributeSet attrs = Xml.asAttributeSet(parser);
 
@@ -1273,7 +1289,13 @@ class MountService extends IMountService.Stub
 
     private void addVolumeLocked(StorageVolume volume) {
         Slog.d(TAG, "addVolumeLocked() " + volume);
-        mVolumes.add(volume);
+        /* SPRD: support double T card @{ */
+        if(volume.isPrimary()){
+          mVolumes.add(0,volume);
+        }else{
+          mVolumes.add(volume);
+        }
+        /* @} */
         final StorageVolume existing = mVolumesByPath.put(volume.getPath(), volume);
         if (existing != null) {
             throw new IllegalStateException(
@@ -1306,7 +1328,12 @@ class MountService extends IMountService.Stub
      */
     public MountService(Context context) {
         mContext = context;
-
+        /* SPRD: init storage type @{  */
+        storage_type = SystemProperties.getInt("persist.storage.type", Environment.STORAGE_TYPE_EMMC_EXTERNAL);
+        if(DEBUG_STORAGE){
+            Log.w(TAG, "curr storage type : "+storage_type);
+        }
+        /* @}*/
         synchronized (mVolumesLock) {
             readStorageListLocked();
         }
@@ -1473,41 +1500,16 @@ class MountService extends IMountService.Stub
     public void setUsbMassStorageEnabled(boolean enable) {
         waitForReady();
         validatePermission(android.Manifest.permission.MOUNT_UNMOUNT_FILESYSTEMS);
-
+        /* SPRD: @{
         final StorageVolume primary = getPrimaryPhysicalVolume();
         if (primary == null) return;
-
-        // TODO: Add support for multiple share methods
-
-        /*
-         * If the volume is mounted and we're enabling then unmount it
-         */
-        String path = primary.getPath();
-        String vs = getVolumeState(path);
-        String method = "ums";
-        if (enable && vs.equals(Environment.MEDIA_MOUNTED)) {
-            // Override for isUsbMassStorageEnabled()
-            setUmsEnabling(enable);
-            UmsEnableCallBack umscb = new UmsEnableCallBack(path, method, true);
-            mHandler.sendMessage(mHandler.obtainMessage(H_UNMOUNT_PM_UPDATE, umscb));
-            // Clear override
-            setUmsEnabling(false);
-        }
-        /*
-         * If we disabled UMS then mount the volume
-         */
-        if (!enable) {
-            doShareUnshareVolume(path, method, enable);
-            if (doMountVolume(path) != StorageResultCode.OperationSucceeded) {
-                Slog.e(TAG, "Failed to remount " + path +
-                        " after disabling share method " + method);
-                /*
-                 * Even though the mount failed, the unshare didn't so don't indicate an error.
-                 * The mountVolume() call will have set the storage state and sent the necessary
-                 * broadcasts.
-                 */
-            }
-        }
+         } */
+        /* SPRD: support double T card  @{ */
+       String path = Environment.getExternalStoragePath().getPath();
+        setUsbMassStorageEnabled(path,enable);
+        path = Environment.getInternalStoragePath().getPath();
+        setUsbMassStorageEnabled(path,enable);
+        /* @} */
     }
 
     public boolean isUsbMassStorageEnabled() {
@@ -2145,6 +2147,14 @@ class MountService extends IMountService.Stub
             return filtered.toArray(new StorageVolume[filtered.size()]);
         }
     }
+    /**
+     * Get link point for sdcard
+     * @return
+     *  SPRD: support double T card
+     */
+    public String getLinkPathForSdcard(){
+        return linkPath;
+    }
 
     private void addObbStateLocked(ObbState obbState) throws RemoteException {
         final IBinder binder = obbState.getBinder();
@@ -2708,4 +2718,41 @@ class MountService extends IMountService.Stub
             mConnector.monitor();
         }
     }
+
+    /*
+     * SPRD: double T card support @ {
+     */
+    private  void setUsbMassStorageEnabled(String path,boolean enable) {
+         // TODO: Add support for multiple share methods
+
+        /*
+         * If the volume is mounted and we're enabling then unmount it
+         */
+        String vs = getVolumeState(path);
+        String method = "ums";
+        if (enable && vs.equals(Environment.MEDIA_MOUNTED)) {
+            // Override for isUsbMassStorageEnabled()
+            setUmsEnabling(enable);
+            UmsEnableCallBack umscb = new UmsEnableCallBack(path, method, true);
+            mHandler.sendMessage(mHandler.obtainMessage(H_UNMOUNT_PM_UPDATE, umscb));
+            // Clear override
+            setUmsEnabling(false);
+        }
+        /*
+         * If we disabled UMS then mount the volume
+         */
+        if (!enable) {
+            doShareUnshareVolume(path, method, enable);
+            if (doMountVolume(path) != StorageResultCode.OperationSucceeded) {
+                Slog.e(TAG, "Failed to remount " + path +
+                        " after disabling share method " + method);
+                /*
+                 * Even though the mount failed, the unshare didn't so don't indicate an error.
+                 * The mountVolume() call will have set the storage state and sent the necessary
+                 * broadcasts.
+                 */
+            }
+        }
+    }
+    /* @} */
 }

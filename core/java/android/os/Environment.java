@@ -95,8 +95,9 @@ public class Environment {
         // TODO: generalize further to create package-specific environment
 
         private final File mExternalStorage;
-        private final File mSecondStorage; // SPRD: temp
-        private final File mPrimaryStorage;// SPRD: temp
+        private final File mSecondStorage; // SPRD: other storage
+        private final File mPrimaryStorage;// SPRD: primary storage
+        private  File mLinkPoint;// SPRD: link point
         private final File mExternalStorageAndroidData;
         private final File mExternalStorageAndroidMedia;
         private final File mExternalStorageAndroidObb;
@@ -107,6 +108,23 @@ public class Environment {
             String rawExternalStorage = System.getenv(ENV_EXTERNAL_STORAGE);
             String rawEmulatedStorageTarget = System.getenv(ENV_EMULATED_STORAGE_TARGET);
             String rawMediaStorage = System.getenv(ENV_MEDIA_STORAGE);
+
+            /* SPRD: init mPrimaryStorage and mSecondStorage @{ */
+            mLinkPoint = new File("/sdcard");
+            int type = Environment.getStorageType();
+            switch(type){
+            default :
+            case Environment.STORAGE_TYPE_EMMC_EXTERNAL:
+              rawEmulatedStorageTarget = Environment.getExternalStoragePath().getPath();
+              mSecondStorage = Environment.getInternalStoragePath();
+              break;
+            case Environment.STORAGE_TYPE_EMMC_INTERNAL:
+               rawEmulatedStorageTarget = Environment.getInternalStoragePath().getPath();
+               mSecondStorage = Environment.getExternalStoragePath();
+               break;
+            }
+            /* @} */
+
             if (TextUtils.isEmpty(rawMediaStorage)) {
                 rawMediaStorage = "/data/media";
             }
@@ -120,8 +138,8 @@ public class Environment {
 
                 // /storage/emulated/0
                 mExternalStorage = buildPath(emulatedBase, rawUserId);
-                mSecondStorage = mExternalStorage ; // SPRD: temp
-                mPrimaryStorage = mExternalStorage; // SPRD: temp
+                mPrimaryStorage = mExternalStorage; // SPRD: primary storage
+                mLinkPoint = buildPath(mLinkPoint, rawUserId); // SPRD: link path
                 // /data/media/0
                 mMediaStorage = buildPath(mediaBase, rawUserId);
 
@@ -134,9 +152,8 @@ public class Environment {
 
                 // /storage/sdcard0
                 mExternalStorage = new File(rawExternalStorage);
-                mSecondStorage = mExternalStorage ; // SPRD: temp
-                mPrimaryStorage = mExternalStorage; // SPRD: temp
-                // /data/media
+                mPrimaryStorage = mExternalStorage; // SPRD: primary storage
+                // /data/media.
                 mMediaStorage = new File(rawMediaStorage);
             }
 
@@ -146,7 +163,7 @@ public class Environment {
         }
 
         public File getExternalStorageDirectory() {
-            return mExternalStorage;
+            return mLinkPoint;
         }
 
         public File getExternalStorageObbDirectory() {
@@ -342,7 +359,8 @@ public class Environment {
 
     /** {@hide} */
     public static File getLegacyExternalStorageDirectory() {
-        return new File(System.getenv(ENV_EXTERNAL_STORAGE));
+           return getExternalStoragePath(); // SPRD: external storage 
+//        return new File(System.getenv(ENV_EXTERNAL_STORAGE));
     }
 
     /** {@hide} */
@@ -611,8 +629,16 @@ public class Environment {
         try {
             IMountService mountService = IMountService.Stub.asInterface(ServiceManager
                     .getService("mount"));
-            final StorageVolume primary = getPrimaryVolume();
-            return mountService.getVolumeState(primary.getPath());
+            /* SPRD:  Access to the link the mount point @{  */
+            String link = mountService.getLinkPathForSdcard();
+            Log.w(TAG, "getExternalStorageState() -- > " + link);
+            if(link== null ||"".equals(link)){
+                 link = "/storage/sdcard1";
+            }
+            String state  = mountService.getVolumeState(link);
+            Log.w(TAG, "getExternalStorageState() -- >  " + link + "   |  "+state  );
+            /*  @}  */
+            return state;
         } catch (RemoteException rex) {
             Log.w(TAG, "Failed to read external storage state; assuming REMOVED: " + rex);
             return Environment.MEDIA_REMOVED;
@@ -731,15 +757,23 @@ public class Environment {
     /*
      * SPRD: The double T card support  @{
      */
+    private static final File EXTERNAL_STORAGE = new File("/storage/sdcard1");
+    private static final File INTERNAL_STORAGE = new File("/mnt/shell/emulated");
    // SPRD: nand
     public static final int STORAGE_TYPE_NAND = 0;
     //  SPRD:  built-in cannot be moved
     public static final int STORAGE_TYPE_EMMC_INTERNAL = 2;
     //  SPRD:  external removable
     public static final int STORAGE_TYPE_EMMC_EXTERNAL = 1;
+    // storage type of curr system
+    private static int storage_type = 1;
     // SPRD: The T scheme of the current system
     public static int getStorageType(){
-         return STORAGE_TYPE_EMMC_EXTERNAL;
+        if(storage_type == -1 ){
+              storage_type = SystemProperties.getInt("persist.storage.type", 1);
+        }
+        Log.w(TAG, " ==== **************8  === curr storage type is == "+ storage_type);
+         return storage_type;
     }
     /**
      * SPRD: Gets the path of internal T card
@@ -748,18 +782,7 @@ public class Environment {
      */
     public static File getInternalStoragePath(){
           throwIfUserRequired();
-          int type = getStorageType();
-          File path = null;
-         switch(type){
-             case STORAGE_TYPE_EMMC_EXTERNAL:
-             case STORAGE_TYPE_NAND:
-                 path = getSecondStorageDirectory();
-                  break;
-             case STORAGE_TYPE_EMMC_INTERNAL:
-                 path = getPrimaryStorageDirectory();
-                 break;
-          }
-        return path;
+        return INTERNAL_STORAGE;
     }
     /**
      * SPRD: Gets the state of internal T card
@@ -767,7 +790,7 @@ public class Environment {
      * @return
      */
     public static String getInternalStoragePathState(){
-          return getExternalStorageState();
+          return getState(getInternalStoragePath());
     }
     /**
      * SPRD: Gets the path of external T card
@@ -776,18 +799,7 @@ public class Environment {
      */
     public static File getExternalStoragePath(){
          throwIfUserRequired();
-         int type = getStorageType();
-         File path = null;
-         switch(type){
-            case STORAGE_TYPE_EMMC_EXTERNAL:
-            case STORAGE_TYPE_NAND:
-                path = getPrimaryStorageDirectory();
-                break;
-            case STORAGE_TYPE_EMMC_INTERNAL:
-                path = getSecondStorageDirectory();
-                break;
-           }
-        return path;
+        return EXTERNAL_STORAGE;
     }
     /**
      * SPRD: Gets the state of external T card
@@ -795,7 +807,7 @@ public class Environment {
      * @return
      */
     public static String getExternalStoragePathState(){
-          return getExternalStorageState();
+          return getState(getExternalStoragePath());
     }
     /**
      * SPRD: Gets the current primary card path
@@ -810,14 +822,20 @@ public class Environment {
      * @return
      */
     public static String getPrimaryStorageState(){
-         return getExternalStorageState();
-    }
-    /**
-     * SPRD: Gets the current second card state
-     * @return
-     */
-    public static String getSecondStorageState(){
-        return getExternalStorageState();
+         int type = getStorageType();
+         String state ;
+         switch(type){
+         case STORAGE_TYPE_EMMC_EXTERNAL:
+         case STORAGE_TYPE_NAND:
+            state = getExternalStoragePathState();
+            break;
+         case STORAGE_TYPE_EMMC_INTERNAL:
+            state = getInternalStoragePathState();
+            break;
+            default :
+              state = Environment.MEDIA_UNMOUNTED;
+       }
+         return state;
     }
     /**
      * SPRD: Gets the current second card path
@@ -827,5 +845,41 @@ public class Environment {
             throwIfUserRequired();
           return sCurrentUser.getSecondStorageDirectory();
     }
+    /**
+     * SPRD: Gets the current second card state
+     * @return
+     */
+    public static String getSecondStorageState(){
+        int type = getStorageType();
+        String state ;
+        switch(type){
+        case STORAGE_TYPE_EMMC_EXTERNAL:
+        case STORAGE_TYPE_NAND:
+            state = getInternalStoragePathState();
+            break;
+        case STORAGE_TYPE_EMMC_INTERNAL:
+            state = getExternalStoragePathState();
+            break;
+            default :
+              state = Environment.MEDIA_UNMOUNTED;
+       }
+         return state;
+    }
+    /**
+     * SPRD: read  storage state
+     * @param path
+     * @return
+     */
+    private static  String getState(File path){
+         try {
+             IMountService mountService = IMountService.Stub.asInterface(ServiceManager
+                     .getService("mount"));
+             return mountService.getVolumeState(path.getPath());
+         } catch (RemoteException rex) {
+             Log.w(TAG, "Failed to read  storage state; assuming REMOVED: " + rex);
+             return Environment.MEDIA_REMOVED;
+         }
+    }
     /* @} */
+
 }

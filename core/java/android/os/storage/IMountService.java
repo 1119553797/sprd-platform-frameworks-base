@@ -142,7 +142,22 @@ public interface IMountService extends IInterface {
                 }
                 return _result;
             }
-
+            /* SPRD: get link path  */
+            public String getLinkPathForSdcard()  throws RemoteException {
+                Parcel _data = Parcel.obtain();
+                Parcel _reply = Parcel.obtain();
+                String _result;
+                try {
+                    _data.writeInterfaceToken(DESCRIPTOR);
+                    mRemote.transact(Stub.TRANSACTION_getLinkPathForSdcard, _data, _reply, 0);
+                    _reply.readException();
+                    _result = _reply.readString();
+                } finally {
+                    _reply.recycle();
+                    _data.recycle();
+                }
+                return _result;
+            }
             /**
              * Mount external storage at given mount point. Returns an int
              * consistent with MountServiceResultCode
@@ -811,6 +826,7 @@ public interface IMountService extends IInterface {
 
         static final int TRANSACTION_fixPermissionsSecureContainer = IBinder.FIRST_CALL_TRANSACTION + 33;
 
+        static final int TRANSACTION_getLinkPathForSdcard = IBinder.FIRST_CALL_TRANSACTION + 34;  // SPRD: get link path
         /**
          * Cast an IBinder object into an IMountService interface, generating a
          * proxy if needed.
@@ -1154,6 +1170,13 @@ public interface IMountService extends IInterface {
                     reply.writeInt(resultCode);
                     return true;
                 }
+				case TRANSACTION_getLinkPathForSdcard: { // SPRD: get link path
+                    data.enforceInterface(DESCRIPTOR);
+                    String path = getLinkPathForSdcard();
+                    reply.writeNoException();
+                    reply.writeString(path);
+                    return true;
+                }
             }
             return super.onTransact(code, data, reply, flags);
         }
@@ -1216,6 +1239,11 @@ public interface IMountService extends IInterface {
      * Gets the state of a volume via its mountpoint.
      */
     public String getVolumeState(String mountPoint) throws RemoteException;
+
+    /**
+     * SPRD: Get link point for sdcard
+     */
+    public String getLinkPathForSdcard()  throws RemoteException;
 
     /**
      * Checks whether the specified Opaque Binary Blob (OBB) is mounted
