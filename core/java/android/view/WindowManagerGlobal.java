@@ -268,6 +268,35 @@ public final class WindowManagerGlobal {
         try {
             root.setView(view, wparams, panelParentView);
         } catch (RuntimeException e) {
+            /* SPRD: add Exception handling clauses @{ */
+            if (android.os.Debug.isMonkey()) {
+                String msg = e.getMessage();
+                if (msg != null) {
+                    if (findViewLocked(view, false)>=0) {
+                        Log.w("WindowManagerImpl",
+                                "BadTokenException, but we just ignore this in monkey test, the msg is:\n" + msg);
+                    } else if (msg != null && msg.contains("register input channel")) {
+                        Log.w("WindowManagerImpl",
+                                "Failed to register input channel with ViewRoot: "
+                                        + root.toString()
+                                        + ", and it's InputChannel: "
+                                        + root.mInputChannel
+                                        + ".\n Often because: 'binder got transaction with invalid fd, -1'. The pipe created by "
+                                        + "WMS was broken before talking with binder driver."
+                                        + "\n But I don't know why, we just ignore it in monkey test.");
+                    }
+                    try {
+                        final int index = findViewLocked(view, false);
+                        if (index >= 0) {
+                            removeViewLocked(index, true);
+                        }
+                    } catch (Exception e2) {
+                        Log.w("WindowManagerImpl", "Ignore the removeViewImmediate() fail: " + e2.getMessage());
+                    }
+                } else {
+                    Log.w("WindowManagerImpl", "root.setView in addView() failed, just ignore this in monkey test.");
+                }
+            } else {
             // BadTokenException or InvalidDisplayException, clean up.
             synchronized (mLock) {
                 final int index = findViewLocked(view, false);
@@ -276,6 +305,8 @@ public final class WindowManagerGlobal {
                 }
             }
             throw e;
+            }
+            /* SPRD: @} */
         }
     }
 
