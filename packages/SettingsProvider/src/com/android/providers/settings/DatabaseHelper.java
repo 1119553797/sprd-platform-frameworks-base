@@ -2270,6 +2270,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     R.bool.def_wifi_auto_connect);
             /* @} */
 
+            /* SPRD:  Enable adb when eng mode @{ */
+            if (!SystemProperties.get("ro.build.type", "user").equals("user")) {
+                loadSetting(stmt, Settings.Global.ADB_ENABLED, 1);
+            }
+            /* @} */
+
             // --- New global settings start here
         } finally {
             if (stmt != null) stmt.close();
