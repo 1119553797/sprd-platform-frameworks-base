@@ -804,7 +804,7 @@ public class NetworkController extends BroadcastReceiver {
         if (mIsWimaxEnabled && mWimaxConnected) {
             // wimax is a special 4g network not handled by telephony
             mDataIconList[phoneId] = TelephonyIcons.DATA_4G[mDataCondition];
-            mDataTypeIconId[phoneId] = R.drawable.stat_sys_data_connected_4g;
+            mDataTypeIconId[phoneId] = R.drawable.stat_sys_data_connected_4g_sprd;
             mQSDataTypeIconId[phoneId] = R.drawable.ic_qs_signal_4g;
             mContentDescriptionDataType[phoneId] = mContext.getString(
                     R.string.accessibility_data_connection_4g);
@@ -826,13 +826,13 @@ public class NetworkController extends BroadcastReceiver {
                         // * SPRD: add by spreadst for cucc case
                         if ("cucc".equals(SystemProperties.get("ro.operator", ""))) {
                             mDataIconList[phoneId] = TelephonyIcons.DATA_G[mDataCondition];
-                            mDataTypeIconId[phoneId] = R.drawable.stat_sys_data_connected_g;
+                            mDataTypeIconId[phoneId] = R.drawable.stat_sys_data_connected_g_sprd;
                             mQSDataTypeIconId[phoneId] = R.drawable.ic_qs_signal_g;
                             mContentDescriptionDataType[phoneId] = mContext.getString(
                                     R.string.accessibility_data_connection_gprs);
                         } else {
                             mDataIconList[phoneId] = TelephonyIcons.DATA_E[mDataCondition];
-                            mDataTypeIconId[phoneId] = R.drawable.stat_sys_data_connected_e;
+                            mDataTypeIconId[phoneId] = R.drawable.stat_sys_data_connected_e_sprd;
                             mQSDataTypeIconId[phoneId] = R.drawable.ic_qs_signal_e;
                             mContentDescriptionDataType[phoneId] = mContext.getString(
                                     R.string.accessibility_data_connection_edge);
@@ -843,7 +843,7 @@ public class NetworkController extends BroadcastReceiver {
                     }
                 case TelephonyManager.NETWORK_TYPE_UMTS:
                     mDataIconList[phoneId] = TelephonyIcons.DATA_3G[mDataCondition];
-                    mDataTypeIconId[phoneId] = R.drawable.stat_sys_data_connected_3g;
+                    mDataTypeIconId[phoneId] = R.drawable.stat_sys_data_connected_3g_sprd;
                     mQSDataTypeIconId[phoneId] = R.drawable.ic_qs_signal_3g;
                     mContentDescriptionDataType[phoneId] = mContext.getString(
                             R.string.accessibility_data_connection_3g);
@@ -855,13 +855,13 @@ public class NetworkController extends BroadcastReceiver {
                      if (mHspaDataDistinguishable
                              && "cucc".equals(SystemProperties.get("ro.operator", ""))) {
                          mDataIconList[phoneId] = TelephonyIcons.DATA_H[mDataCondition];
-                         mDataTypeIconId[phoneId] = R.drawable.stat_sys_data_connected_h;
+                         mDataTypeIconId[phoneId] = R.drawable.stat_sys_data_connected_h_sprd;
                          mQSDataTypeIconId[phoneId] = R.drawable.ic_qs_signal_h;
                          mContentDescriptionDataType[phoneId] = mContext.getString(
                                      R.string.accessibility_data_connection_3_5g);
                      } else {
                          mDataIconList[phoneId] = TelephonyIcons.DATA_3G[mDataCondition];
-                         mDataTypeIconId[phoneId] = R.drawable.stat_sys_data_connected_3g;
+                         mDataTypeIconId[phoneId] = R.drawable.stat_sys_data_connected_3g_sprd;
                          mQSDataTypeIconId[phoneId] = R.drawable.ic_qs_signal_3g;
                          mContentDescriptionDataType[phoneId] = mContext.getString(
                                  R.string.accessibility_data_connection_3g);
@@ -873,20 +873,20 @@ public class NetworkController extends BroadcastReceiver {
                          //* SPRD: add by spreadst for cucc case
                          if ("cucc".equals(SystemProperties.get("ro.operator", ""))) {
                              mDataIconList[phoneId] = TelephonyIcons.DATA_H[mDataCondition];
-                             mDataTypeIconId[phoneId] = R.drawable.stat_sys_data_connected_hp;
+                             mDataTypeIconId[phoneId] = R.drawable.stat_sys_data_connected_hp_sprd;
                              mQSDataTypeIconId[phoneId] = R.drawable.ic_qs_signal_h;
                              mContentDescriptionDataType[phoneId] = mContext.getString(
                                      R.string.accessibility_data_connection_3_5g);
                          } else {
                              mDataIconList[phoneId] = TelephonyIcons.DATA_H[mDataCondition];
-                             mDataTypeIconId[phoneId] = R.drawable.stat_sys_data_connected_h;
+                             mDataTypeIconId[phoneId] = R.drawable.stat_sys_data_connected_h_sprd;
                              mQSDataTypeIconId[phoneId] = R.drawable.ic_qs_signal_h;
                              mContentDescriptionDataType[phoneId] = mContext.getString(
                                      R.string.accessibility_data_connection_3_5g);
                          }
                     } else {
                         mDataIconList[phoneId] = TelephonyIcons.DATA_3G[mDataCondition];
-                        mDataTypeIconId[phoneId] = R.drawable.stat_sys_data_connected_3g;
+                        mDataTypeIconId[phoneId] = R.drawable.stat_sys_data_connected_3g_sprd;
                         mQSDataTypeIconId[phoneId] = R.drawable.ic_qs_signal_3g;
                         mContentDescriptionDataType[phoneId] = mContext.getString(
                                 R.string.accessibility_data_connection_3g);
@@ -920,7 +920,7 @@ public class NetworkController extends BroadcastReceiver {
                 case TelephonyManager.NETWORK_TYPE_EVDO_B:
                 case TelephonyManager.NETWORK_TYPE_EHRPD:
                     mDataIconList[phoneId] = TelephonyIcons.DATA_3G[mDataCondition];
-                    mDataTypeIconId[phoneId] = R.drawable.stat_sys_data_connected_3g;
+                    mDataTypeIconId[phoneId] = R.drawable.stat_sys_data_connected_3g_sprd;
                     mQSDataTypeIconId[phoneId] = R.drawable.ic_qs_signal_3g;
                     mContentDescriptionDataType[phoneId] = mContext.getString(
                             R.string.accessibility_data_connection_3g);
@@ -929,7 +929,7 @@ public class NetworkController extends BroadcastReceiver {
                     boolean show4GforLTE = mContext.getResources().getBoolean(R.bool.config_show4GForLTE);
                     if (show4GforLTE) {
                         mDataIconList[phoneId] = TelephonyIcons.DATA_4G[mDataCondition];
-                        mDataTypeIconId[phoneId] = R.drawable.stat_sys_data_connected_4g;
+                        mDataTypeIconId[phoneId] = R.drawable.stat_sys_data_connected_4g_sprd;
                         mQSDataTypeIconId[phoneId] = R.drawable.ic_qs_signal_4g;
                         mContentDescriptionDataType[phoneId] = mContext.getString(
                                 R.string.accessibility_data_connection_4g);
@@ -944,13 +944,13 @@ public class NetworkController extends BroadcastReceiver {
                 default:
                     if (!mShowAtLeastThreeGees) {
                         mDataIconList[phoneId] = TelephonyIcons.DATA_G[mDataCondition];
-                        mDataTypeIconId[phoneId] = R.drawable.stat_sys_data_connected_g;
+                        mDataTypeIconId[phoneId] = R.drawable.stat_sys_data_connected_g_sprd;
                         mQSDataTypeIconId[phoneId] = R.drawable.ic_qs_signal_g;
                         mContentDescriptionDataType[phoneId] = mContext.getString(
                                 R.string.accessibility_data_connection_gprs);
                     } else {
                         mDataIconList[phoneId] = TelephonyIcons.DATA_3G[mDataCondition];
-                        mDataTypeIconId[phoneId] = R.drawable.stat_sys_data_connected_3g;
+                        mDataTypeIconId[phoneId] = R.drawable.stat_sys_data_connected_3g_sprd;
                         mQSDataTypeIconId[phoneId] = R.drawable.ic_qs_signal_3g;
                         mContentDescriptionDataType[phoneId] = mContext.getString(
                                 R.string.accessibility_data_connection_3g);
@@ -961,11 +961,11 @@ public class NetworkController extends BroadcastReceiver {
 
         if (isCdma(phoneId)) {
             if (isCdmaEri(phoneId)) {
-                mDataTypeIconId[phoneId] = R.drawable.stat_sys_data_connected_roam;
+                mDataTypeIconId[phoneId] = R.drawable.stat_sys_data_connected_roam_sprd;
                 mQSDataTypeIconId[phoneId] = R.drawable.ic_qs_signal_r;
             }
         } else if (mPhone[phoneId].isNetworkRoaming()) {
-                mDataTypeIconId[phoneId] = R.drawable.stat_sys_data_connected_roam;
+                mDataTypeIconId[phoneId] = R.drawable.stat_sys_data_connected_roam_sprd;
                 mQSDataTypeIconId[phoneId] = R.drawable.ic_qs_signal_r;
         }
     }
@@ -1364,16 +1364,16 @@ public class NetworkController extends BroadcastReceiver {
                 combinedSignalIconId = mDataSignalIconId[phoneId];
                 switch (mDataActivity[phoneId]) {
                     case TelephonyManager.DATA_ACTIVITY_IN:
-                        mMobileActivityIconId[phoneId] = R.drawable.stat_sys_signal_in;
+                        mMobileActivityIconId[phoneId] = R.drawable.stat_sys_signal_in_sprd;
                         break;
                     case TelephonyManager.DATA_ACTIVITY_OUT:
-                        mMobileActivityIconId[phoneId] = R.drawable.stat_sys_signal_out;
+                        mMobileActivityIconId[phoneId] = R.drawable.stat_sys_signal_out_sprd;
                         break;
                     case TelephonyManager.DATA_ACTIVITY_INOUT:
-                        mMobileActivityIconId[phoneId] = R.drawable.stat_sys_signal_inout;
+                        mMobileActivityIconId[phoneId] = R.drawable.stat_sys_signal_inout_sprd;
                         break;
                     default:
-                        mMobileActivityIconId[phoneId] = 0;
+                        mMobileActivityIconId[phoneId] = R.drawable.stat_sys_signal_default_sprd;
                         break;
                 }
 
