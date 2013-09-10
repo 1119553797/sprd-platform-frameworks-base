@@ -52,13 +52,22 @@ public class AudioSystem
     public static final int STREAM_DTMF = 8;
     /* @hide The audio stream for text to speech (TTS) */
     public static final int STREAM_TTS = 9;
+    // modified for FM start
+    // add STREAM_FM
+    /* @hide The audio stream for FM */
+    public static final int STREAM_FM = 10;
+    // modified for FM end
     /**
      * @deprecated Use {@link #numStreamTypes() instead}
      */
     public static final int NUM_STREAMS = 5;
 
     // Expose only the getter method publicly so we can change it in the future
-    private static final int NUM_STREAM_TYPES = 10;
+    // modified for FM start
+    // number of stream types changes because STREAM_FM is added for FM
+    //    private static final int NUM_STREAM_TYPES = 10;
+    private static final int NUM_STREAM_TYPES = 11;
+    // modified for FM end
     public static final int getNumStreamTypes() { return NUM_STREAM_TYPES; }
 
     /*
@@ -236,6 +245,12 @@ public class AudioSystem
     public static final int DEVICE_OUT_USB_ACCESSORY = 0x2000;
     public static final int DEVICE_OUT_USB_DEVICE = 0x4000;
     public static final int DEVICE_OUT_REMOTE_SUBMIX = 0x8000;
+
+    // modified for FM start
+    // add FM devices: headset and speaker
+    public static final int DEVICE_OUT_FM_HEADSET = 0x1000000;
+    public static final int DEVICE_OUT_FM_SPEAKER = 0x2000000;
+    // modified for FM end
 
     public static final int DEVICE_OUT_DEFAULT = DEVICE_BIT_DEFAULT;
 

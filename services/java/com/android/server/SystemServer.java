@@ -28,6 +28,7 @@ import android.content.pm.IPackageManager;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.media.AudioService;
+import android.hardware.fm.FmService;
 import android.net.wifi.p2p.WifiP2pService;
 import android.os.Environment;
 import android.os.Handler;
@@ -656,6 +657,15 @@ class ServerThread extends Thread {
                     ServiceManager.addService(Context.AUDIO_SERVICE, new AudioService(context));
                 } catch (Throwable e) {
                     reportWtf("starting Audio Service", e);
+                }
+            }
+
+            if (!"0".equals(SystemProperties.get("system_init.startfmservice"))) {
+                try {
+                    Slog.i(TAG, "Fm Service");
+                    ServiceManager.addService(Context.FM_SERVICE, new FmService(context));
+                } catch (Throwable e) {
+                    reportWtf("starting Fm Service", e);
                 }
             }
 
