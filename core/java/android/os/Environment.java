@@ -76,9 +76,7 @@ public class Environment {
         return sPrimaryVolume;
     }
 
-    static {
-        initForCurrentUser();
-    }
+
 
     /** {@hide} */
     public static void initForCurrentUser() {
@@ -879,6 +877,10 @@ public class Environment {
              Log.w(TAG, "Failed to read  storage state; assuming REMOVED: " + rex);
              return Environment.MEDIA_REMOVED;
          }
+    }
+    // SPRD: lazy init
+    static {
+        initForCurrentUser();
     }
     /* @} */
 
