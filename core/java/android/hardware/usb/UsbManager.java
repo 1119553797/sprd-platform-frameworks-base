@@ -455,7 +455,10 @@ public class UsbManager {
      * {@hide}
      */
     public String getDefaultFunction() {
-        String functions = SystemProperties.get("persist.sys.usb.config", "");
+        /* SPRD: changed for usb function @{ */
+        //String functions = SystemProperties.get("persist.sys.usb.config", "");
+        String functions = SystemProperties.get("sys.usb.config", "");
+        /* @} */
         int commaIndex = functions.indexOf(',');
         if (commaIndex > 0) {
             return functions.substring(0, commaIndex);
