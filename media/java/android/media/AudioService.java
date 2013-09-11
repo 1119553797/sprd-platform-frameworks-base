@@ -2758,6 +2758,11 @@ public class AudioService extends IAudioService.Stub implements OnFinished {
                 device &= AudioSystem.DEVICE_OUT_ALL_A2DP;
             }
         }
+        /* SPRD: getStreamVolume(int) isn't useful for STREAM_FM @{ */
+        if (stream == AudioSystem.STREAM_FM && device == 0) {
+            return AudioSystem.DEVICE_OUT_FM_HEADSET;
+        }
+        /* @} */
         return device;
     }
 
