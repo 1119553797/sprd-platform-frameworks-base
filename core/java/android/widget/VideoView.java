@@ -109,6 +109,7 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
     private boolean isPlaying = false;
     private boolean mIsVideoTrackUnsupport = false;
     private Dialog alertDialog;
+    private long mInterruptPosition;
     /** @} */
 
     public VideoView(Context context) {
@@ -363,6 +364,7 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
             mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
             mMediaPlayer.setScreenOnWhilePlaying(true);
             mMediaPlayer.prepareAsync();
+            mMediaPlayer.setLastInterruptPosition(mInterruptPosition);  // SPRD: add
             // we don't set the target state here either, but preserve the
             // target state that was there before.
             mCurrentState = STATE_PREPARING;
@@ -970,6 +972,13 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
 
     public boolean isPlay() {
         return isPlaying;
+    }
+
+    /**
+     * @hide
+     */
+    public void setLastInterruptPosition(long position){
+        mInterruptPosition = position*1000L;
     }
     /** @} */
 }
