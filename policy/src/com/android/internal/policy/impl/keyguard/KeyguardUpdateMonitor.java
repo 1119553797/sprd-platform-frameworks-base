@@ -1133,11 +1133,9 @@ public class KeyguardUpdateMonitor {
     public static boolean isSimLocked(IccCardConstants.State[] state) {
         boolean isSimLocked = false;
         for (int i = 0; i < TelephonyManager.getPhoneCount(); i++) {
-            isSimLocked = (state[i] == IccCardConstants.State.PIN_REQUIRED
+            isSimLocked = isSimLocked || (state[i] == IccCardConstants.State.PIN_REQUIRED
                     || state[i] == IccCardConstants.State.PUK_REQUIRED
                     || state[i] == IccCardConstants.State.PERM_DISABLED);
-            if (isSimLocked)
-                break;
         }
         return isSimLocked;
     }
@@ -1159,11 +1157,9 @@ public class KeyguardUpdateMonitor {
         final IccCardConstants.State[] simState = state;
 
         for (int i = 0; i < TelephonyManager.getPhoneCount(); i++) {
-            isSimPinSecure = (simState[i] == IccCardConstants.State.PIN_REQUIRED
+            isSimPinSecure = isSimPinSecure || (simState[i] == IccCardConstants.State.PIN_REQUIRED
                     || simState[i] == IccCardConstants.State.PUK_REQUIRED
                     || simState[i] == IccCardConstants.State.PERM_DISABLED);
-            if (isSimPinSecure)
-                break;
         }
         return isSimPinSecure;
     }

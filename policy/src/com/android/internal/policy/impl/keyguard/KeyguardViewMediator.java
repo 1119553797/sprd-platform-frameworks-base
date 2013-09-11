@@ -887,15 +887,19 @@ public class KeyguardViewMediator {
             return;
         }
 
+        final boolean provisioned = mUpdateMonitor.isDeviceProvisioned();
+
+        /* SPRD: Modify 20130911 Spreadst of 210537 keyguard support multi-card
         // if the setup wizard hasn't run yet, don't show
         final boolean requireSim = !SystemProperties.getBoolean("keyguard.no_require_sim",
                 false);
-        final boolean provisioned = mUpdateMonitor.isDeviceProvisioned();
         final IccCardConstants.State state = mUpdateMonitor.getSimState();
         final boolean lockedOrMissing = state.isPinLocked()
                 || ((state == IccCardConstants.State.ABSENT
                 || state == IccCardConstants.State.PERM_DISABLED)
-                && requireSim);
+                && requireSim);  @{ */
+        final boolean lockedOrMissing = isSimLockedOrMissing();
+        /* @} */
 
         if (!lockedOrMissing && !provisioned) {
             if (DEBUG) Log.d(TAG, "doKeyguard: not showing because device isn't provisioned"
@@ -1447,4 +1451,30 @@ public class KeyguardViewMediator {
     public static MultiUserAvatarCache getAvatarCache() {
         return sMultiUserAvatarCache;
     }
+    /* SPRD: Modify 20130911 Spreadst of 210537 keyguard support multi-card @{ */
+    /**
+     * Check sim state is Locked of missing for 'Multi-SIM card'
+     *
+     * @return true locked or missing, else false
+     */
+    private boolean isSimLockedOrMissing() {
+        // if the setup wizard hasn't run yet, don't show
+        final boolean requireSim = !SystemProperties.getBoolean("keyguard.no_require_sim",
+                false);
+
+        boolean lockedOrMissing = false;
+        final int phoneCount = TelephonyManager.getPhoneCount();
+        for (int phoneIndex = 0; phoneIndex < phoneCount; phoneIndex++) {
+            final IccCardConstants.State state = mUpdateMonitor.getSimState(phoneIndex);
+            lockedOrMissing = lockedOrMissing || state.isPinLocked()
+                    || ((state == IccCardConstants.State.ABSENT
+                    || state == IccCardConstants.State.PERM_DISABLED)
+                    && requireSim);
+            if (lockedOrMissing) {
+                break;
+            }
+        }
+        return lockedOrMissing;
+    }
+    /* @} */
 }

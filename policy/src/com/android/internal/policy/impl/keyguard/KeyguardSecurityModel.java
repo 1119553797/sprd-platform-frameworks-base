@@ -18,6 +18,7 @@ package com.android.internal.policy.impl.keyguard;
 import android.app.admin.DevicePolicyManager;
 import android.content.Context;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 
 import com.android.internal.telephony.IccCardConstants;
 import com.android.internal.widget.LockPatternUtils;
@@ -36,11 +37,18 @@ public class KeyguardSecurityModel {
         Biometric, // Unlock with a biometric key (e.g. finger print or face unlock)
         Account, // Unlock by entering an account's login and password.
         SimPin, // Unlock by entering a sim pin.
-        SimPuk // Unlock by entering a sim puk
+        /* SPRD: Modify 20130911 Spreadst of 210537 keyguard support multi-card @{ */
+        Sim2Pin,
+        SimPuk, // Unlock by entering a sim puk
+        Sim2Puk
+        /* @} */
     }
 
     private Context mContext;
     private LockPatternUtils mLockPatternUtils;
+    /* SPRD: Modify 20130911 Spreadst of 210537 keyguard support multi-card @{ */
+    private final String TAG = "KeyguardSecurityModel";
+    /* @} */
 
     KeyguardSecurityModel(Context context) {
         mContext = context;
@@ -75,39 +83,54 @@ public class KeyguardSecurityModel {
 
     SecurityMode getSecurityMode() {
         KeyguardUpdateMonitor updateMonitor = KeyguardUpdateMonitor.getInstance(mContext);
-        final IccCardConstants.State simState = updateMonitor.getSimState();
+        /* SPRD: Modify 20130911 Spreadst of 210537 keyguard support multi-card @{ */
+        // final IccCardConstants.State simState = updateMonitor.getSimState();
         SecurityMode mode = SecurityMode.None;
-        if (simState == IccCardConstants.State.PIN_REQUIRED) {
+        int phoneCount = TelephonyManager.getPhoneCount();
+        final IccCardConstants.State[] simState = new IccCardConstants.State[phoneCount];
+        for (int i = 0; i < phoneCount; i++) {
+            simState[i] = updateMonitor.getSimState(i);
+            Log.d(TAG, "simState = " + simState[i] + ", i = " + i);
+            if (simState[i] == IccCardConstants.State.PIN_REQUIRED) {
+                mode = i == 0 ? SecurityMode.SimPin : SecurityMode.Sim2Pin;
+                return mode;
+            } else if (simState[i] == IccCardConstants.State.PUK_REQUIRED) {
+                mode = i == 0 ? SecurityMode.SimPuk : SecurityMode.Sim2Puk;
+                return mode;
+            }
+        }
+        /* if (simState == IccCardConstants.State.PIN_REQUIRED) {
             mode = SecurityMode.SimPin;
         } else if (simState == IccCardConstants.State.PUK_REQUIRED
                 && mLockPatternUtils.isPukUnlockScreenEnable()) {
             mode = SecurityMode.SimPuk;
-        } else {
-            final int security = mLockPatternUtils.getKeyguardStoredPasswordQuality();
-            switch (security) {
-                case DevicePolicyManager.PASSWORD_QUALITY_NUMERIC:
-                    mode = mLockPatternUtils.isLockPasswordEnabled() ?
-                            SecurityMode.PIN : SecurityMode.None;
-                    break;
-                case DevicePolicyManager.PASSWORD_QUALITY_ALPHABETIC:
-                case DevicePolicyManager.PASSWORD_QUALITY_ALPHANUMERIC:
-                case DevicePolicyManager.PASSWORD_QUALITY_COMPLEX:
-                    mode = mLockPatternUtils.isLockPasswordEnabled() ?
-                            SecurityMode.Password : SecurityMode.None;
-                    break;
+        } else { */
+        final int security = mLockPatternUtils.getKeyguardStoredPasswordQuality();
+        switch (security) {
+            case DevicePolicyManager.PASSWORD_QUALITY_NUMERIC:
+                mode = mLockPatternUtils.isLockPasswordEnabled() ?
+                        SecurityMode.PIN : SecurityMode.None;
+                break;
+            case DevicePolicyManager.PASSWORD_QUALITY_ALPHABETIC:
+            case DevicePolicyManager.PASSWORD_QUALITY_ALPHANUMERIC:
+            case DevicePolicyManager.PASSWORD_QUALITY_COMPLEX:
+                mode = mLockPatternUtils.isLockPasswordEnabled() ?
+                        SecurityMode.Password : SecurityMode.None;
+                break;
 
-                case DevicePolicyManager.PASSWORD_QUALITY_SOMETHING:
-                case DevicePolicyManager.PASSWORD_QUALITY_UNSPECIFIED:
-                    if (mLockPatternUtils.isLockPatternEnabled()) {
-                        mode = mLockPatternUtils.isPermanentlyLocked() ?
+            case DevicePolicyManager.PASSWORD_QUALITY_SOMETHING:
+            case DevicePolicyManager.PASSWORD_QUALITY_UNSPECIFIED:
+                if (mLockPatternUtils.isLockPatternEnabled()) {
+                    mode = mLockPatternUtils.isPermanentlyLocked() ?
                             SecurityMode.Account : SecurityMode.Pattern;
-                    }
-                    break;
+                }
+                break;
 
-                default:
-                    throw new IllegalStateException("Unknown unlock mode:" + mode);
-            }
+            default:
+                throw new IllegalStateException("Unknown unlock mode:" + mode);
         }
+        /* } */
+        /* @} */
         return mode;
     }
 
