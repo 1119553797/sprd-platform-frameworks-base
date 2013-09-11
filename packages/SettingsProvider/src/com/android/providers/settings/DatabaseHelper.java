@@ -1275,6 +1275,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             loadIntegerSetting(stmt, Settings.Secure.ANR_AUTO_RESTART_APP,
                     R.integer.def_anr_auto_restart_app);
 
+            loadSetting(stmt, Settings.Secure.JIT_ENABLED,
+                SystemProperties.get("persist.sys.execution-mode").equals("int:jit") ? 1 : 0);
+
+            loadSetting(stmt, Settings.Secure.SWAP_SDCARD,
+                SystemProperties.get("persist.sys.swapsd_enable").equals("true") ? 1 : 0);
+
             loadSecure35Settings(stmt);
     
             loadBooleanSetting(stmt, Settings.Secure.MOUNT_PLAY_NOTIFICATION_SND,

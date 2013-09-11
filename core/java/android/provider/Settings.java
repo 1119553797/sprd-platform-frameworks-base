@@ -2505,6 +2505,10 @@ public final class Settings {
 
         public static final String ANR_AUTO_RESTART_APP = "anr_auto_restart_app";
 
+        public static final String JIT_ENABLED = "jit_enabled";
+
+        public static final String SWAP_SDCARD = "swap_sdcard";
+        
         /**
          * A 64-bit number (as a hex string) that is randomly
          * generated on the device's first boot and should remain
