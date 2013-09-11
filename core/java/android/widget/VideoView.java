@@ -17,6 +17,7 @@
 package android.widget;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -107,6 +108,7 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
     private int mWinHeight;
     private boolean isPlaying = false;
     private boolean mIsVideoTrackUnsupport = false;
+    private Dialog alertDialog;
     /** @} */
 
     public VideoView(Context context) {
@@ -536,6 +538,12 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
         new MediaPlayer.OnErrorListener() {
         public boolean onError(MediaPlayer mp, int framework_err, int impl_err) {
             Log.d(TAG, "Error: " + framework_err + "," + impl_err);
+            /** SPRD : add for error dialog @{ */
+            if(alertDialog != null && alertDialog.isShowing()){
+                Log.d(TAG, "oNError alertDialog");
+                alertDialog.dismiss();
+            }
+            /** @} */
             mCurrentState = STATE_ERROR;
             mTargetState = STATE_ERROR;
             if (mMediaController != null) {
@@ -564,7 +572,8 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
                     messageId = com.android.internal.R.string.VideoView_error_text_unknown;
                 }
 
-                new AlertDialog.Builder(mContext)
+                /** SPRD : add for error dialog @{ */
+                /*new AlertDialog.Builder(mContext)
                         .setMessage(messageId)
                         .setPositiveButton(com.android.internal.R.string.VideoView_error_button,
                                 new DialogInterface.OnClickListener() {
@@ -572,13 +581,32 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
                                         /* If we get here, there is no onError listener, so
                                          * at least inform them that the video is over.
                                          */
-                                        if (mOnCompletionListener != null) {
+                                        /*if (mOnCompletionListener != null) {
                                             mOnCompletionListener.onCompletion(mMediaPlayer);
                                         }
                                     }
                                 })
                         .setCancelable(false)
-                        .show();
+                        .show();*/
+                alertDialog = new AlertDialog.Builder(mContext)
+                .setMessage(messageId)
+                .setPositiveButton(com.android.internal.R.string.VideoView_error_button,
+                        new DialogInterface.OnClickListener(){
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        /* If we get here, there is no onError listener, so
+                         * at least inform them that the video is over.
+                         */
+                        if (mOnCompletionListener != null) {
+                            mOnCompletionListener.onCompletion(mMediaPlayer);
+                        }
+                    }
+                }).setCancelable(false)
+                .create();
+                if(alertDialog.isShowing()){
+                    alertDialog.dismiss();
+                }
+                alertDialog.show();
+                /** @} */
             }
             return true;
         }
