@@ -1193,7 +1193,9 @@ public class ConnectivityService extends IConnectivityManager.Stub {
             if(networkType == ConnectivityManager.TYPE_MOBILE) {
                 Slog.d(TAG, "if type is MMS,continue setup data call");
                 if (!getMobileDataEnabledByPhoneId(getPhoneIdByFeature(feature)) &&
-                        !(feature.indexOf(PhoneConstants.FEATURE_ENABLE_MMS) != -1)) {
+                        !(feature.indexOf(PhoneConstants.FEATURE_ENABLE_MMS) != -1) &&
+                        !(feature.indexOf(PhoneConstants.FEATURE_ENABLE_WAP) != -1) &&
+                        !(feature.indexOf(PhoneConstants.FEATURE_ENABLE_DM) != -1)) {
                     if (DBG) Slog.d(TAG, "requested special network with data disabled - rejected");
                     return PhoneConstants.APN_TYPE_NOT_AVAILABLE;
                 }
@@ -3461,7 +3463,10 @@ public class ConnectivityService extends IConnectivityManager.Stub {
 //                usedNetworkType = ConnectivityManager.TYPE_MOBILE_IMS;
 //            } else if (TextUtils.equals(feature, Phone.FEATURE_ENABLE_CBS)) {
 //                usedNetworkType = ConnectivityManager.TYPE_MOBILE_CBS;
-            if (TextUtils.indexOf(feature, PhoneConstants.FEATURE_ENABLE_MMS) != -1) {
+            if (TextUtils.indexOf(feature, PhoneConstants.FEATURE_ENABLE_DM) != -1) {
+                int phoneId = getPhoneIdByFeature(feature, PhoneConstants.FEATURE_ENABLE_DM);
+                usedNetworkType = ConnectivityManager.getNetworkTypeByPhoneId(phoneId, ConnectivityManager.TYPE_MOBILE_DM);
+            } else if (TextUtils.indexOf(feature, PhoneConstants.FEATURE_ENABLE_MMS) != -1) {
                 int phoneId = getPhoneIdByFeature(feature, PhoneConstants.FEATURE_ENABLE_MMS);
                 usedNetworkType = ConnectivityManager.getNetworkTypeByPhoneId(phoneId, ConnectivityManager.TYPE_MOBILE_MMS);
             } else if (TextUtils.indexOf(feature, PhoneConstants.FEATURE_ENABLE_SUPL) != -1) {
@@ -3485,6 +3490,12 @@ public class ConnectivityService extends IConnectivityManager.Stub {
             } else if (TextUtils.indexOf(feature, PhoneConstants.FEATURE_ENABLE_CBS) != -1) {
                 int phoneId = getPhoneIdByFeature(feature, PhoneConstants.FEATURE_ENABLE_CBS);
                 usedNetworkType = ConnectivityManager.getNetworkTypeByPhoneId(phoneId, ConnectivityManager.TYPE_MOBILE_CBS);
+            }  else if (TextUtils.indexOf(feature, PhoneConstants.FEATURE_ENABLE_WAP) != -1) {
+                int phoneId = getPhoneIdByFeature(feature, PhoneConstants.FEATURE_ENABLE_WAP);
+                usedNetworkType = ConnectivityManager.getNetworkTypeByPhoneId(phoneId, ConnectivityManager.TYPE_MOBILE_WAP);
+            } else if (TextUtils.indexOf(feature, PhoneConstants.FEATURE_ENABLE_STK) != -1) {
+                int phoneId = getPhoneIdByFeature(feature, PhoneConstants.FEATURE_ENABLE_STK);
+                usedNetworkType = ConnectivityManager.getNetworkTypeByPhoneId(phoneId, ConnectivityManager.TYPE_MOBILE_STK);
             } else {
                 Slog.e(TAG, "Can't match any mobile netTracker!");
             }
@@ -4363,6 +4374,16 @@ public class ConnectivityService extends IConnectivityManager.Stub {
     }
     /** @} */
 
+    /** SPRD : for DM @{ */
+    private boolean isDmFeature(String feature) {
+        if (feature != null) {
+            return feature.startsWith(PhoneConstants.FEATURE_ENABLE_DM);
+        } else {
+            return false;
+        }
+    }
+    /** @} */
+
     /** SPRD : for multi-sim @{ */
     private int getPhoneIdByFeature(String feature, String defaultFeature) {
         int phoneId;
@@ -4385,7 +4406,9 @@ public class ConnectivityService extends IConnectivityManager.Stub {
     /** SPRD : for multi-sim @{ */
     private int getPhoneIdByFeature(String feature) {
         int phoneId = -1;
-        if (TextUtils.indexOf(feature, PhoneConstants.FEATURE_ENABLE_MMS) != -1) {
+        if (TextUtils.indexOf(feature, PhoneConstants.FEATURE_ENABLE_DM) != -1) {
+            phoneId = getPhoneIdByFeature(feature, PhoneConstants.FEATURE_ENABLE_DM);
+        }else if (TextUtils.indexOf(feature, PhoneConstants.FEATURE_ENABLE_MMS) != -1) {
             phoneId = getPhoneIdByFeature(feature, PhoneConstants.FEATURE_ENABLE_MMS);
         } else if (TextUtils.indexOf(feature, PhoneConstants.FEATURE_ENABLE_SUPL) != -1) {
             phoneId = getPhoneIdByFeature(feature, PhoneConstants.FEATURE_ENABLE_SUPL);
@@ -4401,6 +4424,10 @@ public class ConnectivityService extends IConnectivityManager.Stub {
             phoneId = getPhoneIdByFeature(feature, PhoneConstants.FEATURE_ENABLE_IMS);
         } else if (TextUtils.indexOf(feature, PhoneConstants.FEATURE_ENABLE_CBS) != -1) {
             phoneId = getPhoneIdByFeature(feature, PhoneConstants.FEATURE_ENABLE_CBS);
+        } else if (TextUtils.indexOf(feature, PhoneConstants.FEATURE_ENABLE_WAP) != -1) {
+            phoneId = getPhoneIdByFeature(feature, PhoneConstants.FEATURE_ENABLE_WAP);
+        } else if (TextUtils.indexOf(feature, PhoneConstants.FEATURE_ENABLE_STK) != -1) {
+            phoneId = getPhoneIdByFeature(feature, PhoneConstants.FEATURE_ENABLE_STK);
         } else {
             Slog.e(TAG, "Can't match any mobile netTracker!");
         }

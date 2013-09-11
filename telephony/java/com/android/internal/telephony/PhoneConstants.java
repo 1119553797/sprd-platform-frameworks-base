@@ -119,7 +119,12 @@ public class PhoneConstants {
     public static final String APN_TYPE_IMS = "ims";
     /** APN type for CBS */
     public static final String APN_TYPE_CBS = "cbs";
-
+    /** SPRD: APN type for DM */
+    public static final String APN_TYPE_DM = "dm";
+    /** SPRD: APN type for WAP */
+    public static final String APN_TYPE_WAP = "wap";
+    /** SPRD: APN type for STK */
+    public static final String APN_TYPE_STK = "stk";
 
     /* SPRD: @{ */
     /** SPRD: "Features" accessible through the connectivity manager */
