@@ -16,6 +16,7 @@
 
 package android.view;
 
+import android.app.ActivityManager;
 import android.graphics.PixelFormat;
 import android.os.IBinder;
 import android.os.SystemProperties;
@@ -236,22 +237,30 @@ public class WindowManagerImpl implements WindowManager {
     public void removeView(View view) {
         synchronized (this) {
             int index = findViewLocked(view, true);
+            if(index < 0) {
+            	return;
+            }
             View curView = removeViewLocked(index);
             if (curView == view) {
                 return;
             }
-            
-            throw new IllegalStateException("Calling with view " + view
-                    + " but the ViewRoot is attached to " + curView);
+            if(curView == null && ActivityManager.isUserAMonkey()) {
+            	Log.e("WindowManagerImpl", "The ViewAncestor is null in monkey test!");
+            } else {
+            	throw new IllegalStateException("Calling with view " + view
+                        + " but the ViewRoot is attached to " + curView);	
+            }
         }
     }
 
     public void removeViewImmediate(View view) {
         synchronized (this) {
             int index = findViewLocked(view, true);
+            if(index < 0) {
+            	return;
+            }
             ViewRoot root = mRoots[index];
             View curView = root.getView();
-            
             root.mAddNesting = 0;
             root.die(true);
             finishRemoveViewLocked(curView, index);
