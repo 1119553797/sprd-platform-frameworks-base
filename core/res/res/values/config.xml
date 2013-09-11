@@ -588,8 +588,14 @@
          backlight values for LUX levels between these control points.
 
          Must be overridden in platform specific overlays -->
+    <!-- SPRD: config_autoBrightnessLevels add values @{ -->
     <integer-array name="config_autoBrightnessLevels">
+       <item>20</item>
+       <item>85</item>
+       <item>347</item>
+       <item>1500</item>
     </integer-array>
+    <!-- @} -->
 
     <!-- Minimum screen brightness setting allowed by the power manager.
          The user is forbidden from setting the brightness below this level. -->
@@ -613,8 +619,15 @@
          than the size of the config_autoBrightnessLevels array.
          The brightness values must be between 0 and 255 and be non-decreasing.
          This must be overridden in platform specific overlays -->
+    <!-- SPRD: config_autoBrightnessLcdBacklightValues add values @{ -->
     <integer-array name="config_autoBrightnessLcdBacklightValues">
+       <item>20</item>
+       <item>100</item>
+       <item>150</item>
+       <item>200</item>
+       <item>250</item>
     </integer-array>
+    <!-- @} -->
 
     <!-- Array of output values for button backlight corresponding to the LUX values
          in the config_autoBrightnessLevels array.  This array should have size one greater
