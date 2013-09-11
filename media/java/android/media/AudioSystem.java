@@ -270,6 +270,11 @@ public class AudioSystem
                                               DEVICE_OUT_USB_ACCESSORY |
                                               DEVICE_OUT_USB_DEVICE |
                                               DEVICE_OUT_REMOTE_SUBMIX |
+                                              // modified for FM start
+                                              // add FM devices
+                                              DEVICE_OUT_FM_HEADSET |
+                                              DEVICE_OUT_FM_SPEAKER |
+                                              // modified for FM end
                                               DEVICE_OUT_DEFAULT);
     public static final int DEVICE_OUT_ALL_A2DP = (DEVICE_OUT_BLUETOOTH_A2DP |
                                                    DEVICE_OUT_BLUETOOTH_A2DP_HEADPHONES |
@@ -279,6 +284,10 @@ public class AudioSystem
                                                   DEVICE_OUT_BLUETOOTH_SCO_CARKIT);
     public static final int DEVICE_OUT_ALL_USB = (DEVICE_OUT_USB_ACCESSORY |
                                                   DEVICE_OUT_USB_DEVICE);
+    // modified for FM start
+    public static final int DEVICE_OUT_ALL_FM = (DEVICE_OUT_FM_HEADSET |
+                                                  DEVICE_OUT_FM_SPEAKER);
+    // modified for FM end
 
     // input devices
     public static final int DEVICE_IN_COMMUNICATION = DEVICE_BIT_IN | 0x1;
@@ -333,6 +342,11 @@ public class AudioSystem
     public static final String DEVICE_OUT_USB_ACCESSORY_NAME = "usb_accessory";
     public static final String DEVICE_OUT_USB_DEVICE_NAME = "usb_device";
     public static final String DEVICE_OUT_REMOTE_SUBMIX_NAME = "remote_submix";
+    // modified for FM start
+    // add FM devices' names
+    public static final String DEVICE_OUT_FM_HEADSET_NAME = "fm_headset";
+    public static final String DEVICE_OUT_FM_SPEAKER_NAME = "fm_speaker";
+    // modified for FM end
 
     public static String getDeviceName(int device)
     {
@@ -369,6 +383,12 @@ public class AudioSystem
             return DEVICE_OUT_USB_DEVICE_NAME;
         case DEVICE_OUT_REMOTE_SUBMIX:
             return DEVICE_OUT_REMOTE_SUBMIX_NAME;
+        // modified for FM start
+        case DEVICE_OUT_FM_HEADSET:
+            return DEVICE_OUT_FM_HEADSET_NAME;
+        case DEVICE_OUT_FM_SPEAKER:
+            return DEVICE_OUT_FM_SPEAKER_NAME;
+        // modified for FM end
         case DEVICE_OUT_DEFAULT:
         default:
             return "";
