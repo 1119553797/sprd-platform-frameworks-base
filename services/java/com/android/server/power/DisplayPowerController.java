@@ -441,6 +441,11 @@ final class DisplayPowerController {
         } catch (IllegalArgumentException ex) {
             Slog.e(TAG, "Could not create auto-brightness spline.", ex);
             return null;
+        /* SPRD: Throw ArrayIndexOutOfBoundsException. @{ */
+        } catch(ArrayIndexOutOfBoundsException ex){
+            Slog.e(TAG, "Could not create auto-brightness spline.", ex);
+            return null;
+        /* @} */
         }
     }
 
