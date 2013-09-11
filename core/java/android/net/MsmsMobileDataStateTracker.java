@@ -68,6 +68,19 @@ public class MsmsMobileDataStateTracker extends MobileDataStateTracker {
                 .getServiceName("phone", mPhoneId)));
     }
 
+    public static String networkTypeToApnType(int netType) {
+        switch(netType) {
+            case ConnectivityManager.TYPE_MOBILE_DM:
+                return PhoneConstants.APN_TYPE_DM;
+            case ConnectivityManager.TYPE_MOBILE_WAP:
+                return PhoneConstants.APN_TYPE_WAP;
+            case ConnectivityManager.TYPE_MOBILE_STK:
+                return PhoneConstants.APN_TYPE_STK;
+            default:
+                return MobileDataStateTracker.networkTypeToApnType(netType);
+        }
+    }
+
     @ Override
     protected void log(String s) {
         Slog.d(TAG, mApnType + mPhoneId + ": " + s);
