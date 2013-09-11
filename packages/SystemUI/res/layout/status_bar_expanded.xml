@@ -61,7 +61,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/notification_panel_header_height"
             />
-
+        <include android:id="@+id/status_bar_qucik_switch" layout="@layout/status_bar_quick_switch_layout" />
         <TextView
             android:id="@+id/emergency_calls_only"
             android:textAppearance="@style/TextAppearance.StatusBar.Expanded.Network.EmergencyOnly"
