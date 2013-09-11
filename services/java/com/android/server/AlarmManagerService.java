@@ -162,13 +162,14 @@ class AlarmManagerService extends IAlarmManager.Stub {
             //mBlackList.add("com.chinaunicom.deviceregister");
 
             mBlackList.add("cn.wps.moffice_eng");
-            mBlackList.add("com.infinit.wostore.ui");
+/*         mBlackList.add("com.infinit.wostore.ui");
             mBlackList.add("com.sinovatech.unicom.ui");
             mBlackList.add("com.neusoft.td.android.wo11611");
             mBlackList.add("com.asiainfo.android");
 
             mBlackList.add("com.cucc.homepage");
             mBlackList.add("com.cucc.ireader.IReaderPage");
+*/
         }
     }
     
