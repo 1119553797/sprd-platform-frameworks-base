@@ -31197,6 +31197,7 @@ package android.widget {
     method public void resume();
     method public void seekTo(int);
     method public void setChannelVolume(float, float);
+    method public void setLastInterruptPosition(long);
     method public void setMediaController(android.widget.MediaController);
     method public void setOnCompletionListener(android.media.MediaPlayer.OnCompletionListener);
     method public void setOnErrorListener(android.media.MediaPlayer.OnErrorListener);

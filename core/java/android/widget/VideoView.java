@@ -974,9 +974,6 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
         return isPlaying;
     }
 
-    /**
-     * @hide
-     */
     public void setLastInterruptPosition(long position){
         mInterruptPosition = position*1000L;
     }
