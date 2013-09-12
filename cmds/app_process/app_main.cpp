@@ -27,6 +27,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
+// SPRD: Add include.
+#include <errno.h>
 
 /** SPRD: clear dalvik cache when last shutdown abnormal @{ */
 #include <sys/types.h>
@@ -190,8 +192,13 @@ void doDelCache()
         strcat(file_path, "/");
         strcat(file_path, file->d_name);
 
-        remove(file_path);
+        /** SPRD: Add debugging information and closedir. @{ */
+        if(remove(file_path) < 0){
+          ALOGV("doDelCache  remove  %s, error :%d\n", file_path, errno);
+        }
     }
+    closedir(d);
+    /** @} */
 }
 
 void doLastShutDownCheck()
