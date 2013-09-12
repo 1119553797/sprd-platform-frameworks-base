@@ -99,7 +99,11 @@ public final class DefaultDatabaseErrorHandler implements DatabaseErrorHandler {
         }
         Log.e(TAG, "deleting the database file: " + fileName);
         try {
-            new File(fileName).delete();
+            /* SPRD: When deleting a db file, all db related files has to be deleted together like journal, wal, shm etc. @{ */
+            // @orig
+            // new File(fileName).delete();
+            SQLiteDatabase.deleteDatabase(new File(fileName));
+            /* @} */
         } catch (Exception e) {
             /* print warning and ignore exception */
             Log.w(TAG, "delete failed: " + e.getMessage());
