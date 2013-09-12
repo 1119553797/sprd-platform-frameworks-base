@@ -148,6 +148,11 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
         mContext.getContentResolver().registerContentObserver(
                 Settings.Global.getUriFor(Settings.Global.AIRPLANE_MODE_ON), true,
                 mAirplaneModeObserver);
+        /* SPRD: for airplanemode optimization  @{ */
+        mContext.getContentResolver().registerContentObserver(
+                Settings.Secure.getUriFor(Settings.Secure.RADIO_OPERATION), true,
+                mRadioBusyObserver);
+        /* @} */
         Vibrator vibrator = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
         mHasVibrator = vibrator != null && vibrator.hasVibrator();
 
@@ -254,6 +259,7 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
             }
         };
         onAirplaneModeChanged();
+        onRadioBusyStateChanged();
 
         mItems = new ArrayList<Action>();
 
@@ -625,6 +631,7 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
     private static abstract class ToggleAction implements Action {
 
         enum State {
+            busy(true),
             Off(false),
             TurningOn(true),
             TurningOff(true),
@@ -968,8 +975,8 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
     };
     /** SPRD: add for airplne of dual sim @{ */
     private boolean isAirplaneModeOn() {
-        return Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.AIRPLANE_MODE_ON, 0) != 0;
+        return Settings.Global.getInt(mContext.getContentResolver(),
+                Settings.Global.AIRPLANE_MODE_ON, 0) != 0;
     }
     /** @} */
     private ContentObserver mAirplaneModeObserver = new ContentObserver(new Handler()) {
@@ -978,7 +985,14 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
             onAirplaneModeChanged();
         }
     };
-
+    /** SPRD: for airplanemode optimization  @{ */
+    private ContentObserver mRadioBusyObserver = new ContentObserver(new Handler()) {
+        @Override
+        public void onChange(boolean selfChange) {
+            onRadioBusyStateChanged();
+        }
+    };
+    /** @} */
     private static final int MESSAGE_DISMISS = 0;
     private static final int MESSAGE_REFRESH = 1;
     private static final int MESSAGE_SHOW = 2;
@@ -1022,12 +1036,35 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
         mAirplaneState = airplaneModeOn ? ToggleAction.State.On : ToggleAction.State.Off;
         mAirplaneModeOn.updateState(mAirplaneState);
     }
+
+    /** SPRD: for airplanemode optimization @{ */
+    private void onRadioBusyStateChanged() {
+        // Let the service state callbacks handle the state.
+        if (!mHasTelephony)
+            return;
+        boolean airplaneModeOn = Settings.Global.getInt(
+                mContext.getContentResolver(),
+                Settings.Global.AIRPLANE_MODE_ON,
+                0) == 1;
+        boolean isRadioBusy = TelephonyManager.isRadioBusy(mContext);
+        if (isRadioBusy) {
+            mAirplaneState = ToggleAction.State.busy;
+        } else {
+            mAirplaneState = airplaneModeOn ? ToggleAction.State.On : ToggleAction.State.Off;
+        }
+        mAirplaneModeOn.updateState(mAirplaneState);
+        if (mAdapter != null) {
+            mAdapter.notifyDataSetChanged();
+        }
+    }
+    /** @} */
+
     /** SPRD: add for airplane of dual sim */
     private void onAirplaneModeChangedTimedout() {
         TelephonyManager.setRadioBusy(mContext, false);
-        boolean airplaneModeOn = Settings.System.getInt(
+        boolean airplaneModeOn = Settings.Global.getInt(
                 mContext.getContentResolver(),
-                Settings.System.AIRPLANE_MODE_ON,
+                Settings.Global.AIRPLANE_MODE_ON,
                 0) == 1;
         Log.d(TAG, "onAirplaneModeChangedTimedout:airplaneModeOn = " + airplaneModeOn);
         mAirplaneState = airplaneModeOn ? ToggleAction.State.On : ToggleAction.State.Off;
@@ -1039,6 +1076,8 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
      * Change the airplane mode system setting
      */
     private void changeAirplaneModeSystemSetting(boolean on) {
+        TelephonyManager.setRadioBusy(mContext, true);// SPRD: for airplanemode
+                                                      // optimization
         Settings.Global.putInt(
                 mContext.getContentResolver(),
                 Settings.Global.AIRPLANE_MODE_ON,
