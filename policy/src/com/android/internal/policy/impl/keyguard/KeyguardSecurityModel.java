@@ -50,9 +50,23 @@ public class KeyguardSecurityModel {
     private final String TAG = "KeyguardSecurityModel";
     /* @} */
 
+    /* SPRD: Modify 20130912 Spreadst of 215617 support 3sim to init var for Pin and Puk @{ */
+    boolean[] mIsPinUnlockCancelled;
+    boolean[] mIsPukUnlockCancelled;
+    /* @} */
+
     KeyguardSecurityModel(Context context) {
         mContext = context;
         mLockPatternUtils = new LockPatternUtils(context);
+        /* SPRD: Modify 20130912 Spreadst of 215617 support 3sim to init var for Pin and Puk @{ */
+        final int phoneCount = TelephonyManager.getPhoneCount();
+        mIsPinUnlockCancelled = new boolean[phoneCount];
+        mIsPukUnlockCancelled = new boolean[phoneCount];
+        for (int i = 0; i < phoneCount; i++) {
+            mIsPinUnlockCancelled[i] = false;
+            mIsPukUnlockCancelled[i] = false;
+        }
+        /* @} */
     }
 
     void setLockPatternUtils(LockPatternUtils utils) {
@@ -91,10 +105,10 @@ public class KeyguardSecurityModel {
         for (int i = 0; i < phoneCount; i++) {
             simState[i] = updateMonitor.getSimState(i);
             Log.d(TAG, "simState = " + simState[i] + ", i = " + i);
-            if (simState[i] == IccCardConstants.State.PIN_REQUIRED) {
+            if (simState[i] == IccCardConstants.State.PIN_REQUIRED && !mIsPinUnlockCancelled[i]) {
                 mode = i == 0 ? SecurityMode.SimPin : SecurityMode.Sim2Pin;
                 return mode;
-            } else if (simState[i] == IccCardConstants.State.PUK_REQUIRED) {
+            } else if (simState[i] == IccCardConstants.State.PUK_REQUIRED && !mIsPukUnlockCancelled[i]) {
                 mode = i == 0 ? SecurityMode.SimPuk : SecurityMode.Sim2Puk;
                 return mode;
             }

@@ -65,4 +65,12 @@ public interface KeyguardSecurityCallback {
      */
     void setOnDismissAction(OnDismissAction action);
 
+    /* SPRD: Modify 20130912 Spreadst of 215617 support 3sim to init var for Pin and Puk @{ */
+    /**
+     * Update the subscription for which the dialog was dismissed.
+     */
+    void updatePinUnlockCancel(int subscription);
+    void updatePukUnlockCancel(int subscription);
+    /* @} */
+
 }

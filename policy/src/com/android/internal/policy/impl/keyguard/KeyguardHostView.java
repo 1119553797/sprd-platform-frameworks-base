@@ -44,6 +44,7 @@ import android.os.SystemProperties;
 import android.os.UserHandle;
 import android.os.UserManager;
 import android.provider.Settings;
+import android.telephony.TelephonyManager;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.Slog;
@@ -608,6 +609,21 @@ public class KeyguardHostView extends KeyguardViewBase {
         public void setOnDismissAction(OnDismissAction action) {
             KeyguardHostView.this.setOnDismissAction(action);
         }
+        /* SPRD: Modify 20130912 Spreadst of 215617 support 3sim to init var for Pin and Puk @{ */
+        @Override
+        public void updatePinUnlockCancel(int subscription) {
+            Log.d(TAG, "updatePinUnlockCancel sub :" + subscription);
+            mSecurityModel.mIsPinUnlockCancelled[subscription] = true;
+
+        }
+
+        @Override
+        public void updatePukUnlockCancel(int subscription) {
+            Log.d(TAG, "updatePukUnlockCancel sub :" + subscription);
+            mSecurityModel.mIsPukUnlockCancelled[subscription] = true;
+
+        }
+        /* @} */
 
     };
 
@@ -979,6 +995,16 @@ public class KeyguardHostView extends KeyguardViewBase {
         @Override
         public void dismiss(boolean securityVerified) {
         }
+
+        /* SPRD: Modify 20130912 Spreadst of 215617 support 3sim to init var for Pin and Puk @{ */
+        @Override
+        public void updatePinUnlockCancel(int subscription) {
+        }
+
+        @Override
+        public void updatePukUnlockCancel(int subscription) {
+        }
+        /* @} */
     };
 
     protected boolean mShowSecurityWhenReturn;
