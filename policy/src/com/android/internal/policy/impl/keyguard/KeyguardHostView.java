@@ -1242,7 +1242,9 @@ public class KeyguardHostView extends KeyguardViewBase {
             case Biometric: return R.layout.keyguard_face_unlock_view;
             case Account: return R.layout.keyguard_account_view;
             case SimPin: return R.layout.keyguard_sim_pin_view;
+            case Sim2Pin: return R.layout.keyguard_sim_pin_view;
             case SimPuk: return R.layout.keyguard_sim_puk_view;
+            case Sim2Puk: return R.layout.keyguard_sim_puk_view;
             default:
                 return 0;
         }
