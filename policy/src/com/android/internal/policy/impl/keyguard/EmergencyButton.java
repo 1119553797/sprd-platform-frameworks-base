@@ -18,14 +18,19 @@ package com.android.internal.policy.impl.keyguard;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Debug;
 import android.os.PowerManager;
 import android.os.SystemClock;
 import android.os.UserHandle;
+import android.telephony.PhoneStateListener;
+import android.telephony.ServiceState;
 import android.telephony.TelephonyManager;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.android.internal.R;
 import com.android.internal.telephony.IccCardConstants.State;
 import com.android.internal.widget.LockPatternUtils;
 
@@ -40,16 +45,30 @@ public class EmergencyButton extends Button {
     private static final int EMERGENCY_CALL_TIMEOUT = 10000; // screen timeout after starting e.d.
     private static final String ACTION_EMERGENCY_DIAL = "com.android.phone.EmergencyDialer.DIAL";
 
+    /* SPRD: Modify 20130912 Spreadst of Bug 215343 lockscreen show emergency call when no card no service @{ */
+    private static final String TAG = "EmergencyButtons";
+    private static final boolean DEBUG = Debug.isDebug();
+    private int numPhones;
+    private TelephonyManager[] mTelephonyManager;
+    private PhoneStateListener[] mPhoneStateListener;
+    protected int mPhoneState;
+    ServiceState[] mServiceState;
+    /* @} */
+
     KeyguardUpdateMonitorCallback mInfoCallback = new KeyguardUpdateMonitorCallback() {
 
         @Override
         // SPRD: Modify 20130904 Spreadst of 210537 keyguard support multi-card
         public void onSimStateChanged(State simState,int subscription) {
+            if (DEBUG) Log.d(TAG, "onSimStateChanged , simState = " + simState + " , subscription = " + subscription);
             int phoneState = KeyguardUpdateMonitor.getInstance(mContext).getPhoneState();
             updateEmergencyCallButton(simState, phoneState);
         }
 
         void onPhoneStateChanged(int phoneState) {
+            if (DEBUG) Log.d(TAG, "onPhoneStateChanged , phoneState = " + phoneState);
+            // SPRD: Modify 20130912 Spreadst of Bug 215343 lockscreen show emergency call when no card no service
+            mPhoneState = phoneState;
             State simState = KeyguardUpdateMonitor.getInstance(mContext).getSimState();
             updateEmergencyCallButton(simState, phoneState);
         };
@@ -75,6 +94,13 @@ public class EmergencyButton extends Button {
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         KeyguardUpdateMonitor.getInstance(mContext).removeCallback(mInfoCallback);
+        /* SPRD: Modify 20130912 Spreadst of Bug 215343 lockscreen show emergency call when no card no service @{ */
+        for (int i = 0; i < numPhones; i++) {
+            ((TelephonyManager) getContext().getSystemService(TelephonyManager.getServiceName(Context.TELEPHONY_SERVICE,i))).listen(
+                    mPhoneStateListener[i],
+                    PhoneStateListener.LISTEN_NONE);
+        }
+        /* @} */
     }
 
     @Override
@@ -82,6 +108,26 @@ public class EmergencyButton extends Button {
         super.onFinishInflate();
         mLockPatternUtils = new LockPatternUtils(mContext);
         mPowerManager = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
+        /* SPRD: Modify 20130912 Spreadst of Bug 215343 lockscreen show emergency call when no card no service @{ */
+        numPhones = TelephonyManager.getPhoneCount();
+        mServiceState = new ServiceState[numPhones];
+        mTelephonyManager = new TelephonyManager[numPhones];
+        mPhoneStateListener = new PhoneStateListener[numPhones];
+        for (int i = 0; i < numPhones; i++) {
+            mTelephonyManager[i] = (TelephonyManager) getContext().getSystemService(TelephonyManager.getServiceName(
+                            Context.TELEPHONY_SERVICE, i));
+            mPhoneStateListener[i] = getPhoneStateListener(i);
+            mTelephonyManager[i].listen(mPhoneStateListener[i], PhoneStateListener.LISTEN_SERVICE_STATE);
+        }
+        if (!canEmergencyCall()) {
+            setClickable(false);
+            setText(R.string.emergency_call_no_service);
+
+        } else {
+            setClickable(true);
+            setText(R.string.lockscreen_emergency_call);
+        }
+        /* @} */
         setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 takeEmergencyCallAction();
@@ -131,6 +177,64 @@ public class EmergencyButton extends Button {
         mLockPatternUtils.updateEmergencyCallButtonState(this, phoneState, true,
                 KeyguardViewManager.USE_UPPER_CASE, false);
         /* @} */
+        /* SPRD: Modify 20130912 Spreadst of Bug 215343 lockscreen show emergency call when no card no service @{ */
+        if (!canEmergencyCall()) {
+            setClickable(false);
+            setText(R.string.emergency_call_no_service);
+        } else {
+            setClickable(true);
+        }
+        /* @} */
     }
 
+    /* SPRD: Modify 20130912 Spreadst of Bug 215343 lockscreen show emergency call when no card no service @{ */
+    private PhoneStateListener getPhoneStateListener(final int phoneId) {
+        PhoneStateListener phoneStateListener = new PhoneStateListener() {
+            @Override
+            public void onServiceStateChanged(ServiceState state) {
+                if (DEBUG)
+                    Log.v(TAG, "onServiceStateChanged(), serviceState = " + state);
+                if (state != null) {
+                    mServiceState[phoneId] = state;
+                }
+                State simState = KeyguardUpdateMonitor.getInstance(mContext).getSimState();
+                updateEmergencyCallButton(simState, mPhoneState);
+            }
+        };
+        return phoneStateListener;
+    }
+
+    private boolean hasService(int subscription) {
+        if (mServiceState[subscription] != null) {
+            switch (mServiceState[subscription].getState()) {
+                case ServiceState.STATE_OUT_OF_SERVICE:
+                    return false;
+                default:
+                    return true;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    boolean canEmergencyCall(){
+        boolean isEmergencyOnly = false;
+        boolean hasService = false;
+        for (int i = 0; i < this.numPhones; i++) {
+            if (mServiceState[i] != null) {
+                isEmergencyOnly = isEmergencyOnly ? true : mServiceState[i].isEmergencyOnly();
+                hasService = hasService(i);
+                Log.d(TAG, "canEmergencyCall i = "+ i +"| isEmergencyOnly = " + isEmergencyOnly + "|hasService = " + hasService);
+                if(hasService){
+                    return true;
+                } else {
+                    if(isEmergencyOnly){
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+    /* @} */
 }
