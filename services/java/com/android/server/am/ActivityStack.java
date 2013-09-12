@@ -511,6 +511,7 @@ public class ActivityStack {
             if (r.isHomeActivity) {
                 mService.mHomeProcess = app;
             }
+	     app.pendingUiClean = true;
             mService.ensurePackageDexOpt(r.intent.getComponent().getPackageName());
             app.thread.scheduleLaunchActivity(new Intent(r.intent), r,
                     System.identityHashCode(r),
@@ -961,8 +962,9 @@ public class ActivityStack {
                     // to now show its window.
                     if (DEBUG_VISBILITY) Slog.v(
                             TAG, "Making visible and scheduling visibility: " + r);
-                    try {
+                    try {			
                         mService.mWindowManager.setAppVisibility(r, true);
+			r.app.pendingUiClean = true;
                         r.app.thread.scheduleWindowVisibility(r, true);
                         r.stopFreezingScreenLocked(false);
                     } catch (Exception e) {
@@ -1286,7 +1288,7 @@ public class ActivityStack {
                 EventLog.writeEvent(EventLogTags.AM_RESUME_ACTIVITY,
                         System.identityHashCode(next),
                         next.task.taskId, next.shortComponentName);
-                
+                next.app.pendingUiClean = true;
                 next.app.thread.scheduleResumeActivity(next,
                         mService.isNextTransitionForward());
                 

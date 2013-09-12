@@ -19,6 +19,7 @@ package android.app;
 import com.android.internal.policy.PolicyManager;
 
 import android.content.ComponentCallbacks;
+import android.content.ComponentCallbacks2;
 import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -594,7 +595,7 @@ import java.util.HashMap;
 public class Activity extends ContextThemeWrapper
         implements LayoutInflater.Factory,
         Window.Callback, KeyEvent.Callback,
-        OnCreateContextMenuListener, ComponentCallbacks {
+        OnCreateContextMenuListener, ComponentCallbacks2 {
     private static final String TAG = "Activity";
 
     /** Standard activity result: operation canceled. */
@@ -1492,7 +1493,10 @@ public class Activity extends ContextThemeWrapper
     public void onLowMemory() {
         mCalled = true;
     }
-    
+
+    public void onTrimMemory(int level) {
+        mCalled = true;        
+    }	
     /**
      * Wrapper around
      * {@link ContentResolver#query(android.net.Uri , String[], String, String[], String)}

@@ -19,6 +19,7 @@ package android.app;
 import android.app.backup.BackupAgent;
 import android.content.BroadcastReceiver;
 import android.content.ComponentCallbacks;
+import android.content.ComponentCallbacks2;
 import android.content.ComponentName;
 import android.content.ContentProvider;
 import android.content.Context;
@@ -569,6 +570,9 @@ public final class ActivityThread {
         public final void scheduleSuicide() {
             queueOrSendMessage(H.SUICIDE, null);
         }
+        public void scheduleTrimMemory(int level) {
+            queueOrSendMessage(H.TRIM_MEMORY, null, level);
+        }
 
         public void requestThumbnail(IBinder token) {
             queueOrSendMessage(H.REQUEST_THUMBNAIL, token);
@@ -887,6 +891,7 @@ public final class ActivityThread {
         public static final int ENABLE_JIT              = 132;
         public static final int DISPATCH_PACKAGE_BROADCAST = 133;
         public static final int SCHEDULE_CRASH          = 134;
+	public static final int TRIM_MEMORY             = 140;
         String codeToString(int code) {
             if (DEBUG_MESSAGES) {
                 switch (code) {
@@ -925,6 +930,7 @@ public final class ActivityThread {
                     case ENABLE_JIT: return "ENABLE_JIT";
                     case DISPATCH_PACKAGE_BROADCAST: return "DISPATCH_PACKAGE_BROADCAST";
                     case SCHEDULE_CRASH: return "SCHEDULE_CRASH";
+		    case TRIM_MEMORY: return "TRIM_MEMORY";
                 }
             }
             return "(unknown)";
@@ -1051,6 +1057,9 @@ public final class ActivityThread {
                     break;
                 case SCHEDULE_CRASH:
                     throw new RemoteServiceException((String)msg.obj);
+                case TRIM_MEMORY:
+                    handleTrimMemory(msg.arg1);
+                    break;					
             }
             if (DEBUG_MESSAGES) Slog.v(TAG, "<<< done: " + msg.what);
         }
@@ -3146,6 +3155,25 @@ public final class ActivityThread {
         Canvas.freeCaches();
 
         BinderInternal.forceGc("mem");
+    }
+	
+    final void handleTrimMemory(int level) {
+        //WindowManagerImpl.getDefault().trimMemory(level);
+        ArrayList<ComponentCallbacks> callbacks;
+        synchronized (mPackages) {
+            callbacks = collectComponentCallbacksLocked(true, null);
+        }
+	
+	if( callbacks.size() > 0){
+	        Object[] 	objects = callbacks.toArray();
+	        final int N = objects.length;
+	        for (int i=0; i<N; i++) {
+			Object c = objects[i];
+			if (c instanceof ComponentCallbacks2) {
+				((ComponentCallbacks2)c).onTrimMemory(level);
+			}			
+	        }
+	}
     }
 
     private final void handleBindApplication(AppBindData data) {
