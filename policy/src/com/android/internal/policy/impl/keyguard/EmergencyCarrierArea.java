@@ -55,8 +55,12 @@ public class EmergencyCarrierArea extends LinearLayout {
             public boolean onTouch(View v, MotionEvent event) {
                 switch(event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
-                        mCarrierText.animate().alpha(0);
-                        mCarriersTextLayout.animate().alpha(0);
+                        /* SPRD: Modify 20130912 Spreadst of Bug 215343 lockscreen show emergency call when no card no service @{ */
+                        if (mEmergencyButton.canEmergencyCall()){
+                            mCarrierText.animate().alpha(0);
+                            mCarriersTextLayout.animate().alpha(0);
+                        }
+                        /* @} */
                         break;
                     case MotionEvent.ACTION_UP:
                         mCarrierText.animate().alpha(1);

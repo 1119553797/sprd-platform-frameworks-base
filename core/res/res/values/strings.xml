@@ -4180,4 +4180,7 @@
     <string name="description_target_call">Call</string>
     <string name="description_target_sms">Sms</string>
     <!-- @} -->
+    <!-- SPRD: Modify 20130912 Spreadst of Bug 215343 lockscreen show emergency call when no card no service @{ -->
+    <string name="emergency_call_no_service">No available network</string>
+    <!-- @} -->
 </resources>
