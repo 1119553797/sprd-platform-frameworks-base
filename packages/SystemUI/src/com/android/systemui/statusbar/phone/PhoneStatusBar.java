@@ -225,7 +225,7 @@ public class PhoneStatusBar extends BaseStatusBar {
     private TextView mCarrierLabel1;
     private boolean mCarrierLabelVisible = false;
     private int mCarrierLabelHeight;
-    private TextView mEmergencyCallLabel;
+//    private TextView mEmergencyCallLabel;
     private int mNotificationHeaderHeight;
 
     private boolean mShowCarrierInPanel = false;
@@ -645,21 +645,23 @@ public class PhoneStatusBar extends BaseStatusBar {
         signalCluster.setNetworkController(mNetworkController);
 
         final boolean isAPhone = mNetworkController.hasVoiceCallingFeature(-1);
-        if (isAPhone) {
-            mEmergencyCallLabel =
-                    (TextView) mStatusBarWindow.findViewById(R.id.emergency_calls_only);
-            if (mEmergencyCallLabel != null) {
-                mNetworkController.addEmergencyLabelView(mEmergencyCallLabel);
-                mEmergencyCallLabel.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View v) { }});
-                mEmergencyCallLabel.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
-                    @Override
-                    public void onLayoutChange(View v, int left, int top, int right, int bottom,
-                            int oldLeft, int oldTop, int oldRight, int oldBottom) {
-                        updateCarrierLabelVisibility(false);
-                    }});
-            }
-        }
+        /** SPRD: for statusbar optimization  @{ */
+//        if (isAPhone) {
+//            mEmergencyCallLabel =
+//                    (TextView) mStatusBarWindow.findViewById(R.id.emergency_calls_only);
+//            if (mEmergencyCallLabel != null) {
+//                mNetworkController.addEmergencyLabelView(mEmergencyCallLabel);
+//                mEmergencyCallLabel.setOnClickListener(new View.OnClickListener() {
+//                    public void onClick(View v) { }});
+//                mEmergencyCallLabel.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+//                    @Override
+//                    public void onLayoutChange(View v, int left, int top, int right, int bottom,
+//                            int oldLeft, int oldTop, int oldRight, int oldBottom) {
+//                        updateCarrierLabelVisibility(false);
+//                    }});
+//            }
+//        }
+        /** @} */
 
         mCarrierLabel = (TextView)mStatusBarWindow.findViewById(R.id.carrier_label);
         /* SPRD: for multi-sim @{ */
@@ -1369,13 +1371,13 @@ public class PhoneStatusBar extends BaseStatusBar {
             Slog.d(TAG, String.format("pileh=%d scrollh=%d carrierh=%d",
                     mPile.getHeight(), mScrollView.getHeight(), mCarrierLabelHeight));
         }
-
-        final boolean emergencyCallsShownElsewhere = mEmergencyCallLabel != null;
+        /** SPRD: for statusbar optimization  @{ */
+//        final boolean emergencyCallsShownElsewhere = mEmergencyCallLabel != null;
         final boolean makeVisible =
-            !(emergencyCallsShownElsewhere && mNetworkController.isEmergencyOnly())
-            && mPile.getHeight() < (mNotificationPanel.getHeight() - mCarrierLabelHeight - mNotificationHeaderHeight)
+            /**!(emergencyCallsShownElsewhere && mNetworkController.isEmergencyOnly())
+            &&*/ mPile.getHeight() < (mNotificationPanel.getHeight() - mCarrierLabelHeight - mNotificationHeaderHeight)
             && mScrollView.getVisibility() == View.VISIBLE;
-        
+        /** @} */
         if (force || mCarrierLabelVisible != makeVisible) {
             mCarrierLabelVisible = makeVisible;
             if (DEBUG) {

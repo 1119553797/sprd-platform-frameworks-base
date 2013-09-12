@@ -62,6 +62,10 @@ public class CarrierLabel extends TextView {
             mAttached = true;
             IntentFilter filter = new IntentFilter();
             filter.addAction(TelephonyIntents.SPN_STRINGS_UPDATED_ACTION);
+            /** SPRD: for statusbar optimization @{ */
+            filter.addAction(TelephonyIntents.SPN_STRINGS_UPDATED_ACTION + 0);
+            filter.addAction(TelephonyIntents.SPN_STRINGS_UPDATED_ACTION + 1);
+            /** @} */
             getContext().registerReceiver(mIntentReceiver, filter, null, getHandler());
         }
     }
@@ -79,7 +83,7 @@ public class CarrierLabel extends TextView {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            if (TelephonyIntents.SPN_STRINGS_UPDATED_ACTION.equals(action)) {
+            if (action.startsWith(TelephonyIntents.SPN_STRINGS_UPDATED_ACTION)) {
                 updateNetworkName(intent.getBooleanExtra(TelephonyIntents.EXTRA_SHOW_SPN, false),
                         intent.getStringExtra(TelephonyIntents.EXTRA_SPN),
                         intent.getBooleanExtra(TelephonyIntents.EXTRA_SHOW_PLMN, false),

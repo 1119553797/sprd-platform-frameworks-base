@@ -342,6 +342,10 @@ public class NetworkController extends BroadcastReceiver {
         filter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
         filter.addAction(TelephonyIntents.ACTION_SIM_STATE_CHANGED);
         filter.addAction(TelephonyIntents.SPN_STRINGS_UPDATED_ACTION);
+        /** SPRD: for statusbar optimization @{ */
+        filter.addAction(TelephonyIntents.SPN_STRINGS_UPDATED_ACTION + 0);
+        filter.addAction(TelephonyIntents.SPN_STRINGS_UPDATED_ACTION + 1);
+        /** @} */
         filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
         filter.addAction(ConnectivityManager.INET_CONDITION_ACTION);
         filter.addAction(Intent.ACTION_CONFIGURATION_CHANGED);
@@ -535,7 +539,7 @@ public class NetworkController extends BroadcastReceiver {
             updateSimState(intent);
             updateDataIcon(phoneId);
             refreshViews(phoneId);
-        } else if (action.equals(TelephonyIntents.SPN_STRINGS_UPDATED_ACTION)) {
+        } else if (action.startsWith(TelephonyIntents.SPN_STRINGS_UPDATED_ACTION)) {
             final int phoneId = intent.getIntExtra(TelephonyIntents.EXTRA_PHONE_ID, 0);
             /** SPRD: add for splmn @{ */
             updateNetworkNewName(intent.getBooleanExtra(TelephonyIntents.EXTRA_SHOW_SPN, false),
