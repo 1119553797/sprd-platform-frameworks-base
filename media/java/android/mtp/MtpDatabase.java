@@ -221,7 +221,14 @@ public class MtpDatabase {
                 if (c != null) c.close();
                 if (db != null) db.close();
             }
-            databaseFile.delete();
+            /* SPRD: When deleting a db file,
+            Context.deleteDatabase() has to be called instead of File.delete()
+            to guarantee all db related files
+            like journal, wal, shm, etc are deleted together. @{ */
+            // @orig
+            // databaseFile.delete();
+            context.deleteDatabase(devicePropertiesName);
+            /* @} */
         }
     }
 
