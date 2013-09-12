@@ -37,6 +37,14 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textSize="@dimen/kg_status_line_font_size"
         android:textColor="?android:attr/textColorSecondary"/>
+    <!-- SPRD: Modify 20130912 Spreadst of Bug 215339 support support multi-card carrier info display @{ -->
+    <com.android.internal.policy.impl.keyguard.CarriersTextLayout
+        android:id="@+id/carriers_layout"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+    <!-- @} -->
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -28,6 +28,8 @@ public class EmergencyCarrierArea extends LinearLayout {
 
     private CarrierText mCarrierText;
     private EmergencyButton mEmergencyButton;
+    // Modify 20130912 Spreadst of Bug 215339 support support multi-card carrier info display
+    private CarriersTextLayout mCarriersTextLayout;
 
     public EmergencyCarrierArea(Context context) {
         super(context);
@@ -41,7 +43,10 @@ public class EmergencyCarrierArea extends LinearLayout {
     protected void onFinishInflate() {
         super.onFinishInflate();
         mCarrierText = (CarrierText) findViewById(R.id.carrier_text);
+        /* Modify 20130912 Spreadst of Bug 215339 support support multi-card carrier info display @{ */
+        mCarrierText.setVisibility(View.GONE);
         mEmergencyButton = (EmergencyButton) findViewById(R.id.emergency_call_button);
+        mCarriersTextLayout = (CarriersTextLayout) findViewById(R.id.carriers_layout);
 
         // The emergency button overlaps the carrier text, only noticeable when highlighted.
         // So temporarily hide the carrier text while the emergency button is pressed.
@@ -51,9 +56,12 @@ public class EmergencyCarrierArea extends LinearLayout {
                 switch(event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         mCarrierText.animate().alpha(0);
+                        mCarriersTextLayout.animate().alpha(0);
                         break;
                     case MotionEvent.ACTION_UP:
                         mCarrierText.animate().alpha(1);
+                        mCarriersTextLayout.animate().alpha(1);
+                        /* @} */
                         break;
                 }
                 return false;

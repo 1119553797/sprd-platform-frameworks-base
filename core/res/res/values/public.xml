@@ -2148,4 +2148,7 @@
   <java-symbol type="string" name="twenty_four_hour_time_format" />
   <java-symbol type="string" name="twelve_hour_time_format" />
   <!-- @} -->
+  <!-- SPRD: Modify 20130912 Spreadst of Bug 215339 support support multi-card carrier info display @{ -->
+  <java-symbol type="id" name="carriers_layout" />
+  <!-- @} -->
 </resources>
