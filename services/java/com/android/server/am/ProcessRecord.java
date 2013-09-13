@@ -69,6 +69,10 @@ class ProcessRecord {
     int nonStoppingAdj;         // Adjustment not counting any stopping activities
     int curAdj;                 // Current OOM adjustment for this process
     int setAdj;                 // Last set OOM adjustment for this process
+    /** SPRD: add for performance optimization of services restarting @{ */
+    static final int APP_ADJ_DEFAULT = 100;
+    int fixAdj = APP_ADJ_DEFAULT;       // for LC_RAM_SUPPORT Set by framework to fix it's oom_adj tempropraly
+    /** @} */
     int curSchedGroup;          // Currently desired scheduling class
     int setSchedGroup;          // Last set to background scheduling class
     int trimMemoryLevel;        // Last selected memory trimming level

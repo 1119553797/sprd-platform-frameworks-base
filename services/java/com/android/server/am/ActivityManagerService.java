@@ -47,6 +47,8 @@ import android.app.AppGlobals;
 import android.app.ApplicationErrorReport;
 import android.app.Dialog;
 import android.app.IActivityController;
+//SPRD: add for performance optimization of services restarting
+import android.app.IAlarmManager;
 import android.app.IApplicationThread;
 import android.app.IInstrumentationWatcher;
 import android.app.INotificationManager;
@@ -159,6 +161,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+//SPRD: add for performance optimization of services restarting
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -168,6 +172,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 // SPRD: add home-key pressed interface
 import com.android.internal.policy.impl.PhoneWindowManager;
+
+// SPRD: add for performance optimization of services restarting
+import com.sprd.android.config.OptConfig;
 
 public final class ActivityManagerService  extends ActivityManagerNative
         implements Watchdog.Monitor, BatteryStatsImpl.BatteryCallback {
@@ -201,6 +208,11 @@ public final class ActivityManagerService  extends ActivityManagerNative
     static final boolean DEBUG_POWER_QUICK = DEBUG_POWER || false;
     static final boolean DEBUG_MU = localLOGV || false;
     static final boolean DEBUG_IMMERSIVE = localLOGV || false;
+    /** SPRD: add for performance optimization of services restarting @{ */
+    static final boolean DEBUG_LC = Debug.isDebug(); //for LOW COST DEBUG
+    static final boolean LOCAL_LC_RAM_SUPPORT = true;
+    static final boolean LC_RAM_SUPPORT = LOCAL_LC_RAM_SUPPORT | OptConfig.LC_RAM_SUPPORT;
+    /** @} */
     static final boolean VALIDATE_TOKENS = false;
     static final boolean SHOW_ACTIVITY_START_TIME = true;
     
@@ -286,6 +298,38 @@ public final class ActivityManagerService  extends ActivityManagerNative
     public ActivityStack mMainStack;
 
     public IntentFirewall mIntentFirewall;
+
+    /** SPRD: add for performance optimization of services restarting @{ */
+    static HashSet<String> whiteList;
+    static HashSet<String> hasAlarmList;
+    static Hashtable<String, Integer> fixAdjList;
+
+    static {
+        if (LC_RAM_SUPPORT) {
+            whiteList = new HashSet<String>();
+            whiteList.add("com.android.phone");
+            whiteList.add("com.android.contacts");
+            whiteList.add("com.android.mms");
+            //whiteList.add("android.process.acore");
+            whiteList.add("com.android.systemui");
+
+            hasAlarmList = new HashSet<String>();
+            hasAlarmList.add("com.baidu.searchbox");
+            hasAlarmList.add("com.baidu.searchbox:pushservice_v1");
+            hasAlarmList.add("com.facebook.katana");
+            hasAlarmList.add("com.sina.weibo");
+            hasAlarmList.add("com.tencent.mm:push");
+
+            fixAdjList = new Hashtable<String, Integer>();
+            fixAdjList.put("com.tencent.mobileqq:MSF", 1);
+            fixAdjList.put("com.tencent.mobileqq", 1);
+            fixAdjList.put("com.tencent.mm:push", 1);
+            fixAdjList.put("com.tencent.mm", 1);
+            fixAdjList.put("cmccwm.mobilemusic", 2);
+            fixAdjList.put("com.android.music", 2);
+        }
+    }
+    /** @} */
 
     private final boolean mHeadless;
 
@@ -2277,6 +2321,13 @@ public final class ActivityManagerService  extends ActivityManagerNative
             app.setPid(0);
             Slog.e(TAG, "Failure starting process " + app.processName, e);
         }
+
+        /** SPRD: add for performance optimization of services restarting @{ */
+        if (LC_RAM_SUPPORT && fixAdjList.containsKey(app.processName)) {
+            app.fixAdj = fixAdjList.get(app.processName);
+            Slog.v(TAG, "app[" + app.processName + "] has fix adj:" + app.fixAdj);
+        }
+        /** @} */
     }
 
     void updateUsageStats(ActivityRecord resumedComponent, boolean resumed) {
@@ -3080,6 +3131,40 @@ public final class ActivityManagerService  extends ActivityManagerNative
             stats.noteProcessDiedLocked(app.info.uid, pid);
         }
 
+        /** SPRD: add for performance optimization of services restarting @{ */
+        if (LC_RAM_SUPPORT && !whiteList.contains(app.processName)) {
+            boolean needRemoveAlarm = false;
+            ApplicationInfo diedAppInfo = app.instrumentationInfo != null
+                ? app.instrumentationInfo : app.info;
+
+            if (DEBUG_LC) Slog.w(TAG, "diedAppInfo: pkg=" + diedAppInfo.packageName);
+
+            for (ServiceRecord sr : app.services) {
+                sr.lowMemKilled = needRemoveAlarm = true;
+                sr.delayMoreTime = (mDelayMoreTime++)%10;
+                if (DEBUG_LC) Slog.w(TAG, "LowMemKillService: app=" + diedAppInfo.packageName + ", srv=" + sr.shortName + " adj="+ app.curAdj);
+            }
+
+            if (needRemoveAlarm && hasAlarmList.contains(app.processName)) {
+                final String roguePack = new String(diedAppInfo.packageName);
+                mHandler.post(new Runnable() {
+                    public void run() {
+                        try {
+                            IAlarmManager alarmService = IAlarmManager.Stub.asInterface(ServiceManager.getService("alarm"));
+
+                            if (alarmService.checkAlarmForPackageName(roguePack)) {
+                                alarmService.removeAlarmForPackageName(roguePack);
+                                if (DEBUG_LC) Slog.w(TAG, "RemoveSvcAlarm: pkg=" + roguePack);
+                            }
+                        } catch(Exception e) {
+                                if (DEBUG_LC) Slog.e(TAG, "RemoveSvcAlarm: Error!! " + e);
+                        }
+                    }
+                });
+            }
+        }
+        /** @} */
+
         // Clean up already done if the process has been re-started.
         if (app.pid == pid && app.thread != null &&
                 app.thread.asBinder() == thread.asBinder()) {
@@ -3131,6 +3216,8 @@ public final class ActivityManagerService  extends ActivityManagerNative
                     mHandler.sendEmptyMessage(REPORT_MEM_USAGE);
                     scheduleAppGcsLocked();
                 }
+                // SPRD: add for performance optimization of services restarting
+                if (LC_RAM_SUPPORT && haveBg) updateOomAdjLocked();
             }
         } else if (app.pid != pid) {
             // A new process has already been started.
@@ -12976,6 +13063,15 @@ public final class ActivityManagerService  extends ActivityManagerNative
         return null;
     }
 
+    /** SPRD: add for performance optimization of services restarting @{ */
+    private final void raiseToFixAdj(ProcessRecord app) {
+        if (app.fixAdj != ProcessRecord.APP_ADJ_DEFAULT
+                && app.fixAdj < app.curAdj) {
+            app.curAdj = app.curRawAdj = app.fixAdj;
+        }
+    }
+    /** @} */
+
     private final int computeOomAdjLocked(ProcessRecord app, int hiddenAdj, int clientHiddenAdj,
             int emptyAdj, ProcessRecord TOP_APP, boolean recursed, boolean doingAll) {
         if (mAdjSeq == app.adjSeq) {
@@ -12992,13 +13088,27 @@ public final class ActivityManagerService  extends ActivityManagerNative
                     app.curAdj = app.curRawAdj = app.nonStoppingAdj = emptyAdj;
                 }
             }
+            /** SPRD: add for performance optimization of services restarting @{ */
+            if (LC_RAM_SUPPORT) {
+                raiseToFixAdj(app);
+            }
+            /** @} */
             return app.curRawAdj;
         }
 
         if (app.thread == null) {
             app.adjSeq = mAdjSeq;
             app.curSchedGroup = Process.THREAD_GROUP_BG_NONINTERACTIVE;
+            /** SPRD: add for performance optimization of services restarting @{
+              @orig
             return (app.curAdj=app.curRawAdj=ProcessList.HIDDEN_APP_MAX_ADJ);
+             */
+            app.curAdj=app.curRawAdj=ProcessList.HIDDEN_APP_MAX_ADJ;
+            if (LC_RAM_SUPPORT) {
+                raiseToFixAdj(app);
+            }
+            return app.curAdj;
+            /** @} */
         }
 
         app.adjTypeCode = ActivityManager.RunningAppProcessInfo.REASON_UNKNOWN;
@@ -13039,7 +13149,16 @@ public final class ActivityManagerService  extends ActivityManagerNative
                     }
                 }
             }
+            /** SPRD: add for performance optimization of services restarting @{
+              @orig
             return (app.curAdj=app.maxAdj);
+             */
+            app.curAdj=app.maxAdj;
+            if (LC_RAM_SUPPORT) {
+                raiseToFixAdj(app);
+            }
+            return app.curAdj;
+            /** @} */
         }
 
         app.keeping = false;
@@ -13587,6 +13706,11 @@ public final class ActivityManagerService  extends ActivityManagerNative
                 importance = ActivityManager.RunningAppProcessInfo.IMPORTANCE_PERSISTENT;
             }
         }
+        /** SPRD: add for performance optimization of services restarting @{ */
+        if (LC_RAM_SUPPORT) {
+            raiseToFixAdj(app);
+        }
+        /** @} */
 
         int changes = importance != app.memImportance ? ProcessChangeItem.CHANGE_IMPORTANCE : 0;
         if (foregroundActivities != app.foregroundActivities) {
@@ -15138,4 +15262,17 @@ public final class ActivityManagerService  extends ActivityManagerNative
         return PhoneWindowManager.mIsHomeKeyPressed.getAndSet(false);
     }
     /* @} */
+
+    /** SPRD: add for performance optimization of services restarting @{ */
+    int mDelayMoreTime = 0;
+
+    void launchEnd(ActivityRecord ar) {
+        if (ar.isHomeActivity) {
+            if (DEBUG_LC) Slog.v(TAG, "[lom]Lunch home activity end");
+            mServices.ReduceServicesRestartDelay();
+        } else {
+            if (DEBUG_LC) Slog.v(TAG, "[lom]Lunch normal activity end");
+        }
+    }
+    /** @} */
 }

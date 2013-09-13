@@ -1176,4 +1176,32 @@ class AlarmManagerService extends IAlarmManager.Stub {
 		}
 	}
 	/** @} */
+
+    /*
+     * SPRD: add for performance optimization of services restarting @{
+     *
+     * {@hide}
+     */
+    public void removeAlarmForPackageName(String pkgName) {
+        if (pkgName == null) {
+            return;
+        }
+        synchronized (mLock) {
+            removeLocked(pkgName);
+        }
+    }
+
+    /*
+     * {@hide}
+     */
+    public boolean checkAlarmForPackageName(String pkgName) {
+        if (pkgName == null) {
+            return false;
+        }
+        synchronized (mLock) {
+            return lookForPackageLocked(pkgName);
+        }
+    }
+    /** @} */
+
 }
