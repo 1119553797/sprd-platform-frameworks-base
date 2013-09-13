@@ -34,6 +34,7 @@ import com.android.internal.telephony.ITelephonyRegistry;
 import com.android.internal.telephony.PhoneConstants;
 import com.android.internal.telephony.RILConstants;
 import com.android.internal.telephony.TelephonyProperties;
+import com.android.internal.telephony.ISprdTelephony;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -876,7 +877,7 @@ public class TelephonyManager {
      */
     public boolean getIccFdnEnabled() {
         try {
-            return getITelephony().getIccFdnEnabled();
+            return getISprdTelephony().getIccFdnEnabled();
         } catch (RemoteException ex) {
             // Assume no ICC card if remote exception which shouldn't happen
             return false;
@@ -1338,7 +1339,7 @@ public class TelephonyManager {
      */
     public int getDataStatebyApnType(String apnType) {
         try {
-            return getITelephony().getDataStatebyApnType(apnType);
+            return getISprdTelephony().getDataStatebyApnType(apnType);
         } catch (RemoteException ex) {
             // the phone process is restarting.
             return DATA_DISCONNECTED;
@@ -1350,6 +1351,11 @@ public class TelephonyManager {
     private ITelephony getITelephony() {
         //return ITelephony.Stub.asInterface(ServiceManager.getService(Context.TELEPHONY_SERVICE));
         return ITelephony.Stub.asInterface(ServiceManager.getService(SprdPhoneSupport.getServiceName(Context.TELEPHONY_SERVICE, mPhoneId)));
+    }
+
+    /** SPRD: add ISprdTelephony for native version */
+    private ISprdTelephony getISprdTelephony() {
+        return ISprdTelephony.Stub.asInterface(ServiceManager.getService(SprdPhoneSupport.getServiceName(Context.SPRD_TELEPHONY_SERVICE, mPhoneId)));
     }
 
     //
@@ -1612,7 +1618,7 @@ public class TelephonyManager {
     public String[] Mbbms_Gsm_Authenticate(String nonce) {
         String[] authen;
         try {
-            authen = getITelephony().Mbbms_Gsm_Authenticate(nonce);
+            authen = getISprdTelephony().Mbbms_Gsm_Authenticate(nonce);
         } catch (RemoteException ex) {
             // the phone process is restarting.
             return null;
@@ -1631,7 +1637,7 @@ public class TelephonyManager {
     public String[] Mbbms_USim_Authenticate(String nonce, String autn) {
         String[] authen;
         try {
-            authen = getITelephony().Mbbms_USim_Authenticate(nonce, autn);
+            authen = getISprdTelephony().Mbbms_USim_Authenticate(nonce, autn);
         } catch (RemoteException ex) {
             // the phone process is restarting.
             return null;
@@ -1644,7 +1650,7 @@ public class TelephonyManager {
     /** SPRD */
     public boolean isVTCall() {
         try {
-            return getITelephony().isVTCall();
+            return getISprdTelephony().isVTCall();
         } catch (RemoteException ex) {
             // the phone process is restarting.
             return false;
@@ -1675,7 +1681,7 @@ public class TelephonyManager {
      */
     public int getRemainTimes(int type) {
         try {
-            return getITelephony().getRemainTimes(type);
+            return getISprdTelephony().getRemainTimes(type);
         } catch (RemoteException ex) {
             // the phone process is restarting.
             return -1;
@@ -1692,7 +1698,7 @@ public class TelephonyManager {
      */
     public boolean setApnActivePdpFilter(String apntype, boolean filterenable) {
         try {
-            return getITelephony().setApnActivePdpFilter(apntype, filterenable);
+            return getISprdTelephony().setApnActivePdpFilter(apntype, filterenable);
         } catch (RemoteException ex) {
             // the phone process is restarting.
             return false;
@@ -1708,7 +1714,7 @@ public class TelephonyManager {
      */
     public boolean getApnActivePdpFilter(String apntype) {
         try {
-            return getITelephony().getApnActivePdpFilter(apntype);
+            return getISprdTelephony().getApnActivePdpFilter(apntype);
         } catch (RemoteException ex) {
             // the phone process is restarting.
             return false;
@@ -1964,5 +1970,87 @@ public class TelephonyManager {
         Rlog.d(TAG, "setRadioBusy " + mRadioPower);
         Settings.Secure.putInt(context.getContentResolver(),
                 Settings.Secure.RADIO_OPERATION, mRadioPower ? 1 : 0);
+    }
+
+    /**
+     * SPRD
+     * @hide
+     */
+    public void holdCall() {
+        try {
+            getISprdTelephony().holdCall();
+        } catch (RemoteException ex) {
+        } catch (NullPointerException ex) {
+        }
+    }
+
+    /**
+     * SPRD
+     * @hide
+     */
+    public String getSmsc() {
+        try {
+            return getISprdTelephony().getSmsc();
+        } catch (RemoteException ex) {
+            return null;
+        } catch (NullPointerException ex) {
+            return null;
+        }
+    }
+
+    /**
+     * SPRD
+     * @hide
+     */
+    public boolean setSmsc(String smscAddr) {
+        try {
+            return getISprdTelephony().setSmsc(smscAddr);
+        } catch (RemoteException ex) {
+            return false;
+        } catch (NullPointerException ex) {
+            return false;
+        }
+    }
+
+    /**
+     * SPRD
+     * @hide
+     */
+    public boolean setIccCard(boolean turnOn) {
+        try {
+            return getISprdTelephony().setIccCard(turnOn);
+        } catch (RemoteException ex) {
+            return false;
+        } catch (NullPointerException ex) {
+            return false;
+        }
+    }
+
+    /**
+     * SPRD
+     * @hide
+     */
+    public boolean isIccCardOn() {
+        try {
+            return getISprdTelephony().isIccCardOn();
+        } catch (RemoteException ex) {
+            return false;
+        } catch (NullPointerException ex) {
+            return false;
+        }
+    }
+
+    /**
+     * SPRD
+     * @hide
+     */
+    public String[] getActiveApnTypes() {
+        try {
+            return getISprdTelephony().getActiveApnTypes();
+        } catch (RemoteException ex) {
+            return null;
+        } catch (NullPointerException ex) {
+            return null;
+        }
     }
 }
