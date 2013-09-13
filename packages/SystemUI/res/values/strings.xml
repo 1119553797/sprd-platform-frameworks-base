@@ -541,4 +541,9 @@
     <item>com.thunderst.radio</item>
     </string-array>
     <!-- @} -->
+    <!-- SPRD: ADD for data connection dialog @{ -->
+    <string name="dataConnectSetting" >Data Connection</string>
+    <string name="closeData" >Close</string>
+    <!-- @} -->
+
 </resources>

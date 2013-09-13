@@ -199,7 +199,7 @@ public class ToggleListener extends BroadcastReceiver implements View.OnClickLis
             intent.setAction(Settings.ACTION_WIRELESS_SETTINGS);
             break;
         case R.id.quick_switch_sound_toggle:
-            intent.setAction(Settings.ACTION_SOUND_SETTINGS);
+            intent.setAction(Settings.ACTION_AUDIO_PROFILE_SETTINGS);
             break;
         case R.id.quick_switch_gps_toggle:
             intent.setAction(Settings.ACTION_LOCATION_SOURCE_SETTINGS);

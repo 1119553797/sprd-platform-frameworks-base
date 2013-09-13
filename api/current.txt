@@ -6076,6 +6076,8 @@ package android.content {
     field public static final java.lang.String ACTION_CLOSE_SYSTEM_DIALOGS = "android.intent.action.CLOSE_SYSTEM_DIALOGS";
     field public static final java.lang.String ACTION_CONFIGURATION_CHANGED = "android.intent.action.CONFIGURATION_CHANGED";
     field public static final java.lang.String ACTION_CREATE_SHORTCUT = "android.intent.action.CREATE_SHORTCUT";
+    field public static final java.lang.String ACTION_DATA_CONNECTION_CHANGED = "android.intent.action.DATA_CONNECTION_CHANGE_ACTION";
+    field public static final java.lang.String ACTION_DATA_CONNECTION_DETTACH = "android.intent.action.DATA_DETTACH_ACTION";
     field public static final java.lang.String ACTION_DATE_CHANGED = "android.intent.action.DATE_CHANGED";
     field public static final java.lang.String ACTION_DEFAULT = "android.intent.action.VIEW";
     field public static final java.lang.String ACTION_DELETE = "android.intent.action.DELETE";
@@ -20043,6 +20045,7 @@ package android.provider {
     field public static final java.lang.String ACTION_APPLICATION_DETAILS_SETTINGS = "android.settings.APPLICATION_DETAILS_SETTINGS";
     field public static final java.lang.String ACTION_APPLICATION_DEVELOPMENT_SETTINGS = "android.settings.APPLICATION_DEVELOPMENT_SETTINGS";
     field public static final java.lang.String ACTION_APPLICATION_SETTINGS = "android.settings.APPLICATION_SETTINGS";
+    field public static final java.lang.String ACTION_AUDIO_PROFILE_SETTINGS = "com.sprd.action.AUDIO_PROFILE";
     field public static final java.lang.String ACTION_BLUETOOTH_SETTINGS = "android.settings.BLUETOOTH_SETTINGS";
     field public static final java.lang.String ACTION_DATA_ROAMING_SETTINGS = "android.settings.DATA_ROAMING_SETTINGS";
     field public static final java.lang.String ACTION_DATE_SETTINGS = "android.settings.DATE_SETTINGS";

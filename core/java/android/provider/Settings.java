@@ -639,7 +639,10 @@ public final class Settings {
     @SdkConstant(SdkConstantType.ACTIVITY_INTENT_ACTION)
     public static final String ACTION_NFCSHARING_SETTINGS =
         "android.settings.NFCSHARING_SETTINGS";
-
+    // SPRD: add for AudioProfile 
+    @SdkConstant(SdkConstantType.ACTIVITY_INTENT_ACTION)
+    public static final String ACTION_AUDIO_PROFILE_SETTINGS =
+        "com.sprd.action.AUDIO_PROFILE";
     /**
      * Activity Action: Show Daydream settings.
      * <p>

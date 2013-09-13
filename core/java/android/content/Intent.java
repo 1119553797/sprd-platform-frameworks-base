@@ -3241,6 +3241,14 @@ public class Intent implements Parcelable, Cloneable {
      */
     public static final String EXTRA_RESTRICTIONS_INTENT =
             "android.intent.extra.restrictions_intent";
+    /** SPRD: add for "data connection" @{ */
+    public static final String ACTION_DATA_CONNECTION_CHANGED = 
+            "android.intent.action.DATA_CONNECTION_CHANGE_ACTION";
+    
+    public static final String ACTION_DATA_CONNECTION_DETTACH = 
+            "android.intent.action.DATA_DETTACH_ACTION";
+    /** @} */
+
 
     // ---------------------------------------------------------------------
     // ---------------------------------------------------------------------
