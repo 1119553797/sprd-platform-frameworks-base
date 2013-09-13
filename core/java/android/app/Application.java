@@ -16,10 +16,13 @@
 
 package android.app;
 
+import java.util.ArrayList;
 import android.content.ComponentCallbacks;
+import android.content.ComponentCallbacks2;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.res.Configuration;
+import android.util.Slog;
 
 /**
  * Base class for those who need to maintain global application state. You can
@@ -36,8 +39,10 @@ import android.content.res.Configuration;
  * {@link android.content.Context#getApplicationContext() Context.getApplicationContext()}
  * when first constructing the singleton.</p>
  */
-public class Application extends ContextWrapper implements ComponentCallbacks {
-    
+public class Application extends ContextWrapper implements ComponentCallbacks2 {
+
+    private ArrayList<ComponentCallbacks> mComponentCallbacks =
+            new ArrayList<ComponentCallbacks>();
     public Application() {
         super(null);
     }
@@ -67,7 +72,30 @@ public class Application extends ContextWrapper implements ComponentCallbacks {
     
     public void onLowMemory() {
     }
-    
+
+    public void onTrimMemory(int level) {
+        Object[] callbacks = collectComponentCallbacks();
+        if (callbacks != null) {
+            for (int i=0; i<callbacks.length; i++) {
+                Object c = callbacks[i];
+                if (c instanceof ComponentCallbacks2) {
+                    ((ComponentCallbacks2)c).onTrimMemory(level);
+                }
+            }
+        }
+    }	
+      public void registerComponentCallbacks(ComponentCallbacks callback) {
+        synchronized (mComponentCallbacks) {
+            mComponentCallbacks.add(callback);
+        }
+    }
+
+    public void unregisterComponentCallbacks(ComponentCallbacks callback) {
+        synchronized (mComponentCallbacks) {
+            mComponentCallbacks.remove(callback);
+        }
+    }
+	
     // ------------------ Internal API ------------------
     
     /**
@@ -76,5 +104,14 @@ public class Application extends ContextWrapper implements ComponentCallbacks {
     /* package */ final void attach(Context context) {
         attachBaseContext(context);
     }
+    private Object[] collectComponentCallbacks() {
+        Object[] callbacks = null;
+        synchronized (mComponentCallbacks) {
+            if (mComponentCallbacks.size() > 0) {
+                callbacks = mComponentCallbacks.toArray();
+            }
+        }
+        return callbacks;
+    }	
 
 }

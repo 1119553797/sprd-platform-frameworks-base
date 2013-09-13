@@ -80,6 +80,9 @@ class ProcessRecord {
     Bundle instrumentationArguments;// as given to us
     ComponentName instrumentationResultClass;// copy of instrumentationClass
     BroadcastRecord curReceiver;// receiver currently running in the app
+    int trimMemoryLevel;        // Last selected memory trimming levelssssss
+    boolean systemNoUi;         // This is a system process, but not currently showing UI.
+    boolean pendingUiClean;     // Want to clean up resources from showing UI?
     long lastWakeTime;          // How long proc held wake lock at last check
     long lastCpuTime;           // How long proc has run CPU at last check
     long curCpuTime;            // How long proc has run CPU most recently
@@ -188,6 +191,9 @@ class ProcessRecord {
                 pw.print(" removed="); pw.println(removed);
         pw.print(prefix); pw.print("adjSeq="); pw.print(adjSeq);
                 pw.print(" lruSeq="); pw.println(lruSeq);
+	pw.print(" trimMemoryLevel="); pw.println(trimMemoryLevel);
+	pw.print(" systemNoUi="); pw.print(systemNoUi);
+	pw.print(" pendingUiClean="); pw.print(pendingUiClean);
         if (!keeping) {
             long wtime;
             synchronized (batteryStats.getBatteryStats()) {

@@ -30,6 +30,7 @@ import java.io.FileOutputStream;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import  java.io.File;
+import android.content.ComponentCallbacks2;
 
 import dalvik.system.Zygote;
 
@@ -12136,7 +12137,7 @@ public final class ActivityManagerService extends ActivityManagerNative
             raiseToFixAdj(app);
             return app.curAdj;
         }
-       
+        final int activitiesSize = app.activities.size();
         if (app.maxAdj <= FOREGROUND_APP_ADJ) {
             // The max adjustment doesn't allow this app to be anything
             // below foreground, so it is not worth doing work for it.
@@ -12150,6 +12151,22 @@ public final class ActivityManagerService extends ActivityManagerNative
             //if (LC_RAM_SUPPORT) {
                 raiseToFixAdj(app);
             //}
+            // System process can do UI, and when they do we want to have
+            // them trim their memory after the user leaves the UI.  To
+            // facilitate this, here we need to determine whether or not it
+            // is currently showing UI.
+            app.systemNoUi = true;
+            if (app == TOP_APP) {
+                app.systemNoUi = false;
+            } else if (activitiesSize > 0) {
+                for (int j = 0; j < activitiesSize; j++) {
+                    final ActivityRecord r = app.activities.get(j);
+                    if (r.visible) {
+                        app.systemNoUi = false;
+                        break;
+                    }
+                }
+            }            
             return app.curAdj;
         }
 
@@ -12159,7 +12176,7 @@ public final class ActivityManagerService extends ActivityManagerNative
         app.keeping = false;
         app.empty = false;
         app.hidden = false;
-
+       app.systemNoUi = false;
         // Determine the importance of the process, starting with most
         // important to least, and assign an appropriate OOM adjustment.
         int adj;
@@ -12846,6 +12863,85 @@ public final class ActivityManagerService extends ActivityManagerNative
                 }
             } else {
                 didOomAdj = false;
+            }
+        }
+		
+       if (numHidden <= (MAX_HIDDEN_APPS/2)) {
+	final int N = mLruProcesses.size();
+	factor = numHidden/3;
+	int minFactor = 2;
+	if (mHomeProcess != null) minFactor++;
+	//if (mPreviousProcess != null) minFactor++;
+	if (factor < minFactor) factor = minFactor;
+	step = 0;
+	int curLevel = ComponentCallbacks2.TRIM_MEMORY_COMPLETE;
+	for (i=0; i<N; i++) {
+		ProcessRecord app = mLruProcesses.get(i);
+		if (app.curAdj >= HOME_APP_ADJ				
+				&& !app.killedBackground) {
+			if (app.trimMemoryLevel < curLevel && app.thread != null) {
+				try {
+					app.thread.scheduleTrimMemory(curLevel);
+				} catch (RemoteException e) {
+				}
+			}
+			app.trimMemoryLevel = curLevel;
+			step++;
+			if (step >= factor) {
+				switch (curLevel) {
+					case ComponentCallbacks2.TRIM_MEMORY_COMPLETE:
+						curLevel = ComponentCallbacks2.TRIM_MEMORY_MODERATE;
+						break;
+					case ComponentCallbacks2.TRIM_MEMORY_MODERATE:
+						curLevel = ComponentCallbacks2.TRIM_MEMORY_BACKGROUND;
+						break;
+				}
+			}
+		} else if (app.curAdj == HEAVY_WEIGHT_APP_ADJ) {
+			if (app.trimMemoryLevel < ComponentCallbacks2.TRIM_MEMORY_BACKGROUND
+					&& app.thread != null) {
+				try {
+					app.thread.scheduleTrimMemory(
+							ComponentCallbacks2.TRIM_MEMORY_BACKGROUND);
+				} catch (RemoteException e) {
+				}
+			}
+			app.trimMemoryLevel = ComponentCallbacks2.TRIM_MEMORY_BACKGROUND;
+		} else if ((app.curAdj > VISIBLE_APP_ADJ || app.systemNoUi)
+				&& app.pendingUiClean) {
+			if (app.trimMemoryLevel < ComponentCallbacks2.TRIM_MEMORY_UI_HIDDEN
+					&& app.thread != null) {
+				try {
+					app.thread.scheduleTrimMemory(
+							ComponentCallbacks2.TRIM_MEMORY_UI_HIDDEN);
+				} catch (RemoteException e) {
+				}
+			}
+			app.trimMemoryLevel = ComponentCallbacks2.TRIM_MEMORY_UI_HIDDEN;
+			app.pendingUiClean = false;
+		} else {
+			app.trimMemoryLevel = 0;
+		}
+	    }
+	}else{
+            final int N = mLruProcesses.size();
+            for (i=0; i<N; i++) {
+                ProcessRecord app = mLruProcesses.get(i);
+                if ((app.curAdj > VISIBLE_APP_ADJ || app.systemNoUi)
+                        && app.pendingUiClean) {
+                    if (app.trimMemoryLevel < ComponentCallbacks2.TRIM_MEMORY_UI_HIDDEN
+                            && app.thread != null) {
+                        try {
+                            app.thread.scheduleTrimMemory(
+                                    ComponentCallbacks2.TRIM_MEMORY_UI_HIDDEN);
+                        } catch (RemoteException e) {
+                        }
+                    }
+                    app.trimMemoryLevel = ComponentCallbacks2.TRIM_MEMORY_UI_HIDDEN;
+                    app.pendingUiClean = false;
+                } else {
+                    app.trimMemoryLevel = 0;
+                }
             }
         }
 

@@ -32,6 +32,7 @@ import android.os.RemoteException;
 import android.os.IBinder;
 import android.os.Parcel;
 import android.os.ParcelFileDescriptor;
+import android.util.Slog;
 
 import java.io.FileDescriptor;
 import java.io.IOException;
@@ -336,7 +337,12 @@ public abstract class ApplicationThreadNative extends Binder
             scheduleLowMemory();
             return true;
         }
-        
+        case SCHEDULE_TRIM_MEMORY_TRANSACTION: {
+            data.enforceInterface(IApplicationThread.descriptor);
+            int level = data.readInt();
+            scheduleTrimMemory(level);
+            return true;
+        }        
         case SCHEDULE_ACTIVITY_CONFIGURATION_CHANGED_TRANSACTION:
         {
             data.enforceInterface(IApplicationThread.descriptor);
@@ -648,6 +654,13 @@ class ApplicationThreadProxy implements IApplicationThread {
         mRemote.transact(SCHEDULE_STOP_SERVICE_TRANSACTION, data, null,
                 IBinder.FLAG_ONEWAY);
         data.recycle();
+    }
+    public void scheduleTrimMemory(int level) throws RemoteException {
+        Parcel data = Parcel.obtain();
+        data.writeInterfaceToken(IApplicationThread.descriptor);
+        data.writeInt(level);
+        mRemote.transact(SCHEDULE_TRIM_MEMORY_TRANSACTION, data, null,
+                IBinder.FLAG_ONEWAY);
     }
 
     public final void bindApplication(String packageName, ApplicationInfo info,
