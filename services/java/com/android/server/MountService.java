@@ -213,7 +213,7 @@ class MountService extends IMountService.Stub
     private final CountDownLatch mConnectedSignal = new CountDownLatch(1);
     private final CountDownLatch mAsecsScanned = new CountDownLatch(1);
     private boolean                               mSendUmsConnectedOnBoot = false;
-        private String                                linkPath = "/mnt/shell/emulated" ; // SPRD: init value
+    private String                                linkPath = "/storage/sdcard0" ; // SPRD: init value
     /* SPRD: curr system storage type  , default 1*/
     private int storage_type = Environment.STORAGE_TYPE_EMMC_EXTERNAL;
 

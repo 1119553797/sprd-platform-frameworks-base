@@ -756,7 +756,7 @@ public class Environment {
      * SPRD: The double T card support  @{
      */
     private static final File EXTERNAL_STORAGE = new File("/storage/sdcard1");
-    private static final File INTERNAL_STORAGE = new File("/mnt/shell/emulated");
+    private static final File INTERNAL_STORAGE = new File("/storage/sdcard0");
    // SPRD: nand
     public static final int STORAGE_TYPE_NAND = 0;
     //  SPRD:  built-in cannot be moved
