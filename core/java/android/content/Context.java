@@ -2118,6 +2118,12 @@ public abstract class Context {
     public static final String TELEPHONY_SERVICE = "phone";
 
     /**
+     * SPRD: add SPRD_TELEPHONY_SERVICE for native version
+     * @hide
+     */
+    public static final String SPRD_TELEPHONY_SERVICE = "sprd_phone";
+
+    /**
      * Use with {@link #getSystemService} to retrieve a
      * {@link android.text.ClipboardManager} for accessing and modifying
      * the contents of the global clipboard.
