@@ -4421,7 +4421,9 @@ public class PackageManagerService extends IPackageManager.Stub {
                         }
                     }
                     if (!recovered && ((parseFlags&PackageParser.PARSE_IS_SYSTEM) != 0
-                            || (scanMode&SCAN_BOOTING) != 0)) {
+                            || (scanMode&SCAN_BOOTING) != 0
+                            // SPRD: Add isPreloadApp(pkg.applicationInfo) judgment.
+                            || isPreloadApp(pkg.applicationInfo))) {
                         // If this is a system app, we can at least delete its
                         // current data so the application will still work.
                         int ret = removeDataDirsLI(pkgName);
