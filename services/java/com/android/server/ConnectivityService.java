@@ -60,6 +60,7 @@ import android.net.Uri;
 import android.net.LinkProperties.CompareResult;
 import android.net.MobileDataStateTracker;
 import android.net.MsmsMobileDataStateTracker;
+import android.net.MsmsFeatureManager;
 import android.net.NetworkConfig;
 import android.net.NetworkInfo;
 import android.net.NetworkInfo.DetailedState;
@@ -334,6 +335,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
     // list of DeathRecipients used to make sure features are turned off when
     // a process dies
     private List<FeatureUser> mFeatureUsers;
+    private MsmsFeatureManager mFeatureManager; // SPRD: add by spreadst
 
     private boolean mSystemReady;
     private Intent mInitialBroadcast;
@@ -565,6 +567,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
         }
 
         mFeatureUsers = new ArrayList<FeatureUser>();
+        mFeatureManager = MsmsFeatureManager.getInstance(mContext); // SPRD: add by spreadst
 
         mTestMode = SystemProperties.get("cm.test.mode").equals("true")
                 && SystemProperties.get("ro.build.type").equals("eng");
@@ -1243,6 +1246,12 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                             }
                         }
                     }
+                    /* SPRD: for multi-sim @{ */
+                    if (!mFeatureManager.tryStartUsingFeature(networkType, feature, binder, getCallingPid(),
+                            getCallingUid(), getPhoneIdByFeature(feature), isMainSimFeature(feature))) {
+                        return PhoneConstants.APN_REQUEST_STARTED;
+                    }
+                    /* @} */
 
                     int restoreTimer = getRestoreDefaultNetworkDelay(usedNetworkType);
 
@@ -1451,6 +1460,12 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                             " not a known feature - dropping");
                 }
             }
+
+            /* SPRD: for multi-sim @{ */
+            if (callTeardown) {
+                mFeatureManager.stopUsingFeature(networkType, feature, pid, uid, getPhoneIdByFeature(feature));
+            }
+            /* @} */
         }
 
         if (callTeardown) {
