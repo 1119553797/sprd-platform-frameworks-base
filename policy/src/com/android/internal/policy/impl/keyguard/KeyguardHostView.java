@@ -151,7 +151,7 @@ public class KeyguardHostView extends KeyguardViewBase {
 
         if (DEBUG) Log.e(TAG, "KeyguardHostView()");
         // SPRD: Modify 20130909 Spreadst of Bug 213750 add UUI lockscreen
-        mUniverseui_support = SystemProperties.getBoolean("universe_ui_support", true);
+        mUniverseui_support = SystemProperties.getBoolean("universe_ui_support", false);
 
         mLockPatternUtils = new LockPatternUtils(context);
 

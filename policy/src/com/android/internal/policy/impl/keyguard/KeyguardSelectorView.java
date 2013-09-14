@@ -56,7 +56,7 @@ public class KeyguardSelectorView extends LinearLayout implements KeyguardSecuri
 
     /* SPRD: Modify 20130909 Spreadst of Bug 213683 original lockscreen change by UUI @{ */
     private static String universeSupportKey = "universe_ui_support";
-    boolean isUniverseSupport = SystemProperties.getBoolean(universeSupportKey, true);
+    boolean isUniverseSupport = SystemProperties.getBoolean(universeSupportKey, false);
     /* @} */
 
     OnTriggerListener mOnTriggerListener = new OnTriggerListener() {

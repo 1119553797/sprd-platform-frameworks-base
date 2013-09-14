@@ -89,7 +89,7 @@ public class KeyguardStatusView extends GridLayout {
     protected void onFinishInflate() {
         super.onFinishInflate();
         // SPRD: Modify 20130905 Spreadst of Bug 211795 date format is different from LockSettings style
-        isUniverseSupport = SystemProperties.getBoolean(universeSupportKey, true);
+        isUniverseSupport = SystemProperties.getBoolean(universeSupportKey, false);
 
         Resources res = getContext().getResources();
         final Locale locale = Locale.getDefault();
