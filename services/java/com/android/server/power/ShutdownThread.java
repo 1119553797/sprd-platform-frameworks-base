@@ -23,6 +23,7 @@ import android.app.Dialog;
 import android.app.IActivityManager;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.IBluetooth;
 import android.bluetooth.IBluetoothManager;
 import android.nfc.NfcAdapter;
 import android.nfc.INfcAdapter;
@@ -44,7 +45,9 @@ import android.os.storage.IMountService;
 import android.os.storage.IMountShutdownObserver;
 
 import com.android.internal.telephony.ITelephony;
+import com.android.internal.telephony.PhoneFactory;
 
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.WindowManager;
 
@@ -56,6 +59,7 @@ public final class ShutdownThread extends Thread {
     private static final int MAX_BROADCAST_TIME = 10*1000;
     private static final int MAX_SHUTDOWN_WAIT_TIME = 20*1000;
     private static final int MAX_RADIO_WAIT_TIME = 12*1000;
+    private static final int MAX_ICC_WAIT_TIME = 10*1000;
 
     // length of vibration before shutting down
     private static final int SHUTDOWN_VIBRATE_MS = 500;
@@ -342,6 +346,7 @@ public final class ShutdownThread extends Thread {
 
         // Shutdown radios.
         shutdownRadios(MAX_RADIO_WAIT_TIME);
+        shutdownIccs(MAX_ICC_WAIT_TIME);
 
         // Shutdown MountService to ensure media is in a safe state
         IMountShutdownObserver observer = new IMountShutdownObserver.Stub() {
@@ -389,25 +394,101 @@ public final class ShutdownThread extends Thread {
         /* @} */
         rebootOrShutdown(mReboot, mRebootReason);
     }
+    /** SPRD: for AOB  @{ */
+    private void shutdownIccs(int timeout) {
+        final long endTime = SystemClock.elapsedRealtime() + timeout;
+        final boolean[] done = new boolean[1];
+        Thread t = new Thread() {
+            public void run() {
+                boolean iccOff[] = new boolean[PhoneFactory.getPhoneCount()];
+                boolean allIccOff;
 
+                // final ITelephony phone[] =
+                // new ITelephony[PhoneFactory.getPhoneCount()];
+                final TelephonyManager phone[] = new TelephonyManager[PhoneFactory.getPhoneCount()];
+                for (int i = 0; i < PhoneFactory.getPhoneCount(); i++) {
+                    // phone[i] =
+                    // ITelephony.Stub.asInterface(ServiceManager.checkService(PhoneFactory.getServiceName("phone",
+                    // i)));
+                    phone[i] = TelephonyManager.getDefault(i);
+                }
+
+                for (int i = 0; i < PhoneFactory.getPhoneCount(); i++) {
+                    try {
+                        iccOff[i] = phone[i] == null || !(phone[i].isIccCardOn() && phone[i].hasIccCard());
+                        if (!iccOff[i]) {
+                            Log.w(TAG, "Turning off ICC...");
+                            phone[i].setIccCard(false);
+                        }
+                    } catch (Exception ex) {
+                        Log.e(TAG, "Exception during ICC shutdown", ex);
+                        iccOff[i] = true;
+                    }
+                }
+
+                Log.i(TAG, "Waiting for ICC...");
+
+                while (SystemClock.elapsedRealtime() < endTime) {
+                    for (int i = 0; i < PhoneFactory.getPhoneCount(); i++) {
+                        if (!iccOff[i]) {
+                            try {
+                                iccOff[i] = !(phone[i].isIccCardOn() && phone[i].hasIccCard());
+                            } catch (Exception ex) {
+                                Log.e(TAG, "Exception during ICC shutdown", ex);
+                                iccOff[i] = true;
+                            }
+                            if (iccOff[i]) {
+                                Log.i(TAG, "ICC turned off.");
+                            }
+                        }
+                    }
+
+                    allIccOff = true;
+                    for (int i = 0; i < PhoneFactory.getPhoneCount(); i++) {
+                        allIccOff &= iccOff[i];
+                    }
+                    if (allIccOff) {
+                        Log.i(TAG, "ICC shutdown complete.");
+                        done[0] = true;
+                        break;
+                    }
+                    SystemClock.sleep(PHONE_STATE_POLL_SLEEP_MSEC);
+                }
+            }
+        };
+
+        t.start();
+        try {
+            t.join(timeout);
+        } catch (InterruptedException ex) {
+        }
+        if (!done[0]) {
+            Log.w(TAG, "Timed out waiting for SIM shutdown.");
+        }
+    }
+    /** @} */
     private void shutdownRadios(int timeout) {
         // If a radio is wedged, disabling it may hang so we do this work in another thread,
         // just in case.
+        /** SPRD: for AOB  @{ */
         final long endTime = SystemClock.elapsedRealtime() + timeout;
         final boolean[] done = new boolean[1];
         Thread t = new Thread() {
             public void run() {
                 boolean nfcOff;
                 boolean bluetoothOff;
-                boolean radioOff;
+                boolean radioOff[] = new boolean[PhoneFactory.getPhoneCount()];
+                boolean allRadioOff;
 
                 final INfcAdapter nfc =
                         INfcAdapter.Stub.asInterface(ServiceManager.checkService("nfc"));
-                final ITelephony phone =
-                        ITelephony.Stub.asInterface(ServiceManager.checkService("phone"));
-                final IBluetoothManager bluetooth =
-                        IBluetoothManager.Stub.asInterface(ServiceManager.checkService(
-                                BluetoothAdapter.BLUETOOTH_MANAGER_SERVICE));
+
+                final ITelephony phone[] =
+                        new ITelephony[PhoneFactory.getPhoneCount()];
+                for (int i = 0; i < PhoneFactory.getPhoneCount(); i++) {
+                    phone[i] = ITelephony.Stub.asInterface(ServiceManager.checkService(PhoneFactory.getServiceName("phone", i)));
+                }
+                final BluetoothAdapter bluetooth =BluetoothAdapter.getDefaultAdapter();
 
                 try {
                     nfcOff = nfc == null ||
@@ -427,20 +508,22 @@ public final class ShutdownThread extends Thread {
                         Log.w(TAG, "Disabling Bluetooth...");
                         bluetooth.disable(false);  // disable but don't persist new state
                     }
-                } catch (RemoteException ex) {
-                    Log.e(TAG, "RemoteException during bluetooth shutdown", ex);
+                } catch (Exception ex) {
+                    Log.e(TAG, "Exception during bluetooth shutdown", ex);
                     bluetoothOff = true;
                 }
 
-                try {
-                    radioOff = phone == null || !phone.isRadioOn();
-                    if (!radioOff) {
-                        Log.w(TAG, "Turning off radio...");
-                        phone.setRadio(false);
+                for (int i = 0; i < PhoneFactory.getPhoneCount(); i++) {
+                    try {
+                        radioOff[i] = phone[i] == null || !phone[i].isRadioOn();
+                        if (!radioOff[i]) {
+                            Log.w(TAG, "Turning off radio...");
+                            phone[i].setRadio(false);
+                        }
+                    } catch (RemoteException ex) {
+                        Log.e(TAG, "RemoteException during radio shutdown", ex);
+                        radioOff[i] = true;
                     }
-                } catch (RemoteException ex) {
-                    Log.e(TAG, "RemoteException during radio shutdown", ex);
-                    radioOff = true;
                 }
 
                 Log.i(TAG, "Waiting for NFC, Bluetooth and Radio...");
@@ -449,23 +532,25 @@ public final class ShutdownThread extends Thread {
                     if (!bluetoothOff) {
                         try {
                             bluetoothOff = !bluetooth.isEnabled();
-                        } catch (RemoteException ex) {
-                            Log.e(TAG, "RemoteException during bluetooth shutdown", ex);
+                        } catch (Exception ex) {
+                            Log.e(TAG, "Exception during bluetooth shutdown", ex);
                             bluetoothOff = true;
                         }
                         if (bluetoothOff) {
                             Log.i(TAG, "Bluetooth turned off.");
                         }
                     }
-                    if (!radioOff) {
-                        try {
-                            radioOff = !phone.isRadioOn();
-                        } catch (RemoteException ex) {
-                            Log.e(TAG, "RemoteException during radio shutdown", ex);
-                            radioOff = true;
-                        }
-                        if (radioOff) {
-                            Log.i(TAG, "Radio turned off.");
+                    for (int i = 0; i < PhoneFactory.getPhoneCount(); i++) {
+                        if (!radioOff[i]) {
+                            try {
+                                radioOff[i] = !phone[i].isRadioOn();
+                            } catch (RemoteException ex) {
+                                Log.e(TAG, "RemoteException during radio shutdown", ex);
+                                radioOff[i] = true;
+                            }
+                            if (radioOff[i]) {
+                                Log.i(TAG, "Radio turned off.");
+                            }
                         }
                     }
                     if (!nfcOff) {
@@ -475,12 +560,16 @@ public final class ShutdownThread extends Thread {
                             Log.e(TAG, "RemoteException during NFC shutdown", ex);
                             nfcOff = true;
                         }
-                        if (radioOff) {
+                        if (nfcOff) {
                             Log.i(TAG, "NFC turned off.");
                         }
                     }
 
-                    if (radioOff && bluetoothOff && nfcOff) {
+                    allRadioOff = true;
+                    for (int i = 0; i < PhoneFactory.getPhoneCount(); i++) {
+                        allRadioOff &= radioOff[i];
+                    }
+                    if (allRadioOff && bluetoothOff && nfcOff) {
                         Log.i(TAG, "NFC, Radio and Bluetooth shutdown complete.");
                         done[0] = true;
                         break;
@@ -489,7 +578,7 @@ public final class ShutdownThread extends Thread {
                 }
             }
         };
-
+        /** @} */
         t.start();
         try {
             t.join(timeout);
