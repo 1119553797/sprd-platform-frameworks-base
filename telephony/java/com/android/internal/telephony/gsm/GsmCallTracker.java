@@ -253,7 +253,9 @@ public final class GsmCallTracker extends CallTracker {
             if(isEmergency || TextUtils.isEmpty(pendingMO.postDialString)) {
                 cm.dial(tmpAddr, clirMode, uusInfo, obtainCompleteMessage());
             } else {
-                cm.dial(pendingMO.dialString, clirMode, uusInfo, obtainCompleteMessage());
+                //Bug 209561
+                String tempDialStr = pendingMO.dialString.replaceAll(",", "P").replaceAll(";","W");
+                cm.dial(tempDialStr, clirMode, uusInfo, obtainCompleteMessage());
             }
             // Add for bug 121825 End
         }
