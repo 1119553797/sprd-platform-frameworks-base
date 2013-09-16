@@ -2504,9 +2504,15 @@ public final class Settings {
         public static final String ALLOW_MOCK_LOCATION = "mock_location";
 
         public static final String ANR_AUTO_RESTART_APP = "anr_auto_restart_app";
-
+        /**
+         * Get the key that retrieves JIT's priority.
+         * @hide
+         */
         public static final String JIT_ENABLED = "jit_enabled";
-
+        /**
+         * Get the key that retrieves swap_sdcard's priority.
+         * @hide
+         */
         public static final String SWAP_SDCARD = "swap_sdcard";
         
         /**
