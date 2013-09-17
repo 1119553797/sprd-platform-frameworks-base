@@ -170,6 +170,13 @@ public final class GsmSMSDispatcher extends SMSDispatcher {
             return Intents.RESULT_SMS_GENERIC_ERROR;
         }
 
+        // bug 205246 begin
+        if (mDupSmsFilterExt.containDupSms(smsb.getPdu())) {
+            Log.d(TAG, "discard dup sms");
+            return Intents.RESULT_SMS_HANDLED;
+        }
+        // bug 205246 end
+
         SmsMessage sms = (SmsMessage) smsb;
 
         if (sms.isTypeZero()) {

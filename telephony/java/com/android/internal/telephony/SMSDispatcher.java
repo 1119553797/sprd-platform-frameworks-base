@@ -60,6 +60,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Random;
+import com.android.internal.telephony.DupSmsFilterExt;
 
 import static android.telephony.SmsManager.RESULT_ERROR_FDN_CHECK_FAILURE;
 import static android.telephony.SmsManager.RESULT_ERROR_GENERIC_FAILURE;
@@ -169,6 +170,9 @@ public abstract class SMSDispatcher extends Handler {
     protected boolean mSmsSendDisabled;
 
     protected int mRemainingMessages = -1;
+    // bug 205246 begin
+    protected DupSmsFilterExt mDupSmsFilterExt = null;
+    // bug 205246 end
 
     protected static int getNextConcatenatedRef() {
         sConcatenatedRef += 1;
@@ -203,6 +207,9 @@ public abstract class SMSDispatcher extends Handler {
         Log.d(TAG, "SMSDispatcher: ctor mSmsCapable=" + mSmsCapable + " format=" + getFormat()
                 + " mSmsReceiveDisabled=" + mSmsReceiveDisabled
                 + " mSmsSendDisabled=" + mSmsSendDisabled);
+        // bug 205246 begin
+        mDupSmsFilterExt = new DupSmsFilterExt(mContext);
+        // bug 205246 end
     }
 
     /** Unregister for incoming SMS events. */
