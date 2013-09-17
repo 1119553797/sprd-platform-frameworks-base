@@ -82,6 +82,13 @@ import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import android.os.Process;
+import static android.os.Process.THREAD_PRIORITY_FOREGROUND;
+import static android.os.Process.THREAD_PRIORITY_LESS_FAVORABLE;
+import static android.os.Process.THREAD_PRIORITY_DEFAULT;
+import android.os.SystemProperties;
+
+import android.util.Log;
 
 /**
  * An activity is a single, focused thing that the user can do.  Almost all
@@ -5007,6 +5014,7 @@ public class Activity extends ContextThemeWrapper
     }
 
     final void performCreate(Bundle icicle) {
+        bringUpThreadPriority();
         onCreate(icicle);
         mVisibleFromClient = !mWindow.getWindowStyle().getBoolean(
                 com.android.internal.R.styleable.Window_windowNoDisplay, false);
@@ -5014,6 +5022,7 @@ public class Activity extends ContextThemeWrapper
     }
     
     final void performStart() {
+        bringUpThreadPriority();
         mFragments.noteStateNotSaved();
         mCalled = false;
         mFragments.execPendingActions();
@@ -5166,6 +5175,7 @@ public class Activity extends ContextThemeWrapper
             mStopped = true;
         }
         mResumed = false;
+        bringDownThreadPriority();
     }
 
     final void performDestroy() {
@@ -5175,6 +5185,7 @@ public class Activity extends ContextThemeWrapper
         if (mLoaderManager != null) {
             mLoaderManager.doDestroy();
         }
+        bringDownThreadPriority();
     }
     
     /**
@@ -5199,4 +5210,26 @@ public class Activity extends ContextThemeWrapper
             }
         }
     }
+
+    private static final String PROP_ADJUST_PRIO = "persist.sys.adjustmainprio";
+    private static final String PROP_ADJUST_PRIO_VALUE = "persist.sys.adjustmainprio.val";
+    private static final boolean IS_ADJUST_PRIO = com.sprd.android.config.OptConfig.LC_RAM_SUPPORT 
+                                               && SystemProperties.getBoolean(PROP_ADJUST_PRIO, false);
+    private static final int VALUE_ADJUST_PRIO = SystemProperties.getInt(PROP_ADJUST_PRIO_VALUE, 
+                                                 THREAD_PRIORITY_FOREGROUND + THREAD_PRIORITY_LESS_FAVORABLE);
+    private boolean isSetPrio;
+    private void bringUpThreadPriority() {
+        if ( !isSetPrio) {
+            Process.setThreadPriority(Process.myPid(), VALUE_ADJUST_PRIO);
+            isSetPrio = true;
+        }
+    }
+
+    private void bringDownThreadPriority() {
+        if ( isSetPrio) {
+            Process.setThreadPriority(Process.myPid(), THREAD_PRIORITY_DEFAULT);
+            isSetPrio = false;
+        }
+    }
+
 }
