@@ -1645,6 +1645,9 @@ public class PhoneNumberUtils
         boolean isSimEmergency = false;
         for (int i = 0; i < phoneCount; i++ ) {
             isSimEmergency = isSimEmergency || isSimEmergencyNumber(number,i);
+            if(isSimEmergency){
+                break;
+            }
         }
         return isSimEmergency;
     }
@@ -1665,6 +1668,9 @@ public class PhoneNumberUtils
         boolean hasSimCard = false;
         for (int j = 0; j < phoneCount; j++ ) {
             hasSimCard = hasSimCard || TelephonyManager.getDefault(j).hasIccCard();
+            if(hasSimCard){
+                break;
+            }
         }
 
         if (!hasSimCard) {
@@ -1706,6 +1712,7 @@ public class PhoneNumberUtils
         // No ecclist system property, so use our own list.
         return (number.equals("112") || number.equals("911")|| number.equals("110") || number.equals("120") || number.equals("122"));
     }
+
     /**
      * @hide
      */
