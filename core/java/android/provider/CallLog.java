@@ -340,10 +340,10 @@ public class CallLog {
             values.put(DURATION, Long.valueOf(duration));
             values.put(NEW, Integer.valueOf(1));
             /* SPRD: add @{ */
-            if (phoneId == -1) {
+            if (phoneId != -1) {
                 values.put(PHONE_ID, Integer.valueOf(phoneId));
             }
-            if (videoCallFlag == -1) {
+            if (videoCallFlag != -1) {
                 values.put(VIDEO_CALL_FLAG, Integer.valueOf(videoCallFlag));
             }
             if (iccId != null) {
