@@ -66,7 +66,7 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputConnectionWrapper;
 import android.view.inputmethod.InputMethodManager;
-
+import android.util.DisplayMetrics;
 import com.android.internal.R;
 
 import java.util.ArrayList;
@@ -581,7 +581,7 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
     Runnable mPositionScrollAfterLayout;
     private int mMinimumVelocity;
     private int mMaximumVelocity;
-    private float mVelocityScale = 1.0f;
+    private float mVelocityScale = 0.6f;//1.0f;
 
     final boolean[] mIsScrap = new boolean[1];
 
@@ -810,10 +810,11 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
         mTouchSlop = configuration.getScaledTouchSlop();
         mMinimumVelocity = configuration.getScaledMinimumFlingVelocity();
         mMaximumVelocity = configuration.getScaledMaximumFlingVelocity();
-        mOverscrollDistance = configuration.getScaledOverscrollDistance();
-        mOverflingDistance = configuration.getScaledOverflingDistance();
 
-        mDensityScale = getContext().getResources().getDisplayMetrics().density;
+        DisplayMetrics dm     = getContext().getResources().getDisplayMetrics();
+        mOverscrollDistance = mOverflingDistance   = Math.max(dm.heightPixels/6, configuration.getScaledOverscrollDistance());
+        //mOverscrollDistance  = configuration.getScaledOverscrollDistance();
+        mDensityScale          = dm.density;
     }
 
     @Override
@@ -3602,14 +3603,18 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
                 if (mFlingRunnable == null) {
                     mFlingRunnable = new FlingRunnable();
                 }
+/*
                 final VelocityTracker velocityTracker = mVelocityTracker;
                 velocityTracker.computeCurrentVelocity(1000, mMaximumVelocity);
                 final int initialVelocity = (int) velocityTracker.getYVelocity(mActivePointerId);
-
+*/
                 reportScrollStateChange(OnScrollListener.SCROLL_STATE_FLING);
+/*
                 if (Math.abs(initialVelocity) > mMinimumVelocity) {
                     mFlingRunnable.startOverfling(-initialVelocity);
-                } else {
+                } else
+*/
+                {
                     mFlingRunnable.startSpringback();
                 }
 

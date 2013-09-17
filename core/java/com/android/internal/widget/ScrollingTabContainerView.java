@@ -261,7 +261,10 @@ public class ScrollingTabContainerView extends HorizontalScrollView
         mTabSelector = new Runnable() {
             public void run() {
                 final int scrollPos = tabView.getLeft() - (getWidth() - tabView.getWidth()) / 2;
-                smoothScrollTo(scrollPos, 0);
+                /* SPRD: don't use animation, so we can switch faster @{*/
+                //smoothScrollTo(scrollPos, 0);
+                scrollTo(scrollPos, 0);
+                /*@}*/
                 mTabSelector = null;
             }
         };
