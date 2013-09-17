@@ -35,7 +35,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
-        android:layout_marginTop="10dip"
+        android:layout_marginTop="8dip"
         android:layout_marginRight="8dip"
         android:singleLine="true"
         android:ellipsize="marquee"
@@ -52,7 +52,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/carrier"
         android:layout_alignParentRight="true"
-        android:layout_marginTop="10dip"
+        android:layout_marginTop="4dip"
         android:layout_marginRight="8dip"
         android:singleLine="true"
         android:ellipsize="marquee"
@@ -81,7 +81,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/carrier_sub2"
-        android:layout_marginTop="52dip"
+        android:layout_marginTop="32dip"
         android:layout_marginLeft="20dip"
         android:paddingBottom="8dip"
         >
@@ -157,7 +157,7 @@
         android:layout_below="@id/status2"
         android:layout_marginLeft="24dip"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:layout_marginTop="12dip"
+        android:layout_marginTop="4dip"
         android:drawablePadding="4dip"
         />
 
