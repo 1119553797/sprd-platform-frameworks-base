@@ -270,7 +270,7 @@ A2dpAudioInterface::A2dpAudioStreamOut::~A2dpAudioStreamOut()
 
 ssize_t A2dpAudioInterface::A2dpAudioStreamOut::write(const void* buffer, size_t bytes)
 {
-    Mutex::Autolock lock(mLock);
+    mLock.lock();
 
     size_t remaining = bytes;
     status_t status = -1;
@@ -297,10 +297,12 @@ ssize_t A2dpAudioInterface::A2dpAudioStreamOut::write(const void* buffer, size_t
     }
 
     mStandby = false;
+    mLock.unlock();
 
     return bytes;
 
 Error:
+    mLock.unlock();
     // Simulate audio output timing in case of error
     usleep(((bytes * 1000 )/ frameSize() / sampleRate()) * 1000);
 

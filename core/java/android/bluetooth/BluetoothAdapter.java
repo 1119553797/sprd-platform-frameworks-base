@@ -110,6 +110,23 @@ public final class BluetoothAdapter {
     public static final String EXTRA_PREVIOUS_STATE =
             "android.bluetooth.adapter.extra.PREVIOUS_STATE";
 
+    /** The profile is in disconnected state
+     * @hide
+     */
+    public static final int STATE_DISCONNECTED  = 0;
+    /** The profile is in connecting state
+     * @hide
+     */
+    public static final int STATE_CONNECTING    = 1;
+    /** The profile is in connected state
+     * @hide
+     */
+    public static final int STATE_CONNECTED     = 2;
+    /** The profile is in disconnecting state
+     * @hide
+     */
+    public static final int STATE_DISCONNECTING = 3;
+
     /**
      * Indicates the local Bluetooth adapter is off.
      */
@@ -568,6 +585,60 @@ public final class BluetoothAdapter {
         try {
             mService.setDiscoverableTimeout(timeout);
         } catch (RemoteException e) {Log.e(TAG, "", e);}
+    }
+
+    /**
+     * Called when profile state changed.
+     * @param device BluetoothDevice
+     * @param profile BluetoothProfile
+     * @param state Current BluetoothProfile state
+     * @param prevState Former BluetoothProfile state
+     *
+     * @hide
+     */
+    public void sendConnectionStateChange(BluetoothDevice
+            device, int profile, int state, int prevState) {
+        try {
+            mService.sendConnectionStateChange(device, profile, state, prevState);
+        } catch (RemoteException e) {
+            Log.e(TAG, "sendConnectionStateChange:", e);
+        }
+    }
+
+    /**
+     * Is local device in bonding state
+     * @return
+     * @hide
+     */
+    public boolean isInBondingState() {
+        if (getState() != STATE_ON) {
+            return false;
+        }
+        try {
+            return mService.isInBondingSate();
+        } catch (RemoteException e) {Log.e(TAG, "", e);}
+        return false;
+    }
+
+    /**
+     * Get the current connection state of the local Bluetooth adapter.
+     * This can be used to check whether the local Bluetooth adapter is connected
+     * to any profile of any other remote Bluetooth Device.
+     *
+     * <p> Use this function along with {@link #ACTION_CONNECTION_STATE_CHANGED}
+     * intent to get the connection state of the adapter.
+     *
+     * @return One of {@link #STATE_CONNECTED}, {@link #STATE_DISCONNECTED},
+     * {@link #STATE_CONNECTING} or {@link #STATE_DISCONNECTED}
+     *
+     * @hide
+     */
+    public int getConnectionState() {
+        if (getState() != STATE_ON) return BluetoothAdapter.STATE_DISCONNECTED;
+        try {
+            return mService.getAdapterConnectionState();
+        } catch (RemoteException e) {Log.e(TAG, "getConnectionState:", e);}
+        return BluetoothAdapter.STATE_DISCONNECTED;
     }
 
     /**

@@ -80,6 +80,7 @@ public class FmRxControls
    private static final int V4L2_CID_BASE = V4L2_CTRL_CLASS_USER | 0x900;
    private static final int V4L2_CID_AUDIO_VOLUME = V4L2_CID_BASE + 5;
    private static final int V4L2_CID_AUDIO_MUTE = V4L2_CID_BASE + 9;
+   private static final int V4L2_CID_FM_CONFIG = V4L2_CID_BASE + 10;
 
 
 
@@ -119,6 +120,16 @@ public class FmRxControls
 	{
 		return FmReceiverJNI.setControlNative(fd, V4L2_CID_AUDIO_VOLUME, value);
 	}
+
+    /**
+     * @hide
+     * config fm
+     * 0:give up i2s; 1:obtain i2s
+     */
+    public int configFm(int fd, int value)
+    {
+        return FmReceiverJNI.setControlNative(fd, V4L2_CID_FM_CONFIG, value);
+    }
 
    /*
     * Tune FM core to specified freq.

@@ -442,6 +442,20 @@ public class FmReceiver extends FmTransceiver
       return status;
    }
 
+    /**
+     * @hide
+     */
+    public int config() {
+        return mControl.configFm(sFd, 1);
+    }
+
+    /**
+     * @hide
+     */
+    public int restore() {
+        return mControl.configFm(sFd, 0);
+    }
+
    /*==============================================================
    FUNCTION:  searchStations
    ==============================================================*/

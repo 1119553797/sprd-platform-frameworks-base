@@ -636,6 +636,7 @@ status_t AudioPolicyManagerBase::startOutput(audio_io_handle_t output,
     outputDesc->changeRefCount(stream, 1);
     device = getNewDevice(output);
     AudioOutputDescriptor *hwOutputDesc = mOutputs.valueFor(mHardwareOutput);
+#ifndef Trout_FM
     if (stream == AudioSystem::FM) {
         //special strategy for stream fm,  in sound setting interface.
         if (hwOutputDesc->mDevice& (AudioSystem::DEVICE_OUT_FM_SPEAKER
@@ -644,6 +645,7 @@ status_t AudioPolicyManagerBase::startOutput(audio_io_handle_t output,
             device = getDeviceForStrategy(STRATEGY_SONIFICATION,true);
         }
     }
+#endif
     setOutputDevice(output, device);
 
     // handle special case for sonification while in call
@@ -1773,6 +1775,26 @@ uint32_t AudioPolicyManagerBase::getDeviceForStrategy(routing_strategy strategy,
         } break;
 
     case STRATEGY_FM: {
+#ifdef Trout_FM
+    if(!((mAvailableOutputDevices&AudioSystem::DEVICE_OUT_FM_HEADSET)
+           ||(mAvailableOutputDevices&AudioSystem::DEVICE_OUT_FM_SPEAKER))) {
+        switch (mForceUse[AudioSystem::FOR_MEDIA]) {
+            case AudioSystem::FORCE_SPEAKER:
+                device = mAvailableOutputDevices & AudioSystem::DEVICE_OUT_SPEAKER;
+        }
+
+        if (device == 0) {
+            device = mAvailableOutputDevices & AudioSystem::DEVICE_OUT_WIRED_HEADSET;
+        }
+
+        if (device == 0) {
+            device = mAvailableOutputDevices & AudioSystem::DEVICE_OUT_WIRED_HEADPHONE;
+        }
+
+        if (device == 0) {
+            device = mAvailableOutputDevices & AudioSystem::DEVICE_OUT_SPEAKER;
+        }
+    } else {
         if (device == 0) {
             device = mAvailableOutputDevices & AudioSystem::DEVICE_OUT_FM_HEADSET;
         }
@@ -1780,6 +1802,16 @@ uint32_t AudioPolicyManagerBase::getDeviceForStrategy(routing_strategy strategy,
         if (device == 0) {
             device = mAvailableOutputDevices & AudioSystem::DEVICE_OUT_FM_SPEAKER;
         }
+    }
+#else
+        if (device == 0) {
+            device = mAvailableOutputDevices & AudioSystem::DEVICE_OUT_FM_HEADSET;
+        }
+
+        if (device == 0) {
+            device = mAvailableOutputDevices & AudioSystem::DEVICE_OUT_FM_SPEAKER;
+        }
+#endif
         } break;
 
     default:
@@ -1859,9 +1891,12 @@ void AudioPolicyManagerBase::setOutputDevice(audio_io_handle_t output, uint32_t 
 	uint32_t tempDevice = (device & (~AudioSystem::DEVICE_OUT_FM_HEADSET)) & (~AudioSystem::DEVICE_OUT_FM_SPEAKER);
 	LOGV("tempdevices1 output %d device %x delayMs %d", output, tempDevice, delayMs);
     if (output == mHardwareOutput && AudioSystem::popCount(tempDevice) == 2) {
-        	setStrategyMute(STRATEGY_MEDIA, true, output);
-        	// wait for the PCM output buffers to empty before proceeding with the rest of the command
-        	usleep(outputDesc->mLatency*2*1000);
+    #ifdef Trout_FM
+        setStrategyMute(STRATEGY_FM, true, output);
+    #endif
+        setStrategyMute(STRATEGY_MEDIA, true, output);
+        // wait for the PCM output buffers to empty before proceeding with the rest of the command
+        usleep(outputDesc->mLatency*2*1000);
     }
 
     // do the routing
@@ -1885,6 +1920,9 @@ void AudioPolicyManagerBase::setOutputDevice(audio_io_handle_t output, uint32_t 
 	tempDevice = (prevDevice & (~AudioSystem::DEVICE_OUT_FM_HEADSET)) & (~AudioSystem::DEVICE_OUT_FM_SPEAKER);
 	LOGV("tempdevices1 output %d device %x delayMs %d", output, tempDevice, delayMs);
     if (output == mHardwareOutput && AudioSystem::popCount(tempDevice) == 2 ) {
+    #ifdef Trout_FM
+        setStrategyMute(STRATEGY_FM, false, output, delayMs);
+    #endif
         setStrategyMute(STRATEGY_MEDIA, false, output, delayMs);
     }
 }

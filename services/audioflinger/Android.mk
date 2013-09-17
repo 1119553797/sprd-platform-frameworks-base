@@ -70,6 +70,10 @@ ifeq ($(AUDIO_POLICY_TEST),true)
   LOCAL_CFLAGS += -DAUDIO_POLICY_TEST
 endif
 
+ifeq ($(Trout_FM),true)
+  LOCAL_CFLAGS += -DTrout_FM
+endif
+
 include $(BUILD_STATIC_LIBRARY)
 
 include $(CLEAR_VARS)

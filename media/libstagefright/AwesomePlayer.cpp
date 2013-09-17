@@ -51,6 +51,7 @@
 
 #include "MxdCMMBExtractor.h"
 
+#include "include/FMExtractor.h"
 
 #include <surfaceflinger/ISurface.h>
 
@@ -2254,6 +2255,20 @@ LOGV("finishSetDataSource_l enter time:%d s",tv.tv_sec*1000 + tv.tv_usec/1000);
 		return setDataSource_l(extractor);
         }
 //added by innofidei end
+#define SPRD_FM_AUDIO "iis://"
+#ifdef Trout_FM
+        else if(!strncasecmp(SPRD_FM_AUDIO, mUri.string(), strlen(SPRD_FM_AUDIO))) {
+            LOGI("Create sprd fm audio");
+
+            sp<MediaExtractor> fmaudio = new FMExtractor(mUri.string());
+            if (fmaudio == NULL) {
+                LOGE("Can't create SPRD FM audio");
+                return UNKNOWN_ERROR;
+            }
+            return setDataSource_l(fmaudio);
+        }
+#endif
+        // end of sprd fm audio
 	else {
         dataSource = DataSource::CreateFromURI(mUri.string(), &mUriHeaders);
     }

@@ -691,6 +691,10 @@ public class AudioService extends IAudioService.Stub {
                         int mode = hdlr.getMode();
                         if (AudioService.this.mMode != mode) {
                             if (AudioSystem.setPhoneState(mode) == AudioSystem.AUDIO_STATUS_OK) {
+                                if (mode == AudioSystem.MODE_NORMAL) {
+                                    // abandon audio focus for communication focus entry
+                                    abandonAudioFocus(null, IN_VOICE_COMM_FOCUS_ID);
+                                }
                                 AudioService.this.mMode = mode;
                             }
                         }
@@ -925,6 +929,9 @@ public class AudioService extends IAudioService.Stub {
         if (!checkAudioSettingsPermission("setSpeakerphoneOn()")) {
             return;
         }
+        if (!on && mForcedUseForComm != AudioSystem.FORCE_SPEAKER) {
+            return;
+        }
         if (on) {
             AudioSystem.setForceUse(AudioSystem.FOR_COMMUNICATION, AudioSystem.FORCE_SPEAKER);
             mForcedUseForComm = AudioSystem.FORCE_SPEAKER;
@@ -957,6 +964,9 @@ public class AudioService extends IAudioService.Stub {
     /** @see AudioManager#setBluetoothScoOn() */
     public void setBluetoothScoOn(boolean on){
         if (!checkAudioSettingsPermission("setBluetoothScoOn()")) {
+            return;
+        }
+        if (!on && mForcedUseForComm != AudioSystem.FORCE_BT_SCO) {
             return;
         }
         if (on) {
@@ -1236,6 +1246,9 @@ public class AudioService extends IAudioService.Stub {
             return AudioSystem.STREAM_VOICE_CALL;
         } else if (AudioSystem.isStreamActive(AudioSystem.STREAM_MUSIC)) {
             // Log.v(TAG, "getActiveStreamType: Forcing STREAM_MUSIC...");
+            if (suggestedStreamType == AudioSystem.STREAM_FM) {
+                return AudioSystem.STREAM_FM;
+            }
             return AudioSystem.STREAM_MUSIC;
         } else if (AudioSystem.isStreamActive(AudioSystem.STREAM_FM)) {
             // Log.v(TAG, "getActiveStreamType: Forcing STREAM_FM...");

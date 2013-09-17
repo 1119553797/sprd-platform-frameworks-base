@@ -8479,6 +8479,11 @@ public class WindowManagerService extends IWindowManager.Stub
         int topAttached = -1;
         for (i = N-1; i >= 0; i--) {
             WindowState win = mWindows.get(i);
+            //If the window's ViewRootImpl never call performTraversals(),
+            //its mRequestedWidth & mRequestedHeight are both 0,
+            //computing its layout is useless and may leads to some error.
+            if (!win.mRelayoutCalled)
+                continue;
 
             // Don't do layout of a window if it is not visible, or
             // soon won't be visible, to avoid wasting time and funky

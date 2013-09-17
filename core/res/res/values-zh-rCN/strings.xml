@@ -1084,4 +1084,5 @@
 
     <!-- Strings for Airplane mode -->
     <string name="cant_open_airplane_mode_when_phone_busy">"电话忙,不能开启飞行模式"</string>
+    <string name="staticip_invalid">静态IP配置出错，关闭静态IP选项</string>
 </resources>

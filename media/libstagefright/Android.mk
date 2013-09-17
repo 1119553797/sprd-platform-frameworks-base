@@ -59,6 +59,10 @@ LOCAL_SRC_FILES += 			  \
 	VideoPhoneWriter.cpp		  
 endif
 
+ifeq ($(Trout_FM),true)
+LOCAL_SRC_FILES	+= FMExtractor.cpp
+endif
+
 LOCAL_C_INCLUDES:= \
 	$(JNI_H_INCLUDE) \
         $(TOP)/frameworks/base/include/media/stagefright/openmax \
@@ -67,6 +71,11 @@ LOCAL_C_INCLUDES:= \
 	$(TOP)/external/skia/include/core \
         $(TOP)/frameworks/base/media/libstagefright/rtsp\
 	$(TOP)/frameworks/base/media/libstagefright/cmmbmxd
+
+ifeq ($(Trout_FM),true)
+LOCAL_C_INCLUDES += $(TOP)/external/sprd/fmhal \
+	$(TOP)/external/sprd/tinyalsa/include
+endif
 
 LOCAL_SHARED_LIBRARIES := \
         libbinder         \
@@ -135,6 +144,10 @@ LOCAL_SHARED_LIBRARIES += \
         libstagefright_color_conversion \
 	libskia
 
+ifeq ($(Trout_FM),true)
+LOCAL_SHARED_LIBRARIES += libFMHalSource
+endif
+
 ifeq ($(TARGET_OS)-$(TARGET_SIMULATOR),linux-true)
         LOCAL_LDLIBS += -lpthread -ldl
         LOCAL_SHARED_LIBRARIES += libdvm
@@ -159,6 +172,9 @@ LOCAL_CFLAGS += -DBUILD_SPRD_AVC
 
 ifneq ($(BOARD_SUPPORT_FEATURE_VT),false)
 LOCAL_CFLAGS += -DBOARD_SUPPORT_FEATURE_VT
+endif
+ifeq ($(Trout_FM),true)
+LOCAL_CFLAGS += -DTrout_FM
 endif
 
 LOCAL_MODULE:= libstagefright

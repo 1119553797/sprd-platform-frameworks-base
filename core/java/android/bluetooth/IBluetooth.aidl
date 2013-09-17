@@ -18,6 +18,7 @@ package android.bluetooth;
 
 import android.bluetooth.IBluetoothCallback;
 import android.os.ParcelUuid;
+import android.bluetooth.BluetoothDevice;
 
 /**
  * System private API for talking with the Bluetooth service.
@@ -76,4 +77,7 @@ interface IBluetooth
     boolean connectHeadset(String address);
     boolean disconnectHeadset(String address);
     boolean notifyIncomingConnection(String address);
+    void sendConnectionStateChange(in BluetoothDevice device, int profile, int state, int prevState);
+    int getAdapterConnectionState();
+    boolean isInBondingSate();
 }

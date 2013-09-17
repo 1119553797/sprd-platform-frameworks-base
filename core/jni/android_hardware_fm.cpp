@@ -48,6 +48,7 @@
 #define FM_IOCTL_STOP_SEARCH _IOW(FM_IOCTL_BASE, 5, int)
 #define FM_IOCTL_SET_VOLUME  _IOW(FM_IOCTL_BASE, 7, int)
 #define FM_IOCTL_GET_VOLUME  _IOW(FM_IOCTL_BASE, 8, int)
+#define FM_IOCTL_CONFIG      _IOW(FM_IOCTL_BASE, 9, int)
 
 // operation result
 #define FM_JNI_SUCCESS  0L
@@ -65,6 +66,7 @@
 #define V4L2_CID_BASE                   (V4L2_CTRL_CLASS_USER | 0x900)
 #define V4L2_CID_AUDIO_VOLUME           (V4L2_CID_BASE + 5)
 #define V4L2_CID_AUDIO_MUTE             (V4L2_CID_BASE + 9)
+#define V4L2_CID_FM_CONFIG              (V4L2_CID_BASE + 10)
 
 
 using namespace android;
@@ -169,6 +171,12 @@ static jint android_hardware_fmradio_FmReceiverJNI_setControlNative
             }
         }
         break;
+
+        case V4L2_CID_FM_CONFIG:
+        {
+            err = ioctl(fd, FM_IOCTL_CONFIG, &value);
+        }
+        break;
     }
 
     LOGE("(setControl)operation=%x value=%d result=%d errno=%d", id, value, err, errno);
@@ -208,9 +216,9 @@ static jint android_hardware_fmradio_FmReceiverJNI_startSearchNative
             break;
         }
     } while (1);*/
-	do {
+//	do {
         err = ioctl(fd, FM_IOCTL_SEARCH, buffer);
-        if (err < 0 && count<3) {
+/*        if (err < 0 && count<3) {
             if (dir == 0) {
                 buffer[0] += 1;
             } else {
@@ -221,9 +229,8 @@ static jint android_hardware_fmradio_FmReceiverJNI_startSearchNative
         } else {
             break;
         }
-    } while (1);
-	
-	LOGE("err=%d\n", err);
+    } while (1);*/
+
     LOGE("(seek)freq=%d direction=%d timeout=%d reserve=%d result=%d errno=%d\n", freq, dir, timeout, reserve, err, errno);
     if(err < 0){
         return FM_JNI_FAILURE;

@@ -992,7 +992,7 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
             netStatPollEnabled = true;
             //add by liguxiang 08-26-11 for Cellular network to WLAN begin
             SystemProperties.set("gsm.gprs.attached", "true");
-            mWifiManager.setGprsConnectState(true);
+            //mWifiManager.setGprsConnectState(true);
             //add by liguxiang 08-26-11 for Cellular network to WLAN end
             mPollNetStat.run();
         }
@@ -1002,7 +1002,7 @@ public class GsmDataConnectionTracker extends DataConnectionTracker {
         netStatPollEnabled = false;
         //add by liguxiang 08-26-11 for Cellular network to WLAN begin
         SystemProperties.set("gsm.gprs.attached", "false");
-        mWifiManager.setGprsConnectState(false);
+        //mWifiManager.setGprsConnectState(false);
         //add by liguxiang 08-26-11 for Cellular network to WLAN end
         removeCallbacks(mPollNetStat);
         Log.d(LOG_TAG, "[DataConnection] Stop poll NetStat");

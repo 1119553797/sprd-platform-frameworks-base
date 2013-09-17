@@ -2221,6 +2221,27 @@ public class BluetoothService extends IBluetooth.Stub {
             mA2dpProfileState.sendMessage(msg);
         }
     }
+    /**
+     * @hide
+     */
+    public int getAdapterConnectionState() {
+        return 0;
+    }
+    /**
+     * @hide
+     */
+    public synchronized void sendConnectionStateChange(BluetoothDevice
+            device, int profile, int state, int prevState)
+	{
+
+	}
+    /**
+     * @hide
+     */
+    public synchronized boolean isInBondingSate() {
+        String[] bondingDevices = mBondState.listInState(BluetoothDevice.BOND_BONDING);
+        return (bondingDevices.length > 0);
+    }
 
     private static void log(String msg) {
         Log.d(TAG, msg);
