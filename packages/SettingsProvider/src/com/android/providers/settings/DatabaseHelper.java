@@ -1607,6 +1607,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     R.fraction.def_uui_window_animation_scale, 1);
             loadFractionSetting(stmt, Settings.System.TRANSITION_ANIMATION_SCALE,
                     R.fraction.def_uui_window_transition_scale, 1);
+            //fix bug 216225 change animation default scale on 20130913 begin
+            loadFractionSetting(stmt, Settings.System.ANIMATOR_DURATION_SCALE,
+                  R.fraction.def_uui_animator_duration_scale,1);
+            //fix bug 216225 change animation default scale on 20130913 end
     }
         //Fix Bug 160259
     }
