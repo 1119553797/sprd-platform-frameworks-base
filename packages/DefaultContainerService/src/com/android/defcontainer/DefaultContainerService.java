@@ -639,6 +639,16 @@ public class DefaultContainerService extends IntentService {
         final boolean isForwardLocked = (flags & PackageManager.INSTALL_FORWARD_LOCK) != 0;
 
         check_inner : {
+            /*
+             * Explicit install flags should override the manifest settings.
+             */
+            if ((flags & PackageManager.INSTALL_INTERNAL) != 0) {
+                prefer = PREFER_INTERNAL;
+                break check_inner;
+            } else if ((flags & PackageManager.INSTALL_EXTERNAL) != 0) {
+                prefer = PREFER_EXTERNAL;
+                break check_inner;
+            }
 /* Add 20121218 Spreadst of 106635 ,install location start */
             int installPreference = Settings.System.getInt(getApplicationContext()
                     .getContentResolver(),
@@ -652,17 +662,6 @@ public class DefaultContainerService extends IntentService {
                 break check_inner;
             }
 /* Add 20121218 Spreadst of 106635 ,install location end */
-            /*
-             * Explicit install flags should override the manifest settings.
-             */
-            if ((flags & PackageManager.INSTALL_INTERNAL) != 0) {
-                prefer = PREFER_INTERNAL;
-                break check_inner;
-            } else if ((flags & PackageManager.INSTALL_EXTERNAL) != 0) {
-                prefer = PREFER_EXTERNAL;
-                break check_inner;
-            }
-
             /* No install flags. Check for manifest option. */
             if (installLocation == PackageInfo.INSTALL_LOCATION_INTERNAL_ONLY) {
                 prefer = PREFER_INTERNAL;
