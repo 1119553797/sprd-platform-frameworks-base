@@ -101,6 +101,7 @@ import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.SystemClock;
 import android.os.SystemProperties;
+import android.os.StatFs;
 import android.os.UserId;
 import android.provider.Settings.Secure;
 import android.security.SystemKeyStore;
@@ -421,6 +422,9 @@ public class PackageManagerService extends IPackageManager.Stub {
     static final int CHECK_PENDING_VERIFICATION = 16;
 
     static final int WRITE_SETTINGS_DELAY = 10*1000;  // 10 seconds
+
+    static final int LOW_THRESHOLD_PERCENTAGE = 15; //15%
+    private long mTotDataSize = 0L;
 
     // Delay time in millisecs
     static final int BROADCAST_DELAY = 10 * 1000;
@@ -919,6 +923,8 @@ public class PackageManagerService extends IPackageManager.Stub {
 
         mPreInstallDir = new File("/system/preloadapp");
         mInstaller = new Installer();
+        final StatFs internalStats = new StatFs(Environment.getDataDirectory().getPath());
+        mTotDataSize = (long)internalStats.getBlockCount() * internalStats.getBlockSize();
 
         WindowManager wm = (WindowManager)context.getSystemService(Context.WINDOW_SERVICE);
         Display d = wm.getDefaultDisplay();
@@ -6041,14 +6047,17 @@ public class PackageManagerService extends IPackageManager.Stub {
             } else {
                 final long lowThreshold;
 
-                final DeviceStorageMonitorService dsm = (DeviceStorageMonitorService) ServiceManager
+                /*final DeviceStorageMonitorService dsm = (DeviceStorageMonitorService) ServiceManager
                         .getService(DeviceStorageMonitorService.SERVICE);
                 if (dsm == null) {
                     Log.w(TAG, "Couldn't get low memory threshold; no free limit imposed");
                     lowThreshold = 0L;
                 } else {
                     lowThreshold = dsm.getMemoryLowThreshold();
-                }
+                }*/
+
+                // lowThreshold :10%->15%
+                lowThreshold = mTotDataSize / 100L * LOW_THRESHOLD_PERCENTAGE;
 
                 try {
                     mContext.grantUriPermission(DEFAULT_CONTAINER_PACKAGE, mPackageURI,
@@ -6523,7 +6532,7 @@ public class PackageManagerService extends IPackageManager.Stub {
         boolean checkFreeStorage(IMediaContainerService imcs) throws RemoteException {
             final long lowThreshold;
 
-            final DeviceStorageMonitorService dsm = (DeviceStorageMonitorService) ServiceManager
+            /*final DeviceStorageMonitorService dsm = (DeviceStorageMonitorService) ServiceManager
                     .getService(DeviceStorageMonitorService.SERVICE);
             if (dsm == null) {
                 Log.w(TAG, "Couldn't get low memory threshold; no free limit imposed");
@@ -6535,7 +6544,10 @@ public class PackageManagerService extends IPackageManager.Stub {
                 }
 
                 lowThreshold = dsm.getMemoryLowThreshold();
-            }
+            }*/
+
+            // lowThreshold :10%->15%
+            lowThreshold = mTotDataSize / 100L * LOW_THRESHOLD_PERCENTAGE;
 
             try {
                 mContext.grantUriPermission(DEFAULT_CONTAINER_PACKAGE, packageURI,
@@ -7392,6 +7404,22 @@ public class PackageManagerService extends IPackageManager.Stub {
         int retCode;
         if ((newPackage.applicationInfo.flags&ApplicationInfo.FLAG_HAS_CODE) != 0) {
             retCode = mInstaller.movedex(newPackage.mScanPath, newPackage.mPath);
+             /* add for :if app is installed in T-card,
+              * move classes from /data/dalvik-cache to /mnt/sdcard/.Dalcache.
+              * rename from /data/dalvik-cache to /mnt/sdcard/.Dalcache will be failed,errno is EXDEV.
+              */
+             try {
+                 if (retCode == -18) { //Cross-device link
+                    Slog.i(TAG,"movedex failed.reason=Cross-device link");
+                    retCode = mInstaller.dexopt(newPackage.mPath, newPackage.applicationInfo.uid, !isForwardLocked(newPackage));
+                    if (retCode == 0) {
+                        return PackageManager.INSTALL_SUCCEEDED;
+                    }
+                 }
+             } catch (Exception e) {
+                //
+             }
+
             if (retCode != 0) {
                 if (mNoDexOpt) {
                     /*
