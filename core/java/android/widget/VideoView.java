@@ -736,7 +736,8 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
      * release the media player in any state
      */
     private void release(boolean cleartargetstate) {
-        if (mMediaPlayer != null) {
+        /** SPRD : add catch for exception @{ */
+        /*if (mMediaPlayer != null) {
             mMediaPlayer.reset();
             mMediaPlayer.release();
             mMediaPlayer = null;
@@ -744,7 +745,31 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
             if (cleartargetstate) {
                 mTargetState  = STATE_IDLE;
             }
+        }*/
+        try {
+            if (mMediaPlayer != null) {
+                mMediaPlayer.reset();
+                mMediaPlayer.release();
+                mMediaPlayer = null;
+                mCurrentState = STATE_IDLE;
+                if (cleartargetstate) {
+                    mTargetState  = STATE_IDLE;
+                }
+            }
+        }  catch (java.lang.IllegalStateException e1) {
+            mMediaPlayer = null;
+            mCurrentState = STATE_IDLE;
+            if (cleartargetstate) {
+                mTargetState = STATE_IDLE;
+            }
+        } catch (NullPointerException e2) {
+            mMediaPlayer = null;
+            mCurrentState = STATE_IDLE;
+            if (cleartargetstate) {
+                mTargetState = STATE_IDLE;
+            }
         }
+        /** @} */
     }
 
     @Override
