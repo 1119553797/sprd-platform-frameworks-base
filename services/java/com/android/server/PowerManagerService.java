@@ -2635,6 +2635,7 @@ public class PowerManagerService extends IPowerManager.Stub
     }
 
     public void userActivity(long time, boolean noChangeLights, int eventType, boolean force) {
+        setButtonBrightness(100);
         userActivity(time, -1, noChangeLights, eventType, force, false);
     }
 
@@ -3290,9 +3291,11 @@ public class PowerManagerService extends IPowerManager.Stub
         public void handleMessage(Message msg) {
             switch (msg.what) {
             case BUTTON_LIGHT_OFF:
+                mButtonBrightnessOn = false;
                 setButtonBrightnessWithHandler(0);
                 break;
             case BUTTON_LIGHT_ON:
+                mButtonBrightnessOn = true;
                 setButtonBrightnessWithHandler(100);
                 Message msg1 = mMessageHandler.obtainMessage(BUTTON_LIGHT_OFF);
                 mMessageHandler.sendMessageDelayed(msg1, 1500);
@@ -3321,12 +3324,18 @@ public class PowerManagerService extends IPowerManager.Stub
 
     private MessageHandler mMessageHandler;
     private HandlerThread mThread;
+    private boolean mButtonBrightnessOn = false;
     //for just set button brightness
     public void setButtonBrightness(int brightness) {
         if (0 < brightness && brightness <= 255) {
             mMessageHandler.removeMessages(MessageHandler.BUTTON_LIGHT_OFF);
-            Message msg1 = mMessageHandler.obtainMessage(MessageHandler.BUTTON_LIGHT_ON);
-            mMessageHandler.sendMessage(msg1);
+            if (!mButtonBrightnessOn) {
+                Message msg1 = mMessageHandler.obtainMessage(MessageHandler.BUTTON_LIGHT_ON);
+                mMessageHandler.sendMessage(msg1);
+                return;
+            }
+            Message msg1 = mMessageHandler.obtainMessage(MessageHandler.BUTTON_LIGHT_OFF);
+            mMessageHandler.sendMessageDelayed(msg1, 1500);
         }
     }
 
