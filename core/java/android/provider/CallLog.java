@@ -298,7 +298,7 @@ public class CallLog {
          */
         public static Uri addCall(CallerInfo ci, Context context, String number,
                 int presentation, int callType, long start, int duration) {
-            return addCall(ci, context, number, presentation, callType, start, duration, 0, 0);
+            return addCall(ci, context, number, presentation, callType, start, duration, -1, -1);
         }
 
         /**
@@ -307,7 +307,7 @@ public class CallLog {
          */
         public static Uri addCall(CallerInfo ci, Context context, String number,
                 int presentation, int callType, long start, int duration, int phoneId, int videoCallFlag) {
-            return addCall(ci, context, number, presentation, callType, start, duration, 0, 0, null);
+            return addCall(ci, context, number, presentation, callType, start, duration, phoneId, videoCallFlag, null);
         }
 
         /**
@@ -340,8 +340,12 @@ public class CallLog {
             values.put(DURATION, Long.valueOf(duration));
             values.put(NEW, Integer.valueOf(1));
             /* SPRD: add @{ */
-            values.put(PHONE_ID, Integer.valueOf(phoneId));
-            values.put(VIDEO_CALL_FLAG, Integer.valueOf(videoCallFlag));
+            if (phoneId == -1) {
+                values.put(PHONE_ID, Integer.valueOf(phoneId));
+            }
+            if (videoCallFlag == -1) {
+                values.put(VIDEO_CALL_FLAG, Integer.valueOf(videoCallFlag));
+            }
             if (iccId != null) {
                 values.put(ICC_ID, iccId);
             }
@@ -412,7 +416,7 @@ public class CallLog {
          * string if none exist yet.
          */
         public static String getLastOutgoingCall(Context context) {
-            return getLastOutgoingCall(context, 0);//SPRD: remove logic to below
+            return getLastOutgoingCall(context, -1);//SPRD: remove logic to below
         }
 
         /** 
@@ -422,11 +426,18 @@ public class CallLog {
         public static String getLastOutgoingCall(Context context, int type) {
             final ContentResolver resolver = context.getContentResolver();
             Cursor c = null;
+            StringBuffer sb = new StringBuffer();
+            if (type != -1) {
+                sb.append(" AND ");
+                sb.append(VIDEO_CALL_FLAG);
+                sb.append(" = ");
+                sb.append(type);
+            }
             try {
                 c = resolver.query(
                     CONTENT_URI,
                     new String[] {NUMBER},
-                    TYPE + " = " + OUTGOING_TYPE + " AND " + VIDEO_CALL_FLAG + " = " + type,
+                    TYPE + " = " + OUTGOING_TYPE + sb.toString(),
                     null,
                     DEFAULT_SORT_ORDER + " LIMIT 1");
                 if (c == null || !c.moveToFirst()) {
