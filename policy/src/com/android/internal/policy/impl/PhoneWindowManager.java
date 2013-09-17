@@ -1741,10 +1741,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     private PowerManager mPower = null;
     //lit button light
     private void litButtonLight() {
-        if (mPower == null) 
+        /*if (mPower == null) 
             mPower = (PowerManager)mContext.getSystemService("power");
 
-        mPower.setButtonBrightness(100);
+        mPower.setButtonBrightness(100);*/
     } 
 
     /** {@inheritDoc} */
