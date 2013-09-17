@@ -3658,6 +3658,11 @@
         <item quantity="other"><xliff:g id="index" example="2">%d</xliff:g> of <xliff:g id="total" example="137">%d</xliff:g></item>
     </plurals>
 
+    <!--STK Add start-->
+    <string name="stk_refresh_sim_init_message" >SIM card is updating</string>
+    <string name="stk_refresh_sim_reset_message" >Phone will reboot</string>
+    <!--STK Add end  -->
+
     <!-- Label for the "Done" button on the far left of action mode toolbars. -->
     <string name="action_mode_done">Done</string>
 
