@@ -93,7 +93,6 @@ public class Environment {
         // TODO: generalize further to create package-specific environment
 
         private final File mExternalStorage;
-        private final File mSecondStorage; // SPRD: other storage
         private final File mPrimaryStorage;// SPRD: primary storage
         private  File mLinkPoint;// SPRD: link point
         private final File mExternalStorageAndroidData;
@@ -109,18 +108,18 @@ public class Environment {
 
             /* SPRD: init mPrimaryStorage and mSecondStorage @{ */
             mLinkPoint = new File("/sdcard");
+            /*
             int type = Environment.getStorageType();
             switch(type){
             default :
             case Environment.STORAGE_TYPE_EMMC_EXTERNAL:
               rawEmulatedStorageTarget = Environment.getExternalStoragePath().getPath();
-              mSecondStorage = Environment.getInternalStoragePath();
               break;
             case Environment.STORAGE_TYPE_EMMC_INTERNAL:
                rawEmulatedStorageTarget = Environment.getInternalStoragePath().getPath();
-               mSecondStorage = Environment.getExternalStoragePath();
                break;
-            }
+            }*/
+            rawEmulatedStorageTarget = mLinkPoint.getPath();
             /* @} */
 
             if (TextUtils.isEmpty(rawMediaStorage)) {
@@ -203,9 +202,6 @@ public class Environment {
         /*
          * SPRD: add multi-user support @{
          */
-        public  File getSecondStorageDirectory(){
-              return mSecondStorage;
-        }
         public  File getPrimaryStorageDirectory(){
               return mPrimaryStorage;
         }
@@ -713,6 +709,8 @@ public class Environment {
                 cur = new File(cur, segment);
             }
         }
+        // SPRD: create user direcory
+        boolean f = cur.mkdirs();
         return cur;
     }
 
@@ -779,7 +777,6 @@ public class Environment {
      * @return
      */
     public static File getInternalStoragePath(){
-          throwIfUserRequired();
         return INTERNAL_STORAGE;
     }
     /**
@@ -796,7 +793,6 @@ public class Environment {
      * @return
      */
     public static File getExternalStoragePath(){
-         throwIfUserRequired();
         return EXTERNAL_STORAGE;
     }
     /**
@@ -813,7 +809,20 @@ public class Environment {
      */
     public static File getPrimaryStorageDirectory(){
              throwIfUserRequired();
-          return sCurrentUser.getPrimaryStorageDirectory();
+             int type = getStorageType();
+             File path ;
+             switch(type){
+             case STORAGE_TYPE_EMMC_EXTERNAL:
+             case STORAGE_TYPE_NAND:
+                  path = getExternalStoragePath();
+                break;
+             case STORAGE_TYPE_EMMC_INTERNAL:
+                 path = getInternalStoragePath();
+                break;
+                default :
+                    path = getInternalStoragePath();
+           }
+             return path;
     }
     /**
      * SPRD: Gets the current primary card state
@@ -834,14 +843,6 @@ public class Environment {
               state = Environment.MEDIA_UNMOUNTED;
        }
          return state;
-    }
-    /**
-     * SPRD: Gets the current second card path
-     * @return
-     */
-    public static File getSecondStorageDirectory(){
-            throwIfUserRequired();
-          return sCurrentUser.getSecondStorageDirectory();
     }
     /**
      * SPRD: Gets the current second card state

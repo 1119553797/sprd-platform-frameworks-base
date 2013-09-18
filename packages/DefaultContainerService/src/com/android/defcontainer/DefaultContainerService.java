@@ -325,7 +325,7 @@ public class DefaultContainerService extends IntentService {
 
         if (isExternal) {
             // Make sure the sdcard is mounted.
-            String status = Environment.getExternalStorageState();
+            String status = Environment.getPrimaryStorageState(); // SPRD: primary storage
             if (!status.equals(Environment.MEDIA_MOUNTED)) {
                 Slog.w(TAG, "Make sure sdcard is mounted.");
                 return null;
@@ -663,6 +663,19 @@ public class DefaultContainerService extends IntentService {
         final boolean isForwardLocked = (flags & PackageManager.INSTALL_FORWARD_LOCK) != 0;
 
         check_inner : {
+            /* SPRD: add install location , see settings @{ */
+            int installPreference = Settings.Global.getInt(getContentResolver(), // SPRD:update  getApplicationContext() to   getContentResolver()
+                    Settings.Global.DEFAULT_INSTALL_LOCATION,
+                    PackageHelper.APP_INSTALL_AUTO);
+            Log.w(TAG, "===  installPreference:"+installPreference);
+            if (installPreference == PackageHelper.APP_INSTALL_INTERNAL) {
+                prefer = PREFER_INTERNAL;
+                break check_inner;
+            } else if (installPreference == PackageHelper.APP_INSTALL_EXTERNAL) {
+                prefer = PREFER_EXTERNAL;
+                break check_inner;
+            }
+            /* @} */
             /*
              * Explicit install flags should override the manifest settings.
              */
@@ -674,7 +687,7 @@ public class DefaultContainerService extends IntentService {
                 break check_inner;
             }
             /* SPRD: Modify Bug 209961, add install location @{ */
-            int installPreference = Settings.System.getInt(getApplicationContext()
+            installPreference = Settings.System.getInt(getApplicationContext()
                     .getContentResolver(),
                     Settings.Global.DEFAULT_INSTALL_LOCATION,
                     PackageHelper.APP_INSTALL_AUTO);
@@ -721,9 +734,10 @@ public class DefaultContainerService extends IntentService {
              */
             prefer = PREFER_INTERNAL;
         }
+        // SPRD:  add log
+        Log.w(TAG, "===  prefer:"+prefer);
 
         final boolean emulated = Environment.isExternalStorageEmulated();
-
         final File apkFile = new File(archiveFilePath);
 
         boolean fitsOnInternal = false;
@@ -768,7 +782,7 @@ public class DefaultContainerService extends IntentService {
          * storage space available.
          */
         if (!emulated && (checkBoth || prefer == PREFER_EXTERNAL)
-                && !Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
+                && !Environment.MEDIA_MOUNTED.equals(Environment.getPrimaryStorageState())) { // SPRD: primary storage
             return PackageHelper.RECOMMEND_MEDIA_UNAVAILABLE;
         } else {
             return PackageHelper.RECOMMEND_FAILED_INSUFFICIENT_STORAGE;
@@ -818,8 +832,8 @@ public class DefaultContainerService extends IntentService {
         final int sizeMb = calculateContainerSize(apkFile, isForwardLocked);
 
         final int availSdMb;
-        if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
-            final StatFs sdStats = new StatFs(Environment.getExternalStorageDirectory().getPath());
+        if (Environment.MEDIA_MOUNTED.equals(Environment.getPrimaryStorageState())) {
+            final StatFs sdStats = new StatFs(Environment.getPrimaryStorageDirectory().getPath());
             final int blocksToMb = (1 << 20) / sdStats.getBlockSize();
             availSdMb = sdStats.getAvailableBlocks() * blocksToMb;
         } else {

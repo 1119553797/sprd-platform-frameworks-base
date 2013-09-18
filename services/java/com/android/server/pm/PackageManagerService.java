@@ -6945,6 +6945,8 @@ public class PackageManagerService extends IPackageManager.Stub {
             final boolean onSd = (flags & PackageManager.INSTALL_EXTERNAL) != 0;
             final boolean onInt = (flags & PackageManager.INSTALL_INTERNAL) != 0;
             PackageInfoLite pkgLite = null;
+            //  SPRD : add log
+            Log.w("eric", "onSd:"+onSd+ "   onInt:" +onInt);
 
             if (onInt && onSd) {
                 // Check if both bits are set.
