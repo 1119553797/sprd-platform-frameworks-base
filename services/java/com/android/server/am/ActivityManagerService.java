@@ -9519,9 +9519,9 @@ public final class ActivityManagerService extends ActivityManagerNative
         if (!mRestartingServices.contains(r)) {
             return;
         }
-        if (r.app == null || r.app.processName == null) {
-            return;
-        }	
+        //if (r.app == null || r.app.processName == null) {
+         //   return;
+        //}	
        if (r.lowMemKilled && checkServicesDelayRestartLocked(r)) return;		
         bringUpServiceLocked(r, r.intent.getIntent().getFlags(), true);
     }
