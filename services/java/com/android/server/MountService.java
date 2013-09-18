@@ -1290,11 +1290,11 @@ class MountService extends IMountService.Stub
     private void addVolumeLocked(StorageVolume volume) {
         /* SPRD: support double T card @{ */
         Slog.d(TAG, volume.isPrimary()+" addVolumeLocked() " + volume);
-        if(volume.isPrimary()){
-          mVolumes.add(0,volume);
-        }else{
+        //if(volume.isPrimary()){
+        //  mVolumes.add(0,volume);
+        //}else{
           mVolumes.add(volume);
-        }
+        //}
 
         /* @} */
         final StorageVolume existing = mVolumesByPath.put(volume.getPath(), volume);
