@@ -128,7 +128,7 @@ public class FmTransceiver
       boolean bStatus;
       if (sFd == -1)
       {
-         sFd = FmReceiverJNI.acquireFdNative("/dev/Trout_FM");
+         sFd = FmReceiverJNI.acquireFdNative(device);
 
          if (sFd >= 0) {
            Log.d(TAG, "Opened "+ sFd);
