@@ -17232,8 +17232,6 @@ package android.os {
     method public static java.io.File getPrimaryStorageDirectory();
     method public static java.lang.String getPrimaryStorageState();
     method public static java.io.File getRootDirectory();
-    method public static java.io.File getSecondStorageDirectory();
-    method public static java.lang.String getSecondStorageState();
     method public static int getStorageType();
     method public static boolean isExternalStorageEmulated();
     method public static boolean isExternalStorageRemovable();
