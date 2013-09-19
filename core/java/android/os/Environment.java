@@ -844,6 +844,48 @@ public class Environment {
        }
          return state;
     }
+
+    /**
+     * SPRD: Gets the current second card path
+     * @return
+     */
+   public static File getSecondStorageDirectory(){
+       int type = getStorageType();
+       File path ;
+       switch(type){
+       case STORAGE_TYPE_EMMC_EXTERNAL:
+       case STORAGE_TYPE_NAND:
+            path = getInternalStoragePath();
+          break;
+       case STORAGE_TYPE_EMMC_INTERNAL:
+           path = getExternalStoragePath();
+          break;
+          default :
+              path = getExternalStoragePath();
+     }
+       return path;
+   }
+
+     /**
+      * SPRD: Gets the current second card state
+      * @return
+      */
+    public static String getSecondStorageState(){
+     int type = getStorageType();
+    String state ;
+    switch(type){
+    case STORAGE_TYPE_EMMC_EXTERNAL:
+    case STORAGE_TYPE_NAND:
+    state = getInternalStoragePathState();
+    break;
+    case STORAGE_TYPE_EMMC_INTERNAL:
+    state = getExternalStoragePathState();
+    break;
+    default :
+    state = Environment.MEDIA_UNMOUNTED;
+     }
+    return state;
+    }
     /**
      * SPRD: read  storage state
      * @param path
