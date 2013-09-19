@@ -9,11 +9,7 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="status_bar_recent_inspect_item_title">அப்ளிகேஷன் தகவல்</string>
     <string name="status_bar_no_recent_apps">சமீபத்திய அப்ளிகேஷன்கள் இல்லை</string>
     <string name="status_bar_accessibility_dismiss_recents">சமீபத்திய அப்ளிகேஷன்களை ஒதுக்கவும்</string>
-    <plurals name="status_bar_accessibility_recent_apps">
-        <item quantity="one">1 சமீபத்திய அப்ளிகேஷன்</item>
-        <item quantity="other">%d சமீபத்திய அப்ளிகேஷன்கள்</item>
-    </plurals>
-    <string name="status_bar_no_notifications_title">அறிவிப்புக்கள் இல்லை</string>
+  <string name="status_bar_no_notifications_title">அறிவிப்புக்கள் இல்லை</string>
     <string name="status_bar_ongoing_events_title">நடந்து கொண்டிருப்பது</string>
     <string name="status_bar_latest_events_title">அறிவிக்கை</string>
     <string name="battery_low_title">சார்ஜர் இணைக்கவும்</string>
@@ -144,4 +140,8 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="status_bar_expanded_notification_ongoing_button_text">நடந்து கொண்டிருப்பது</string>
     <string name="dataConnectSetting">தரவுகள் இணைப்பு </string>
     <string name="closeData">மூடு</string>
+  <plurals name="status_bar_accessibility_recent_apps">
+        <item quantity="one">"1 சமீபத்தியப் பயன்பாடுகள்"</item>
+        <item quantity="other">"%d சமீபத்தியப் பயன்பாடுகள்"</item>
+    </plurals>
 </resources>

@@ -9,11 +9,7 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="status_bar_recent_inspect_item_title">ပရိုဂရမ္သတင္း</string>
     <string name="status_bar_no_recent_apps">မၾကာေသးမီက ပ႐ိုဂရမ္မ်ားမ႐ွိပါ။</string>
     <string name="status_bar_accessibility_dismiss_recents">ယခင္ပရိုဂရမ္အား ပိတ္ပါ</string>
-    <plurals name="status_bar_accessibility_recent_apps">
-        <item quantity="one">↔မၾကာမီကသံုးခဲ့သည့္ပရိုဂရမ္တစ္ခု↔</item>
-        <item quantity="other">↔%d ယခုေလးတင္သံုးခဲ့သည့္ ပရိုဂရမ္↔</item>
-    </plurals>
-    <string name="status_bar_no_notifications_title">အေၾကာင္းမၾကားျခင္း</string>
+  <string name="status_bar_no_notifications_title">အေၾကာင္းမၾကားျခင္း</string>
     <string name="status_bar_ongoing_events_title">အလုပ္လုပ္ေနသည္</string>
     <string name="status_bar_latest_events_title">အခ်က္ေပးခ်က္မ်ား</string>
     <string name="battery_low_title">မီးအားသြင္းခ်ာဂ်ာႏွင့္ဆက္ျခင္း</string>
@@ -144,4 +140,8 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="status_bar_expanded_notification_ongoing_button_text">အလုပ္လုပ္ေနသည္</string>
     <string name="dataConnectSetting">ေဒတာအခ်က္အလက္လိုင္း ခ်ိတ္ဆက္မႈ</string>
     <string name="closeData">ပိတ္ပါ</string>
+  <plurals name="status_bar_accessibility_recent_apps">
+        <item quantity="one">"မၾကာမီကသံုးခဲ့သည့္ ေဆာ့ဖ္၀ဲလ္တစ္ခု"</item>
+        <item quantity="other">"%d မၾကာမီကသံုးသည့္ ေဆာ့ဖ္၀ဲလ္ပရိုဂရမ္"</item>
+    </plurals>
 </resources>

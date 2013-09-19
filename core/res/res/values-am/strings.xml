@@ -79,7 +79,7 @@
   <string name="find_next_title">"ቀጥሎ"</string>
   <string name="lockscreen_sim_network_locked_message">ስልኩ በSIM  አውታረ መረብ ተቆልፏል</string>
   <string name="lockscreen_sim_card_locked_message">SIM ካርዱ  ተቆልፏል።</string>
-  <string name="digtal_formatter">%2$ሰከንድ</string>
+  <string name="digtal_formatter">"%2$ሰከንድ"</string>
   <string name="description_target_call">ጥሪ</string>
   <string name="description_target_sms">"SMS"</string>
   <string name="ringtone_waning">የተሳሳተ ፋይል፣ እባክዎ እንደገና ይምረጡ</string>

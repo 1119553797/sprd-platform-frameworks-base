@@ -10,8 +10,8 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="status_bar_no_recent_apps">Walay bagohay nga mga app</string>
     <string name="status_bar_accessibility_dismiss_recents">Itiwalag mga bag-ohay nga app</string>
     <plurals name="status_bar_accessibility_recent_apps">
-        <item quantity="one">2 ka bagohay nga app</item>
-        <item quantity="other">%d bagohay nga mga app</item>
+        <item quantity="one">"1 ka bagohay nga app"</item>
+        <item quantity="other">"%d bagohay nga mga app"</item>
     </plurals>
     <string name="status_bar_no_notifications_title">Walay mga notipikasyon</string>
     <string name="status_bar_ongoing_events_title">Nagpadayon</string>

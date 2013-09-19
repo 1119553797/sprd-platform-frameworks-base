@@ -8,10 +8,6 @@
   <string name="status_bar_recent_inspect_item_title">ពត៌មានកម្មវិធី</string>
   <string name="status_bar_no_recent_apps">នៅពេលថ្មីៗនេះអត់ធ្វើកម្មវិធីទេ</string>
   <string name="status_bar_accessibility_dismiss_recents">បិទកម្មវិធីដែលដំណើរពេលថ្មីនេះ</string>
-  <plurals name="status_bar_accessibility_recent_apps">
-        <item quantity="one">កម្មវិធី1 ដំណើរការថ្មីៗ</item>
-        <item quantity="other">%d កម្មវិធីដំណើរការថ្មីៗ</item>
-    </plurals>
   <string name="status_bar_no_notifications_title">គ្មានសេចក្តីជូនដំណឹង</string>
   <string name="status_bar_ongoing_events_title">កំពុងធ្វើ</string>
   <string name="status_bar_latest_events_title">សេចក្តីជូនដំណឹង</string>
@@ -125,4 +121,8 @@
   <string name="mobile_data_connect_enable">បាទ</string>
   <string name="network_disconnect_title">សេចក្តីជូនដំណឹង</string>
   <string name="network_disconnect_message">បណ្ដាញWLANដាច់ហើយ។ \nតភ្ជាប់តាមរយ:3Gឬ? \nIf ប្រសិនបើលោកមិន​មានផែនការ​ទិន្នន័យ ​វានឹងបង្កើតសោហ៊ុយបន្ថែមទៀត។</string>
-</resources>
+  <plurals name="status_bar_accessibility_recent_apps">
+        <item quantity="one">"កម្មវិធី1 ដំណើរការថ្មីៗ"</item>
+        <item quantity="other">"%d កម្មវិធីដំណើរការថ្មីៗ"</item>
+    </plurals>
+  </resources>

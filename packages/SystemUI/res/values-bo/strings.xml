@@ -9,8 +9,8 @@
     <string name="status_bar_no_recent_apps">མིག་སྔར་ཉེར་སྤྱོད་བྱ་རིམ་གཅིག་ཀྱང་འགུལ་བསྐྱོད་བྱེད་ཀྱིན་མེད་པ།</string>
     <string name="status_bar_accessibility_dismiss_recents">མིག་སྔར་འགུལ་བསྐྱོད་བྱེད་ཀྱིན་པའི་ཉེར་སྤྱོད་བྱ་རིམ་གྱི་སྒོ་རྒྱག་པ།</string>
     <plurals name="status_bar_accessibility_recent_apps">
-        <item quantity="one">འགུལ་བསྐྱོད་བྱེད་ཀྱིན་པའི་ཉེར་སྤྱོད་བྱ་རིམ་གཅིག</item>
-        <item quantity="other">%d འགུལ་བསྐྱོད་བྱེད་ཀྱིན་པའི་ཉེར་སྤྱོད་བྱ་རིམ།</item>
+        <item quantity="one">"འགུལ་བསྐྱོད་བྱེད་ཀྱིན་པའི་ཉེར་སྤྱོད་བྱ་རིམ་གཅིག"</item>
+        <item quantity="other">"%d འགུལ་བསྐྱོད་བྱེད་ཀྱིན་པའི་ཉེར་སྤྱོད་བྱ་རིམ།"</item>
     </plurals>
     <string name="status_bar_no_notifications_title">གསལ་བསྒྲགས་མ་བྱས་པ།</string>
     <string name="status_bar_ongoing_events_title">འགུལ་བསྐྱོད་བྱེད་ཀྱིན་པ།</string>

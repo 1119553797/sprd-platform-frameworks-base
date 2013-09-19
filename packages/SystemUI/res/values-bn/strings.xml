@@ -30,10 +30,6 @@
   <string name="status_bar_recent_inspect_item_title">আবেদন তথ্য</string>
   <string name="status_bar_no_recent_apps">কোনও সাম্প্রতিক এপস নেই</string>
   <string name="status_bar_accessibility_dismiss_recents">সাম্প্রতিক এপস খারিজ</string>
-  <plurals name="status_bar_accessibility_recent_apps">
-        <item quantity="one">1 সাম্প্রতিক অ্যাপ্লিকেশন</item>
-        <item quantity="other">%d সাম্প্রতিক আবেদন</item>
-    </plurals>
   <string name="invalid_charger">ইউএসবি সমর্থিত নয় ব্যার্থতার.\nশুধুমাত্র সরবরাহকৃত চার্জার ব্যবহার করুন.</string>
   <string name="status_bar_settings_settings_button">সেটিংস</string>
   <string name="status_bar_settings_wifi_button">ওয়াই ফাই</string>
@@ -142,4 +138,8 @@
   <string name="status_bar_expanded_notification_ongoing_button_text">নিরবচ্ছিন্ন</string>
   <string name="dataConnectSetting">ডাটা সংযোগ</string>
   <string name="closeData">বন্ধ করা</string>
+  <plurals name="status_bar_accessibility_recent_apps">
+        <item quantity="one">"1 সাম্প্রতিক অ্যাপ্লিকেশন"</item>
+        <item quantity="other">"% ঘ সাম্প্রতিক আবেদন"</item>
+    </plurals>
 </resources>
