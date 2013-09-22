@@ -229,4 +229,12 @@
     <string name="dataConnectSetting" >数据连接</string>
     <string name="closeData" >关闭</string>
     <!-- @} -->
+    <!-- SPRD：MODIFY for dual sim card patch @{ -->
+    <string name="toggle_data_alert">注意</string>
+    <string name="alert_ok">确定</string>
+    <string name="alert_cancel">取消</string>
+    <string name="toggle_data_message">网络数据连接即将打开，将可能产生数据流量和相关费用，请知悉</string>
+    <string name="toggle_data_change_message">网络数据连接即将切换至卡<xliff:g id="NEW_DATA_CARD">%1$d</xliff:g>，将可能产生数据流量和相关费用，请知悉</string>
+    <string name="wifi_error_airplane">手机处于飞行模式下，您不能使用WIFI.</string>
+    <!-- @} -->
 </resources>

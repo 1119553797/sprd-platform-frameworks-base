@@ -695,15 +695,6 @@ public class PhoneStatusBar extends BaseStatusBar {
                 });
             }
             /* @} */
-            /* SPRD: for multi-sim @{ */
-            // set up the dynamic hide/show of the label
-            mPile.setOnSizeChangedListener(new OnSizeChangedListener() {
-                @Override
-                public void onSizeChanged(View view, int w, int h, int oldw, int oldh) {
-                    updateCarrierLabelVisibility(false);
-                }
-            });
-            /* @} */
         }
 
         // Quick Settings (where available, some restrictions apply)

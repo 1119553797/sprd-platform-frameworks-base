@@ -545,5 +545,12 @@
     <string name="dataConnectSetting" >Data Connection</string>
     <string name="closeData" >Close</string>
     <!-- @} -->
-
+    <!-- SPRD：MODIFY for dual sim card patch @{ -->
+    <string name="toggle_data_alert">Attention</string>
+    <string name="alert_ok">OK</string>
+    <string name="alert_cancel">Cancel</string>
+    <string name="toggle_data_message">About to open data connection, which may result in data traffic and related costs.</string>
+    <string name="toggle_data_change_message">Network connection will switch to sim card <xliff:g id="NEW_DATA_CARD">%1$d</xliff:g>，it will produce data throughput and correlative charges，please note.</string>
+    <string name="wifi_error_airplane">You can\'t use Wifi when the phone is in airplane mode.</string>
+    <!-- @} -->
 </resources>

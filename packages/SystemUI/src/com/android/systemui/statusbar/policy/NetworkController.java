@@ -65,7 +65,6 @@ import android.widget.TextView;
 
 import com.android.internal.app.IBatteryStats;
 import com.android.internal.telephony.IccCardConstants;
-import com.android.internal.telephony.PhoneFactory;
 import com.android.internal.telephony.TelephonyIntents;
 import com.android.internal.telephony.cdma.EriInfo;
 import com.android.internal.util.AsyncChannel;
@@ -292,7 +291,8 @@ public class NetworkController extends BroadcastReceiver {
                 com.android.internal.R.string.lockscreen_carrier_default);
         mPhoneStateListener = new PhoneStateListener[numPhones];
         for (int i=0; i < numPhones; i++) {
-            mPhone[i] = (TelephonyManager)context.getSystemService(PhoneFactory.getServiceName(
+            // SPRD：MODIFY for dual sim card patch
+            mPhone[i] = (TelephonyManager)context.getSystemService(TelephonyManager.getServiceName(
                     Context.TELEPHONY_SERVICE, i));
             //mPhone[i] = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
 
@@ -2014,10 +2014,12 @@ public class NetworkController extends BroadcastReceiver {
 
        mConnectivityManager.setMobileDataEnabled(false);
        int phoneId = 0;
-       if (PhoneFactory.isMultiSim()) {
+       // SPRD：MODIFY for dual sim card patch
+       if (TelephonyManager.isMultiSim()) {
            phoneId = TelephonyManager.getDefaultDataPhoneId(mContext);
        }
-       TelephonyManager mTeleMgr = (TelephonyManager) mContext.getSystemService(PhoneFactory
+       // SPRD：MODIFY for dual sim card patch
+       TelephonyManager mTeleMgr = (TelephonyManager) mContext.getSystemService(TelephonyManager
                .getServiceName(Context.TELEPHONY_SERVICE, phoneId));
 
        if (mTeleMgr.getDataState() != TelephonyManager.DATA_DISCONNECTED) {
