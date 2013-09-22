@@ -779,9 +779,9 @@ class CommandParamsFactory extends Handler {
         if (ctlv != null) {
             textMsg.text = ValueParser.retrieveAlphaId(ctlv);
         } else {
-            throw new ResultException(ResultCode.REQUIRED_VALUES_MISSING);
-            //textMsg.text = Resources.getSystem().getString(R.string.sms_control_title);
-            //StkLog.d(this, "alpha id null, use default="+textMsg.text);
+            //throw new ResultException(ResultCode.REQUIRED_VALUES_MISSING);
+            textMsg.text = Resources.getSystem().getString(R.string.sms_control_title);
+            StkLog.d(this, "alpha id null, use default="+textMsg.text);
         }
 
         ctlv = searchForTag(ComprehensionTlvTag.ICON_ID, ctlvs);
