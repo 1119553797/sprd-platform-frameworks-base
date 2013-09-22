@@ -45,6 +45,7 @@ import android.media.IAudioService;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.os.Bundle;
+import android.os.Build;
 import android.os.FactoryTest;
 import android.os.Handler;
 import android.os.IBinder;
@@ -99,6 +100,7 @@ import com.android.internal.policy.impl.keyguard.KeyguardViewMediator;
 import com.android.internal.statusbar.IStatusBarService;
 import com.android.internal.telephony.ITelephony;
 import com.android.internal.widget.PointerLocationView;
+import com.sprd.android.config.OptConfig;
 
 import java.io.File;
 import java.io.FileReader;
@@ -4775,6 +4777,15 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     }
 
     void startDockOrHome() {
+	/* SPRD: add for kill-stop in call incoming. @{ */
+   	if (Build.IS_LOWMEM_VERSION && OptConfig.KILL_FRONT_APP) {
+            try {
+                ActivityManagerNative.getDefault().startHomePre();
+            } catch (RemoteException re) {
+                // ignor
+            }
+        }
+	/** @} */
         awakenDreams();
 
         Intent dock = createHomeDockIntent();

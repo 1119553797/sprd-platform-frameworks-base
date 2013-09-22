@@ -92,6 +92,7 @@ public interface IActivityManager extends IInterface {
     public void activityResumed(IBinder token) throws RemoteException;
     public void activityIdle(IBinder token, Configuration config,
             boolean stopProfiling) throws RemoteException;
+    public void killStopFrontApp(int func) throws RemoteException;	//SPRD: add for kill-stop in call incoming.
     public void activityPaused(IBinder token) throws RemoteException;
     public void activityStopped(IBinder token, Bundle state,
             Bitmap thumbnail, CharSequence description) throws RemoteException;
@@ -380,7 +381,8 @@ public interface IActivityManager extends IInterface {
     public void hang(IBinder who, boolean allowRestart) throws RemoteException;
     // SPRD: add home-key press interface
     public boolean isHomeKeyPressed() throws RemoteException;
-
+    // SPRD: add for kill-stop in call incoming
+    public void startHomePre() throws RemoteException;
     /*
      * Private non-Binder interfaces
      */
@@ -643,6 +645,10 @@ public interface IActivityManager extends IInterface {
     int KILL_UID_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+164;
     int SET_USER_IS_MONKEY_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+165;
     int HANG_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+166;
+    /* SPRD: add for kill-stop in call incoming. @{ */		
+    int KILL_STOP_FRONT_APP_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+167;		
+    int START_HOME_PRE = IBinder.FIRST_CALL_TRANSACTION+168;		
+    /* @} */
     // SPRD: add home-key pressed interface
     int IS_HOME_KEY_PRESSED_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+201;
 }

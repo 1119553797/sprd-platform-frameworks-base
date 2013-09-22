@@ -590,6 +590,14 @@ public abstract class ActivityManagerNative extends Binder implements IActivityM
             reply.writeNoException();
             return true;
         }
+        /* SPRD: add for kill-stop in call incoming. @{ */
+        case KILL_STOP_FRONT_APP_TRANSACTION: {
+            data.enforceInterface(IActivityManager.descriptor);
+            killStopFrontApp(data.readInt());
+            reply.writeNoException();
+            return true;
+        }
+       /* @} */
 
         case MOVE_ACTIVITY_TASK_TO_BACK_TRANSACTION: {
             data.enforceInterface(IActivityManager.descriptor);
@@ -1887,6 +1895,14 @@ public abstract class ActivityManagerNative extends Binder implements IActivityM
             return true;
         }
         /* @} */
+	/* SPRD: add for kill-stop in call incoming @{ */
+  	case START_HOME_PRE: {
+            data.enforceInterface(IActivityManager.descriptor);
+            startHomePre();
+            reply.writeNoException();
+            return true;
+        }
+        /* @} */
         }
 
         return super.onTransact(code, data, reply, flags);
@@ -2548,6 +2564,18 @@ class ActivityManagerProxy implements IActivityManager
         data.recycle();
         reply.recycle();
     }
+    /* SPRD: add for kill-stop in call incoming. @{ */	
+    public void killStopFrontApp(int func) throws RemoteException {
+        Parcel data = Parcel.obtain();
+        Parcel reply = Parcel.obtain();
+        data.writeInterfaceToken(IActivityManager.descriptor);
+        data.writeInt(func);
+        mRemote.transact(KILL_STOP_FRONT_APP_TRANSACTION, data, reply, 0);
+        reply.readException();
+        data.recycle();
+        reply.recycle();
+    }
+   /* @} */
     public boolean moveActivityTaskToBack(IBinder token, boolean nonRoot)
             throws RemoteException {
         Parcel data = Parcel.obtain();
@@ -4309,6 +4337,17 @@ class ActivityManagerProxy implements IActivityManager
         data.recycle();
         reply.recycle();
         return res;
+    }
+    /* @} */
+    /* SPRD: add for kill-stop in call incoming @{ */
+    public void startHomePre() throws RemoteException {
+        Parcel data = Parcel.obtain();
+        Parcel reply = Parcel.obtain();
+        data.writeInterfaceToken(IActivityManager.descriptor);
+        mRemote.transact(START_HOME_PRE, data, reply, 0);
+        reply.readException();
+        data.recycle();
+        reply.recycle();
     }
     /* @} */
 
