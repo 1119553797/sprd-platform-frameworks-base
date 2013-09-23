@@ -131,6 +131,12 @@ public class UsbDeviceManager {
     private static final int MSG_LOCAL_CHANGE = 9;
     private static final int MSG_ENABLE_VSER_GSER = 10;
 
+    private static final int FUNCTION_MASS_STORAGE = 0;
+    private static final int FUNCTION_TETHER = 1;
+    private static final int FUNCTION_CDROM = 2;
+    private static final int FUNCTION_MTP = 3;
+    private static final int FUNCTION_PTP = 4;
+
     private boolean mUmsEnabled;
     private boolean mCdromEnabled;
     private boolean mTetherEnabled;
@@ -555,6 +561,8 @@ public class UsbDeviceManager {
             } else if ("CONFIGURED".equals(state)) {
                 connected = 1;
                 configured = 1;
+                // SPRD: add for usb functions
+                mFuctionSwitch = false;
             } else {
                 Slog.e(TAG, "unknown state " + state);
                 return;
@@ -603,7 +611,7 @@ public class UsbDeviceManager {
             }
         }
 
-        /* SPRD: add for usb functions @{ */
+        /** SPRD: add for usb functions @{ */
         private void setCdromEnabled(boolean enable) {
             if (enable != mCdromEnabled) {
                 mCdromEnabled = enable;
@@ -651,96 +659,95 @@ public class UsbDeviceManager {
         }
 
         private String switchUsbFunctions(String functions) {
+            int function = 0;
+            String tempFunctions = "none";
 
-            boolean mMtpEnaled = false;
-            boolean mPtpEnabled = false;
-            // Caution: We need UI to obey the same rule. It is hard to be handled only in this function
-            if (DEBUG)
-                Slog.d(TAG, "setEnabledFunctions:" + functions);
             if (functions.equalsIgnoreCase(UsbManager.USB_FUNCTION_RNDIS)) {
-                mTetherEnabled = true;
+                function = FUNCTION_TETHER;
             } else if (functions.equalsIgnoreCase(UsbManager.USB_FUNCTION_MASS_STORAGE)) {
-                mUmsEnabled = true;
+                function = FUNCTION_MASS_STORAGE;
             } else if (functions.equalsIgnoreCase(UsbManager.USB_FUNCTION_CDROM)) {
-                mCdromEnabled = true;
-            } else {
-                if (functions.equalsIgnoreCase(UsbManager.USB_FUNCTION_MTP)) {
-                    mMtpEnaled = true;
-                } else if (functions.equalsIgnoreCase(UsbManager.USB_FUNCTION_PTP)) {
-                    mPtpEnabled = true;
+                function = FUNCTION_CDROM;
+            } else if (functions.equalsIgnoreCase(UsbManager.USB_FUNCTION_MTP)) {
+                function = FUNCTION_MTP;
+            } else if (functions.equalsIgnoreCase(UsbManager.USB_FUNCTION_PTP)) {
+                function = FUNCTION_PTP;
+            }
+
+            switch(function) {
+            case FUNCTION_MASS_STORAGE:
+                tempFunctions = addFunction(tempFunctions, UsbManager.USB_FUNCTION_MASS_STORAGE);
+                if (mAdbEnabled) {
+                    tempFunctions = addFunction(tempFunctions, UsbManager.USB_FUNCTION_ADB);
                 }
-                mTetherEnabled = mUmsEnabled = mCdromEnabled == false;
-            }
-
-            functions = removeFunction(functions, UsbManager.USB_FUNCTION_MTP);
-            functions = removeFunction(functions, UsbManager.USB_FUNCTION_PTP);
-            functions = removeFunction(functions, UsbManager.USB_FUNCTION_MASS_STORAGE);
-            functions = removeFunction(functions, UsbManager.USB_FUNCTION_RNDIS);
-            functions = removeFunction(functions, UsbManager.USB_FUNCTION_ADB);
-            functions = removeFunction(functions, UsbManager.USB_FUNCTION_CDROM);
-            functions = removeFunction(functions, UsbManager.USB_FUNCTION_VSER);
-            functions = removeFunction(functions, UsbManager.USB_FUNCTION_GSER);
-
-            if (mTetherEnabled) {
-                functions = addFunction(functions, UsbManager.USB_FUNCTION_RNDIS);
-            } else if (mUmsEnabled) {
-                functions = addFunction(functions, UsbManager.USB_FUNCTION_MASS_STORAGE);
-            } else if (mCdromEnabled) {
-                functions = addFunction(functions, UsbManager.USB_FUNCTION_CDROM);
-            } else {
-                if (mMtpEnaled) {
-                    functions = addFunction(functions, UsbManager.USB_FUNCTION_MTP);
-                } else if (mPtpEnabled) {
-                    functions = addFunction(functions, UsbManager.USB_FUNCTION_PTP);
+                if (mVserGserEnabled) {
+                    tempFunctions = addFunction(tempFunctions, UsbManager.USB_FUNCTION_VSER);
+                    tempFunctions = addFunction(tempFunctions, UsbManager.USB_FUNCTION_GSER);
                 }
+                break;
+            case FUNCTION_TETHER:
+                tempFunctions = addFunction(tempFunctions, UsbManager.USB_FUNCTION_RNDIS);
+                if (mAdbEnabled) {
+                    if (mVserGserEnabled) {
+                        tempFunctions = addFunction(tempFunctions, UsbManager.USB_FUNCTION_VSER);
+                    }
+                    tempFunctions = addFunction(tempFunctions, UsbManager.USB_FUNCTION_ADB);
+                }
+                break;
+            case FUNCTION_CDROM:
+                tempFunctions = addFunction(tempFunctions, UsbManager.USB_FUNCTION_CDROM);
+                break;
+            case FUNCTION_MTP:
+                tempFunctions = addFunction(tempFunctions, UsbManager.USB_FUNCTION_MTP);
+                if (mAdbEnabled) {
+                    tempFunctions = addFunction(tempFunctions, UsbManager.USB_FUNCTION_ADB);
+                }
+                break;
+            case FUNCTION_PTP:
+                tempFunctions = addFunction(tempFunctions, UsbManager.USB_FUNCTION_PTP);
+                if (mAdbEnabled) {
+                    tempFunctions = addFunction(tempFunctions, UsbManager.USB_FUNCTION_ADB);
+                }
+                break;
             }
 
-            if (mAdbEnabled && !mCdromEnabled) {
-                functions = addFunction(functions, UsbManager.USB_FUNCTION_ADB);
-            }
-
-            if (mVserGserEnabled && mUmsEnabled) {
-                functions = addFunction(functions, UsbManager.USB_FUNCTION_VSER);
-                functions = addFunction(functions, UsbManager.USB_FUNCTION_GSER);
-            }
-            return functions;
+            return tempFunctions;
         }
-        /* @} */
+        /** @} */
 
         private void setEnabledFunctions(String functions, boolean makeDefault) {
 
+            /* SPRD: changed for usb function @{ */
             // Do not update persystent.sys.usb.config if the device is booted up
             // with OEM specific mode.
+            if (DEBUG)
+                Slog.d(TAG, "setEnabledFunctions:" + functions);
             if (functions != null && makeDefault && !needsOemUsbOverride()) {
 
-                /* SPRD: changed for usb function @{ */
                 // if (mAdbEnabled) {
                 //     functions = addFunction(functions, UsbManager.USB_FUNCTION_ADB);
                 // } else {
                 //     functions = removeFunction(functions, UsbManager.USB_FUNCTION_ADB);
                 // }
                 // if (!mDefaultFunctions.equals(functions)) {
-                functions = switchUsbFunctions(functions);
-                if (!mCurrentFunctions.equals(functions)) {
-                    if (!setUsbConfig("none")) {
-                        Slog.e(TAG, "Failed to disable USB");
-                        // revert to previous configuration if we fail
-                        setUsbConfig(mCurrentFunctions);
-                        return;
-                    }
-                    // setting this property will also change the current USB state
-                    // via a property trigger
-                    // SystemProperties.set("persist.sys.usb.config", functions);
-                    if (waitForState(functions)) {
-                        mCurrentFunctions = functions;
-                        // mDefaultFunctions = functions;
-                    } else {
-                        Slog.e(TAG, "Failed to switch persistent USB config to " + functions);
-                        // revert to previous configuration if we fail
-                        // SystemProperties.set("persist.sys.usb.config", mDefaultFunctions);
-                    }
-                }
-                /* @} */
+                //     if (!setUsbConfig("none")) {
+                //         Slog.e(TAG, "Failed to disable USB");
+                //         // revert to previous configuration if we fail
+                //         setUsbConfig(mCurrentFunctions);
+                //         return;
+                //     }
+                //     // setting this property will also change the current USB state
+                //     // via a property trigger
+                //     SystemProperties.set("persist.sys.usb.config", functions);
+                //     if (waitForState(functions)) {
+                //         mCurrentFunctions = functions;
+                //         mDefaultFunctions = functions;
+                //     } else {
+                //         Slog.e(TAG, "Failed to switch persistent USB config to " + functions);
+                //         // revert to previous configuration if we fail
+                //         SystemProperties.set("persist.sys.usb.config", mDefaultFunctions);
+                //     }
+                // }
             } else {
                 if (functions == null) {
                     functions = mDefaultFunctions;
@@ -749,31 +756,55 @@ public class UsbDeviceManager {
                 // Override with bootmode specific usb mode if needed
                 functions = processOemUsbOverride(functions);
 
-                /* SPRD: changed for usb function @{ */
                 // if (mAdbEnabled) {
                 //     functions = addFunction(functions, UsbManager.USB_FUNCTION_ADB);
                 // } else {
                 //     functions = removeFunction(functions, UsbManager.USB_FUNCTION_ADB);
                 // }
-                functions = switchUsbFunctions(functions);
-                /* @} */
 
-                if (!mCurrentFunctions.equals(functions)) {
-                    if (!setUsbConfig("none")) {
-                        Slog.e(TAG, "Failed to disable USB");
-                        // revert to previous configuration if we fail
-                        setUsbConfig(mCurrentFunctions);
-                        return;
-                    }
-                    if (setUsbConfig(functions)) {
-                        mCurrentFunctions = functions;
-                    } else {
-                        Slog.e(TAG, "Failed to switch USB config to " + functions);
-                        // revert to previous configuration if we fail
-                        setUsbConfig(mCurrentFunctions);
-                    }
-                }
+                // if (!mCurrentFunctions.equals(functions)) {
+                //     if (!setUsbConfig("none")) {
+                //         Slog.e(TAG, "Failed to disable USB");
+                //         // revert to previous configuration if we fail
+                //         setUsbConfig(mCurrentFunctions);
+                //         return;
+                //     }
+                //     if (setUsbConfig(functions)) {
+                //         mCurrentFunctions = functions;
+                //     } else {
+                //         Slog.e(TAG, "Failed to switch USB config to " + functions);
+                //         // revert to previous configuration if we fail
+                //         setUsbConfig(mCurrentFunctions);
+                //     }
+                // }
             }
+
+            if (functions.equals("none") && setUsbConfig("none")) {
+                mCurrentFunctions = functions;
+                return;
+            }
+
+            functions = switchUsbFunctions(functions);
+            if (DEBUG)
+                Slog.d(TAG, "functions = " + functions);
+            if (!mCurrentFunctions.equals(functions)) {
+                mFuctionSwitch = true;
+                if (!setUsbConfig("none")) {
+                    Slog.e(TAG, "Failed to disable USB");
+                    // revert to previous configuration if we fail
+                    setUsbConfig(mCurrentFunctions);
+                    mFuctionSwitch = false;
+                    return;
+                }
+                if (setUsbConfig(functions)) {
+                    mCurrentFunctions = functions;
+                } else {
+                    Slog.e(TAG, "Failed to switch USB config to " + functions);
+                    setUsbConfig(mCurrentFunctions);
+                }
+                mFuctionSwitch = false;
+            }
+            /* @} */
         }
 
         private void updateCurrentAccessory() {
@@ -861,10 +892,13 @@ public class UsbDeviceManager {
                         updateCurrentAccessory();
                     }
 
-                    if (!mConnected) {
+                    /* SPRD: changed for usb charge only function */
+                    // if (!mConnected) {
+                    if (!mConnected  && !mCurrentFunctions.equals("none")) {
                         // restore defaults when USB is disconnected
                         setEnabledFunctions(mDefaultFunctions, false);
                     }
+                    /* @} */
                     if (mBootCompleted) {
                         updateUsbState();
                         updateAudioSourceFunction();
@@ -927,7 +961,9 @@ public class UsbDeviceManager {
         }
 
         private void updateUsbNotification() {
-            if (mNotificationManager == null || !mUseUsbNotification) return;
+            /* SPRD: changed for usb notification @{ */
+            // if (mNotificationManager == null || !mUseUsbNotification) return;
+            if (mNotificationManager == null || mUseUsbNotification) return;
             int id = 0;
             Resources r = mContext.getResources();
             if (mConnected) {
@@ -935,19 +971,20 @@ public class UsbDeviceManager {
                     id = com.android.internal.R.string.usb_mtp_notification_title;
                 } else if (containsFunction(mCurrentFunctions, UsbManager.USB_FUNCTION_PTP)) {
                     id = com.android.internal.R.string.usb_ptp_notification_title;
-                } else if (containsFunction(mCurrentFunctions, UsbManager.USB_FUNCTION_MASS_STORAGE)) {
-                    id = com.android.internal.R.string.usb_cd_installer_notification_title;
+                // } else if (containsFunction(mCurrentFunctions, UsbManager.USB_FUNCTION_MASS_STORAGE)) {
+                //    id = com.android.internal.R.string.usb_cd_installer_notification_title;
                 } else if (containsFunction(mCurrentFunctions, UsbManager.USB_FUNCTION_ACCESSORY)) {
                     id = com.android.internal.R.string.usb_accessory_notification_title;
                 } else if (containsFunction(mCurrentFunctions, UsbManager.USB_FUNCTION_CDROM)) {
                     id = com.android.internal.R.string.usb_cdrom_notification_title;
                 } else {
                     // There is a different notification for USB tethering so we don't need one here
-                    //if (!containsFunction(mCurrentFunctions, UsbManager.USB_FUNCTION_RNDIS)) {
-                    //    Slog.e(TAG, "No known USB function in updateUsbNotification");
-                    //}
+                    // if (!containsFunction(mCurrentFunctions, UsbManager.USB_FUNCTION_RNDIS)) {
+                    //     Slog.e(TAG, "No known USB function in updateUsbNotification");
+                    // }
                 }
             }
+            /* @} */
             if (id != mUsbNotificationId) {
                 // clear notification if title needs changing
                 if (mUsbNotificationId != 0) {
@@ -968,9 +1005,9 @@ public class UsbDeviceManager {
                     notification.defaults = 0; // please be quiet
                     notification.sound = null;
                     notification.vibrate = null;
-                    notification.priority = Notification.PRIORITY_MIN;
 
                     /* SPRD: add for usb functions @{ */
+                    // notification.priority = Notification.PRIORITY_MIN;
                     // Intent intent = Intent.makeRestartActivityTask(
                     //         new ComponentName("com.android.settings",
                     //                 "com.android.settings.UsbSettings"));
@@ -1001,7 +1038,10 @@ public class UsbDeviceManager {
         private void updateAdbNotification() {
             if (mNotificationManager == null) return;
             final int id = com.android.internal.R.string.adb_active_notification_title;
-            if (mAdbEnabled && mConnected) {
+            /* SPRD: changed to show correct adb notification @{ */
+            // if (mAdbEnabled && mConnected) {
+            if (mConnected && containsFunction(mCurrentFunctions, UsbManager.USB_FUNCTION_ADB)) {
+            /* @} */
                 if ("0".equals(SystemProperties.get("persist.adb.notify"))) return;
 
                 if (!mAdbNotificationShown) {
