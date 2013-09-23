@@ -141,7 +141,7 @@ public final class RingtonePickerActivity extends AlertActivity implements
         mRingtoneManager.setIncludeDrm(includeDrm);
 
         // Get whether to include External ringtones
-        boolean includeExternal = intent.getBooleanExtra(RingtoneManager.EXTRA_RINGTONE_INCLUDE_EXTERNAL, true);
+        boolean includeExternal = intent.getBooleanExtra(RingtoneManager.EXTRA_RINGTONE_INCLUDE_EXTERNAL, false);
         mRingtoneManager.setIncludeExternal(includeExternal);
         // Get the types of ringtones to show
         int types = intent.getIntExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, -1);
