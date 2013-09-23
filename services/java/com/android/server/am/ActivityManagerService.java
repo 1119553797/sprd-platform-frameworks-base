@@ -170,6 +170,7 @@ public final class ActivityManagerService extends ActivityManagerNative
     static final boolean DEBUG_CONFIGURATION = localLOGV || false;
     static final boolean DEBUG_POWER = localLOGV || false;
     static final boolean DEBUG_POWER_QUICK = DEBUG_POWER || false;
+    static final boolean DEBUG_LC = localLOGV || false;
     static final boolean VALIDATE_TOKENS = false;
     static final boolean SHOW_ACTIVITY_START_TIME = true;
     
@@ -979,7 +980,7 @@ public final class ActivityManagerService extends ActivityManagerNative
     // for LC_RAM_SUPPORT
     long mRecentAvailMem = 0;
     long mRecentAvailMemClock = 0;
-
+    long mTopProcessPss = 0;
     AlertDialog mUidAlert;
 
     final Handler mHandler = new Handler() {
@@ -1803,7 +1804,7 @@ public final class ActivityManagerService extends ActivityManagerNative
         //     object attached to it so we know it couldn't have crashed; and
         // (3) There is a pid assigned to it, so it is either starting or
         //     already running.
-        if (DEBUG_PROCESSES) Slog.v(TAG, "startProcess: name=" + processName
+       if (DEBUG_PROCESSES) Slog.v(TAG, "startProcess: name=" + processName
                 + " app=" + app + " knownToBeDead=" + knownToBeDead
                 + " thread=" + (app != null ? app.thread : null)
                 + " pid=" + (app != null ? app.pid : -1));
@@ -2411,7 +2412,7 @@ public final class ActivityManagerService extends ActivityManagerNative
         if (resultData != null && resultData.hasFileDescriptors() == true) {
             throw new IllegalArgumentException("File descriptors passed in Intent");
         }
-
+  
         synchronized(this) {
             if (mController != null) {
                 // Find the first activity that is not finishing.
@@ -2717,7 +2718,7 @@ public final class ActivityManagerService extends ActivityManagerNative
         BatteryStatsImpl stats = mBatteryStatsService.getActiveStatistics();
         synchronized (stats) {
             stats.noteProcessDiedLocked(app.info.uid, pid);
-        }
+        }		
 	if(!whiteList.contains(app.processName))
 	{
 	     boolean needRemoveAlarm = false;
@@ -2753,11 +2754,12 @@ public final class ActivityManagerService extends ActivityManagerNative
                         + ") has died.");
             }
             EventLog.writeEvent(EventLogTags.AM_PROC_DIED, app.pid, app.processName);
-            if (localLOGV) Slog.v(
-                TAG, "Dying app: " + app + ", pid: " + pid
+	    if (localLOGV) Slog.v(
+		 TAG, "Dying app: " + app + ", pid: " + pid
                 + ", thread: " + thread.asBinder());
             boolean doLowMem = app.instrumentationClass == null;
             handleAppDiedLocked(app, false);
+			
 
             if (doLowMem) {
                 // If there are no longer any background processes running,
@@ -2771,7 +2773,6 @@ public final class ActivityManagerService extends ActivityManagerNative
                         break;
                     }
                 }
-                
                 if (!haveBg) {
                     Slog.i(TAG, "Low Memory: No more background processes.");
                     EventLog.writeEvent(EventLogTags.AM_LOW_MEMORY, mLruProcesses.size());
@@ -8407,7 +8408,6 @@ public final class ActivityManagerService extends ActivityManagerNative
                 }
             }
         }
-
         // Clean up any connections this application has to other services.
         if (app.connections.size() > 0) {
             Iterator<ConnectionRecord> it = app.connections.iterator();
@@ -8417,7 +8417,6 @@ public final class ActivityManagerService extends ActivityManagerNative
             }
         }
         app.connections.clear();
-
         if (app.services.size() != 0) {
             // Any services running in the application need to be placed
             // back in the pending list.
@@ -8693,7 +8692,6 @@ public final class ActivityManagerService extends ActivityManagerNative
         if (app == mHomeProcess) {
             mHomeProcess = null;
         }
-        
         if (restart) {
             // We have components that still need to be running in the
             // process, so re-launch it.
@@ -8779,6 +8777,7 @@ public final class ActivityManagerService extends ActivityManagerNative
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
+		
             }
         });
     }    
@@ -8950,12 +8949,22 @@ public final class ActivityManagerService extends ActivityManagerNative
         // GB: 2048,3072,4096,6144,7168,8192
         // HC: 8192,10240,12288,14336,16384,20480
     }
-
+    private long getTopProcessPss(){
+		if(lastLaunchEndApp != null){
+			int[] pids=  new int[1];;
+			pids[0]=lastLaunchEndApp.pid;
+			 try {
+			Debug.MemoryInfo[] mem = getProcessMemoryInfo(pids);
+			if(mem != null){
+				return mem[0].getTotalPss();
+			}}catch(RemoteException e){Slog.i(TAG, "getTopProcessPss error " );}
+		}
+		return 0;
+    	}
     private long readAvailMemory() {
         long freeMem = 0;
         try {
             freeMem = readAvailMemNative();
-           // if (DEBUG_LC) Slog.v(TAG, "readAvailMemNative return " + freeMem);
         } catch (Exception e) {
             Slog.e(TAG, "readAvailMemNative error", e);
         }
@@ -8972,20 +8981,21 @@ public final class ActivityManagerService extends ActivityManagerNative
     }	
     boolean checkServicesDelayRestartLocked(ServiceRecord r) {
         boolean needDelay = true;
-
+      
         for (int i = mLruProcesses.size() - 1 ; i >= 0 ; i--) {
             ProcessRecord pr = mLruProcesses.get(i);
             if (pr.thread != null &&
-               (pr.curAdj >= HIDDEN_APP_MIN_ADJ)) {
+                 pr.curAdj >= HIDDEN_APP_MIN_ADJ) {
                 needDelay = false;
             }
         }
-
         if (needDelay) {
-            if (r.hasFixAdj) {
+            //if (r.hasFixAdj) 
+              {
                 long curClock = SystemClock.uptimeMillis();
                 if (mRecentAvailMem == 0 || (curClock > mRecentAvailMemClock + 10 * 1000)) {
                     mRecentAvailMem = readAvailMemory();
+		    mTopProcessPss = getTopProcessPss()*1024;
                     mRecentAvailMemClock = curClock;
                 }
                 int adjustment = SERVICE_B_ADJ;
@@ -8993,8 +9003,12 @@ public final class ActivityManagerService extends ActivityManagerNative
                     adjustment = r.appAdj;
                 }
                 long serviceNeedMem = getMemLevel(adjustment) >> 10;
-
-                if (mRecentAvailMem > serviceNeedMem) {
+                if (mRecentAvailMem > serviceNeedMem &&
+		     (mTopProcessPss < 10*1024*1024//10MB
+           	     || mRecentAvailMem  >= 30720 //30MB
+		     ) 
+		   )
+		{
                     needDelay = false;
                 } 
             } 
@@ -9013,13 +9027,12 @@ public final class ActivityManagerService extends ActivityManagerNative
             r.nextRestartTime = SystemClock.uptimeMillis() + r.restartDelay;
 
             mHandler.postAtTime(r.restarter, r.nextRestartTime);
-            //if (DEBUG_LC) Slog.e(TAG, "ServicesDelayRestart: Delay service [" + r.shortName + "] for " + r.restartDelay + "ms");
+             if (DEBUG_LC) Slog.e(TAG, "ServicesDelayRestart: Delay service [" + r.shortName + "] for " + r.restartDelay + "ms");
         } else {
-//            if (DEBUG_LC) Slog.w(TAG, "ServicesDelayRestart: Restart service[" + r.shortName + "]");
+              if (DEBUG_LC) Slog.w(TAG, "ServicesDelayRestart: Restart service[" + r.shortName + "]");
             r.lowMemKilled = false;
             r.delayRestartCount = 0;
         }
-
         return needDelay;
     }
 
@@ -9408,7 +9421,6 @@ public final class ActivityManagerService extends ActivityManagerNative
         final long now = SystemClock.uptimeMillis();
         long minDuration = SERVICE_RESTART_DURATION;
         long resetTime = SERVICE_RESET_RUN_DURATION;
-        
         // Any delivered but not yet finished starts should be put back
         // on the pending list.
         final int N = r.deliveredStarts.size();
@@ -9526,9 +9538,7 @@ public final class ActivityManagerService extends ActivityManagerNative
         if (!mRestartingServices.contains(r)) {
             return;
         }
-        //if (r.app == null || r.app.processName == null) {
-         //   return;
-        //}	
+	
        if (r.lowMemKilled && checkServicesDelayRestartLocked(r)) return;		
         bringUpServiceLocked(r, r.intent.getIntent().getFlags(), true);
     }
@@ -9729,8 +9739,8 @@ public final class ActivityManagerService extends ActivityManagerNative
             Intent service, String resolvedType,
             int callingPid, int callingUid) {
         synchronized(this) {
-            if (DEBUG_SERVICE) Slog.v(TAG, "startService: " + service
-                    + " type=" + resolvedType + " args=" + service.getExtras());
+ 	  if (DEBUG_SERVICE) Slog.v(TAG, "startService: " + service
+		 + " type=" + resolvedType + " args=" + service.getExtras());
 
             if (caller != null) {
                 final ProcessRecord callerApp = getRecordForAppLocked(caller);
@@ -11180,6 +11190,7 @@ public final class ActivityManagerService extends ActivityManagerNative
     private final boolean finishReceiverLocked(IBinder receiver, int resultCode,
             String resultData, Bundle resultExtras, boolean resultAbort,
             boolean explicit) {
+
         if (mOrderedBroadcasts.size() == 0) {
             if (explicit) {
                 Slog.w(TAG, "finishReceiver called but no pending broadcasts");
@@ -11391,8 +11402,9 @@ public final class ActivityManagerService extends ActivityManagerNative
 
     private final void processCurBroadcastLocked(BroadcastRecord r,
             ProcessRecord app) throws RemoteException {
-        if (DEBUG_BROADCAST)  Slog.v(TAG,
-                "Process cur broadcast " + r + " for app " + app);
+          if (DEBUG_BROADCAST)  Slog.v(TAG,
+		 "Process cur broadcast " + r + " for app " + app);
+
         if (app.thread == null) {
             throw new RemoteException();
         }
@@ -11417,7 +11429,7 @@ public final class ActivityManagerService extends ActivityManagerNative
             started = true;
         } finally {
             if (!started) {
-                if (DEBUG_BROADCAST)  Slog.v(TAG,
+                 if (DEBUG_BROADCAST)  Slog.v(TAG,
                         "Process cur broadcast " + r + ": NOT STARTED!");
                 r.receiver = null;
                 r.curApp = null;
@@ -11533,10 +11545,9 @@ public final class ActivityManagerService extends ActivityManagerNative
     private final void processNextBroadcast(boolean fromMsg) {
         synchronized(this) {
             BroadcastRecord r;
-
-            if (DEBUG_BROADCAST) Slog.v(TAG, "processNextBroadcast: "
-                    + mParallelBroadcasts.size() + " broadcasts, "
-                    + mOrderedBroadcasts.size() + " ordered broadcasts");
+	    if (DEBUG_BROADCAST) Slog.v(TAG, "processNextBroadcast: "
+	   	  + mParallelBroadcasts.size() + " broadcasts, "
+		  + mOrderedBroadcasts.size() + " ordered broadcasts");
 
             updateCpuStats();
             
@@ -12209,7 +12220,7 @@ public final class ActivityManagerService extends ActivityManagerNative
         } else if (app.executingServices.size() > 0) {
             // An app that is currently executing a service callback also
             // counts as being in the foreground.
-            adj = FOREGROUND_APP_ADJ;
+            adj = PERCEPTIBLE_APP_ADJ;//baokun
             schedGroup = Process.THREAD_GROUP_DEFAULT;
             app.adjType = "exec-service";
         } else if (app.foregroundServices) {
@@ -12467,7 +12478,6 @@ public final class ActivityManagerService extends ActivityManagerNative
         //if (LC_RAM_SUPPORT) {
             raiseToFixAdj(app);
         //}
-
 
         return app.curAdj;
     }
