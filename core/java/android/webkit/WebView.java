@@ -521,7 +521,7 @@ public class WebView extends AbsoluteLayout
     // This should be ViewConfiguration.getTapTimeout()
     // But system time out is 100ms, which is too short for the browser.
     // In the browser, if it switches out of tap too soon, jump tap won't work.
-    private static final int TAP_TIMEOUT = 200;
+    private static final int TAP_TIMEOUT = 100;
     // This should be ViewConfiguration.getLongPressTimeout()
     // But system time out is 500ms, which is too short for the browser.
     // With a short timeout, it's difficult to treat trigger a short press.
