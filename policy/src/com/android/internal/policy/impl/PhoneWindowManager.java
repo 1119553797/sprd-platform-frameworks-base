@@ -303,6 +303,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
     // Nothing to see here, move along...
     int mFancyRotationAnimation;
+    
+    //add for restart systemUi
+    boolean mTopIsFullscreen = false;
 
     ShortcutManager mShortcutManager;
     PowerManager.WakeLock mBroadcastWakeLock;
@@ -1632,7 +1635,19 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 }
             }
         }
-        
+        if (mTopFullscreenOpaqueWindowState != null) {
+            WindowManager.LayoutParams lp =
+                    mTopFullscreenOpaqueWindowState.getAttrs();
+            boolean topIsFullscreen = (lp.flags & WindowManager.LayoutParams.FLAG_FULLSCREEN) != 0;
+            if (topIsFullscreen != mTopIsFullscreen) {
+                try {
+                    ActivityManagerNative.getDefault().notifySystemUiVisibility(!topIsFullscreen);
+                } catch (RemoteException e) {
+                    // not much to be done
+                }
+                mTopIsFullscreen = topIsFullscreen;
+            }
+        }
         if (changes != 0 && hiding) {
             IStatusBarService sbs = IStatusBarService.Stub.asInterface(ServiceManager.getService("statusbar"));
             if (sbs != null) {

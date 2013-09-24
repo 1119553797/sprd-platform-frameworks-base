@@ -8458,19 +8458,26 @@ public final class ActivityManagerService extends ActivityManagerNative
                 } else if (!allowRestart) {
                     bringDownServiceLocked(sr, true);
                 } else {
-                    boolean canceled = scheduleServiceRestartLocked(sr, true);
-                    
-                    // Should the service remain running?  Note that in the
-                    // extreme case of so many attempts to deliver a command
-                    // that it failed, that we also will stop it here.
-                    if (sr.startRequested && (sr.stopIfKilled || canceled)) {
-                        if (sr.pendingStarts.size() == 0) {
-                            sr.startRequested = false;
-                            if (!hasClients) {
-                                // Whoops, no reason to restart!
-                                bringDownServiceLocked(sr, true);
+                    if(!SYSTEMUI_PROC_NAME.equals(sr.processName) || mCanRestartSystemUi) {
+                        boolean canceled = scheduleServiceRestartLocked(sr, true);
+                        
+                        // Should the service remain running?  Note that in the
+                        // extreme case of so many attempts to deliver a command
+                        // that it failed, that we also will stop it here.
+                        if (sr.startRequested && (sr.stopIfKilled || canceled)) {
+                            if (sr.pendingStarts.size() == 0) {
+                                sr.startRequested = false;
+                                if (!hasClients) {
+                                    // Whoops, no reason to restart!
+                                    bringDownServiceLocked(sr, true);
+                                }
                             }
                         }
+                    } 
+                    else {
+//                        mSystemUisr = sr;
+                        bringDownServiceLocked(sr, true);
+                        mSystemUiIsAlive = false;
                     }
                 }
             }
@@ -13286,4 +13293,55 @@ public final class ActivityManagerService extends ActivityManagerNative
     HashMap<String,CrashRecord> appCrashRecord = new HashMap<String,CrashRecord>();
     HashMap<String,CrashRecord> appAnrRecord = new HashMap<String,CrashRecord>();
     //end crash}
+
+    private int mPreSystemUiAdj;
+    
+    private boolean mCanRestartSystemUi = true; 
+    
+    private boolean mSystemUiIsAlive = true;
+    
+    final static String SYSTEMUI_PROC_NAME = "com.android.systemui";
+    
+    public void notifySystemUiVisibility(boolean invisible) {
+        Log.v(TAG, "[systemUiVisibility] invisible is " + invisible);
+        ProcessRecord systemUi = null;
+        for(ProcessRecord app : mLruProcesses) {
+               if(SYSTEMUI_PROC_NAME.equals(app.processName)) {
+                       systemUi = app;
+                       break;
+               }
+        }
+        if(systemUi == null) {
+               Log.w(TAG, "can not find com.android.systemui process!");
+               if(invisible) {
+                   startSystemUi(null);
+               }
+               return;
+        }
+        if(invisible) {
+               systemUi.curAdj = mPreSystemUiAdj;
+               mCanRestartSystemUi = true;
+               if(!mSystemUiIsAlive) {
+                   startSystemUi(systemUi.thread);
+               } else {
+                   systemUi.persistent = true;
+               }
+        } else {
+               mPreSystemUiAdj = systemUi.curAdj;
+               systemUi.curAdj = 1;
+               systemUi.persistent = false;
+               mCanRestartSystemUi = false;
+        }
+        Process.setOomAdj(systemUi.pid, systemUi.curAdj);
+        Log.d(TAG, systemUi.processName + "-- curAdj: " + systemUi.curAdj + " preSystemUiAdj: " + mPreSystemUiAdj);
+    }
+    
+    private void startSystemUi(IApplicationThread caller) {
+        Intent intent = new Intent();
+        intent.setComponent(new ComponentName("com.android.systemui",
+                    "com.android.systemui.statusbar.StatusBarService"));
+        Slog.i(TAG, "Starting service: " + intent);
+        startService(caller, intent, null);
+        mSystemUiIsAlive = true;
+    }
 }
