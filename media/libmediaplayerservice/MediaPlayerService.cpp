@@ -666,6 +666,10 @@ MediaPlayerService::Client::Client(const sp<MediaPlayerService>& service, pid_t 
 MediaPlayerService::Client::~Client()
 {
     LOGV("Client(%d) destructor pid = %d", mConnId, mPid);
+    if(mPlayer != 0){
+        mPlayer->setNotifyCallback(0, 0);
+        LOGV("Client(%d) pid = %d callback clear ", mConnId, mPid);
+    }
     mAudioOutput.clear();
     wp<Client> client(this);
     disconnect();
