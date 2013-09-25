@@ -828,7 +828,9 @@ public class KeyguardHostView extends KeyguardViewBase {
                         break;
 
                     case SimPin:
+                    case Sim2Pin:
                     case SimPuk:
+                    case Sim2Puk:
                         // Shortcut for SIM PIN/PUK to go to directly to user's security screen or home
                         SecurityMode securityMode = mSecurityModel.getSecurityMode();
                         if (securityMode != SecurityMode.None) {
@@ -900,6 +902,8 @@ public class KeyguardHostView extends KeyguardViewBase {
 
                     case SimPin:
                     case SimPuk:
+                    case Sim2Pin:
+                    case Sim2Puk:
                         // Shortcut for SIM PIN/PUK to go to directly to user's security screen or home
                         SecurityMode securityMode = mSecurityModel.getSecurityMode();
                         if (securityMode != SecurityMode.None) {
@@ -1054,8 +1058,16 @@ public class KeyguardHostView extends KeyguardViewBase {
         final int children = mSecurityViewContainer.getChildCount();
         for (int child = 0; child < children; child++) {
             if (mSecurityViewContainer.getChildAt(child).getId() == securityViewIdForMode) {
-                view = ((KeyguardSecurityView)mSecurityViewContainer.getChildAt(child));
-                break;
+                if (securityViewIdForMode == R.id.keyguard_sim_pin_view
+                        || securityViewIdForMode == R.id.keyguard_sim_puk_view) {
+                    if (getSimSecurityView(mSecurityViewContainer.getChildAt(child), securityMode) != null) {
+                        view = ((KeyguardSecurityView) mSecurityViewContainer.getChildAt(child));
+                        break;
+                    }
+                } else {
+                    view = ((KeyguardSecurityView) mSecurityViewContainer.getChildAt(child));
+                    break;
+                }
             }
         }
         int layoutId = getLayoutIdFor(securityMode);
@@ -1077,6 +1089,25 @@ public class KeyguardHostView extends KeyguardViewBase {
         return view;
     }
 
+    private KeyguardSecurityView getSimSecurityView(View securityView, SecurityMode securityMode) {
+        KeyguardSecurityView view = null;
+        KeyguardAbsKeyInputView keyInputView = (KeyguardAbsKeyInputView) securityView;
+        int subId = -1;
+        switch (securityMode) {
+            case SimPin:
+            case SimPuk:
+                subId = 0;
+                break;
+            case Sim2Pin:
+            case Sim2Puk:
+                subId = 1;
+                break;
+        }
+        if (keyInputView.mSubId == subId) {
+            view = keyInputView;
+        }
+        return view;
+    }
     /**
      * Switches to the given security view unless it's already being shown, in which case
      * this is a no-op.
@@ -1095,7 +1126,9 @@ public class KeyguardHostView extends KeyguardViewBase {
         boolean fullScreenEnabled = getResources().getBoolean(
                 com.android.internal.R.bool.kg_sim_puk_account_full_screen);
         boolean isSimOrAccount = securityMode == SecurityMode.SimPin
+                || securityMode == SecurityMode.Sim2Pin
                 || securityMode == SecurityMode.SimPuk
+                || securityMode == SecurityMode.Sim2Puk
                 || securityMode == SecurityMode.Account;
         mAppWidgetContainer.setVisibility(
                 isSimOrAccount && fullScreenEnabled ? View.GONE : View.VISIBLE);
@@ -1127,8 +1160,17 @@ public class KeyguardHostView extends KeyguardViewBase {
         final int securityViewIdForMode = getSecurityViewIdForMode(securityMode);
         for (int i = 0; i < childCount; i++) {
             if (mSecurityViewContainer.getChildAt(i).getId() == securityViewIdForMode) {
-                mSecurityViewContainer.setDisplayedChild(i);
-                break;
+                if (securityViewIdForMode == R.id.keyguard_sim_pin_view
+                        || securityViewIdForMode == R.id.keyguard_sim_puk_view) {
+                    if (getSimSecurityView(mSecurityViewContainer.getChildAt(i), securityMode) != null) {
+                        mSecurityViewContainer.setDisplayedChild(i);
+                        break;
+                    }
+
+                } else {
+                    mSecurityViewContainer.setDisplayedChild(i);
+                    break;
+                }
             }
         }
 
