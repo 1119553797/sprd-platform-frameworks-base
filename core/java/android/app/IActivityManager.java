@@ -323,6 +323,8 @@ public interface IActivityManager extends IInterface {
     public void revokeUriPermissionFromOwner(IBinder owner, Uri uri,
             int mode) throws RemoteException;
 
+	public void notifySystemUiVisibility(boolean invisible) throws RemoteException;
+
     /*
      * Private non-Binder interfaces
      */
@@ -534,4 +536,5 @@ public interface IActivityManager extends IInterface {
     int GRANT_URI_PERMISSION_FROM_OWNER_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+116;
     int REVOKE_URI_PERMISSION_FROM_OWNER_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+117;
     int SET_PROCESS_ADJ_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+200;
+	int NOTIFY_SYSTEMUI_VISIBILITY = IBinder.FIRST_CALL_TRANSACTION+201;
 }

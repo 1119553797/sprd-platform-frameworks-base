@@ -73,7 +73,7 @@ public abstract class ActivityManagerNative extends Binder implements IActivityM
     {
         if (gDefault != null) {
             //if (Config.LOGV) Log.v(
-            //    "ActivityManager", "returning cur default = " + gDefault);
+            //    "ActivityManager", "returning cur default = "  gDefault);
             return gDefault;
         }
         IBinder b = ServiceManager.getService("activity");
@@ -1309,6 +1309,14 @@ public abstract class ActivityManagerNative extends Binder implements IActivityM
             }
             int mode = data.readInt();
             revokeUriPermissionFromOwner(owner, uri, mode);
+            reply.writeNoException();
+            return true;
+        }
+
+        case NOTIFY_SYSTEMUI_VISIBILITY: {
+            data.enforceInterface(IActivityManager.descriptor);
+            boolean visible = (0 != data.readInt());
+            notifySystemUiVisibility(visible);
             reply.writeNoException();
             return true;
         }
@@ -2915,6 +2923,17 @@ class ActivityManagerProxy implements IActivityManager
         }
         data.writeInt(mode);
         mRemote.transact(REVOKE_URI_PERMISSION_TRANSACTION, data, reply, 0);
+        reply.readException();
+        data.recycle();
+        reply.recycle();
+    }
+
+    public void notifySystemUiVisibility(boolean invisible) throws RemoteException {
+        Parcel data = Parcel.obtain();
+        Parcel reply = Parcel.obtain();
+        data.writeInt(invisible ? 1 : 0);
+        data.writeInterfaceToken(IActivityManager.descriptor);
+        mRemote.transact(NOTIFY_SYSTEMUI_VISIBILITY, data, reply, 0);
         reply.readException();
         data.recycle();
         reply.recycle();
