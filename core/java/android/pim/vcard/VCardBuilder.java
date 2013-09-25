@@ -864,11 +864,13 @@ public class VCardBuilder {
                     phoneLineExists = true;
                     for (String actualPhoneNumber : phoneNumberList) {
                         if (!phoneSet.contains(actualPhoneNumber)) {
-                            final int format = VCardUtils.getPhoneNumberFormat(mVCardType);
-                            final String formattedPhoneNumber =
-                                    PhoneNumberUtils.formatNumber(actualPhoneNumber, format);
+//                            begin:for bug 214060
+//                            final int format = VCardUtils.getPhoneNumberFormat(mVCardType);
+//                            final String formattedPhoneNumber =
+//                                    PhoneNumberUtils.formatNumber(actualPhoneNumber, format);
                             phoneSet.add(actualPhoneNumber);
-                            appendTelLine(type, label, formattedPhoneNumber, isPrimary);
+                            appendTelLine(type, label, actualPhoneNumber, isPrimary);
+//                            end:for bug 214060
                         }
                     }  // for (String actualPhoneNumber : phoneNumberList) {
                 }
