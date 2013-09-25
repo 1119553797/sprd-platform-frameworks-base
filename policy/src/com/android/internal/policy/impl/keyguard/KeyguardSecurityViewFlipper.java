@@ -276,4 +276,8 @@ public class KeyguardSecurityViewFlipper extends ViewFlipper implements Keyguard
             a.recycle();
         }
     }
+
+    @Override
+    public void setSubId(int subId) {
+    }
 }

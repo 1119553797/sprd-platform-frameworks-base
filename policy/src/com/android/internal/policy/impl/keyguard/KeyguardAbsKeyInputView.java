@@ -47,6 +47,7 @@ public abstract class KeyguardAbsKeyInputView extends LinearLayout
     protected View mEcaView;
     private Drawable mBouncerFrame;
     protected boolean mEnableHaptics;
+    protected int mSubId;
 
     // To avoid accidental lockout due to events while the device in in the pocket, ignore
     // any passwords with length less than or equal to this length.
@@ -258,6 +259,11 @@ public abstract class KeyguardAbsKeyInputView extends LinearLayout
     public void hideBouncer(int duration) {
         KeyguardSecurityViewHelper.
                 hideBouncer(mSecurityMessageDisplay, mEcaView, mBouncerFrame, duration);
+    }
+
+    @Override
+    public void setSubId(int subId) {
+        mSubId = subId;
     }
 }
 

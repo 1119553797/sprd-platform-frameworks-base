@@ -21,6 +21,8 @@ public interface KeyguardSecurityView {
     static public final int SCREEN_ON = 1;
     static public final int VIEW_REVEALED = 2;
 
+    void setSubId(int subId);
+
     /**
      * Interface back to keyguard to tell it when security
      * @param callback

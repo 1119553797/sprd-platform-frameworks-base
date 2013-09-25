@@ -21,6 +21,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.RemoteException;
 import android.os.ServiceManager;
+import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -191,9 +192,10 @@ public class KeyguardSimPukView extends KeyguardAbsKeyInputView
         @Override
         public void run() {
             try {
-                final boolean result = ITelephony.Stub.asInterface(ServiceManager
-                        .checkService("phone")).supplyPuk(mPuk, mPin);
-
+                final boolean result = ITelephony.Stub.asInterface(
+                        ServiceManager
+                                .getService(TelephonyManager.getServiceName(
+                                        Context.TELEPHONY_SERVICE, mSubId))).supplyPuk(mPuk, mPin);
                 post(new Runnable() {
                     public void run() {
                         onSimLockChangedResponse(result);

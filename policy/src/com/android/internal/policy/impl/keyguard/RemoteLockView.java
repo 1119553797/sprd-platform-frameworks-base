@@ -453,4 +453,8 @@ public class RemoteLockView extends RelativeLayout implements KeyguardSecurityVi
         // TODO Auto-generated method stub
 
     }
+
+    @Override
+    public void setSubId(int subId) {
+    }
 }

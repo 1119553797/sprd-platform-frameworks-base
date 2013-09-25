@@ -458,11 +458,26 @@ public class KeyguardHostView extends KeyguardViewBase {
     private void updateSecurityViews() {
         int children = mSecurityViewContainer.getChildCount();
         for (int i = 0; i < children; i++) {
-            updateSecurityView(mSecurityViewContainer.getChildAt(i));
+            updateSecurityView(mSecurityViewContainer.getChildAt(i), null);
         }
     }
 
-    private void updateSecurityView(View view) {
+    // private void updateSecurityView(View view) {
+    // if (view instanceof KeyguardSecurityView) {
+    // KeyguardSecurityView ksv = (KeyguardSecurityView) view;
+    // ksv.setKeyguardCallback(mCallback);
+    // ksv.setLockPatternUtils(mLockPatternUtils);
+    // if (mViewStateManager.isBouncing()) {
+    // ksv.showBouncer(0);
+    // } else {
+    // ksv.hideBouncer(0);
+    // }
+    // } else {
+    // Log.w(TAG, "View " + view + " is not a KeyguardSecurityView");
+    // }
+    // }
+
+    private void updateSecurityView(View view, SecurityMode securityMode) {
         if (view instanceof KeyguardSecurityView) {
             KeyguardSecurityView ksv = (KeyguardSecurityView) view;
             ksv.setKeyguardCallback(mCallback);
@@ -471,6 +486,16 @@ public class KeyguardHostView extends KeyguardViewBase {
                 ksv.showBouncer(0);
             } else {
                 ksv.hideBouncer(0);
+            }
+            if (securityMode != null) {
+                if (securityMode == securityMode.SimPin || securityMode == securityMode.SimPuk) {
+                    ksv.setSubId(0);
+
+                } else if (securityMode == securityMode.Sim2Pin
+                        || securityMode == securityMode.Sim2Puk) {
+                    ksv.setSubId(1);
+
+                }
             }
         } else {
             Log.w(TAG, "View " + view + " is not a KeyguardSecurityView");
@@ -1039,7 +1064,7 @@ public class KeyguardHostView extends KeyguardViewBase {
             if (DEBUG) Log.v(TAG, "inflating id = " + layoutId);
             View v = inflater.inflate(layoutId, mSecurityViewContainer, false);
             mSecurityViewContainer.addView(v);
-            updateSecurityView(v);
+            updateSecurityView(v,securityMode);
             view = (KeyguardSecurityView)v;
         }
 
@@ -1228,7 +1253,9 @@ public class KeyguardHostView extends KeyguardViewBase {
             case Biometric: return R.id.keyguard_face_unlock_view;
             case Account: return R.id.keyguard_account_view;
             case SimPin: return R.id.keyguard_sim_pin_view;
+            case Sim2Pin: return R.id.keyguard_sim_pin_view;
             case SimPuk: return R.id.keyguard_sim_puk_view;
+            case Sim2Puk: return R.id.keyguard_sim_puk_view;
         }
         return 0;
     }

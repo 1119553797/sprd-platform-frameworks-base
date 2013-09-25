@@ -17,6 +17,7 @@
 package com.android.internal.policy.impl.keyguard;
 
 import com.android.internal.telephony.ITelephony;
+import com.android.internal.telephony.PhoneFactory;
 
 import android.content.Context;
 import android.app.Activity;
@@ -24,11 +25,13 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.os.RemoteException;
 import android.os.ServiceManager;
+import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.text.method.DigitsKeyListener;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView.OnEditorActionListener;
@@ -136,8 +139,10 @@ public class KeyguardSimPinView extends KeyguardAbsKeyInputView
         @Override
         public void run() {
             try {
-                final boolean result = ITelephony.Stub.asInterface(ServiceManager
-                        .checkService("phone")).supplyPin(mPin);
+                final boolean result = ITelephony.Stub.asInterface(
+                        ServiceManager
+                                .getService(TelephonyManager.getServiceName(
+                                        Context.TELEPHONY_SERVICE, mSubId))).supplyPin(mPin);
                 post(new Runnable() {
                     public void run() {
                         onSimCheckResponse(result);
@@ -195,8 +200,7 @@ public class KeyguardSimPinView extends KeyguardAbsKeyInputView
                                 // before closing the keyguard, report back that the sim is unlocked
                                 // so it knows right away.
                                 // SPRD: Modify 20130904 Spreadst of 210537 keyguard support multi-card
-                                // TODO
-                                KeyguardUpdateMonitor.getInstance(getContext()).reportSimUnlocked(0);
+                                KeyguardUpdateMonitor.getInstance(getContext()).reportSimUnlocked(mSubId);
                                 mCallback.dismiss(true);
                             } else {
                                 mSecurityMessageDisplay.setMessage
