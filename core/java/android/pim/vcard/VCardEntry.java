@@ -539,8 +539,11 @@ public class VCardEntry {
                 }
             }
 
-            final int formattingType = VCardUtils.getPhoneNumberFormat(mVCardType);
-            formattedNumber = PhoneNumberUtils.formatNumber(builder.toString(), formattingType);
+//            begin:for bug 214060
+//            final int formattingType = VCardUtils.getPhoneNumberFormat(mVCardType);
+//            formattedNumber = PhoneNumberUtils.formatNumber(builder.toString(), formattingType);
+//            end:for bug 214060
+            formattedNumber = builder.toString();
         }
         if(!TextUtils.isEmpty(formattedNumber)){
             PhoneData phoneData = new PhoneData(type, formattedNumber, label, isPrimary);
