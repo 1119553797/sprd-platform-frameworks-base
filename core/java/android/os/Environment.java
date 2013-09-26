@@ -119,7 +119,8 @@ public class Environment {
                rawEmulatedStorageTarget = Environment.getInternalStoragePath().getPath();
                break;
             }*/
-            rawEmulatedStorageTarget = mLinkPoint.getPath();
+            rawEmulatedStorageTarget = null ;
+            rawExternalStorage = mLinkPoint.getPath();
             /* @} */
 
             if (TextUtils.isEmpty(rawMediaStorage)) {
@@ -711,6 +712,7 @@ public class Environment {
         }
         // SPRD: create user direcory
         boolean f = cur.mkdirs();
+        Log.w(TAG, "create direcory "+cur.getPath()+"  "+f);
         return cur;
     }
 
