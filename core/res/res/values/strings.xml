@@ -4057,12 +4057,14 @@
     <string name="kg_pattern_instructions">Draw your pattern</string>
     <!-- Instructions for using the SIM PIN unlock screen -->
     <string name="kg_sim_pin_instructions">Enter SIM PIN</string>
+    <string name="kg_sim_pin_instructions_sub">Enter SIM<xliff:g id="number">%d</xliff:g> PIN. remaining times(<xliff:g id="number">%d</xliff:g>)</string>
     <!-- Instructions for using the PIN unlock screen -->
     <string name="kg_pin_instructions">Enter PIN</string>
     <!-- Instructions for using the password unlock screen -->
     <string name="kg_password_instructions">Enter Password</string>
     <!-- Hint shown in the PUK screen that asks the user to enter the PUK code given to them by their provider -->
     <string name="kg_puk_enter_puk_hint">SIM is now disabled. Enter PUK code to continue. Contact carrier for details.</string>
+    <string name="kg_puk_enter_puk_hint_sub">SIM<xliff:g id="number">%d</xliff:g> is now disabled. Enter PUK code to continue. remaining times(<xliff:g id="number">%d</xliff:g>). Contact carrier for details.</string>
     <!-- Hint shown in the PUK unlock screen PIN TextView -->
     <string name="kg_puk_enter_pin_hint">Enter desired PIN code</string>
     <!-- Message shown when the user needs to confirm the PIN they just entered in the PUK screen -->
@@ -4071,6 +4073,7 @@
     <string name="kg_sim_unlock_progress_dialog_message">Unlocking SIM card\u2026</string>
     <!-- Message shown when the user enters the wrong PIN code -->
     <string name="kg_password_wrong_pin_code">Incorrect PIN code.</string>
+    <string name="kg_password_wrong_pin_code_times">Incorrect PIN code.remaining times(<xliff:g id="number">%d</xliff:g>) </string>
     <!-- Message shown when the user enters an invalid SIM pin password in PUK screen -->
     <string name="kg_invalid_sim_pin_hint">Type a PIN that is 4 to 8 numbers.</string>
     <!-- Message shown when the user enters an invalid PUK code in the PUK screen -->
