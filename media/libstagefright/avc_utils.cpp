@@ -600,7 +600,14 @@ bool GetMPEGAudioFrameSize(
 
             bitrate = kBitrateV2[bitrate_index - 1];
             if (out_num_samples) {
-                *out_num_samples = 576;
+                //*out_num_samples = 576;   // @orig
+                /* SPRD: merge from bug 198411 begin @{ */
+                if (2 == layer) {   // L2
+                    *out_num_samples = 1152;
+                } else {            // L3
+                    *out_num_samples = 576;
+                }
+                /* merge from bug 198411 end @} */
             }
         }
 
@@ -608,18 +615,33 @@ bool GetMPEGAudioFrameSize(
             *out_bitrate = bitrate;
         }
 
+/* merge from bug 198411 start @{ */
+#if 0
         if (1 == layer) {
             //layer III
-            if (version == 3 /* V1 */) {
+            if (version == 3 ) {
                 *frame_size = 144000 * bitrate / sampling_rate + padding;
             } else {
                 // V2 or V2.5
                 *frame_size = 72000 * bitrate / sampling_rate + padding;
             }
-        }else{
+        } else {
             //layer II
             *frame_size = 144000 * bitrate / sampling_rate + padding;
         }
+#else
+        if (version == 3 /* V1 */) {
+            *frame_size = 144000 * bitrate / sampling_rate + padding;
+        } else {
+            // V2 or V2.5
+            if (layer == 2 /* L2 */) {
+                *frame_size = 144000 * bitrate / sampling_rate + padding;
+            } else {
+                *frame_size = 72000 * bitrate / sampling_rate + padding;
+            }
+        }
+#endif
+/* merge from bug 198411 end @} */
     }
 
     if (out_sampling_rate) {
