@@ -47,6 +47,7 @@ public class KeyguardSimPukView extends KeyguardAbsKeyInputView
     private String mPukText;
     private String mPinText;
     private StateMachine mStateMachine = new StateMachine();
+    private int mRemainTimes;
 
     private class StateMachine {
         final int ENTER_PUK = 0;
@@ -92,7 +93,9 @@ public class KeyguardSimPukView extends KeyguardAbsKeyInputView
             mPinText="";
             mPukText="";
             state = ENTER_PUK;
-            mSecurityMessageDisplay.setMessage(R.string.kg_puk_enter_puk_hint, true);
+            mSecurityMessageDisplay.setMessage(R.string.kg_puk_enter_puk_hint_sub, true,
+                    mSubId + 1,
+                    mRemainTimes);
             mPasswordEntry.requestFocus();
         }
     }
@@ -274,6 +277,8 @@ public class KeyguardSimPukView extends KeyguardAbsKeyInputView
                             if (success) {
                                 mCallback.dismiss(true);
                             } else {
+                                mRemainTimes = TelephonyManager.getDefault(mSubId).getRemainTimes(
+                                        TelephonyManager.UNLOCK_PUK);
                                 mStateMachine.reset();
                                 mSecurityMessageDisplay.setMessage(R.string.kg_invalid_puk, true);
                             }
@@ -288,6 +293,15 @@ public class KeyguardSimPukView extends KeyguardAbsKeyInputView
     @Override
     protected void verifyPasswordAndUnlock() {
         mStateMachine.next();
+    }
+
+    @Override
+    public void setSubId(int subId) {
+        super.setSubId(subId);
+        mRemainTimes = TelephonyManager.getDefault(mSubId).getRemainTimes(
+                TelephonyManager.UNLOCK_PUK);
+        mSecurityMessageDisplay.setMessage(R.string.kg_puk_enter_puk_hint_sub, true, mSubId + 1,
+                mRemainTimes);
     }
 }
 

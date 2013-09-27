@@ -1470,12 +1470,15 @@
   <java-symbol type="string" name="kg_too_many_failed_attempts_countdown" />
   <java-symbol type="string" name="kg_pattern_instructions" />
   <java-symbol type="string" name="kg_sim_pin_instructions" />
+  <java-symbol type="string" name="kg_sim_pin_instructions_sub" />
   <java-symbol type="string" name="kg_pin_instructions" />
   <java-symbol type="string" name="kg_password_instructions" />
   <java-symbol type="string" name="kg_puk_enter_puk_hint" />
+  <java-symbol type="string" name="kg_puk_enter_puk_hint_sub" />
   <java-symbol type="string" name="kg_puk_enter_pin_hint" />
   <java-symbol type="string" name="kg_sim_unlock_progress_dialog_message" />
   <java-symbol type="string" name="kg_password_wrong_pin_code" />
+  <java-symbol type="string" name="kg_password_wrong_pin_code_times" />
   <java-symbol type="string" name="kg_invalid_sim_pin_hint" />
   <java-symbol type="string" name="kg_invalid_sim_puk_hint" />
   <java-symbol type="string" name="kg_invalid_puk" />

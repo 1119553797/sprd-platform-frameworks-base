@@ -1619,4 +1619,7 @@
   <string name="low_internal_storage_wait">"请等待…"</string>
   <string name="low_internal_storage_updating_details">"正在更新详情…"</string>
   <!-- @} -->
+  <string name="kg_sim_pin_instructions_sub">"输入 SIM<xliff:g id="number">%d</xliff:g> PIN。剩余次数（<xliff:g id="number">%d</xliff:g>）"</string>
+  <string name="kg_password_wrong_pin_code_times">"PIN 码有误。剩余次数（<xliff:g id="number">%d</xliff:g>）"</string>
+  <string name="kg_puk_enter_puk_hint_sub">"SIM<xliff:g id="number">%d</xliff:g> 卡已被停用，需要输入 PUK 码才能继续使用。剩余次数（<xliff:g id="number">%d</xliff:g>）。有关详情，请联系您的运营商。"</string>
 </resources>

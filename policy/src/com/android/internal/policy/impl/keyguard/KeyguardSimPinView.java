@@ -46,6 +46,7 @@ public class KeyguardSimPinView extends KeyguardAbsKeyInputView
 
     private ProgressDialog mSimUnlockProgressDialog = null;
     private volatile boolean mSimCheckInProgress;
+    private int mRemainTimes;
 
     public KeyguardSimPinView(Context context) {
         this(context, null);
@@ -56,7 +57,8 @@ public class KeyguardSimPinView extends KeyguardAbsKeyInputView
     }
 
     public void resetState() {
-        mSecurityMessageDisplay.setMessage(R.string.kg_sim_pin_instructions, true);
+        mSecurityMessageDisplay.setMessage(R.string.kg_sim_pin_instructions_sub, true, mSubId + 1,
+                mRemainTimes);
         mPasswordEntry.setEnabled(true);
     }
 
@@ -212,9 +214,16 @@ public class KeyguardSimPinView extends KeyguardAbsKeyInputView
                                 KeyguardUpdateMonitor.getInstance(getContext()).reportSimUnlocked(mSubId);
                                 mCallback.dismiss(true);
                             } else {
-                                mSecurityMessageDisplay.setMessage
-                                    (R.string.kg_password_wrong_pin_code, true);
-                                mPasswordEntry.setText("");
+                                mRemainTimes=TelephonyManager.getDefault(mSubId).getRemainTimes(TelephonyManager.UNLOCK_PIN);
+                                if (mRemainTimes > 0) {
+                                    mSecurityMessageDisplay.setMessage
+                                            (R.string.kg_password_wrong_pin_code_times, true,
+                                                    mRemainTimes);
+                                    mPasswordEntry.setText("");
+                                }else{
+                                    KeyguardUpdateMonitor.getInstance(getContext()).reportSimPukRequired(mSubId);
+                                    mCallback.dismiss(true);
+                                }
                             }
                             mCallback.userActivity(0);
                             mSimCheckInProgress = false;
@@ -223,6 +232,14 @@ public class KeyguardSimPinView extends KeyguardAbsKeyInputView
                 }
             }.start();
         }
+    }
+
+    @Override
+    public void setSubId(int subId) {
+        super.setSubId(subId);
+        mRemainTimes=TelephonyManager.getDefault(mSubId).getRemainTimes(TelephonyManager.UNLOCK_PIN);
+        mSecurityMessageDisplay.setMessage(R.string.kg_sim_pin_instructions_sub, true, mSubId + 1,
+                mRemainTimes);
     }
 }
 
