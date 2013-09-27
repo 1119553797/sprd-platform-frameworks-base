@@ -231,8 +231,10 @@ void InputDispatcher::dispatchOnce() {
     nsecs_t nextWakeupTime = LONG_LONG_MAX;
     { // acquire lock
         AutoMutex _l(mLock);
-        dispatchOnceInnerLocked(keyRepeatTimeout, keyRepeatDelay, & nextWakeupTime);
-
+	if (mCommandQueue.isEmpty()) {
+	    dispatchOnceInnerLocked(keyRepeatTimeout, keyRepeatDelay, & nextWakeupTime);
+	}
+        
         if (runCommandsLockedInterruptible()) {
             nextWakeupTime = LONG_LONG_MIN;  // force next poll to wake up immediately
         }
@@ -2824,9 +2826,8 @@ status_t InputDispatcher::registerInputChannel(const sp<InputChannel>& inputChan
         }
 
         mLooper->addFd(receiveFd, 0, ALOOPER_EVENT_INPUT, handleReceiveCallback, this);
-
-        runCommandsLockedInterruptible();
     } // release lock
+    mLooper->wake();
     return OK;
 }
 
@@ -2861,8 +2862,6 @@ status_t InputDispatcher::unregisterInputChannel(const sp<InputChannel>& inputCh
 
         nsecs_t currentTime = now();
         abortBrokenDispatchCycleLocked(currentTime, connection);
-
-        runCommandsLockedInterruptible();
     } // release lock
 
     // Wake the poll loop because removing the connection may have changed the current
