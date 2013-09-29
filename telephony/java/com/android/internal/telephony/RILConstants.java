@@ -300,4 +300,8 @@ cat include/telephony/ril.h | \
     int RIL_UNSOL_RIL_CONNECTED = 1034;
     int RIL_UNSOL_VOICE_RADIO_TECH_CHANGED = 1035;
     int RIL_UNSOL_CELL_INFO_LIST = 1036;
+	
+	 /* SPRD: add for sprd ril @{ */
+	int RIL_SPRD_REQUEST_BASE = 5000;
+	int RIL_REQUEST_SEND_AT = RIL_SPRD_REQUEST_BASE + 29;//SPRD: add
 }
