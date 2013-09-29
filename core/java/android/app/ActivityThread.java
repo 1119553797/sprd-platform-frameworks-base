@@ -210,6 +210,9 @@ public final class ActivityThread {
     // which means this lock gets held while the activity and window managers
     // holds their own lock.  Thus you MUST NEVER call back into the activity manager
     // or window manager or anything that depends on them while holding this lock.
+
+    //add for bug#219176
+    private boolean mPackagesisLocked = false;
     final HashMap<String, WeakReference<LoadedApk>> mPackages
             = new HashMap<String, WeakReference<LoadedApk>>();
     final HashMap<String, WeakReference<LoadedApk>> mResourcePackages
@@ -526,10 +529,12 @@ public final class ActivityThread {
 
         private void updatePendingConfiguration(Configuration config) {
             synchronized (mPackages) {
+            mPackagesisLocked=true;
                 if (mPendingConfiguration == null ||
                         mPendingConfiguration.isOtherSeqNewer(config)) {
                     mPendingConfiguration = config;
                 }
+            mPackagesisLocked=false;
             }
         }
 
@@ -1402,9 +1407,12 @@ public final class ActivityThread {
                     handleUpdatePackageCompatibilityInfo((UpdateCompatibilityData)msg.obj);
                     break;
                 case TRIM_MEMORY:
+                    //Slog.v(TAG, "handleTrimMemory_mPackagesisLocked == " + mPackagesisLocked);
+                    if(!mPackagesisLocked){
                     Trace.traceBegin(Trace.TRACE_TAG_ACTIVITY_MANAGER, "trimMemory");
                     handleTrimMemory(msg.arg1);
                     Trace.traceEnd(Trace.TRACE_TAG_ACTIVITY_MANAGER);
+                    }
                     break;
                 case UNSTABLE_PROVIDER_DIED:
                     handleUnstableProviderDied((IBinder)msg.obj, false);
@@ -1594,6 +1602,7 @@ public final class ActivityThread {
         ResourcesKey key = new ResourcesKey(resDir, compInfo.applicationScale);
         Resources r;
         synchronized (mPackages) {
+        mPackagesisLocked=true;
             // Resources is app scale dependent.
             if (false) {
                 Slog.w(TAG, "getTopLevelResources: " + resDir + " / "
@@ -1607,8 +1616,10 @@ public final class ActivityThread {
                     Slog.w(TAG, "Returning cached resources " + r + " " + resDir
                             + ": appScale=" + r.getCompatibilityInfo().applicationScale);
                 }
+                mPackagesisLocked=false;
                 return r;
             }
+            mPackagesisLocked=false;
         }
 
         //if (r != null) {
@@ -1639,17 +1650,20 @@ public final class ActivityThread {
         }
         
         synchronized (mPackages) {
+            mPackagesisLocked=true;
             WeakReference<Resources> wr = mActiveResources.get(key);
             Resources existing = wr != null ? wr.get() : null;
             if (existing != null && existing.getAssets().isUpToDate()) {
                 // Someone else already created the resources while we were
                 // unlocked; go ahead and use theirs.
                 r.getAssets().close();
+                mPackagesisLocked=false;
                 return existing;
             }
             
             // XXX need to remove entries when weak references go away
             mActiveResources.put(key, new WeakReference<Resources>(r));
+            mPackagesisLocked=false;
             return r;
         }
     }
@@ -1668,6 +1682,7 @@ public final class ActivityThread {
     public final LoadedApk getPackageInfo(String packageName, CompatibilityInfo compatInfo,
             int flags) {
         synchronized (mPackages) {
+            mPackagesisLocked=true;
             WeakReference<LoadedApk> ref;
             if ((flags&Context.CONTEXT_INCLUDE_CODE) != 0) {
                 ref = mPackages.get(packageName);
@@ -1688,8 +1703,10 @@ public final class ActivityThread {
                             + mBoundApplication.processName
                             + "/" + mBoundApplication.appInfo.uid);
                 }
+                mPackagesisLocked=false;
                 return packageInfo;
             }
+            mPackagesisLocked=false;
         }
 
         ApplicationInfo ai = null;
@@ -1738,12 +1755,14 @@ public final class ActivityThread {
 
     public final LoadedApk peekPackageInfo(String packageName, boolean includeCode) {
         synchronized (mPackages) {
+            mPackagesisLocked=true;
             WeakReference<LoadedApk> ref;
             if (includeCode) {
                 ref = mPackages.get(packageName);
             } else {
                 ref = mResourcePackages.get(packageName);
             }
+            mPackagesisLocked=false;
             return ref != null ? ref.get() : null;
         }
     }
@@ -1751,6 +1770,7 @@ public final class ActivityThread {
     private LoadedApk getPackageInfo(ApplicationInfo aInfo, CompatibilityInfo compatInfo,
             ClassLoader baseLoader, boolean securityViolation, boolean includeCode) {
         synchronized (mPackages) {
+        mPackagesisLocked=true;
             WeakReference<LoadedApk> ref;
             if (includeCode) {
                 ref = mPackages.get(aInfo.packageName);
@@ -1777,6 +1797,7 @@ public final class ActivityThread {
                             new WeakReference<LoadedApk>(packageInfo));
                 }
             }
+            mPackagesisLocked=false;
             return packageInfo;
         }
     }
@@ -3265,7 +3286,9 @@ public final class ActivityThread {
 
     private void handleSetCoreSettings(Bundle coreSettings) {
         synchronized (mPackages) {
+            mPackagesisLocked=true;
             mCoreSettings = coreSettings;
+            mPackagesisLocked=false;
         }
     }
 
@@ -3516,6 +3539,7 @@ public final class ActivityThread {
         ActivityClientRecord target = null;
 
         synchronized (mPackages) {
+            mPackagesisLocked=true;
             for (int i=0; i<mRelaunchingActivities.size(); i++) {
                 ActivityClientRecord r = mRelaunchingActivities.get(i);
                 if (r.token == token) {
@@ -3534,6 +3558,7 @@ public final class ActivityThread {
                             r.pendingIntents = pendingNewIntents;
                         }
                     }
+                    mPackagesisLocked=false;
                     break;
                 }
             }
@@ -3562,6 +3587,7 @@ public final class ActivityThread {
                 target.createdConfig = config;
             }
             target.pendingConfigChanges |= configChanges;
+            mPackagesisLocked=false;
         }
     }
 
@@ -3577,6 +3603,7 @@ public final class ActivityThread {
         // recent version of the activity, or skip it if some previous call
         // had taken a more recent version.
         synchronized (mPackages) {
+        mPackagesisLocked=true;
             int N = mRelaunchingActivities.size();
             IBinder token = tmp.token;
             tmp = null;
@@ -3593,6 +3620,7 @@ public final class ActivityThread {
 
             if (tmp == null) {
                 if (DEBUG_CONFIGURATION) Slog.v(TAG, "Abort, activity not relaunching!");
+                mPackagesisLocked=false;
                 return;
             }
 
@@ -3604,6 +3632,7 @@ public final class ActivityThread {
                 changedConfig = mPendingConfiguration;
                 mPendingConfiguration = null;
             }
+            mPackagesisLocked=false;
         }
 
         if (tmp.createdConfig != null) {
@@ -3795,7 +3824,9 @@ public final class ActivityThread {
 
     public final void applyConfigurationToResources(Configuration config) {
         synchronized (mPackages) {
+            mPackagesisLocked=true;
             applyConfigurationToResourcesLocked(config, null);
+            mPackagesisLocked=false;
         }
     }
 
@@ -3871,6 +3902,7 @@ public final class ActivityThread {
         int configDiff = 0;
 
         synchronized (mPackages) {
+            mPackagesisLocked=true;
             if (mPendingConfiguration != null) {
                 if (!mPendingConfiguration.isOtherSeqNewer(config)) {
                     config = mPendingConfiguration;
@@ -3879,6 +3911,7 @@ public final class ActivityThread {
             }
 
             if (config == null) {
+                mPackagesisLocked=false;
                 return;
             }
             
@@ -3891,12 +3924,14 @@ public final class ActivityThread {
                 mConfiguration = new Configuration();
             }
             if (!mConfiguration.isOtherSeqNewer(config) && compat == null) {
+                mPackagesisLocked=false;
                 return;
             }
             configDiff = mConfiguration.diff(config);
             mConfiguration.updateFrom(config);
             config = applyCompatConfiguration();
             callbacks = collectComponentCallbacksLocked(false, config);
+            mPackagesisLocked=false;
         }
         
         // Cleanup hardware accelerated stuff
@@ -4014,7 +4049,9 @@ public final class ActivityThread {
         ArrayList<ComponentCallbacks2> callbacks;
 
         synchronized (mPackages) {
+        mPackagesisLocked=true;
             callbacks = collectComponentCallbacksLocked(true, null);
+            mPackagesisLocked=false;
         }
 
         final int N = callbacks.size();
@@ -4045,7 +4082,9 @@ public final class ActivityThread {
 
         ArrayList<ComponentCallbacks2> callbacks;
         synchronized (mPackages) {
+        mPackagesisLocked=true;
             callbacks = collectComponentCallbacksLocked(true, null);
+            mPackagesisLocked=false;
         }
 
         final int N = callbacks.size();
@@ -4844,6 +4883,7 @@ public final class ActivityThread {
         ViewRootImpl.addConfigCallback(new ComponentCallbacks2() {
             public void onConfigurationChanged(Configuration newConfig) {
                 synchronized (mPackages) {
+                mPackagesisLocked=true;
                     // We need to apply this change to the resources
                     // immediately, because upon returning the view
                     // hierarchy will be informed about it.
@@ -4857,6 +4897,7 @@ public final class ActivityThread {
                             queueOrSendMessage(H.CONFIGURATION_CHANGED, newConfig);
                         }
                     }
+                    mPackagesisLocked=false;
                 }
             }
             public void onLowMemory() {
@@ -4881,9 +4922,13 @@ public final class ActivityThread {
 
     public int getIntCoreSetting(String key, int defaultValue) {
         synchronized (mPackages) {
+            mPackagesisLocked=true;
             if (mCoreSettings != null) {
-                return mCoreSettings.getInt(key, defaultValue);
+                int value = mCoreSettings.getInt(key, defaultValue);
+                mPackagesisLocked=false;
+                return value;
             } else {
+                mPackagesisLocked=false;
                 return defaultValue;
             }
         }
