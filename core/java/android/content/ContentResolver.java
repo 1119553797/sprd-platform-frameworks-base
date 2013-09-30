@@ -486,8 +486,15 @@ public abstract class ContentResolver {
                     releaseProvider(provider);
                     return null;
                 }
+                /* @bug 213725 begin @{ */
+                ParcelFileDescriptor fdState =  fd.getParcelFileDescriptor();
+                if (fdState == null) {
+                    releaseProvider(provider);
+                    return null;
+                }
+                /* @bug 213725 end @} */
                 ParcelFileDescriptor pfd = new ParcelFileDescriptorInner(
-                        fd.getParcelFileDescriptor(), provider);
+                        fdState/* fd.getParcelFileDescriptor() */, provider);//@bug 213725
                 return new AssetFileDescriptor(pfd, fd.getStartOffset(),
                         fd.getDeclaredLength());
             } catch (RemoteException e) {
