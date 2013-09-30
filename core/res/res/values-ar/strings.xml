@@ -17,7 +17,7 @@
 ** limitations under the License.
 */
  -->
-<resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" xmlns:android="http://schemas.android.com/apk/res/android">
   <!-- no translation found for wifi_available_sign_in_detailed (6797764740339907572) -->
   <string name="silent_mode_outdoor">"رنين خارجي"</string>
   <string name="autofill_attention_ignored_re">attention|attn</string>
@@ -94,100 +94,99 @@
   <string name="description_target_call">اتصال</string>
   <string name="description_target_sms">Sms</string>
   <string name="ringtone_waning">ملف خاطئ، يرجى إعادة التحديد</string>
-  <string msgid="2625429890869005782" name="imei">"IMEI"</string>
-  <string msgid="4841221237681254195" name="meid">"MEID"</string>
-  <string msgid="319298163018473078" name="silent_mode_silent">"إيقاف الرنين"</string>
-  <string msgid="7072043388581551395" name="silent_mode_vibrate">"اهتزاز الرنين"</string>
-  <string msgid="8592241816194074353" name="silent_mode_ring">"تشغيل الرنين"</string>
-  <string msgid="7054509914500140361" name="reboot_safemode_title">"إعادة تشغيل في الوضع الآمن"</string>
-  <string msgid="55293944502784668" name="reboot_safemode_confirm">"هل تريد إعادة تشغيل الكمبيوتر في الوضع الآمن؟ سيؤدي ذلك إلى تعطيل جميع تطبيقات الجهات الخارجية التي تم تثبيتها. ستتم استعادتها عند إعادة التشغيل مرة أخرى."</string>
-  <string msgid="1598328843619646166" name="permlab_readCellBroadcasts">"قراءة رسائل بث الخلية"</string>
-  <string msgid="6361972776080458979" name="permdesc_readCellBroadcasts">"السماح للتطبيق بقراءة رسائل بث الخلية التي يتلقاها هذا الجهاز. يتم تسليم تنبيهات بث الخلية في بعض المواقع لتحذيرك من حالات طارئة. يمكن أن تتداخل التطبيقات الضارة مع أداء أو تشغيل الجهاز عندما يتم تلقي بث خلية طارئ."</string>
-  <string msgid="6229468674753529501" name="permlab_getDetailedTasks">"استرداد تفاصيل التطبيقات قيد التشغيل"</string>
-  <string msgid="153824741440717599" name="permdesc_getDetailedTasks">"يسمح للتطبيق باسترداد معلومات تفصيلية حول المهام قيد التشغيل حاليًا ومؤخرًا. قد تكتشف التطبيقات الضارة معلومات خاصة حول التطبيقات الأخرى."</string>
-  <string msgid="2918768238045206456" name="permlab_startAnyActivity">"بدء أي نشاط"</string>
-  <string msgid="997823695343584001" name="permdesc_startAnyActivity">"للسماح للتطبيق ببدء أي نشاط، بغض النظر عن حماية الإذن أو حالة التصدير."</string>
-  <string msgid="6975387118861842061" name="permlab_setScreenCompatibility">"تعيين توافق الشاشة"</string>
-  <string msgid="692043618693917374" name="permdesc_setScreenCompatibility">"السماح للتطبيق بالتحكم في وضع التوافق مع شاشة التطبيقات الأخرى. قد تتسبب التطبيقات الضارة في تعطيل سلوك التطبيقات الأخرى."</string>
-  <string msgid="5357733942556031593" name="permlab_bindAccessibilityService">"الالتزام بخدمة إمكانية الدخول"</string>
-  <string msgid="7034615928609331368" name="permdesc_bindAccessibilityService">"للسماح للمالك بالالتزام بواجهة المستوى العلوي لخدمة إمكانية الدخول. لن تكون هناك حاجة إليه مطلقًا مع التطبيقات العادية."</string>
-  <string msgid="4778731703600909340" name="permlab_setKeyboardLayout">"تغيير تنسيق لوحة مفاتيح"</string>
-  <string msgid="8480016771134175879" name="permdesc_setKeyboardLayout">"للسماح للتطبيق بتغيير تنسيق لوحة المفاتيح. لن تكون هناك حاجة إليه مطلقًا مع التطبيقات العادية."</string>
-  <string msgid="8525189272329086137" product="tablet" name="permdesc_persistentActivity">"للسماح للتطبيق بجعل أجزاء منه ثابتة في الذاكرة. وقد يؤدي هذا إلى تقييد الذاكرة المتاحة للتطبيقات الأخرى مما يؤدي إلى حدوث بطء في الجهاز اللوحي."</string>
-  <string msgid="4384760047508278272" product="default" name="permdesc_persistentActivity">"للسماح للتطبيق بجعل أجزاء منه ثابتة في الذاكرة. وقد يؤدي هذا إلى تقييد الذاكرة المتاحة للتطبيقات الأخرى مما يؤدي إلى حدوث بطء في الهاتف."</string>
-  <string msgid="4627315351093508795" name="permlab_grantRevokePermissions">"منح الأذونات أو إلغائها"</string>
-  <string msgid="4088642654085850662" name="permdesc_grantRevokePermissions">"للسماح لأحد التطبيقات بمنح أذونات محددة أو إلغائها لنفسه أو لتطبيقات أخرى. قد تستخدم التطبيقات الضارة هذا للدخول إلى ميزات لم تمنحها إذنًا لدخولها."</string>
-  <string msgid="3478133184624102739" name="permlab_readCallLog">"قراءة سجل المكالمات"</string>
-  <string msgid="3700645184870760285" product="tablet" name="permdesc_readCallLog">"للسماح للتطبيق بقراءة سجل مكالمات الجهاز اللوحي، بما في ذلك البيانات حول المكالمات الواردة والصادرة. ويتيح هذا الإذن للتطبيق حفظ بيانات سجل المكالمات، وقد تشارك التطبيقات الضارة بيانات سجل المكالمات بدون معرفتك."</string>
-  <string msgid="5777725796813217244" product="default" name="permdesc_readCallLog">"للسماح للتطبيق بقراءة سجل مكالمات الهاتف، بما في ذلك البيانات حول المكالمات الواردة والصادرة. ويتيح هذا الإذن للتطبيق حفظ بيانات سجل المكالمات، وقد تشارك التطبيقات الضارة بيانات سجل المكالمات بدون معرفتك."</string>
-  <string msgid="8552045664743499354" name="permlab_writeCallLog">"كتابة سجل المكالمات"</string>
-  <string msgid="6661806062274119245" product="tablet" name="permdesc_writeCallLog">"للسماح للتطبيق بتعديل سجل مكالمات الجهاز اللوحي، بما في ذلك البيانات عن المكالمات الواردة والصادرة. وربما تستخدم التطبيقات الضارة هذا لمسح سجل المكالمات أو تعديله."</string>
-  <string msgid="683941736352787842" product="default" name="permdesc_writeCallLog">"للسماح للتطبيق بتعديل سجل مكالمات الهاتف، بما في ذلك البيانات عن المكالمات الواردة والصادرة. وربما تستخدم التطبيقات الضارة هذا لمحو سجل المكالمات أو تعديله."</string>
-  <string msgid="6679035520113668528" product="tablet" name="permdesc_writeCalendar">"للسماح للتطبيق بإضافة أو إزالة أو تغيير الأحداث التي يمكنك تعديلها على جهازك اللوحي، بما في ذلك أحداث الأصدقاء أو زملاء العمل. وقد يتيح هذا للتطبيق إرسال رسائل يبدو أنها واردة من أصحاب التقويم أو تعديل الأحداث بدون معرفة المالكين."</string>
-  <string msgid="2324469496327249376" product="default" name="permdesc_writeCalendar">"للسماح للتطبيق بإضافة أو إزالة أو تغيير الأحداث التي يمكنك تعديلها على هاتفك، بما في ذلك أحداث الأصدقاء أو زملاء العمل. وقد يتيح هذا للتطبيق إرسال رسائل يبدو أنها واردة من أصحاب التقويم أو تعديل الأحداث بدون معرفة المالكين."</string>
-  <string msgid="5383798877137640762" name="permdesc_accessCoarseLocation">"للدخول إلى الموقع التقريبي من موفري المواقع باستخدام مصادر الشبكة مثل برج الهاتف الخلوي وWLAN. وعند توفر خدمات المواقع هذه وتشغيلها، يتيح هذا الإذن للتطبيق تحديد الموقع التقريبي."</string>
-  <string msgid="2927361537942591841" product="nosdcard" name="permlab_mount_unmount_filesystems">"الدخول إلى نظام ملفات وحدة تخزين USB"</string>
-  <string msgid="4402305049890953810" product="default" name="permlab_mount_unmount_filesystems">"الدخول إلى نظام ملفات بطاقة SD"</string>
-  <string msgid="6227819582624904972" product="nosdcard" name="permlab_mount_format_filesystems">"محو وحدة تخزين USB"</string>
-  <string msgid="262582698639274056" product="default" name="permlab_mount_format_filesystems">"محو بطاقة SD"</string>
-  <string msgid="7969774021256336548" product="tablet" name="permdesc_changeWifiMulticastState">"للمساح للتطبيق بتلقي الحزم التي يتم إرسالها إلى جميع الأجهزة على شبكة WLAN باستخدام عناوين بث متعدد، وليس باستخدام جهازك اللوحي فقط. ويؤدي ذلك إلى استخدام قدر أكبر من الطاقة يفوق وضع البث غير المتعدد."</string>
-  <string msgid="6851949706025349926" product="default" name="permdesc_changeWifiMulticastState">"للمساح للتطبيق بتلقي الحزم التي يتم إرسالها إلى جميع الأجهزة على شبكة WLAN باستخدام عناوين بث متعدد، وليس باستخدام هاتفك فقط. ويؤدي ذلك إلى استخدام قدر أكبر من الطاقة يفوق وضع البث غير المتعدد."</string>
-  <string msgid="3156456504084201805" product="tablet" name="permdesc_changeWimaxState">"للسماح للتطبيق بتوصيل الجهاز اللوحي بشبكات WiMAX وقطع اتصاله بها."</string>
-  <string msgid="697025043004923798" product="default" name="permdesc_changeWimaxState">"للسماح للتطبيق بتوصيل الهاتف بشبكات WiMAX وقطع اتصاله بها."</string>
-  <string msgid="8235341515605559677" product="nosdcard" name="permlab_sdcardRead">"اختبار إمكانية الدخول إلى وحدة تخزين محمية"</string>
-  <string msgid="8235341515605559677" product="default" name="permlab_sdcardRead">"اختبار إمكانية الدخول إلى وحدة تخزين محمية"</string>
-  <string msgid="5791957130190763289" product="nosdcard" name="permdesc_sdcardRead">"للسماح للتطبيق باختبار إذن لوحدة تخزين USB سيتم توفيرها على أجهزة مستقبلية."</string>
-  <string msgid="5914402684685848828" product="default" name="permdesc_sdcardRead">"للسماح للتطبيق باختبار إذن لبطاقة SD سيتم توفيرها على أجهزة مستقبلية."</string>
-  <string msgid="754137583022792429" name="faceunlock_multiple_failures">"تم تجاوز الحد الأقصى لعدد محاولات تأمين الجهاز بالوجه"</string>
-  <string msgid="5096149665138916184" name="lockscreen_permanent_disabled_sim_message_short">"بطاقة SIM غير قابلة للاستخدام."</string>
-  <string msgid="7336470535385009523" name="granularity_label_character">"حرف"</string>
-  <string msgid="7075570328374918660" name="granularity_label_word">"كلمة"</string>
-  <string msgid="5815508880782488267" name="granularity_label_link">"رابط"</string>
-  <string msgid="5764267235026120888" name="granularity_label_line">"سطر"</string>
-  <string msgid="546083327654631076" name="permlab_serialPort">"الدخول إلى المنافذ التسلسلية"</string>
-  <string msgid="2991639985224598193" name="permdesc_serialPort">"يسمح لحامله بالدخول إلى المنافذ التسلسلية باستخدام واجهة برمجة التطبيقات."</string>
-  <string msgid="5077774297943409285" name="permlab_accessContentProvidersExternally">"الدخول إلى مزودي المحتوى خارجيًا"</string>
-  <string msgid="4544346486697853685" name="permdesc_accessContentProvidersExternally">"السماح للمالك بالدخول إلى مزودي المحتوى من الوعاء. لن تكون هناك حاجة إليه مطلقًا مع التطبيقات العادية."</string>
-  <string msgid="3527558366616680889" name="permlab_updateLock">"عدم التوصية بالتحديثات التلقائية للجهاز"</string>
-  <string msgid="1655625832166778492" name="permdesc_updateLock">"للسماح للمالك بتقديم معلومات إلى النظام بشأن الوقت المناسب لإجراء إعادة تشغيل غير تفاعلية لترقية الجهاز."</string>
-  <string msgid="7460694070309730149" name="enable_explore_by_touch_warning_title">"هل تريد تمكين ميزة Explore by Touch؟"</string>
-  <string msgid="8655887539089910577" product="tablet" name="enable_explore_by_touch_warning_message">"يريد <xliff:g id="ACCESSIBILITY_SERVICE_NAME">%1$s</xliff:g> تمكين ميزة Explore by Touch. عند تشغيل ميزة Explore by Touch، سيكون بإمكانك سماع أو مشاهدة أوصاف لما تحت إصبعك أو إجراء إيماءات للتفاعل مع الجهاز اللوحي."</string>
-  <string msgid="2708199672852373195" product="default" name="enable_explore_by_touch_warning_message">"يريد <xliff:g id="ACCESSIBILITY_SERVICE_NAME">%1$s</xliff:g> تمكين ميزة Explore by Touch. عند تشغيل ميزة Explore by Touch، سيكون بإمكانك سماع أو مشاهدة أوصاف لما تحت إصبعك أو إجراء إيماءات للتفاعل مع الهاتف."</string>
-  <string msgid="6640505817617414371" name="low_internal_storage_view_text">"قد لا تعمل بعض وظائف النظام"</string>
-  <string msgid="3272758351138122503" name="webpage_unresponsive">"أصبحت الصفحة لا تستجيب."\n\n"هل تريد إغلاقها؟"</string>
-  <string msgid="1645267259272829559" name="accept">"قبول"</string>
-  <string msgid="2112225451706137894" name="decline">"رفض"</string>
-  <string msgid="1318975185112070734" name="wifi_p2p_invitation_sent_title">"تم إرسال الدعوة"</string>
-  <string msgid="4958803948658533637" name="wifi_p2p_invitation_to_connect_title">"دعوة للاتصال"</string>
-  <string msgid="570389174731951769" name="wifi_p2p_from_message">"من:"</string>
-  <string msgid="248968974522044099" name="wifi_p2p_to_message">"إلى:"</string>
-  <string msgid="5920929550367828970" name="wifi_p2p_enter_pin_message">"اكتب رقم التعريف الشخصي المطلوب:"</string>
-  <string msgid="8530563323880921094" name="wifi_p2p_show_pin_message">"رقم التعريف الشخصي:"</string>
-  <string msgid="2507683751759308828" name="date_time_done">"تم"</string>
-  <string msgid="8257740710754301407" name="perms_new_perm_prefix">
-    <font fgcolor="#ff900000" size="12">"جديد: "</font>
+  <string name="imei" msgid="2625429890869005782">"IMEI"</string>
+  <string name="meid" msgid="4841221237681254195">"MEID"</string>
+  <string name="silent_mode_silent" msgid="319298163018473078">"إيقاف الرنين"</string>
+  <string name="silent_mode_vibrate" msgid="7072043388581551395">"اهتزاز الرنين"</string>
+  <string name="silent_mode_ring" msgid="8592241816194074353">"تشغيل الرنين"</string>
+  <string name="reboot_safemode_title" msgid="7054509914500140361">"إعادة تشغيل في الوضع الآمن"</string>
+  <string name="reboot_safemode_confirm" msgid="55293944502784668">"هل تريد إعادة تشغيل الكمبيوتر في الوضع الآمن؟ سيؤدي ذلك إلى تعطيل جميع تطبيقات الجهات الخارجية التي تم تثبيتها. ستتم استعادتها عند إعادة التشغيل مرة أخرى."</string>
+  <string name="permlab_readCellBroadcasts" msgid="1598328843619646166">"قراءة رسائل بث الخلية"</string>
+  <string name="permdesc_readCellBroadcasts" msgid="6361972776080458979">"السماح للتطبيق بقراءة رسائل بث الخلية التي يتلقاها هذا الجهاز. يتم تسليم تنبيهات بث الخلية في بعض المواقع لتحذيرك من حالات طارئة. يمكن أن تتداخل التطبيقات الضارة مع أداء أو تشغيل الجهاز عندما يتم تلقي بث خلية طارئ."</string>
+  <string name="permlab_getDetailedTasks" msgid="6229468674753529501">"استرداد تفاصيل التطبيقات قيد التشغيل"</string>
+  <string name="permdesc_getDetailedTasks" msgid="153824741440717599">"يسمح للتطبيق باسترداد معلومات تفصيلية حول المهام قيد التشغيل حاليًا ومؤخرًا. قد تكتشف التطبيقات الضارة معلومات خاصة حول التطبيقات الأخرى."</string>
+  <string name="permlab_startAnyActivity" msgid="2918768238045206456">"بدء أي نشاط"</string>
+  <string name="permdesc_startAnyActivity" msgid="997823695343584001">"للسماح للتطبيق ببدء أي نشاط، بغض النظر عن حماية الإذن أو حالة التصدير."</string>
+  <string name="permlab_setScreenCompatibility" msgid="6975387118861842061">"تعيين توافق الشاشة"</string>
+  <string name="permdesc_setScreenCompatibility" msgid="692043618693917374">"السماح للتطبيق بالتحكم في وضع التوافق مع شاشة التطبيقات الأخرى. قد تتسبب التطبيقات الضارة في تعطيل سلوك التطبيقات الأخرى."</string>
+  <string name="permlab_bindAccessibilityService" msgid="5357733942556031593">"الالتزام بخدمة إمكانية الدخول"</string>
+  <string name="permdesc_bindAccessibilityService" msgid="7034615928609331368">"للسماح للمالك بالالتزام بواجهة المستوى العلوي لخدمة إمكانية الدخول. لن تكون هناك حاجة إليه مطلقًا مع التطبيقات العادية."</string>
+  <string name="permlab_setKeyboardLayout" msgid="4778731703600909340">"تغيير تنسيق لوحة مفاتيح"</string>
+  <string name="permdesc_setKeyboardLayout" msgid="8480016771134175879">"للسماح للتطبيق بتغيير تنسيق لوحة المفاتيح. لن تكون هناك حاجة إليه مطلقًا مع التطبيقات العادية."</string>
+  <string name="permdesc_persistentActivity" product="tablet" msgid="8525189272329086137">"للسماح للتطبيق بجعل أجزاء منه ثابتة في الذاكرة. وقد يؤدي هذا إلى تقييد الذاكرة المتاحة للتطبيقات الأخرى مما يؤدي إلى حدوث بطء في الجهاز اللوحي."</string>
+  <string name="permdesc_persistentActivity" product="default" msgid="4384760047508278272">"للسماح للتطبيق بجعل أجزاء منه ثابتة في الذاكرة. وقد يؤدي هذا إلى تقييد الذاكرة المتاحة للتطبيقات الأخرى مما يؤدي إلى حدوث بطء في الهاتف."</string>
+  <string name="permlab_grantRevokePermissions" msgid="4627315351093508795">"منح الأذونات أو إلغائها"</string>
+  <string name="permdesc_grantRevokePermissions" msgid="4088642654085850662">"للسماح لأحد التطبيقات بمنح أذونات محددة أو إلغائها لنفسه أو لتطبيقات أخرى. قد تستخدم التطبيقات الضارة هذا للدخول إلى ميزات لم تمنحها إذنًا لدخولها."</string>
+  <string name="permlab_readCallLog" msgid="3478133184624102739">"قراءة سجل المكالمات"</string>
+  <string name="permdesc_readCallLog" product="tablet" msgid="3700645184870760285">"للسماح للتطبيق بقراءة سجل مكالمات الجهاز اللوحي، بما في ذلك البيانات حول المكالمات الواردة والصادرة. ويتيح هذا الإذن للتطبيق حفظ بيانات سجل المكالمات، وقد تشارك التطبيقات الضارة بيانات سجل المكالمات بدون معرفتك."</string>
+  <string name="permdesc_readCallLog" product="default" msgid="5777725796813217244">"للسماح للتطبيق بقراءة سجل مكالمات الهاتف، بما في ذلك البيانات حول المكالمات الواردة والصادرة. ويتيح هذا الإذن للتطبيق حفظ بيانات سجل المكالمات، وقد تشارك التطبيقات الضارة بيانات سجل المكالمات بدون معرفتك."</string>
+  <string name="permlab_writeCallLog" msgid="8552045664743499354">"كتابة سجل المكالمات"</string>
+  <string name="permdesc_writeCallLog" product="tablet" msgid="6661806062274119245">"للسماح للتطبيق بتعديل سجل مكالمات الجهاز اللوحي، بما في ذلك البيانات عن المكالمات الواردة والصادرة. وربما تستخدم التطبيقات الضارة هذا لمسح سجل المكالمات أو تعديله."</string>
+  <string name="permdesc_writeCallLog" product="default" msgid="683941736352787842">"للسماح للتطبيق بتعديل سجل مكالمات الهاتف، بما في ذلك البيانات عن المكالمات الواردة والصادرة. وربما تستخدم التطبيقات الضارة هذا لمحو سجل المكالمات أو تعديله."</string>
+  <string name="permdesc_writeCalendar" product="tablet" msgid="6679035520113668528">"للسماح للتطبيق بإضافة أو إزالة أو تغيير الأحداث التي يمكنك تعديلها على جهازك اللوحي، بما في ذلك أحداث الأصدقاء أو زملاء العمل. وقد يتيح هذا للتطبيق إرسال رسائل يبدو أنها واردة من أصحاب التقويم أو تعديل الأحداث بدون معرفة المالكين."</string>
+  <string name="permdesc_writeCalendar" product="default" msgid="2324469496327249376">"للسماح للتطبيق بإضافة أو إزالة أو تغيير الأحداث التي يمكنك تعديلها على هاتفك، بما في ذلك أحداث الأصدقاء أو زملاء العمل. وقد يتيح هذا للتطبيق إرسال رسائل يبدو أنها واردة من أصحاب التقويم أو تعديل الأحداث بدون معرفة المالكين."</string>
+  <string name="permdesc_accessCoarseLocation" msgid="5383798877137640762">"للدخول إلى الموقع التقريبي من موفري المواقع باستخدام مصادر الشبكة مثل برج الهاتف الخلوي وWLAN. وعند توفر خدمات المواقع هذه وتشغيلها، يتيح هذا الإذن للتطبيق تحديد الموقع التقريبي."</string>
+  <string name="permlab_mount_unmount_filesystems" product="nosdcard" msgid="2927361537942591841">"الدخول إلى نظام ملفات وحدة تخزين USB"</string>
+  <string name="permlab_mount_unmount_filesystems" product="default" msgid="4402305049890953810">"الدخول إلى نظام ملفات بطاقة SD"</string>
+  <string name="permlab_mount_format_filesystems" product="nosdcard" msgid="6227819582624904972">"محو وحدة تخزين USB"</string>
+  <string name="permlab_mount_format_filesystems" product="default" msgid="262582698639274056">"محو بطاقة SD"</string>
+  <string name="permdesc_changeWifiMulticastState" product="tablet" msgid="7969774021256336548">"للمساح للتطبيق بتلقي الحزم التي يتم إرسالها إلى جميع الأجهزة على شبكة WLAN باستخدام عناوين بث متعدد، وليس باستخدام جهازك اللوحي فقط. ويؤدي ذلك إلى استخدام قدر أكبر من الطاقة يفوق وضع البث غير المتعدد."</string>
+  <string name="permdesc_changeWifiMulticastState" product="default" msgid="6851949706025349926">"للمساح للتطبيق بتلقي الحزم التي يتم إرسالها إلى جميع الأجهزة على شبكة WLAN باستخدام عناوين بث متعدد، وليس باستخدام هاتفك فقط. ويؤدي ذلك إلى استخدام قدر أكبر من الطاقة يفوق وضع البث غير المتعدد."</string>
+  <string name="permdesc_changeWimaxState" product="tablet" msgid="3156456504084201805">"للسماح للتطبيق بتوصيل الجهاز اللوحي بشبكات WiMAX وقطع اتصاله بها."</string>
+  <string name="permdesc_changeWimaxState" product="default" msgid="697025043004923798">"للسماح للتطبيق بتوصيل الهاتف بشبكات WiMAX وقطع اتصاله بها."</string>
+  <string name="permlab_sdcardRead" product="nosdcard" msgid="8235341515605559677">"اختبار إمكانية الدخول إلى وحدة تخزين محمية"</string>
+  <string name="permlab_sdcardRead" product="default" msgid="8235341515605559677">"اختبار إمكانية الدخول إلى وحدة تخزين محمية"</string>
+  <string name="permdesc_sdcardRead" product="nosdcard" msgid="5791957130190763289">"للسماح للتطبيق باختبار إذن لوحدة تخزين USB سيتم توفيرها على أجهزة مستقبلية."</string>
+  <string name="permdesc_sdcardRead" product="default" msgid="5914402684685848828">"للسماح للتطبيق باختبار إذن لبطاقة SD سيتم توفيرها على أجهزة مستقبلية."</string>
+  <string name="faceunlock_multiple_failures" msgid="754137583022792429">"تم تجاوز الحد الأقصى لعدد محاولات تأمين الجهاز بالوجه"</string>
+  <string name="lockscreen_permanent_disabled_sim_message_short" msgid="5096149665138916184">"بطاقة SIM غير قابلة للاستخدام."</string>
+  <string name="granularity_label_character" msgid="7336470535385009523">"حرف"</string>
+  <string name="granularity_label_word" msgid="7075570328374918660">"كلمة"</string>
+  <string name="granularity_label_link" msgid="5815508880782488267">"رابط"</string>
+  <string name="granularity_label_line" msgid="5764267235026120888">"سطر"</string>
+  <string name="permlab_serialPort" msgid="546083327654631076">"الدخول إلى المنافذ التسلسلية"</string>
+  <string name="permdesc_serialPort" msgid="2991639985224598193">"يسمح لحامله بالدخول إلى المنافذ التسلسلية باستخدام واجهة برمجة التطبيقات."</string>
+  <string name="permlab_accessContentProvidersExternally" msgid="5077774297943409285">"الدخول إلى مزودي المحتوى خارجيًا"</string>
+  <string name="permdesc_accessContentProvidersExternally" msgid="4544346486697853685">"السماح للمالك بالدخول إلى مزودي المحتوى من الوعاء. لن تكون هناك حاجة إليه مطلقًا مع التطبيقات العادية."</string>
+  <string name="permlab_updateLock" msgid="3527558366616680889">"عدم التوصية بالتحديثات التلقائية للجهاز"</string>
+  <string name="permdesc_updateLock" msgid="1655625832166778492">"للسماح للمالك بتقديم معلومات إلى النظام بشأن الوقت المناسب لإجراء إعادة تشغيل غير تفاعلية لترقية الجهاز."</string>
+  <string name="enable_explore_by_touch_warning_title" msgid="7460694070309730149">"هل تريد تمكين ميزة Explore by Touch؟"</string>
+  <string name="enable_explore_by_touch_warning_message" product="tablet" msgid="8655887539089910577">"يريد <xliff:g id="ACCESSIBILITY_SERVICE_NAME">%1$s</xliff:g> تمكين ميزة Explore by Touch. عند تشغيل ميزة Explore by Touch، سيكون بإمكانك سماع أو مشاهدة أوصاف لما تحت إصبعك أو إجراء إيماءات للتفاعل مع الجهاز اللوحي."</string>
+  <string name="enable_explore_by_touch_warning_message" product="default" msgid="2708199672852373195">"يريد <xliff:g id="ACCESSIBILITY_SERVICE_NAME">%1$s</xliff:g> تمكين ميزة Explore by Touch. عند تشغيل ميزة Explore by Touch، سيكون بإمكانك سماع أو مشاهدة أوصاف لما تحت إصبعك أو إجراء إيماءات للتفاعل مع الهاتف."</string>
+  <string name="low_internal_storage_view_text" msgid="6640505817617414371">"قد لا تعمل بعض وظائف النظام"</string>
+  <string name="webpage_unresponsive" msgid="3272758351138122503">"أصبحت الصفحة لا تستجيب."\n\n"هل تريد إغلاقها؟"</string>
+  <string name="accept" msgid="1645267259272829559">"قبول"</string>
+  <string name="decline" msgid="2112225451706137894">"رفض"</string>
+  <string name="wifi_p2p_invitation_sent_title" msgid="1318975185112070734">"تم إرسال الدعوة"</string>
+  <string name="wifi_p2p_invitation_to_connect_title" msgid="4958803948658533637">"دعوة للاتصال"</string>
+  <string name="wifi_p2p_from_message" msgid="570389174731951769">"من:"</string>
+  <string name="wifi_p2p_to_message" msgid="248968974522044099">"إلى:"</string>
+  <string name="wifi_p2p_enter_pin_message" msgid="5920929550367828970">"اكتب رقم التعريف الشخصي المطلوب:"</string>
+  <string name="wifi_p2p_show_pin_message" msgid="8530563323880921094">"رقم التعريف الشخصي:"</string>
+  <string name="date_time_done" msgid="2507683751759308828">"تم"</string>
+  <string name="perms_new_perm_prefix" msgid="8257740710754301407">
+    <font size="12" fgcolor="#ff900000">"جديد: "</font>
   </string>
-  <string msgid="5139836143293299417" name="perms_description_app">"يقدمه <xliff:g id="APP_NAME">%1$s</xliff:g>."</string>
-  <string msgid="6203112478095117625" name="use_physical_keyboard">"لوحة مفاتيح فعلية"</string>
-  <string msgid="7517821086888990278" name="hardware">"أجهزة"</string>
-  <string msgid="1407367017263030773" name="select_keyboard_layout_notification_title">"تحديد تخطيط لوحة مفاتيح"</string>
-  <string msgid="4465907700449257063" name="select_keyboard_layout_notification_message">"المس لتحديد تخطيط لوحة مفاتيح."</string>
-  <string msgid="1642024455750414694" name="permlab_route_media_output">"توجيه إخراج الوسائط"</string>
-  <string msgid="4932818749547244346" name="permdesc_route_media_output">"للسماح للتطبيق بتوجيه إخراج الوسائط إلى أجهزة خارجية أخرى."</string>
-  <string msgid="3091587249776033139" name="description_target_search">"بحث"</string>
-  <string msgid="8017770747801494933" name="activity_resolver_use_always">"دومًا"</string>
-  <string msgid="2404644797149173758" name="activity_resolver_use_once">"مرة واحدة فقط"</string>
-  <string msgid="4617053898167127471" product="tablet" name="default_audio_route_name">"الجهاز اللوحي"</string>
-  <string msgid="4239291273420140123" product="default" name="default_audio_route_name">"الهاتف"</string>
-  <string msgid="8119971843803439110" name="default_audio_route_name_headphones">"سماعات رأس"</string>
-  <string msgid="6240602982276591864" name="default_audio_route_name_dock_speakers">"مكبرات صوت للإرساء"</string>
-  <string msgid="7986404173839007682" name="default_audio_route_name_hdmi">"صوت HDMI"</string>
-  <string msgid="3722811174003886946" name="default_audio_route_category_name">"النظام"</string>
-  <string msgid="8575624030406771015" name="bluetooth_a2dp_audio_route_name">"صوت بلوتوث"</string>
-  <string msgid="7966438307723317169" name="media_route_chooser_grouping_done">"تم"</string>
-  <skip></skip>
-  <string msgid="1905800560317137752" name="aerr_title"></string>
-  <string msgid="4351948481459135709" name="anr_title"></string>
+  <string name="perms_description_app" msgid="5139836143293299417">"يقدمه <xliff:g id="APP_NAME">%1$s</xliff:g>."</string>
+  <string name="use_physical_keyboard" msgid="6203112478095117625">"لوحة مفاتيح فعلية"</string>
+  <string name="hardware" msgid="7517821086888990278">"أجهزة"</string>
+  <string name="select_keyboard_layout_notification_title" msgid="1407367017263030773">"تحديد تخطيط لوحة مفاتيح"</string>
+  <string name="select_keyboard_layout_notification_message" msgid="4465907700449257063">"المس لتحديد تخطيط لوحة مفاتيح."</string>
+  <string name="permlab_route_media_output" msgid="1642024455750414694">"توجيه إخراج الوسائط"</string>
+  <string name="permdesc_route_media_output" msgid="4932818749547244346">"للسماح للتطبيق بتوجيه إخراج الوسائط إلى أجهزة خارجية أخرى."</string>
+  <string name="description_target_search" msgid="3091587249776033139">"بحث"</string>
+  <string name="activity_resolver_use_always" msgid="8017770747801494933">"دومًا"</string>
+  <string name="activity_resolver_use_once" msgid="2404644797149173758">"مرة واحدة فقط"</string>
+  <string name="default_audio_route_name" product="tablet" msgid="4617053898167127471">"الجهاز اللوحي"</string>
+  <string name="default_audio_route_name" product="default" msgid="4239291273420140123">"الهاتف"</string>
+  <string name="default_audio_route_name_headphones" msgid="8119971843803439110">"سماعات رأس"</string>
+  <string name="default_audio_route_name_dock_speakers" msgid="6240602982276591864">"مكبرات صوت للإرساء"</string>
+  <string name="default_audio_route_name_hdmi" msgid="7986404173839007682">"صوت HDMI"</string>
+  <string name="default_audio_route_category_name" msgid="3722811174003886946">"النظام"</string>
+  <string name="bluetooth_a2dp_audio_route_name" msgid="8575624030406771015">"صوت بلوتوث"</string>
+  <string name="media_route_chooser_grouping_done" msgid="7966438307723317169">"تم"</string>
+  <string name="aerr_title" msgid="1905800560317137752"></string>
+  <string name="anr_title" msgid="4351948481459135709"></string>
   <string name="byteShort">"بايت"</string>
   <string name="kilobyteShort">"كيلوبايت"</string>
   <string name="megabyteShort">"ميغابايت"</string>
@@ -210,7 +209,7 @@
   <string name="serviceRegistered">"تم التسجيل بنجاح."</string>
   <string name="serviceErased">"لم يتم المسح بنجاح."</string>
   <string name="passwordIncorrect">"كلمة مرور غير صحيحة."</string>
-  <string msgid="" name="passwordChange">" تغيير كلمة المرور "</string>
+  <string name="passwordChange" msgid="">" تغيير كلمة المرور "</string>
   <string name="mmiComplete">"اكتمل MMI."</string>
   <string name="badPin">"رقم التعريف الشخصي الذي أدخلته غير صحيح."</string>
   <string name="badPin2">الرمز PIN2 القديم الموضوع غير صحيح</string>
@@ -230,32 +229,32 @@
   <string name="ColpMmi">اظهار رقم المتصل</string>
   <string name="ColrMmi">عدم اظهار رقم المتصل الفعلي</string>
   <string name="CfMmi">"إعادة توجيه الاتصال"</string>
-  <string msgid="" name="UnConditionCfMmi">"تحويل المكالمات غير المشروط"</string>
-  <string msgid="" name="BusyCfMmi">" تحويل المكالمة عند انشغال الخط "</string>
-  <string msgid="" name="NoReplyCfMmi">" تحويل المكالمة عند عدم الرد "</string>
-  <string msgid="" name="NotReachCfMmi">" تحويل المكالمة عندما لايمكن الوصول "</string>
-  <string msgid="" name="AllCfMmi">" تحويل جميع المكالمات "</string>
-  <string msgid="" name="ConditionCfMmi">" إعادة توجيه مكالمة مشروطة"</string>
+  <string name="UnConditionCfMmi" msgid="">"تحويل المكالمات غير المشروط"</string>
+  <string name="BusyCfMmi" msgid="">" تحويل المكالمة عند انشغال الخط "</string>
+  <string name="NoReplyCfMmi" msgid="">" تحويل المكالمة عند عدم الرد "</string>
+  <string name="NotReachCfMmi" msgid="">" تحويل المكالمة عندما لايمكن الوصول "</string>
+  <string name="AllCfMmi" msgid="">" تحويل جميع المكالمات "</string>
+  <string name="ConditionCfMmi" msgid="">" إعادة توجيه مكالمة مشروطة"</string>
   <string name="CwMmi">"انتظار المكالمة"</string>
   <string name="BaMmi">"حظر الاتصال"</string>
-  <string msgid="" name="BaocMmi">" حظر جميع المكالمات الصادرة "</string>
-  <string msgid="" name="BaoicMmi">" حظر جميع المكالمات الدولية الصادرة "</string>
-  <string msgid="" name="BaoicxhMmi">" حظر جميع المكالمات الدولية الصادرة ما عدا البلد الام "</string>
-  <string msgid="" name="BaicMmi">" حظر جميع المكالمات الواردة "</string>
-  <string msgid="" name="BaicrMmi">" حظر جميع المكالمات الواردة عند الجوال الدولي "</string>
-  <string msgid="" name="BaallMmi">" حظر جميع الخدمات الاساسية "</string>
-  <string msgid="" name="BamoMmi">" جميع الصادر لجميع الخدمات الاساسية " </string>
-  <string msgid="" name="BamtMmi">" جميع الوارد لجميع الخدمات الاساسية " </string>
+  <string name="BaocMmi" msgid="">" حظر جميع المكالمات الصادرة "</string>
+  <string name="BaoicMmi" msgid="">" حظر جميع المكالمات الدولية الصادرة "</string>
+  <string name="BaoicxhMmi" msgid="">" حظر جميع المكالمات الدولية الصادرة ما عدا البلد الام "</string>
+  <string name="BaicMmi" msgid="">" حظر جميع المكالمات الواردة "</string>
+  <string name="BaicrMmi" msgid="">" حظر جميع المكالمات الواردة عند الجوال الدولي "</string>
+  <string name="BaallMmi" msgid="">" حظر جميع الخدمات الاساسية "</string>
+  <string name="BamoMmi" msgid="">" جميع الصادر لجميع الخدمات الاساسية " </string>
+  <string name="BamtMmi" msgid="">" جميع الوارد لجميع الخدمات الاساسية " </string>
   <string name="ActiveUnconCf">تم تحويل المكالمات غير المشروط</string>
   <string name="ActiveConCf">تم تحويل المكالمات المشروط</string>
   <string name="CallForwarded">تم تحويل المكالمة</string>
   <string name="CallWaiting">"انتظار المكالمة"</string>
-  <string msgid="" name="OutCallBarred">" حجب المكالمات الصادرة "</string>
-  <string msgid="" name="InCallBarred">"المكالمة الواردة منعت"</string>
+  <string name="OutCallBarred" msgid="">" حجب المكالمات الصادرة "</string>
+  <string name="InCallBarred" msgid="">"المكالمة الواردة منعت"</string>
   <string name="ForwardedCall">تم تحويل الكل</string>
-  <string msgid="" name="CallHold">"تعليق المكالمة"</string>
-  <string msgid="" name="CallRetrieved">" استعادة المكالمة "</string>
-  <string msgid="" name="IncomingCallForwarded">" تم تحويل الاتصالات الواردة الاضافية "</string>
+  <string name="CallHold" msgid="">"تعليق المكالمة"</string>
+  <string name="CallRetrieved" msgid="">" استعادة المكالمة "</string>
+  <string name="IncomingCallForwarded" msgid="">" تم تحويل الاتصالات الواردة الاضافية "</string>
   <string name="PwdMmi">"تغيير كلمة المرور"</string>
   <string name="PinMmi">"تغيير رقم التعريف الشخصي"</string>
   <string name="Pin2Mmi">"  PIN تغيير 2 " </string>
@@ -331,24 +330,24 @@
   <string name="contentServiceSync">"مزامنة"</string>
   <string name="contentServiceSyncNotificationTitle">"مزامنة"</string>
   <string name="contentServiceTooManyDeletesNotificationDesc">"عمليات حذف <xliff:g id="CONTENT_TYPE">%s</xliff:g> كثيرة للغاية."</string>
-  <string product="tablet" name="low_memory">"وحدة تخزين الجهاز اللوحي ممتلئة! احذف بعض الملفات لتوفير مساحة."</string>
-  <string product="default" name="low_memory">"سعة تخزين الهاتف ممتلئة! احذف بعض الملفات لتحرير مساحة."</string>
+  <string name="low_memory" product="tablet">"وحدة تخزين الجهاز اللوحي ممتلئة! احذف بعض الملفات لتوفير مساحة."</string>
+  <string name="low_memory" product="default">"سعة تخزين الهاتف ممتلئة! احذف بعض الملفات لتحرير مساحة."</string>
   <string name="me">"أنا"</string>
-  <string product="tablet" name="power_dialog">"خيارات الجهاز اللوحي"</string>
-  <string product="default" name="power_dialog">"خيارات الهاتف"</string>
+  <string name="power_dialog" product="tablet">"خيارات الجهاز اللوحي"</string>
+  <string name="power_dialog" product="default">"خيارات الهاتف"</string>
   <string name="silent_mode">"وضع صامت"</string>
   <string name="turn_on_radio">"تشغيل اللاسلكي"</string>
   <string name="turn_off_radio">"إيقاف تشغيل الشبكة اللاسلكية"</string>
   <string name="screen_lock">"تأمين الشاشة"</string>
   <string name="power_off">"إيقاف التشغيل"</string>
   <string name="shutdown_progress">"جارٍ إيقاف التشغيل..."</string>
-  <string product="tablet" name="shutdown_confirm">"سيتم إيقاف تشغيل الجهاز اللوحي."</string>
-  <string product="default" name="shutdown_confirm">"سيتم إيقاف تشغيل هاتفك."</string>
+  <string name="shutdown_confirm" product="tablet">"سيتم إيقاف تشغيل الجهاز اللوحي."</string>
+  <string name="shutdown_confirm" product="default">"سيتم إيقاف تشغيل هاتفك."</string>
   <string name="shutdown_confirm_question">"هل تريد إيقاف التشغيل؟"</string>
   <string name="recent_tasks_title">"حديثة"</string>
   <string name="no_recent_tasks">"ليس هناك أية تطبيقات حديثة."</string>
-  <string product="tablet" name="global_actions">"خيارات الجهاز اللوحي"</string>
-  <string product="default" name="global_actions">"خيارات الهاتف"</string>
+  <string name="global_actions" product="tablet">"خيارات الجهاز اللوحي"</string>
+  <string name="global_actions" product="default">"خيارات الهاتف"</string>
   <string name="global_action_lock">"تأمين الشاشة"</string>
   <string name="global_action_power_off">"إيقاف التشغيل"</string>
   <string name="global_action_toggle_silent_mode">"وضع صامت"</string>
@@ -365,8 +364,8 @@
   <string name="permgrouplab_messages">"رسائلك"</string>
   <string name="permgroupdesc_messages">"قراءة وكتابة الرسائل القصيرة SMS والرسائل الإلكترونية والرسائل الأخرى."</string>
   <string name="permgrouplab_personalInfo">"معلوماتك الشخصية"</string>
-  <string product="tablet" name="permgroupdesc_personalInfo">"الدخول المباشر إلى جهات اتصالك والتقويم المخزنين على الجهاز اللوحي."</string>
-  <string product="default" name="permgroupdesc_personalInfo">"الدخول المباشر إلى التقويم وجهات الاتصال المخزّنة على الهاتف."</string>
+  <string name="permgroupdesc_personalInfo" product="tablet">"الدخول المباشر إلى جهات اتصالك والتقويم المخزنين على الجهاز اللوحي."</string>
+  <string name="permgroupdesc_personalInfo" product="default">"الدخول المباشر إلى التقويم وجهات الاتصال المخزّنة على الهاتف."</string>
   <string name="permgrouplab_location">"موقعك"</string>
   <string name="permgroupdesc_location">"مراقبة موقعك الفعلي"</string>
   <string name="permgrouplab_network">"اتصال الشبكة"</string>
@@ -382,8 +381,8 @@
   <string name="permgrouplab_developmentTools">"أدوات التطوير"</string>
   <string name="permgroupdesc_developmentTools">"الميزات مطلوبة فقط لمطوّري التطبيق."</string>
   <string name="permgrouplab_storage">"التخزين"</string>
-  <string product="nosdcard" name="permgroupdesc_storage">"الدخول إلى وحدة تخزين USB."</string>
-  <string product="default" name="permgroupdesc_storage">"الدخول إلى بطاقة SD."</string>
+  <string name="permgroupdesc_storage" product="nosdcard">"الدخول إلى وحدة تخزين USB."</string>
+  <string name="permgroupdesc_storage" product="default">"الدخول إلى بطاقة SD."</string>
   <string name="permlab_statusBar">"تعطيل شريط الحالة أو تعديله"</string>
   <string name="permdesc_statusBar">"للسماح للتطبيق بتعطيل شريط الحالة أو إضافة رموز نظام وإزالتها."</string>
   <string name="permlab_statusBarService">"شريط الحالة"</string>
@@ -403,11 +402,11 @@
   <string name="permlab_sendSmsNoConfirmation">"إرسال رسائل قصيرة SMS بدون تأكيد"</string>
   <string name="permdesc_sendSmsNoConfirmation">"للسماح للتطبيق بإرسال رسائل قصيرة SMS. قد تكلفك التطبيقات الضارة المال من خلال إرسال رسائل بدون تأكيدك."</string>
   <string name="permlab_readSms">"قراءة الرسائل القصيرة SMS أو رسائل الوسائط المتعددة"</string>
-  <string product="tablet" name="permdesc_readSms">"للسماح للتطبيق بقراءة الرسائل القصيرة SMS المخزنة على الجهاز اللوحي أو بطاقة SIM. يمكن للتطبيقات الضارة قراءة رسائلك السرية."</string>
-  <string product="default" name="permdesc_readSms">"للسماح للتطبيق بقراءة الرسائل القصيرة SMS المخزنة على الهاتف أو بطاقة SIM. قد تقرأ التطبيقات الضارة رسائلك السرية."</string>
+  <string name="permdesc_readSms" product="tablet">"للسماح للتطبيق بقراءة الرسائل القصيرة SMS المخزنة على الجهاز اللوحي أو بطاقة SIM. يمكن للتطبيقات الضارة قراءة رسائلك السرية."</string>
+  <string name="permdesc_readSms" product="default">"للسماح للتطبيق بقراءة الرسائل القصيرة SMS المخزنة على الهاتف أو بطاقة SIM. قد تقرأ التطبيقات الضارة رسائلك السرية."</string>
   <string name="permlab_writeSms">"تعديل الرسائل القصيرة SMS أو رسائل الوسائط المتعددة"</string>
-  <string product="tablet" name="permdesc_writeSms">"للسماح للتطبيق بالكتابة على الرسائل القصيرة SMS المخزنة على الجهاز اللوحي أو بطاقة SIM. يمكن للتطبيقات الضارة حذف رسائلك."</string>
-  <string product="default" name="permdesc_writeSms">"للسماح للتطبيق بالكتابة إلى الرسائل القصيرة SMS المخزنة على الهاتف أو بطاقة SIM. قد تحذف التطبيقات الضارة رسائلك."</string>
+  <string name="permdesc_writeSms" product="tablet">"للسماح للتطبيق بالكتابة على الرسائل القصيرة SMS المخزنة على الجهاز اللوحي أو بطاقة SIM. يمكن للتطبيقات الضارة حذف رسائلك."</string>
+  <string name="permdesc_writeSms" product="default">"للسماح للتطبيق بالكتابة إلى الرسائل القصيرة SMS المخزنة على الهاتف أو بطاقة SIM. قد تحذف التطبيقات الضارة رسائلك."</string>
   <string name="permlab_receiveWapPush">"تلقي WAP"</string>
   <string name="permdesc_receiveWapPush">"للسماح للتطبيق بتلقي رسائل WAP ومعالجتها. قد تراقب بعض التطبيقات الضارة رسائلك أو تحذفها بدون عرضها لك."</string>
   <string name="permlab_getTasks">"استرداد التطبيقات التي قيد التشغيل"</string>
@@ -463,8 +462,8 @@
   <string name="permlab_manageAppTokens">"إدارة رموز التطبيق"</string>
   <string name="permdesc_manageAppTokens">"للسماح للتطبيقات بإنشاء وإدارة رموزها الخاصة، وتجاوز ترتيب Z العادي. لا يجب استخدامه على الإطلاق للتطبيقات العادية."</string>
   <string name="permlab_injectEvents">"مفاتيح الضغط وأزرار التحكم"</string>
-  <string product="tablet" name="permdesc_injectEvents">"للسماح للتطبيق بتوصيل أحداث إدخالاته الخاصة (ضغطات المفاتيح، وما إلى ذلك) للتطبيقات الأخرى. يمكن أن تستخدم التطبيقات الضارة ذلك للتحكم في الجهاز اللوحي."</string>
-  <string product="default" name="permdesc_injectEvents">"للسماح لتطبيق ما بتسليم أحداث الإرسال الخاصة به (ضغطات المفاتيح وغير ذلك) إلى تطبيقات أخرى. يمكن أن تستخدم التطبيقات الضارة ذلك للاستحواذ على الهاتف."</string>
+  <string name="permdesc_injectEvents" product="tablet">"للسماح للتطبيق بتوصيل أحداث إدخالاته الخاصة (ضغطات المفاتيح، وما إلى ذلك) للتطبيقات الأخرى. يمكن أن تستخدم التطبيقات الضارة ذلك للتحكم في الجهاز اللوحي."</string>
+  <string name="permdesc_injectEvents" product="default">"للسماح لتطبيق ما بتسليم أحداث الإرسال الخاصة به (ضغطات المفاتيح وغير ذلك) إلى تطبيقات أخرى. يمكن أن تستخدم التطبيقات الضارة ذلك للاستحواذ على الهاتف."</string>
   <string name="permlab_readInputState">"تسجيل ما تكتبه والإجراءات التي تتخذها"</string>
   <string name="permdesc_readInputState">"للسماح للتطبيقات بمراقبة الأحرف التي تضغط عليها حتى عند التفاعل مع تطبيق آخر (مثل إدخال كلمة مرور). لا يجب استخدامه على الإطلاق للتطبيقات العادية."</string>
   <string name="permlab_bindInputMethod">"الالتزام بطريقة إرسال ما"</string>
@@ -497,20 +496,20 @@
   <string name="permlab_installPackages">"تثبيت التطبيقات مباشرة"</string>
   <string name="permdesc_installPackages">"للسماح لتطبيق ما بتثبيت حزم Android الجديدة أو المحدّثة. يمكن أن تستخدم التطبيقات الضارة ذلك لإضافة تطبيقات جديدة ذات أذونات قوية على نحو عشوائي."</string>
   <string name="permlab_clearAppCache">"حذف جميع بيانات ذاكرة التخزين المؤقت للتطبيق"</string>
-  <string product="tablet" name="permdesc_clearAppCache">"للسماح لتطبيق ما بإفراغ وحدة تخزين الجهاز اللوحي من خلال حذف بعض الملفات في دليل ذاكرة التخزين المؤقت للتطبيق. وعادةً يكون الدخول مقيدًا جدًا لتشغيل النظام."</string>
-  <string product="default" name="permdesc_clearAppCache">"للسماح لتطبيق ما بتفريغ سعة تخزين الهاتف من خلال حذف بعض الملفات من دليل ذاكرة التخزين المؤقت للتطبيق. ويكون الدخول في العادة مقيّدًا بشدة لمعالجة النظام."</string>
+  <string name="permdesc_clearAppCache" product="tablet">"للسماح لتطبيق ما بإفراغ وحدة تخزين الجهاز اللوحي من خلال حذف بعض الملفات في دليل ذاكرة التخزين المؤقت للتطبيق. وعادةً يكون الدخول مقيدًا جدًا لتشغيل النظام."</string>
+  <string name="permdesc_clearAppCache" product="default">"للسماح لتطبيق ما بتفريغ سعة تخزين الهاتف من خلال حذف بعض الملفات من دليل ذاكرة التخزين المؤقت للتطبيق. ويكون الدخول في العادة مقيّدًا بشدة لمعالجة النظام."</string>
   <string name="permlab_movePackage">"نقل موارد التطبيق"</string>
   <string name="permdesc_movePackage">"للسماح لتطبيق ما بنقل موارد التطبيق من الوسائط الداخلية إلى الوسائط الخارجية والعكس."</string>
   <string name="permlab_readLogs">"قراءة بيانات السجل الحساسة"</string>
-  <string product="tablet" name="permdesc_readLogs">"للسماح لتطبيق ما بالقراءة من ملفات سجلات النظام المتنوعة. ويسمح ذلك للتطبيق باكتشاف المعلومات العامة حول ما تفعله بالجهاز اللوحي، ومن المحتمل أن يتضمن معلومات شخصية أو خاصة."</string>
-  <string product="default" name="permdesc_readLogs">"للسماح لتطبيق ما بالقراءة من ملفات سجلات النظام المتنوعة. ويسمح ذلك للتطبيق باكتشاف المعلومات العامة حول ما تفعله بالهاتف، ومن المحتمل أن يتضمن معلومات شخصية أو خاصة."</string>
+  <string name="permdesc_readLogs" product="tablet">"للسماح لتطبيق ما بالقراءة من ملفات سجلات النظام المتنوعة. ويسمح ذلك للتطبيق باكتشاف المعلومات العامة حول ما تفعله بالجهاز اللوحي، ومن المحتمل أن يتضمن معلومات شخصية أو خاصة."</string>
+  <string name="permdesc_readLogs" product="default">"للسماح لتطبيق ما بالقراءة من ملفات سجلات النظام المتنوعة. ويسمح ذلك للتطبيق باكتشاف المعلومات العامة حول ما تفعله بالهاتف، ومن المحتمل أن يتضمن معلومات شخصية أو خاصة."</string>
   <string name="permlab_anyCodecForPlayback">"استخدام أي برنامج فك تشفير وسائط من أجل التشغيل"</string>
   <string name="permdesc_anyCodecForPlayback">"السماح للتطبيق باستخدام أي برنامج فك تشفير وسائط مثبت لفك التشفير من أجل التشغيل."</string>
   <string name="permlab_diagnostic">"قراءة/كتابة إلى الموارد المملوكة بواسطة التشخيص"</string>
   <string name="permdesc_diagnostic">"للسماح لتطبيق ما بالقراءة والكتابة إلى أي مورد مملوك بواسطة مجموعة التشخيصات؛ على سبيل المثال، الملفات في /dev. من المحتمل أن يؤثر ذلك في استقرار النظام وأمانه. يجب ألا يستخدم ذلك سوى للتشخيصات الخاصة بالنظام من قِبل المصنِّع أو المشغِّل."</string>
   <string name="permlab_changeComponentState">"تمكين مكونات التطبيق أو تعطيلها"</string>
-  <string product="tablet" name="permdesc_changeComponentState">"للسماح لتطبيق ما بتغيير ما إذا كان سيتم تمكين مكون لتطبيق آخر أم لا. يمكن أن تستخدم التطبيقات الضارة ذلك لتعطيل قدرات الجهاز اللوحي المهمة. يجب توخي الحذر عند استخدام هذا الإذن، وذلك لأنه من الممكن أن يؤدي ذلك إلى جعل حالة مكونات التطبيق غير قابلة للاستخدام أو غير متناسقة أو غير مستقرة."</string>
-  <string product="default" name="permdesc_changeComponentState">"للسماح لتطبيق ما بتغيير ما إذا كان سيتم تمكين مكون لتطبيق آخر أم لا. يمكن أن تستخدم التطبيقات الضارة ذلك لتعطيل قدرات الهاتف المهمة. يجب توخي الحذر عند استخدام هذا الإذن، وذلك لأنه من الممكن أن يؤدي ذلك إلى جعل حالة مكونات التطبيق غير قابلة للاستخدام أو غير متناسقة أو غير مستقرة."</string>
+  <string name="permdesc_changeComponentState" product="tablet">"للسماح لتطبيق ما بتغيير ما إذا كان سيتم تمكين مكون لتطبيق آخر أم لا. يمكن أن تستخدم التطبيقات الضارة ذلك لتعطيل قدرات الجهاز اللوحي المهمة. يجب توخي الحذر عند استخدام هذا الإذن، وذلك لأنه من الممكن أن يؤدي ذلك إلى جعل حالة مكونات التطبيق غير قابلة للاستخدام أو غير متناسقة أو غير مستقرة."</string>
+  <string name="permdesc_changeComponentState" product="default">"للسماح لتطبيق ما بتغيير ما إذا كان سيتم تمكين مكون لتطبيق آخر أم لا. يمكن أن تستخدم التطبيقات الضارة ذلك لتعطيل قدرات الهاتف المهمة. يجب توخي الحذر عند استخدام هذا الإذن، وذلك لأنه من الممكن أن يؤدي ذلك إلى جعل حالة مكونات التطبيق غير قابلة للاستخدام أو غير متناسقة أو غير مستقرة."</string>
   <string name="permlab_setPreferredApplications">"تعيين التطبيقات المفضلة"</string>
   <string name="permdesc_setPreferredApplications">"للسماح لتطبيق ما بتعديل التطبيقات المفضلة. يمكن أن يسمح ذلك للتطبيقات الضارة بتغيير التطبيقات قيد التشغيل بشكل غير ملحوظ، وانتحال صفة تطبيقاتك الحالية لجمع بيانات خاصة منك."</string>
   <string name="permlab_writeSettings">"تعديل إعدادات النظام العمومية"</string>
@@ -520,28 +519,28 @@
   <string name="permlab_writeGservices">"تعديل خريطة خدمات Google"</string>
   <string name="permdesc_writeGservices">"للسماح لتطبيق ما بتعديل خريطة خدمات Google. ليس للاستخدام بواسطة التطبيقات العادية."</string>
   <string name="permlab_receiveBootCompleted">"البدء تلقائيًا عند التشغيل"</string>
-  <string product="tablet" name="permdesc_receiveBootCompleted">"للسماح للتطبيق ببدء ذاته فور انتهاء النظام من التمهيد. ويمكن أن يؤدي ذلك إلى إطالة فترة بدء الجهاز اللوحي والسماح للتطبيق بإبطاء الجهاز اللوحي بالكامل من خلال التشغيل بصفة مستمرة."</string>
-  <string product="default" name="permdesc_receiveBootCompleted">"للسماح لتطبيق ما ببدء تشغيل نفسه عقب انتهاء النظام من التشغيل. قد يؤدي ذلك إلى استغراق مزيد من الوقت عن بدء الهاتف والسماح للتطبيق بإبطاء الأداء الإجمالي للهاتف حيث يتم تشغيله دومًا."</string>
+  <string name="permdesc_receiveBootCompleted" product="tablet">"للسماح للتطبيق ببدء ذاته فور انتهاء النظام من التمهيد. ويمكن أن يؤدي ذلك إلى إطالة فترة بدء الجهاز اللوحي والسماح للتطبيق بإبطاء الجهاز اللوحي بالكامل من خلال التشغيل بصفة مستمرة."</string>
+  <string name="permdesc_receiveBootCompleted" product="default">"للسماح لتطبيق ما ببدء تشغيل نفسه عقب انتهاء النظام من التشغيل. قد يؤدي ذلك إلى استغراق مزيد من الوقت عن بدء الهاتف والسماح للتطبيق بإبطاء الأداء الإجمالي للهاتف حيث يتم تشغيله دومًا."</string>
   <string name="permlab_broadcastSticky">"إرسال بث طويل الزيارة"</string>
-  <string product="tablet" name="permdesc_broadcastSticky">"للسماح للتطبيق بإرسال عمليات بث طويلة الزيارة، والتي تبقى بعد انتهاء البث. يمكن أن تبطئ التطبيقات الضارة الجهاز اللوحي أو تجعله غير مستقر عبر جعله يستخدم ذاكرة كبيرة جدًا."</string>
-  <string product="default" name="permdesc_broadcastSticky">"للسماح لتطبيق ما بإرسال بث طويل الزيارة، والذي يظل بعد انتهاء البث. قد تجعل التطبيقات الضارة الهاتف بطيئًا أو غير مستقر من خلال التسبب في استخدام مساحة كبيرة للغاية من الذاكرة."</string>
+  <string name="permdesc_broadcastSticky" product="tablet">"للسماح للتطبيق بإرسال عمليات بث طويلة الزيارة، والتي تبقى بعد انتهاء البث. يمكن أن تبطئ التطبيقات الضارة الجهاز اللوحي أو تجعله غير مستقر عبر جعله يستخدم ذاكرة كبيرة جدًا."</string>
+  <string name="permdesc_broadcastSticky" product="default">"للسماح لتطبيق ما بإرسال بث طويل الزيارة، والذي يظل بعد انتهاء البث. قد تجعل التطبيقات الضارة الهاتف بطيئًا أو غير مستقر من خلال التسبب في استخدام مساحة كبيرة للغاية من الذاكرة."</string>
   <string name="permlab_readContacts">"قراءة بيانات جهة الاتصال"</string>
-  <string product="tablet" name="permdesc_readContacts">"للسماح لتطبيق ما بقراءة كل بيانات جهة الاتصال (العنوان) المخزنة على الجهاز اللوحي. ويمكن للتطبيقات الضارة استخدام ذلك لإرسال بياناتك إلى أشخاص آخرين."</string>
-  <string product="default" name="permdesc_readContacts">"للسماح لتطبيق ما بقراءة جميع بيانات (عنوان) جهات الاتصال المخزّنة في هاتفك. يمكن أن تستخدم التطبيقات الضارة هذا لإرسال بياناتك إلى أشخاص آخرين."</string>
+  <string name="permdesc_readContacts" product="tablet">"للسماح لتطبيق ما بقراءة كل بيانات جهة الاتصال (العنوان) المخزنة على الجهاز اللوحي. ويمكن للتطبيقات الضارة استخدام ذلك لإرسال بياناتك إلى أشخاص آخرين."</string>
+  <string name="permdesc_readContacts" product="default">"للسماح لتطبيق ما بقراءة جميع بيانات (عنوان) جهات الاتصال المخزّنة في هاتفك. يمكن أن تستخدم التطبيقات الضارة هذا لإرسال بياناتك إلى أشخاص آخرين."</string>
   <string name="permlab_writeContacts">"كتابة بيانات جهة الاتصال"</string>
-  <string product="tablet" name="permdesc_writeContacts">"للسماح للتطبيق بتعديل بيانات جهة الاتصال (العنوان) المخزنة على الجهاز اللوحي. يمكن أن تستخدم التطبيقات الضارة ذلك لمحو بيانات جهة الاتصال أو تعديلها."</string>
-  <string product="default" name="permdesc_writeContacts">"للسماح لتطبيق ما بتعديل بيانات (عنوان) جهة الاتصال المخزّنة في هاتفك. يمكن أن تستخدم التطبيقات الضارة ذلك لمسح بيانات جهة الاتصال أو تعديلها."</string>
+  <string name="permdesc_writeContacts" product="tablet">"للسماح للتطبيق بتعديل بيانات جهة الاتصال (العنوان) المخزنة على الجهاز اللوحي. يمكن أن تستخدم التطبيقات الضارة ذلك لمحو بيانات جهة الاتصال أو تعديلها."</string>
+  <string name="permdesc_writeContacts" product="default">"للسماح لتطبيق ما بتعديل بيانات (عنوان) جهة الاتصال المخزّنة في هاتفك. يمكن أن تستخدم التطبيقات الضارة ذلك لمسح بيانات جهة الاتصال أو تعديلها."</string>
   <string name="permlab_readProfile">"قراءة بيانات ملفك الشخصي"</string>
-  <string product="default" name="permdesc_readProfile">"للسماح للتطبيق بقراءة معلومات الملف الشخصي الشخصية المخزنة على الجهاز، مثل الاسم ومعلومات الاتصال. يعني ذلك أن التطبيق يمكنه التعرف عليك وإرسال معلومات ملفك الشخصي إلى الآخرين."</string>
+  <string name="permdesc_readProfile" product="default">"للسماح للتطبيق بقراءة معلومات الملف الشخصي الشخصية المخزنة على الجهاز، مثل الاسم ومعلومات الاتصال. يعني ذلك أن التطبيق يمكنه التعرف عليك وإرسال معلومات ملفك الشخصي إلى الآخرين."</string>
   <string name="permlab_writeProfile">"الكتابة إلى بيانات ملفك الشخصي"</string>
-  <string product="default" name="permdesc_writeProfile">"للسماح للتطبيق بتغيير أو إضافة معلومات الملف الشخصي الشخصية المخزنة على الجهاز، مثل الاسم ومعلومات الاتصال. يعني ذلك أن التطبيقات الأخرى يمكنها التعرف عليك وإرسال معلومات ملفك الشخصي إلى الآخرين."</string>
-  <string product="default" name="permlab_readSocialStream">"قراءة المشاركات الاجتماعية"</string>
-  <string product="default" name="permdesc_readSocialStream">"للسماح للتطبيق بالدخول إلى التحديثات الاجتماعية منك ومن أصدقائك ومزامنتها. يمكن أن تستخدم التطبيقات الضارة هذا لقراءة الاتصالات الخاصة بينك وبين أصدقائك على الشبكات الاجتماعية."</string>
-  <string product="default" name="permlab_writeSocialStream">"كتابة إلى المشاركات الاجتماعية"</string>
-  <string product="default" name="permdesc_writeSocialStream">"للسماح للتطبيق بعرض التحديثات الاجتماعية من أصدقائك. يمكن أن تستخدم التطبيقات الضارة هذا للتظاهر بأنها صديق وتخدعك لكشف كلمات المرور أو المعلومات السرية الأخرى."</string>
+  <string name="permdesc_writeProfile" product="default">"للسماح للتطبيق بتغيير أو إضافة معلومات الملف الشخصي الشخصية المخزنة على الجهاز، مثل الاسم ومعلومات الاتصال. يعني ذلك أن التطبيقات الأخرى يمكنها التعرف عليك وإرسال معلومات ملفك الشخصي إلى الآخرين."</string>
+  <string name="permlab_readSocialStream" product="default">"قراءة المشاركات الاجتماعية"</string>
+  <string name="permdesc_readSocialStream" product="default">"للسماح للتطبيق بالدخول إلى التحديثات الاجتماعية منك ومن أصدقائك ومزامنتها. يمكن أن تستخدم التطبيقات الضارة هذا لقراءة الاتصالات الخاصة بينك وبين أصدقائك على الشبكات الاجتماعية."</string>
+  <string name="permlab_writeSocialStream" product="default">"كتابة إلى المشاركات الاجتماعية"</string>
+  <string name="permdesc_writeSocialStream" product="default">"للسماح للتطبيق بعرض التحديثات الاجتماعية من أصدقائك. يمكن أن تستخدم التطبيقات الضارة هذا للتظاهر بأنها صديق وتخدعك لكشف كلمات المرور أو المعلومات السرية الأخرى."</string>
   <string name="permlab_readCalendar">"قراءة أحداث التقويم بالإضافة إلى المعلومات السرية"</string>
-  <string product="tablet" name="permdesc_readCalendar">"للسماح لأحد التطبيقات بقراءة جميع أحداث التقويم المخزّنة في الجهاز اللوحي، بما في ذلك أحداث التقويم الخاصة بالأصدقاء وزملاء العمل. يمكن لأحد التطبيقات الضارة باستخدام هذا الإذن استخراج المعلومات الشخصية من هذه التقاويم بدون معرفة المالكين."</string>
-  <string product="default" name="permdesc_readCalendar">"للسماح لأحد التطبيقات بقراءة جميع أحداث التقويم المخزّنة في هاتفك، بما في ذلك أحداث التقويم الخاصة بالأصدقاء وزملاء العمل. يمكن لأحد التطبيقات الضارة باستخدام هذا الإذن استخراج المعلومات الشخصية من هذه التقاويم بدون معرفة المالكين."</string>
+  <string name="permdesc_readCalendar" product="tablet">"للسماح لأحد التطبيقات بقراءة جميع أحداث التقويم المخزّنة في الجهاز اللوحي، بما في ذلك أحداث التقويم الخاصة بالأصدقاء وزملاء العمل. يمكن لأحد التطبيقات الضارة باستخدام هذا الإذن استخراج المعلومات الشخصية من هذه التقاويم بدون معرفة المالكين."</string>
+  <string name="permdesc_readCalendar" product="default">"للسماح لأحد التطبيقات بقراءة جميع أحداث التقويم المخزّنة في هاتفك، بما في ذلك أحداث التقويم الخاصة بالأصدقاء وزملاء العمل. يمكن لأحد التطبيقات الضارة باستخدام هذا الإذن استخراج المعلومات الشخصية من هذه التقاويم بدون معرفة المالكين."</string>
   <string name="permlab_writeCalendar">"إضافة أو تعديل أحداث التقويم وإرسال رسالة إلكترونية إلى المدعوين بدون معرفة المالكين"</string>
   <string name="permlab_accessMockLocation">"مصادر مواقع وهمية للاختبار"</string>
   <string name="permdesc_accessMockLocation">"إنشاء مصادر مواقع وهمية للاختبار. قد تستخدم التطبيقات الضارة هذا لتجاوز الموقع و/أو الحالة المُرجَعة بواسطة مصادر مواقع حقيقية مثل موفري خدمة الشبكة أو GPS."</string>
@@ -550,8 +549,8 @@
   <string name="permlab_installLocationProvider">"إذن لتثبيت موفر خدمة موقع"</string>
   <string name="permdesc_installLocationProvider">"إنشاء مصادر مواقع وهمية للاختبار. قد تستخدم التطبيقات الضارة هذا لتجاوز الموقع و/أو الحالة المُرجَعة بواسطة مصادر مواقع حقيقية مثل موفري خدمة الشبكة أو GPS أو مراقبة وإعداد تقارير حول موقعك إلى مصدر خارجي."</string>
   <string name="permlab_accessFineLocation">"موقع (GPS) جيد"</string>
-  <string product="tablet" name="permdesc_accessFineLocation">"الدخول إلى مصادر المواقع الجيدة مثل نظام تحديد المواقع العالمي على الجهاز اللوحي، حيث يتوفر ذلك. يمكن أن تستخدم التطبيقات الضارة ذلك لتحديد مكانك، وقد تستهلك المزيد من طاقة البطارية."</string>
-  <string product="default" name="permdesc_accessFineLocation">"الدخول إلى مصادر المواقع الجيدة مثل نظام تحديد المواقع العالمي على الهاتف، حيث يتوفر ذلك. يمكن أن تستخدم التطبيقات الضارة ذلك لتحديد مكانك، وقد تستهلك المزيد من طاقة البطارية."</string>
+  <string name="permdesc_accessFineLocation" product="tablet">"الدخول إلى مصادر المواقع الجيدة مثل نظام تحديد المواقع العالمي على الجهاز اللوحي، حيث يتوفر ذلك. يمكن أن تستخدم التطبيقات الضارة ذلك لتحديد مكانك، وقد تستهلك المزيد من طاقة البطارية."</string>
+  <string name="permdesc_accessFineLocation" product="default">"الدخول إلى مصادر المواقع الجيدة مثل نظام تحديد المواقع العالمي على الهاتف، حيث يتوفر ذلك. يمكن أن تستخدم التطبيقات الضارة ذلك لتحديد مكانك، وقد تستهلك المزيد من طاقة البطارية."</string>
   <string name="permlab_accessCoarseLocation">"موقع تقريبي (مستند إلى الشبكة)"</string>
   <string name="permlab_accessSurfaceFlinger">"الدخول إلى SurfaceFlinger"</string>
   <string name="permdesc_accessSurfaceFlinger">"للسماح للتطبيق باستخدام ميزات SurfaceFlinger ذات المستوى المنخفض."</string>
@@ -563,14 +562,14 @@
   <string name="permdesc_recordAudio">"للسماح للتطبيق بالدخول إلى مسار تسجيل الصوت."</string>
   <string name="permlab_camera">"التقاط صور ومقاطع فيديو"</string>
   <string name="permdesc_camera">"للسماح للتطبيق بالتقاط صور ومقاطع فيديو باستخدام الكاميرا. يسمح ذلك للتطبيق بتجميع الصور التي تعرضها الكاميرا في أي وقت."</string>
-  <string product="tablet" name="permlab_brick">"تعطيل الجهاز اللوحي نهائيًا"</string>
-  <string product="default" name="permlab_brick">"تعطيل الهاتف على الدوام"</string>
-  <string product="tablet" name="permdesc_brick">"للسماح للتطبيق بتعطيل الجهاز اللوحي بأكمله نهائيًا. هذا خطير جدًا."</string>
-  <string product="default" name="permdesc_brick">"للسماح للتطبيق بتعطيل الهاتف بالكامل على الدوام. هذا خطير للغاية."</string>
-  <string product="tablet" name="permlab_reboot">"فرض إعادة تشغيل الجهاز اللوحي"</string>
-  <string product="default" name="permlab_reboot">"فرض إعادة تشغيل الهاتف"</string>
-  <string product="tablet" name="permdesc_reboot">"للسماح للتطبيق بفرض إعادة تشغيل الجهاز اللوحي."</string>
-  <string product="default" name="permdesc_reboot">"للسماح للتطبيق بفرض إعادة تشغيل الهاتف."</string>
+  <string name="permlab_brick" product="tablet">"تعطيل الجهاز اللوحي نهائيًا"</string>
+  <string name="permlab_brick" product="default">"تعطيل الهاتف على الدوام"</string>
+  <string name="permdesc_brick" product="tablet">"للسماح للتطبيق بتعطيل الجهاز اللوحي بأكمله نهائيًا. هذا خطير جدًا."</string>
+  <string name="permdesc_brick" product="default">"للسماح للتطبيق بتعطيل الهاتف بالكامل على الدوام. هذا خطير للغاية."</string>
+  <string name="permlab_reboot" product="tablet">"فرض إعادة تشغيل الجهاز اللوحي"</string>
+  <string name="permlab_reboot" product="default">"فرض إعادة تشغيل الهاتف"</string>
+  <string name="permdesc_reboot" product="tablet">"للسماح للتطبيق بفرض إعادة تشغيل الجهاز اللوحي."</string>
+  <string name="permdesc_reboot" product="default">"للسماح للتطبيق بفرض إعادة تشغيل الهاتف."</string>
   <string name="permdesc_mount_unmount_filesystems">"للسماح للتطبيق بتحميل أنظمة الملفات وإلغاء تحميلها لسعة التخزين القابلة للإزالة."</string>
   <string name="permdesc_mount_format_filesystems">"للسماح للتطبيق بتنسيق سعة التخزين القابلة للإزالة."</string>
   <string name="permlab_asec_access">"الحصول على معلومات حول وحدة التخزين الداخلية"</string>
@@ -597,8 +596,8 @@
   <string name="permdesc_callPhone">"للسماح للتطبيق بالاتصال بأرقام الهواتف بدون تدخل منك. قد تسبب التطبيقات في وجود اتصالات غير متوقعة في فاتورة الهاتف. لاحظ أن هذا لا يسمح للتطبيق بالاتصال بأرقام الطوارئ."</string>
   <string name="permlab_callPrivileged">"اتصال مباشر بأي رقم من أرقام الهواتف"</string>
   <string name="permdesc_callPrivileged">"للسماح للتطبيق بالاتصال بأي رقم هاتف، بما في ذلك أرقام الطوارئ، بدون تدخل منك. قد تجري التطبيقات الضارة اتصالات غير ضرورية وغير قانونية بخدمات الطوارئ."</string>
-  <string product="tablet" name="permlab_performCdmaProvisioning">"بدء إعداد الجهاز اللوحي CDMA مباشرةً"</string>
-  <string product="default" name="permlab_performCdmaProvisioning">"بدء إعداد هاتف CDMA مباشرة"</string>
+  <string name="permlab_performCdmaProvisioning" product="tablet">"بدء إعداد الجهاز اللوحي CDMA مباشرةً"</string>
+  <string name="permlab_performCdmaProvisioning" product="default">"بدء إعداد هاتف CDMA مباشرة"</string>
   <string name="permdesc_performCdmaProvisioning">"للسماح للتطبيق ببدء توفير CDMA. قد تبدأ التطبيقات الضارة توفير CDMA بدون الحاجة إلى ذلك."</string>
   <string name="permlab_locationUpdates">"التحكم في تنبيهات تحديث الموقع"</string>
   <string name="permdesc_locationUpdates">"للسماح بتمكين/تعطيل تنبيهات تحديث الموقع من اللاسلكي. لا يمكن الاستخدام للتطبيقات العادية."</string>
@@ -610,17 +609,17 @@
   <string name="permdesc_modifyPhoneState">"للسماح للتطبيق بالتحكم في ميزات الهاتف بالجهاز. يمكن لتطبيق ما باستخدام هذا الإذن تبديل الشبكات وتشغيل لاسلكي الهاتف أو إيقاف تشغيله وما إلى ذلك بدون إعلامك على الإطلاق."</string>
   <string name="permlab_readPhoneState">"قراءة حالة الهاتف وهويته"</string>
   <string name="permdesc_readPhoneState">"للسماح للتطبيق بالدخول إلى ميزات الهاتف للجهاز. يمكن أن يحدد تطبيق، بهذا الإذن، رقم الهاتف والرقم التسلسلي لهذا الهاتف وما إذا كانت هناك مكالمة نشطة والرقم الذي يجري الاتصال به وما إلى ذلك."</string>
-  <string product="tablet" name="permlab_wakeLock">"منع الجهاز اللوحي من الدخول في وضع السكون"</string>
-  <string product="default" name="permlab_wakeLock">"منع الهاتف من الدخول في وضع السكون"</string>
-  <string product="tablet" name="permdesc_wakeLock">"للسماح لتطبيق ما بمنع الجهاز اللوحي من الانتقال إلى وضع السكون."</string>
-  <string product="default" name="permdesc_wakeLock">"للسماح لتطبيق ما بمنع الهاتف من الانتقال إلى وضع السكون."</string>
-  <string product="tablet" name="permlab_devicePower">"تشغيل الجهاز اللوحي أو إيقاف تشغيله"</string>
-  <string product="default" name="permlab_devicePower">"تشغيل الهاتف أو إيقاف تشغيله"</string>
-  <string product="tablet" name="permdesc_devicePower">"للسماح للتطبيق بتشغيل الجهاز اللوحي أو إيقاف تشغيله."</string>
-  <string product="default" name="permdesc_devicePower">"للسماح للتطبيق بتشغيل الهاتف أو إيقاف تشغيله."</string>
+  <string name="permlab_wakeLock" product="tablet">"منع الجهاز اللوحي من الدخول في وضع السكون"</string>
+  <string name="permlab_wakeLock" product="default">"منع الهاتف من الدخول في وضع السكون"</string>
+  <string name="permdesc_wakeLock" product="tablet">"للسماح لتطبيق ما بمنع الجهاز اللوحي من الانتقال إلى وضع السكون."</string>
+  <string name="permdesc_wakeLock" product="default">"للسماح لتطبيق ما بمنع الهاتف من الانتقال إلى وضع السكون."</string>
+  <string name="permlab_devicePower" product="tablet">"تشغيل الجهاز اللوحي أو إيقاف تشغيله"</string>
+  <string name="permlab_devicePower" product="default">"تشغيل الهاتف أو إيقاف تشغيله"</string>
+  <string name="permdesc_devicePower" product="tablet">"للسماح للتطبيق بتشغيل الجهاز اللوحي أو إيقاف تشغيله."</string>
+  <string name="permdesc_devicePower" product="default">"للسماح للتطبيق بتشغيل الهاتف أو إيقاف تشغيله."</string>
   <string name="permlab_factoryTest">"تشغيل في وضع اختبار المصنع"</string>
-  <string product="tablet" name="permdesc_factoryTest">"التشغيل كاختبار للشركة المصنعة من المستوى المنخفض، مما يسمح بإكمال الدخول إلى الجهاز اللوحي. ويتوفر فقط عندما يتم تشغيل الجهاز اللوحي في وضع اختبار المصنِّع."</string>
-  <string product="default" name="permdesc_factoryTest">"للتشغيل كاختبار مصنِّع بمستوى أدنى، مما يسمح بالدخول الكامل إلى جهاز الهاتف. لا يتوفر سوى عند تشغيل الهاتف في وضع اختبار المصنِّع."</string>
+  <string name="permdesc_factoryTest" product="tablet">"التشغيل كاختبار للشركة المصنعة من المستوى المنخفض، مما يسمح بإكمال الدخول إلى الجهاز اللوحي. ويتوفر فقط عندما يتم تشغيل الجهاز اللوحي في وضع اختبار المصنِّع."</string>
+  <string name="permdesc_factoryTest" product="default">"للتشغيل كاختبار مصنِّع بمستوى أدنى، مما يسمح بالدخول الكامل إلى جهاز الهاتف. لا يتوفر سوى عند تشغيل الهاتف في وضع اختبار المصنِّع."</string>
   <string name="permlab_setWallpaper">"تعيين الخلفية"</string>
   <string name="permdesc_setWallpaper">"للسماح للتطبيق بتعيين خلفية النظام."</string>
   <string name="permlab_setWallpaperHints">"تعيين تلميحات حجم الخلفية"</string>
@@ -628,16 +627,16 @@
   <string name="permlab_masterClear">"إعادة تعيين النظام إلى الإعدادات الافتراضية للمصنع"</string>
   <string name="permdesc_masterClear">"للسماح لتطبيق ما بإعادة تعيين النظام بالكامل على إعدادات المصنع، ومسح جميع البيانات والتهيئة والتطبيقات المثبتة."</string>
   <string name="permlab_setTime">"تعيين الوقت"</string>
-  <string product="tablet" name="permdesc_setTime">"للسماح لتطبيق ما بتغيير وقت ساعة الجهاز اللوحي."</string>
-  <string product="default" name="permdesc_setTime">"للسماح لتطبيق ما بتغيير وقت ساعة الهاتف."</string>
+  <string name="permdesc_setTime" product="tablet">"للسماح لتطبيق ما بتغيير وقت ساعة الجهاز اللوحي."</string>
+  <string name="permdesc_setTime" product="default">"للسماح لتطبيق ما بتغيير وقت ساعة الهاتف."</string>
   <string name="permlab_setTimeZone">"تعيين المنطقة الزمنية"</string>
-  <string product="tablet" name="permdesc_setTimeZone">"للسماح لتطبيق ما بتغيير المنطقة الزمنية للجهاز اللوحي."</string>
-  <string product="default" name="permdesc_setTimeZone">"للسماح لتطبيق ما بتغيير المنطقة الزمنية للهاتف."</string>
+  <string name="permdesc_setTimeZone" product="tablet">"للسماح لتطبيق ما بتغيير المنطقة الزمنية للجهاز اللوحي."</string>
+  <string name="permdesc_setTimeZone" product="default">"للسماح لتطبيق ما بتغيير المنطقة الزمنية للهاتف."</string>
   <string name="permlab_accountManagerService">"العمل كخدمة مدير حساب"</string>
   <string name="permdesc_accountManagerService">"للسماح لتطبيق ما بإجراء مكالمات إلى مصدِّقي الحساب"</string>
   <string name="permlab_getAccounts">"اكتشاف الحسابات المعروفة"</string>
-  <string product="tablet" name="permdesc_getAccounts">"للسماح لتطبيق ما بالحصول على قائمة بالحسابات المعروفة بواسطة الجهاز اللوحي."</string>
-  <string product="default" name="permdesc_getAccounts">"للسماح لتطبيق ما بالحصول على قائمة الحسابات المعروفة بواسطة الهاتف."</string>
+  <string name="permdesc_getAccounts" product="tablet">"للسماح لتطبيق ما بالحصول على قائمة بالحسابات المعروفة بواسطة الجهاز اللوحي."</string>
+  <string name="permdesc_getAccounts" product="default">"للسماح لتطبيق ما بالحصول على قائمة الحسابات المعروفة بواسطة الهاتف."</string>
   <string name="permlab_authenticateAccounts">"العمل كمصدِّق للحساب"</string>
   <string name="permdesc_authenticateAccounts">"للسماح لتطبيق ما باستخدام إمكانيات مصدِّق الحساب لـ AccountManager، بما في ذلك إنشاء حسابات والحصول على كلمات مرورها وتعينها."</string>
   <string name="permlab_manageAccounts">"إدارة قائمة الحسابات"</string>
@@ -665,11 +664,11 @@
   <string name="permdesc_accessWimaxState">"للسماح لتطبيق ما بعرض معلومات حول حالة WiMAX."</string>
   <string name="permlab_changeWimaxState">"تغيير حالة WiMAX"</string>
   <string name="permlab_bluetoothAdmin">"إدارة البلوتوث"</string>
-  <string product="tablet" name="permdesc_bluetoothAdmin">"للسماح لتطبيق ما بتهيئة لوحة البلوتوث المحلي، واكتشاف أجهزة التحكم عن بعد والاقتران بها."</string>
-  <string product="default" name="permdesc_bluetoothAdmin">"للسماح لتطبيق ما بتهيئة هاتف البلوتوث المحلي، واكتشاف أجهزة التحكم عن بعد والاقتران معها."</string>
+  <string name="permdesc_bluetoothAdmin" product="tablet">"للسماح لتطبيق ما بتهيئة لوحة البلوتوث المحلي، واكتشاف أجهزة التحكم عن بعد والاقتران بها."</string>
+  <string name="permdesc_bluetoothAdmin" product="default">"للسماح لتطبيق ما بتهيئة هاتف البلوتوث المحلي، واكتشاف أجهزة التحكم عن بعد والاقتران معها."</string>
   <string name="permlab_bluetooth">"إنشاء اتصالات بلوتوث"</string>
-  <string product="tablet" name="permdesc_bluetooth">"للسماح للتطبيق بعرض مكونات لوحة البلوتوث المحلي، وإجراء الاتصالات وقبولها مع الأجهزة المقترنة."</string>
-  <string product="default" name="permdesc_bluetooth">"للسماح لتطبيق ما بعرض تهيئة هاتف البلوتوث المحلي، وإجراء اتصالات وقبولها باستخدام الأجهزة المقترنة."</string>
+  <string name="permdesc_bluetooth" product="tablet">"للسماح للتطبيق بعرض مكونات لوحة البلوتوث المحلي، وإجراء الاتصالات وقبولها مع الأجهزة المقترنة."</string>
+  <string name="permdesc_bluetooth" product="default">"للسماح لتطبيق ما بعرض تهيئة هاتف البلوتوث المحلي، وإجراء اتصالات وقبولها باستخدام الأجهزة المقترنة."</string>
   <string name="permlab_nfc">"التحكم في اتصال الحقل القريب"</string>
   <string name="permdesc_nfc">"للسماح لتطبيق ما بالاتصال بعلامات اتصال حقل قريب (NFC)، والبطاقات وبرامج القراءة."</string>
   <string name="permlab_disableKeyguard">"تعطيل تأمين المفاتيح"</string>
@@ -688,12 +687,12 @@
   <string name="permdesc_readDictionary">"للسماح لتطبيق ما بقراءة أي كلمات وأسماء وعبارات خاصة ربما خزنها المستخدم في قاموس المستخدم."</string>
   <string name="permlab_writeDictionary">"كتابة إلى القاموس المعرّف بواسطة المستخدم"</string>
   <string name="permdesc_writeDictionary">"للسماح لتطبيق ما بكتابة كلمات جديدة إلى قاموس المستخدم."</string>
-  <string product="nosdcard" name="permlab_sdcardWrite">"تعديل/حذف محتويات وحدة تخزين USB"</string>
-  <string product="default" name="permlab_sdcardWrite">"تعديل/حذف محتويات بطاقة SD"</string>
-  <string product="nosdcard" name="permdesc_sdcardWrite">"للسماح لتطبيق ما بالكتابة على وحدة تخزين USB."</string>
-  <string product="default" name="permdesc_sdcardWrite">"للسماح لتطبيق ما بالكتابة إلى بطاقة SD."</string>
-  <string product="default" name="permlab_mediaStorageWrite">"تعديل/حذف محتويات وحدة تخزين الوسائط الداخلية"</string>
-  <string product="default" name="permdesc_mediaStorageWrite">"للسماح لأحد التطبيقات بتعديل محتويات وحدة تخزين الوسائط الداخلية."</string>
+  <string name="permlab_sdcardWrite" product="nosdcard">"تعديل/حذف محتويات وحدة تخزين USB"</string>
+  <string name="permlab_sdcardWrite" product="default">"تعديل/حذف محتويات بطاقة SD"</string>
+  <string name="permdesc_sdcardWrite" product="nosdcard">"للسماح لتطبيق ما بالكتابة على وحدة تخزين USB."</string>
+  <string name="permdesc_sdcardWrite" product="default">"للسماح لتطبيق ما بالكتابة إلى بطاقة SD."</string>
+  <string name="permlab_mediaStorageWrite" product="default">"تعديل/حذف محتويات وحدة تخزين الوسائط الداخلية"</string>
+  <string name="permdesc_mediaStorageWrite" product="default">"للسماح لأحد التطبيقات بتعديل محتويات وحدة تخزين الوسائط الداخلية."</string>
   <string name="permlab_cache_filesystem">"الدخول إلى نظام ملفات ذاكرة التخزين المؤقت"</string>
   <string name="permdesc_cache_filesystem">"للسماح لتطبيق ما بقراءة نظام ملفات ذاكرة التخزين المؤقت والكتابة به."</string>
   <string name="permlab_use_sip">"إجراء/تلقي مكالمات عبر الإنترنت"</string>
@@ -707,15 +706,15 @@
   <string name="policylab_limitPassword">"تعيين قواعد كلمة المرور"</string>
   <string name="policydesc_limitPassword">"التحكم في الطول والأحرف المسموح بها في كلمات مرور إلغاء قفل الشاشة"</string>
   <string name="policylab_watchLogin">"مراقبة محاولات إلغاء قفل الشاشة"</string>
-  <string product="tablet" name="policydesc_watchLogin">"مراقبة عدد كلمات المرور غير الصحيحة التي تم إدخالها عند إلغاء قفل الشاشة، وقفل الجهاز اللوحي ومحو كل بيانات الجهاز إذا تم إدخال عدد أكبر من اللازم من كلمات المرور غير الصحيحة"</string>
-  <string product="default" name="policydesc_watchLogin">"مراقبة عدد كلمات المرور غير الصحيحة التي تم إدخالها عند إلغاء قفل الشاشة، وقفل الهاتف ومحو كل بيانات الهاتف إذا تم إدخال عدد أكبر من اللازم من كلمات المرور غير الصحيحة"</string>
+  <string name="policydesc_watchLogin" product="tablet">"مراقبة عدد كلمات المرور غير الصحيحة التي تم إدخالها عند إلغاء قفل الشاشة، وقفل الجهاز اللوحي ومحو كل بيانات الجهاز إذا تم إدخال عدد أكبر من اللازم من كلمات المرور غير الصحيحة"</string>
+  <string name="policydesc_watchLogin" product="default">"مراقبة عدد كلمات المرور غير الصحيحة التي تم إدخالها عند إلغاء قفل الشاشة، وقفل الهاتف ومحو كل بيانات الهاتف إذا تم إدخال عدد أكبر من اللازم من كلمات المرور غير الصحيحة"</string>
   <string name="policylab_resetPassword">"تغيير كلمة مرور إلغاء قفل الشاشة"</string>
   <string name="policydesc_resetPassword">"تغيير كلمة مرور إلغاء قفل الشاشة"</string>
   <string name="policylab_forceLock">"تأمين الشاشة"</string>
   <string name="policydesc_forceLock">"التحكم في كيفية ووقت قفل الشاشة"</string>
   <string name="policylab_wipeData">"مسح جميع البيانات"</string>
-  <string product="tablet" name="policydesc_wipeData">"محو بيانات الجهاز اللوحي بدون تحذير، وذلك عبر إجراء إعادة الضبط بحسب بيانات المصنع"</string>
-  <string product="default" name="policydesc_wipeData">"محو بيانات الهاتف بدون تحذير، وذلك عبر إجراء إعادة الضبط بحسب بيانات المصنع"</string>
+  <string name="policydesc_wipeData" product="tablet">"محو بيانات الجهاز اللوحي بدون تحذير، وذلك عبر إجراء إعادة الضبط بحسب بيانات المصنع"</string>
+  <string name="policydesc_wipeData" product="default">"محو بيانات الهاتف بدون تحذير، وذلك عبر إجراء إعادة الضبط بحسب بيانات المصنع"</string>
   <string name="policylab_setGlobalProxy">"تعيين الخادم الوكيل العمومي للجهاز"</string>
   <string name="policydesc_setGlobalProxy">"تعيين الخادم الوكيل العمومي للجهاز لكي يتم استخدامه أثناء تمكين السياسة. يعين مشرف الجهاز الأول فقط الخادم الوكيل العمومي الفعال."</string>
   <string name="policylab_expirePassword">"ضبط انتهاء كلمة مرور تأمين شاشة"</string>
@@ -724,49 +723,6 @@
   <string name="policydesc_encryptedStorage">"طلب تشفير بيانات التطبيق المخزنة"</string>
   <string name="policylab_disableCamera">"تعطيل الكاميرات"</string>
   <string name="policydesc_disableCamera">"منح استخدام جميع كاميرات الجهاز"</string>
-  <string-array name="phoneTypes">
-        <item>"الرئيسية"</item>
-        <item>"الجوال"</item>
-        <item>"عمل"</item>
-        <item>"فاكس العمل"</item>
-        <item>"فاكس المنزل"</item>
-        <item>"جهاز النداء"</item>
-        <item>"آخر"</item>
-        <item>"مخصص"</item>
-    </string-array>
-  <string-array name="emailAddressTypes">
-        <item>"الرئيسية"</item>
-        <item>"عمل"</item>
-        <item>"آخر"</item>
-        <item>"مخصص"</item>
-    </string-array>
-  <string-array name="postalAddressTypes">
-        <item>"الرئيسية"</item>
-        <item>"عمل"</item>
-        <item>"آخر"</item>
-        <item>"مخصص"</item>
-    </string-array>
-  <string-array name="imAddressTypes">
-        <item>"الرئيسية"</item>
-        <item>"عمل"</item>
-        <item>"آخر"</item>
-        <item>"مخصص"</item>
-    </string-array>
-  <string-array name="organizationTypes">
-        <item>"عمل"</item>
-        <item>"آخر"</item>
-        <item>"مخصص"</item>
-    </string-array>
-  <string-array name="imProtocols">
-        <item>"AIM"</item>
-        <item>"Windows Live"</item>
-        <item>"Yahoo"</item>
-        <item>"Skype"</item>
-        <item>"QQ"</item>
-        <item>"Google Talk"</item>
-        <item>"ICQ"</item>
-        <item>"Jabber"</item>
-    </string-array>
   <string name="phoneTypeCustom">"مخصص"</string>
   <string name="phoneTypeHome">"الرئيسية"</string>
   <string name="phoneTypeMobile">"الجوال"</string>
@@ -870,8 +826,8 @@
   <string name="lockscreen_low_battery">"توصيل جهاز الشحن."</string>
   <string name="lockscreen_missing_sim_message_short">"ليس هناك بطاقة SIM."</string>
   <string name="lockscreen_blocked_sim_message_short">بطاقة SIM مقفلة</string>
-  <string product="tablet" name="lockscreen_missing_sim_message">"ليس هناك بطاقة SIM في الجهاز اللوحي."</string>
-  <string product="default" name="lockscreen_missing_sim_message">"ليس هناك بطاقة SIM في الهاتف."</string>
+  <string name="lockscreen_missing_sim_message" product="tablet">"ليس هناك بطاقة SIM في الجهاز اللوحي."</string>
+  <string name="lockscreen_missing_sim_message" product="default">"ليس هناك بطاقة SIM في الهاتف."</string>
   <string name="lockscreen_missing_sim_instructions">"الرجاء إدخال بطاقة SIM."</string>
   <string name="lockscreen_missing_sim_instructions_long">"بطاقة SIM مفقودة أو غير قابلة للقراءة. الرجاء إدراج بطاقة SIM."</string>
   <string name="lockscreen_permanent_disabled_sim_instructions">"بطاقة SIM معطلة دومًا."\n" يرجى الاتصال بمقدم الخدمة اللاسلكية للحصول على بطاقة SIM أخرى."</string>
@@ -880,7 +836,7 @@
   <string name="lockscreen_transport_pause_description">"زر الإيقاف المؤقت"</string>
   <string name="lockscreen_transport_play_description">"زر التشغيل"</string>
   <string name="lockscreen_transport_stop_description">"زر الإيقاف"</string>
-  <string msgid="2485604591272668370" name="emergency_calls_only">"مكالمات الطوارئ فقط"</string>
+  <string name="emergency_calls_only" msgid="2485604591272668370">"مكالمات الطوارئ فقط"</string>
   <string name="lockscreen_network_locked_message">"الشبكة مؤمّنة"</string>
   <string name="lockscreen_sim_puk_locked_message">"بطاقة SIM مؤمّنة بكود PUK."</string>
   <string name="lockscreen_sim_puk_locked_instructions">"الرجاء مراجعة دليل المستخدم أو الاتصال بخدمة العملاء."</string>
@@ -889,12 +845,12 @@
   <string name="lockscreen_too_many_failed_attempts_dialog_message">"لقد رسمت نقش إلغاء التأمين بطريقة غير صحيحة <xliff:g id="NUMBER_0">%d</xliff:g> مرة. "\n\n"الرجاء إعادة المحاولة خلال <xliff:g id="NUMBER_1">%d</xliff:g> ثانية."</string>
   <string name="lockscreen_too_many_failed_password_attempts_dialog_message">"لقد أدخلت كلمة المرور بشكل غير صحيح عدد <xliff:g id="NUMBER_0">%d</xliff:g> من المرات. "\n\n"الرجاء إعادة المحاولة خلال <xliff:g id="NUMBER_1">%d</xliff:g> ثانية."</string>
   <string name="lockscreen_too_many_failed_pin_attempts_dialog_message">"لقد أدخلت رقم التعريف الشخصي (PIN) بشكل غير صحيح عدد <xliff:g id="NUMBER_0">%d</xliff:g> من المرات. "\n\n"الرجاء إعادة المحاولة خلال <xliff:g id="NUMBER_1">%d</xliff:g> ثانية."</string>
-  <string product="tablet" name="lockscreen_failed_attempts_almost_glogin">"لقد رسمت نقش إلغاء التأمين بصورة خاطئة عدد <xliff:g id="NUMBER_0">%d</xliff:g> من المرات. بعد إجراء <xliff:g id="NUMBER_1">%d</xliff:g> من المحاولات الأخرى غير الناجحة، ستتم مطالبتك بإلغاء تأمين الجهاز اللوحي باستخدام معلومات تسجيل الدخول إلى Google."\n\n" الرجاء إعادة المحاولة خلال <xliff:g id="NUMBER_2">%d</xliff:g> ثانية."</string>
-  <string product="default" name="lockscreen_failed_attempts_almost_glogin">"لقد رسمت نقش إلغاء التأمين بشكل غير صحيح <xliff:g id="NUMBER_0">%d</xliff:g> مرة. بعد <xliff:g id="NUMBER_1">%d</xliff:g> من المحاولات غير الناجحة الأخرى، ستُطالب بإلغاء تأمين الهاتف باستخدام معلومات تسجيل الدخول إلى Google."\n\n" الرجاء المحاولة مرة أخرى خلال <xliff:g id="NUMBER_2">%d</xliff:g> ثانية."</string>
-  <string product="tablet" name="lockscreen_failed_attempts_almost_at_wipe">"لقد حاولت إلغاء تأمين الجهاز اللوحي <xliff:g id="NUMBER_0">%d</xliff:g> من المرات. بعد <xliff:g id="NUMBER_1">%d</xliff:g> من المحاولات غير الناجحة، ستتم إعادة تعيين الجهاز اللوحي إلى الإعدادات الافتراضية للمصنع وسيتم فقد جميع بيانات المستخدم."</string>
-  <string product="default" name="lockscreen_failed_attempts_almost_at_wipe">"لقد حاولت إلغاء تأمين الهاتف <xliff:g id="NUMBER_0">%d</xliff:g> من المرات. بعد <xliff:g id="NUMBER_1">%d</xliff:g> من المحاولات غير الناجحة، ستتم إعادة تعيين الهاتف إلى الإعدادات الافتراضية للمصنع وسيتم فقد جميع بيانات المستخدم."</string>
-  <string product="tablet" name="lockscreen_failed_attempts_now_wiping">"لقد حاولت إلغاء تأمين الجهاز اللوحي <xliff:g id="NUMBER">%d</xliff:g> من المرات بشكل غير صحيح. سيتم الآن إعادة تعيين الجهاز اللوحي إلى الإعدادات الافتراضية للمصنع."</string>
-  <string product="default" name="lockscreen_failed_attempts_now_wiping">"لقد حاولت إلغاء تأمين الهاتف <xliff:g id="NUMBER">%d</xliff:g> من المرات بشكل غير صحيح. سيتم الآن إعادة تعيين الهاتف إلى الإعدادات الافتراضية للمصنع."</string>
+  <string name="lockscreen_failed_attempts_almost_glogin" product="tablet">"لقد رسمت نقش إلغاء التأمين بصورة خاطئة عدد <xliff:g id="NUMBER_0">%d</xliff:g> من المرات. بعد إجراء <xliff:g id="NUMBER_1">%d</xliff:g> من المحاولات الأخرى غير الناجحة، ستتم مطالبتك بإلغاء تأمين الجهاز اللوحي باستخدام معلومات تسجيل الدخول إلى Google."\n\n" الرجاء إعادة المحاولة خلال <xliff:g id="NUMBER_2">%d</xliff:g> ثانية."</string>
+  <string name="lockscreen_failed_attempts_almost_glogin" product="default">"لقد رسمت نقش إلغاء التأمين بشكل غير صحيح <xliff:g id="NUMBER_0">%d</xliff:g> مرة. بعد <xliff:g id="NUMBER_1">%d</xliff:g> من المحاولات غير الناجحة الأخرى، ستُطالب بإلغاء تأمين الهاتف باستخدام معلومات تسجيل الدخول إلى Google."\n\n" الرجاء المحاولة مرة أخرى خلال <xliff:g id="NUMBER_2">%d</xliff:g> ثانية."</string>
+  <string name="lockscreen_failed_attempts_almost_at_wipe" product="tablet">"لقد حاولت إلغاء تأمين الجهاز اللوحي <xliff:g id="NUMBER_0">%d</xliff:g> من المرات. بعد <xliff:g id="NUMBER_1">%d</xliff:g> من المحاولات غير الناجحة، ستتم إعادة تعيين الجهاز اللوحي إلى الإعدادات الافتراضية للمصنع وسيتم فقد جميع بيانات المستخدم."</string>
+  <string name="lockscreen_failed_attempts_almost_at_wipe" product="default">"لقد حاولت إلغاء تأمين الهاتف <xliff:g id="NUMBER_0">%d</xliff:g> من المرات. بعد <xliff:g id="NUMBER_1">%d</xliff:g> من المحاولات غير الناجحة، ستتم إعادة تعيين الهاتف إلى الإعدادات الافتراضية للمصنع وسيتم فقد جميع بيانات المستخدم."</string>
+  <string name="lockscreen_failed_attempts_now_wiping" product="tablet">"لقد حاولت إلغاء تأمين الجهاز اللوحي <xliff:g id="NUMBER">%d</xliff:g> من المرات بشكل غير صحيح. سيتم الآن إعادة تعيين الجهاز اللوحي إلى الإعدادات الافتراضية للمصنع."</string>
+  <string name="lockscreen_failed_attempts_now_wiping" product="default">"لقد حاولت إلغاء تأمين الهاتف <xliff:g id="NUMBER">%d</xliff:g> من المرات بشكل غير صحيح. سيتم الآن إعادة تعيين الهاتف إلى الإعدادات الافتراضية للمصنع."</string>
   <string name="lockscreen_too_many_failed_attempts_countdown">"حاول مرة أخرى خلال <xliff:g id="NUMBER">%d</xliff:g> ثانية."</string>
   <string name="lockscreen_forgot_pattern_button_text">"هل نسيت النمط؟"</string>
   <string name="lockscreen_glogin_forgot_pattern">"إلغاء تأمين الحساب"</string>
@@ -948,8 +904,8 @@
   <string name="permlab_readHistoryBookmarks">"قراءة سجل المتصفح والإشارات"</string>
   <string name="permdesc_readHistoryBookmarks">"للسماح للتطبيق بقراءة جميع عناوين URL التي انتقل إليها المتصفح. وجميع إشارات المتصفح."</string>
   <string name="permlab_writeHistoryBookmarks">"كتابة سجل المتصفح والإشارات"</string>
-  <string product="tablet" name="permdesc_writeHistoryBookmarks">"للسماح لتطبيق ما بتعديل سجل المتصفح أو الإشارات المخزنة على الجهاز اللوحي. يمكن للتطبيقات الضارة استخدام هذا لمحو بيانات المتصفح أو تعديلها."</string>
-  <string product="default" name="permdesc_writeHistoryBookmarks">"للسماح لتطبيق ما بتعديل سجل المتصفح أو الإشارات في هاتفك. يمكن أن تستخدم التطبيقات الضارة ذلك لمسح بيانات المتصفح أو تعديلها."</string>
+  <string name="permdesc_writeHistoryBookmarks" product="tablet">"للسماح لتطبيق ما بتعديل سجل المتصفح أو الإشارات المخزنة على الجهاز اللوحي. يمكن للتطبيقات الضارة استخدام هذا لمحو بيانات المتصفح أو تعديلها."</string>
+  <string name="permdesc_writeHistoryBookmarks" product="default">"للسماح لتطبيق ما بتعديل سجل المتصفح أو الإشارات في هاتفك. يمكن أن تستخدم التطبيقات الضارة ذلك لمسح بيانات المتصفح أو تعديلها."</string>
   <string name="permlab_setAlarm">"تعيين المنبه في ساعة المنبه"</string>
   <string name="permdesc_setAlarm">"للسماح للتطبيق بضبط المنبه في تطبيق ساعة منبه مثبّت. ربما لا تنفذ بعض تطبيقات المنبه هذه الميزة."</string>
   <string name="permlab_addVoicemail">"إضافة بريد صوتي"</string>
@@ -979,75 +935,8 @@
   <string name="searchview_description_voice">"البحث الصوتي"</string>
   <string name="oneMonthDurationPast">"قبل شهر واحد"</string>
   <string name="beforeOneMonthDurationPast">"قبل شهر واحد"</string>
-  <plurals name="num_seconds_ago">
-        <item quantity="one">"قبل ثانية واحدة"</item>
-        <item quantity="other">"قبل <xliff:g id="COUNT">%d</xliff:g> ثانية"</item>
-    </plurals>
-  <plurals name="num_minutes_ago">
-        <item quantity="one">"قبل دقيقة واحدة"</item>
-        <item quantity="other">"قبل <xliff:g id="COUNT">%d</xliff:g> دقيقة"</item>
-    </plurals>
-  <plurals name="num_hours_ago">
-        <item quantity="one">"قبل ساعة واحدة"</item>
-        <item quantity="other">"قبل <xliff:g id="COUNT">%d</xliff:g> ساعة"</item>
-    </plurals>
-  <plurals name="last_num_days">
-        <item quantity="other">"آخر <xliff:g id="COUNT">%d</xliff:g> من الأيام"</item>
-    </plurals>
   <string name="last_month">"الشهر الماضي"</string>
   <string name="older">"أقدم"</string>
-  <plurals name="num_days_ago">
-        <item quantity="one">"أمس"</item>
-        <item quantity="other">"قبل <xliff:g id="COUNT">%d</xliff:g> يوم"</item>
-    </plurals>
-  <plurals name="in_num_seconds">
-        <item quantity="one">"في ثانية واحدة"</item>
-        <item quantity="other">"في <xliff:g id="COUNT">%d</xliff:g> ثانية"</item>
-    </plurals>
-  <plurals name="in_num_minutes">
-        <item quantity="one">"في دقيقة واحدة"</item>
-        <item quantity="other">"في <xliff:g id="COUNT">%d</xliff:g> دقيقة"</item>
-    </plurals>
-  <plurals name="in_num_hours">
-        <item quantity="one">"في ساعة واحدة"</item>
-        <item quantity="other">"في <xliff:g id="COUNT">%d</xliff:g> ساعة"</item>
-    </plurals>
-  <plurals name="in_num_days">
-        <item quantity="one">"غدًا"</item>
-        <item quantity="other">"في <xliff:g id="COUNT">%d</xliff:g> يوم"</item>
-    </plurals>
-  <plurals name="abbrev_num_seconds_ago">
-        <item quantity="one">"قبل ثانية واحدة"</item>
-        <item quantity="other">"قبل <xliff:g id="COUNT">%d</xliff:g> ثانية"</item>
-    </plurals>
-  <plurals name="abbrev_num_minutes_ago">
-        <item quantity="one">"قبل دقيقة واحدة"</item>
-        <item quantity="other">"قبل <xliff:g id="COUNT">%d</xliff:g> دقيقة"</item>
-    </plurals>
-  <plurals name="abbrev_num_hours_ago">
-        <item quantity="one">"قبل ساعة واحدة"</item>
-        <item quantity="other">"قبل <xliff:g id="COUNT">%d</xliff:g> ساعة"</item>
-    </plurals>
-  <plurals name="abbrev_num_days_ago">
-        <item quantity="one">"أمس"</item>
-        <item quantity="other">"قبل <xliff:g id="COUNT">%d</xliff:g> يوم"</item>
-    </plurals>
-  <plurals name="abbrev_in_num_seconds">
-        <item quantity="one">"في ثانية واحدة"</item>
-        <item quantity="other">"في <xliff:g id="COUNT">%d</xliff:g> ثانية"</item>
-    </plurals>
-  <plurals name="abbrev_in_num_minutes">
-        <item quantity="one">"في دقيقة واحدة"</item>
-        <item quantity="other">"في <xliff:g id="COUNT">%d</xliff:g> دقيقة"</item>
-    </plurals>
-  <plurals name="abbrev_in_num_hours">
-        <item quantity="one">"في ساعة واحدة"</item>
-        <item quantity="other">"في <xliff:g id="COUNT">%d</xliff:g> ساعة"</item>
-    </plurals>
-  <plurals name="abbrev_in_num_days">
-        <item quantity="one">"غدًا"</item>
-        <item quantity="other">"في <xliff:g id="COUNT">%d</xliff:g> يوم"</item>
-    </plurals>
   <string name="preposition_for_date">"في <xliff:g id="DATE">%s</xliff:g>"</string>
   <string name="preposition_for_time">"في الساعة <xliff:g id="TIME">%s</xliff:g>"</string>
   <string name="preposition_for_year">"في <xliff:g id="YEAR">%s</xliff:g>"</string>
@@ -1102,9 +991,9 @@
   <string name="chooseActivity">"تحديد إجراء"</string>
   <string name="chooseUsbActivity">"تحديد تطبيق لجهاز USB"</string>
   <string name="noApplications">"ليس هناك تطبيقات يمكنها تنفيذ هذا الإجراء."</string>
-  <string msgid="932628488013092776" name="aerr_application">"للأسف، توقف <xliff:g id="APPLICATION">%1$s</xliff:g>."</string>
+  <string name="aerr_application" msgid="932628488013092776">"للأسف، توقف <xliff:g id="APPLICATION">%1$s</xliff:g>."</string>
   <string name="aerr_process">"للأسف، توقفت العملية <xliff:g id="PROCESS">%1$s</xliff:g>."</string>
-  <string msgid="8339738283149696827" name="anr_activity_application">"<xliff:g id="APPLICATION">%2$s</xliff:g> غير مستجيب."\n\n"هل تريد إغلاقه؟"</string>
+  <string name="anr_activity_application" msgid="8339738283149696827">"<xliff:g id="APPLICATION">%2$s</xliff:g> غير مستجيب."\n\n"هل تريد إغلاقه؟"</string>
   <string name="anr_activity_process">"النشاط <xliff:g id="ACTIVITY">%1$s</xliff:g> غير مستجيب."\n\n"هل تريد إغلاقه؟"</string>
   <string name="anr_application_process">"<xliff:g id="APPLICATION">%1$s</xliff:g> غير مستجيب. هل تريد إغلاقه؟"</string>
   <string name="anr_process">"العملية <xliff:g id="PROCESS">%1$s</xliff:g> غير مستجيبة."\n\n"هل تريد إغلاقها؟"</string>
@@ -1151,14 +1040,6 @@
   <string name="ringtone_silent">"صامت"</string>
   <string name="ringtone_picker_title">"نغمات الرنين"</string>
   <string name="ringtone_unknown">"نغمة رنين غير معروفة"</string>
-  <plurals name="wifi_available">
-        <item quantity="one">"شبكة Wi-Fi متاحة"</item>
-        <item quantity="other">"شبكات Wi-Fi متاحة"</item>
-    </plurals>
-  <plurals name="wifi_available_detailed">
-        <item quantity="one">"هناك شبكة Wi-Fi مفتوحة متاحة"</item>
-        <item quantity="other">"هناك شبكات Wi-Fi مفتوحة متاحة"</item>
-    </plurals>
   <string name="wifi_available_sign_in">"تسجيل الدخول إلى شبكة Wi-Fi"</string>
   <string name="wifi_watchdog_network_disabled">"تعذر الاتصال بـ Wi-Fi"</string>
   <string name="wifi_watchdog_network_disabled_detailed">" تحتوي على اتصال إنترنت ضعيف."</string>
@@ -1192,18 +1073,18 @@
   </string>
   <string name="usb_storage_activity_title">"تخزين USB كبير السعة"</string>
   <string name="usb_storage_title">"USB متصل"</string>
-  <string product="nosdcard" name="usb_storage_message">"لقد اتصلت بجهاز الكمبيوتر من خلال USB. المس الزر أدناه إذا كنت تريد نسخ الملفات بين جهاز الكمبيوتر ووحدة تخزين Android."</string>
-  <string product="default" name="usb_storage_message">"لقد اتصلت بجهاز الكمبيوتر من خلال USB. المس الزر أدناه إذا كنت تريد نسخ الملفات بين جهاز الكمبيوتر وبطاقة SD لـ Android."</string>
+  <string name="usb_storage_message" product="nosdcard">"لقد اتصلت بجهاز الكمبيوتر من خلال USB. المس الزر أدناه إذا كنت تريد نسخ الملفات بين جهاز الكمبيوتر ووحدة تخزين Android."</string>
+  <string name="usb_storage_message" product="default">"لقد اتصلت بجهاز الكمبيوتر من خلال USB. المس الزر أدناه إذا كنت تريد نسخ الملفات بين جهاز الكمبيوتر وبطاقة SD لـ Android."</string>
   <string name="usb_storage_button_mount">"تشغيل سعة تخزين USB"</string>
-  <string product="nosdcard" name="usb_storage_error_message">"هناك مشكلة في استخدام وحدة تخزين USB للتخزين الجماعي لـ USB."</string>
-  <string product="default" name="usb_storage_error_message">"هناك مشكلة في استخدام بطاقة SD للتخزين الجماعي لـ USB."</string>
+  <string name="usb_storage_error_message" product="nosdcard">"هناك مشكلة في استخدام وحدة تخزين USB للتخزين الجماعي لـ USB."</string>
+  <string name="usb_storage_error_message" product="default">"هناك مشكلة في استخدام بطاقة SD للتخزين الجماعي لـ USB."</string>
   <string name="usb_storage_notification_title">"USB متصل"</string>
   <string name="usb_storage_notification_message">"يمكنك التحديد لنسخ الملفات إلى/من جهاز الكمبيوتر."</string>
   <string name="usb_storage_stop_notification_title">"إيقاف تشغيل سعة تخزين USB"</string>
   <string name="usb_storage_stop_notification_message">"حدد لإيقاف تشغيل سعة تخزين USB."</string>
   <string name="usb_storage_stop_title">"سعة USB التخزينية المستخدمة"</string>
-  <string product="nosdcard" name="usb_storage_stop_message">"قبل إيقاف تشغيل وحدة تخزين USB، تأكد من إلغاء تركيب (\"إخراج\") وحدة تخزين USB لـ Android من الكمبيوتر."</string>
-  <string product="default" name="usb_storage_stop_message">"قبل إيقاف تشغيل سعة تخزين USB، تأكد من إلغاء تحميل (\"تم إخراجها\") بطاقة SD لـ Android من جهاز الكمبيوتر."</string>
+  <string name="usb_storage_stop_message" product="nosdcard">"قبل إيقاف تشغيل وحدة تخزين USB، تأكد من إلغاء تركيب (\"إخراج\") وحدة تخزين USB لـ Android من الكمبيوتر."</string>
+  <string name="usb_storage_stop_message" product="default">"قبل إيقاف تشغيل سعة تخزين USB، تأكد من إلغاء تحميل (\"تم إخراجها\") بطاقة SD لـ Android من جهاز الكمبيوتر."</string>
   <string name="usb_storage_stop_button_mount">"إيقاف تشغيل سعة تخزين USB"</string>
   <string name="usb_storage_stop_error_message">"حدثت مشكلة في إيقاف تشغيل سعة USB التخزينية. تحقق من إلغاء تحميل مضيف USB، ثم حاول مرة أخرى."</string>
   <string name="dlg_confirm_kill_storage_users_title">"تشغيل سعة تخزين USB"</string>
@@ -1216,10 +1097,10 @@
   <string name="usb_accessory_notification_title">"الاتصال بجهاز USB ملحق"</string>
   <string name="usb_cdrom_notification_title">برنامج التشغيل الإفتراضي يعمل</string>
   <string name="usb_notification_message">"المس للاطلاع على خيارات USB الأخرى"</string>
-  <string product="nosdcard" name="extmedia_format_title">"تهيئة وحدة تخزين USB"</string>
-  <string product="default" name="extmedia_format_title">"تنسيق بطاقة SD"</string>
-  <string product="nosdcard" name="extmedia_format_message">"هل تريد تهيئة وحدة تخزين USB، ومحو كل الملفات المخزنة بها؟ لا يمكن عكس هذا الإجراء!"</string>
-  <string product="default" name="extmedia_format_message">"هل تريد تنسيق بطاقة SD؟ ستفقد جميع البيانات على بطاقتك."</string>
+  <string name="extmedia_format_title" product="nosdcard">"تهيئة وحدة تخزين USB"</string>
+  <string name="extmedia_format_title" product="default">"تنسيق بطاقة SD"</string>
+  <string name="extmedia_format_message" product="nosdcard">"هل تريد تهيئة وحدة تخزين USB، ومحو كل الملفات المخزنة بها؟ لا يمكن عكس هذا الإجراء!"</string>
+  <string name="extmedia_format_message" product="default">"هل تريد تنسيق بطاقة SD؟ ستفقد جميع البيانات على بطاقتك."</string>
   <string name="extmedia_format_button_format">"تنسيق"</string>
   <string name="adb_active_notification_title">"تم توصيل تصحيح أخطاء USB"</string>
   <string name="adb_active_notification_message">"اختيار تعطيل تصحيح أخطاء USB."</string>
@@ -1231,29 +1112,29 @@
   <string name="candidates_style">
     <u>"العناصر المرشحة"</u>
   </string>
-  <string product="nosdcard" name="ext_media_checking_notification_title">"تحضير وحدة تخزين USB"</string>
-  <string product="default" name="ext_media_checking_notification_title">"تحضير بطاقة SD"</string>
+  <string name="ext_media_checking_notification_title" product="nosdcard">"تحضير وحدة تخزين USB"</string>
+  <string name="ext_media_checking_notification_title" product="default">"تحضير بطاقة SD"</string>
   <string name="ext_media_checking_notification_message">"التحقق من الأخطاء."</string>
-  <string product="nosdcard" name="ext_media_nofs_notification_title">"وحدة تخزين USB فارغة"</string>
-  <string product="default" name="ext_media_nofs_notification_title">"بطاقة SD فارغة"</string>
-  <string product="nosdcard" name="ext_media_nofs_notification_message">"وحدة تخزين USB فارغة أو بها نظام ملفات غير صالح."</string>
-  <string product="default" name="ext_media_nofs_notification_message">"بطاقة SD فارغة أو تحتوي على نظام ملفات غير معتمد."</string>
-  <string product="nosdcard" name="ext_media_unmountable_notification_title">"وحدة تخزين USB تالفة"</string>
-  <string product="default" name="ext_media_unmountable_notification_title">"بطاقة SD تالفة"</string>
-  <string product="nosdcard" name="ext_media_unmountable_notification_message">"تلف وحدة تخزين USB. ربما يتوجب عليك إعادة تهيئتها."</string>
-  <string product="default" name="ext_media_unmountable_notification_message">"بطاقة SD تالفة. قد يجب عليك إعادة تنسيقها."</string>
-  <string product="nosdcard" name="ext_media_badremoval_notification_title">"تمت إزالة وحدة تخزين USB على غير المتوقع"</string>
-  <string product="default" name="ext_media_badremoval_notification_title">"تمت إزالة بطاقة SD على نحو غير متوقع"</string>
-  <string product="nosdcard" name="ext_media_badremoval_notification_message">"إلغاء تركيب وحدة تخزين USB قبل الإزالة لتجنب فقد البيانات."</string>
-  <string product="default" name="ext_media_badremoval_notification_message">"ألغ تحميل بطاقة SD قبل الإزالة لتجنب فقدان البيانات."</string>
-  <string product="nosdcard" name="ext_media_safe_unmount_notification_title">"يمكنك إزالة وحدة تخزين USB بشكل آمن"</string>
-  <string product="default" name="ext_media_safe_unmount_notification_title">"يمكن إزالة بطاقة SD بأمان"</string>
-  <string product="nosdcard" name="ext_media_safe_unmount_notification_message">"يمكنك إزالة وحدة تخزين USB بشكل آمن."</string>
-  <string product="default" name="ext_media_safe_unmount_notification_message">"يمكنك إزالة بطاقة SD بأمان."</string>
-  <string product="nosdcard" name="ext_media_nomedia_notification_title">"تمت إزالة وحدة تخزين USB"</string>
-  <string product="default" name="ext_media_nomedia_notification_title">"تمت إزالة بطاقة SD"</string>
-  <string product="nosdcard" name="ext_media_nomedia_notification_message">"تمت إزالة وحدة تخزين USB. أدرج وسائط جديدة."</string>
-  <string product="default" name="ext_media_nomedia_notification_message">"تمت إزالة بطاقة SD. أدخل بطاقة جديدة."</string>
+  <string name="ext_media_nofs_notification_title" product="nosdcard">"وحدة تخزين USB فارغة"</string>
+  <string name="ext_media_nofs_notification_title" product="default">"بطاقة SD فارغة"</string>
+  <string name="ext_media_nofs_notification_message" product="nosdcard">"وحدة تخزين USB فارغة أو بها نظام ملفات غير صالح."</string>
+  <string name="ext_media_nofs_notification_message" product="default">"بطاقة SD فارغة أو تحتوي على نظام ملفات غير معتمد."</string>
+  <string name="ext_media_unmountable_notification_title" product="nosdcard">"وحدة تخزين USB تالفة"</string>
+  <string name="ext_media_unmountable_notification_title" product="default">"بطاقة SD تالفة"</string>
+  <string name="ext_media_unmountable_notification_message" product="nosdcard">"تلف وحدة تخزين USB. ربما يتوجب عليك إعادة تهيئتها."</string>
+  <string name="ext_media_unmountable_notification_message" product="default">"بطاقة SD تالفة. قد يجب عليك إعادة تنسيقها."</string>
+  <string name="ext_media_badremoval_notification_title" product="nosdcard">"تمت إزالة وحدة تخزين USB على غير المتوقع"</string>
+  <string name="ext_media_badremoval_notification_title" product="default">"تمت إزالة بطاقة SD على نحو غير متوقع"</string>
+  <string name="ext_media_badremoval_notification_message" product="nosdcard">"إلغاء تركيب وحدة تخزين USB قبل الإزالة لتجنب فقد البيانات."</string>
+  <string name="ext_media_badremoval_notification_message" product="default">"ألغ تحميل بطاقة SD قبل الإزالة لتجنب فقدان البيانات."</string>
+  <string name="ext_media_safe_unmount_notification_title" product="nosdcard">"يمكنك إزالة وحدة تخزين USB بشكل آمن"</string>
+  <string name="ext_media_safe_unmount_notification_title" product="default">"يمكن إزالة بطاقة SD بأمان"</string>
+  <string name="ext_media_safe_unmount_notification_message" product="nosdcard">"يمكنك إزالة وحدة تخزين USB بشكل آمن."</string>
+  <string name="ext_media_safe_unmount_notification_message" product="default">"يمكنك إزالة بطاقة SD بأمان."</string>
+  <string name="ext_media_nomedia_notification_title" product="nosdcard">"تمت إزالة وحدة تخزين USB"</string>
+  <string name="ext_media_nomedia_notification_title" product="default">"تمت إزالة بطاقة SD"</string>
+  <string name="ext_media_nomedia_notification_message" product="nosdcard">"تمت إزالة وحدة تخزين USB. أدرج وسائط جديدة."</string>
+  <string name="ext_media_nomedia_notification_message" product="default">"تمت إزالة بطاقة SD. أدخل بطاقة جديدة."</string>
   <string name="activity_list_empty">"لم يتم العثور على أية أنشطة متطابقة"</string>
   <string name="permlab_pkgUsageStats">"تحديث إحصاءات استخدام المكون"</string>
   <string name="permdesc_pkgUsageStats">"للسماح بتعديل إحصاءات استخدام المكون المجمّعة. ليس للاستخدام بواسطة التطبيقات العادية."</string>
@@ -1304,31 +1185,21 @@
   <string name="throttled_notification_message">"يمكنك اللمس لمعرفة المزيد حول استخدام بيانات الجوال"</string>
   <string name="no_matches">No matches</string>
   <string name="find_on_page">"بحث في الصفحة"</string>
-  <plurals name="matches_found">
-        <!-- Case of one match -->
-        <!--Modify Spreadst of 94151 can't show whole information on webpage  start -->
-        <!-- <item quantity="one">1 match</item> -->
-        <item quantity="one">"مطابقة واحدة"</item>
-        <!-- Case of multiple total matches -->
-        <!-- <item quantity="other"><xliff:g id="index" example="2">%d</xliff:g> of <xliff:g id="total" example="137">%d</xliff:g></item> -->
-        <item quantity="other">"<xliff:g id="INDEX">%d</xliff:g> من <xliff:g id="TOTAL">%d</xliff:g>"</item>
-        <!--Modify Spreadst of 94151 can't show whole information on webpage  end -->
-        </plurals>
   <string name="stk_refresh_sim_init_message">التحديث جاري لبطاقة SIM</string>
   <string name="stk_refresh_sim_reset_message">سيتم اعادة تشغيل الهاتف</string>
   <string name="action_mode_done">"تم"</string>
-  <string product="nosdcard" name="progress_unmounting">"جارٍ إلغاء تركيب وحدة تخزين USB..."</string>
-  <string product="default" name="progress_unmounting">"جارٍ إلغاء تركيب بطاقة SD..."</string>
-  <string product="nosdcard" name="progress_erasing">"جارٍ محو وحدة تخزين USB..."</string>
-  <string product="default" name="progress_erasing">"جارٍ محو بطاقة SD..."</string>
-  <string product="nosdcard" name="format_error">"تعذر مسح وحدة تخزين USB."</string>
-  <string product="default" name="format_error">"تعذر مسح بطاقة SD."</string>
+  <string name="progress_unmounting" product="nosdcard">"جارٍ إلغاء تركيب وحدة تخزين USB..."</string>
+  <string name="progress_unmounting" product="default">"جارٍ إلغاء تركيب بطاقة SD..."</string>
+  <string name="progress_erasing" product="nosdcard">"جارٍ محو وحدة تخزين USB..."</string>
+  <string name="progress_erasing" product="default">"جارٍ محو بطاقة SD..."</string>
+  <string name="format_error" product="nosdcard">"تعذر مسح وحدة تخزين USB."</string>
+  <string name="format_error" product="default">"تعذر مسح بطاقة SD."</string>
   <string name="media_bad_removal">"تمت إزالة بطاقة SD قبل أن يتم إلغاء تركيبها."</string>
-  <string product="nosdcard" name="media_checking">"يتم حاليًا التحقق من وحدة تخزين USB."</string>
-  <string product="default" name="media_checking">"يتم الآن التحقق من بطاقة SD."</string>
+  <string name="media_checking" product="nosdcard">"يتم حاليًا التحقق من وحدة تخزين USB."</string>
+  <string name="media_checking" product="default">"يتم الآن التحقق من بطاقة SD."</string>
   <string name="media_removed">"تمت إزالة بطاقة SD."</string>
-  <string product="nosdcard" name="media_shared">"وحدة تخزين USB قيد الاستخدام بواسطة كمبيوتر حاليًا."</string>
-  <string product="default" name="media_shared">"بطاقة SD قيد الاستخدام حاليًا بواسطة كمبيوتر."</string>
+  <string name="media_shared" product="nosdcard">"وحدة تخزين USB قيد الاستخدام بواسطة كمبيوتر حاليًا."</string>
+  <string name="media_shared" product="default">"بطاقة SD قيد الاستخدام حاليًا بواسطة كمبيوتر."</string>
   <string name="media_unknown_state">"وسائط خارجية في حالة غير معروفة."</string>
   <string name="share">"مشاركة"</string>
   <string name="find">"بحث"</string>
@@ -1432,4 +1303,143 @@
   <string name="missed_call">%1$d مكالمة لم يرد عليها</string>
   <string name="unread_message">%1$d رسالة غير مقروءة</string>
   <string name="shutdown_after_seconds">سيتم إيقاف تشغيل الهاتف بعد <xliff:g id="NUMBER">%d</xliff:g> ثواني</string>
+  <skip></skip>
+  <string-array name="phoneTypes">
+        <item>"الرئيسية"</item>
+        <item>"الجوال"</item>
+        <item>"عمل"</item>
+        <item>"فاكس العمل"</item>
+        <item>"فاكس المنزل"</item>
+        <item>"جهاز النداء"</item>
+        <item>"آخر"</item>
+        <item>"مخصص"</item>
+    </string-array>
+  <string-array name="emailAddressTypes">
+        <item>"الرئيسية"</item>
+        <item>"عمل"</item>
+        <item>"آخر"</item>
+        <item>"مخصص"</item>
+    </string-array>
+  <string-array name="postalAddressTypes">
+        <item>"الرئيسية"</item>
+        <item>"عمل"</item>
+        <item>"آخر"</item>
+        <item>"مخصص"</item>
+    </string-array>
+  <string-array name="imAddressTypes">
+        <item>"الرئيسية"</item>
+        <item>"عمل"</item>
+        <item>"آخر"</item>
+        <item>"مخصص"</item>
+    </string-array>
+  <string-array name="organizationTypes">
+        <item>"عمل"</item>
+        <item>"آخر"</item>
+        <item>"مخصص"</item>
+    </string-array>
+  <string-array name="imProtocols">
+        <item>"AIM"</item>
+        <item>"Windows Live"</item>
+        <item>"Yahoo"</item>
+        <item>"Skype"</item>
+        <item>"QQ"</item>
+        <item>"Google Talk"</item>
+        <item>"ICQ"</item>
+        <item>"Jabber"</item>
+    </string-array>
+  <plurals name="num_seconds_ago">
+        <item quantity="one">"قبل ثانية واحدة"</item>
+        <item quantity="other">"قبل <xliff:g id="COUNT">%d</xliff:g> ثانية"</item>
+    </plurals>
+  <plurals name="num_minutes_ago">
+        <item quantity="one">"قبل دقيقة واحدة"</item>
+        <item quantity="other">"قبل <xliff:g id="COUNT">%d</xliff:g> دقيقة"</item>
+    </plurals>
+  <plurals name="num_hours_ago">
+        <item quantity="one">"قبل ساعة واحدة"</item>
+        <item quantity="other">"قبل <xliff:g id="COUNT">%d</xliff:g> ساعة"</item>
+    </plurals>
+  <plurals name="last_num_days">
+        <item quantity="other">"آخر <xliff:g id="COUNT">%d</xliff:g> من الأيام"</item>
+    </plurals>
+  <plurals name="num_days_ago">
+        <item quantity="one">"أمس"</item>
+        <item quantity="other">"قبل <xliff:g id="COUNT">%d</xliff:g> يوم"</item>
+    </plurals>
+  <plurals name="in_num_seconds">
+        <item quantity="one">"في ثانية واحدة"</item>
+        <item quantity="other">"في <xliff:g id="COUNT">%d</xliff:g> ثانية"</item>
+    </plurals>
+  <plurals name="in_num_minutes">
+        <item quantity="one">"في دقيقة واحدة"</item>
+        <item quantity="other">"في <xliff:g id="COUNT">%d</xliff:g> دقيقة"</item>
+    </plurals>
+  <plurals name="in_num_hours">
+        <item quantity="one">"في ساعة واحدة"</item>
+        <item quantity="other">"في <xliff:g id="COUNT">%d</xliff:g> ساعة"</item>
+    </plurals>
+  <plurals name="in_num_days">
+        <item quantity="one">"غدًا"</item>
+        <item quantity="other">"في <xliff:g id="COUNT">%d</xliff:g> يوم"</item>
+    </plurals>
+  <plurals name="abbrev_num_seconds_ago">
+        <item quantity="one">"قبل ثانية واحدة"</item>
+        <item quantity="other">"قبل <xliff:g id="COUNT">%d</xliff:g> ثانية"</item>
+    </plurals>
+  <plurals name="abbrev_num_minutes_ago">
+        <item quantity="one">"قبل دقيقة واحدة"</item>
+        <item quantity="other">"قبل <xliff:g id="COUNT">%d</xliff:g> دقيقة"</item>
+    </plurals>
+  <plurals name="abbrev_num_hours_ago">
+        <item quantity="one">"قبل ساعة واحدة"</item>
+        <item quantity="other">"قبل <xliff:g id="COUNT">%d</xliff:g> ساعة"</item>
+    </plurals>
+  <plurals name="abbrev_num_days_ago">
+        <item quantity="one">"أمس"</item>
+        <item quantity="other">"قبل <xliff:g id="COUNT">%d</xliff:g> يوم"</item>
+    </plurals>
+  <plurals name="abbrev_in_num_seconds">
+        <item quantity="one">"في ثانية واحدة"</item>
+        <item quantity="other">"في <xliff:g id="COUNT">%d</xliff:g> ثانية"</item>
+    </plurals>
+  <plurals name="abbrev_in_num_minutes">
+        <item quantity="one">"في دقيقة واحدة"</item>
+        <item quantity="other">"في <xliff:g id="COUNT">%d</xliff:g> دقيقة"</item>
+    </plurals>
+  <plurals name="abbrev_in_num_hours">
+        <item quantity="one">"في ساعة واحدة"</item>
+        <item quantity="other">"في <xliff:g id="COUNT">%d</xliff:g> ساعة"</item>
+    </plurals>
+  <plurals name="abbrev_in_num_days">
+        <item quantity="one">"غدًا"</item>
+        <item quantity="other">"في <xliff:g id="COUNT">%d</xliff:g> يوم"</item>
+    </plurals>
+  <plurals name="wifi_available">
+        <item quantity="one">"شبكة Wi-Fi متاحة"</item>
+        <item quantity="other">"شبكات Wi-Fi متاحة"</item>
+    </plurals>
+  <plurals name="wifi_available_detailed">
+        <item quantity="one">"هناك شبكة Wi-Fi مفتوحة متاحة"</item>
+        <item quantity="other">"هناك شبكات Wi-Fi مفتوحة متاحة"</item>
+    </plurals>
+  <plurals name="matches_found">
+        <!-- Case of one match -->
+        <!--Modify Spreadst of 94151 can't show whole information on webpage  start -->
+        <!-- <item quantity="one">1 match</item> -->
+        <item quantity="one">"مطابقة واحدة"</item>
+        <!-- Case of multiple total matches -->
+        <!-- <item quantity="other"><xliff:g id="index" example="2">%d</xliff:g> of <xliff:g id="total" example="137">%d</xliff:g></item> -->
+        <item quantity="other">"<xliff:g id="INDEX">%d</xliff:g> من <xliff:g id="TOTAL">%d</xliff:g>"</item>
+        <!--Modify Spreadst of 94151 can't show whole information on webpage  end -->
+        </plurals>
+  <string name="low_internal_storage_ignore">تجاهل</string>
+  <string name="low_internal_storage_display_details">"التفاصيل"</string>
+  <string name="low_internal_storage_wait">"انتظار..."</string>
+  <string name="low_internal_storage_updating_details">"تفاصيل التحديث..."</string>
+  <string name="emergency_call_no_service">لا توجد شبكة متوفرة</string>
+  <string name="usim_recommanded">لا يتم استخدام بطاقة CUCC</string>
+  <string name="usim_recommanded_for_cucc_app">تطبيق CUUC، يستحسن استخدام Usim. استمرار؟</string>
+  <string name="pick_yes">"متابعة"</string>
+  <string name="pick_no">"إلغاء"</string>
+  <string name="language_automatic">"تلقائي"</string>
 </resources>

@@ -1,4 +1,7 @@
-<?xml version="1.0"  encoding="utf-8"?>
-<resources
-xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="keyboard_layouts_label">"Clavier Android"</string>
+  <string name="keyboard_layout_english_us_label">"Anglais (États-Unis)"</string>
+  <string name="keyboard_layout_french_label">"Français"</string>
+  <string name="keyboard_layout_spanish_label">"Espagnol"</string>
 </resources>

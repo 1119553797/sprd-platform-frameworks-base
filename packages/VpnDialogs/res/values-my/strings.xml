@@ -1,14 +1,17 @@
-<?xml version="1.0"  encoding="utf-8"?>
-<resources
-xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="warning">ဆက္လက္ေဆာင္ရြက္ရန္ ကြန္ရက္အားလံုး၏ အသြားအလာကိုခြင့္ျပဳရန္ပရိုဂရမ္အားသင္ေပးေနသည္။  <b> ပရိုဂရမ္ကို အတည္ျပဳ ယံုၾကည္ျခင္းမရွိက မလက္ခံပါ။ </b> တနည္းအားျဖင့္ အေႏွာင့္အယွက္ေဆာ့ဖ္၀ဲလ္မွ သင္၏ ေဒတာ အေပးအယူအား ခက္ခဲစြာလုပ္ေဆာင္ရမည္။ </string>
-    <string name="accept">ွယခုပရိုဂရမ္ကိုကၽြနု္ပ္ယံုၾကည္သည္။</string>
-    <string name="legacy_title">VPN လိုင္းနွင့္ခ်ိတ္သည္</string>
-    <string name="session">ဖုန္းေျပာေနသည္</string>
-    <string name="data_transmitted">စာပို႕ၿပီးၿပီ။</string>
-    <string name="data_received">လက္ခံၿပီးၿပီ။</string>
-    <string name="data_value_format">
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="warning">ဆက္လက္ေဆာင္ရြက္ရန္ ကြန္ရက္အားလံုး၏ အသြားအလာကိုခြင့္ျပဳရန္ပရိုဂရမ္အားသင္ေပးေနသည္။  <b> ပရိုဂရမ္ကို အတည္ျပဳ ယံုၾကည္ျခင္းမရွိက မလက္ခံပါ။ </b> တနည္းအားျဖင့္ အေႏွာင့္အယွက္ေဆာ့ဖ္၀ဲလ္မွ သင္၏ ေဒတာ အေပးအယူအား ခက္ခဲစြာလုပ္ေဆာင္ရမည္။ </string>
+  <string name="accept">ွယခုပရိုဂရမ္ကိုကၽြနု္ပ္ယံုၾကည္သည္။</string>
+  <string name="legacy_title">VPN လိုင္းနွင့္ခ်ိတ္သည္</string>
+  <string name="session">ဖုန္းေျပာေနသည္</string>
+  <string name="data_transmitted">စာပို႕ၿပီးၿပီ။</string>
+  <string name="data_received">လက္ခံၿပီးၿပီ။</string>
+  <string name="data_value_format">
         <xliff:g id="number">%1$s</xliff:g> bytes /
         <xliff:g id="number">%2$s</xliff:g> packets
     </string>
+  <string name="prompt"><xliff:g id="APP">%s</xliff:g> VPN ဆက္သြယ္မႈ တစ္ခု ဖန္တီးရန္ ကပ္ပါ.</string>
+  <string name="configure">"စီစဥ္မည္"</string>
+  <string name="disconnect">"ဆက်သွယ်မူမရိှ"</string>
+  <string name="duration">အချိန်ြကာဆုံး</string>
 </resources>

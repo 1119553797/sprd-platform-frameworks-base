@@ -20,38 +20,38 @@
   <string name="permdesc_bindAccessibilityService">အေထြေထြဆားဗစ္ကို မ်က္ႏွာျပင္ ထိပ္တြင္ ဗိုင္းလုပ္ႏိုင္ရန္္ဟိုဒါကို ဖြင့္ပါ။ ပံုမွန္တြင္သံုးစရာမလိုပါ။</string>
   <string name="permlab_setKeyboardLayout">ကီးဘုတ္ေျပာင္းရန္</string>
   <string name="permdesc_setKeyboardLayout">ကီးဘုတ္ေျပာင္းျခင္းကို လက္ခံသည္။ ပံုမွန္ပရိုဂရမ္တြင္ လံုး၀မလိုအပ္ပါ။</string>
-  <string product="tablet" name="permdesc_persistentActivity">မွတ္ဥာဏ္တြင္ပရိုဂရမ္၏ ေအာ္တိုအခ်က္တစ္ခ်ိဳ႕ ကိုသိမ္း ထားပါ။ ဒီကိစၥသည္ တျခား ပရိုဂရမ္မ်ား မွ တက္ပလက္ ေက်ာက္သင္ပုန္းလိုင္း ဆြဲအား အားေႏွး သြားမႈ ကို တားဆီး ေပးႏိုင္သည္။</string>
-  <string product="default" name="permdesc_persistentActivity">မွတ္ဥာဏ္တြင္ပရိုဂရမ္၏ ေအာ္တိုအခ်က္တစ္ခ်ိဳ႕ ကိုသိမ္း ထားပါ။ ဒီကိစၥသည္ တျခား ပရိုဂရမ္မ်ား မွ ဖုန္းလိုင္း ဆြဲအား အားေႏွး သြားမႈ ကို တားဆီး ေပးႏိုင္သည္။</string>
+  <string name="permdesc_persistentActivity" product="tablet">မွတ္ဥာဏ္တြင္ပရိုဂရမ္၏ ေအာ္တိုအခ်က္တစ္ခ်ိဳ႕ ကိုသိမ္း ထားပါ။ ဒီကိစၥသည္ တျခား ပရိုဂရမ္မ်ား မွ တက္ပလက္ ေက်ာက္သင္ပုန္းလိုင္း ဆြဲအား အားေႏွး သြားမႈ ကို တားဆီး ေပးႏိုင္သည္။</string>
+  <string name="permdesc_persistentActivity" product="default">မွတ္ဥာဏ္တြင္ပရိုဂရမ္၏ ေအာ္တိုအခ်က္တစ္ခ်ိဳ႕ ကိုသိမ္း ထားပါ။ ဒီကိစၥသည္ တျခား ပရိုဂရမ္မ်ား မွ ဖုန္းလိုင္း ဆြဲအား အားေႏွး သြားမႈ ကို တားဆီး ေပးႏိုင္သည္။</string>
   <string name="permlab_grantRevokePermissions">ခြင့္ျပဳမိန္႕အားအတည္ျပဳ(သို႕)ဖယ္ရွား</string>
   <string name="permdesc_grantRevokePermissions">ပရိုဂရမ္ တစ္ခုကိုသေဘာတူ ရန္လက္ခံသည္(သို႕)၊  ပရိုဂရမ္ တစ္ခု (သို႕) တျခားပရိုဂရမ္မ်ား အတြက္ ဖ်က္ရန္ တိက်စြာ ခြင့္ျပဳသည္။ ရွဳပ္ေထြးသည့္ ပရိုဂရမ္မ်ားက သင့္အား လက္ခံရန္အခ်က္ကို ခြင့္ျပဳခ်က္မရေအာင္လုပ္လိမ့္မည္။</string>
   <string name="permlab_readCallLog">ဆက္သြယ္သူမွတ္တမ္းကိုဖတ္ပါ</string>
-  <string product="tablet" name="permdesc_readCallLog">တျခားပရိုဂရမ္မွ သင့္ေဒတာမ်ား ကို သင္မသိဘဲ မေ၀ႏိုင္ရန္တက္ပလက္ ေက်ာက္သင္ပုန္း ၏ အ၀င္အထြက္ ဖုန္းစာရင္း မ်ားကို ဖတ္ရန္ ပရိုဂရမ္ဖြင့္ပါ။ ဖတ္ရန္ ပရိုဂရမ္မွ သင့္ေဒတာမ်ားကို သိမ္းထား ေပးမည္။ </string>
-  <string product="default" name="permdesc_readCallLog">ပ႐ိုဂရမ္အား သင့္ပစၥည္း႐ွိ သင့္အမည္ႏွင့္ လိပ္စာအခ်က္အလက္ကဲ့သို႔ ကိုယ္ေရးကိုယ္တာပ႐ိုဖိုင္အခ်က္အလက္ကို ဖတ္ရန္ ခြင့္ျပဳပါ။ ယင္းက ပ႐ိုဂရမ္အား သင့္ကို သက္ေသခံခြဲျခားႏိုင္ျပီး အျခားသူမ်ားထံသို႔ သင့္ပ႐ိုဖိုင္အခ်က္အလက္ကို ေပးပို႔လိမ့္မည္။</string>
+  <string name="permdesc_readCallLog" product="tablet">တျခားပရိုဂရမ္မွ သင့္ေဒတာမ်ား ကို သင္မသိဘဲ မေ၀ႏိုင္ရန္တက္ပလက္ ေက်ာက္သင္ပုန္း ၏ အ၀င္အထြက္ ဖုန္းစာရင္း မ်ားကို ဖတ္ရန္ ပရိုဂရမ္ဖြင့္ပါ။ ဖတ္ရန္ ပရိုဂရမ္မွ သင့္ေဒတာမ်ားကို သိမ္းထား ေပးမည္။ </string>
+  <string name="permdesc_readCallLog" product="default">ပ႐ိုဂရမ္အား သင့္ပစၥည္း႐ွိ သင့္အမည္ႏွင့္ လိပ္စာအခ်က္အလက္ကဲ့သို႔ ကိုယ္ေရးကိုယ္တာပ႐ိုဖိုင္အခ်က္အလက္ကို ဖတ္ရန္ ခြင့္ျပဳပါ။ ယင္းက ပ႐ိုဂရမ္အား သင့္ကို သက္ေသခံခြဲျခားႏိုင္ျပီး အျခားသူမ်ားထံသို႔ သင့္ပ႐ိုဖိုင္အခ်က္အလက္ကို ေပးပို႔လိမ့္မည္။</string>
   <string name="permlab_writeCallLog">ဖုန္းေခၚမႈအားမွတ္ျခင္း</string>
-  <string product="tablet" name="permdesc_writeCallLog">တက္ပလက္ေက်ာက္သင္ပုန္း ၏ အ၀င္အထြက္ဖုန္းစာရင္း မ်ားကို ေမာ္ဒီဖိုင္းလုပ္ေပးပါ၊ တျခား ပရိုဂရမ္မွ ဒီေဒတာမ်ား ကို ဖ်က္ဆီးျခင္း ႏွင့္ ေမာ္ဒီဖိုင္း လုပ္ျခင္းမ်ား ျဖစ္ေပၚႏိုင္ျခင္း ေၾကာင့္ျဖစ္သည္။</string>
-  <string product="default" name="permdesc_writeCallLog">ဖုန္း ၏ အ၀င္အထြက္ဖုန္းစာရင္း မ်ားကို ေမာ္ဒီဖိုင္းလုပ္ေပးပါ၊ တျခားပရိုဂရမ္မွ ဒီေဒတာမ်ား ကို ဖ်က္ဆီးျခင္း ႏွင့္ ေမာ္ဒီဖိုင္း လုပ္ျခင္းမ်ား ျဖစ္ေပၚႏိုင္ျခင္း ေၾကာင့္ျဖစ္သည္။</string>
-  <string product="tablet" name="permdesc_writeCalendar">မိတ္ေဆြ၊ လုပ္ေဖာ္ကိုင္ဖက္ ဖိုင္မ်ားကို ထည့္ပါ၊ ဖယ္ပါ၊ ေျပာင္းပါ ပရိုဂရမ္ျဖင့္ တက္ပလက္ေက်ာက္သင္ပုန္းတြင္ တီထြင္ႏိုင္သည္။ ၄င္းသည္ မက္ေစ့ပို႔ရာတြင္ တီထြင္ထားသည့္ အေၾကာင္းအရာအတိုင္း သို႕ ပံုမွန္ အစီအစဥ္ျပကၡဒိန္အတိုင္း ေဖာ္ျပနိုင္မည္။</string>
-  <string product="default" name="permdesc_writeCalendar">မိတ္ေဆြ၊ လုပ္ေဖာ္ကိုင္ဖက္ ဖိုင္မ်ားကို ထည့္ပါ၊ ဖယ္ပါ၊ ေျပာင္းပါ ပရိုဂရမ္ျဖင့္ ဖုန္းတြင္ တီထြင္ႏိုင္သည္။ ၄င္းသည္ မက္ေစ့ပို႔ရာတြင္ တီထြင္ထားသည့္ အေၾကာင္းအရာအတိုင္း သို႕ ပံုမွန္ အစီအစဥ္ျပကၡဒိန္အတိုင္း ေဖာ္ျပနိုင္မည္။</string>
+  <string name="permdesc_writeCallLog" product="tablet">တက္ပလက္ေက်ာက္သင္ပုန္း ၏ အ၀င္အထြက္ဖုန္းစာရင္း မ်ားကို ေမာ္ဒီဖိုင္းလုပ္ေပးပါ၊ တျခား ပရိုဂရမ္မွ ဒီေဒတာမ်ား ကို ဖ်က္ဆီးျခင္း ႏွင့္ ေမာ္ဒီဖိုင္း လုပ္ျခင္းမ်ား ျဖစ္ေပၚႏိုင္ျခင္း ေၾကာင့္ျဖစ္သည္။</string>
+  <string name="permdesc_writeCallLog" product="default">ဖုန္း ၏ အ၀င္အထြက္ဖုန္းစာရင္း မ်ားကို ေမာ္ဒီဖိုင္းလုပ္ေပးပါ၊ တျခားပရိုဂရမ္မွ ဒီေဒတာမ်ား ကို ဖ်က္ဆီးျခင္း ႏွင့္ ေမာ္ဒီဖိုင္း လုပ္ျခင္းမ်ား ျဖစ္ေပၚႏိုင္ျခင္း ေၾကာင့္ျဖစ္သည္။</string>
+  <string name="permdesc_writeCalendar" product="tablet">မိတ္ေဆြ၊ လုပ္ေဖာ္ကိုင္ဖက္ ဖိုင္မ်ားကို ထည့္ပါ၊ ဖယ္ပါ၊ ေျပာင္းပါ ပရိုဂရမ္ျဖင့္ တက္ပလက္ေက်ာက္သင္ပုန္းတြင္ တီထြင္ႏိုင္သည္။ ၄င္းသည္ မက္ေစ့ပို႔ရာတြင္ တီထြင္ထားသည့္ အေၾကာင္းအရာအတိုင္း သို႕ ပံုမွန္ အစီအစဥ္ျပကၡဒိန္အတိုင္း ေဖာ္ျပနိုင္မည္။</string>
+  <string name="permdesc_writeCalendar" product="default">မိတ္ေဆြ၊ လုပ္ေဖာ္ကိုင္ဖက္ ဖိုင္မ်ားကို ထည့္ပါ၊ ဖယ္ပါ၊ ေျပာင္းပါ ပရိုဂရမ္ျဖင့္ ဖုန္းတြင္ တီထြင္ႏိုင္သည္။ ၄င္းသည္ မက္ေစ့ပို႔ရာတြင္ တီထြင္ထားသည့္ အေၾကာင္းအရာအတိုင္း သို႕ ပံုမွန္ အစီအစဥ္ျပကၡဒိန္အတိုင္း ေဖာ္ျပနိုင္မည္။</string>
   <string name="permdesc_accessCoarseLocation"> ဆဲလ္တာ၀ါႏွင့္ WLANနက္ေ၀ါ့စနစ္မွ ေထာက္ပံ့လာသည့္ တည္ေနရာမ်ားကို၀င္ရန္လိုသည္၊၊ ဤေထာက္ပံ့လာသည့္ တည္ေနရာမ်ား လိုင္းတက္လာလွ်င္ လွည့္လိုက္ျခင္းျဖင့္ သင္လိုခ်င္သည့္ တည္ေနရာအားခြင့္ျပဳလိမ့္မည္၊</string>
-  <string product="nosdcard" name="permlab_mount_unmount_filesystems">ယူအက္(စ္)ဘီ သိမ္းသည့္ဖိုင္စနစ္၀င္ရန္</string>
-  <string product="default" name="permlab_mount_unmount_filesystems">SDကဒ္ဖိုင္စနစ္အား၀င္ရန္</string>
-  <string product="nosdcard" name="permlab_mount_format_filesystems">USB သိမ္းဆည္းမႈကို ဖ်က္ပါ</string>
-  <string product="default" name="permlab_mount_format_filesystems">SD ကဒ္ကို ဖ်က္ပါ</string>
-  <string product="tablet" name="permdesc_changeWifiMulticastState">သင့္တက္ပလက္အျပင္လိပ္စာမ်ိဳးစံုအားဒဗယူအယ္ေအအန္ နက္ေ၀ါ့ ရွိ ကိရိယာမ်ားတြင္ ပို႕ျပီး လက္ခံ ပရိုဂရမ္ကိုဖြင့္ပါ။ ပါ၀ါအားကို မာတီကတ္စ္မဟုတ္သည့္မုတ္ထက္ပိုသံုးလိမ့္မည္။</string>
-  <string product="default" name="permdesc_changeWifiMulticastState">သင့္ဖုန္းအျပင္လိပ္စာမ်ိဳးစံုအားဒဗယူအယ္ေအအန္ ကြန္ယက္ ရွိ ကိရိယာမ်ားတြင္ ပို႕ျပီး လက္ခံ ပရိုဂရမ္ကိုဖြင့္ပါ။ ပါ၀ါအားကို မာတီကတ္စ္မဟုတ္သည့္မုတ္ထက္ပိုသံုးလိမ့္မည္။</string>
-  <string product="tablet" name="permdesc_changeWimaxState">၀ိုင္မက္(စ္)ႏွင့္ခ်ိတ္ဆက္သြယ္ ႏိုင္ရန္ တက္ပလက္ ေက်ာက္သင္ပုန္္း ကို ကြန္ယက္ႏွင့္ ခ်ိတ္ျခင္း မခ်ိတ္ျခင္း ပရိုဂရမ္ ကိုဖြင့္ပါ။</string>
-  <string product="default" name="permdesc_changeWimaxState">၀ိုင္မက္(စ္)ႏွင့္ခ်ိတ္ဆက္သြယ္ ႏိုင္ရန္ ဖုန္းကိုကြန္ယက္ ႏွင့္ ခ်ိတ္ျခင္းမခ်ိတ္ျခင္း ပရိုဂရမ္ကိုဖြင့္ပါ။</string>
-  <string product="nosdcard" name="permlab_sdcardRead">စတိုဂိုေဒါင္မွတ္ဥာဏ္ ေနရာလြတ္ အေျခအေန စစ္ေဆးပါ။</string>
-  <string product="default" name="permlab_sdcardRead">စတိုဂိုေဒါင္မွတ္ဥာဏ္ ေနရာလြတ္ အေျခအေန စစ္ေဆးပါ။</string>
-  <string product="nosdcard" name="permdesc_sdcardRead">ယူအက္စ္ပီဂိုေဒါင္ကိုသံုးရန္ ခြင့္ျပဳသည့္ စစ္ေဆးသည့္ ပရိုဂရမ္ကိုဖြင့္ပါ။</string>
-  <string product="default" name="permdesc_sdcardRead">အက္စ္ဒီကဒ္သံုးရန္ ခြင့္ျပဳသည့္ စစ္ေဆးသည့္ပရိုဂရမ္ကိုဖြင့္ပါ။</string>
+  <string name="permlab_mount_unmount_filesystems" product="nosdcard">ယူအက္(စ္)ဘီ သိမ္းသည့္ဖိုင္စနစ္၀င္ရန္</string>
+  <string name="permlab_mount_unmount_filesystems" product="default">SDကဒ္ဖိုင္စနစ္အား၀င္ရန္</string>
+  <string name="permlab_mount_format_filesystems" product="nosdcard">USB သိမ္းဆည္းမႈကို ဖ်က္ပါ</string>
+  <string name="permlab_mount_format_filesystems" product="default">SD ကဒ္ကို ဖ်က္ပါ</string>
+  <string name="permdesc_changeWifiMulticastState" product="tablet">သင့္တက္ပလက္အျပင္လိပ္စာမ်ိဳးစံုအားဒဗယူအယ္ေအအန္ နက္ေ၀ါ့ ရွိ ကိရိယာမ်ားတြင္ ပို႕ျပီး လက္ခံ ပရိုဂရမ္ကိုဖြင့္ပါ။ ပါ၀ါအားကို မာတီကတ္စ္မဟုတ္သည့္မုတ္ထက္ပိုသံုးလိမ့္မည္။</string>
+  <string name="permdesc_changeWifiMulticastState" product="default">သင့္ဖုန္းအျပင္လိပ္စာမ်ိဳးစံုအားဒဗယူအယ္ေအအန္ ကြန္ယက္ ရွိ ကိရိယာမ်ားတြင္ ပို႕ျပီး လက္ခံ ပရိုဂရမ္ကိုဖြင့္ပါ။ ပါ၀ါအားကို မာတီကတ္စ္မဟုတ္သည့္မုတ္ထက္ပိုသံုးလိမ့္မည္။</string>
+  <string name="permdesc_changeWimaxState" product="tablet">၀ိုင္မက္(စ္)ႏွင့္ခ်ိတ္ဆက္သြယ္ ႏိုင္ရန္ တက္ပလက္ ေက်ာက္သင္ပုန္္း ကို ကြန္ယက္ႏွင့္ ခ်ိတ္ျခင္း မခ်ိတ္ျခင္း ပရိုဂရမ္ ကိုဖြင့္ပါ။</string>
+  <string name="permdesc_changeWimaxState" product="default">၀ိုင္မက္(စ္)ႏွင့္ခ်ိတ္ဆက္သြယ္ ႏိုင္ရန္ ဖုန္းကိုကြန္ယက္ ႏွင့္ ခ်ိတ္ျခင္းမခ်ိတ္ျခင္း ပရိုဂရမ္ကိုဖြင့္ပါ။</string>
+  <string name="permlab_sdcardRead" product="nosdcard">စတိုဂိုေဒါင္မွတ္ဥာဏ္ ေနရာလြတ္ အေျခအေန စစ္ေဆးပါ။</string>
+  <string name="permlab_sdcardRead" product="default">စတိုဂိုေဒါင္မွတ္ဥာဏ္ ေနရာလြတ္ အေျခအေန စစ္ေဆးပါ။</string>
+  <string name="permdesc_sdcardRead" product="nosdcard">ယူအက္စ္ပီဂိုေဒါင္ကိုသံုးရန္ ခြင့္ျပဳသည့္ စစ္ေဆးသည့္ ပရိုဂရမ္ကိုဖြင့္ပါ။</string>
+  <string name="permdesc_sdcardRead" product="default">အက္စ္ဒီကဒ္သံုးရန္ ခြင့္ျပဳသည့္ စစ္ေဆးသည့္ပရိုဂရမ္ကိုဖြင့္ပါ။</string>
   <string name="faceunlock_multiple_failures">လူမ်က္ႏွာအက်ယ္ခ်ဲ႕မွဳအရွိန္လြန္သြားၿပီ</string>
   <string name="lockscreen_permanent_disabled_sim_message_short">အက္(စ္)အိုင္အမ္ ကဒ္သံုး၍မရပါ</string>
   <string name="granularity_label_character">အကၡရာစာ</string>
   <string name="granularity_label_word">စာလံုး</string>
   <string name="granularity_label_link">လင့္ခ္</string>
   <string name="granularity_label_line">လိုင္း</string>
-  <string name="hour_cap_ampm">"<xliff:g id="hour" example="3">%-l</xliff:g><xliff:g id="ampm" example="pm">%P</xliff:g>"</string>
+  <string name="hour_cap_ampm">"<xliff:g example="3" id="hour">%-l</xliff:g><xliff:g example="pm" id="ampm">%P</xliff:g>"</string>
   <string name="autofill_attention_ignored_re">သတိျပဳရန္</string>
   <string name="autofill_region_ignored_re">province|region|other<!-- es -->|provincia<!-- pt-BR, pt-PT -->|bairro|suburb</string>
   <string name="autofill_company_re">company|business|organization|organisation|department<!-- de-DE -->|firma|firmenname<!-- es -->|empresa<!-- fr-FR -->|societe|société<!-- it-IT -->|ragione.?sociale<!-- ja-JP -->|会社<!-- ru -->|название.?компании<!-- zh-CN -->|单位|公司</string>
@@ -116,7 +116,7 @@
   <string name="date_time_done">ျပီးျပီ</string>
   <string name="permissions_format"><xliff:g id="perm_line1">%1$s</xliff:g>, <xliff:g id="perm_line2">%2$s</xliff:g></string>
   <string name="perms_new_perm_prefix">
-    <font fgcolor="#ff900000" size="12">NEW: </font>
+    <font size="12" fgcolor="#ff900000">NEW: </font>
   </string>
   <string name="perms_description_app">စီစဥ္မႈ <xliff:g id="app_name">%1$s</xliff:g>.</string>
   <string name="usb_cdrom_notification_title">ဗက်ဴရယ္ဒရိုင္ဘာအားဖြင့္ထားၿပီး</string>
@@ -155,8 +155,8 @@
   <string name="description_target_search">႐ွာေဖြခ်က္</string>
   <string name="activity_resolver_use_always">အျမဲတမ္း</string>
   <string name="activity_resolver_use_once">တစ္ႀကိမ္သာ</string>
-  <string product="tablet" name="default_audio_route_name">တက္ဘလက္</string>
-  <string product="default" name="default_audio_route_name">ဖုန္း</string>
+  <string name="default_audio_route_name" product="tablet">တက္ဘလက္</string>
+  <string name="default_audio_route_name" product="default">ဖုန္း</string>
   <string name="default_audio_route_name_headphones">နားၾကပ္</string>
   <string name="default_audio_route_name_dock_speakers">စပီကာ</string>
   <string name="default_audio_route_name_hdmi">HDMI အသံလိုင္း</string>
@@ -176,7 +176,7 @@
   <string name="gigabyteShort">GB</string>
   <string name="terabyteShort">TB</string>
   <string name="petabyteShort">PB</string>
-  <string name="fileSizeSuffix"><xliff:g id="number" example="123">%1$s</xliff:g><xliff:g id="unit" example="KB">%2$s</xliff:g></string>
+  <string name="fileSizeSuffix"><xliff:g example="123" id="number">%1$s</xliff:g><xliff:g example="KB" id="unit">%2$s</xliff:g></string>
   <string name="untitled">&lt;ေခါင္းစဥ္မေပးထားေသာ&gt;</string>
   <string name="ellipsis">\u2026</string>
   <string name="ellipsis_two_dots">\u2025</string>
@@ -192,7 +192,7 @@
   <string name="serviceRegistered">မွတ္ပံုတင္ျခင္းေအာင္ျမင္။</string>
   <string name="serviceErased">ဖ်က္ျခင္းေအာင္ျမင္</string>
   <string name="passwordIncorrect">မွန္ကန္ေသာ စကား၀ွက္ကို ထည့္သြင္းပါ</string>
-  <string msgid="" name="passwordChange">"စကားဝွက္ေျပာင္းျပီး"</string>
+  <string name="passwordChange" msgid="">"စကားဝွက္ေျပာင္းျပီး"</string>
   <string name="mmiComplete">MMI ျပီးဆံုး။</string>
   <string name="badPin">သင္႐ိုက္ထားသည့္ PIN အေဟာင္းမွာ မမွန္ကန္ပါ။</string>
   <string name="badPin2">သင္႐ိုက္ထားသည့္ PIN အေဟာင္းမွာ မမွန္ကန္ပါ။</string>
@@ -212,32 +212,32 @@
   <string name="ColpMmi">ခ်ိတ္ဆက္ထားေသာလိုင္း၏ အေထာက္အထားတင္ျပခ်က္</string>
   <string name="ColrMmi">ခ်ိတ္ဆက္ထားေသာလိုင္း၏ အေထာက္အထားကန္႔သတ္ခ်က္</string>
   <string name="CfMmi">လိုင္းလႊဲေနဆဲ</string>
-  <string msgid="" name="UnConditionCfMmi">"မည္သည့္အေျခအေနတြင္မဆို ဖုန္းလိုင္းလႊဲျခင္း"</string>
-  <string msgid="" name="BusyCfMmi">"မအားပါက ဖုန္းလုိင္းလႊဲပါ"</string>
-  <string msgid="" name="NoReplyCfMmi">"မေျဖဆိုပါက ဖုန္းလိုင္းလႊဲပါ"</string>
-  <string msgid="" name="NotReachCfMmi">"မေရာက္႐ွိႏိုင္ပါက ဖုန္းလိုင္းလႊဲပါ"</string>
-  <string msgid="" name="AllCfMmi">"ဖုန္းလိုင္းလႊဲျခင္းအားလံုး"</string>
-  <string msgid="" name="ConditionCfMmi">"အေျခအေနလိုက္၍ ဖုန္းလိုင္းလႊဲပါ"</string>
+  <string name="UnConditionCfMmi" msgid="">"မည္သည့္အေျခအေနတြင္မဆို ဖုန္းလိုင္းလႊဲျခင္း"</string>
+  <string name="BusyCfMmi" msgid="">"မအားပါက ဖုန္းလုိင္းလႊဲပါ"</string>
+  <string name="NoReplyCfMmi" msgid="">"မေျဖဆိုပါက ဖုန္းလိုင္းလႊဲပါ"</string>
+  <string name="NotReachCfMmi" msgid="">"မေရာက္႐ွိႏိုင္ပါက ဖုန္းလိုင္းလႊဲပါ"</string>
+  <string name="AllCfMmi" msgid="">"ဖုန္းလိုင္းလႊဲျခင္းအားလံုး"</string>
+  <string name="ConditionCfMmi" msgid="">"အေျခအေနလိုက္၍ ဖုန္းလိုင္းလႊဲပါ"</string>
   <string name="CwMmi">ေကျးဇူးြပု၍ခဏေဆာင့်ပါ</string>
   <string name="BaMmi">ေခၚဆိုမႈတားျမစ္ထားျခင္း</string>
-  <string msgid="" name="BaocMmi">"အထြက္ဖုန္းေခၚဆိုမႈမ်ားအားလံုးကို တားျမစ္ဆဲ"</string>
-  <string msgid="" name="BaoicMmi">"ႏိုင္ငံတကာအထြက္ဖုန္းေခၚဆိုမႈမ်ားအားလံုးကို တားျမစ္ဆဲ"</string>
-  <string msgid="" name="BaoicxhMmi">"မူရင္းႏိုင္ငံမွလြဲ၍ ႏိုင္ငံတကာအထြက္ဖုန္းေခၚဆိုမႈမ်ားအားလံုးကို တားျမစ္ဆဲ"</string>
-  <string msgid="" name="BaicMmi">"အဝင္ဖုန္းေခၚဆိုမႈမ်ားအားလံုးကို တားျမစ္ဆဲ"</string>
-  <string msgid="" name="BaicrMmi">"ျပင္ပကြန္ယက္အခ်က္အလက္သို႔ ဝင္ေရာက္စဥ္ အဝင္ဖုန္းေခၚဆိုမႈအားလံုးကို တားျမစ္ဆဲ"</string>
-  <string msgid="" name="BaallMmi">"အေျခခံဝန္ေဆာင္မႈမ်ားအားလံုးအတြက္ တားျမစ္ခ်က္မ်ားအားလံုး"</string>
-  <string msgid="" name="BamoMmi">"အေျခခံဝန္ေဆာင္မႈမ်ားအားလံုးအတြက္ အထြက္ဖုန္းေခၚဆိုမႈအားလံုး"</string>
-  <string msgid="" name="BamtMmi">"အေျခခံဝန္ေဆာင္မႈမ်ားအားလံုးအတြက္ အဝင္ေခၚဆိုမႈအားလံုး"</string>
+  <string name="BaocMmi" msgid="">"အထြက္ဖုန္းေခၚဆိုမႈမ်ားအားလံုးကို တားျမစ္ဆဲ"</string>
+  <string name="BaoicMmi" msgid="">"ႏိုင္ငံတကာအထြက္ဖုန္းေခၚဆိုမႈမ်ားအားလံုးကို တားျမစ္ဆဲ"</string>
+  <string name="BaoicxhMmi" msgid="">"မူရင္းႏိုင္ငံမွလြဲ၍ ႏိုင္ငံတကာအထြက္ဖုန္းေခၚဆိုမႈမ်ားအားလံုးကို တားျမစ္ဆဲ"</string>
+  <string name="BaicMmi" msgid="">"အဝင္ဖုန္းေခၚဆိုမႈမ်ားအားလံုးကို တားျမစ္ဆဲ"</string>
+  <string name="BaicrMmi" msgid="">"ျပင္ပကြန္ယက္အခ်က္အလက္သို႔ ဝင္ေရာက္စဥ္ အဝင္ဖုန္းေခၚဆိုမႈအားလံုးကို တားျမစ္ဆဲ"</string>
+  <string name="BaallMmi" msgid="">"အေျခခံဝန္ေဆာင္မႈမ်ားအားလံုးအတြက္ တားျမစ္ခ်က္မ်ားအားလံုး"</string>
+  <string name="BamoMmi" msgid="">"အေျခခံဝန္ေဆာင္မႈမ်ားအားလံုးအတြက္ အထြက္ဖုန္းေခၚဆိုမႈအားလံုး"</string>
+  <string name="BamtMmi" msgid="">"အေျခခံဝန္ေဆာင္မႈမ်ားအားလံုးအတြက္ အဝင္ေခၚဆိုမႈအားလံုး"</string>
   <string name="ActiveUnconCf">မည္သည့္အေျခအေနတြင္မဆို ဖုန္းေခၚဆုိမႈကို လက္ဆင့္ကမ္းမည္</string>
   <string name="ActiveConCf">အေျခအေနေပၚမူတည္၍ ဖုန္းေခၚဆိုမႈကို လက္ဆင့္ကမ္းမည္</string>
   <string name="CallForwarded">ဖုန္းေခၚဆိုမႈကို လက္ဆင့္ကမ္းမည္</string>
   <string name="CallWaiting">ေကျးဇူးြပု၍ခဏေဆာင့်ပါ</string>
-  <string msgid="" name="OutCallBarred">"အထြက္ေခၚဆိုမႈတားျမစ္ျပီး"</string>
-  <string msgid="" name="InCallBarred">"အဝင္ေခၚဆိုမႈတားျမစ္ထားျပီး"</string>
+  <string name="OutCallBarred" msgid="">"အထြက္ေခၚဆိုမႈတားျမစ္ျပီး"</string>
+  <string name="InCallBarred" msgid="">"အဝင္ေခၚဆိုမႈတားျမစ္ထားျပီး"</string>
   <string name="ForwardedCall">လက္ဆင့္ကမ္းထားသည့္ ဖုန္းေခၚဆိုမႈ</string>
-  <string msgid="" name="CallHold">"ဖုန္းကိုင္ထားျပီး"</string>
-  <string msgid="" name="CallRetrieved">"ဖုန္းေခၚဆိုမႈျပန္လည္ရယူျပီး"</string>
-  <string msgid="" name="IncomingCallForwarded">"ေနာက္ထပ္အဝင္ေခၚဆိုမႈလုိင္းလႊဲျပီး"</string>
+  <string name="CallHold" msgid="">"ဖုန္းကိုင္ထားျပီး"</string>
+  <string name="CallRetrieved" msgid="">"ဖုန္းေခၚဆိုမႈျပန္လည္ရယူျပီး"</string>
+  <string name="IncomingCallForwarded" msgid="">"ေနာက္ထပ္အဝင္ေခၚဆိုမႈလုိင္းလႊဲျပီး"</string>
   <string name="PwdMmi">စကားဝွက္ေျပာင္းျခင္း</string>
   <string name="PinMmi">PIN ေျပာင္းလဲပါ</string>
   <string name="Pin2Mmi">"PIN2 ေျပာင္းပါ"</string>
@@ -309,28 +309,28 @@
   <string name="httpErrorFile">ဖိုင္သုိ႔ ဝင္ေရာက္၍မရပါ။</string>
   <string name="httpErrorFileNotFound">ေတာင္းဆိုထားေသာဖိုင္အား ႐ွာမေတြ႔ပါ။</string>
   <string name="httpErrorTooManyRequests">ေတာင္းဆိုခ်က္အေျမာက္အျမားကို လုပ္ေဆာင္ေနဆဲျဖစ္သည္။ ေနာက္မွတစ္ဖန္ ၾကိဳးစားၾကည့္ပါ။</string>
-  <string name="notification_title"><xliff:g id="account" example="foo@gmail.com">%1$s</xliff:g> သို႔ဝင္ေရာက္ျခင္း အမွားျပေနသည္</string>
+  <string name="notification_title"><xliff:g example="foo@gmail.com" id="account">%1$s</xliff:g> သို႔ဝင္ေရာက္ျခင္း အမွားျပေနသည္</string>
   <string name="contentServiceSync">ကို sync လုပ္ပါ</string>
   <string name="contentServiceSyncNotificationTitle">ကို sync လုပ္ပါ</string>
   <string name="contentServiceTooManyDeletesNotificationDesc"><xliff:g id="content_type">%s</xliff:g> ဖ်က္ထားခ်က္မ်ား မ်ားလြန္းေနသည္။</string>
-  <string product="tablet" name="low_memory">တက္ဘလက္သိမ္းဆည္းမႈျပည့္ေနျပီ! ေနရာလြတ္ျပဳလုပ္ရန္ အခ်ိဳ႕ဖုိင္မ်ားကို ဖ်က္ပါ။</string>
-  <string product="default" name="low_memory">ဖုန္းသိမ္းဆည္းမႈျပည့္ေနျပီ! ေနရာလြတ္ျပဳလုပ္ရန္ ဖိုင္အခ်ိဳ႕ဖ်က္ပါ။</string>
+  <string name="low_memory" product="tablet">တက္ဘလက္သိမ္းဆည္းမႈျပည့္ေနျပီ! ေနရာလြတ္ျပဳလုပ္ရန္ အခ်ိဳ႕ဖုိင္မ်ားကို ဖ်က္ပါ။</string>
+  <string name="low_memory" product="default">ဖုန္းသိမ္းဆည္းမႈျပည့္ေနျပီ! ေနရာလြတ္ျပဳလုပ္ရန္ ဖိုင္အခ်ိဳ႕ဖ်က္ပါ။</string>
   <string name="me">မိမိ</string>
-  <string product="tablet" name="power_dialog">တက္ဘလက္ေ႐ြးခ်ယ္မႈမ်ား</string>
-  <string product="default" name="power_dialog">ဖုန္းေ႐ြးစရာမ်ား</string>
+  <string name="power_dialog" product="tablet">တက္ဘလက္ေ႐ြးခ်ယ္မႈမ်ား</string>
+  <string name="power_dialog" product="default">ဖုန္းေ႐ြးစရာမ်ား</string>
   <string name="silent_mode">အသံေဖ်ာက္ထားသည့္ပံုစံ</string>
   <string name="turn_on_radio">ၾကိဳးမဲကြန္ယက္ဖြင့္ပါ</string>
   <string name="turn_off_radio">ၾကိဳးမဲ့ကြန္ယက္ပိတ္ပါ</string>
   <string name="screen_lock">စကရင္ေသာ့ခတ္ျခင္းထား႐ွိပါ</string>
   <string name="power_off">ပါဝါပိတ္ျခင္း</string>
   <string name="shutdown_progress">ပိတ္ေနဆဲ\u2026</string>
-  <string product="tablet" name="shutdown_confirm">သင့္တက္ဘလက္ပိတ္သြားမည္။</string>
-  <string product="default" name="shutdown_confirm">သင့္ဖုန္းပိတ္သြားမည္ျဖစ္သည္။</string>
+  <string name="shutdown_confirm" product="tablet">သင့္တက္ဘလက္ပိတ္သြားမည္။</string>
+  <string name="shutdown_confirm" product="default">သင့္ဖုန္းပိတ္သြားမည္ျဖစ္သည္။</string>
   <string name="shutdown_confirm_question">သင္ပိတ္လုိပါသလား?</string>
   <string name="recent_tasks_title">မၾကာေသးမီက </string>
   <string name="no_recent_tasks">မၾကာေသးမီက ပ႐ိုဂရမ္မ်ားမ႐ွိပါ။</string>
-  <string product="tablet" name="global_actions">တက္ဘလက္ေ႐ြးခ်ယ္မႈမ်ား</string>
-  <string product="default" name="global_actions">ဖုန္းေ႐ြးစရာမ်ား</string>
+  <string name="global_actions" product="tablet">တက္ဘလက္ေ႐ြးခ်ယ္မႈမ်ား</string>
+  <string name="global_actions" product="default">ဖုန္းေ႐ြးစရာမ်ား</string>
   <string name="global_action_lock">စကရင္ေသာ့ခတ္ျခင္း</string>
   <string name="global_action_power_off">ပါဝါပိတ္ျခင္း</string>
   <string name="global_action_toggle_silent_mode">အသံေဖ်ာက္ထားသည့္ပံုစံ</string>
@@ -347,8 +347,8 @@
   <string name="permgrouplab_messages">သင့္မက္ေဆ့ခ်္မ်ား</string>
   <string name="permgroupdesc_messages">သင့္ SMS၊ အီးေမးလ္ႏွင့္ အျခားမက္ေဆ့ခ်္မ်ားကို ဖတ္ပါ၊ ေရးပါ။</string>
   <string name="permgrouplab_personalInfo">သင့္ကိုယ္ေရးကိုယ္တာအခ်က္အလက္</string>
-  <string product="tablet" name="permgroupdesc_personalInfo">တက္ဘလက္တြင္ သိမ္းထားေသာ သင့္လိပ္စာမ်ားႏွင့္ ျပကၡဒိန္သို႔ တုိက္႐ိုက္ဝင္ေရာက္ပါ</string>
-  <string product="default" name="permgroupdesc_personalInfo">ဖုန္းတြင္ သိမ္းထားေသာ သင့္လိပ္စာမ်ားႏွင့္ ျပကၡဒိန္သို႔ တုိက္႐ိုက္ဝင္ေရာက္ပါ</string>
+  <string name="permgroupdesc_personalInfo" product="tablet">တက္ဘလက္တြင္ သိမ္းထားေသာ သင့္လိပ္စာမ်ားႏွင့္ ျပကၡဒိန္သို႔ တုိက္႐ိုက္ဝင္ေရာက္ပါ</string>
+  <string name="permgroupdesc_personalInfo" product="default">ဖုန္းတြင္ သိမ္းထားေသာ သင့္လိပ္စာမ်ားႏွင့္ ျပကၡဒိန္သို႔ တုိက္႐ိုက္ဝင္ေရာက္ပါ</string>
   <string name="permgrouplab_location">သင့္တည္ေနရာ</string>
   <string name="permgroupdesc_location">ျပင္ပတြင္ သင္႐ွိသည့္တည္ေနရာကို ေစာင့္ၾကပ္ၾကည့္႐ႈပါ</string>
   <string name="permgrouplab_network">ကြန္ယက္ဆက္သြယ္ေရး</string>
@@ -364,8 +364,8 @@
   <string name="permgrouplab_developmentTools">ဝက္ဘ္ဒီဇိုင္းေရးဆြဲသည့္ ကိရိယာမ်ား</string>
   <string name="permgroupdesc_developmentTools">ပ႐ိုဂရမ္ေရးဆြဲသူမ်ားအတြက္သာ လိုအပ္ေသာ အဆင္အျပင္မ်ား။</string>
   <string name="permgrouplab_storage">သိမ္းဆည္းမႈ</string>
-  <string product="nosdcard" name="permgroupdesc_storage">USB သိမ္းဆည္းမႈပစၥည္းသို႔ ဝင္ေရာက္မည္</string>
-  <string product="default" name="permgroupdesc_storage">SD ကဒ္သို႔ ဝင္ေရာက္ပါ။</string>
+  <string name="permgroupdesc_storage" product="nosdcard">USB သိမ္းဆည္းမႈပစၥည္းသို႔ ဝင္ေရာက္မည္</string>
+  <string name="permgroupdesc_storage" product="default">SD ကဒ္သို႔ ဝင္ေရာက္ပါ။</string>
   <string name="permlab_statusBar">အေျခအေနျပဘားတန္းကို ပိတ္ပါ သို႔မဟုတ္ အဆင့္ျမွင့္ပါ</string>
   <string name="permdesc_statusBar">ပ႐ိုဂရမ္အား အေျခအေနျပဘားတန္းကို ျဖဳတ္ရန္ သို႔မဟုတ္ စနစ္အိုင္ကြန္မ်ားကို ထည့္ရန္ႏွင့္ ဖယ္႐ွားရန္ ခြင့္ျပဳပါ။</string>
   <string name="permlab_statusBarService">အေၾကာင္းအရာျပဘား</string>
@@ -385,11 +385,11 @@
   <string name="permlab_sendSmsNoConfirmation">အတည္ျပဳခ်က္မလိုေသာ SMS မက္ေဆ့ခ်္မ်ား ပို႔ပါ</string>
   <string name="permdesc_sendSmsNoConfirmation">ပ႐ိုဂရမ္အား SMS မက္ေဆ့ခ်္မ်ား ေပးပို႔ရန္ ခြင့္ျပဳပါ။ အႏၲရာယ္႐ွိေသာ ပ႐ိုဂရမ္မ်ားက သင့္အတည္ျပဳခ်က္မယူဘဲ မက္ေဆ့ခ်္မ်ားေပးပို႔ျခင္းျဖင့္ သင့္အား ေငြေၾကးကုန္က်ေစလိမ့္မည္။</string>
   <string name="permlab_readSms">SMS သို႔မဟုတ္ MMS ကို ဖတ္ပါ</string>
-  <string product="tablet" name="permdesc_readSms">ပ႐ိုဂရမ္အား သင့္တက္ဘလက္ သို႔မဟုတ္ SIM ကဒ္တြင္ သိမ္းထားေသာ SMS မက္ေဆ့ခ်္မ်ားကို ဖတ္႐ႈရန္ ခြင့္ျပဳပါ။ အႏၲရာယ္႐ွိေသာ ပ႐ိုဂရမ္မ်ားက သင့္မက္ေဆ့ခ်္မ်ားကို ဖ်က္မည္။</string>
-  <string product="default" name="permdesc_readSms">ပ႐ိုဂရမ္အား သင့္ဖုန္း သို႔မဟုတ္ SIM ကဒ္တြင္ သိမ္းထားေသာ SMS မက္ေဆ့ခ်္မ်ားကို ဖတ္႐ႈရန္ ခြင့္ျပဳပါ။ အႏၲရာယ္႐ွိေသာ ပ႐ိုဂရမ္မ်ားက သင့္မက္ေဆ့ခ်္မ်ားကို ဖ်က္မည္။</string>
+  <string name="permdesc_readSms" product="tablet">ပ႐ိုဂရမ္အား သင့္တက္ဘလက္ သို႔မဟုတ္ SIM ကဒ္တြင္ သိမ္းထားေသာ SMS မက္ေဆ့ခ်္မ်ားကို ဖတ္႐ႈရန္ ခြင့္ျပဳပါ။ အႏၲရာယ္႐ွိေသာ ပ႐ိုဂရမ္မ်ားက သင့္မက္ေဆ့ခ်္မ်ားကို ဖ်က္မည္။</string>
+  <string name="permdesc_readSms" product="default">ပ႐ိုဂရမ္အား သင့္ဖုန္း သို႔မဟုတ္ SIM ကဒ္တြင္ သိမ္းထားေသာ SMS မက္ေဆ့ခ်္မ်ားကို ဖတ္႐ႈရန္ ခြင့္ျပဳပါ။ အႏၲရာယ္႐ွိေသာ ပ႐ိုဂရမ္မ်ားက သင့္မက္ေဆ့ခ်္မ်ားကို ဖ်က္မည္။</string>
   <string name="permlab_writeSms">SMS သို႔မဟုတ္ MMS ကို တည္းျဖတ္ပါ</string>
-  <string product="tablet" name="permdesc_writeSms">ပ႐ိုဂရမ္အား သင့္တက္ဘလက္ သို႔မဟုတ္ SIM ကဒ္တြင္ သိမ္းထားေသာ SMS မက္ေဆ့ခ်္မ်ားကို ေရးသားရန္ ခြင့္ျပဳပါ။ အႏၲရာယ္႐ွိေသာ ပ႐ိုဂရမ္မ်ားက သင့္မက္ေဆ့ခ်္မ်ားကို ဖ်က္မည္။</string>
-  <string product="default" name="permdesc_writeSms">ပ႐ိုဂရမ္အား သင့္ဖုန္း သို႔မဟုတ္ SIM ကဒ္တြင္ သိမ္းထားေသာ SMS မက္ေဆ့ခ်္မ်ားကို ေရးသားရန္ ခြင့္ျပဳပါ။ အႏၲရာယ္႐ွိေသာ ပ႐ိုဂရမ္မ်ားက သင့္မက္ေဆ့ခ်္မ်ားကို ဖ်က္မည္။</string>
+  <string name="permdesc_writeSms" product="tablet">ပ႐ိုဂရမ္အား သင့္တက္ဘလက္ သို႔မဟုတ္ SIM ကဒ္တြင္ သိမ္းထားေသာ SMS မက္ေဆ့ခ်္မ်ားကို ေရးသားရန္ ခြင့္ျပဳပါ။ အႏၲရာယ္႐ွိေသာ ပ႐ိုဂရမ္မ်ားက သင့္မက္ေဆ့ခ်္မ်ားကို ဖ်က္မည္။</string>
+  <string name="permdesc_writeSms" product="default">ပ႐ိုဂရမ္အား သင့္ဖုန္း သို႔မဟုတ္ SIM ကဒ္တြင္ သိမ္းထားေသာ SMS မက္ေဆ့ခ်္မ်ားကို ေရးသားရန္ ခြင့္ျပဳပါ။ အႏၲရာယ္႐ွိေသာ ပ႐ိုဂရမ္မ်ားက သင့္မက္ေဆ့ခ်္မ်ားကို ဖ်က္မည္။</string>
   <string name="permlab_receiveWapPush">WAP ရယူပါ</string>
   <string name="permdesc_receiveWapPush">ပ႐ိုဂရမ္အား WAP မက္ေဆ့ခ်္မ်ားကို ရယူရန္ႏွင့္ လုပ္ေဆာင္ရန္ ခြင့္ျပဳပါ။ အႏၲရာယ္႐ွိေသာ ပ႐ိုဂရမ္မ်ားက သင့္မက္ေဆ့ခ်္မ်ားကို ေစာင့္ၾကပ္ၾကည့္႐ႈႏိုင္သည္ သို႔မဟုတ္ သင့္ကို ျပသျခင္းမ႐ွိဘဲ ဖ်က္ႏိုင္သည္။ </string>
   <string name="permlab_getTasks">ဖြင့္ထားေသာပ႐ိုဂရမ္မ်ားကို ျပန္ရယူပါ</string>
@@ -445,8 +445,8 @@
   <string name="permlab_manageAppTokens">ပ႐ိုဂရမ္တိုကင္မ်ားစီစဥ္ပါ</string>
   <string name="permdesc_manageAppTokens">ပ႐ိုဂရမ္အား ပံုမွန္ Z အစီအစဥ္ကို ေ႐ွာင္လႊဲျခင္းျဖင့္ ကိုယ္ပိုင္တိုကင္အားကို ဖန္တီးရန္ႏွင့္ စီစဥ္ရန္ ခြင့္ျပဳပါ။ ပံုမွန္ပ႐ိုဂရမ္မ်ားအတြက္ ဘယ္ေတာ့မွ လိုအပ္လိမ့္မည္မဟုတ္ပါ။</string>
   <string name="permlab_injectEvents">ကီးမ်ားႏွင့္ ထိန္းခ်ဳပ္ခ်က္ခလုတ္မ်ားကို ႏွိပ္ပါ</string>
-  <string product="tablet" name="permdesc_injectEvents">ပ႐ိုဂရမ္အား အျခားပ႐ိုဂရမ္မ်ားသို႔ ယင္း၏ကိုယ္ပိုင္အသြင္းျဖစ္စဥ္မ်ား (ခလုတ္ႏွိပ္ျခင္းမ်ားစသျဖင့္) ေပးပို႔ရန္ ခြင့္ျပဳပါ။ အႏၲရာယ္႐ွိေသာ ပ႐ိုဂရမ္မ်ားက တက္ဘလက္ကို ထိန္းခ်ဳပ္ႏိုင္ရန္ ယင္းအား အသံုးျပဳလိမ့္မည္။</string>
-  <string product="default" name="permdesc_injectEvents">ပ႐ိုဂရမ္အား အျခားပ႐ိုဂရမ္မ်ားသို႔ ယင္း၏ကိုယ္ပိုင္အသြင္းျဖစ္စဥ္မ်ား (ခလုတ္ႏွိပ္ျခင္းမ်ားစသျဖင့္) ေပးပို႔ရန္ ခြင့္ျပဳပါ။ အႏၲရာယ္႐ွိေသာ ပ႐ိုဂရမ္မ်ားက ဖုန္းကို ထိန္းခ်ဳပ္ႏိုင္ရန္ ယင္းအား အသံုးျပဳလိမ့္မည္။</string>
+  <string name="permdesc_injectEvents" product="tablet">ပ႐ိုဂရမ္အား အျခားပ႐ိုဂရမ္မ်ားသို႔ ယင္း၏ကိုယ္ပိုင္အသြင္းျဖစ္စဥ္မ်ား (ခလုတ္ႏွိပ္ျခင္းမ်ားစသျဖင့္) ေပးပို႔ရန္ ခြင့္ျပဳပါ။ အႏၲရာယ္႐ွိေသာ ပ႐ိုဂရမ္မ်ားက တက္ဘလက္ကို ထိန္းခ်ဳပ္ႏိုင္ရန္ ယင္းအား အသံုးျပဳလိမ့္မည္။</string>
+  <string name="permdesc_injectEvents" product="default">ပ႐ိုဂရမ္အား အျခားပ႐ိုဂရမ္မ်ားသို႔ ယင္း၏ကိုယ္ပိုင္အသြင္းျဖစ္စဥ္မ်ား (ခလုတ္ႏွိပ္ျခင္းမ်ားစသျဖင့္) ေပးပို႔ရန္ ခြင့္ျပဳပါ။ အႏၲရာယ္႐ွိေသာ ပ႐ိုဂရမ္မ်ားက ဖုန္းကို ထိန္းခ်ဳပ္ႏိုင္ရန္ ယင္းအား အသံုးျပဳလိမ့္မည္။</string>
   <string name="permlab_readInputState">သင္႐ိုက္သမွ်ႏွင့္ လုပ္ေဆာင္ခ်က္မ်ားကို မွတ္ယူပါ</string>
   <string name="permdesc_readInputState">ပ႐ိုဂရမ္အား အျခားပ႐ိုဂရမ္မ်ား(စကားဝွက္ထည့္သြင္းျခင္း)ႏွင့္ တုန္႔ျပန္မႈျပဳစဥ္ သင္ႏွိပ္သည့္ ခလုတ္မ်ားကို ၾကည့္ရန္ ခြင့္ျပဳပါ။ ပံုမွန္ပ႐ိုဂရမ္မ်ားအတြက္ ဘယ္ေတာ့မွ လိုအပ္လိမ့္မည္မဟုတ္ပါ။</string>
   <string name="permlab_bindInputMethod">အသြင္းနည္းလမ္းသို႔ ပူးပါ</string>
@@ -479,20 +479,20 @@
   <string name="permlab_installPackages">ပ႐ိုဂရမ္မ်ားကို တိုက္႐ိုက္သြင္းပါ</string>
   <string name="permdesc_installPackages">ပ႐ိုဂရမ္အား Android ပက္ေက့ခ်္အစုမ်ားအသစ္မ်ား သို႔မဟုတ္ အဆင့္ျမွင္ထားခ်က္မ်ားကို သြင္းခြင့္ျပဳပါ။ အႏၲရာယ္႐ွိေသာ ပ႐ိုဂရမ္မ်ားက ေတြ႔ျမင္ရာ အားေကာင္းသည့္ ခြင့္ျပဳခ်က္မ်ားျဖင့္ ပ႐ိုဂရမ္အသစ္မ်ားကို ထည့္ရန္ ယင္းအား အသံုးျပဳလိမ့္မည္။</string>
   <string name="permlab_clearAppCache">ပ႐ိုဂရမ္ကက္႐ွ္သိမ္းဆည္းခ်က္ေဒတာအားလံုးကို ဖ်က္ပါ</string>
-  <string product="tablet" name="permdesc_clearAppCache">ပ႐ိုဂရမ္အား ပ႐ိုဂရမ္ကက္႐ွ္လမ္းညႊန္႐ွိ ဖုိင္မ်ားကို ဖ်က္ျခင္းျဖင့္ တက္ဘလက္သိမ္းဆည္းမႈအား ေနရာလြတ္ျပဳလုပ္ရန္ ခြင့္ျပဳပါ။ အျမဲလိုပင္ စနစ္လုပ္ငန္းစဥ္သို႔ ဝင္ေရာက္ျခင္းအား တင္းက်ပ္စြာ ကန္႔သတ္ထားသည္။ </string>
-  <string product="default" name="permdesc_clearAppCache">ပ႐ိုဂရမ္အား ပ႐ိုဂရမ္ကက္႐ွ္လမ္းညႊန္႐ွိ ဖုိင္မ်ားကို ဖ်က္ျခင္းျဖင့္ ဖုန္းသိမ္းဆည္းမႈအား ေနရာလြတ္ျပဳလုပ္ရန္ ခြင့္ျပဳပါ။ အျမဲလိုပင္ စနစ္လုပ္ငန္းစဥ္သို႔ ဝင္ေရာက္ျခင္းအား တင္းက်ပ္စြာ ကန္႔သတ္ထားသည္။ </string>
+  <string name="permdesc_clearAppCache" product="tablet">ပ႐ိုဂရမ္အား ပ႐ိုဂရမ္ကက္႐ွ္လမ္းညႊန္႐ွိ ဖုိင္မ်ားကို ဖ်က္ျခင္းျဖင့္ တက္ဘလက္သိမ္းဆည္းမႈအား ေနရာလြတ္ျပဳလုပ္ရန္ ခြင့္ျပဳပါ။ အျမဲလိုပင္ စနစ္လုပ္ငန္းစဥ္သို႔ ဝင္ေရာက္ျခင္းအား တင္းက်ပ္စြာ ကန္႔သတ္ထားသည္။ </string>
+  <string name="permdesc_clearAppCache" product="default">ပ႐ိုဂရမ္အား ပ႐ိုဂရမ္ကက္႐ွ္လမ္းညႊန္႐ွိ ဖုိင္မ်ားကို ဖ်က္ျခင္းျဖင့္ ဖုန္းသိမ္းဆည္းမႈအား ေနရာလြတ္ျပဳလုပ္ရန္ ခြင့္ျပဳပါ။ အျမဲလိုပင္ စနစ္လုပ္ငန္းစဥ္သို႔ ဝင္ေရာက္ျခင္းအား တင္းက်ပ္စြာ ကန္႔သတ္ထားသည္။ </string>
   <string name="permlab_movePackage">ပ႐ိုဂရမ္ရင္းျမစ္မ်ားကို ေ႐ႊ႕ပါ</string>
   <string name="permdesc_movePackage">ပ႐ိုဂရမ္အား အတြင္းပိုင္းမွ အျပင္ပိုင္းမီဒီယာသုိ႔ သို႔မဟုတ္ အျပန္အလွန္အားျဖင့္ ပ႐ိုဂရမ္ရင္းျမစ္မ်ားကို ေ႐ႊ႕ရန္ ခြင့္ျပဳပါ။</string>
   <string name="permlab_readLogs">လံုျခံဳေရးႏွင့္ပတ္သက္၍ ထိခိုက္မႈ႐ွိႏိုင္ေသာ မွတ္တမ္းေဒတာမ်ားကို ဖတ္ပါ</string>
-  <string product="tablet" name="permdesc_readLogs">ပ႐ိုဂရမ္အား စနစ္၏ မွတ္တမ္းဖိုင္အမ်ိဳးမ်ိဳးမွ ဖတ္ရန္ ခြင့္ျပဳပါ။ ယင္းက ကိုယ္ေရးကိုယ္တာႏွင့္ သီးသန္႔အခ်က္အလက္မ်ားအပါအဝင္ တက္ဘလက္အေပၚ သင္၏လုပ္ေဆာင္ခ်က္ႏွင့္ပတ္သက္၍ အေထြေထြသတင္းအခ်က္အလက္အား ႐ွာေဖြရန္ ခြင့္ျပဳမည္။ </string>
-  <string product="default" name="permdesc_readLogs">ပ႐ိုဂရမ္အား စနစ္၏ မွတ္တမ္းဖိုင္အမ်ိဳးမ်ိဳးမွ ဖတ္ရန္ ခြင့္ျပဳပါ။ ယင္းက ကိုယ္ေရးကိုယ္တာႏွင့္ သီးသန္႔အခ်က္အလက္မ်ားအပါအဝင္ ဖုန္းအေပၚ သင္၏လုပ္ေဆာင္ခ်က္ႏွင့္ပတ္သက္၍ အေထြေထြသတင္းအခ်က္အလက္အား ႐ွာေဖြရန္ ခြင့္ျပဳမည္။ </string>
+  <string name="permdesc_readLogs" product="tablet">ပ႐ိုဂရမ္အား စနစ္၏ မွတ္တမ္းဖိုင္အမ်ိဳးမ်ိဳးမွ ဖတ္ရန္ ခြင့္ျပဳပါ။ ယင္းက ကိုယ္ေရးကိုယ္တာႏွင့္ သီးသန္႔အခ်က္အလက္မ်ားအပါအဝင္ တက္ဘလက္အေပၚ သင္၏လုပ္ေဆာင္ခ်က္ႏွင့္ပတ္သက္၍ အေထြေထြသတင္းအခ်က္အလက္အား ႐ွာေဖြရန္ ခြင့္ျပဳမည္။ </string>
+  <string name="permdesc_readLogs" product="default">ပ႐ိုဂရမ္အား စနစ္၏ မွတ္တမ္းဖိုင္အမ်ိဳးမ်ိဳးမွ ဖတ္ရန္ ခြင့္ျပဳပါ။ ယင္းက ကိုယ္ေရးကိုယ္တာႏွင့္ သီးသန္႔အခ်က္အလက္မ်ားအပါအဝင္ ဖုန္းအေပၚ သင္၏လုပ္ေဆာင္ခ်က္ႏွင့္ပတ္သက္၍ အေထြေထြသတင္းအခ်က္အလက္အား ႐ွာေဖြရန္ ခြင့္ျပဳမည္။ </string>
   <string name="permlab_anyCodecForPlayback">ျပန္လည္ဖြင့္ရန္အတြက္ မည္သည့္မီဒီယာကုဒ္ျဖည္စက္မဆို အသံုးျပဳပါ</string>
   <string name="permdesc_anyCodecForPlayback">ပ႐ိုဂရမ္အား မည္သည့္သြင္းထားသည့္ မီဒီယာကုဒ္ျဖည္စက္မဆို အဖြင့္စာရင္းအား ကုဒ္ျဖည္ရန္အသံုးျပဳျခင္းကို ခြင့္ျပဳပါ။ </string>
   <string name="permlab_diagnostic">ကြန္ပ်ဴတာခၽြင္းခ်က္႐ွာေသာ ပ႐ိုဂရမ္၏ ရင္းျမစ္မ်ားကို ဖတ္ပါ/ေရးပါ</string>
   <string name="permdesc_diagnostic">ပ႐ိုဂရမ္အား ေျပာဆိုသူအုပ္စုမွ ပိုင္ဆိုင္ေသာ ရင္းျမစ္မ်ားသို႔ ဖတ္ရန္ႏွင့္ ေရးရန္ ခြင့္ျပဳပါ။ ဥပမာ /dev ႐ွိ ဖိုင္မ်ား။ ယင္းက စနစ္၏ တည္ျငိမ္မႈႏွင့္ လံုျခံဳေရးကို ထိခုိက္ႏိုင္သည္။ ယင္းအား ထုတ္လုပ္သူ သို႔မဟုတ္ မိုဘိုင္းကြန္ယက္အေထာက္အပံ့မွ ဟာ့ဒ္ဝဲလ္သီးသန္႔႐ွာေဖြေဖာ္ထုတ္ျခင္းမ်ားအတြက္သာ အသံုးျပဳႏိုင္သည္။ </string>
   <string name="permlab_changeComponentState">ပ႐ိုဂရမ္အစိတ္အပိုင္းမ်ားကို ဖြင့္ပါ သို႔မဟုတ္ ျဖဳတ္ပါ</string>
-  <string product="tablet" name="permdesc_changeComponentState">ပ႐ိုဂရမ္အား အျခားပ႐ိုဂရမ္၏ အစိတ္အပိုင္းကို ဖြင့္ထားျခင္း သို႔မဟုတ္ ပိတ္ထားျခင္းကို ေျပာင္းရန္ ခြင့္ျပဳပါ။ အႏၲရာယ္႐ွိေသာ ပ႐ိုဂရမ္မ်ားက အေရးၾကီးေသာ တက္ဘလက္စြမ္းေဆာင္ရည္မ်ားကို ျဖဳတ္ရန္ ၎အား အသံုးျပဳလိမ့္မည္။ ပ႐ိုဂရမ္အပိုင္းမ်ားအား အသံုးမျပဳႏိုင္ျခင္း၊ တစ္သမတ္တည္း မေျပာင္းလဲႏိုင္ျခင္း သို႔မဟုတ္ မတည္ျမဲေသာ အေျခအေနသို႔ ေရာက္သြားႏိုင္သျဖင့္ ယင္းခြင့္ျပဳခ်က္အား ဂ႐ုျပဳ၍ လုပ္ေဆာင္ရမည္။ </string>
-  <string product="default" name="permdesc_changeComponentState">ပ႐ိုဂရမ္အား အျခားပ႐ိုဂရမ္၏ အစိတ္အပိုင္းကို ဖြင့္ထားျခင္း သို႔မဟုတ္ ပိတ္ထားျခင္းကို ေျပာင္းရန္ ခြင့္ျပဳပါ။ အႏၲရာယ္႐ွိေသာ ပ႐ိုဂရမ္မ်ားက အေရးၾကီးေသာ ဖုန္းစြမ္းေဆာင္ရည္မ်ားကို ျဖဳတ္ရန္ ၎အား အသံုးျပဳလိမ့္မည္။ ပ႐ိုဂရမ္အပိုင္းမ်ားအား အသံုးမျပဳႏိုင္ျခင္း၊ တစ္သမတ္တည္း မေျပာင္းလဲႏိုင္ျခင္း သို႔မဟုတ္ မတည္ျမဲေသာ အေျခအေနသို႔ ေရာက္သြားႏိုင္သျဖင့္ ယင္းခြင့္ျပဳခ်က္အား ဂ႐ုျပဳ၍ လုပ္ေဆာင္ရမည္။ </string>
+  <string name="permdesc_changeComponentState" product="tablet">ပ႐ိုဂရမ္အား အျခားပ႐ိုဂရမ္၏ အစိတ္အပိုင္းကို ဖြင့္ထားျခင္း သို႔မဟုတ္ ပိတ္ထားျခင္းကို ေျပာင္းရန္ ခြင့္ျပဳပါ။ အႏၲရာယ္႐ွိေသာ ပ႐ိုဂရမ္မ်ားက အေရးၾကီးေသာ တက္ဘလက္စြမ္းေဆာင္ရည္မ်ားကို ျဖဳတ္ရန္ ၎အား အသံုးျပဳလိမ့္မည္။ ပ႐ိုဂရမ္အပိုင္းမ်ားအား အသံုးမျပဳႏိုင္ျခင္း၊ တစ္သမတ္တည္း မေျပာင္းလဲႏိုင္ျခင္း သို႔မဟုတ္ မတည္ျမဲေသာ အေျခအေနသို႔ ေရာက္သြားႏိုင္သျဖင့္ ယင္းခြင့္ျပဳခ်က္အား ဂ႐ုျပဳ၍ လုပ္ေဆာင္ရမည္။ </string>
+  <string name="permdesc_changeComponentState" product="default">ပ႐ိုဂရမ္အား အျခားပ႐ိုဂရမ္၏ အစိတ္အပိုင္းကို ဖြင့္ထားျခင္း သို႔မဟုတ္ ပိတ္ထားျခင္းကို ေျပာင္းရန္ ခြင့္ျပဳပါ။ အႏၲရာယ္႐ွိေသာ ပ႐ိုဂရမ္မ်ားက အေရးၾကီးေသာ ဖုန္းစြမ္းေဆာင္ရည္မ်ားကို ျဖဳတ္ရန္ ၎အား အသံုးျပဳလိမ့္မည္။ ပ႐ိုဂရမ္အပိုင္းမ်ားအား အသံုးမျပဳႏိုင္ျခင္း၊ တစ္သမတ္တည္း မေျပာင္းလဲႏိုင္ျခင္း သို႔မဟုတ္ မတည္ျမဲေသာ အေျခအေနသို႔ ေရာက္သြားႏိုင္သျဖင့္ ယင္းခြင့္ျပဳခ်က္အား ဂ႐ုျပဳ၍ လုပ္ေဆာင္ရမည္။ </string>
   <string name="permlab_setPreferredApplications">ႏွစ္သက္ရာပ႐ိုဂရမ္မ်ား ္ထား႐ွိပါ</string>
   <string name="permdesc_setPreferredApplications">ပ႐ိုဂရမ္အား သင္ႏွစ္သက္ရာ ပ႐ိုဂရမ္မ်ားကို အဆင့္ျမွင့္ရန္ ခြင့္ျပဳပါ။ ယင္းက အႏၲရာယ္႐ွိေသာ ပ႐ိုဂရမ္မ်ားအား သင့္ထံမွ ကိုယ္ပိုင္ေဒတာအခ်က္အလက္မ်ားကို စုေဆာင္းရန္ လက္႐ွိပ႐ိုဂရမ္မ်ားကို လွည့္ျဖားျပီး ဖြင့္ထားသည့္ ပ႐ိုဂရမ္မ်ားကို တိတ္တဆိတ္ ေျပာင္းခြင့္ျပဳမည္ျဖစ္သည္။</string>
   <string name="permlab_writeSettings">ကမာၻလံုးဆိုင္ရာစနစ္အဆင္အျပင္မ်ားကို အသစ္ျပဳျပင္ပါ</string>
@@ -502,28 +502,28 @@
   <string name="permlab_writeGservices">Google ဝန္ေဆာင္မႈေျမပံုကို အသစ္ျပဳျပင္ပါ</string>
   <string name="permdesc_writeGservices">ပ႐ိုဂရမ္အား Google ဝန္ေဆာင္မႈေျမပံုကို အဆင့္ျမွင့္ရန္ ခြင့္ျပဳပါ။ ပံုမွန္ပ႐ိုဂရမ္မ်ားက အသံုးျပဳရန္ မဟုတ္ပါ။</string>
   <string name="permlab_receiveBootCompleted">အလိုအေလ်ာက္ျပန္ဖြင့္ခ်ိန္တြင္ စတင္ပါ</string>
-  <string product="tablet" name="permdesc_receiveBootCompleted">ပ႐ိုဂရမ္အား စနစ္ဖြင့္ျခင္းျပီးဆံုးလွ်င္ ျပီးဆံုးခ်င္း ကိုယ္တိုင္စတင္ရန္ခြင့္ျပဳပါ။ ယင္းက တက္ဘလက္စတင္ရန္ အခ်ိန္ၾကာေစျပီး ပ႐ိုဂရမ္အား တက္ဘလက္တစ္ခုလံုးကို အျမဲတမ္းဖြင့္ျခင္းျဖင့္ ေႏွးသြားေစလိမ့္မည္။ </string>
-  <string product="default" name="permdesc_receiveBootCompleted">ပ႐ိုဂရမ္အား စနစ္ဖြင့္ျခင္းျပီးဆံုးလွ်င္ ျပီးဆံုးခ်င္း ကိုယ္တိုင္စတင္ရန္ခြင့္ျပဳပါ။ ယင္းက ဖုန္းစတင္ရန္ အခ်ိန္ၾကာေစျပီး ပ႐ိုဂရမ္အား ဖုန္းတစ္ခုလံုးကို အျမဲတမ္းဖြင့္ျခင္းျဖင့္ ေႏွးသြားေစလိမ့္မည္။ </string>
+  <string name="permdesc_receiveBootCompleted" product="tablet">ပ႐ိုဂရမ္အား စနစ္ဖြင့္ျခင္းျပီးဆံုးလွ်င္ ျပီးဆံုးခ်င္း ကိုယ္တိုင္စတင္ရန္ခြင့္ျပဳပါ။ ယင္းက တက္ဘလက္စတင္ရန္ အခ်ိန္ၾကာေစျပီး ပ႐ိုဂရမ္အား တက္ဘလက္တစ္ခုလံုးကို အျမဲတမ္းဖြင့္ျခင္းျဖင့္ ေႏွးသြားေစလိမ့္မည္။ </string>
+  <string name="permdesc_receiveBootCompleted" product="default">ပ႐ိုဂရမ္အား စနစ္ဖြင့္ျခင္းျပီးဆံုးလွ်င္ ျပီးဆံုးခ်င္း ကိုယ္တိုင္စတင္ရန္ခြင့္ျပဳပါ။ ယင္းက ဖုန္းစတင္ရန္ အခ်ိန္ၾကာေစျပီး ပ႐ိုဂရမ္အား ဖုန္းတစ္ခုလံုးကို အျမဲတမ္းဖြင့္ျခင္းျဖင့္ ေႏွးသြားေစလိမ့္မည္။ </string>
   <string name="permlab_broadcastSticky">သတိေပးခ်က္မ်ားဆက္လက္ေပးပို႔ႏိုင္သည့္ မက္ေဆ့ခ်္ေပးပို႔ပါ</string>
-  <string product="tablet" name="permdesc_broadcastSticky">ပ႐ိုဂရမ္အား မက္ေဆ့ခ်္ေပးပို႔ခ်က္ျပီးဆံုးပါက က်န္႐ွိေနသည့္ တြဲလ်က္ပါေသာ မက္ေဆ့ခ်္မ်ား ေပးပို႔မႈမ်ားကို ေပးပို႔ရန္ ခြင့္ျပဳပါ။ အႏၲရာယ္႐ွိေသာ ပ႐ိုဂရမ္မ်ားက မွတ္ဥာဏ္အေျမာက္အျမားအသံုးျပဳျခင္းျဖင့္ တက္ဘလက္အား ေႏွးသြားေစျခင္း သို႔မဟုတ္ မတည္ျငိမ္ျခင္းတို႔ ျဖစ္ေစႏိုင္သည္။</string>
-  <string product="default" name="permdesc_broadcastSticky">ပ႐ိုဂရမ္အား မက္ေဆ့ခ်္ေပးပို႔ခ်က္ျပီးဆံုးပါက က်န္႐ွိေနသည့္ တြဲလ်က္ပါေသာ မက္ေဆ့ခ်္မ်ား ေပးပို႔မႈမ်ားကို ေပးပို႔ရန္ ခြင့္ျပဳပါ။ အႏၲရာယ္႐ွိေသာ ပ႐ိုဂရမ္မ်ားက မွတ္ဥာဏ္အေျမာက္အျမားအသံုးျပဳျခင္းျဖင့္ ဖုန္း္အား ေႏွးသြားေစျခင္း သို႔မဟုတ္ မတည္ျငိမ္ျခင္းတို႔ ျဖစ္ေစႏိုင္သည္။</string>
+  <string name="permdesc_broadcastSticky" product="tablet">ပ႐ိုဂရမ္အား မက္ေဆ့ခ်္ေပးပို႔ခ်က္ျပီးဆံုးပါက က်န္႐ွိေနသည့္ တြဲလ်က္ပါေသာ မက္ေဆ့ခ်္မ်ား ေပးပို႔မႈမ်ားကို ေပးပို႔ရန္ ခြင့္ျပဳပါ။ အႏၲရာယ္႐ွိေသာ ပ႐ိုဂရမ္မ်ားက မွတ္ဥာဏ္အေျမာက္အျမားအသံုးျပဳျခင္းျဖင့္ တက္ဘလက္အား ေႏွးသြားေစျခင္း သို႔မဟုတ္ မတည္ျငိမ္ျခင္းတို႔ ျဖစ္ေစႏိုင္သည္။</string>
+  <string name="permdesc_broadcastSticky" product="default">ပ႐ိုဂရမ္အား မက္ေဆ့ခ်္ေပးပို႔ခ်က္ျပီးဆံုးပါက က်န္႐ွိေနသည့္ တြဲလ်က္ပါေသာ မက္ေဆ့ခ်္မ်ား ေပးပို႔မႈမ်ားကို ေပးပို႔ရန္ ခြင့္ျပဳပါ။ အႏၲရာယ္႐ွိေသာ ပ႐ိုဂရမ္မ်ားက မွတ္ဥာဏ္အေျမာက္အျမားအသံုးျပဳျခင္းျဖင့္ ဖုန္း္အား ေႏွးသြားေစျခင္း သို႔မဟုတ္ မတည္ျငိမ္ျခင္းတို႔ ျဖစ္ေစႏိုင္သည္။</string>
   <string name="permlab_readContacts">လိပ္စာအခ်က္အလက္မ်ားကို ဖတ္ပါ</string>
-  <string product="tablet" name="permdesc_readContacts">ပ႐ိုဂရမ္အား သင့္တက္ဘလက္တြင္ သိမ္းဆည္းထားေသာ အားလံုးေသာဆက္သြယ္ရန္လိပ္စာ(လိပ္စာ)ေဒတာမ်ားကို ဖတ္ရန္ ခြင့္ျပဳပါ။ အႏၲရာယ္႐ွိေသာ ပ႐ိုဂရမ္မ်ားက သင့္ေဒတာမ်ားကို အျခားသူမ်ားထံသို႔ ေပးပို႔ရန္ ၎ကို အသံုးျပဳႏိုင္သည္။</string>
-  <string product="default" name="permdesc_readContacts">ပ႐ိုဂရမ္အား သင့္ဖုန္းတြင္ သိမ္းဆည္းထားေသာ အားလံုးေသာဆက္သြယ္ရန္လိပ္စာ(လိပ္စာ)ေဒတာမ်ားကို ဖတ္ရန္ ခြင့္ျပဳပါ။ အႏၲရာယ္႐ွိေသာ ပ႐ိုဂရမ္မ်ားက သင့္ေဒတာမ်ားကို အျခားသူမ်ားထံသို႔ ေပးပို႔ရန္ ၎ကို အသံုးျပဳႏိုင္သည္။</string>
+  <string name="permdesc_readContacts" product="tablet">ပ႐ိုဂရမ္အား သင့္တက္ဘလက္တြင္ သိမ္းဆည္းထားေသာ အားလံုးေသာဆက္သြယ္ရန္လိပ္စာ(လိပ္စာ)ေဒတာမ်ားကို ဖတ္ရန္ ခြင့္ျပဳပါ။ အႏၲရာယ္႐ွိေသာ ပ႐ိုဂရမ္မ်ားက သင့္ေဒတာမ်ားကို အျခားသူမ်ားထံသို႔ ေပးပို႔ရန္ ၎ကို အသံုးျပဳႏိုင္သည္။</string>
+  <string name="permdesc_readContacts" product="default">ပ႐ိုဂရမ္အား သင့္ဖုန္းတြင္ သိမ္းဆည္းထားေသာ အားလံုးေသာဆက္သြယ္ရန္လိပ္စာ(လိပ္စာ)ေဒတာမ်ားကို ဖတ္ရန္ ခြင့္ျပဳပါ။ အႏၲရာယ္႐ွိေသာ ပ႐ိုဂရမ္မ်ားက သင့္ေဒတာမ်ားကို အျခားသူမ်ားထံသို႔ ေပးပို႔ရန္ ၎ကို အသံုးျပဳႏိုင္သည္။</string>
   <string name="permlab_writeContacts">လိပ္စာေဒတာကို ေရးပါ</string>
-  <string product="tablet" name="permdesc_writeContacts">ပ႐ိုဂရမ္အား သင့္တက္ဘလက္တြင္ သိမ္းဆည္းထားေသာ ဆက္သြယ္ရန္လိပ္စာ(လိပ္စာ) ကို အဆင့္ျမွင့္ရန္ ခြင့္ျပဳပါ။ အႏၲရာယ္႐ွိေသာ ပ႐ိုဂရမ္မ်ားက သင့္လိပ္စာအခ်က္အလက္ကို ဖ်က္ရန္ သို႔မဟုတ္ အဆင့္ျမွင့္ရန္ ယင္းကို အသံုးျပဳလိမ့္မည္။</string>
-  <string product="default" name="permdesc_writeContacts">ပ႐ိုဂရမ္အား သင့္ဖုန္းတြင္ သိမ္းဆည္းထားေသာ ဆက္သြယ္ရန္လိပ္စာ(လိပ္စာ) ကို အဆင့္ျမွင့္ရန္ ခြင့္ျပဳပါ။ အႏၲရာယ္႐ွိေသာ ပ႐ိုဂရမ္မ်ားက သင့္လိပ္စာအခ်က္အလက္ကို ဖ်က္ရန္ သို႔မဟုတ္ အဆင့္ျမွင့္ရန္ ယင္းကို အသံုးျပဳလိမ့္မည္။</string>
+  <string name="permdesc_writeContacts" product="tablet">ပ႐ိုဂရမ္အား သင့္တက္ဘလက္တြင္ သိမ္းဆည္းထားေသာ ဆက္သြယ္ရန္လိပ္စာ(လိပ္စာ) ကို အဆင့္ျမွင့္ရန္ ခြင့္ျပဳပါ။ အႏၲရာယ္႐ွိေသာ ပ႐ိုဂရမ္မ်ားက သင့္လိပ္စာအခ်က္အလက္ကို ဖ်က္ရန္ သို႔မဟုတ္ အဆင့္ျမွင့္ရန္ ယင္းကို အသံုးျပဳလိမ့္မည္။</string>
+  <string name="permdesc_writeContacts" product="default">ပ႐ိုဂရမ္အား သင့္ဖုန္းတြင္ သိမ္းဆည္းထားေသာ ဆက္သြယ္ရန္လိပ္စာ(လိပ္စာ) ကို အဆင့္ျမွင့္ရန္ ခြင့္ျပဳပါ။ အႏၲရာယ္႐ွိေသာ ပ႐ိုဂရမ္မ်ားက သင့္လိပ္စာအခ်က္အလက္ကို ဖ်က္ရန္ သို႔မဟုတ္ အဆင့္ျမွင့္ရန္ ယင္းကို အသံုးျပဳလိမ့္မည္။</string>
   <string name="permlab_readProfile">သင့္ပ႐ိုဖိုင္ေဒတာကိုဖတ္ပါ</string>
-  <string product="default" name="permdesc_readProfile">ပ႐ိုဂရမ္အား သင့္ပစၥည္း႐ွိ သင့္အမည္ႏွင့္ လိပ္စာအခ်က္အလက္ကဲ့သို႔ ကိုယ္ေရးကိုယ္တာပ႐ိုဖိုင္အခ်က္အလက္ကို ဖတ္ရန္ ခြင့္ျပဳပါ။ ယင္းက ပ႐ိုဂရမ္အား သင့္ကို သက္ေသခံခြဲျခားႏိုင္ျပီး အျခားသူမ်ားထံသို႔ သင့္ပ႐ိုဖိုင္အခ်က္အလက္ကို ေပးပို႔လိမ့္မည္။</string>
+  <string name="permdesc_readProfile" product="default">ပ႐ိုဂရမ္အား သင့္ပစၥည္း႐ွိ သင့္အမည္ႏွင့္ လိပ္စာအခ်က္အလက္ကဲ့သို႔ ကိုယ္ေရးကိုယ္တာပ႐ိုဖိုင္အခ်က္အလက္ကို ဖတ္ရန္ ခြင့္ျပဳပါ။ ယင္းက ပ႐ိုဂရမ္အား သင့္ကို သက္ေသခံခြဲျခားႏိုင္ျပီး အျခားသူမ်ားထံသို႔ သင့္ပ႐ိုဖိုင္အခ်က္အလက္ကို ေပးပို႔လိမ့္မည္။</string>
   <string name="permlab_writeProfile">သင့္ပ႐ိုဖိုင္ေဒတာသို႔ ေရးပါ</string>
-  <string product="default" name="permdesc_writeProfile">ပ႐ိုဂရမ္အား သင့္ပစၥည္းတြင္ သိမ္းဆည္းထားေသာ သင့္အမည္ႏွင့္ လိပ္စာအခ်က္အလက္ကဲ့သို႔ ကိုယ္ေရးကိုယ္တာပ႐ိုဖုိင္အခ်က္အလက္အား ေျပာင္းရန္၊ ထည့္ရန္ ခြင့္ျပဳပါ။ ၎မွာ အျခားပ႐ိုဂရမ္မ်ားက သင့္ကို သက္ေသခံခြဲျခားျပီး သင့္ပ႐ိုဖိုင္အခ်က္အလက္အား အျခားသူမ်ားထံသို႔ ေပးပို႔ရန္ ဆိုလိုသည္။</string>
-  <string product="default" name="permlab_readSocialStream">သင့္လူမႈေရးကြန္ယက္ဝက္ဘ္ဆိုဒ္မ်ားကို ဖတ္ပါ</string>
-  <string product="default" name="permdesc_readSocialStream">ပ႐ိုဂရမ္အား သင္ႏွင့္ သင့္သူငယ္ခ်င္းမ်ားထံမွ လူမႈဆက္သြယ္ေရးအပ္ဒိတ္မ်ား ရယူရန္ႏွင့္ တစ္ျပိဳင္နက္ျဖစ္ေပၚျခင္းျပဳလုပ္ရန္ ခြင့္ျပဳပါ။ အႏၲရာယ္႐ွိေသာ ပ႐ိုဂရမ္မ်ားက လူမႈဆက္သြယ္ေရးကြန္ယက္တြင္ သင္ႏွင့္ သင့္သူငယ္ခ်င္းမ်ားအၾကား သီးသန္႔ဆက္သြယ္ခ်က္မ်ားကို ဖတ္႐ႈရန္ ၎အား အသံုးျပဳလိမ့္မည္။ </string>
-  <string product="default" name="permlab_writeSocialStream">သင့္လူမႈေရးကြန္ယက္သို႔ ေရးပါ</string>
-  <string product="default" name="permdesc_writeSocialStream">ပ႐ိုဂရမ္အား သင့္သူငယ္ခ်င္းမ်ားထံမွ လူမႈဆက္သြယ္ေရးအပ္ဒိတ္မ်ား ျပသရန္ ခြင့္ျပဳပါ။ အႏၲရာယ္႐ွိေသာ ပ႐ိုဂရမ္မ်ားက ယင္းကို အသံုးျပဳ၍ သင့္သူငယ္ခ်င္း ဟန္ေဆာင္ျပီး စကားဝွက္ႏွင့္ အျခားအတြင္းေရးသတင္းမ်ားကို ျပသေစရန္ သင့္ကို လွည့္စားလိမ့္မည္။ </string>
+  <string name="permdesc_writeProfile" product="default">ပ႐ိုဂရမ္အား သင့္ပစၥည္းတြင္ သိမ္းဆည္းထားေသာ သင့္အမည္ႏွင့္ လိပ္စာအခ်က္အလက္ကဲ့သို႔ ကိုယ္ေရးကိုယ္တာပ႐ိုဖုိင္အခ်က္အလက္အား ေျပာင္းရန္၊ ထည့္ရန္ ခြင့္ျပဳပါ။ ၎မွာ အျခားပ႐ိုဂရမ္မ်ားက သင့္ကို သက္ေသခံခြဲျခားျပီး သင့္ပ႐ိုဖိုင္အခ်က္အလက္အား အျခားသူမ်ားထံသို႔ ေပးပို႔ရန္ ဆိုလိုသည္။</string>
+  <string name="permlab_readSocialStream" product="default">သင့္လူမႈေရးကြန္ယက္ဝက္ဘ္ဆိုဒ္မ်ားကို ဖတ္ပါ</string>
+  <string name="permdesc_readSocialStream" product="default">ပ႐ိုဂရမ္အား သင္ႏွင့္ သင့္သူငယ္ခ်င္းမ်ားထံမွ လူမႈဆက္သြယ္ေရးအပ္ဒိတ္မ်ား ရယူရန္ႏွင့္ တစ္ျပိဳင္နက္ျဖစ္ေပၚျခင္းျပဳလုပ္ရန္ ခြင့္ျပဳပါ။ အႏၲရာယ္႐ွိေသာ ပ႐ိုဂရမ္မ်ားက လူမႈဆက္သြယ္ေရးကြန္ယက္တြင္ သင္ႏွင့္ သင့္သူငယ္ခ်င္းမ်ားအၾကား သီးသန္႔ဆက္သြယ္ခ်က္မ်ားကို ဖတ္႐ႈရန္ ၎အား အသံုးျပဳလိမ့္မည္။ </string>
+  <string name="permlab_writeSocialStream" product="default">သင့္လူမႈေရးကြန္ယက္သို႔ ေရးပါ</string>
+  <string name="permdesc_writeSocialStream" product="default">ပ႐ိုဂရမ္အား သင့္သူငယ္ခ်င္းမ်ားထံမွ လူမႈဆက္သြယ္ေရးအပ္ဒိတ္မ်ား ျပသရန္ ခြင့္ျပဳပါ။ အႏၲရာယ္႐ွိေသာ ပ႐ိုဂရမ္မ်ားက ယင္းကို အသံုးျပဳ၍ သင့္သူငယ္ခ်င္း ဟန္ေဆာင္ျပီး စကားဝွက္ႏွင့္ အျခားအတြင္းေရးသတင္းမ်ားကို ျပသေစရန္ သင့္ကို လွည့္စားလိမ့္မည္။ </string>
   <string name="permlab_readCalendar">ျပကၡဒိန္အေၾကာင္းအရာမ်ားႏွင့္ အတြင္းေရးအခ်က္အလက္မ်ားကို ဖတ္ပါ</string>
-  <string product="tablet" name="permdesc_readCalendar">ပ႐ိုဂရမ္အား သင့္တက္ဘလက္တြင္ သိမ္းဆည္းထားေသာ အားလံုးေသာျပကၡဒိန္အေၾကာင္းအရာမ်ားကို ဖတ္ရန္ ခြင့္ျပဳပါ။ ယင္းခြင့္ျပဳခ်က္မ်ားႏွင့္ အႏၲရာယ္႐ွိေသာ ပ႐ိုဂရမ္မ်ားက ျပကၡဒိန္မ်ားမွ ကိုယ္ေရးကိုယ္တာအခ်က္အလက္မ်ားကို အသံုးျပဳသူမသိဘဲ ထုတ္ယူႏိုင္သည္။ </string>
-  <string product="default" name="permdesc_readCalendar">ပ႐ိုဂရမ္အား သင့္ဖုန္းတြင္ သိမ္းဆည္းထားေသာ အားလံုးေသာျပကၡဒိန္အေၾကာင္းအရာမ်ားကို ဖတ္ရန္ ခြင့္ျပဳပါ။ ယင္းခြင့္ျပဳခ်က္မ်ားႏွင့္ အႏၲရာယ္႐ွိေသာ ပ႐ိုဂရမ္မ်ားက ျပကၡဒိန္မ်ားမွ ကိုယ္ေရးကိုယ္တာအခ်က္အလက္မ်ားကို အသံုးျပဳသူမသိဘဲ ထုတ္ယူႏိုင္သည္။ </string>
+  <string name="permdesc_readCalendar" product="tablet">ပ႐ိုဂရမ္အား သင့္တက္ဘလက္တြင္ သိမ္းဆည္းထားေသာ အားလံုးေသာျပကၡဒိန္အေၾကာင္းအရာမ်ားကို ဖတ္ရန္ ခြင့္ျပဳပါ။ ယင္းခြင့္ျပဳခ်က္မ်ားႏွင့္ အႏၲရာယ္႐ွိေသာ ပ႐ိုဂရမ္မ်ားက ျပကၡဒိန္မ်ားမွ ကိုယ္ေရးကိုယ္တာအခ်က္အလက္မ်ားကို အသံုးျပဳသူမသိဘဲ ထုတ္ယူႏိုင္သည္။ </string>
+  <string name="permdesc_readCalendar" product="default">ပ႐ိုဂရမ္အား သင့္ဖုန္းတြင္ သိမ္းဆည္းထားေသာ အားလံုးေသာျပကၡဒိန္အေၾကာင္းအရာမ်ားကို ဖတ္ရန္ ခြင့္ျပဳပါ။ ယင္းခြင့္ျပဳခ်က္မ်ားႏွင့္ အႏၲရာယ္႐ွိေသာ ပ႐ိုဂရမ္မ်ားက ျပကၡဒိန္မ်ားမွ ကိုယ္ေရးကိုယ္တာအခ်က္အလက္မ်ားကို အသံုးျပဳသူမသိဘဲ ထုတ္ယူႏိုင္သည္။ </string>
   <string name="permlab_writeCalendar">ပိုင္႐ွင္အား အသိမေပးဘဲ ျပကၡဒိန္အေၾကာင္းအရာမ်ားကို ထည့္ပါ သို႔မဟုတ္ အဆင့္ျမွင့္ပါ။ ဧည့္သည္မ်ားသို႔ အီးေမးလ္ေပးပို႔ပါ။</string>
   <string name="permlab_accessMockLocation">စမ္းသပ္ရန္ တည္ေနရာရင္းျမစ္မ်ားကို ပံုစံတူျပဳလုပ္ပါ</string>
   <string name="permdesc_accessMockLocation">စမ္းသပ္ရန္ တည္ေနရာအတုရင္းျမစ္မ်ားကို ဖန္တီးပါ။
@@ -534,8 +534,8 @@
   <string name="permdesc_installLocationProvider">စမ္းသပ္ရန္ တည္ေနရာအတုရင္းျမစ္မ်ားကို ဖန္တီးပါ။
         အႏၲရာယ္႐ွိေသာ ပ႐ိုဂရမ္မ်ားက GPS သို႔မဟုတ္ ကြန္ယက္အေထာက္အပံ့မ်ားကဲ့သို႔ တည္ေနရာရင္းျမစ္အစစ္မ်ားမွ ျပန္ေပးပို႔ေသာ တည္ေနရာႏွင့္/သို႔မဟုတ္ အေျခအေနမ်ားကို ပယ္ခ်ရန္ သို႔မဟုတ္ ျပင္ပရင္းျမစ္သုိ႔ သင့္တည္ေနရာအား ေစာင့္ၾကပ္ၾကည့္႐ႈရန္ႏွင့္ သတင္းေပးပို႔ရန္ ယင္းအား အသံုးျပဳႏိုင္သည္။ </string>
   <string name="permlab_accessFineLocation">(GPS) တည္ေနရာေကာင္း</string>
-  <string product="tablet" name="permdesc_accessFineLocation">ရ႐ွိႏိုင္ပါက တက္ဘလက္႐ွိ တည္ေနရာ႐ွာေဖြသည့္စနစ္ကဲ့သို႔ သင့္တင့္ေသာ တည္ေနရာရင္းျမစ္မ်ားသို႔ ဝင္ေရာက္ပါ။ အႏၲရာယ္႐ွိေသာ ပ႐ိုဂရမ္မ်ားက သင္တည္႐ွိရာေနရာကို သတ္မွတ္ရန္ ယင္းကို အသံုးျပဳျပီး ၎က အပိုဘက္ထရီအားကို သံုးစြဲမည္။</string>
-  <string product="default" name="permdesc_accessFineLocation">ရ႐ွိႏိုင္ပါက ဖုန္း႐ွိ တည္ေနရာ႐ွာေဖြသည့္စနစ္ကဲ့သို႔ သင့္တင့္ေသာ တည္ေနရာရင္းျမစ္မ်ားသို႔ ဝင္ေရာက္ပါ။ အႏၲရာယ္႐ွိေသာ ပ႐ိုဂရမ္မ်ားက သင္တည္႐ွိရာေနရာကို သတ္မွတ္ရန္ ယင္းကို အသံုးျပဳျပီး ၎က အပိုဘက္ထရီအားကို သံုးစြဲမည္။</string>
+  <string name="permdesc_accessFineLocation" product="tablet">ရ႐ွိႏိုင္ပါက တက္ဘလက္႐ွိ တည္ေနရာ႐ွာေဖြသည့္စနစ္ကဲ့သို႔ သင့္တင့္ေသာ တည္ေနရာရင္းျမစ္မ်ားသို႔ ဝင္ေရာက္ပါ။ အႏၲရာယ္႐ွိေသာ ပ႐ိုဂရမ္မ်ားက သင္တည္႐ွိရာေနရာကို သတ္မွတ္ရန္ ယင္းကို အသံုးျပဳျပီး ၎က အပိုဘက္ထရီအားကို သံုးစြဲမည္။</string>
+  <string name="permdesc_accessFineLocation" product="default">ရ႐ွိႏိုင္ပါက ဖုန္း႐ွိ တည္ေနရာ႐ွာေဖြသည့္စနစ္ကဲ့သို႔ သင့္တင့္ေသာ တည္ေနရာရင္းျမစ္မ်ားသို႔ ဝင္ေရာက္ပါ။ အႏၲရာယ္႐ွိေသာ ပ႐ိုဂရမ္မ်ားက သင္တည္႐ွိရာေနရာကို သတ္မွတ္ရန္ ယင္းကို အသံုးျပဳျပီး ၎က အပိုဘက္ထရီအားကို သံုးစြဲမည္။</string>
   <string name="permlab_accessCoarseLocation">ေလၾကမ္းေသာ(ကြန္ယက္အေျခခံ)ေနရာ</string>
   <string name="permlab_accessSurfaceFlinger">SurfaceFlinger သို႔ ဝင္ေရာက္ပါ</string>
   <string name="permdesc_accessSurfaceFlinger">ပ႐ိုဂရမ္အား SurfaceFlinger အဆင့္နိမ့္အဆင္အျပင္မ်ားကို အသံုးျပဳရန္ ခြင့္ျပဳပါ။ </string>
@@ -547,14 +547,14 @@
   <string name="permdesc_recordAudio">ပ႐ိုဂရမ္အား အသံဖမ္းယူျခင္းလမ္းေၾကာင္းသို႔ ဝင္ေရာက္ရန္ ခြင့္ျပဳပါ။</string>
   <string name="permlab_camera">ဓာတ္ပံုႏွင့္ဗီဒီယို႐ုိက္ပါ</string>
   <string name="permdesc_camera">ပ႐ိုဂရမ္အား ကင္မရာႏွင့္ ႐ုပ္ပံုမ်ားႏွင့္ ဗီဒီယိုမ်ား႐ုိက္ရန္ ခြင့္ျပဳမည္။ ယင္းက ပ႐ိုဂရမ္အား ကင္မရာမွ မည္သည့္႐ုပ္ပံုမဆို အခ်ိန္မေ႐ြးစုစည္းရန္ ခြင့္ျပဳမည္</string>
-  <string product="tablet" name="permlab_brick">တက္ဘလက္အား အျပီးျဖဳတ္ပါ</string>
-  <string product="default" name="permlab_brick">ဖုန္းအား အျပီးျဖဳတ္ပါ</string>
-  <string product="tablet" name="permdesc_brick">ပ႐ိုဂရမ္အား တက္ဘလက္တစ္ခုလံုးအား အျပီးပိတ္ရန္ ခြင့္ျပဳပါ။ ယင္းမွာ အလြန္အႏၲရာယ္မ်ားသည္။</string>
-  <string product="default" name="permdesc_brick">ပ႐ိုဂရမ္အား ဖုန္းတစ္ခုလံုးအား အျပီးပိတ္ရန္ ခြင့္ျပဳပါ။ ယင္းမွာ အလြန္အႏၲရာယ္မ်ားသည္။</string>
-  <string product="tablet" name="permlab_reboot">တက္ဘလက္အား အတင္းအက်ပ္ျပန္စေစပါ</string>
-  <string product="default" name="permlab_reboot">ဖုန္းအား အတင္းအက်ပ္ျပန္စေစပါ</string>
-  <string product="tablet" name="permdesc_reboot">ပ႐ိုဂရမ္အား တက္ဘလက္အား အတင္းျပန္စတင္ရန္ ခြင့္ျပဳပါ။</string>
-  <string product="default" name="permdesc_reboot">ပ႐ိုဂရမ္အား ဖုန္းအား အတင္းျပန္စတင္ရန္ ခြင့္ျပဳပါ။</string>
+  <string name="permlab_brick" product="tablet">တက္ဘလက္အား အျပီးျဖဳတ္ပါ</string>
+  <string name="permlab_brick" product="default">ဖုန္းအား အျပီးျဖဳတ္ပါ</string>
+  <string name="permdesc_brick" product="tablet">ပ႐ိုဂရမ္အား တက္ဘလက္တစ္ခုလံုးအား အျပီးပိတ္ရန္ ခြင့္ျပဳပါ။ ယင္းမွာ အလြန္အႏၲရာယ္မ်ားသည္။</string>
+  <string name="permdesc_brick" product="default">ပ႐ိုဂရမ္အား ဖုန္းတစ္ခုလံုးအား အျပီးပိတ္ရန္ ခြင့္ျပဳပါ။ ယင္းမွာ အလြန္အႏၲရာယ္မ်ားသည္။</string>
+  <string name="permlab_reboot" product="tablet">တက္ဘလက္အား အတင္းအက်ပ္ျပန္စေစပါ</string>
+  <string name="permlab_reboot" product="default">ဖုန္းအား အတင္းအက်ပ္ျပန္စေစပါ</string>
+  <string name="permdesc_reboot" product="tablet">ပ႐ိုဂရမ္အား တက္ဘလက္အား အတင္းျပန္စတင္ရန္ ခြင့္ျပဳပါ။</string>
+  <string name="permdesc_reboot" product="default">ပ႐ိုဂရမ္အား ဖုန္းအား အတင္းျပန္စတင္ရန္ ခြင့္ျပဳပါ။</string>
   <string name="permdesc_mount_unmount_filesystems">ပ႐ိုဂရမ္အား ဖယ္႐ွားႏိုင္ေသာ သိမ္းဆည္းမႈအတြက္ ဖိုင္စနစ္မ်ား ကြန္ပ်ဴတာသို႔ တင္ရန္၊ ျဖဳတ္ရန္ ခြင့္ျပဳပါ။</string>
   <string name="permdesc_mount_format_filesystems">ပ႐ိုဂရမ္အား ဖယ္႐ွားႏိုင္ေသာ သိမ္းဆည္းမႈအား ေဖာမက္ခ်ရန္ ခြင့္ျပဳပါ။</string>
   <string name="permlab_asec_access">အတြင္းပိုင္းသိမ္းဆည္းမႈတြင္ သတင္းအခ်က္အလက္ရယူပါ</string>
@@ -581,8 +581,8 @@
   <string name="permdesc_callPhone">ပ႐ိုဂရမ္အား သင္ၾကားဝင္ရန္မလိုဘဲ ဖုန္းနံပါတ္မ်ားကို ေခၚဆိုခြင့္ျပဳပါ။ အႏၲရာယ္႐ွိေသာ ပ႐ုိဂရမ္မ်ားက သင့္ဖုန္းဘီလ္တြင္ မထင္မွတ္ထားေသာ ဖုန္းေခၚဆိုမႈမ်ားကို ျဖစ္ေစလိမ့္မည္။ ယင္းက ပ႐ိုဂရမ္အား အေရးေပၚနံပါတ္မ်ားကို ေခၚဆုိရန္ ခြင့္ျပဳမည္မဟုတ္ေၾကာင္း သတိျပဳပါ။</string>
   <string name="permlab_callPrivileged">မည္သည့္ဖုန္းနံပါတ္မဆို တိုက္႐ိုက္ေခၚဆိုပါ</string>
   <string name="permdesc_callPrivileged">ပ႐ိုဂရမ္အား အေရးေပၚနံပါတ္မ်ားအပါအဝင္ မည္သည့္ဖုန္းနံပါတ္မဆို သင္ၾကားဝင္ရန္မလိုဘဲ ေခၚဆိုခြင့္ျပဳပါ။ အႏၲရာယ္႐ွိေသာ ပ႐ိုဂရမ္မ်ားက အေရးေပၚဝန္ေဆာင္မႈမ်ားသို႔ မလိုအပ္ေသာ၊ တရားမဝင္ေသာ ဖုန္းေခၚဆိုမႈမ်ား ျပဳလုပ္လိမ့္မည္။</string>
-  <string product="tablet" name="permlab_performCdmaProvisioning">CDMA တက္ဘလက္အဆင္အျပင္အား တိုက္႐ိုက္စတင္ပါ</string>
-  <string product="default" name="permlab_performCdmaProvisioning">CDMA ဖုန္းအဆင္အျပင္အား တိုက္႐ိုက္စတင္ပါ</string>
+  <string name="permlab_performCdmaProvisioning" product="tablet">CDMA တက္ဘလက္အဆင္အျပင္အား တိုက္႐ိုက္စတင္ပါ</string>
+  <string name="permlab_performCdmaProvisioning" product="default">CDMA ဖုန္းအဆင္အျပင္အား တိုက္႐ိုက္စတင္ပါ</string>
   <string name="permdesc_performCdmaProvisioning">ပ႐ုိဂရမ္အား CDMA အေထာက္အပံ့စတင္ရန္ ခြင့္ျပဳပါ။ အႏၲရာယ္႐ွိေသာ ပ႐ိုဂရမ္မ်ားက မလိုအပ္ဘဲႏွင့္ CDMA အေထာက္အပံ့အား စတင္မည္ျဖစ္သည္။</string>
   <string name="permlab_locationUpdates">တည္ေနရာအပ္ဒိတ္အခ်က္ေပးခ်က္မ်ားကို ထိန္းခ်ဳပ္ပါ</string>
   <string name="permdesc_locationUpdates">ေရဒီယိုမွ တည္ေနရာအပ္ဒိတ္အခ်က္ေပးခ်က္မ်ားကို ဖြင့္ျခင္း/ပိတ္ျခင္းအား ခြင့္ျပဳပါ။ ပံုမွန္ပ႐ိုဂရမ္မ်ားက အသံုးျပဳရန္ မဟုတ္ပါ။</string>
@@ -594,17 +594,17 @@
   <string name="permdesc_modifyPhoneState">ပ႐ိုဂရမ္အား ပစၥည္း၏ ဖုန္းအဆင္အျပင္မ်ားကို ထိန္းခ်ဳပ္ရန္ ခြင့္ျပဳပါ။ ဤခြင့္ျပဳခ်က္ႏွင့္ ပ႐ိုဂရမ္သည္ ကြန္ယက္မ်ားကို ေျပာင္းႏိုင္ျပီး သင့္အား သတိမေပးဘဲ ဖုန္းေရဒီယိုအား ဖြင့္ျခင္း၊ ပိတ္ျခင္း စသျဖင့္ ျပဳလုပ္ႏိုင္သည္။ </string>
   <string name="permlab_readPhoneState">ဖုန္းအေျခအေနႏွင့္အိုင္ဒီကို ဖတ္ပါ</string>
   <string name="permdesc_readPhoneState">ပ႐ိုဂရမ္အား ပစၥည္း၏ ဖုန္းအဆင္အျပင္မ်ားကို ရယူရန္ ခြင့္ျပဳပါ။ ဤခြင့္ျပဳခ်က္ႏွင့္ ပ႐ိုဂရမ္သည္ ဖုန္းေျပာေနစဥ္ ဤဖုန္း၏ ဖုန္းနံပါတ္ႏွင့္ နံပါတ္စဥ္၊ ေခၚဆိုထားေသာ နံပါတ္ စသျဖင့္ သတ္မွတ္ႏိုင္သည္။ </string>
-  <string product="tablet" name="permlab_wakeLock">တက္ဘလက္အား အိပ္သြားျခင္းမွ ကာကြယ္ပါ</string>
-  <string product="default" name="permlab_wakeLock">ဖုန္းအား အိပ္သြားျခင္းမွ ကာကြယ္ပါ</string>
-  <string product="tablet" name="permdesc_wakeLock">ပ႐ိုဂရမ္အား တက္ဘလက္ကို အိပ္သြားျခင္းမွ ကာကြယ္ရန္ ခြင့္ျပဳပါ။</string>
-  <string product="default" name="permdesc_wakeLock">ပ႐ိုဂရမ္အား ဖုန္းကို အိပ္သြားျခင္းမွ ကာကြယ္ရန္ ခြင့္ျပဳပါ။</string>
-  <string product="tablet" name="permlab_devicePower">တက္ဘလက္ပါဝါ ဖြင့္ျခင္း သို႔မဟုတ္ ပိတ္ျခင္း</string>
-  <string product="default" name="permlab_devicePower">ဖုန္းပါဝါ ဖြင့္ျခင္း သို႔မဟုတ္ ပိတ္ျခင္း</string>
-  <string product="tablet" name="permdesc_devicePower">ပ႐ိုဂရမ္အား တက္ဘလက္ကို ဖြင့္ရန္ သို႔မဟုတ္ ပိတ္ရန္ ခြင့္ျပဳပါ။</string>
-  <string product="default" name="permdesc_devicePower">ပ႐ိုဂရမ္အား ဖုန္းကို ဖြင့္ရန္ သို႔မဟုတ္ ပိတ္ရန္ ခြင့္ျပဳပါ။</string>
+  <string name="permlab_wakeLock" product="tablet">တက္ဘလက္အား အိပ္သြားျခင္းမွ ကာကြယ္ပါ</string>
+  <string name="permlab_wakeLock" product="default">ဖုန္းအား အိပ္သြားျခင္းမွ ကာကြယ္ပါ</string>
+  <string name="permdesc_wakeLock" product="tablet">ပ႐ိုဂရမ္အား တက္ဘလက္ကို အိပ္သြားျခင္းမွ ကာကြယ္ရန္ ခြင့္ျပဳပါ။</string>
+  <string name="permdesc_wakeLock" product="default">ပ႐ိုဂရမ္အား ဖုန္းကို အိပ္သြားျခင္းမွ ကာကြယ္ရန္ ခြင့္ျပဳပါ။</string>
+  <string name="permlab_devicePower" product="tablet">တက္ဘလက္ပါဝါ ဖြင့္ျခင္း သို႔မဟုတ္ ပိတ္ျခင္း</string>
+  <string name="permlab_devicePower" product="default">ဖုန္းပါဝါ ဖြင့္ျခင္း သို႔မဟုတ္ ပိတ္ျခင္း</string>
+  <string name="permdesc_devicePower" product="tablet">ပ႐ိုဂရမ္အား တက္ဘလက္ကို ဖြင့္ရန္ သို႔မဟုတ္ ပိတ္ရန္ ခြင့္ျပဳပါ။</string>
+  <string name="permdesc_devicePower" product="default">ပ႐ိုဂရမ္အား ဖုန္းကို ဖြင့္ရန္ သို႔မဟုတ္ ပိတ္ရန္ ခြင့္ျပဳပါ။</string>
   <string name="permlab_factoryTest">မူလဝယ္ယူစဥ္အစမ္းပံုစံျဖင့္ ဖြင့္ပါ</string>
-  <string product="tablet" name="permdesc_factoryTest">တက္ဘလက္ဟာ့ဒ္ဝဲလ္သို႔ ဝင္ေရာက္ခြင့္အျပည့္အဝခြင့္ျပဳသည့္ အဆင့္နိမ့္ထုတ္လုပ္စဥ္အစမ္းပံုစံအား ဖြင့္ပါ။ တက္ဘလက္အား ထုတ္လုပ္စဥ္အစမ္းပံုစံျဖင့္ ဖြင့္ထားမွသာ ရႏိုင္သည္။</string>
-  <string product="default" name="permdesc_factoryTest">ဖုန္းဟာ့ဒ္ဝဲလ္သို႔ ဝင္ေရာက္ခြင့္အျပည့္အဝခြင့္ျပဳသည့္ အဆင့္နိမ့္ထုတ္လုပ္စဥ္အစမ္းပံုစံအား ဖြင့္ပါ။ ဖုန္းအား ထုတ္လုပ္စဥ္အစမ္းပံုစံျဖင့္ ဖြင့္ထားမွသာ ရႏိုင္သည္။</string>
+  <string name="permdesc_factoryTest" product="tablet">တက္ဘလက္ဟာ့ဒ္ဝဲလ္သို႔ ဝင္ေရာက္ခြင့္အျပည့္အဝခြင့္ျပဳသည့္ အဆင့္နိမ့္ထုတ္လုပ္စဥ္အစမ္းပံုစံအား ဖြင့္ပါ။ တက္ဘလက္အား ထုတ္လုပ္စဥ္အစမ္းပံုစံျဖင့္ ဖြင့္ထားမွသာ ရႏိုင္သည္။</string>
+  <string name="permdesc_factoryTest" product="default">ဖုန္းဟာ့ဒ္ဝဲလ္သို႔ ဝင္ေရာက္ခြင့္အျပည့္အဝခြင့္ျပဳသည့္ အဆင့္နိမ့္ထုတ္လုပ္စဥ္အစမ္းပံုစံအား ဖြင့္ပါ။ ဖုန္းအား ထုတ္လုပ္စဥ္အစမ္းပံုစံျဖင့္ ဖြင့္ထားမွသာ ရႏိုင္သည္။</string>
   <string name="permlab_setWallpaper">ေနာက္ခံပံုရိပ္ထား႐ွိပါ</string>
   <string name="permdesc_setWallpaper">ပ႐ိုဂရမ္အား စနစ္ေဝါလ္ေပပါထား႐ွိရန္ ခြင့္ျပဳပါ။</string>
   <string name="permlab_setWallpaperHints">ေဝါလ္ေပပါအ႐ြယ္အစားအရိပ္အျမြက္ထား႐ွိပါ</string>
@@ -612,16 +612,16 @@
   <string name="permlab_masterClear">စနစ္အား မူလဝယ္ယူစဥ္ပံုစံသို႔ ျပန္ထား႐ွိပါ</string>
   <string name="permdesc_masterClear">ပ႐ိုဂရမ္အား စနစ္ကို အခ်က္အလက္မ်ား၊ အစီအစဥ္မ်ားႏွင့္ သြင္းထားေသာ ပ႐ိုဂရမ္မ်ားအားလံုးကို ဖ်က္ျခင္းျဖင့္ ယင္း၏မူလဝယ္ယူစဥ္ပံုစံအဆင္အျပင္မ်ားသို႔ အားလံုးျပန္လည္ထား႐ွိရန္ ခြင့္ျပဳပါ။ </string>
   <string name="permlab_setTime">Set အချိန်</string>
-  <string product="tablet" name="permdesc_setTime">ပ႐ိုဂရမ္အား တက္ဘလက္၏ နာရီအခ်ိန္ကို ေျပာင္းရန္ ခြင့္ျပဳပါ။</string>
-  <string product="default" name="permdesc_setTime">ပ႐ိုဂရမ္အား ဖုန္း၏ နာရီအခ်ိန္ေျပာင္းရန္ ခြင့္ျပဳပါ။</string>
+  <string name="permdesc_setTime" product="tablet">ပ႐ိုဂရမ္အား တက္ဘလက္၏ နာရီအခ်ိန္ကို ေျပာင္းရန္ ခြင့္ျပဳပါ။</string>
+  <string name="permdesc_setTime" product="default">ပ႐ိုဂရမ္အား ဖုန္း၏ နာရီအခ်ိန္ေျပာင္းရန္ ခြင့္ျပဳပါ။</string>
   <string name="permlab_setTimeZone">ေဒသစံေတာ္ခ်ိန္ထား႐ွိပါ</string>
-  <string product="tablet" name="permdesc_setTimeZone">ပ႐ိုဂရမ္အား တက္ဘလက္၏ ေဒသစံေတာ္ခ်ိန္ကို ေျပာင္းရန္ ခြင့္ျပဳပါ။</string>
-  <string product="default" name="permdesc_setTimeZone">ပ႐ိုဂရမ္အား ဖုန္း၏ ေဒသစံေတာ္ခ်ိန္ေျပာင္းရန္ ခြင့္ျပဳပါ။</string>
+  <string name="permdesc_setTimeZone" product="tablet">ပ႐ိုဂရမ္အား တက္ဘလက္၏ ေဒသစံေတာ္ခ်ိန္ကို ေျပာင္းရန္ ခြင့္ျပဳပါ။</string>
+  <string name="permdesc_setTimeZone" product="default">ပ႐ိုဂရမ္အား ဖုန္း၏ ေဒသစံေတာ္ခ်ိန္ေျပာင္းရန္ ခြင့္ျပဳပါ။</string>
   <string name="permlab_accountManagerService">အေကာင့္မန္ေနဂ်ာဝန္ေဆာင္မႈအျဖစ္ လုပ္ေဆာင္ပါ</string>
   <string name="permdesc_accountManagerService">ပ႐ိုဂရမ္အား အေကာင့္တရားဝင္စစ္မွန္ေၾကာင္းစစ္ေဆးစက္မ်ားသို႔ ဖုန္းေခၚဆိုမႈမ်ား ျပဳလုပ္ရန္ ခြင့္ျပဳပါ။</string>
   <string name="permlab_getAccounts">သိသည့္ အေကာင့္မ်ားကို ႐ွာပါ</string>
-  <string product="tablet" name="permdesc_getAccounts">ပ႐ိုဂရမ္အား တက္ဘလက္က သိသည့္ အေကာင့္မ်ားစာရင္းကို ရယူရန္ ခြင့္ျပဳပါ။</string>
-  <string product="default" name="permdesc_getAccounts">ပ႐ိုဂရမ္အား ဖုန္းက သိသည့္ အေကာင့္မ်ားစာရင္းကို ရယူရန္ ခြင့္ျပဳပါ။</string>
+  <string name="permdesc_getAccounts" product="tablet">ပ႐ိုဂရမ္အား တက္ဘလက္က သိသည့္ အေကာင့္မ်ားစာရင္းကို ရယူရန္ ခြင့္ျပဳပါ။</string>
+  <string name="permdesc_getAccounts" product="default">ပ႐ိုဂရမ္အား ဖုန္းက သိသည့္ အေကာင့္မ်ားစာရင္းကို ရယူရန္ ခြင့္ျပဳပါ။</string>
   <string name="permlab_authenticateAccounts">အေကာင့္စစ္မွန္ေၾကာင္းစစ္ေဆးခ်က္အျဖစ္ လုပ္ေဆာင္ပါ</string>
   <string name="permdesc_authenticateAccounts">ပ႐ိုဂရမ္အား အေကာင့္မန္ေနဂ်ာ၏ အေကာင့္မ်ားဖန္တီးျခင္းႏွင့္ ယင္းတို႔၏ စကားဝွက္မ်ားရယူျခင္းႏွင့္ အဆင္အျပင္ထား႐ွိျခင္းမ်ား အပါအဝင္ အေကာင့္တရားဝင္စစ္မွန္ေၾကာင္းစစ္ေဆးစက္စြမ္းေဆာင္ရည္မ်ားကို အသံုးျပဳခြင့္ျပဳပါ။ </string>
   <string name="permlab_manageAccounts">အေကာင့္စာရင္းကို စီစဥ္ပါ</string>
@@ -649,11 +649,11 @@
   <string name="permdesc_accessWimaxState">ပ႐ိုဂရမ္အား WiMAX အေျခအေနႏွင့္ပတ္သက္သည့္ အခ်က္အလက္မ်ားၾကည့္႐ႈရန္ ခြင့္ျပဳမည္</string>
   <string name="permlab_changeWimaxState">WiMAX အေျခအေနေျပာင္းပါ</string>
   <string name="permlab_bluetoothAdmin">ဘလူးတုစီစဥ္ၾကီးၾကပ္ျခင္း</string>
-  <string product="tablet" name="permdesc_bluetoothAdmin">ပ႐ိုဂရမ္အား အနီးအနား႐ွိ ဘလူးတုတက္ဘလက္ကို စီစဥ္မႈျပဳလုပ္ရန္ႏွင့္ အေဝး႐ွိ ပစၥည္းမ်ားႏွင့္ တြဲရန္ ခြင့္ျပဳပါ။ </string>
-  <string product="default" name="permdesc_bluetoothAdmin">ပ႐ိုဂရမ္အား အနီးအနား႐ွိ ဘလူးတုဖုန္းကို စီစဥ္မႈျပဳလုပ္ရန္ႏွင့္ အေဝး႐ွိ ပစၥည္းမ်ားႏွင့္ တြဲရန္ ခြင့္ျပဳပါ။ </string>
+  <string name="permdesc_bluetoothAdmin" product="tablet">ပ႐ိုဂရမ္အား အနီးအနား႐ွိ ဘလူးတုတက္ဘလက္ကို စီစဥ္မႈျပဳလုပ္ရန္ႏွင့္ အေဝး႐ွိ ပစၥည္းမ်ားႏွင့္ တြဲရန္ ခြင့္ျပဳပါ။ </string>
+  <string name="permdesc_bluetoothAdmin" product="default">ပ႐ိုဂရမ္အား အနီးအနား႐ွိ ဘလူးတုဖုန္းကို စီစဥ္မႈျပဳလုပ္ရန္ႏွင့္ အေဝး႐ွိ ပစၥည္းမ်ားႏွင့္ တြဲရန္ ခြင့္ျပဳပါ။ </string>
   <string name="permlab_bluetooth">ဘလူးတုခ်ိတ္ဆက္မႈမ်ားကို ဖန္တီးပါ</string>
-  <string product="tablet" name="permdesc_bluetooth">ပ႐ိုဂရမ္အား အနီးအနား႐ွိ ဘလူးတုတက္ဘလက္စီစဥ္မႈအား ၾကည့္႐ႈရန္၊ တြဲဖက္ထားေသာ ခ်ိတ္ဆက္မႈမ်ား ျပဳလုပ္ရန္ႏွင့္ လက္ခံရန္ ခြင့္ျပဳပါ။</string>
-  <string product="default" name="permdesc_bluetooth">ပ႐ိုဂရမ္အား အနီးအနား႐ွိ ဘလူးတုဖုန္းစီစဥ္မႈအား ၾကည့္႐ႈရန္၊ တြဲဖက္ထားေသာ ခ်ိတ္ဆက္မႈမ်ား ျပဳလုပ္ရန္ႏွင့္ လက္ခံရန္ ခြင့္ျပဳပါ။</string>
+  <string name="permdesc_bluetooth" product="tablet">ပ႐ိုဂရမ္အား အနီးအနား႐ွိ ဘလူးတုတက္ဘလက္စီစဥ္မႈအား ၾကည့္႐ႈရန္၊ တြဲဖက္ထားေသာ ခ်ိတ္ဆက္မႈမ်ား ျပဳလုပ္ရန္ႏွင့္ လက္ခံရန္ ခြင့္ျပဳပါ။</string>
+  <string name="permdesc_bluetooth" product="default">ပ႐ိုဂရမ္အား အနီးအနား႐ွိ ဘလူးတုဖုန္းစီစဥ္မႈအား ၾကည့္႐ႈရန္၊ တြဲဖက္ထားေသာ ခ်ိတ္ဆက္မႈမ်ား ျပဳလုပ္ရန္ႏွင့္ လက္ခံရန္ ခြင့္ျပဳပါ။</string>
   <string name="permlab_nfc">အကြာအေဝးတုိၾကိမ္ႏႈန္းျမင့္ ၾကိဳးမဲ့ဆက္သြယ္ေရးစနစ္</string>
   <string name="permdesc_nfc">ပ႐ိုဂရမ္အား အကြာအေဝးတုိၾကိမ္ႏႈန္းျမင့္ၾကိဳးမဲ့ခ်ိတ္ဆက္မႈစနစ္(NFC) အမွတ္အသားမ်ား၊ ကဒ္မ်ား၊ ဖတ္သည့္စက္မ်ားႏွင့္ ဆက္သြယ္ရန္ ခြင့္ျပဳမည္</string>
   <string name="permlab_disableKeyguard">ေသာ့ခတ္ျခင္းကို ျဖဳတ္ပါ</string>
@@ -672,12 +672,12 @@
   <string name="permdesc_readDictionary">ပ႐ိုဂရမ္အား အသံုးျပဳသူက အသံုးျပဳသူအဘိဓာန္တြင္ သိမ္းဆည္းထားေသာ ကိုယ္ေရးကိုယ္တာစကားလံုးမ်ား၊ အမည္မ်ားႏွင့္ စာပိုဒ္မ်ားကို ဖတ္ရန္ ခြင့္ျပဳပါ။ </string>
   <string name="permlab_writeDictionary">သံုးစြဲသူ၏ ကိုယ္ပိုင္အဘိဓာန္သို႔ ေရးပါ</string>
   <string name="permdesc_writeDictionary">ပ႐ိုဂရမ္အား အသံုးျပဳသူအဘိဓာန္သို႔ စကားလံုးအသစ္မ်ား ေရးသားရန္ ခြင့္ျပဳပါ။</string>
-  <string product="nosdcard" name="permlab_sdcardWrite">USB သိမ္းဆည္းမႈအေၾကာင္းအရာမ်ားကို အဆင့္ျမွင့္မည္/ဖ်က္မည္</string>
-  <string product="default" name="permlab_sdcardWrite">SD ကဒ္အေၾကာင္းအရာမ်ားကို အသစ္ျပဳျပင္ပါ/ဖ်က္ပါ</string>
-  <string product="nosdcard" name="permdesc_sdcardWrite">ပ႐ိုဂရမ္အား USB သိမ္းဆည္းမႈပစၥည္းသို႔ ေရးရန္ ခြင့္ျပဳမည္</string>
-  <string product="default" name="permdesc_sdcardWrite">ပ႐ိုဂရမ္အား SD ကဒ္သို႔ ေရးသားရန္ ခြင့္ျပဳပါ။</string>
-  <string product="default" name="permlab_mediaStorageWrite">အတြင္းပိုင္းမီဒီယာသိမ္းဆည္းမႈအေၾကာင္းအရာမ်ားကို အသစ္ျပဳျပင္ပါ/ဖ်က္ပါ</string>
-  <string product="default" name="permdesc_mediaStorageWrite">ပ႐ိုဂရမ္အား အတြင္းပိုင္းမီဒီယာသိမ္းဆည္းမႈပါ အေၾကာင္းအရာမ်းကို အဆင့္ျမွင့္ရန္ ခြင့္ျပဳပါ။</string>
+  <string name="permlab_sdcardWrite" product="nosdcard">USB သိမ္းဆည္းမႈအေၾကာင္းအရာမ်ားကို အဆင့္ျမွင့္မည္/ဖ်က္မည္</string>
+  <string name="permlab_sdcardWrite" product="default">SD ကဒ္အေၾကာင္းအရာမ်ားကို အသစ္ျပဳျပင္ပါ/ဖ်က္ပါ</string>
+  <string name="permdesc_sdcardWrite" product="nosdcard">ပ႐ိုဂရမ္အား USB သိမ္းဆည္းမႈပစၥည္းသို႔ ေရးရန္ ခြင့္ျပဳမည္</string>
+  <string name="permdesc_sdcardWrite" product="default">ပ႐ိုဂရမ္အား SD ကဒ္သို႔ ေရးသားရန္ ခြင့္ျပဳပါ။</string>
+  <string name="permlab_mediaStorageWrite" product="default">အတြင္းပိုင္းမီဒီယာသိမ္းဆည္းမႈအေၾကာင္းအရာမ်ားကို အသစ္ျပဳျပင္ပါ/ဖ်က္ပါ</string>
+  <string name="permdesc_mediaStorageWrite" product="default">ပ႐ိုဂရမ္အား အတြင္းပိုင္းမီဒီယာသိမ္းဆည္းမႈပါ အေၾကာင္းအရာမ်းကို အဆင့္ျမွင့္ရန္ ခြင့္ျပဳပါ။</string>
   <string name="permlab_cache_filesystem">ကက္႐ွ္သိမ္းဆည္းမႈဖိုင္စနစ္သို႔ ဝင္ေရာက္ပါ</string>
   <string name="permdesc_cache_filesystem">ပ႐ိုဂရမ္အား ကက္႐ွ္သိမ္းဆည္းမႈဖိုင္စနစ္ကို ဖတ္ရန္ႏွင့္ ေရးရန္ ခြင့္ျပဳပါ။</string>
   <string name="permlab_use_sip">အင္တာနက္ဖုန္းေခၚဆိုမႈမ်ား ျပဳလုပ္မည္/လက္ခံမည္</string>
@@ -691,15 +691,15 @@
   <string name="policylab_limitPassword">စကားဝွက္စည္းကမ္းခ်က္မ်ားထား႐ွိပါ</string>
   <string name="policydesc_limitPassword">စကရင္ေသာ့ခတ္သည့္ စကားဝွက္မ်ားတြင္ ခြင့္ျပဳသည့္ အ႐ွည္ႏွင့္ စကားလံုးမ်ားကို ထိန္းခ်ဳပ္ပါ</string>
   <string name="policylab_watchLogin">စကရင္ေသာ့ဖြင့္ျခင္း ၾကိဳးစားၾကိမ္ေပါင္းကို ေစာင့္ၾကပ္ၾကည့္႐ႈပါ</string>
-  <string product="tablet" name="policydesc_watchLogin">စကရင္ေသာ့ဖြင့္စဥ္ စကားဝွက္မ်ား မွားသြင္းမိသည့္ အေရအတြက္ကို ေစာင့္ၾကပ္ၾကည့္႐ႈျပီး တက္ဘလက္ကို ေသာ့ခတ္ပါ သို႔မဟုတ္ စကားဝွက္အမွားမ်ား ၾကိမ္ဖန္မ်ားစြာ ထည့္သြင္းပါက တက္ဘလက္ေဒတာမ်ားအားလံုးကို ဖ်က္ပစ္ပါ။ </string>
-  <string product="default" name="policydesc_watchLogin">စကရင္ေသာ့ဖြင့္စဥ္ စကားဝွက္မ်ား မွားသြင္းမိသည့္ အေရအတြက္ကို ေစာင့္ၾကပ္ၾကည့္႐ႈျပီး ဖုန္းကို ေသာ့ခတ္ပါ သို႔မဟုတ္ စကားဝွက္အမွားမ်ား ၾကိမ္ဖန္မ်ားစြာ ထည့္သြင္းပါက ဖုန္းေဒတာမ်ားအားလံုးကို ဖ်က္ပစ္ပါ။ </string>
+  <string name="policydesc_watchLogin" product="tablet">စကရင္ေသာ့ဖြင့္စဥ္ စကားဝွက္မ်ား မွားသြင္းမိသည့္ အေရအတြက္ကို ေစာင့္ၾကပ္ၾကည့္႐ႈျပီး တက္ဘလက္ကို ေသာ့ခတ္ပါ သို႔မဟုတ္ စကားဝွက္အမွားမ်ား ၾကိမ္ဖန္မ်ားစြာ ထည့္သြင္းပါက တက္ဘလက္ေဒတာမ်ားအားလံုးကို ဖ်က္ပစ္ပါ။ </string>
+  <string name="policydesc_watchLogin" product="default">စကရင္ေသာ့ဖြင့္စဥ္ စကားဝွက္မ်ား မွားသြင္းမိသည့္ အေရအတြက္ကို ေစာင့္ၾကပ္ၾကည့္႐ႈျပီး ဖုန္းကို ေသာ့ခတ္ပါ သို႔မဟုတ္ စကားဝွက္အမွားမ်ား ၾကိမ္ဖန္မ်ားစြာ ထည့္သြင္းပါက ဖုန္းေဒတာမ်ားအားလံုးကို ဖ်က္ပစ္ပါ။ </string>
   <string name="policylab_resetPassword">စကရင္ေသာ့ဖြင့္သည့္ စကားဝွက္ကို ေျပာင္းပါ</string>
   <string name="policydesc_resetPassword">စကရင္ေသာ့ဖြင့္သည့္ စကားဝွက္ကို ေျပာင္းပါ</string>
   <string name="policylab_forceLock">စကရင္ေသာ့ခတ္ပါ</string>
   <string name="policydesc_forceLock">စကရင္ေသာ့ခတ္ပံုႏွင့္ ေသာ့ခတ္ခ်ိန္ကို ထိန္းခ်ဳပ္ပါ</string>
   <string name="policylab_wipeData">ေဒတာအားလံုးကို ဖ်က္ပါ</string>
-  <string product="tablet" name="policydesc_wipeData">မူလဝယ္ယူစဥ္ပံုစံေဒတာအတိုင္း ျပန္လည္ထား႐ွိျခင္းျဖင့္ သတိမေပးဘဲ တက္ဘလက္ေဒတာကို ဖ်က္ပါ</string>
-  <string product="default" name="policydesc_wipeData">မူလဝယ္ယူစဥ္ပံုစံေဒတာအတိုင္း ျပန္လည္ထား႐ွိျခင္းျဖင့္ သတိမေပးဘဲ ဖုန္းေဒတာကို ဖ်က္ပါ</string>
+  <string name="policydesc_wipeData" product="tablet">မူလဝယ္ယူစဥ္ပံုစံေဒတာအတိုင္း ျပန္လည္ထား႐ွိျခင္းျဖင့္ သတိမေပးဘဲ တက္ဘလက္ေဒတာကို ဖ်က္ပါ</string>
+  <string name="policydesc_wipeData" product="default">မူလဝယ္ယူစဥ္ပံုစံေဒတာအတိုင္း ျပန္လည္ထား႐ွိျခင္းျဖင့္ သတိမေပးဘဲ ဖုန္းေဒတာကို ဖ်က္ပါ</string>
   <string name="policylab_setGlobalProxy">ပစၥည္း၏ ကမာၻအႏွံ႔ၾကားခံ ထား႐ွိပါ</string>
   <string name="policydesc_setGlobalProxy">မူဖြင့္ထားစဥ္ ပစၥည္း၏ ကမာၻအႏွံ႔ၾကားခံ သံုးႏိုင္ရန္ ထား႐ွိပါ။ ပထမဆံုးပစၥည္းစီစဥ္ၾကီးၾကပ္သူသာ</string>
   <string name="policylab_expirePassword">ေသာ့ခတ္သည့္စကရင္၏ စကားဝွက္သက္တမ္းထား႐ွိပါ</string>
@@ -708,49 +708,6 @@
   <string name="policydesc_encryptedStorage">သိမ္းထားေသာ ပ႐ိုဂရမ္ေဒတာအား ကုဒ္ျဖင့္ေဖာ္ျပရန္ လိုအပ္သည္</string>
   <string name="policylab_disableCamera">ကင္မရာမ်ားကို ျဖဳတ္ပါ</string>
   <string name="policydesc_disableCamera">ပစၥည္း၏ကင္မရာအားလံုးကို အသံုးျပဳျခင္းမွ ကာကြယ္ပါ</string>
-  <string-array name="phoneTypes">
-        <item>အိမ္</item>
-        <item>မိုဘိုင္း</item>
-        <item>အလုပ္</item>
-        <item>အလုပ္ဖက္စ္</item>
-        <item>အိမ္ဖက္စ္</item>
-        <item>ေပဂ်ာ</item>
-        <item>အျခား</item>
-        <item>စိတ္ၾကိဳက္</item>
-    </string-array>
-  <string-array name="emailAddressTypes">
-        <item>အိမ္</item>
-        <item>အလုပ္</item>
-        <item>အျခား</item>
-        <item>စိတ္ၾကိဳက္</item>
-    </string-array>
-  <string-array name="postalAddressTypes">
-        <item>အိမ္</item>
-        <item>အလုပ္</item>
-        <item>အျခား</item>
-        <item>စိတ္ၾကိဳက္</item>
-    </string-array>
-  <string-array name="imAddressTypes">
-        <item>အိမ္</item>
-        <item>အလုပ္</item>
-        <item>အျခား</item>
-        <item>စိတ္ၾကိဳက္</item>
-    </string-array>
-  <string-array name="organizationTypes">
-        <item>အလုပ္</item>
-        <item>အျခား</item>
-        <item>စိတ္ၾကိဳက္</item>
-    </string-array>
-  <string-array name="imProtocols">
-        <item>ဦးတည္ခ်က္</item>
-        <item>Windows Live</item>
-        <item>Yahoo</item>
-        <item>Skype</item>
-        <item>QQ</item>
-        <item>Google Talk</item>
-        <item>ICQ</item>
-        <item>Jabber</item>
-    </string-array>
   <string name="phoneTypeCustom">စိတ္ၾကိဳက္</string>
   <string name="phoneTypeHome">အိမ္</string>
   <string name="phoneTypeMobile">မိုဘိုင္း</string>
@@ -854,8 +811,8 @@
   <string name="lockscreen_low_battery">သင့္အားသြင္းစက္ႏွင့္ခ်ိတ္ဆက္ပါ။</string>
   <string name="lockscreen_missing_sim_message_short">SIM ကဒ္မ႐ွိပါ</string>
   <string name="lockscreen_blocked_sim_message_short">SIM ကဒ္အား ပိတ္ဆို႔ထား။</string>
-  <string product="tablet" name="lockscreen_missing_sim_message">တက္ဘလက္တြင္ SIM ကဒ္မ႐ွိပါ။</string>
-  <string product="default" name="lockscreen_missing_sim_message">ဖုန္းတြင္ SIM ကဒ္မ႐ွိပါ။</string>
+  <string name="lockscreen_missing_sim_message" product="tablet">တက္ဘလက္တြင္ SIM ကဒ္မ႐ွိပါ။</string>
+  <string name="lockscreen_missing_sim_message" product="default">ဖုန္းတြင္ SIM ကဒ္မ႐ွိပါ။</string>
   <string name="lockscreen_missing_sim_instructions">SIM ကဒ္ထည့္သြင္းပါ။</string>
   <string name="lockscreen_missing_sim_instructions_long">SIM ကဒ္မ႐ွိပါ သို႔မဟုတ္ မဖတ္ႏိုင္ပါ။ SIM ကဒ္ထည့္သြင္းပါ။</string>
   <string name="lockscreen_permanent_disabled_sim_instructions">ွသင့္ SIM ကဒ္ကို အျပီးအပိုင္ျဖဳတ္ထားျပီးျဖစ္သည္။ \n
@@ -865,7 +822,7 @@
   <string name="lockscreen_transport_pause_description">ခဏရပ္ထားသည့္ ခလုတ္</string>
   <string name="lockscreen_transport_play_description">ဖြင့္သည့္ခလုတ္</string>
   <string name="lockscreen_transport_stop_description">ခလုတ္ကို ရပ္တန္႔ပါ</string>
-  <string msgid="2485604591272668370" name="emergency_calls_only">အေရးေပၚဖုန္းေခၚဆိုမႈမ်ားသာ</string>
+  <string name="emergency_calls_only" msgid="2485604591272668370">အေရးေပၚဖုန္းေခၚဆိုမႈမ်ားသာ</string>
   <string name="lockscreen_network_locked_message">ကြန္ယက္ေသာ့ခတ္ျပီး</string>
   <string name="lockscreen_sim_puk_locked_message">SIM ကဒ္မွာ PUK ေသာ့ခတ္ထား။</string>
   <string name="lockscreen_sim_puk_locked_instructions">အသံုးျပဳသူလမ္းညႊန္ကိုၾကည့္ပါ သို႔မဟုတ္ ဧည့္သည္ဝန္ေဆာင္မႈေရးရာသို႔ ဆက္သြယ္ပါ။</string>
@@ -882,27 +839,27 @@
   <string name="lockscreen_too_many_failed_pin_attempts_dialog_message">
         PIN အား <xliff:g id="number">%d</xliff:g> ၾကိမ္ မွားယြင္းစြာ ထည့္သြင္းျပီးျဖစ္သည္။
         \n\n<xliff:g id="number">%d</xliff:g> စကၠန္႔အတြင္း ျပန္လည္လုပ္ေဆာင္ပါ။   </string>
-  <string product="tablet" name="lockscreen_failed_attempts_almost_glogin">
+  <string name="lockscreen_failed_attempts_almost_glogin" product="tablet">
         ေသာ့ဖြင့္သည့္ ပံုစံအား <xliff:g id="number">%d</xliff:g> ၾကိမ္ မွားယြင္းစြာ ေရးဆြဲျပီးျဖစ္သည္။
        ေနာက္ထပ္ <xliff:g id="number">%d</xliff:g> မေအာင္ျမင္သည့္ ၾကိဳးစားမႈမ်ားအတြက္ 
        Google ဝင္ေရာက္ျခင္းအား အသံုးျပဳ၍ သင့္တက္ဘလက္ကို ေသာ့ဖြင့္ရန္ ေမးလိမ့္မည္။
       \n\n
        <xliff:g id="number">%d</xliff:g> စကၠန္႔အတြင္း ျပန္လုပ္ေဆာင္ပါ။ 
     </string>
-  <string product="default" name="lockscreen_failed_attempts_almost_glogin">ေသာ့ဖြင့္သည့္ပံုစံအား <xliff:g id="number">%d</xliff:g> ၾကိမ္ မွားယြင္းစြာ ေရးဆြဲျပီးျဖစ္သည္။ မေအာင္ျမင္ေသာ ၾကိဳးစားမႈ <xliff:g id="number">%d</xliff:g> ၾကိမ္ျပဳျပီးေနာက္ သင့္အား Google ဝင္ျခင္းအား အသံုးျပဳျပီး သင့္ဖုန္းအား ေသာ့ဖြင့္ရန္ ေမးလိမ့္မည္။ \n\n <xliff:g id="number">%d</xliff:g> စကၠန္႔ၾကာလွ်င္ ျပန္ၾကိဳးစားၾကည့္ပါ။</string>
-  <string product="tablet" name="lockscreen_failed_attempts_almost_at_wipe">
+  <string name="lockscreen_failed_attempts_almost_glogin" product="default">ေသာ့ဖြင့္သည့္ပံုစံအား <xliff:g id="number">%d</xliff:g> ၾကိမ္ မွားယြင္းစြာ ေရးဆြဲျပီးျဖစ္သည္။ မေအာင္ျမင္ေသာ ၾကိဳးစားမႈ <xliff:g id="number">%d</xliff:g> ၾကိမ္ျပဳျပီးေနာက္ သင့္အား Google ဝင္ျခင္းအား အသံုးျပဳျပီး သင့္ဖုန္းအား ေသာ့ဖြင့္ရန္ ေမးလိမ့္မည္။ \n\n <xliff:g id="number">%d</xliff:g> စကၠန္႔ၾကာလွ်င္ ျပန္ၾကိဳးစားၾကည့္ပါ။</string>
+  <string name="lockscreen_failed_attempts_almost_at_wipe" product="tablet">
        တက္ဘလက္အား <xliff:g id="number">%d</xliff:g> ၾကိမ္ မွားယြင္းစြာ ေသာ့ဖြင့္ထားသည္။ 
        ေနာက္ထပ္ <xliff:g id="number">%d</xliff:g>ၾကိမ္ မေအာင္ျမင္သည့္ ၾကိဳးစားမႈမ်ားအတြက္ 
        တက္ဘလက္အား မူလဝယ္ယူစဥ္ပံုစံသို႔ ျပန္လည္ထား႐ွိမည္ျဖစ္ျပီး အသံုးျပဳသူေဒတာမ်ားအားလံုး ဆံုး႐ံႈးႏိုင္သည္။ </string>
-  <string product="default" name="lockscreen_failed_attempts_almost_at_wipe">
+  <string name="lockscreen_failed_attempts_almost_at_wipe" product="default">
        ဖုန္းအား <xliff:g id="number">%d</xliff:g> ၾကိမ္ မွားယြင္းစြာ ေသာ့ဖြင့္ထားသည္။ 
        ေနာက္ထပ္ <xliff:g id="number">%d</xliff:g>ၾကိမ္ မေအာင္ျမင္သည့္ ၾကိဳးစားမႈမ်ားအတြက္ 
        ဖုန္းအား မူလဝယ္ယူစဥ္ပံုစံသို႔ ျပန္လည္ထား႐ွိမည္ျဖစ္ျပီး အသံုးျပဳသူေဒတာမ်ားအားလံုး ဆံုး႐ံႈးႏိုင္သည္။ 
     </string>
-  <string product="tablet" name="lockscreen_failed_attempts_now_wiping">
+  <string name="lockscreen_failed_attempts_now_wiping" product="tablet">
        တက္ဘလက္အား <xliff:g id="number">%d</xliff:g> ၾကိမ္ မွားယြင္းစြာ ေသာ့ဖြင့္ထားသည္။ 
        တက္ဘလက္အား မူလဝယ္ယူစဥ္ပံုစံသို႔ ယခုျပန္လည္ထား႐ွိမည္။ </string>
-  <string product="default" name="lockscreen_failed_attempts_now_wiping">
+  <string name="lockscreen_failed_attempts_now_wiping" product="default">
       ဖုန္းအား <xliff:g id="number">%d</xliff:g> ၾကိမ္ မွားယြင္းစြာ ေသာ့ဖြင့္ထားသည္။ 
       ဖုန္းအား မူလဝယ္ယူစဥ္ပံုစံသို႔ ယခုျပန္လည္ထား႐ွိမည္။ 
       </string>
@@ -927,7 +884,7 @@
   <string name="password_keyboard_label_symbol_key">\?123</string>
   <string name="password_keyboard_label_alpha_key">ABC</string>
   <string name="password_keyboard_label_alt_key">ALT</string>
-  <string name="hour_ampm">"<xliff:g id="hour" example="3">%-l</xliff:g><xliff:g id="ampm" example="pm">%P</xliff:g>"</string>
+  <string name="hour_ampm">"<xliff:g example="3" id="hour">%-l</xliff:g><xliff:g example="pm" id="ampm">%P</xliff:g>"</string>
   <string name="factorytest_failed">မူလဝယ္ယူစဥ္ပံုစံအစမ္းလုပ္ေဆာင္ခ်က္မေအာင္ျမင္</string>
   <string name="factorytest_not_system">ပစၥည္း၏ မူလဝယ္ယူစဥ္ပံုစံစမ္းသပ္မႈလုပ္ေဆာင္ခ်က္အား /စနစ္/ပ႐ိုဂရမ္မ်ားတြင္ သြင္းထားေသာ ပက္ေက့ခ်္မ်ားအတြက္သာ အေထာက္အပံ့ေပးသည္။</string>
   <string name="factorytest_no_action">မူလဝယ္ယူစဥ္ပံုစံအစမ္းလုပ္ေဆာင္ခ်က္ကို အေထာက္အပံ့ေပးေသာ ပက္ေက့ခ်္႐ွာမေတြ႔ပါ။</string>
@@ -958,8 +915,8 @@
   <string name="permlab_readHistoryBookmarks">ဘေရာက္ဆာမွတ္တမ္းႏွင့္ စာညွပ္မ်ားကို ဖတ္ပါ</string>
   <string name="permdesc_readHistoryBookmarks">ပ႐ိုဂရမ္အား ဘေရာက္ဆာမွ သြားေရာက္ထားသည့္ ဝက္ဘ္ဆိုဒ္လိပ္စာမ်ားအားလံုးႏွင့္ ဘေရာက္ဆာစာညွပ္မ်ားအားလံုးကို ဖတ္႐ႈရန္ ခြင့္ျပဳပါ။ </string>
   <string name="permlab_writeHistoryBookmarks">ဘေရာက္ဆာမွတ္တမ္းႏွင့္ စာညွပ္မ်ားကို ေရးပါ</string>
-  <string product="tablet" name="permdesc_writeHistoryBookmarks">ပ႐ိုဂရမ္အား သင့္တက္ဘလက္တြင္ သိမ္းဆည္းထားေသာ ဘေရာက္ဆာမွတ္တမ္း သို႔မဟုတ္ စာညွပ္မ်ားကို အဆင့္ျမွင့္ရန္ ခြင့္ျပဳပါ။ အႏၲရာယ္႐ွိေသာ ပ႐ိုဂရမ္မ်ားက သင့္ဘေရာက္ဆာေဒတာအား ဖ်က္ရန္ သို႔မဟုတ္ အဆင့္ျမွင့္ရန္ ယင္းအား အသံုးျပဳလိမ့္မည္။</string>
-  <string product="default" name="permdesc_writeHistoryBookmarks">ပ႐ိုဂရမ္အား သင့္ဖုန္းတြင္ သိမ္းဆည္းထားေသာ ဘေရာက္ဆာမွတ္တမ္း သို႔မဟုတ္ စာညွပ္မ်ားကို အဆင့္ျမွင့္ရန္ ခြင့္ျပဳပါ။ အႏၲရာယ္႐ွိေသာ ပ႐ိုဂရမ္မ်ားက သင့္ဘေရာက္ဆာေဒတာအား ဖ်က္ရန္ သို႔မဟုတ္ အဆင့္ျမွင့္ရန္ ယင္းအား အသံုးျပဳလိမ့္မည္။</string>
+  <string name="permdesc_writeHistoryBookmarks" product="tablet">ပ႐ိုဂရမ္အား သင့္တက္ဘလက္တြင္ သိမ္းဆည္းထားေသာ ဘေရာက္ဆာမွတ္တမ္း သို႔မဟုတ္ စာညွပ္မ်ားကို အဆင့္ျမွင့္ရန္ ခြင့္ျပဳပါ။ အႏၲရာယ္႐ွိေသာ ပ႐ိုဂရမ္မ်ားက သင့္ဘေရာက္ဆာေဒတာအား ဖ်က္ရန္ သို႔မဟုတ္ အဆင့္ျမွင့္ရန္ ယင္းအား အသံုးျပဳလိမ့္မည္။</string>
+  <string name="permdesc_writeHistoryBookmarks" product="default">ပ႐ိုဂရမ္အား သင့္ဖုန္းတြင္ သိမ္းဆည္းထားေသာ ဘေရာက္ဆာမွတ္တမ္း သို႔မဟုတ္ စာညွပ္မ်ားကို အဆင့္ျမွင့္ရန္ ခြင့္ျပဳပါ။ အႏၲရာယ္႐ွိေသာ ပ႐ိုဂရမ္မ်ားက သင့္ဘေရာက္ဆာေဒတာအား ဖ်က္ရန္ သို႔မဟုတ္ အဆင့္ျမွင့္ရန္ ယင္းအား အသံုးျပဳလိမ့္မည္။</string>
   <string name="permlab_setAlarm">ႏိႈးစက္နာရီတြင္ ႏိႈးစက္ထား႐ွိပါ</string>
   <string name="permdesc_setAlarm">ပ႐ိုဂရမ္အား ထည့္သြင္းထားေသာ ႏိႈးစက္နာရီပ႐ိုဂရမ္တြင္ ႏိႈးစက္ထား႐ွိရန္ ခြင့္ျပဳပါ။ ႏိႈးစက္နာရီပ႐ိုဂရမ္အခ်ိဳ႕က ဤအဆင္အျပင္အား အေကာင္အထည္ေဖာ္မည္မဟုတ္ပါ။</string>
   <string name="permlab_addVoicemail">အသံေမးလ္ထည့္ပါ</string>
@@ -989,79 +946,12 @@
   <string name="searchview_description_voice">အသံ႐ွာေဖြခ်က္</string>
   <string name="oneMonthDurationPast">လြန္ခဲ့ေသာ 1 မိနစ္အၾကာက</string>
   <string name="beforeOneMonthDurationPast">လြန္ခဲ့ေသာတစ္လမတိုင္မီက</string>
-  <plurals name="num_seconds_ago">
-        <item quantity="one">လြန္ခဲ့ေသာ 1 စကၠန္႔က</item>
-        <item quantity="other">လြန္ခဲ့ေသာ <xliff:g id="count">%d</xliff:g> စကၠန္႔က</item>
-    </plurals>
-  <plurals name="num_minutes_ago">
-        <item quantity="one">လြန္ခဲ့ေသာ 1 မိနစ္အၾကာက</item>
-        <item quantity="other">လြန္ခဲ့ေသာ <xliff:g id="count">%d</xliff:g> မိနစ္အၾကာက</item>
-    </plurals>
-  <plurals name="num_hours_ago">
-        <item quantity="one">လြန္ခဲ့ေသာ 1 နာရီက</item>
-        <item quantity="other">လြန္ခဲ့ေသာ <xliff:g id="count">%d</xliff:g> နာရီက</item>
-    </plurals>
-  <plurals name="last_num_days">
-        <item quantity="other">ေနာက္ဆံုး <xliff:g id="count">%d</xliff:g> ရက္</item>
-    </plurals>
   <string name="last_month">ယခင္လ</string>
   <string name="older">ပိုေဟာင္းေသာ</string>
-  <plurals name="num_days_ago">
-        <item quantity="one">မေန႔က</item>
-        <item quantity="other">လြန္ခဲ့ေသာ <xliff:g id="count">%d</xliff:g> ရက္က</item>
-    </plurals>
-  <plurals name="in_num_seconds">
-        <item quantity="one">1 စကၠန္႔ၾကာလွ်င္</item>
-        <item quantity="other"><xliff:g id="count">%d</xliff:g>စကၠန္႔အတြင္း</item>
-    </plurals>
-  <plurals name="in_num_minutes">
-        <item quantity="one">1 မိနစ္ၾကာလွ်င္</item>
-        <item quantity="other"><xliff:g id="count">%d</xliff:g> မိနစ္ၾကာလွ်င္</item>
-    </plurals>
-  <plurals name="in_num_hours">
-        <item quantity="one">1 နာရီၾကာလွ်င္</item>
-        <item quantity="other"><xliff:g id="count">%d</xliff:g> နာရီလွ်င္</item>
-    </plurals>
-  <plurals name="in_num_days">
-        <item quantity="one">မနက္ျဖန္</item>
-        <item quantity="other"><xliff:g id="count">%d</xliff:g> ရက္လွ်င္</item>
-    </plurals>
-  <plurals name="abbrev_num_seconds_ago">
-        <item quantity="one">လြန္ခဲ့ေသာ 1 စကၠန္႔က</item>
-        <item quantity="other">လြန္ခဲ့ေသာ <xliff:g id="count">%d</xliff:g> စကၠန္႔က</item>
-    </plurals>
-  <plurals name="abbrev_num_minutes_ago">
-        <item quantity="one">လြန္ခဲ့ေသာ 1 မိနစ္က</item>
-        <item quantity="other">လြန္ခဲ့ေသာ <xliff:g id="count">%d</xliff:g> မိနစ္အၾကာက</item>
-    </plurals>
-  <plurals name="abbrev_num_hours_ago">
-        <item quantity="one">လြန္ခဲ့ေသာ 1 နာရီက</item>
-        <item quantity="other">လြန္ခဲ့ေသာ <xliff:g id="count">%d</xliff:g> နာရီက</item>
-    </plurals>
-  <plurals name="abbrev_num_days_ago">
-        <item quantity="one">မေန႔က</item>
-        <item quantity="other">လြန္ခဲ့ေသာ <xliff:g id="count">%d</xliff:g> ရက္က</item>
-    </plurals>
-  <plurals name="abbrev_in_num_seconds">
-        <item quantity="one">1 စကၠန္႔ၾကာလွ်င္</item>
-        <item quantity="other"><xliff:g id="count">%d</xliff:g>စကၠန္႔အတြင္း</item>
-    </plurals>
-  <plurals name="abbrev_in_num_minutes">
-        <item quantity="one">1 မိနစ္ၾကာလွ်င္</item>
-        <item quantity="other"><xliff:g id="count">%d</xliff:g> မိနစ္ၾကာလွ်င္</item>
-    </plurals>
-  <plurals name="abbrev_in_num_hours">
-        <item quantity="one">1 နာရီၾကာလွ်င္</item>
-        <item quantity="other"><xliff:g id="count">%d</xliff:g> နာရီလွ်င္</item>
-    </plurals>
-  <plurals name="abbrev_in_num_days">
-        <item quantity="one">မနက္ျဖန္</item>
-        <item quantity="other"><xliff:g id="count">%d</xliff:g> ရက္လွ်င္</item>
-    </plurals>
-  <string name="preposition_for_date"><xliff:g id="date" example="May 29">%s</xliff:g> တြင္</string>
-  <string name="preposition_for_time"><xliff:g id="time" example="2:33 am">%s</xliff:g>တြင္</string>
+  <string name="preposition_for_date"><xliff:g example="May 29" id="date">%s</xliff:g> တြင္</string>
+  <string name="preposition_for_time"><xliff:g example="2:33 am" id="time">%s</xliff:g>တြင္</string>
   <string name="preposition_for_year">
-    <xliff:g id="year" example="2003">%s</xliff:g>
+    <xliff:g example="2003" id="year">%s</xliff:g>
   </string>
   <string name="day">ရက္</string>
   <string name="days">ရက္မ်ား</string>
@@ -1079,13 +969,13 @@
   <string name="VideoView_error_text_invalid_progressive_playback">ေဆာရီး၊ ယင္းဗီဒီယိုမွာ ဤပစၥည္းသို႔ တုိက္႐ိုက္ၾကည့္႐ႈမႈအား ခြင့္မျပဳပါ။</string>
   <string name="VideoView_error_text_unknown">ေဆာရီး၊ ယင္းဗီဒီယိုအား ဖြင့္၍မရပါ။</string>
   <string name="VideoView_error_button">OK</string>
-  <string name="relative_time">"<xliff:g id="date" example="4 hours ago">%1$s</xliff:g>, <xliff:g id="time" example="11:00 am">%2$s</xliff:g>"</string>
+  <string name="relative_time">"<xliff:g example="4 hours ago" id="date">%1$s</xliff:g>, <xliff:g example="11:00 am" id="time">%2$s</xliff:g>"</string>
   <string name="noon">"ေန႔လည္"</string>
   <string name="Noon">"ေန႔လည္"</string>
   <string name="midnight">"ညသန္းေခါင္"</string>
   <string name="Midnight">"ညသန္းေခါင္"</string>
-  <string name="elapsed_time_short_format_mm_ss"><xliff:g id="minutes" example="1">%1$02d</xliff:g>:<xliff:g id="seconds" example="23">%2$02d</xliff:g></string>
-  <string name="elapsed_time_short_format_h_mm_ss"><xliff:g id="hours" example="1">%1$d</xliff:g>:<xliff:g id="minutes" example="43">%2$02d</xliff:g>:<xliff:g id="seconds" example="33">%3$02d</xliff:g></string>
+  <string name="elapsed_time_short_format_mm_ss"><xliff:g example="1" id="minutes">%1$02d</xliff:g>:<xliff:g example="23" id="seconds">%2$02d</xliff:g></string>
+  <string name="elapsed_time_short_format_h_mm_ss"><xliff:g example="1" id="hours">%1$d</xliff:g>:<xliff:g example="43" id="minutes">%2$02d</xliff:g>:<xliff:g example="33" id="seconds">%3$02d</xliff:g></string>
   <string name="selectAll">အားလုံးကိုေရွးချယ်</string>
   <string name="cut">ျဖတ္ေတာက္ပါ</string>
   <string name="copy">ကူးယူပါ</string>
@@ -1133,8 +1023,8 @@
         (ျဖစ္စဥ္ <xliff:g id="process">%2$s</xliff:g>) မွ ကိုယ္ပိုင္သတ္မွတ္ထားသည့္ ႐ုတ္တရက္မွားသြားပါက ျပန္ျပင္ႏိုင္ရန္ သတိေပးသည့္ ပံုစံမူအား ခ်ိဳးေဖာက္ထားသည္။</string>
   <string name="smv_process">လုပ္ေဆာင္ခ်က္<xliff:g id="process">%1$s</xliff:g>မွာ StrictMode ၏ ကိုယ္ပုိင္ျပ႒ာန္းခ်က္ဥပေဒအား ခ်ိဳးေဖာက္သည္</string>
   <string name="android_upgrading_title">Android အား အပ္ဒိတ္လုပ္ေနဆဲ...</string>
-  <string name="android_upgrading_apk">ပ႐ိုဂရမ္ <xliff:g id="number" example="123">%1$d</xliff:g> ႐ွိ
-        <xliff:g id="number" example="123">%2$d</xliff:g>အား သင့္ေလ်ာ္ေအာင္ေဆာင္႐ြက္ျခင္း။</string>
+  <string name="android_upgrading_apk">ပ႐ိုဂရမ္ <xliff:g example="123" id="number">%1$d</xliff:g> ႐ွိ
+        <xliff:g example="123" id="number">%2$d</xliff:g>အား သင့္ေလ်ာ္ေအာင္ေဆာင္႐ြက္ျခင္း။</string>
   <string name="android_upgrading_starting_apps">ပ႐ိုဂရမ္မ်ားစတင္ေနဆဲ။</string>
   <string name="android_upgrading_complete">စျခင္းျပီးဆံုးခါနီး။</string>
   <string name="heavy_weight_notification"><xliff:g id="app">%1$s</xliff:g> ဖြင့္ထားဆဲ</string>
@@ -1165,14 +1055,6 @@
   <string name="ringtone_silent">Silent</string>
   <string name="ringtone_picker_title">ဖုန္းတီးလံုးမ်ား</string>
   <string name="ringtone_unknown">အမည္မသိဖုန္းတီးလံုး</string>
-  <plurals name="wifi_available">
-        <item quantity="one">WLAN ကြန္ယက္ရ႐ွိႏိုင္</item>
-        <item quantity="other">WLAN ကြန္ယက္မ်ားရ႐ွိႏိုင္</item>
-    </plurals>
-  <plurals name="wifi_available_detailed">
-        <item quantity="one">ရ႐ွိႏိုင္သည့္ WLAN ကြန္ယက္ဖြင့္ပါ</item>
-        <item quantity="other">ရ႐ွိႏိုင္သည့္ WLAN ကြန္ယက္မ်ားဖြင့္ပါ</item>
-    </plurals>
   <string name="wifi_available_sign_in">ွWLAN ကြန္ယက္သို႔ ဝင္ပါ</string>
   <string name="wifi_watchdog_network_disabled">WLAN သို႔ မခ်ိတ္ဆက္ႏိုင္ပါ</string>
   <string name="wifi_watchdog_network_disabled_detailed">\u0020အင္တာနက္ခ်ိတ္ဆက္မႈ အားမေကာင္းပါ။ </string>
@@ -1205,18 +1087,18 @@
   </string>
   <string name="usb_storage_activity_title">USB ေဒတာအစုလိုက္သိမ္းဆည္းမႈပစၥည္း</string>
   <string name="usb_storage_title">USB ခ်ိတ္ဆက္ျပီး</string>
-  <string product="nosdcard" name="usb_storage_message">သင့္ကြန္ပ်ဴတာအား USB မွတစ္ဆင့္ ခ်ိတ္ဆက္ျပီးျဖစ္သည္။ သင့္ကြန္ပ်ဴတာႏွင့္ Android\u2018s USB သိမ္းဆည္းမႈပစၥည္းအၾကား ဖိုင္မ်ားကို ကူးယူလိုပါက ေအာက္ပါခလုတ္ကို ထိပါ။</string>
-  <string product="default" name="usb_storage_message">သင့္ကြန္ပ်ဴတာအား USB မွတစ္ဆင့္ ခ်ိတ္ဆက္ျပီးျဖစ္သည္။ သင့္ကြန္ပ်ဴတာႏွင့္ Android\u2018s SD ကဒ္အၾကား ဖိုင္မ်ားကို ကူးယူလိုပါက ေအာက္ပါခလုတ္ကို ထိပါ။</string>
+  <string name="usb_storage_message" product="nosdcard">သင့္ကြန္ပ်ဴတာအား USB မွတစ္ဆင့္ ခ်ိတ္ဆက္ျပီးျဖစ္သည္။ သင့္ကြန္ပ်ဴတာႏွင့္ Android\u2018s USB သိမ္းဆည္းမႈပစၥည္းအၾကား ဖိုင္မ်ားကို ကူးယူလိုပါက ေအာက္ပါခလုတ္ကို ထိပါ။</string>
+  <string name="usb_storage_message" product="default">သင့္ကြန္ပ်ဴတာအား USB မွတစ္ဆင့္ ခ်ိတ္ဆက္ျပီးျဖစ္သည္။ သင့္ကြန္ပ်ဴတာႏွင့္ Android\u2018s SD ကဒ္အၾကား ဖိုင္မ်ားကို ကူးယူလိုပါက ေအာက္ပါခလုတ္ကို ထိပါ။</string>
   <string name="usb_storage_button_mount">USB သိမ္းဆည္းမႈပစၥည္းကို ဖြင့္ပါ</string>
-  <string product="nosdcard" name="usb_storage_error_message">သင့္ USB သိမ္းဆည္းမႈ၏ USB သိမ္းဆည္းမႈပစၥည္းအသံုးျပဳရာတြင္ ျပႆနာ႐ွိေနသည္။</string>
-  <string product="default" name="usb_storage_error_message">သင့္ USB သိမ္းဆည္းမႈ၏ SD ကဒ္ အသံုးျပဳရာတြင္ ျပႆနာ႐ွိေနသည္။</string>
+  <string name="usb_storage_error_message" product="nosdcard">သင့္ USB သိမ္းဆည္းမႈ၏ USB သိမ္းဆည္းမႈပစၥည္းအသံုးျပဳရာတြင္ ျပႆနာ႐ွိေနသည္။</string>
+  <string name="usb_storage_error_message" product="default">သင့္ USB သိမ္းဆည္းမႈ၏ SD ကဒ္ အသံုးျပဳရာတြင္ ျပႆနာ႐ွိေနသည္။</string>
   <string name="usb_storage_notification_title">USB ခ်ိတ္ဆက္ျပီး</string>
   <string name="usb_storage_notification_message">သင့္ကြန္ပ်ဴတာသို႔/မွ ဖိုင္မ်ားကူးယူရန္ ေ႐ြးပါ။</string>
   <string name="usb_storage_stop_notification_title">USB သိမ္းဆည္းမႈပစၥည္း</string>
   <string name="usb_storage_stop_notification_message">USB သိမ္းဆည္းမႈပစၥည္းပိတ္ရန္ ေ႐ြးပါ။</string>
   <string name="usb_storage_stop_title">USB သိမ္းဆည္းမႈပစၥည္းအား အသံုးျပဳေနသည္</string>
-  <string product="nosdcard" name="usb_storage_stop_message">USB သိမ္းဆည္းမႈမပိတ္ခင္ သင့္ကြန္ပ်ဴတာမွ သင့္ Android\u2018s USB သိမ္းဆည္းမႈပစၥည္းအား ျဖဳတ္ျပီး (\u201cျဖဳတ္ျပီး\u201d) ျဖစ္ေၾကာင္း ေသခ်ာေအာင္ျပဳလုပ္ပါ</string>
-  <string product="default" name="usb_storage_stop_message">USB သိမ္းဆည္းမႈကို မပိတ္ခင္ ကြန္ပ်ဴတာမွ Android \u2018s SD ကဒ္အား မတင္ထားေၾကာင္း (\u201cထုတ္ျပီးျဖစ္\u201d) ေသခ်ာေစရန္ျပဳလုပ္ပါ။</string>
+  <string name="usb_storage_stop_message" product="nosdcard">USB သိမ္းဆည္းမႈမပိတ္ခင္ သင့္ကြန္ပ်ဴတာမွ သင့္ Android\u2018s USB သိမ္းဆည္းမႈပစၥည္းအား ျဖဳတ္ျပီး (\u201cျဖဳတ္ျပီး\u201d) ျဖစ္ေၾကာင္း ေသခ်ာေအာင္ျပဳလုပ္ပါ</string>
+  <string name="usb_storage_stop_message" product="default">USB သိမ္းဆည္းမႈကို မပိတ္ခင္ ကြန္ပ်ဴတာမွ Android \u2018s SD ကဒ္အား မတင္ထားေၾကာင္း (\u201cထုတ္ျပီးျဖစ္\u201d) ေသခ်ာေစရန္ျပဳလုပ္ပါ။</string>
   <string name="usb_storage_stop_button_mount">USB သိမ္းဆည္းမႈပစၥည္းကို ပိတ္ပါ</string>
   <string name="usb_storage_stop_error_message">USB သိမ္းဆည္းမႈပစၥည္းကို ပိတ္ရာတြင္ ျပႆနာျဖစ္ေပၚသြားသည္။ USB လက္ခံထားခ်က္အား ျဖဳတ္ျပီးျဖစ္ေၾကာင္း ေသခ်ာရန္ စစ္ေဆးျပီးေနာက္ ျပန္ၾကိဳးစားၾကည့္ပါ။ </string>
   <string name="dlg_confirm_kill_storage_users_title">USB သိမ္းဆည္းမႈပစၥည္းကို ဖြင့္ပါ</string>
@@ -1228,10 +1110,10 @@
   <string name="usb_cd_installer_notification_title">သြင္းစက္အျဖစ္ ခ်ိတ္ဆက္ျပီး</string>
   <string name="usb_accessory_notification_title">USB အပိုပစၥည္းသို႔ ခ်ိတ္ဆက္ျပီး</string>
   <string name="usb_notification_message">အျခား USB ေ႐ြးခ်ယ္ခ်က္မ်ားအတြက္ ထိပါ</string>
-  <string product="nosdcard" name="extmedia_format_title">USB သိမ္းဆည္းမႈကို ေဖာမက္ခ်မည္</string>
-  <string product="default" name="extmedia_format_title">SD ကဒ္ကို ေဖာမက္ခ်ပါ။</string>
-  <string product="nosdcard" name="extmedia_format_message">USB သိမ္းဆည္းမႈကို ေဖာမက္ခ်မည္၊ ယင္း႐ွိ သိမ္းဆည္းထားေသာ ဖုိင္အားလံုးကို ဖ်က္မလား? ယင္းလုပ္ေဆာင္ခ်က္ကို ျပန္ျပင္၍မရပါ!</string>
-  <string product="default" name="extmedia_format_message">SD ကဒ္အား ေဖာမက္ခ်လိုသည္မွာ ေသခ်ာပါသလား? သင့္ကဒ္႐ွိ အခ်က္အလက္အားလံုးကို ဆံု႐ံႈးလိမ့္မည္။</string>
+  <string name="extmedia_format_title" product="nosdcard">USB သိမ္းဆည္းမႈကို ေဖာမက္ခ်မည္</string>
+  <string name="extmedia_format_title" product="default">SD ကဒ္ကို ေဖာမက္ခ်ပါ။</string>
+  <string name="extmedia_format_message" product="nosdcard">USB သိမ္းဆည္းမႈကို ေဖာမက္ခ်မည္၊ ယင္း႐ွိ သိမ္းဆည္းထားေသာ ဖုိင္အားလံုးကို ဖ်က္မလား? ယင္းလုပ္ေဆာင္ခ်က္ကို ျပန္ျပင္၍မရပါ!</string>
+  <string name="extmedia_format_message" product="default">SD ကဒ္အား ေဖာမက္ခ်လိုသည္မွာ ေသခ်ာပါသလား? သင့္ကဒ္႐ွိ အခ်က္အလက္အားလံုးကို ဆံု႐ံႈးလိမ့္မည္။</string>
   <string name="extmedia_format_button_format">ေဖာမက္ခ်ပါ</string>
   <string name="adb_active_notification_title">USB ခ်ိဳ႕ယြင္းခ်က္ဖယ္႐ွားျခင္းအား ခ်ိတ္ဆက္ျပီး</string>
   <string name="adb_active_notification_message">USB ခ်ိဳ႕ယြင္းခ်က္ဖယ္႐ွားျခင္းပိတ္ရန္ ေ႐ြးပါ။</string>
@@ -1242,29 +1124,29 @@
   <string name="candidates_style">
     <u>ပါဝင္သူမ်ား</u>
   </string>
-  <string product="nosdcard" name="ext_media_checking_notification_title">USB သိမ္းဆည္းမႈျပင္ဆင္ေနဆဲ</string>
-  <string product="default" name="ext_media_checking_notification_title">SD ကဒ္ကို ျပင္ဆင္ေနဆဲ</string>
+  <string name="ext_media_checking_notification_title" product="nosdcard">USB သိမ္းဆည္းမႈျပင္ဆင္ေနဆဲ</string>
+  <string name="ext_media_checking_notification_title" product="default">SD ကဒ္ကို ျပင္ဆင္ေနဆဲ</string>
   <string name="ext_media_checking_notification_message">အမွားမ်ားစစ္ေဆးေနဆဲ။</string>
-  <string product="nosdcard" name="ext_media_nofs_notification_title">USB သိမ္းဆည္းမႈဗလာ</string>
-  <string product="default" name="ext_media_nofs_notification_title">SD ကဒ္ဗလာ</string>
-  <string product="nosdcard" name="ext_media_nofs_notification_message">USB သိမ္းဆည္းမႈမ႐ွိ သို႔မဟုတ္ အေထာက္အပံ့မေပးေသာ ဖုိင္စနစ္</string>
-  <string product="default" name="ext_media_nofs_notification_message">SD ကဒ္အလြတ္ သို႔မဟုတ္ ဖိုင္စနစ္အား အေထာက္အပံ့မေပးပါ။</string>
-  <string product="nosdcard" name="ext_media_unmountable_notification_title">USB သိမ္းဆည္းခ်က္ပ်က္စီး</string>
-  <string product="default" name="ext_media_unmountable_notification_title">ပ်က္စီးေနေသာ SD ကဒ္</string>
-  <string product="nosdcard" name="ext_media_unmountable_notification_message">USB သိမ္းဆည္းမႈပ်က္စီးသြားသည္။ ယင္းကို ျပန္ေဖာမက္ခ်ပါ။</string>
-  <string product="default" name="ext_media_unmountable_notification_message">SD ကဒ္ပ်က္စီးသြားသည္။ ယင္းအား ေဖာမက္ျပန္ခ်ပါ။</string>
-  <string product="nosdcard" name="ext_media_badremoval_notification_title">USB သိမ္းဆည္းမႈပစၥည္း႐ုတ္တရက္ျပဳတ္က်သြားသည္</string>
-  <string product="default" name="ext_media_badremoval_notification_title">SD ကဒ္အား မေတာ္တဆ ဖယ္႐ွားလိုက္သည္</string>
-  <string product="nosdcard" name="ext_media_badremoval_notification_message">USB သိမ္းဆည္းမႈပစၥည္းကို ေဒတာဆံုး႐ႈံးမႈမွ ေ႐ွာင္က်ဥ္ရန္ မျဖဳတ္မီ အရင္ပိတ္ပါ</string>
-  <string product="default" name="ext_media_badremoval_notification_message">ေဒတာဆံုး႐ံႈးမႈမွ ေ႐ွာင္က်ဥ္ရန္ SD ကဒ္ကို မဖယ္႐ွားမီ တင္ထားျခင္းကို ျဖဳတ္ပါ။</string>
-  <string product="nosdcard" name="ext_media_safe_unmount_notification_title">USB သိမ္းဆည္းမႈပစၥည္းျဖဳတ္ရန္လံုျခံဳပါျပီ</string>
-  <string product="default" name="ext_media_safe_unmount_notification_title">SD ကဒ္အား ဖယ္႐ွားရန္ စိတ္ခ်ရပါျပီ</string>
-  <string product="nosdcard" name="ext_media_safe_unmount_notification_message">USB သိမ္းဆည္းမႈပစၥည္းအား လံုျခံဳစိတ္ခ်ရစြာ ျဖဳတ္ႏိုင္ျပီျဖစ္သည္။</string>
-  <string product="default" name="ext_media_safe_unmount_notification_message">SD ကဒ္အား လံုျခံဳစိတ္ခ်စြာ ဖယ္႐ွားႏိုင္ပါသည္။</string>
-  <string product="nosdcard" name="ext_media_nomedia_notification_title">USB သိမ္းဆည္းမႈဖယ္႐ွားျပီး</string>
-  <string product="default" name="ext_media_nomedia_notification_title">SD ကဒ္ဖယ္႐ွားျပီး</string>
-  <string product="nosdcard" name="ext_media_nomedia_notification_message">USB သိမ္းဆည္းမႈပစၥည္းအား ျဖဳတ္ျပီးျဖစ္သည္။ မီဒီယာအသစ္ကို ထည့္သြင္းပါ။</string>
-  <string product="default" name="ext_media_nomedia_notification_message">SD ကဒ္ဖယ္႐ွားျပီး။ အသစ္ထည့္သြင္းပါ။</string>
+  <string name="ext_media_nofs_notification_title" product="nosdcard">USB သိမ္းဆည္းမႈဗလာ</string>
+  <string name="ext_media_nofs_notification_title" product="default">SD ကဒ္ဗလာ</string>
+  <string name="ext_media_nofs_notification_message" product="nosdcard">USB သိမ္းဆည္းမႈမ႐ွိ သို႔မဟုတ္ အေထာက္အပံ့မေပးေသာ ဖုိင္စနစ္</string>
+  <string name="ext_media_nofs_notification_message" product="default">SD ကဒ္အလြတ္ သို႔မဟုတ္ ဖိုင္စနစ္အား အေထာက္အပံ့မေပးပါ။</string>
+  <string name="ext_media_unmountable_notification_title" product="nosdcard">USB သိမ္းဆည္းခ်က္ပ်က္စီး</string>
+  <string name="ext_media_unmountable_notification_title" product="default">ပ်က္စီးေနေသာ SD ကဒ္</string>
+  <string name="ext_media_unmountable_notification_message" product="nosdcard">USB သိမ္းဆည္းမႈပ်က္စီးသြားသည္။ ယင္းကို ျပန္ေဖာမက္ခ်ပါ။</string>
+  <string name="ext_media_unmountable_notification_message" product="default">SD ကဒ္ပ်က္စီးသြားသည္။ ယင္းအား ေဖာမက္ျပန္ခ်ပါ။</string>
+  <string name="ext_media_badremoval_notification_title" product="nosdcard">USB သိမ္းဆည္းမႈပစၥည္း႐ုတ္တရက္ျပဳတ္က်သြားသည္</string>
+  <string name="ext_media_badremoval_notification_title" product="default">SD ကဒ္အား မေတာ္တဆ ဖယ္႐ွားလိုက္သည္</string>
+  <string name="ext_media_badremoval_notification_message" product="nosdcard">USB သိမ္းဆည္းမႈပစၥည္းကို ေဒတာဆံုး႐ႈံးမႈမွ ေ႐ွာင္က်ဥ္ရန္ မျဖဳတ္မီ အရင္ပိတ္ပါ</string>
+  <string name="ext_media_badremoval_notification_message" product="default">ေဒတာဆံုး႐ံႈးမႈမွ ေ႐ွာင္က်ဥ္ရန္ SD ကဒ္ကို မဖယ္႐ွားမီ တင္ထားျခင္းကို ျဖဳတ္ပါ။</string>
+  <string name="ext_media_safe_unmount_notification_title" product="nosdcard">USB သိမ္းဆည္းမႈပစၥည္းျဖဳတ္ရန္လံုျခံဳပါျပီ</string>
+  <string name="ext_media_safe_unmount_notification_title" product="default">SD ကဒ္အား ဖယ္႐ွားရန္ စိတ္ခ်ရပါျပီ</string>
+  <string name="ext_media_safe_unmount_notification_message" product="nosdcard">USB သိမ္းဆည္းမႈပစၥည္းအား လံုျခံဳစိတ္ခ်ရစြာ ျဖဳတ္ႏိုင္ျပီျဖစ္သည္။</string>
+  <string name="ext_media_safe_unmount_notification_message" product="default">SD ကဒ္အား လံုျခံဳစိတ္ခ်စြာ ဖယ္႐ွားႏိုင္ပါသည္။</string>
+  <string name="ext_media_nomedia_notification_title" product="nosdcard">USB သိမ္းဆည္းမႈဖယ္႐ွားျပီး</string>
+  <string name="ext_media_nomedia_notification_title" product="default">SD ကဒ္ဖယ္႐ွားျပီး</string>
+  <string name="ext_media_nomedia_notification_message" product="nosdcard">USB သိမ္းဆည္းမႈပစၥည္းအား ျဖဳတ္ျပီးျဖစ္သည္။ မီဒီယာအသစ္ကို ထည့္သြင္းပါ။</string>
+  <string name="ext_media_nomedia_notification_message" product="default">SD ကဒ္ဖယ္႐ွားျပီး။ အသစ္ထည့္သြင္းပါ။</string>
   <string name="activity_list_empty">လုိက္ဖက္သည့္လုပ္ေဆာင္ခ်က္မ်ား ႐ွာမေတြ႔ပါ</string>
   <string name="permlab_pkgUsageStats">အပိုင္းအလိုက္ သံုးစြဲမႈပမာဏစာရင္းအင္းဇယားမ်ားကို အဆင့္ျမွင့္ပါ</string>
   <string name="permdesc_pkgUsageStats">အပိုင္းအလိုက္အသံုးခ်မႈစာရင္းအင္းစုစည္းခ်က္အဆင့္ျမွင့္ျခင္းအား ခြင့္ျပဳပါ။ ပံုမွန္ပ႐ိုဂရမ္မ်ားက အသံုးျပဳရန္ မဟုတ္ပါ။</string>
@@ -1279,24 +1161,24 @@
   <string name="ime_action_done">ျပီးျပီ</string>
   <string name="ime_action_previous">ေနာက္သို႔</string>
   <string name="ime_action_default">စတင္လုပ္ေဆာင္ပါ</string>
-  <string name="dial_number_using"><xliff:g id="number" example="555">%s</xliff:g> အသံုးျပဳ၍ \n နံပါတ္ကို ေခၚဆိုမည္</string>
-  <string name="create_contact_using"><xliff:g id="number" example="555">%s</xliff:g>  အသံုးျပဳ၍ \n လိပ္စာကို ဖန္တီးပါ။</string>
+  <string name="dial_number_using"><xliff:g example="555" id="number">%s</xliff:g> အသံုးျပဳ၍ \n နံပါတ္ကို ေခၚဆိုမည္</string>
+  <string name="create_contact_using"><xliff:g example="555" id="number">%s</xliff:g>  အသံုးျပဳ၍ \n လိပ္စာကို ဖန္တီးပါ။</string>
   <string name="grant_credentials_permission_message_header">ယခု သို႔မဟုတ္ ေနာင္တြင္ သင့္အေကာင့္သို႔ ဝင္ေရာက္ရန္ ေအာက္ပါတစ္ခုသို႔မဟုတ္ တစ္ခုထက္ပိုေသာ ပ႐ိုဂရမ္မ်ားက ခြင့္ျပဳခ်က္ ေတာင္းဆိုေနသည္။ </string>
   <string name="grant_credentials_permission_message_footer">ဤေတာင္းဆိုခ်က္ကို ခြင့္ျပဳမလား?</string>
   <string name="grant_permissions_header_text">ေတာင္းဆိုခ်က္သို႔ ဝင္ေရာက္ပါ</string>
   <string name="allow">ခြင့္ျပဳပါ</string>
   <string name="deny">ပယ္ခ်ပါ</string>
   <string name="permission_request_notification_title">ခြင့္ျပဳခ်က္ေတာင္းဆိုျပီး</string>
-  <string name="permission_request_notification_with_subtitle">\nအေကာင့္ <xliff:g id="account" example="foo@gmail.com">%s</xliff:g> အတြက္ ခြင့္ျပဳခ်က္ေတာင္းခံျပီး</string>
+  <string name="permission_request_notification_with_subtitle">\nအေကာင့္ <xliff:g example="foo@gmail.com" id="account">%s</xliff:g> အတြက္ ခြင့္ျပဳခ်က္ေတာင္းခံျပီး</string>
   <string name="input_method_binding_label">အသြင္းနည္းလမ္း</string>
   <string name="sync_binding_label">ကို sync လုပ္ပါ</string>
   <string name="accessibility_binding_label">ဝင္ေရာက္ျခင္း</string>
   <string name="wallpaper_binding_label">Wallpaper</string>
   <string name="chooser_wallpaper">ေဝါလ္ေပပါေျပာင္းပါ</string>
   <string name="vpn_title">VPN စတင္ျပီး။</string>
-  <string name="vpn_title_long"><xliff:g id="app" example="FooVPN client">%s</xliff:g> ျဖင့္ VPN အားစတင္ျပီး</string>
+  <string name="vpn_title_long"><xliff:g example="FooVPN client" id="app">%s</xliff:g> ျဖင့္ VPN အားစတင္ျပီး</string>
   <string name="vpn_text">ကြန္ယက္စီစဥ္ရန္ ႏွိပ္ပါ</string>
-  <string name="vpn_text_long"><xliff:g id="session" example="office">%s</xliff:g> သို႔ ခ်ိတ္ဆက္ျပီး။ ကြန္ယက္ကို စီစဥ္ရန္ ႏွိပ္ပါ။</string>
+  <string name="vpn_text_long"><xliff:g example="office" id="session">%s</xliff:g> သို႔ ခ်ိတ္ဆက္ျပီး။ ကြန္ယက္ကို စီစဥ္ရန္ ႏွိပ္ပါ။</string>
   <string name="upload_file">ဖိုင္ေ႐ြးပါ</string>
   <string name="no_file_chosen">မည္သည့္ဖုိင္မွ်ေ႐ြးမထားပါ</string>
   <string name="reset">ျပန္ထား႐ွိပါ</string>
@@ -1314,38 +1196,28 @@
   <string name="throttled_notification_message">မိုဘိုင္းေဒတာအသံုးခ်မႈႏွင့္ပတ္သက္၍ ေလ့လာရန္ ထိပါ</string>
   <string name="no_matches">No matches</string>
   <string name="find_on_page">စာမ်က္ႏွာတြင္ ႐ွာပါ</string>
-  <plurals name="matches_found">
-        <!-- Case of one match -->
-        <!--Modify Spreadst of 94151 can't show whole information on webpage  start -->
-        <!-- <item quantity="one">1 match</item> -->
-        <item quantity="one">လိုက္ဖက္မႈ 1 ခု</item>
-        <!-- Case of multiple total matches -->
-        <!-- <item quantity="other"><xliff:g id="index" example="2">%d</xliff:g> of <xliff:g id="total" example="137">%d</xliff:g></item> -->
-        <item quantity="other"><xliff:g id="total" example="137">%d</xliff:g> ႐ွိ <xliff:g id="index" example="2">%d</xliff:g></item>
-        <!--Modify Spreadst of 94151 can't show whole information on webpage  end -->
-        </plurals>
   <string name="stk_refresh_sim_init_message">SIM ကဒ္ကို အဆင့္ျမွင့္ေနဆဲ</string>
   <string name="stk_refresh_sim_reset_message">ဖုန္းကို ျပန္စမည္</string>
   <string name="action_mode_done">ျပီးျပီ</string>
-  <string product="nosdcard" name="progress_unmounting">USB သိမ္းဆည္းမႈပစၥည္းအား တင္ထားျခင္းကို ျဖဳတ္ေနဆဲ...</string>
-  <string product="default" name="progress_unmounting">SD ကဒ္ကို ပိတ္ေနဆဲ...</string>
-  <string product="nosdcard" name="progress_erasing">USB သိမ္းဆည္းမႈကို ဖ်က္ေနဆဲ...</string>
-  <string product="default" name="progress_erasing">SD ကဒ္ကို ဖ်က္ေနဆ...</string>
-  <string product="nosdcard" name="format_error">USB သိမ္းဆည္းမႈပစၥည္းကို မဖ်က္ႏိုင္ပါ။</string>
-  <string product="default" name="format_error">SD ကဒ္အား မဖ်က္ႏိုင္ပါ။</string>
+  <string name="progress_unmounting" product="nosdcard">USB သိမ္းဆည္းမႈပစၥည္းအား တင္ထားျခင္းကို ျဖဳတ္ေနဆဲ...</string>
+  <string name="progress_unmounting" product="default">SD ကဒ္ကို ပိတ္ေနဆဲ...</string>
+  <string name="progress_erasing" product="nosdcard">USB သိမ္းဆည္းမႈကို ဖ်က္ေနဆဲ...</string>
+  <string name="progress_erasing" product="default">SD ကဒ္ကို ဖ်က္ေနဆ...</string>
+  <string name="format_error" product="nosdcard">USB သိမ္းဆည္းမႈပစၥည္းကို မဖ်က္ႏိုင္ပါ။</string>
+  <string name="format_error" product="default">SD ကဒ္အား မဖ်က္ႏိုင္ပါ။</string>
   <string name="media_bad_removal">SD ကဒ္အား ကြန္ပ်ဴတာသုိ႔ မတင္ခင္ ဖယ္႐ွားထားျပီးျဖစ္သည္။</string>
-  <string product="nosdcard" name="media_checking">USB သိမ္းဆည္းမႈပစၥည္းကို ယခုစစ္ေဆးေနဆဲျဖစ္သည္။</string>
-  <string product="default" name="media_checking">SD ကဒ္ကို လက္႐ွိ စစ္ေဆးဆဲ</string>
+  <string name="media_checking" product="nosdcard">USB သိမ္းဆည္းမႈပစၥည္းကို ယခုစစ္ေဆးေနဆဲျဖစ္သည္။</string>
+  <string name="media_checking" product="default">SD ကဒ္ကို လက္႐ွိ စစ္ေဆးဆဲ</string>
   <string name="media_removed">SD ကဒ္အား ဖယ္႐ွားျပီးျဖစ္သည္။</string>
-  <string product="nosdcard" name="media_shared">USB သိမ္းဆည္းမႈပစၥည္းကို ကြန္ပ်ဴတာက ယခုအသံုးျပဳေနဆဲျဖစ္သည္။</string>
-  <string product="default" name="media_shared">SD ကဒ္အား လက္႐ွိကြန္ပ်ဴူတာက အသံုးျပဳေနဆဲ</string>
+  <string name="media_shared" product="nosdcard">USB သိမ္းဆည္းမႈပစၥည္းကို ကြန္ပ်ဴတာက ယခုအသံုးျပဳေနဆဲျဖစ္သည္။</string>
+  <string name="media_shared" product="default">SD ကဒ္အား လက္႐ွိကြန္ပ်ဴူတာက အသံုးျပဳေနဆဲ</string>
   <string name="media_unknown_state">ျပင္ပမီဒီယာမွာ အမည္မသိအေျခအေနတြင္႐ွိ။</string>
   <string name="share">ေဝမွ်ပါ</string>
   <string name="find">႐ွာပါ</string>
   <string name="websearch">ဝက္ဘ္ျဖင့္႐ွာေဖြျခင္း</string>
   <string name="gpsNotifTicker"><xliff:g id="name">%s</xliff:g>မွ တည္ေနရာေတာင္းဆိုခ်က္</string>
   <string name="gpsNotifTitle">တည္ေနရာေတာင္းဆိုခ်က္</string>
-  <string name="gpsNotifMessage"><xliff:g id="name">%1$s</xliff:g> (<xliff:g id="service" example="SUPL-service">%2$s</xliff:g>) မွ ေတာင္းဆိုထားသည္</string>
+  <string name="gpsNotifMessage"><xliff:g id="name">%1$s</xliff:g> (<xliff:g example="SUPL-service" id="service">%2$s</xliff:g>) မွ ေတာင္းဆိုထားသည္</string>
   <string name="gpsVerifYes">ဟုတ် </string>
   <string name="gpsVerifNo">မ႐ွိ</string>
   <string name="sync_too_many_deletes">ကန္႔သတ္ခ်က္ထက္ ေက်ာ္လြန္ပါက ဖ်က္ပါ</string>
@@ -1358,7 +1230,7 @@
   <string name="add_account_button_label">အေကာင့္ထည့္ပါ</string>
   <string name="number_picker_increment_button">အတိုး</string>
   <string name="number_picker_decrement_button">ေလ်ာ့ျခင္း</string>
-  <string name="number_picker_increment_scroll_mode"><xliff:g id="value" example="3">%s</xliff:g> ႏွိပ္ျပီး ကိုင္ထားပါ။</string>
+  <string name="number_picker_increment_scroll_mode"><xliff:g example="3" id="value">%s</xliff:g> ႏွိပ္ျပီး ကိုင္ထားပါ။</string>
   <string name="number_picker_increment_scroll_action">တိုးရန္ အေပၚသို႔ ေ႐ႊႊ႕ျပီး ေလွ်ာ့ရန္ ေအာက္သုိ႔ ေ႐ႊႊ႕ပါ</string>
   <string name="time_picker_increment_minute_button">မိနစ္တိုး</string>
   <string name="time_picker_decrement_minute_button">ေလ်ာ့သည့္မိနစ္</string>
@@ -1381,12 +1253,12 @@
   <string name="keyboardview_keycode_enter">ထည့္ပါ</string>
   <string name="activitychooserview_choose_application">ပ႐ုိဂရမ္ေ႐ြးပါ</string>
   <string name="shareactionprovider_share_with">ႏွင့္ေဝမွ်ပါ</string>
-  <string name="shareactionprovider_share_with_application"><xliff:g id="application_name" example="Bluetooth">%s</xliff:g> ႏွင့္ေဝမွ်ပါ</string>
+  <string name="shareactionprovider_share_with_application"><xliff:g example="Bluetooth" id="application_name">%s</xliff:g> ႏွင့္ေဝမွ်ပါ</string>
   <string name="content_description_sliding_handle">"လက္ကိုင္ကို ပြတ္ဆြဲျခင္း။ ႏွိပ္ျပီးကိုင္ထားပါ။"</string>
-  <string name="description_direction_up"><xliff:g id="target_description" example="Unlock">%s</xliff:g>အတြက္။ </string>
-  <string name="description_direction_down"><xliff:g id="target_description" example="Unlock">%s</xliff:g> အတြက္ ေအာက္ဘက္။</string>
-  <string name="description_direction_left">"<xliff:g id="target_description" example="Unlock">%s</xliff:g>အတြက္ ဘယ္ဘက္။</string>
-  <string name="description_direction_right"><xliff:g id="target_description" example="Unlock">%s</xliff:g> အတြက္ ညာဘက္။</string>
+  <string name="description_direction_up"><xliff:g example="Unlock" id="target_description">%s</xliff:g>အတြက္။ </string>
+  <string name="description_direction_down"><xliff:g example="Unlock" id="target_description">%s</xliff:g> အတြက္ ေအာက္ဘက္။</string>
+  <string name="description_direction_left">"<xliff:g example="Unlock" id="target_description">%s</xliff:g>အတြက္ ဘယ္ဘက္။</string>
+  <string name="description_direction_right"><xliff:g example="Unlock" id="target_description">%s</xliff:g> အတြက္ ညာဘက္။</string>
   <string name="description_target_unlock">ေသာ့ဖွင့်ြခင်း</string>
   <string name="description_target_camera">ကင္မရာ</string>
   <string name="description_target_silent">Silent</string>
@@ -1412,7 +1284,7 @@
   <string name="data_usage_4g_limit_snoozed_title">4G ေဒတာကန္႔သတ္ခ်က္ေက်ာ္လြန္</string>
   <string name="data_usage_mobile_limit_snoozed_title">မိုဘိုင္းေဒတာကန္႔သတ္ခ်က္ထက္ေက်ာ္လြန္</string>
   <string name="data_usage_wifi_limit_snoozed_title">WLAN ေဒတာကန္႔သတ္ခ်က္ေက်ာ္လြန္</string>
-  <string name="data_usage_limit_snoozed_body">သတ္မွတ္ကန္႔သတ္ခ်က္အထက္ <xliff:g id="size" example="3.8GB">%s</xliff:g></string>
+  <string name="data_usage_limit_snoozed_body">သတ္မွတ္ကန္႔သတ္ခ်က္အထက္ <xliff:g example="3.8GB" id="size">%s</xliff:g></string>
   <string name="data_usage_restricted_title">ေနာက္ခံေဒတာကန္႔သတ္ျပီး</string>
   <string name="data_usage_restricted_body">ထိန္းခ်ဳပ္ထားခ်က္ကို ဖယ္႐ွားရန္ ထိပါ</string>
   <string name="ssl_certificate">လံုျခံဳေရးတရားဝင္အေထာက္အထား</string>
@@ -1441,10 +1313,148 @@
   <string name="china_unicom_numeric_values">CUCC</string>
   <string name="missed_call">%1$d မေျဖထားေသာဖုန္း</string>
   <string name="unread_message">%1$d မဖတ္ရေသးေသာမက္ေဆ့ခ်္</string>
-  <string product="tablet" name="enable_explore_by_touch_warning_message">
+  <string name="enable_explore_by_touch_warning_message" product="tablet">
             <xliff:g id="accessibility_service_name">%1$s</xliff:g> ေဖၚျပရန္ထိလိုက္ပါ၊ မ်က္ႏွာျပင္ကိုထိျပီးလွည့္လိုက္လွ်င္ ညႊန္ၾကားခ်က္အသံကို ၾကားရမည္ (သို႕)  ညႊန္ၾကားခ်က္စာကို ေတြ႕ျမင္ရမည္။ တက္ပလက္ေက်ာက္သင္ပုန္း ကြန္ျပဴတာသည္ သင္လက္ထိေတြ႕မႈအတိုင္း ျပန္လည္လႈပ္ရွားလာပါမည္။
             </string>
-  <string product="default" name="enable_explore_by_touch_warning_message">
+  <string name="enable_explore_by_touch_warning_message" product="default">
             <xliff:g id="accessibility_service_name">%1$s</xliff:g> ေဖၚျပရန္ထိလိုက္ပါ၊ မ်က္ႏွာျပင္ကို ထိျပီးလွည့္လိုက္လွ်င္ ညႊန္ၾကားခ်က္ အသံကို ၾကားရမည္ (သို႕)  ညႊန္ၾကားခ်က္စာကို ေတြ႕ျမင္ရမည္။ ဖုန္းသည္ သင္လက္ထိေတြ႕မႈ အတိုင္း ျပန္လည္လႈပ္ရွားလာပါမည္။
             </string>
+  <string-array name="phoneTypes">
+        <item>"အိမ္"</item>
+        <item>"မိုဘိုင္း"</item>
+        <item>"အလုပ္"</item>
+        <item>"အလုပ္ဖက္စ္"</item>
+        <item>"အိမ္ဖက္စ္"</item>
+        <item>"ေပဂ်ာ"</item>
+        <item>"အျခား"</item>
+        <item>"စိတ္ၾကိဳက္"</item>
+    </string-array>
+  <string-array name="emailAddressTypes">
+        <item>"အိမ္"</item>
+        <item>"အလုပ္"</item>
+        <item>"အျခား"</item>
+        <item>"စိတ္ၾကိဳက္"</item>
+    </string-array>
+  <string-array name="postalAddressTypes">
+        <item>"အိမ္"</item>
+        <item>"အလုပ္"</item>
+        <item>"အျခား"</item>
+        <item>"စိတ္ၾကိဳက္"</item>
+    </string-array>
+  <string-array name="imAddressTypes">
+        <item>"အိမ္"</item>
+        <item>"အလုပ္"</item>
+        <item>"အျခား"</item>
+        <item>"စိတ္ၾကိဳက္"</item>
+    </string-array>
+  <string-array name="organizationTypes">
+        <item>"အလုပ္"</item>
+        <item>"အျခား"</item>
+        <item>"စိတ္ၾကိဳက္"</item>
+    </string-array>
+  <string-array name="imProtocols">
+        <item>"ဦးတည္ခ်က္"</item>
+        <item>"Windows Live"</item>
+        <item>"Yahoo"</item>
+        <item>"Skype"</item>
+        <item>"QQ"</item>
+        <item>"Google Talk"</item>
+        <item>"ICQ"</item>
+        <item>"Jabber"</item>
+    </string-array>
+  <plurals name="num_seconds_ago">
+        <item quantity="one">"လြန္ခဲ့ေသာ 1 စကၠန္႔က"</item>
+        <item quantity="other">"လြန္ခဲ့ေသာ <xliff:g id="count">%d</xliff:g> စကၠန္႔က"</item>
+    </plurals>
+  <plurals name="num_minutes_ago">
+        <item quantity="one">"လြန္ခဲ့ေသာ 1 မိနစ္အၾကာက"</item>
+        <item quantity="other">"လြန္ခဲ့ေသာ <xliff:g id="count">%d</xliff:g> မိနစ္အၾကာက"</item>
+    </plurals>
+  <plurals name="num_hours_ago">
+        <item quantity="one">"လြန္ခဲ့ေသာ 1 နာရီက"</item>
+        <item quantity="other">"လြန္ခဲ့ေသာ <xliff:g id="count">%d</xliff:g> နာရီက"</item>
+    </plurals>
+  <plurals name="last_num_days">
+        <item quantity="other">"ေနာက္ဆံုး <xliff:g id="count">%d</xliff:g> ရက္"</item>
+    </plurals>
+  <plurals name="num_days_ago">
+        <item quantity="one">"မေန႔က"</item>
+        <item quantity="other">"လြန္ခဲ့ေသာ <xliff:g id="count">%d</xliff:g> ရက္က"</item>
+    </plurals>
+  <plurals name="in_num_seconds">
+        <item quantity="one">"1 စကၠန္႔ၾကာလွ်င္"</item>
+        <item quantity="other">"<xliff:g id="count">%d</xliff:g>စကၠန္႔အတြင္း"</item>
+    </plurals>
+  <plurals name="in_num_minutes">
+        <item quantity="one">"1 မိနစ္ၾကာလွ်င္"</item>
+        <item quantity="other">"<xliff:g id="count">%d</xliff:g> မိနစ္ၾကာလွ်င္"</item>
+    </plurals>
+  <plurals name="in_num_hours">
+        <item quantity="one">"1 နာရီၾကာလွ်င္"</item>
+        <item quantity="other">"<xliff:g id="count">%d</xliff:g> နာရီလွ်င္"</item>
+    </plurals>
+  <plurals name="in_num_days">
+        <item quantity="one">"မနက္ျဖန္"</item>
+        <item quantity="other">"<xliff:g id="count">%d</xliff:g> ရက္လွ်င္"</item>
+    </plurals>
+  <plurals name="abbrev_num_seconds_ago">
+        <item quantity="one">"လြန္ခဲ့ေသာ 1 စကၠန္႔က"</item>
+        <item quantity="other">"လြန္ခဲ့ေသာ <xliff:g id="count">%d</xliff:g> စကၠန္႔က"</item>
+    </plurals>
+  <plurals name="abbrev_num_minutes_ago">
+        <item quantity="one">"လြန္ခဲ့ေသာ 1 မိနစ္က"</item>
+        <item quantity="other">"လြန္ခဲ့ေသာ <xliff:g id="count">%d</xliff:g> မိနစ္အၾကာက"</item>
+    </plurals>
+  <plurals name="abbrev_num_hours_ago">
+        <item quantity="one">"လြန္ခဲ့ေသာ 1 နာရီက"</item>
+        <item quantity="other">"လြန္ခဲ့ေသာ <xliff:g id="count">%d</xliff:g> နာရီက"</item>
+    </plurals>
+  <plurals name="abbrev_num_days_ago">
+        <item quantity="one">"မေန႔က"</item>
+        <item quantity="other">"လြန္ခဲ့ေသာ <xliff:g id="count">%d</xliff:g> ရက္က"</item>
+    </plurals>
+  <plurals name="abbrev_in_num_seconds">
+        <item quantity="one">"1 စကၠန္႔ၾကာလွ်င္"</item>
+        <item quantity="other">"<xliff:g id="count">%d</xliff:g>စကၠန္႔အတြင္း"</item>
+    </plurals>
+  <plurals name="abbrev_in_num_minutes">
+        <item quantity="one">"1 မိနစ္ၾကာလွ်င္"</item>
+        <item quantity="other">"<xliff:g id="count">%d</xliff:g> မိနစ္ၾကာလွ်င္"</item>
+    </plurals>
+  <plurals name="abbrev_in_num_hours">
+        <item quantity="one">"1 နာရီၾကာလွ်င္"</item>
+        <item quantity="other">"<xliff:g id="count">%d</xliff:g> နာရီလွ်င္"</item>
+    </plurals>
+  <plurals name="abbrev_in_num_days">
+        <item quantity="one">"မနက္ျဖန္"</item>
+        <item quantity="other">"<xliff:g id="count">%d</xliff:g> ရက္လွ်င္"</item>
+    </plurals>
+  <plurals name="wifi_available">
+        <item quantity="one">"WLAN ကြန္ယက္ရ႐ွိႏိုင္"</item>
+        <item quantity="other">"WLAN ကြန္ယက္မ်ားရ႐ွိႏိုင္"</item>
+    </plurals>
+  <plurals name="wifi_available_detailed">
+        <item quantity="one">"ရ႐ွိႏိုင္သည့္ WLAN ကြန္ယက္ဖြင့္ပါ"</item>
+        <item quantity="other">"ရ႐ွိႏိုင္သည့္ WLAN ကြန္ယက္မ်ားဖြင့္ပါ"</item>
+    </plurals>
+  <plurals name="matches_found">
+        <!-- Case of one match -->
+        <!--Modify Spreadst of 94151 can't show whole information on webpage  start -->
+        <!-- <item quantity="one">1 match</item> -->
+        <item quantity="one">"လိုက္ဖက္မႈ 1 ခု"</item>
+        <!-- Case of multiple total matches -->
+        <!-- <item quantity="other"><xliff:g id="index" example="2">%d</xliff:g> of <xliff:g id="total" example="137">%d</xliff:g></item> -->
+        <item quantity="other">"<xliff:g example="137" id="total">%d</xliff:g> ႐ွိ <xliff:g example="2" id="index">%d</xliff:g>"</item>
+        <!--Modify Spreadst of 94151 can't show whole information on webpage  end -->
+        </plurals>
+  <string name="low_internal_storage_ignore">မသိဟန္</string>
+  <string name="low_internal_storage_display_details">အေသးစိတ်</string>
+  <string name="low_internal_storage_wait">"ေစာင့္ေနသည္…"</string>
+  <string name="low_internal_storage_updating_details">"အေသးစိတ္အပ္ဒိတ္ေနသည္…"</string>
+  <string name="emergency_call_no_service">ကြန္ရက္မေထာက္ပံ့ပါ</string>
+  <string name="usim_recommanded">CUCC ကဒ္မသံုးပါ</string>
+  <string name="usim_recommanded_for_cucc_app">CUCC ေအပီပီ,Usim သံုးႏိုင္သည္. ဆက္သံုးမွာလား?</string>
+  <string name="pick_yes">"ဆက္လုပ္ပါ"</string>
+  <string name="pick_no">"မလုပ္ပါ"</string>
+  <string name="language_automatic">"အလိုအေလ်ာက္"</string>
 </resources>

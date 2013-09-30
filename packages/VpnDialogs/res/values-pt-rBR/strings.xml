@@ -1,14 +1,19 @@
-<?xml version="1.0"  encoding="utf-8"?>
-<resources
-xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="warning">Por processar, você está dando a permissão de aplicação para interceptar todo o trâfico de rede. <b>NÃO aceita até confiar na aplicação. </b>Senão, você roda o risco de deixar seus dados compromissados por um software malicioso.</string>
-    <string name="accept">Confio nesta aplicação</string>
-    <string name="legacy_title">VPN é ligado</string>
-    <string name="session">Sessão:</string>
-    <string name="data_transmitted">Enviado:</string>
-    <string name="data_received">Recebido:</string>
-    <string name="data_value_format">
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="warning">Por processar, você está dando a permissão de aplicação para interceptar todo o trâfico de rede. <b>NÃO aceita até confiar na aplicação. </b>Senão, você roda o risco de deixar seus dados compromissados por um software malicioso.</string>
+  <string name="accept">Confio nesta aplicação</string>
+  <string name="legacy_title">VPN é ligado</string>
+  <string name="session">Sessão:</string>
+  <string name="data_transmitted">Enviado:</string>
+  <string name="data_received">Recebido:</string>
+  <string name="data_value_format">
         <xliff:g id="number">%1$s</xliff:g> bytes /
         <xliff:g id="number">%2$s</xliff:g> pacotes
     </string>
+  <string name="prompt"><xliff:g id="app">%s</xliff:g>
+        tenta criar uma VPN conexão.
+    </string>
+  <string name="configure">Configurar</string>
+  <string name="disconnect">"Desconectar"</string>
+  <string name="duration">Duração</string>
 </resources>

@@ -17,105 +17,104 @@
 ** limitations under the License.
 */
  -->
-<resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" xmlns:android="http://schemas.android.com/apk/res/android">
   <!-- no translation found for wifi_available_sign_in_detailed (6797764740339907572) -->
-  <string msgid="2625429890869005782" name="imei">"IMEI"</string>
-  <string msgid="4841221237681254195" name="meid">"MEID"</string>
-  <string msgid="319298163018473078" name="silent_mode_silent">"रिंगर बंद"</string>
-  <string msgid="7072043388581551395" name="silent_mode_vibrate">"रिंगर कंपन"</string>
-  <string msgid="8592241816194074353" name="silent_mode_ring">"रिंगर चालू"</string>
-  <string msgid="7054509914500140361" name="reboot_safemode_title">"सुरक्षित मोड में रीबूट करें"</string>
-  <string msgid="55293944502784668" name="reboot_safemode_confirm">"क्या आप सुरक्षित मोड में रीबूट करना चाहते हैं? इससे आपके इंस्टॉल किए हुए सभी तृतीय पक्ष एप्लिकेशन अक्षम हो जाएंगे. जब आप फिर से रीबूट करेंगे तो वे पुनर्स्थापित हो जाएंगे."</string>
-  <string msgid="1598328843619646166" name="permlab_readCellBroadcasts">"सेल प्रसारण संदेश पढ़ें"</string>
-  <string msgid="6361972776080458979" name="permdesc_readCellBroadcasts">"एप्‍लिकेशन को आपके उपकरण द्वारा प्राप्त सेल प्रसारण संदेशों को पढ़ने देता है. कुछ स्‍थानों पर आपको आपातकालीन स्‍थितियों की चेतावनी देने के लिए सेल प्रसारण अलर्ट वितरित किए जाते हैं. आपातकालीन सेल प्रसारण प्राप्त होने पर दुर्भावनापूर्ण एप्‍लिकेशन आपके उपकरण के निष्‍पादन या संचालन में हस्‍तक्षेप कर सकते हैं."</string>
-  <string msgid="6229468674753529501" name="permlab_getDetailedTasks">"चल रहे एप्‍लिकेशन के विवरण प्राप्त करें"</string>
-  <string msgid="153824741440717599" name="permdesc_getDetailedTasks">"एप्लिकेशन को वर्तमान में और हाल ही में चल रहे कार्यों की जानकारी प्राप्त करने देता है. दुर्भावनापूर्ण एप्लिकेशन अन्य एप्लिकेशन के बारे में निजी जानकारी खोज सकते हैं."</string>
-  <string msgid="2918768238045206456" name="permlab_startAnyActivity">"कोई गतिविधि प्रारंभ करें"</string>
-  <string msgid="997823695343584001" name="permdesc_startAnyActivity">"अनुमति सुरक्षा या निर्यात की स्‍थिति पर ध्‍यान दिए बिना, एप्‍लिकेशन को कोई गतिविधि प्रारंभ करने देता है."</string>
-  <string msgid="6975387118861842061" name="permlab_setScreenCompatibility">"स्‍क्रीन संगतता सेट करें"</string>
-  <string msgid="692043618693917374" name="permdesc_setScreenCompatibility">"एप्‍लिकेशन को अन्‍य एप्‍लिकेशन के स्‍क्रीन संगतता मोड को नियंत्रित करने देता है. दुर्भावनापूर्ण एप्‍लिकेशन अन्‍य एप्‍लिकेशन का व्‍यवहार बाधित कर सकते हैं."</string>
-  <string msgid="5357733942556031593" name="permlab_bindAccessibilityService">"पहुंच-योग्‍यता सेवा से आबद्ध करें"</string>
-  <string msgid="7034615928609331368" name="permdesc_bindAccessibilityService">"धारक को किसी पहुंच-योग्यता सेवा के शीर्ष-स्‍तर इंटरफ़ेस से आबद्ध होने देता है. सामान्‍य एप्‍लिकेशन के लिए कभी भी आवश्‍यक नहीं होना चाहिए."</string>
-  <string msgid="4778731703600909340" name="permlab_setKeyboardLayout">"कीबोर्ड लेआउट बदलें"</string>
-  <string msgid="8480016771134175879" name="permdesc_setKeyboardLayout">"एप्‍लिकेशन को कीबोर्ड लेआउट बदलने देता है. सामान्‍य एप्‍लिकेशन के लिए कभी आवश्‍यक नहीं है."</string>
-  <string msgid="8525189272329086137" product="tablet" name="permdesc_persistentActivity">"एप्‍लिकेशन को स्मृति में स्‍वयं के कुछ हिस्सों को लगातार बनाने की अनुमति देता है. यह अन्‍य एप्लिकेशन के लिए उपलब्‍ध स्‍मृति को सीमित कर टेबलेट को धीमा कर सकता है."</string>
-  <string msgid="4384760047508278272" product="default" name="permdesc_persistentActivity">"एप्‍लिकेशन को स्मृति में स्‍वयं के कुछ हिस्सों को लगातार बनाने देता है. यह अन्‍य एप्लिकेशन के लिए उपलब्‍ध स्‍मृति को सीमित कर फ़ोन को धीमा कर सकता है."</string>
-  <string msgid="4627315351093508795" name="permlab_grantRevokePermissions">"अनुमति दें या रद्द करें"</string>
-  <string msgid="4088642654085850662" name="permdesc_grantRevokePermissions">"एप्लिकेशन को उसके या अन्य एप्लिकेशन के लिए विशेष अनुमतियां देने या रद्द करने देता है. दुर्भावनापूर्ण एप्लिकेशन इसका उपयोग उन सुविधाओं तक पहुंचने के लिए कर सकते हैं जो आपने उन्हें नहीं दी हैं."</string>
-  <string msgid="3478133184624102739" name="permlab_readCallLog">"कॉल लॉग पढ़ें"</string>
-  <string msgid="3700645184870760285" product="tablet" name="permdesc_readCallLog">"एप्लिकेशन को आपके फ़ोन का कॉल लॉग पढ़ने देता है, जिसमें इनकमिंग और आउटगोइंग कॉल का डेटा शामिल है. यह अनुमति एप्लिकेशन को आपके कॉल लॉग डेटा को सहेजने देती है, और दुर्भावनापूर्ण एप्लिकेशन आपकी जानकारी के बिना कॉल लॉग डेटा को साझा कर सकते हैं."</string>
-  <string msgid="5777725796813217244" product="default" name="permdesc_readCallLog">"एप्लिकेशन को आपके फ़ोन का कॉल लॉग पढ़ने देता है, जिसमें इनकमिंग और आउटगोइंग कॉल का डेटा शामिल है. यह अनुमति एप्लिकेशन को आपके कॉल लॉग डेटा को सहेजने देती है, और दुर्भावनापूर्ण एप्लिकेशन आपकी जानकारी के बिना कॉल लॉग डेटा को साझा कर सकते हैं."</string>
-  <string msgid="8552045664743499354" name="permlab_writeCallLog">"कॉल लॉग लिखें"</string>
-  <string msgid="6661806062274119245" product="tablet" name="permdesc_writeCallLog">"एप्‍लिकेशन को इनकमिंग और आउटगोइंग कॉल के डेटा सहित, आपके टेबलेट का कॉल लॉग संशोधित करने देता है. दुर्भावनापूर्ण एप्‍लिकेशन आपके कॉल लॉग को मिटाने या संशोधित करने के लिए इसका उपयोग कर सकते हैं."</string>
-  <string msgid="683941736352787842" product="default" name="permdesc_writeCallLog">"एप्‍लिकेशन को इनकमिंग और आउटगोइंग कॉल के डेटा सहित, आपके फ़ोन का कॉल लॉग संशोधित करने देता है. दुर्भावनापूर्ण एप्‍लिकेशन आपके कॉल लॉग को मिटाने या संशोधित करने के लिए इसका उपयोग कर सकते हैं."</string>
-  <string msgid="6679035520113668528" product="tablet" name="permdesc_writeCalendar">"एप्लिकेशन को मित्रों या सहकर्मियों के ईवेंट के साथ ही वे ईवेंट जोड़ने, निकालने, बदलने देता है जिन्हें आप अपने टेबलेट पर संशोधित कर सकते हैं. इससे एप्लिकेशन, स्‍वामी की जानकारी के बिना उन संदेशों को भेज सकता है जो कैलेंडर स्वामियों की ओर से आते दिखाई देते हैं, या ईवेंट संशोधित कर सकता है."</string>
-  <string msgid="2324469496327249376" product="default" name="permdesc_writeCalendar">"एप्लिकेशन को मित्रों या सहकर्मियों के ईवेंट के साथ ही वे ईवेंट जोड़ने, निकालने, बदलने देता है जिन्हें आप अपने फ़ोन पर संशोधित कर सकते हैं. इससे एप्लिकेशन, स्‍वामी की जानकारी के बिना उन संदेशों को भेज सकता है जो कैलेंडर स्वामियों की ओर से आते दिखाई देते हैं, या ईवेंट संशोधित कर सकता है."</string>
-  <string msgid="5383798877137640762" name="permdesc_accessCoarseLocation">"उपलब्‍ध नेटवर्क स्रोतों जैसे सेल टॉवर और WI- Fi का उपयोग करते हुए स्‍थान प्रदाताओं से अनुमानित स्थान तक पहुचें. जब ये स्थान सेवाएं उपलब्ध और चालू हों, तो यह अनुमति एप्लिकेशन को आपका अनुमानित स्थान निर्धारित करते देती है."</string>
-  <string msgid="2927361537942591841" product="nosdcard" name="permlab_mount_unmount_filesystems">"USB संग्रहण फ़ाइल सिस्‍टम पर पहुंचें"</string>
-  <string msgid="4402305049890953810" product="default" name="permlab_mount_unmount_filesystems">"SD कार्ड फ़ाइल सिस्‍टम पर पहुंचें"</string>
-  <string msgid="6227819582624904972" product="nosdcard" name="permlab_mount_format_filesystems">"USB संग्रहण मिटाएं"</string>
-  <string msgid="262582698639274056" product="default" name="permlab_mount_format_filesystems">"SD कार्ड मिटाएं"</string>
-  <string msgid="7969774021256336548" product="tablet" name="permdesc_changeWifiMulticastState">"एप्लिकेशन को WLAN नेटवर्क पर मल्टीकास्ट पते के उपयोग से केवल आपके टेबलेट पर ही नहीं, बल्कि सभी उपकरणों पर भेजे गए पैकेट प्राप्‍त करने देता है. यह गैर-मल्टीकास्ट मोड से अधिक पावर का उपयोग करता है."</string>
-  <string msgid="6851949706025349926" product="default" name="permdesc_changeWifiMulticastState">"एप्लिकेशन को WLAN नेटवर्क पर मल्टीकास्ट पते के उपयोग से केवल आपके फ़ोन पर ही नहीं, बल्कि सभी उपकरणों पर भेजे गए पैकेट प्राप्‍त करने देता है. यह गैर-मल्टीकास्ट मोड से अधिक पावर का उपयोग करता है."</string>
-  <string msgid="3156456504084201805" product="tablet" name="permdesc_changeWimaxState">"एप्‍लिकेशन को WiMAX नेटवर्क से टेबलेट को कनेक्‍ट और डिस्‍कनेक्‍ट करने देता है."</string>
-  <string msgid="697025043004923798" product="default" name="permdesc_changeWimaxState">"एप्‍लिकेशन को WiMAX नेटवर्क से फ़ोन को कनेक्‍ट और डिस्‍कनेक्‍ट करने देता है."</string>
-  <string msgid="8235341515605559677" product="nosdcard" name="permlab_sdcardRead">"संरक्ष‍ित संग्रहण पर पहुंच का परीक्षण करें"</string>
-  <string msgid="8235341515605559677" product="default" name="permlab_sdcardRead">"संरक्ष‍ित संग्रहण पर पहुंच का परीक्षण करें"</string>
-  <string msgid="5791957130190763289" product="nosdcard" name="permdesc_sdcardRead">"एप्लि. को USB संग्रहण अनुमति जांचने देता है जो भावी उपकरणों में उपलब्‍ध होगा."</string>
-  <string msgid="5914402684685848828" product="default" name="permdesc_sdcardRead">"एप्लिकेशन को SD कार्ड के लिए किसी अनुमति का परीक्षण करने देता है जो भविष्‍य के उपकरणों में उपलब्‍ध होगा."</string>
-  <string msgid="754137583022792429" name="faceunlock_multiple_failures">"फेस अनलॉक के अधिकतम प्रयासों की सीमा पार हो गई"</string>
-  <string msgid="5096149665138916184" name="lockscreen_permanent_disabled_sim_message_short">"अनुपयोगी SIM कार्ड."</string>
-  <string msgid="7336470535385009523" name="granularity_label_character">"वर्ण"</string>
-  <string msgid="7075570328374918660" name="granularity_label_word">"शब्द"</string>
-  <string msgid="5815508880782488267" name="granularity_label_link">"लिंक"</string>
-  <string msgid="5764267235026120888" name="granularity_label_line">"पंक्ति"</string>
-  <string msgid="546083327654631076" name="permlab_serialPort">"सीरियल पोर्ट पर पहुंचें"</string>
-  <string msgid="2991639985224598193" name="permdesc_serialPort">"SerialManager API का उपयोग करके धारक को सीरियल पोर्ट पर पहुंच प्रदान करता है."</string>
-  <string msgid="5077774297943409285" name="permlab_accessContentProvidersExternally">"बाह्य रूप से सामग्री प्रदाताओं पर पहुंच"</string>
-  <string msgid="4544346486697853685" name="permdesc_accessContentProvidersExternally">"धारक को शेल से सामग्री प्रदाताओं तक पहुंचने देता है. सामान्य एप्लिकेशन के लिए कभी भी आवश्यकता नहीं होनी चाहिए."</string>
-  <string msgid="3527558366616680889" name="permlab_updateLock">"स्वचालित उपकरण अपडेट का समर्थन न करें"</string>
-  <string msgid="1655625832166778492" name="permdesc_updateLock">"धारक को उपकरण अपग्रेड करने के लिए, गैर-सहभागी रीबूट के ठीक समय के बारे में सिस्टम पर जानकारी प्रस्तुत करने देता है."</string>
-  <string msgid="7460694070309730149" name="enable_explore_by_touch_warning_title">"स्‍पर्श के द्वारा अन्‍वेषण करें सक्षम करें?"</string>
-  <string msgid="8655887539089910577" product="tablet" name="enable_explore_by_touch_warning_message">"<xliff:g id="ACCESSIBILITY_SERVICE_NAME">%1$s</xliff:g> स्‍पर्श के द्वारा अन्‍वेषण करें सक्षम करना चाहती है. स्‍पर्श के द्वारा अन्‍वेष करें चालू होने पर, आप अपनी अंगुली के नीचे क्या है उसका विवरण सुन सकते हैं या देख सकते हैं या टेबलेट से संवाद करने के लिए जेस्‍चर निष्‍पादित कर सकते हैं."</string>
-  <string msgid="2708199672852373195" product="default" name="enable_explore_by_touch_warning_message">"<xliff:g id="ACCESSIBILITY_SERVICE_NAME">%1$s</xliff:g> स्‍पर्श के द्वारा अन्‍वेषण करें सक्षम करना चाहती है. स्‍पर्श के द्वारा अन्‍वेष करें चालू होने पर, आप अपनी अंगुली के नीचे क्या है उसका विवरण सुन सकते हैं या देख सकते हैं या फ़ोन से संवाद करने के लिए जेस्‍चर निष्‍पादित कर सकते हैं."</string>
-  <string msgid="6640505817617414371" name="low_internal_storage_view_text">"हो सकता है कुछ सिस्टम फ़ंक्शन कार्य न करें"</string>
-  <string msgid="3272758351138122503" name="webpage_unresponsive">"पृष्ठ प्रतिसाद नहीं दे रहा है."\n\n"क्‍या आप इसे बंद करना चाहते हैं?"</string>
-  <string msgid="1645267259272829559" name="accept">"स्वीकार करें"</string>
-  <string msgid="2112225451706137894" name="decline">"अस्वीकार करें"</string>
-  <string msgid="1318975185112070734" name="wifi_p2p_invitation_sent_title">"आमंत्रण भेजा गया"</string>
-  <string msgid="4958803948658533637" name="wifi_p2p_invitation_to_connect_title">"कनेक्‍ट करने का आमंत्रण"</string>
-  <string msgid="570389174731951769" name="wifi_p2p_from_message">"प्रेषक:"</string>
-  <string msgid="248968974522044099" name="wifi_p2p_to_message">"प्रति:"</string>
-  <string msgid="5920929550367828970" name="wifi_p2p_enter_pin_message">"आवश्‍यक पिन लिखें:"</string>
-  <string msgid="8530563323880921094" name="wifi_p2p_show_pin_message">"पिन:"</string>
-  <string msgid="2507683751759308828" name="date_time_done">"पूर्ण"</string>
-  <string msgid="8257740710754301407" name="perms_new_perm_prefix">
-    <font fgcolor="#ff900000" size="12">"नया: "</font>
+  <string name="imei" msgid="2625429890869005782">"IMEI"</string>
+  <string name="meid" msgid="4841221237681254195">"MEID"</string>
+  <string name="silent_mode_silent" msgid="319298163018473078">"रिंगर बंद"</string>
+  <string name="silent_mode_vibrate" msgid="7072043388581551395">"रिंगर कंपन"</string>
+  <string name="silent_mode_ring" msgid="8592241816194074353">"रिंगर चालू"</string>
+  <string name="reboot_safemode_title" msgid="7054509914500140361">"सुरक्षित मोड में रीबूट करें"</string>
+  <string name="reboot_safemode_confirm" msgid="55293944502784668">"क्या आप सुरक्षित मोड में रीबूट करना चाहते हैं? इससे आपके इंस्टॉल किए हुए सभी तृतीय पक्ष एप्लिकेशन अक्षम हो जाएंगे. जब आप फिर से रीबूट करेंगे तो वे पुनर्स्थापित हो जाएंगे."</string>
+  <string name="permlab_readCellBroadcasts" msgid="1598328843619646166">"सेल प्रसारण संदेश पढ़ें"</string>
+  <string name="permdesc_readCellBroadcasts" msgid="6361972776080458979">"एप्‍लिकेशन को आपके उपकरण द्वारा प्राप्त सेल प्रसारण संदेशों को पढ़ने देता है. कुछ स्‍थानों पर आपको आपातकालीन स्‍थितियों की चेतावनी देने के लिए सेल प्रसारण अलर्ट वितरित किए जाते हैं. आपातकालीन सेल प्रसारण प्राप्त होने पर दुर्भावनापूर्ण एप्‍लिकेशन आपके उपकरण के निष्‍पादन या संचालन में हस्‍तक्षेप कर सकते हैं."</string>
+  <string name="permlab_getDetailedTasks" msgid="6229468674753529501">"चल रहे एप्‍लिकेशन के विवरण प्राप्त करें"</string>
+  <string name="permdesc_getDetailedTasks" msgid="153824741440717599">"एप्लिकेशन को वर्तमान में और हाल ही में चल रहे कार्यों की जानकारी प्राप्त करने देता है. दुर्भावनापूर्ण एप्लिकेशन अन्य एप्लिकेशन के बारे में निजी जानकारी खोज सकते हैं."</string>
+  <string name="permlab_startAnyActivity" msgid="2918768238045206456">"कोई गतिविधि प्रारंभ करें"</string>
+  <string name="permdesc_startAnyActivity" msgid="997823695343584001">"अनुमति सुरक्षा या निर्यात की स्‍थिति पर ध्‍यान दिए बिना, एप्‍लिकेशन को कोई गतिविधि प्रारंभ करने देता है."</string>
+  <string name="permlab_setScreenCompatibility" msgid="6975387118861842061">"स्‍क्रीन संगतता सेट करें"</string>
+  <string name="permdesc_setScreenCompatibility" msgid="692043618693917374">"एप्‍लिकेशन को अन्‍य एप्‍लिकेशन के स्‍क्रीन संगतता मोड को नियंत्रित करने देता है. दुर्भावनापूर्ण एप्‍लिकेशन अन्‍य एप्‍लिकेशन का व्‍यवहार बाधित कर सकते हैं."</string>
+  <string name="permlab_bindAccessibilityService" msgid="5357733942556031593">"पहुंच-योग्‍यता सेवा से आबद्ध करें"</string>
+  <string name="permdesc_bindAccessibilityService" msgid="7034615928609331368">"धारक को किसी पहुंच-योग्यता सेवा के शीर्ष-स्‍तर इंटरफ़ेस से आबद्ध होने देता है. सामान्‍य एप्‍लिकेशन के लिए कभी भी आवश्‍यक नहीं होना चाहिए."</string>
+  <string name="permlab_setKeyboardLayout" msgid="4778731703600909340">"कीबोर्ड लेआउट बदलें"</string>
+  <string name="permdesc_setKeyboardLayout" msgid="8480016771134175879">"एप्‍लिकेशन को कीबोर्ड लेआउट बदलने देता है. सामान्‍य एप्‍लिकेशन के लिए कभी आवश्‍यक नहीं है."</string>
+  <string name="permdesc_persistentActivity" product="tablet" msgid="8525189272329086137">"एप्‍लिकेशन को स्मृति में स्‍वयं के कुछ हिस्सों को लगातार बनाने की अनुमति देता है. यह अन्‍य एप्लिकेशन के लिए उपलब्‍ध स्‍मृति को सीमित कर टेबलेट को धीमा कर सकता है."</string>
+  <string name="permdesc_persistentActivity" product="default" msgid="4384760047508278272">"एप्‍लिकेशन को स्मृति में स्‍वयं के कुछ हिस्सों को लगातार बनाने देता है. यह अन्‍य एप्लिकेशन के लिए उपलब्‍ध स्‍मृति को सीमित कर फ़ोन को धीमा कर सकता है."</string>
+  <string name="permlab_grantRevokePermissions" msgid="4627315351093508795">"अनुमति दें या रद्द करें"</string>
+  <string name="permdesc_grantRevokePermissions" msgid="4088642654085850662">"एप्लिकेशन को उसके या अन्य एप्लिकेशन के लिए विशेष अनुमतियां देने या रद्द करने देता है. दुर्भावनापूर्ण एप्लिकेशन इसका उपयोग उन सुविधाओं तक पहुंचने के लिए कर सकते हैं जो आपने उन्हें नहीं दी हैं."</string>
+  <string name="permlab_readCallLog" msgid="3478133184624102739">"कॉल लॉग पढ़ें"</string>
+  <string name="permdesc_readCallLog" product="tablet" msgid="3700645184870760285">"एप्लिकेशन को आपके फ़ोन का कॉल लॉग पढ़ने देता है, जिसमें इनकमिंग और आउटगोइंग कॉल का डेटा शामिल है. यह अनुमति एप्लिकेशन को आपके कॉल लॉग डेटा को सहेजने देती है, और दुर्भावनापूर्ण एप्लिकेशन आपकी जानकारी के बिना कॉल लॉग डेटा को साझा कर सकते हैं."</string>
+  <string name="permdesc_readCallLog" product="default" msgid="5777725796813217244">"एप्लिकेशन को आपके फ़ोन का कॉल लॉग पढ़ने देता है, जिसमें इनकमिंग और आउटगोइंग कॉल का डेटा शामिल है. यह अनुमति एप्लिकेशन को आपके कॉल लॉग डेटा को सहेजने देती है, और दुर्भावनापूर्ण एप्लिकेशन आपकी जानकारी के बिना कॉल लॉग डेटा को साझा कर सकते हैं."</string>
+  <string name="permlab_writeCallLog" msgid="8552045664743499354">"कॉल लॉग लिखें"</string>
+  <string name="permdesc_writeCallLog" product="tablet" msgid="6661806062274119245">"एप्‍लिकेशन को इनकमिंग और आउटगोइंग कॉल के डेटा सहित, आपके टेबलेट का कॉल लॉग संशोधित करने देता है. दुर्भावनापूर्ण एप्‍लिकेशन आपके कॉल लॉग को मिटाने या संशोधित करने के लिए इसका उपयोग कर सकते हैं."</string>
+  <string name="permdesc_writeCallLog" product="default" msgid="683941736352787842">"एप्‍लिकेशन को इनकमिंग और आउटगोइंग कॉल के डेटा सहित, आपके फ़ोन का कॉल लॉग संशोधित करने देता है. दुर्भावनापूर्ण एप्‍लिकेशन आपके कॉल लॉग को मिटाने या संशोधित करने के लिए इसका उपयोग कर सकते हैं."</string>
+  <string name="permdesc_writeCalendar" product="tablet" msgid="6679035520113668528">"एप्लिकेशन को मित्रों या सहकर्मियों के ईवेंट के साथ ही वे ईवेंट जोड़ने, निकालने, बदलने देता है जिन्हें आप अपने टेबलेट पर संशोधित कर सकते हैं. इससे एप्लिकेशन, स्‍वामी की जानकारी के बिना उन संदेशों को भेज सकता है जो कैलेंडर स्वामियों की ओर से आते दिखाई देते हैं, या ईवेंट संशोधित कर सकता है."</string>
+  <string name="permdesc_writeCalendar" product="default" msgid="2324469496327249376">"एप्लिकेशन को मित्रों या सहकर्मियों के ईवेंट के साथ ही वे ईवेंट जोड़ने, निकालने, बदलने देता है जिन्हें आप अपने फ़ोन पर संशोधित कर सकते हैं. इससे एप्लिकेशन, स्‍वामी की जानकारी के बिना उन संदेशों को भेज सकता है जो कैलेंडर स्वामियों की ओर से आते दिखाई देते हैं, या ईवेंट संशोधित कर सकता है."</string>
+  <string name="permdesc_accessCoarseLocation" msgid="5383798877137640762">"उपलब्‍ध नेटवर्क स्रोतों जैसे सेल टॉवर और WI- Fi का उपयोग करते हुए स्‍थान प्रदाताओं से अनुमानित स्थान तक पहुचें. जब ये स्थान सेवाएं उपलब्ध और चालू हों, तो यह अनुमति एप्लिकेशन को आपका अनुमानित स्थान निर्धारित करते देती है."</string>
+  <string name="permlab_mount_unmount_filesystems" product="nosdcard" msgid="2927361537942591841">"USB संग्रहण फ़ाइल सिस्‍टम पर पहुंचें"</string>
+  <string name="permlab_mount_unmount_filesystems" product="default" msgid="4402305049890953810">"SD कार्ड फ़ाइल सिस्‍टम पर पहुंचें"</string>
+  <string name="permlab_mount_format_filesystems" product="nosdcard" msgid="6227819582624904972">"USB संग्रहण मिटाएं"</string>
+  <string name="permlab_mount_format_filesystems" product="default" msgid="262582698639274056">"SD कार्ड मिटाएं"</string>
+  <string name="permdesc_changeWifiMulticastState" product="tablet" msgid="7969774021256336548">"एप्लिकेशन को WLAN नेटवर्क पर मल्टीकास्ट पते के उपयोग से केवल आपके टेबलेट पर ही नहीं, बल्कि सभी उपकरणों पर भेजे गए पैकेट प्राप्‍त करने देता है. यह गैर-मल्टीकास्ट मोड से अधिक पावर का उपयोग करता है."</string>
+  <string name="permdesc_changeWifiMulticastState" product="default" msgid="6851949706025349926">"एप्लिकेशन को WLAN नेटवर्क पर मल्टीकास्ट पते के उपयोग से केवल आपके फ़ोन पर ही नहीं, बल्कि सभी उपकरणों पर भेजे गए पैकेट प्राप्‍त करने देता है. यह गैर-मल्टीकास्ट मोड से अधिक पावर का उपयोग करता है."</string>
+  <string name="permdesc_changeWimaxState" product="tablet" msgid="3156456504084201805">"एप्‍लिकेशन को WiMAX नेटवर्क से टेबलेट को कनेक्‍ट और डिस्‍कनेक्‍ट करने देता है."</string>
+  <string name="permdesc_changeWimaxState" product="default" msgid="697025043004923798">"एप्‍लिकेशन को WiMAX नेटवर्क से फ़ोन को कनेक्‍ट और डिस्‍कनेक्‍ट करने देता है."</string>
+  <string name="permlab_sdcardRead" product="nosdcard" msgid="8235341515605559677">"संरक्ष‍ित संग्रहण पर पहुंच का परीक्षण करें"</string>
+  <string name="permlab_sdcardRead" product="default" msgid="8235341515605559677">"संरक्ष‍ित संग्रहण पर पहुंच का परीक्षण करें"</string>
+  <string name="permdesc_sdcardRead" product="nosdcard" msgid="5791957130190763289">"एप्लि. को USB संग्रहण अनुमति जांचने देता है जो भावी उपकरणों में उपलब्‍ध होगा."</string>
+  <string name="permdesc_sdcardRead" product="default" msgid="5914402684685848828">"एप्लिकेशन को SD कार्ड के लिए किसी अनुमति का परीक्षण करने देता है जो भविष्‍य के उपकरणों में उपलब्‍ध होगा."</string>
+  <string name="faceunlock_multiple_failures" msgid="754137583022792429">"फेस अनलॉक के अधिकतम प्रयासों की सीमा पार हो गई"</string>
+  <string name="lockscreen_permanent_disabled_sim_message_short" msgid="5096149665138916184">"अनुपयोगी SIM कार्ड."</string>
+  <string name="granularity_label_character" msgid="7336470535385009523">"वर्ण"</string>
+  <string name="granularity_label_word" msgid="7075570328374918660">"शब्द"</string>
+  <string name="granularity_label_link" msgid="5815508880782488267">"लिंक"</string>
+  <string name="granularity_label_line" msgid="5764267235026120888">"पंक्ति"</string>
+  <string name="permlab_serialPort" msgid="546083327654631076">"सीरियल पोर्ट पर पहुंचें"</string>
+  <string name="permdesc_serialPort" msgid="2991639985224598193">"SerialManager API का उपयोग करके धारक को सीरियल पोर्ट पर पहुंच प्रदान करता है."</string>
+  <string name="permlab_accessContentProvidersExternally" msgid="5077774297943409285">"बाह्य रूप से सामग्री प्रदाताओं पर पहुंच"</string>
+  <string name="permdesc_accessContentProvidersExternally" msgid="4544346486697853685">"धारक को शेल से सामग्री प्रदाताओं तक पहुंचने देता है. सामान्य एप्लिकेशन के लिए कभी भी आवश्यकता नहीं होनी चाहिए."</string>
+  <string name="permlab_updateLock" msgid="3527558366616680889">"स्वचालित उपकरण अपडेट का समर्थन न करें"</string>
+  <string name="permdesc_updateLock" msgid="1655625832166778492">"धारक को उपकरण अपग्रेड करने के लिए, गैर-सहभागी रीबूट के ठीक समय के बारे में सिस्टम पर जानकारी प्रस्तुत करने देता है."</string>
+  <string name="enable_explore_by_touch_warning_title" msgid="7460694070309730149">"स्‍पर्श के द्वारा अन्‍वेषण करें सक्षम करें?"</string>
+  <string name="enable_explore_by_touch_warning_message" product="tablet" msgid="8655887539089910577">"<xliff:g id="ACCESSIBILITY_SERVICE_NAME">%1$s</xliff:g> स्‍पर्श के द्वारा अन्‍वेषण करें सक्षम करना चाहती है. स्‍पर्श के द्वारा अन्‍वेष करें चालू होने पर, आप अपनी अंगुली के नीचे क्या है उसका विवरण सुन सकते हैं या देख सकते हैं या टेबलेट से संवाद करने के लिए जेस्‍चर निष्‍पादित कर सकते हैं."</string>
+  <string name="enable_explore_by_touch_warning_message" product="default" msgid="2708199672852373195">"<xliff:g id="ACCESSIBILITY_SERVICE_NAME">%1$s</xliff:g> स्‍पर्श के द्वारा अन्‍वेषण करें सक्षम करना चाहती है. स्‍पर्श के द्वारा अन्‍वेष करें चालू होने पर, आप अपनी अंगुली के नीचे क्या है उसका विवरण सुन सकते हैं या देख सकते हैं या फ़ोन से संवाद करने के लिए जेस्‍चर निष्‍पादित कर सकते हैं."</string>
+  <string name="low_internal_storage_view_text" msgid="6640505817617414371">"हो सकता है कुछ सिस्टम फ़ंक्शन कार्य न करें"</string>
+  <string name="webpage_unresponsive" msgid="3272758351138122503">"पृष्ठ प्रतिसाद नहीं दे रहा है."\n\n"क्‍या आप इसे बंद करना चाहते हैं?"</string>
+  <string name="accept" msgid="1645267259272829559">"स्वीकार करें"</string>
+  <string name="decline" msgid="2112225451706137894">"अस्वीकार करें"</string>
+  <string name="wifi_p2p_invitation_sent_title" msgid="1318975185112070734">"आमंत्रण भेजा गया"</string>
+  <string name="wifi_p2p_invitation_to_connect_title" msgid="4958803948658533637">"कनेक्‍ट करने का आमंत्रण"</string>
+  <string name="wifi_p2p_from_message" msgid="570389174731951769">"प्रेषक:"</string>
+  <string name="wifi_p2p_to_message" msgid="248968974522044099">"प्रति:"</string>
+  <string name="wifi_p2p_enter_pin_message" msgid="5920929550367828970">"आवश्‍यक पिन लिखें:"</string>
+  <string name="wifi_p2p_show_pin_message" msgid="8530563323880921094">"पिन:"</string>
+  <string name="date_time_done" msgid="2507683751759308828">"पूर्ण"</string>
+  <string name="perms_new_perm_prefix" msgid="8257740710754301407">
+    <font size="12" fgcolor="#ff900000">"नया: "</font>
   </string>
-  <string msgid="5139836143293299417" name="perms_description_app">"<xliff:g id="APP_NAME">%1$s</xliff:g> द्वारा प्रदत्त."</string>
-  <string msgid="6203112478095117625" name="use_physical_keyboard">"भौतिक कीबोर्ड"</string>
-  <string msgid="7517821086888990278" name="hardware">"हार्डवेयर"</string>
-  <string msgid="1407367017263030773" name="select_keyboard_layout_notification_title">"कीबोर्ड लेआउट का चयन करें"</string>
-  <string msgid="4465907700449257063" name="select_keyboard_layout_notification_message">"कीबोर्ड लेआउट का चयन करने के लिए स्‍पर्श करें."</string>
-  <string msgid="1642024455750414694" name="permlab_route_media_output">"मीडिया आउटपुट को रूट करें"</string>
-  <string msgid="4932818749547244346" name="permdesc_route_media_output">"एप्लिकेशन को मीडिया आउटपुट को अन्य बाहरी उपकरणों पर रूट करने देता है."</string>
-  <string msgid="3091587249776033139" name="description_target_search">"खोजें"</string>
-  <string msgid="8017770747801494933" name="activity_resolver_use_always">"हमेशा"</string>
-  <string msgid="2404644797149173758" name="activity_resolver_use_once">"केवल एक बार"</string>
-  <string msgid="4617053898167127471" product="tablet" name="default_audio_route_name">"टेबलेट"</string>
-  <string msgid="4239291273420140123" product="default" name="default_audio_route_name">"फ़ोन"</string>
-  <string msgid="8119971843803439110" name="default_audio_route_name_headphones">"हेडफ़ोन"</string>
-  <string msgid="6240602982276591864" name="default_audio_route_name_dock_speakers">"डॉक स्‍पीकर"</string>
-  <string msgid="7986404173839007682" name="default_audio_route_name_hdmi">"HDMI ऑडियो"</string>
-  <string msgid="3722811174003886946" name="default_audio_route_category_name">"सिस्‍टम"</string>
-  <string msgid="8575624030406771015" name="bluetooth_a2dp_audio_route_name">"Bluetooth ऑडियो"</string>
-  <string msgid="7966438307723317169" name="media_route_chooser_grouping_done">"पूर्ण"</string>
-  <string msgid="8340973892742019101" name="byteShort">"B"</string>
-  <string msgid="5973789783504771878" name="kilobyteShort">"KB"</string>
-  <string msgid="6355851576770428922" name="megabyteShort">"MB"</string>
-  <skip></skip>
-  <string msgid="1905800560317137752" name="aerr_title"></string>
-  <string msgid="4351948481459135709" name="anr_title"></string>
+  <string name="perms_description_app" msgid="5139836143293299417">"<xliff:g id="APP_NAME">%1$s</xliff:g> द्वारा प्रदत्त."</string>
+  <string name="use_physical_keyboard" msgid="6203112478095117625">"भौतिक कीबोर्ड"</string>
+  <string name="hardware" msgid="7517821086888990278">"हार्डवेयर"</string>
+  <string name="select_keyboard_layout_notification_title" msgid="1407367017263030773">"कीबोर्ड लेआउट का चयन करें"</string>
+  <string name="select_keyboard_layout_notification_message" msgid="4465907700449257063">"कीबोर्ड लेआउट का चयन करने के लिए स्‍पर्श करें."</string>
+  <string name="permlab_route_media_output" msgid="1642024455750414694">"मीडिया आउटपुट को रूट करें"</string>
+  <string name="permdesc_route_media_output" msgid="4932818749547244346">"एप्लिकेशन को मीडिया आउटपुट को अन्य बाहरी उपकरणों पर रूट करने देता है."</string>
+  <string name="description_target_search" msgid="3091587249776033139">"खोजें"</string>
+  <string name="activity_resolver_use_always" msgid="8017770747801494933">"हमेशा"</string>
+  <string name="activity_resolver_use_once" msgid="2404644797149173758">"केवल एक बार"</string>
+  <string name="default_audio_route_name" product="tablet" msgid="4617053898167127471">"टेबलेट"</string>
+  <string name="default_audio_route_name" product="default" msgid="4239291273420140123">"फ़ोन"</string>
+  <string name="default_audio_route_name_headphones" msgid="8119971843803439110">"हेडफ़ोन"</string>
+  <string name="default_audio_route_name_dock_speakers" msgid="6240602982276591864">"डॉक स्‍पीकर"</string>
+  <string name="default_audio_route_name_hdmi" msgid="7986404173839007682">"HDMI ऑडियो"</string>
+  <string name="default_audio_route_category_name" msgid="3722811174003886946">"सिस्‍टम"</string>
+  <string name="bluetooth_a2dp_audio_route_name" msgid="8575624030406771015">"Bluetooth ऑडियो"</string>
+  <string name="media_route_chooser_grouping_done" msgid="7966438307723317169">"पूर्ण"</string>
+  <string name="byteShort" msgid="8340973892742019101">"B"</string>
+  <string name="kilobyteShort" msgid="5973789783504771878">"KB"</string>
+  <string name="megabyteShort" msgid="6355851576770428922">"MB"</string>
+  <string name="aerr_title" msgid="1905800560317137752"></string>
+  <string name="anr_title" msgid="4351948481459135709"></string>
   <string name="gigabyteShort">"GB"</string>
   <string name="terabyteShort">"TB"</string>
   <string name="petabyteShort">"PB"</string>
@@ -135,7 +134,7 @@
   <string name="serviceRegistered">"पंजीकरण सफल था."</string>
   <string name="serviceErased">"मिटाना सफल था."</string>
   <string name="passwordIncorrect">"गलत पासवर्ड"</string>
-  <string msgid="" name="passwordChange">"पासवर्ड बदला"</string>
+  <string name="passwordChange" msgid="">"पासवर्ड बदला"</string>
   <string name="mmiComplete">"MMI पूर्ण."</string>
   <string name="badPin">"आपके द्वारा लिखी गई पुरानी पिन सही नहीं है."</string>
   <string name="badPin2">"आपके द्वारा टाइप किया गया पुराना PIN2 सही नहीं है. </string>
@@ -155,32 +154,32 @@
   <string name="ColpMmi">कनेक्ट लाइन पहचान प्रीजेंटेशन</string>
   <string name="ColrMmi">कनेक्ट लाइन पहचान प्रतिबंध</string>
   <string name="CfMmi">"कॉल अग्रेषण"</string>
-  <string msgid="" name="UnConditionCfMmi">"बिना शर्त कॉल अग्रेषण"</string>
-  <string msgid="" name="BusyCfMmi">"व्यस्त होने के दौरान कॉल अग्रेषित करें"</string>
-  <string msgid="" name="NoReplyCfMmi">"उत्तर नहीं मिलने पर कॉल अग्रेषित करें"</string>
-  <string msgid="" name="NotReachCfMmi">"पहुंच में नहीं होने पर कॉल अग्रेषित करें"</string>
-  <string msgid="" name="AllCfMmi">"सभी कॉल फॉरवर्ड की जा रही हैं"</string>
-  <string msgid="" name="ConditionCfMmi">"शर्तों के आधार पर कॉल फॉरवर्ड"</string>
+  <string name="UnConditionCfMmi" msgid="">"बिना शर्त कॉल अग्रेषण"</string>
+  <string name="BusyCfMmi" msgid="">"व्यस्त होने के दौरान कॉल अग्रेषित करें"</string>
+  <string name="NoReplyCfMmi" msgid="">"उत्तर नहीं मिलने पर कॉल अग्रेषित करें"</string>
+  <string name="NotReachCfMmi" msgid="">"पहुंच में नहीं होने पर कॉल अग्रेषित करें"</string>
+  <string name="AllCfMmi" msgid="">"सभी कॉल फॉरवर्ड की जा रही हैं"</string>
+  <string name="ConditionCfMmi" msgid="">"शर्तों के आधार पर कॉल फॉरवर्ड"</string>
   <string name="CwMmi">"कॉल प्रतीक्षा"</string>
   <string name="BaMmi">"कॉल बाधित करना"</string>
-  <string msgid="" name="BaocMmi">"सभी जावक कॉलें बाधित"</string>
-  <string msgid="" name="BaoicMmi">"सभी जावक अंतर्राष्ट्रीय कालें बाधित"</string>
-  <string msgid="" name="BaoicxhMmi">"मूल देश के अतिरिक्त सभी जावक अंतर्राष्ट्रीय कालें बाधित"</string>
-  <string msgid="" name="BaicMmi">"सभी आगत कॉलें बाधित"</string>
-  <string msgid="" name="BaicrMmi">"रोमिंग के दौरान सभी आगत कॉलें बाधित"</string>
-  <string msgid="" name="BaallMmi">"सभी मूल सेवाओं हेतु सभी बाधित"</string>
-  <string msgid="" name="BamoMmi">"सभी मूल सेवाओं हेतु सभी जावक"</string>
-  <string msgid="" name="BamtMmi">"सभी मूल सेवाओं हेतु सभी आगत कॉलें"</string>
+  <string name="BaocMmi" msgid="">"सभी जावक कॉलें बाधित"</string>
+  <string name="BaoicMmi" msgid="">"सभी जावक अंतर्राष्ट्रीय कालें बाधित"</string>
+  <string name="BaoicxhMmi" msgid="">"मूल देश के अतिरिक्त सभी जावक अंतर्राष्ट्रीय कालें बाधित"</string>
+  <string name="BaicMmi" msgid="">"सभी आगत कॉलें बाधित"</string>
+  <string name="BaicrMmi" msgid="">"रोमिंग के दौरान सभी आगत कॉलें बाधित"</string>
+  <string name="BaallMmi" msgid="">"सभी मूल सेवाओं हेतु सभी बाधित"</string>
+  <string name="BamoMmi" msgid="">"सभी मूल सेवाओं हेतु सभी जावक"</string>
+  <string name="BamtMmi" msgid="">"सभी मूल सेवाओं हेतु सभी आगत कॉलें"</string>
   <string name="ActiveUnconCf">कॉल अग्रेषित प्रतिबंध रहित</string>
   <string name="ActiveConCf">कॉल अग्रेषित प्रतिबंध</string>
   <string name="CallForwarded">कॉल अग्रेषित</string>
   <string name="CallWaiting">कॉल प्रतीक्षा</string>
-  <string msgid="" name="OutCallBarred">"जावक कॉल बाधित"</string>
-  <string msgid="" name="InCallBarred">"आगत कॉल बाधित"</string>
+  <string name="OutCallBarred" msgid="">"जावक कॉल बाधित"</string>
+  <string name="InCallBarred" msgid="">"आगत कॉल बाधित"</string>
   <string name="ForwardedCall">अग्रेषित की गई कॉल</string>
-  <string msgid="" name="CallHold">"कॉल होल्ड में रखा गया है"</string>
-  <string msgid="" name="CallRetrieved">"कॉल पुनर्प्राप्ति की गई"</string>
-  <string msgid="" name="IncomingCallForwarded">"अतिरिक्त आगत कॉल फॉरवर्ड की गईं"</string>
+  <string name="CallHold" msgid="">"कॉल होल्ड में रखा गया है"</string>
+  <string name="CallRetrieved" msgid="">"कॉल पुनर्प्राप्ति की गई"</string>
+  <string name="IncomingCallForwarded" msgid="">"अतिरिक्त आगत कॉल फॉरवर्ड की गईं"</string>
   <string name="PwdMmi">"पासवर्ड बदलें"</string>
   <string name="PinMmi">"पिन परिवर्तन"</string>
   <string name="Pin2Mmi">"PIN2 बदलें"</string>
@@ -256,24 +255,24 @@
   <string name="contentServiceSync">"सिंक"</string>
   <string name="contentServiceSyncNotificationTitle">"सिंक"</string>
   <string name="contentServiceTooManyDeletesNotificationDesc">"बहुत से <xliff:g id="CONTENT_TYPE">%s</xliff:g> हटाए जाते हैं."</string>
-  <string product="tablet" name="low_memory">"टेबलेट संग्रहण भर गया है! स्‍थान रिक्त करने के लिए कुछ फ़ाइलें हटाएं."</string>
-  <string product="default" name="low_memory">"फ़ोन संग्रहण भर गया है! स्‍थान रिक्त करने के लिए कुछ फ़ाइलें हटाएं."</string>
+  <string name="low_memory" product="tablet">"टेबलेट संग्रहण भर गया है! स्‍थान रिक्त करने के लिए कुछ फ़ाइलें हटाएं."</string>
+  <string name="low_memory" product="default">"फ़ोन संग्रहण भर गया है! स्‍थान रिक्त करने के लिए कुछ फ़ाइलें हटाएं."</string>
   <string name="me">"मैं"</string>
-  <string product="tablet" name="power_dialog">"टेबलेट विकल्‍प"</string>
-  <string product="default" name="power_dialog">"फ़ोन विकल्‍प"</string>
+  <string name="power_dialog" product="tablet">"टेबलेट विकल्‍प"</string>
+  <string name="power_dialog" product="default">"फ़ोन विकल्‍प"</string>
   <string name="silent_mode">"मौन मोड"</string>
   <string name="turn_on_radio">"वायरलेस चालू करें"</string>
   <string name="turn_off_radio">"वायरलेस बंद करें"</string>
   <string name="screen_lock">"स्‍क्रीन लॉक"</string>
   <string name="power_off">"पावर बंद"</string>
   <string name="shutdown_progress">"शट डाउन हो रहा है..."</string>
-  <string product="tablet" name="shutdown_confirm">"आपकी टेबलेट शट डाउन हो जाएगी."</string>
-  <string product="default" name="shutdown_confirm">"आपका फ़ोन शट डाउन हो जाएगा."</string>
+  <string name="shutdown_confirm" product="tablet">"आपकी टेबलेट शट डाउन हो जाएगी."</string>
+  <string name="shutdown_confirm" product="default">"आपका फ़ोन शट डाउन हो जाएगा."</string>
   <string name="shutdown_confirm_question">"क्‍या आप शट डाउन करना चाहेंगे?"</string>
   <string name="recent_tasks_title">"हाल के"</string>
   <string name="no_recent_tasks">"हाल की कोई एप्‍लिकेशन नहीं."</string>
-  <string product="tablet" name="global_actions">"टेबलेट विकल्‍प"</string>
-  <string product="default" name="global_actions">"फ़ोन विकल्‍प"</string>
+  <string name="global_actions" product="tablet">"टेबलेट विकल्‍प"</string>
+  <string name="global_actions" product="default">"फ़ोन विकल्‍प"</string>
   <string name="global_action_lock">"स्‍क्रीन लॉक"</string>
   <string name="global_action_power_off">"पावर बंद"</string>
   <string name="global_action_toggle_silent_mode">"मौन मोड"</string>
@@ -290,8 +289,8 @@
   <string name="permgrouplab_messages">"आपके संदेश"</string>
   <string name="permgroupdesc_messages">"अपने SMS, ई-मेल और अन्‍य संदेश पढ़ें और लिखें."</string>
   <string name="permgrouplab_personalInfo">"आपकी निजी जानकारी"</string>
-  <string product="tablet" name="permgroupdesc_personalInfo">"टेबलेट पर संग्रहीत आपके संपर्कों और कैलेंडर में सीधे पहुंचें."</string>
-  <string product="default" name="permgroupdesc_personalInfo">"फ़ोन पर संग्रहीत आपके संपर्कों और कैलेंडर में सीधे पहुंचें."</string>
+  <string name="permgroupdesc_personalInfo" product="tablet">"टेबलेट पर संग्रहीत आपके संपर्कों और कैलेंडर में सीधे पहुंचें."</string>
+  <string name="permgroupdesc_personalInfo" product="default">"फ़ोन पर संग्रहीत आपके संपर्कों और कैलेंडर में सीधे पहुंचें."</string>
   <string name="permgrouplab_location">"आपका स्‍थान"</string>
   <string name="permgroupdesc_location">"अपने भौतिक स्‍थान की निगरानी करें"</string>
   <string name="permgrouplab_network">"नेटवर्क संचार"</string>
@@ -307,8 +306,8 @@
   <string name="permgrouplab_developmentTools">"डेवलपमेंट टूल"</string>
   <string name="permgroupdesc_developmentTools">"सुविधाएं केवल एप्‍लिकेशन डेवलपर के लिए आवश्‍यक है."</string>
   <string name="permgrouplab_storage">"संग्रहण"</string>
-  <string product="nosdcard" name="permgroupdesc_storage">"USB संग्रहण में पहुंचें."</string>
-  <string product="default" name="permgroupdesc_storage">"SD कार्ड में पहुंचें."</string>
+  <string name="permgroupdesc_storage" product="nosdcard">"USB संग्रहण में पहुंचें."</string>
+  <string name="permgroupdesc_storage" product="default">"SD कार्ड में पहुंचें."</string>
   <string name="permlab_statusBar">"स्‍थिति बार अक्षम या संशोधित करें"</string>
   <string name="permdesc_statusBar">"एप्‍लिकेशन को स्‍थिति बार अक्षम करने की या सिस्‍टम आइकन जोड़ने और निकालने की अनुमति देता है."</string>
   <string name="permlab_statusBarService">"स्‍थिति बार"</string>
@@ -328,11 +327,11 @@
   <string name="permlab_sendSmsNoConfirmation">"बिना कि‍सी पुष्टि के SMS संदेश भेजें"</string>
   <string name="permdesc_sendSmsNoConfirmation">"एप्‍लिकेशन को SMS संदेश भेजने देता है. दुर्भावनापूर्ण एप्‍लिकेशन आपकी पुष्टि के बिना संदेश भेजकर आपका पैसा खर्च कर सकते हैं."</string>
   <string name="permlab_readSms">"SMS या MMS पढ़ें"</string>
-  <string product="tablet" name="permdesc_readSms">"आपके टेबलेट या सिम कार्ड पर संग्रहीत SMS संदेशों को पढ़ने की अनुमति देता है. दुर्भावनापूर्ण एप्‍लिकेशन आपके क्रेडेंशियल संदेशों को पढ़ सकती हैं."</string>
-  <string product="default" name="permdesc_readSms">"आपके फ़ोन या सिम कार्ड पर संग्रहीत SMS संदेशों को पढ़ने की अनुमति देता है. दुर्भावनापूर्ण एप्‍लिकेशन आपके क्रेडेंशियल संदेशों को पढ़ सकते हैं."</string>
+  <string name="permdesc_readSms" product="tablet">"आपके टेबलेट या सिम कार्ड पर संग्रहीत SMS संदेशों को पढ़ने की अनुमति देता है. दुर्भावनापूर्ण एप्‍लिकेशन आपके क्रेडेंशियल संदेशों को पढ़ सकती हैं."</string>
+  <string name="permdesc_readSms" product="default">"आपके फ़ोन या सिम कार्ड पर संग्रहीत SMS संदेशों को पढ़ने की अनुमति देता है. दुर्भावनापूर्ण एप्‍लिकेशन आपके क्रेडेंशियल संदेशों को पढ़ सकते हैं."</string>
   <string name="permlab_writeSms">"SMS या MMS संपादित करें"</string>
-  <string product="tablet" name="permdesc_writeSms">"आपके टेबलेट या सिम कार्ड पर संग्रहीत SMS संदेशों पर लिखने की अनुमति देता है. दुर्भावनापूर्ण एप्‍लिकेशन आपके संदेश हटा सकती हैं."</string>
-  <string product="default" name="permdesc_writeSms">"आपके फ़ोन या सिम कार्ड पर संग्रहीत SMS संदेशों पर लिखने की अनुमति देता है. दुर्भावनापूर्ण एप्‍लिकेशन आपके संदेशों को हटा सकती हैं."</string>
+  <string name="permdesc_writeSms" product="tablet">"आपके टेबलेट या सिम कार्ड पर संग्रहीत SMS संदेशों पर लिखने की अनुमति देता है. दुर्भावनापूर्ण एप्‍लिकेशन आपके संदेश हटा सकती हैं."</string>
+  <string name="permdesc_writeSms" product="default">"आपके फ़ोन या सिम कार्ड पर संग्रहीत SMS संदेशों पर लिखने की अनुमति देता है. दुर्भावनापूर्ण एप्‍लिकेशन आपके संदेशों को हटा सकती हैं."</string>
   <string name="permlab_receiveWapPush">"WAP प्राप्त करें"</string>
   <string name="permdesc_receiveWapPush">"एप्‍लिकेशन को WAP संदेशों को प्राप्त करने और संसाधित करने की अनुमति देता है. दुर्भावनापूर्ण एप्‍लिकेशन आपके संदेशों पर नज़र रख सकती है या आपको बिना दिखाए उन्‍हें हटा सकती हैं."</string>
   <string name="permlab_getTasks">"चल रही एप्‍लिकेशन पुन: प्राप्त करें"</string>
@@ -388,8 +387,8 @@
   <string name="permlab_manageAppTokens">"एप्‍लिकेशन टोकन प्रबंधित करें"</string>
   <string name="permdesc_manageAppTokens">"एप्‍लिकेशन को उनके स्‍वयं के टोकन बनाने और प्रबंधित करने, उनके सामान्‍य Z-क्रम को दरकिनार करते हुए, की अनुमति देता है. सामान्‍य एप्‍लिकश्‍ोन के लिए कभी भी आवश्‍यक नहीं होना चाहिए."</string>
   <string name="permlab_injectEvents">"कुंजियों और नियंत्रण बटन को दबाएं"</string>
-  <string product="tablet" name="permdesc_injectEvents">"किसी एप्‍लिकेशन को उनके स्‍वयं के इनपुट ईवेंट (कुंजी दबाव इत्‍यादि) को किसी दूसरी एप्‍लिकेशन को वितरित करने की अनुमति देता है. दुर्भावनापूर्ण एप्‍लिकेशन इसका उपयोग टेबलेट अधिग्रहीत करने में कर सकती हैं."</string>
-  <string product="default" name="permdesc_injectEvents">"किसी एप्‍लिकेशन को उनके स्‍वयं के इनपुट ईवेंट (कुंजी दबाव इत्‍यादि) किसी दूसरी एप्‍लिकेशन को वितरित करने की अनुमति देता है. दुर्भावनापूर्ण एप्‍लिकेशन इसका उपयोग फ़ोन अधिग्रहीत करने में कर सकती हैं."</string>
+  <string name="permdesc_injectEvents" product="tablet">"किसी एप्‍लिकेशन को उनके स्‍वयं के इनपुट ईवेंट (कुंजी दबाव इत्‍यादि) को किसी दूसरी एप्‍लिकेशन को वितरित करने की अनुमति देता है. दुर्भावनापूर्ण एप्‍लिकेशन इसका उपयोग टेबलेट अधिग्रहीत करने में कर सकती हैं."</string>
+  <string name="permdesc_injectEvents" product="default">"किसी एप्‍लिकेशन को उनके स्‍वयं के इनपुट ईवेंट (कुंजी दबाव इत्‍यादि) किसी दूसरी एप्‍लिकेशन को वितरित करने की अनुमति देता है. दुर्भावनापूर्ण एप्‍लिकेशन इसका उपयोग फ़ोन अधिग्रहीत करने में कर सकती हैं."</string>
   <string name="permlab_readInputState">"आप जो भी लिखते हैं और जो कार्यवाहियां करते हैं उन्‍हें रिकॉर्ड करें"</string>
   <string name="permdesc_readInputState">"एप्‍लिकेशन को आपके द्वारा दबाई जाने वाली कुंजियों को देखने की अनुमति देता है, तब भी जबकि आप किसी दूसरी एप्‍लिकेशन के साथ सहभागिता (जैसे पासवर्ड दर्ज करना) कर रहे हों. सामान्‍य एप्‍लिकेशन के लिए कभी भी आवश्‍यक नहीं होनी चाहिए."</string>
   <string name="permlab_bindInputMethod">"किसी इनपुट विधि से आबद्ध करें"</string>
@@ -422,20 +421,20 @@
   <string name="permlab_installPackages">"एप्‍लिकेशन सीधे इंस्‍टॉल करें"</string>
   <string name="permdesc_installPackages">"किसी एप्‍लिकेशन को नए और अपडेट किए गए Android पैकेज इंस्‍टॉल करने की अनुमति देता है. दुर्भावनापूर्ण एप्‍लिकेशन इसका उपयोग निरंकुश सशक्त अनुमतियों वाली नई एप्‍लिकेशन जोड़ने में कर सकती हैं."</string>
   <string name="permlab_clearAppCache">"सभी एप्‍लिकेशन कैश डेटा हटाएं"</string>
-  <string product="tablet" name="permdesc_clearAppCache">"एप्‍लिकेशन कैश निर्देशिका में फ़ाइलों को हटाकर किसी एप्‍लिकेशन को टेबलेट संग्रहण रिक्त करने की अनुमति देता है. सिस्‍टम प्रक्रिया के लिए आम तौर पर पहुंच अत्‍यंत प्रतिबंधित है."</string>
-  <string product="default" name="permdesc_clearAppCache">"एप्‍लिकेशन कैश निर्देशिका में फ़ाइलों को हटाकर किसी एप्‍लिकेशन को फ़ोन संग्रहण रिक्त करने की अनुमति देता है. सिस्‍टम प्रक्रिया के लिए आम तौर पर पहुंच अत्‍यंत प्रतिबंधित है."</string>
+  <string name="permdesc_clearAppCache" product="tablet">"एप्‍लिकेशन कैश निर्देशिका में फ़ाइलों को हटाकर किसी एप्‍लिकेशन को टेबलेट संग्रहण रिक्त करने की अनुमति देता है. सिस्‍टम प्रक्रिया के लिए आम तौर पर पहुंच अत्‍यंत प्रतिबंधित है."</string>
+  <string name="permdesc_clearAppCache" product="default">"एप्‍लिकेशन कैश निर्देशिका में फ़ाइलों को हटाकर किसी एप्‍लिकेशन को फ़ोन संग्रहण रिक्त करने की अनुमति देता है. सिस्‍टम प्रक्रिया के लिए आम तौर पर पहुंच अत्‍यंत प्रतिबंधित है."</string>
   <string name="permlab_movePackage">"एप्‍लिकेशन संसाधनों को ले जाएं"</string>
   <string name="permdesc_movePackage">"एप्‍लिकेशन संसाधनों को आंतरिक मीडिया से बाह्य मीडिया में और इसके ठीक विपरीत ले जाने की अनुमति किसी एप्‍लिकेशन को देता है."</string>
   <string name="permlab_readLogs">"संवेदनशील लॉग डेटा पढ़ें"</string>
-  <string product="tablet" name="permdesc_readLogs">"किसी एप्‍लिकेशन को सिस्‍टम की विभिन्‍न लॉग फ़ाइलों से पढ़ने की अनुमति देता है. आप टेबलेट के साथ क्‍या कर रहे हैं इस बारे में यह इसे सामान्‍य जानकारी खोजने की अनुमति देता है, संभवत: व्यक्तिगत या निजी जानकारी शामिल करते हुए."</string>
-  <string product="default" name="permdesc_readLogs">"किसी एप्‍लिकेशन को सिस्‍टम की विभिन्‍न लॉग फ़ाइलों से पढ़ने की अनुमति देता है. आप फ़ोन के साथ क्‍या कर रहे हैं इस बारे में यह इसे सामान्‍य जानकारी खोजने की अनुमति देता है, संभवत: व्यक्तिगत या निजी जानकारी शामिल करते हुए."</string>
+  <string name="permdesc_readLogs" product="tablet">"किसी एप्‍लिकेशन को सिस्‍टम की विभिन्‍न लॉग फ़ाइलों से पढ़ने की अनुमति देता है. आप टेबलेट के साथ क्‍या कर रहे हैं इस बारे में यह इसे सामान्‍य जानकारी खोजने की अनुमति देता है, संभवत: व्यक्तिगत या निजी जानकारी शामिल करते हुए."</string>
+  <string name="permdesc_readLogs" product="default">"किसी एप्‍लिकेशन को सिस्‍टम की विभिन्‍न लॉग फ़ाइलों से पढ़ने की अनुमति देता है. आप फ़ोन के साथ क्‍या कर रहे हैं इस बारे में यह इसे सामान्‍य जानकारी खोजने की अनुमति देता है, संभवत: व्यक्तिगत या निजी जानकारी शामिल करते हुए."</string>
   <string name="permlab_anyCodecForPlayback">"प्लेबैक के लिए किसी भी मीडिया डीकोडर का उपयोग करें"</string>
   <string name="permdesc_anyCodecForPlayback">"एप्लिकेशन को प्लेबैक डीकोड करने के लिए, किसी भी इंस्टॉल किए गए डीकोडर का उपयोग करने देता है."</string>
   <string name="permlab_diagnostic">"निदान के स्‍वामित्‍व वाले संसाधनों को पढ़ें/लिखें"</string>
   <string name="permdesc_diagnostic">"एप्‍लिकेशन को निदान समूह के स्‍वामित्‍व वाले किसी स्रोत को पढ़ने और लिखने की अनुमति देता है; उदाहरण के लिए,  /dev में फ़ाइलें. यह सिस्‍टम की स्‍थिरता और सुरक्षा को संभावित रूप से प्रभावित कर सकता है. इसका उपयोग निर्माता या ऑपरेटर द्वारा केवल हार्डवेयर-विशेष निदान के लिए किया जाना चाहिए."</string>
   <string name="permlab_changeComponentState">"एप्‍लिकेशन घटकों के सक्षम या अक्षम करें"</string>
-  <string product="tablet" name="permdesc_changeComponentState">"किसी दूसरी एप्‍लिकेशन का घटक सक्षम किया गया है या नहीं, यह बदलने की अनुमति किसी एप्‍लिकेशन को देता है. दुर्भावनापूर्ण एप्‍लिकेशन इसका उपयोग महत्‍वपूर्ण टेबलेट क्षमताओं को अक्षम करने में कर सकती हैं. इस अनुमति के साथ ही देखभाल होना अत्‍यावश्‍यक है, क्‍योंकि एप्‍लिकेशन घटकों को व्यर्थ, असंगत या अस्थिर अवस्‍था में ले जाना संभव है."</string>
-  <string product="default" name="permdesc_changeComponentState">"किसी दूसरी एप्‍लिकेशन का घटक सक्षम किया गया है या नहीं, यह बदलने की अनुमति किसी एप्‍लिकेशन को देता है. दुर्भावनापूर्ण एप्‍लिकेशन इसका उपयोग महत्‍वपूर्ण फ़ोन क्षमताओं को अक्षम करने में कर सकती हैं. इस अनुमति के साथ ही देखभाल होना अत्‍यावश्‍यक है, क्‍योंकि एप्‍लिकेशन घटकों को व्यर्थ, असंगत या अस्थिर अवस्‍था में ले जाना संभव है."</string>
+  <string name="permdesc_changeComponentState" product="tablet">"किसी दूसरी एप्‍लिकेशन का घटक सक्षम किया गया है या नहीं, यह बदलने की अनुमति किसी एप्‍लिकेशन को देता है. दुर्भावनापूर्ण एप्‍लिकेशन इसका उपयोग महत्‍वपूर्ण टेबलेट क्षमताओं को अक्षम करने में कर सकती हैं. इस अनुमति के साथ ही देखभाल होना अत्‍यावश्‍यक है, क्‍योंकि एप्‍लिकेशन घटकों को व्यर्थ, असंगत या अस्थिर अवस्‍था में ले जाना संभव है."</string>
+  <string name="permdesc_changeComponentState" product="default">"किसी दूसरी एप्‍लिकेशन का घटक सक्षम किया गया है या नहीं, यह बदलने की अनुमति किसी एप्‍लिकेशन को देता है. दुर्भावनापूर्ण एप्‍लिकेशन इसका उपयोग महत्‍वपूर्ण फ़ोन क्षमताओं को अक्षम करने में कर सकती हैं. इस अनुमति के साथ ही देखभाल होना अत्‍यावश्‍यक है, क्‍योंकि एप्‍लिकेशन घटकों को व्यर्थ, असंगत या अस्थिर अवस्‍था में ले जाना संभव है."</string>
   <string name="permlab_setPreferredApplications">"पसंदीदा एप्‍लिकेशन सेट करें"</string>
   <string name="permdesc_setPreferredApplications">"किसी एप्‍लिकेशन को आपकी पसंदीदा एप्‍लिकेशन संशोधित करने की अनुमति देता है. यह दुर्भावनापूर्ण एप्‍लिकेशन को आपसे निजी डेटा एकत्र करने के लिए आपकी मौजूदा एप्‍लिकेशन को चकमा देते हुए ऐसी एप्‍लिकेशन को मौन रूप से बदलने की अनुमति देता है जो चल रही हों."</string>
   <string name="permlab_writeSettings">"वैश्विक सिस्‍टम सेटिंग संशोधित करें"</string>
@@ -445,28 +444,28 @@
   <string name="permlab_writeGservices">"Google सेवाएं मैप संशोधित करें"</string>
   <string name="permdesc_writeGservices">"किसी एप्‍लिकेशन को Google सेवा मैप संशोधित करने की अनुमति देता है. सामान्‍य एप्‍लिकेशन द्वारा उपयोग किए जाने के लिए नहीं है."</string>
   <string name="permlab_receiveBootCompleted">"बूट पर स्‍वचालित रूप से प्रारंभ करें"</string>
-  <string product="tablet" name="permdesc_receiveBootCompleted">"किसी एप्‍लिकेशन को सिस्‍टम द्वारा बूट करना समाप्त करने के तुरंत बाद स्‍वयं प्रारंभ होने की अनुमति देता है.  इसके कारण टेबलेट को प्रारंभ होने में अधिक समय लग सकता है और हमेशा चलते रहने के द्वारा यह पूरे टेबलेट को धीमा करने की अनुमति एप्‍लिकेशन को दे सकता है."</string>
-  <string product="default" name="permdesc_receiveBootCompleted">"किसी एप्‍लिकेशन को सिस्‍टम द्वारा बूट करना समाप्त करने के तुरंत बाद स्‍वयं प्रारंभ होने की अनुमति देता है.  इसके कारण फ़ोन को प्रारंभ होने में अधिक समय लग सकता है और हमेशा चलते रहने के द्वारा यह पूरे फ़ोन को धीमा करने की अनुमति एप्‍लिकेशन को दे सकता है."</string>
+  <string name="permdesc_receiveBootCompleted" product="tablet">"किसी एप्‍लिकेशन को सिस्‍टम द्वारा बूट करना समाप्त करने के तुरंत बाद स्‍वयं प्रारंभ होने की अनुमति देता है.  इसके कारण टेबलेट को प्रारंभ होने में अधिक समय लग सकता है और हमेशा चलते रहने के द्वारा यह पूरे टेबलेट को धीमा करने की अनुमति एप्‍लिकेशन को दे सकता है."</string>
+  <string name="permdesc_receiveBootCompleted" product="default">"किसी एप्‍लिकेशन को सिस्‍टम द्वारा बूट करना समाप्त करने के तुरंत बाद स्‍वयं प्रारंभ होने की अनुमति देता है.  इसके कारण फ़ोन को प्रारंभ होने में अधिक समय लग सकता है और हमेशा चलते रहने के द्वारा यह पूरे फ़ोन को धीमा करने की अनुमति एप्‍लिकेशन को दे सकता है."</string>
   <string name="permlab_broadcastSticky">"स्टिकी प्रसारण भेजें"</string>
-  <string product="tablet" name="permdesc_broadcastSticky">"किसी एप्‍लिकेशन को ऐसे रोचक प्रसारणों को भेजने की अनुमति देता है, जो प्रसारण समाप्त होने के बाद रहते हैं. दुर्भावनापूर्ण एप्‍लिकेशन बहुत सी स्‍मृति का उपयोग करके टेबलेट को धीमा या अस्‍थिर बना सकती हैं."</string>
-  <string product="default" name="permdesc_broadcastSticky">"किसी एप्‍लिकेशन को ऐसे रोचक प्रसारणों को भेजने की अनुमति देता है, जो प्रसारण समाप्त होने के बाद रहते हैं. दुर्भावनापूर्ण एप्‍लिकेशन बहुत सी स्‍मृति का उपयोग करके फ़ोन को धीमा या अस्‍थिर बना सकती हैं."</string>
+  <string name="permdesc_broadcastSticky" product="tablet">"किसी एप्‍लिकेशन को ऐसे रोचक प्रसारणों को भेजने की अनुमति देता है, जो प्रसारण समाप्त होने के बाद रहते हैं. दुर्भावनापूर्ण एप्‍लिकेशन बहुत सी स्‍मृति का उपयोग करके टेबलेट को धीमा या अस्‍थिर बना सकती हैं."</string>
+  <string name="permdesc_broadcastSticky" product="default">"किसी एप्‍लिकेशन को ऐसे रोचक प्रसारणों को भेजने की अनुमति देता है, जो प्रसारण समाप्त होने के बाद रहते हैं. दुर्भावनापूर्ण एप्‍लिकेशन बहुत सी स्‍मृति का उपयोग करके फ़ोन को धीमा या अस्‍थिर बना सकती हैं."</string>
   <string name="permlab_readContacts">"संपर्क डेटा पढ़ें"</string>
-  <string product="tablet" name="permdesc_readContacts">"किसी एप्‍लिकेशन को आपके टेबलेट पर संग्रहीत सभी संपर्क (पता) डेटा पढ़ने की अनुमति देता है. दुर्भावनापूर्ण एप्‍लिकेशन इसका उपयोग दूसरे लोगों को आपका डेटा भेजने में कर सकती हैं."</string>
-  <string product="default" name="permdesc_readContacts">"किसी एप्‍लिकेशन को आपके फ़ोन पर संग्रहीत सभी संपर्क (पता) डेटा पढ़ने की अनुमति देता है. दुर्भावनापूर्ण एप्‍लिकेशन इसका उपयोग दूसरे लोगों को आपका डेटा भेजने में कर सकती हैं."</string>
+  <string name="permdesc_readContacts" product="tablet">"किसी एप्‍लिकेशन को आपके टेबलेट पर संग्रहीत सभी संपर्क (पता) डेटा पढ़ने की अनुमति देता है. दुर्भावनापूर्ण एप्‍लिकेशन इसका उपयोग दूसरे लोगों को आपका डेटा भेजने में कर सकती हैं."</string>
+  <string name="permdesc_readContacts" product="default">"किसी एप्‍लिकेशन को आपके फ़ोन पर संग्रहीत सभी संपर्क (पता) डेटा पढ़ने की अनुमति देता है. दुर्भावनापूर्ण एप्‍लिकेशन इसका उपयोग दूसरे लोगों को आपका डेटा भेजने में कर सकती हैं."</string>
   <string name="permlab_writeContacts">"संपर्क डेटा लिखें"</string>
-  <string product="tablet" name="permdesc_writeContacts">"किसी एप्‍लिकेशन को आपके टेबलेट पर संग्रहीत संपर्क (पता) डेटा संशोधित करने की अनुमति देता है. दुर्भावनापूर्ण एप्‍िलकेशन इसका उपयोग आपके संपर्क डेटा को मिटाने या संशोधित करने में कर सकती हैं."</string>
-  <string product="default" name="permdesc_writeContacts">"किसी एप्‍लिकेशन को आपके फ़ोन पर संग्रहीत संपर्क (पता) डेटा संशोधित करने की अनुमति देता है. दुर्भावनापूर्ण एप्‍िलकेशन इसका उपयोग आपके संपर्क डेटा को मिटाने या संशोधित करने में कर सकती हैं."</string>
+  <string name="permdesc_writeContacts" product="tablet">"किसी एप्‍लिकेशन को आपके टेबलेट पर संग्रहीत संपर्क (पता) डेटा संशोधित करने की अनुमति देता है. दुर्भावनापूर्ण एप्‍िलकेशन इसका उपयोग आपके संपर्क डेटा को मिटाने या संशोधित करने में कर सकती हैं."</string>
+  <string name="permdesc_writeContacts" product="default">"किसी एप्‍लिकेशन को आपके फ़ोन पर संग्रहीत संपर्क (पता) डेटा संशोधित करने की अनुमति देता है. दुर्भावनापूर्ण एप्‍िलकेशन इसका उपयोग आपके संपर्क डेटा को मिटाने या संशोधित करने में कर सकती हैं."</string>
   <string name="permlab_readProfile">"अपना प्रोफ़ाइल डेटा पढ़ें"</string>
-  <string product="default" name="permdesc_readProfile">"एप्‍लि‍केशन को आपके उपकरण पर संग्रहीत नि‍जी प्रोफाइल जानकारी पढ़ने देता है, जैसे आपका नाम और संपर्क जानकारी. इसका अर्थ है कि‍ एप्‍लि‍केशन आपको पहचान सकता है और आपकी प्रोफ़ाइल जानकारी दूसरों को भेज सकता है."</string>
+  <string name="permdesc_readProfile" product="default">"एप्‍लि‍केशन को आपके उपकरण पर संग्रहीत नि‍जी प्रोफाइल जानकारी पढ़ने देता है, जैसे आपका नाम और संपर्क जानकारी. इसका अर्थ है कि‍ एप्‍लि‍केशन आपको पहचान सकता है और आपकी प्रोफ़ाइल जानकारी दूसरों को भेज सकता है."</string>
   <string name="permlab_writeProfile">"अपने प्रोफ़ाइल डेटा में लि‍खें"</string>
-  <string product="default" name="permdesc_writeProfile">"एप्‍लि‍केशन को आपके उपकरण पर संग्रहीत नि‍जी प्रोफ़ाइल जानकारी बदलने या जोड़ने देता है, जैसे आपका नाम और संपर्क जानकारी. इसका अर्थ है कि‍ अन्‍य एप्‍लि‍केशन आपको पहचान सकते हैं और आपकी प्रोफ़ाइल जानकारी दूसरों को भेज सकते हैं."</string>
-  <string product="default" name="permlab_readSocialStream">"अपनी सामाजिक स्‍ट्रीम पढ़ें"</string>
-  <string product="default" name="permdesc_readSocialStream">"एप्‍लिकेशन को आपके और आपके मित्रों के सामाजिक अपडेट पर पहुंचने और समन्‍वयित करने देता है. दुर्भावनापूर्ण एप्‍लिकेशन सामाजिक नेटवर्क पर आपके और आपके मित्रों के बीच निजी संचार पढ़ने के लिए इसका उपयोग कर सकते हैं."</string>
-  <string product="default" name="permlab_writeSocialStream">"सामाजिक स्‍ट्रीम में लिखें"</string>
-  <string product="default" name="permdesc_writeSocialStream">"एप्‍लिकेशन को आपके मित्रों के सामाजिक अपडेट प्रदर्शित करने देता है. दुर्भावनापूर्ण एप्‍लिकेशन मित्र होने का दिखावा करने और आपसे पासवर्ड या अन्‍य गोपनीय जानकारी प्रकट करने के लिए इसका उपयोग कर सकते हैं."</string>
+  <string name="permdesc_writeProfile" product="default">"एप्‍लि‍केशन को आपके उपकरण पर संग्रहीत नि‍जी प्रोफ़ाइल जानकारी बदलने या जोड़ने देता है, जैसे आपका नाम और संपर्क जानकारी. इसका अर्थ है कि‍ अन्‍य एप्‍लि‍केशन आपको पहचान सकते हैं और आपकी प्रोफ़ाइल जानकारी दूसरों को भेज सकते हैं."</string>
+  <string name="permlab_readSocialStream" product="default">"अपनी सामाजिक स्‍ट्रीम पढ़ें"</string>
+  <string name="permdesc_readSocialStream" product="default">"एप्‍लिकेशन को आपके और आपके मित्रों के सामाजिक अपडेट पर पहुंचने और समन्‍वयित करने देता है. दुर्भावनापूर्ण एप्‍लिकेशन सामाजिक नेटवर्क पर आपके और आपके मित्रों के बीच निजी संचार पढ़ने के लिए इसका उपयोग कर सकते हैं."</string>
+  <string name="permlab_writeSocialStream" product="default">"सामाजिक स्‍ट्रीम में लिखें"</string>
+  <string name="permdesc_writeSocialStream" product="default">"एप्‍लिकेशन को आपके मित्रों के सामाजिक अपडेट प्रदर्शित करने देता है. दुर्भावनापूर्ण एप्‍लिकेशन मित्र होने का दिखावा करने और आपसे पासवर्ड या अन्‍य गोपनीय जानकारी प्रकट करने के लिए इसका उपयोग कर सकते हैं."</string>
   <string name="permlab_readCalendar">"केलैंडर ईवेंट के साथ-साथ गोपनीय जानकारी पढ़ें"</string>
-  <string product="tablet" name="permdesc_readCalendar">"किसी एप्‍लि‍केशन को आपके टैबलेट पर संग्रहीत सभी कैलेंडर ईवेंट पढ़ने देता है, उनके सहित जो मि‍त्रों और सहकर्मि‍यों के हैं. किसी दुर्भावनापूर्ण एप्‍लि‍केशन के पास यह अनुमति हो तो वह  इन कैलेंडर से स्‍वामी की जानकारी के बि‍ना व्यक्तिगत जानकारी निकाल सकता है."</string>
-  <string product="default" name="permdesc_readCalendar">"किसी एप्‍लि‍केशन को आपके फ़ोन पर संग्रहीत सभी कैलेंडर ईवेंट पढ़ने देता है, उनके सहित जो मि‍त्रों और सहकर्मि‍यों के हैं. किसी दुर्भावनापूर्ण एप्‍लि‍केशन के पास यह अनुमति हो तो वह इन कैलेंडर से स्‍वामी की जानकारी के बि‍ना व्यक्तिगत जानकारी निकाल सकता है."</string>
+  <string name="permdesc_readCalendar" product="tablet">"किसी एप्‍लि‍केशन को आपके टैबलेट पर संग्रहीत सभी कैलेंडर ईवेंट पढ़ने देता है, उनके सहित जो मि‍त्रों और सहकर्मि‍यों के हैं. किसी दुर्भावनापूर्ण एप्‍लि‍केशन के पास यह अनुमति हो तो वह  इन कैलेंडर से स्‍वामी की जानकारी के बि‍ना व्यक्तिगत जानकारी निकाल सकता है."</string>
+  <string name="permdesc_readCalendar" product="default">"किसी एप्‍लि‍केशन को आपके फ़ोन पर संग्रहीत सभी कैलेंडर ईवेंट पढ़ने देता है, उनके सहित जो मि‍त्रों और सहकर्मि‍यों के हैं. किसी दुर्भावनापूर्ण एप्‍लि‍केशन के पास यह अनुमति हो तो वह इन कैलेंडर से स्‍वामी की जानकारी के बि‍ना व्यक्तिगत जानकारी निकाल सकता है."</string>
   <string name="permlab_writeCalendar">"स्‍वामी की जानकारी के बि‍ना कैलेंडर ईवेंट जोड़ें या संशोधि‍त करें और अति‍थि‍यों को ईमेल भेजें"</string>
   <string name="permlab_accessMockLocation">"परीक्षण के लिए नकली स्‍थान स्रोत"</string>
   <string name="permdesc_accessMockLocation">"परीक्षण के लिए नकली स्‍थान स्रोत बनाएं. दुर्भावनापूर्ण एप्‍लिकेशन इसका उपयोग वास्‍तविक स्‍थान स्रोतों जैसे GPS या नेटवर्क प्रदाताओं से वापस लौटे स्‍थान/या स्‍थिति ओवरराइड करने में कर सकती हैं."</string>
@@ -475,8 +474,8 @@
   <string name="permlab_installLocationProvider">"किसी स्‍थान प्रदाता को इंस्‍टॉल करने की अनुमति"</string>
   <string name="permdesc_installLocationProvider">"परीक्षण के लिए नकली स्‍थान स्रोत बनाएं. दुर्भावनापूर्ण एप्‍लिकेशन इसका उपयोग वास्‍तविक स्‍थान स्रोतों जैसे GPS या नेटवर्क प्रदाताओं से वापस लौटे स्‍थान/या स्‍थिति ओवरराइड करने में या आपके स्‍थान की निगरानी करने और बाह्य स्रोत को रिपोर्ट करने में कर सकती हैं."</string>
   <string name="permlab_accessFineLocation">"सही (GPS) स्‍थान"</string>
-  <string product="tablet" name="permdesc_accessFineLocation">"सही स्‍थान स्रोतों में पहुंचें, जैसे टेबलेट पर वैश्विक स्‍थिति निर्धारण प्रणाली, जहां उपलब्‍ध हो. दुर्भावनापूर्ण एप्‍लिकेशन इसका उपयोग आपकी स्‍थिति का निर्धारण करने में कर सकती हैं और अतिरिक्त बैटरी पावर का उपभोग कर सकती हैं."</string>
-  <string product="default" name="permdesc_accessFineLocation">"सही स्‍थान स्रोतों में पहुंचें, जैसे फ़ोन पर वैश्विक स्‍थिति निर्धारण प्रणाली, जहां उपलब्‍ध हो. दुर्भावनापूर्ण एप्‍लिकेशन इसका उपयोग आपकी स्‍थिति का निर्धारण करने में कर सकती हैं और अतिरिक्त बैटरी पावर का उपभोग कर सकती हैं."</string>
+  <string name="permdesc_accessFineLocation" product="tablet">"सही स्‍थान स्रोतों में पहुंचें, जैसे टेबलेट पर वैश्विक स्‍थिति निर्धारण प्रणाली, जहां उपलब्‍ध हो. दुर्भावनापूर्ण एप्‍लिकेशन इसका उपयोग आपकी स्‍थिति का निर्धारण करने में कर सकती हैं और अतिरिक्त बैटरी पावर का उपभोग कर सकती हैं."</string>
+  <string name="permdesc_accessFineLocation" product="default">"सही स्‍थान स्रोतों में पहुंचें, जैसे फ़ोन पर वैश्विक स्‍थिति निर्धारण प्रणाली, जहां उपलब्‍ध हो. दुर्भावनापूर्ण एप्‍लिकेशन इसका उपयोग आपकी स्‍थिति का निर्धारण करने में कर सकती हैं और अतिरिक्त बैटरी पावर का उपभोग कर सकती हैं."</string>
   <string name="permlab_accessCoarseLocation">"ख़राब (नेटवर्क-आधारित) स्‍थान"</string>
   <string name="permlab_accessSurfaceFlinger">"SurfaceFlinger में पहुंचें"</string>
   <string name="permdesc_accessSurfaceFlinger">"एप्‍लिकेशन को SurfaceFlinger निम्‍न-स्‍तर सुविधाओं का उपयोग करने की अनुमति देता है."</string>
@@ -488,14 +487,14 @@
   <string name="permdesc_recordAudio">"एप्‍लिकेशन को ऑडियो रिकॉर्ड पथ में पहुंच की अनुमति देता है."</string>
   <string name="permlab_camera">"चित्र और वीडियो लें"</string>
   <string name="permdesc_camera">"एप्‍लिकेशन को कैमरे से चित्र और वीडियो लेने की अनुमति देता है. यह एप्‍लिकेशन को किसी भी समय कैमरे द्वारा देखी जा रही छवियों को एकत्र करने की अनुमति देता है."</string>
-  <string product="tablet" name="permlab_brick">"स्‍थायी रूप से टेबलेट अक्षम करें"</string>
-  <string product="default" name="permlab_brick">"फ़ोन को स्‍थायी रूप से अक्षम करें"</string>
-  <string product="tablet" name="permdesc_brick">"संपूर्ण टेबलेट को स्‍थायी रूप से अक्षम करने की अनुमति एप्‍लिकेशन को देता है. यह बहुत खतरनाक है."</string>
-  <string product="default" name="permdesc_brick">"संपूर्ण फ़ोन को स्‍थायी रूप से अक्षम करने की अनुमति एप्‍लिकेशन को देता है. यह बहुत खतरनाक है."</string>
-  <string product="tablet" name="permlab_reboot">"टेबलेट रीबूट के लिए बाध्‍य करें"</string>
-  <string product="default" name="permlab_reboot">"फ़ोन रीबूट के लिए बाध्‍य करें"</string>
-  <string product="tablet" name="permdesc_reboot">"एप्‍लिकेशन को टेबलेट रीबूट करने के लिए बाध्‍य करने की अनुमति देता है."</string>
-  <string product="default" name="permdesc_reboot">"फ़ोन को रीबूट करने के लिए बाध्‍य करने की अनुमति एप्‍लिकेशन को देता है."</string>
+  <string name="permlab_brick" product="tablet">"स्‍थायी रूप से टेबलेट अक्षम करें"</string>
+  <string name="permlab_brick" product="default">"फ़ोन को स्‍थायी रूप से अक्षम करें"</string>
+  <string name="permdesc_brick" product="tablet">"संपूर्ण टेबलेट को स्‍थायी रूप से अक्षम करने की अनुमति एप्‍लिकेशन को देता है. यह बहुत खतरनाक है."</string>
+  <string name="permdesc_brick" product="default">"संपूर्ण फ़ोन को स्‍थायी रूप से अक्षम करने की अनुमति एप्‍लिकेशन को देता है. यह बहुत खतरनाक है."</string>
+  <string name="permlab_reboot" product="tablet">"टेबलेट रीबूट के लिए बाध्‍य करें"</string>
+  <string name="permlab_reboot" product="default">"फ़ोन रीबूट के लिए बाध्‍य करें"</string>
+  <string name="permdesc_reboot" product="tablet">"एप्‍लिकेशन को टेबलेट रीबूट करने के लिए बाध्‍य करने की अनुमति देता है."</string>
+  <string name="permdesc_reboot" product="default">"फ़ोन को रीबूट करने के लिए बाध्‍य करने की अनुमति एप्‍लिकेशन को देता है."</string>
   <string name="permdesc_mount_unmount_filesystems">"एप्‍लिकेशन को निकाले जाने योग्‍य संग्रहण के लिए फ़ाइल सिस्‍टम माउंट और अनमाउंट करने की अनुमति देता है."</string>
   <string name="permdesc_mount_format_filesystems">"एप्‍लिकेशन को निकाले जाने योग्‍य संग्रहण को प्रारूपित करने की अनुमति देता है."</string>
   <string name="permlab_asec_access">"आंतरिक संग्रहण पर जानकारी प्राप्त करें"</string>
@@ -522,8 +521,8 @@
   <string name="permdesc_callPhone">"एप्‍लिकेशन को बिना आपके हस्‍तक्षेप के फ़ोन नंबर पर कॉल करने की अनुमति देता है. दुर्भावनापूर्ण एप्‍लिकेशन आपके फ़ोन बिल में अप्रत्‍याशित कॉल का कारण हो सकती हैं. ध्‍यान रखें कि यह एप्‍लिकेशन को आपातकालीन नंबर पर कॉल करने की अनुमति नहीं देता है."</string>
   <string name="permlab_callPrivileged">"किसी भी फ़ोन नंबर पर सीधे कॉल करें"</string>
   <string name="permdesc_callPrivileged">"एप्‍लिकेशन को बिना आपके हस्‍तक्षेप के आपातकालीन नंबरों समेत किसी भी फ़ोन नंबर पर कॉल करने की अनुमति देता है. दुर्भावनापूर्ण एप्‍लिकेशन आपातकालीन सेवाओं पर अनावश्‍यक और अवैध कॉल कर सकती हैं."</string>
-  <string product="tablet" name="permlab_performCdmaProvisioning">"सीधे CDMA टेबलेट सेटअप प्रारंभ करें"</string>
-  <string product="default" name="permlab_performCdmaProvisioning">"सीधे CDMA फ़ोन सेटअप प्रारंभ करें"</string>
+  <string name="permlab_performCdmaProvisioning" product="tablet">"सीधे CDMA टेबलेट सेटअप प्रारंभ करें"</string>
+  <string name="permlab_performCdmaProvisioning" product="default">"सीधे CDMA फ़ोन सेटअप प्रारंभ करें"</string>
   <string name="permdesc_performCdmaProvisioning">"एप्‍लिकेशन को CDMA प्रावधानीकरण प्रारंभ करने की अनुमति देता है. दुर्भावनापूर्ण एप्‍लिकेशन अनावश्‍यक रूप से CDMA प्रावधानीकरण प्रारंभ कर सकते हैं."</string>
   <string name="permlab_locationUpdates">"स्‍थान अपडेट सूचनाएं नियंत्रित करें"</string>
   <string name="permdesc_locationUpdates">"रेडियो से स्‍थान अपडेट सूचनाओं को सक्षम/अक्षम करने की अनुमति देता है. सामान्‍य एप्‍लिकेशन द्वारा उपयोग किए जाने के लिए नहीं है."</string>
@@ -535,17 +534,17 @@
   <string name="permdesc_modifyPhoneState">"एप्‍लिकेशन को उपकरण की फ़ोन सुविधाओं को नियंत्रित करने की अनुमति देता है. अनुमति प्राप्त एप्‍लिकेशन कभी भी आपको सूचित किए बिना नेटवर्क स्‍विच कर सकती है, फ़ोन रेडियो चालू और बंद एवं ऐसे ही अन्‍य कार्य कर सकती है."</string>
   <string name="permlab_readPhoneState">"फ़ोन की स्‍थिति और पहचान पढें"</string>
   <string name="permdesc_readPhoneState">"एप्‍लिकेशन को उपकरण की फ़ोन सुविधाओं में पहुंच की अनुमति देता है. इस अनुमति के साथ वाला कोई एप्‍लिकेशन, कॉल सक्रिय हो या नहीं फिर भी इस फ़ोन का फ़ोन नंबर और क्रमांक, वह नंबर जिससे कॉल कनेक्‍ट की गई है और ऐसे ही अन्‍य नंबर निर्धारित कर सकती है."</string>
-  <string product="tablet" name="permlab_wakeLock">"टेबलेट को निष्‍क्रिय होने से रोकें"</string>
-  <string product="default" name="permlab_wakeLock">"फ़ोन को निष्‍क्रिय होने से रोकें"</string>
-  <string product="tablet" name="permdesc_wakeLock">"टेबलेट को निष्‍क्रिय होने से रोकने की अनुमति किसी एप्‍लिकेशन को देता है."</string>
-  <string product="default" name="permdesc_wakeLock">"फ़ोन को निष्‍क्रिय होने से रोकने की अनुमति किसी एप्‍लिकेशन को देता है."</string>
-  <string product="tablet" name="permlab_devicePower">"टेबलेट चालू या बंद करें"</string>
-  <string product="default" name="permlab_devicePower">"फ़ोन चालू या बंद करें"</string>
-  <string product="tablet" name="permdesc_devicePower">"एप्‍लिकेशन को टेबलेट चालू या बंद करने की अनुमति देता है."</string>
-  <string product="default" name="permdesc_devicePower">"एप्‍लिकेशन को फ़ोन चालू या बंद करने की अनुमति देता है."</string>
+  <string name="permlab_wakeLock" product="tablet">"टेबलेट को निष्‍क्रिय होने से रोकें"</string>
+  <string name="permlab_wakeLock" product="default">"फ़ोन को निष्‍क्रिय होने से रोकें"</string>
+  <string name="permdesc_wakeLock" product="tablet">"टेबलेट को निष्‍क्रिय होने से रोकने की अनुमति किसी एप्‍लिकेशन को देता है."</string>
+  <string name="permdesc_wakeLock" product="default">"फ़ोन को निष्‍क्रिय होने से रोकने की अनुमति किसी एप्‍लिकेशन को देता है."</string>
+  <string name="permlab_devicePower" product="tablet">"टेबलेट चालू या बंद करें"</string>
+  <string name="permlab_devicePower" product="default">"फ़ोन चालू या बंद करें"</string>
+  <string name="permdesc_devicePower" product="tablet">"एप्‍लिकेशन को टेबलेट चालू या बंद करने की अनुमति देता है."</string>
+  <string name="permdesc_devicePower" product="default">"एप्‍लिकेशन को फ़ोन चालू या बंद करने की अनुमति देता है."</string>
   <string name="permlab_factoryTest">"फ़ैक्‍ट्री परीक्षण मोड में चलाएं"</string>
-  <string product="tablet" name="permdesc_factoryTest">"टेबलेट हार्डवेयर में पूर्ण पहुंच की अनुमति देते हुए निम्‍न-स्‍तर निर्माता परीक्षण के रूप में चलाएं. केवल तभी उपलब्‍ध जब कोई टेबलेट निर्माता परीक्षण मोड में चल रहा हो."</string>
-  <string product="default" name="permdesc_factoryTest">"फ़ोन हार्डवेयर में पूर्ण पहुंच की अनुमति देते हुए निम्‍न-स्‍तर निर्माता परीक्षण के रूप में चलाएं. केवल तभी उपलब्‍ध जब कोई फ़ोन निर्माता परीक्षण मोड में चल रहा हो."</string>
+  <string name="permdesc_factoryTest" product="tablet">"टेबलेट हार्डवेयर में पूर्ण पहुंच की अनुमति देते हुए निम्‍न-स्‍तर निर्माता परीक्षण के रूप में चलाएं. केवल तभी उपलब्‍ध जब कोई टेबलेट निर्माता परीक्षण मोड में चल रहा हो."</string>
+  <string name="permdesc_factoryTest" product="default">"फ़ोन हार्डवेयर में पूर्ण पहुंच की अनुमति देते हुए निम्‍न-स्‍तर निर्माता परीक्षण के रूप में चलाएं. केवल तभी उपलब्‍ध जब कोई फ़ोन निर्माता परीक्षण मोड में चल रहा हो."</string>
   <string name="permlab_setWallpaper">"वॉलपेपर सेट करें"</string>
   <string name="permdesc_setWallpaper">"एप्‍लिकेशन को सिस्‍टम वॉलपेपर सेट करने की अनुमति देता है."</string>
   <string name="permlab_setWallpaperHints">"वॉलपेपर आकार सुझाव सेट करें"</string>
@@ -553,16 +552,16 @@
   <string name="permlab_masterClear">"फ़ैक्‍ट्री डिफ़ॉल्‍ट पर सिस्‍टम रीसेट करें"</string>
   <string name="permdesc_masterClear">"किसी एप्‍लिकेशन को सभी डेटा, कॉन्‍फ़िगरेशन और इंस्‍टॉल की हुई एप्‍लिकेशन मिटाते हुए सिस्‍टम को पूरी तरह से उसकी फ़ैक्‍ट्री सेटिंग पर रीसेट करने की अनुमति देता है."</string>
   <string name="permlab_setTime">"समय सेट करें"</string>
-  <string product="tablet" name="permdesc_setTime">"किसी एप्‍लिकेशन को टेबलेट की घड़ी का समय बदलने की अनुमति देता है."</string>
-  <string product="default" name="permdesc_setTime">"किसी एप्‍लिकेशन को फ़ोन की घड़ी का समय बदलने की अनुमति देता है."</string>
+  <string name="permdesc_setTime" product="tablet">"किसी एप्‍लिकेशन को टेबलेट की घड़ी का समय बदलने की अनुमति देता है."</string>
+  <string name="permdesc_setTime" product="default">"किसी एप्‍लिकेशन को फ़ोन की घड़ी का समय बदलने की अनुमति देता है."</string>
   <string name="permlab_setTimeZone">"समय क्षेत्र सेट करें"</string>
-  <string product="tablet" name="permdesc_setTimeZone">"किसी एप्‍लिकेशन को टेबलेट के समय क्षेत्र की बदलने की अनुमति देता है."</string>
-  <string product="default" name="permdesc_setTimeZone">"किसी एप्‍लिकेशन को फ़ोन का समय क्षेत्र बदलने की अनुमति देता है."</string>
+  <string name="permdesc_setTimeZone" product="tablet">"किसी एप्‍लिकेशन को टेबलेट के समय क्षेत्र की बदलने की अनुमति देता है."</string>
+  <string name="permdesc_setTimeZone" product="default">"किसी एप्‍लिकेशन को फ़ोन का समय क्षेत्र बदलने की अनुमति देता है."</string>
   <string name="permlab_accountManagerService">"खाता प्रबंधक सेवा के रूप में कार्य करें"</string>
   <string name="permdesc_accountManagerService">"किसी एप्‍लिकेशन को खाता प्रमाणकर्त्ताओं को कॉल करने की अनुमति देता है"</string>
   <string name="permlab_getAccounts">"ज्ञात खातों का पता लगाएं"</string>
-  <string product="tablet" name="permdesc_getAccounts">"किसी एप्‍लिकेशन को टेबलेट द्वारा ज्ञात खातों की सूची प्राप्त करने की अनुमति देता है."</string>
-  <string product="default" name="permdesc_getAccounts">"किसी एप्‍िलकेशन को फ़ोन द्वारा ज्ञात खातों की सूची प्राप्त करने की अनुमति देता है."</string>
+  <string name="permdesc_getAccounts" product="tablet">"किसी एप्‍लिकेशन को टेबलेट द्वारा ज्ञात खातों की सूची प्राप्त करने की अनुमति देता है."</string>
+  <string name="permdesc_getAccounts" product="default">"किसी एप्‍िलकेशन को फ़ोन द्वारा ज्ञात खातों की सूची प्राप्त करने की अनुमति देता है."</string>
   <string name="permlab_authenticateAccounts">"खाता प्रमाणकर्त्ता के रूप में कार्य करें"</string>
   <string name="permdesc_authenticateAccounts">"एप्‍िलकेशन को खाता बनाने और उनके पासवर्ड प्राप्त करने और सेट करने समेत, खाता प्रबंधक की खाता प्रमाणीकरण क्षमताओं का उपयोग करने की अनुमति देता है."</string>
   <string name="permlab_manageAccounts">"खाता सूची प्रबंधित करें"</string>
@@ -590,11 +589,11 @@
   <string name="permdesc_accessWimaxState">"किसी एप्‍लिकेशन को WiMAX की स्‍थिति की जानकारी देखने की सुविधा देता है."</string>
   <string name="permlab_changeWimaxState">"WiMAX स्‍थिति बदलें"</string>
   <string name="permlab_bluetoothAdmin">"ब्‍लूटूथ व्‍यवस्‍थापन"</string>
-  <string product="tablet" name="permdesc_bluetoothAdmin">"किसी एप्‍लिकेशन को स्‍थानीय Bluetooth टेबलेट कॉन्‍फ़िगर करने की अनुमति देता है, और रिमोट उपकरणों के साथ खोजने और युग्‍मित करने की अनुमति देता है."</string>
-  <string product="default" name="permdesc_bluetoothAdmin">"किसी एप्‍लिकेशन को स्‍थानीय Bluetooth फ़ोन कॉन्‍फ़िगर करने की अनुमति देता है, और रिमोट उपकरणों के साथ खोजने और युग्‍मित करने की अनुमति देता है."</string>
+  <string name="permdesc_bluetoothAdmin" product="tablet">"किसी एप्‍लिकेशन को स्‍थानीय Bluetooth टेबलेट कॉन्‍फ़िगर करने की अनुमति देता है, और रिमोट उपकरणों के साथ खोजने और युग्‍मित करने की अनुमति देता है."</string>
+  <string name="permdesc_bluetoothAdmin" product="default">"किसी एप्‍लिकेशन को स्‍थानीय Bluetooth फ़ोन कॉन्‍फ़िगर करने की अनुमति देता है, और रिमोट उपकरणों के साथ खोजने और युग्‍मित करने की अनुमति देता है."</string>
   <string name="permlab_bluetooth">"Bluetooth कनेक्‍शन बनाएं"</string>
-  <string product="tablet" name="permdesc_bluetooth">"किसी एप्‍लिकेशन को स्‍थानीय Bluetooth टेबलेट का कॉन्‍फ़िगरेशन देखने की, और युग्‍मित उपकरणों के साथ कनेक्‍शन बनाने एवं स्‍वीकृत करने की अनुमति देता है."</string>
-  <string product="default" name="permdesc_bluetooth">"किसी एप्‍लिकेशन को स्‍थानीय Bluetooth फ़ोन का कॉन्‍फ़िगरेशन देखने की, और युग्‍मित उपकरणों के साथ कनेक्‍शन बनाने एवं स्‍वीकृति देने की अनुमति देता है."</string>
+  <string name="permdesc_bluetooth" product="tablet">"किसी एप्‍लिकेशन को स्‍थानीय Bluetooth टेबलेट का कॉन्‍फ़िगरेशन देखने की, और युग्‍मित उपकरणों के साथ कनेक्‍शन बनाने एवं स्‍वीकृत करने की अनुमति देता है."</string>
+  <string name="permdesc_bluetooth" product="default">"किसी एप्‍लिकेशन को स्‍थानीय Bluetooth फ़ोन का कॉन्‍फ़िगरेशन देखने की, और युग्‍मित उपकरणों के साथ कनेक्‍शन बनाने एवं स्‍वीकृति देने की अनुमति देता है."</string>
   <string name="permlab_nfc">"नियर फ़ील्‍ड कम्‍यूनिकेशन नियंत्रित करें"</string>
   <string name="permdesc_nfc">"किसी एप्‍लिकेशन को नियर फ़ील्‍ड कम्‍यूनिकेशन (NFC) टैग, कार्ड और रीडर के साथ संचार करने की अनुमति देता है."</string>
   <string name="permlab_disableKeyguard">"कीलॉक अक्षम करें"</string>
@@ -613,12 +612,12 @@
   <string name="permdesc_readDictionary">"किसी एप्‍लिकेशन को ऐसे निजी शब्‍दों, नामों या पदबंधों को पढ़ने की अनुमति देता है जो संभवत: उपयोगकर्ता द्वारा उपयोगकर्ता निर्देशिका में संग्रहीत किए गए हों."</string>
   <string name="permlab_writeDictionary">"उपयोगकर्ता निर्धारित शब्‍दकोष में लिखें"</string>
   <string name="permdesc_writeDictionary">"किसी एप्‍लिकेशन को उपयोगकर्ता शब्‍दकोष में नए शब्‍द लिखने की अनुमति देता है."</string>
-  <string product="nosdcard" name="permlab_sdcardWrite">"USB संग्रहण सामग्रियों को संशोधित करें/हटाएं"</string>
-  <string product="default" name="permlab_sdcardWrite">"SD कार्ड सामग्रियां संशोधित करें/हटाएं"</string>
-  <string product="nosdcard" name="permdesc_sdcardWrite">"किसी एप्‍लिकेशन को USB संग्रहण पर लिखने की अनुमति देता है."</string>
-  <string product="default" name="permdesc_sdcardWrite">"किसी एप्‍लिकेशन को SD कार्ड पर लिखने की अनुमति देता है."</string>
-  <string product="default" name="permlab_mediaStorageWrite">"आंतरिक मीडिया संग्रहण सामग्रियों को संशोधित करें/हटाएं"</string>
-  <string product="default" name="permdesc_mediaStorageWrite">"किसी एप्‍लिकेशन को आंतरिक मीडिया संग्रहण संशोधित करने की अनुमति देता है."</string>
+  <string name="permlab_sdcardWrite" product="nosdcard">"USB संग्रहण सामग्रियों को संशोधित करें/हटाएं"</string>
+  <string name="permlab_sdcardWrite" product="default">"SD कार्ड सामग्रियां संशोधित करें/हटाएं"</string>
+  <string name="permdesc_sdcardWrite" product="nosdcard">"किसी एप्‍लिकेशन को USB संग्रहण पर लिखने की अनुमति देता है."</string>
+  <string name="permdesc_sdcardWrite" product="default">"किसी एप्‍लिकेशन को SD कार्ड पर लिखने की अनुमति देता है."</string>
+  <string name="permlab_mediaStorageWrite" product="default">"आंतरिक मीडिया संग्रहण सामग्रियों को संशोधित करें/हटाएं"</string>
+  <string name="permdesc_mediaStorageWrite" product="default">"किसी एप्‍लिकेशन को आंतरिक मीडिया संग्रहण संशोधित करने की अनुमति देता है."</string>
   <string name="permlab_cache_filesystem">"कैश फ़ाइल सिस्‍टम में पहंचे"</string>
   <string name="permdesc_cache_filesystem">"किसी एप्‍लिकेशन को कैश फ़ाइल सिस्‍टम पढ़ने और लिखने की अनुमति देता है."</string>
   <string name="permlab_use_sip">"इंटरनेट कॉल करें/प्राप्त करें"</string>
@@ -632,15 +631,15 @@
   <string name="policylab_limitPassword">"पासवर्ड नियम सेट करें"</string>
   <string name="policydesc_limitPassword">"स्‍क्रीन-अनलॉक पासवर्ड में अनुमति प्राप्त लंबाई और वर्णों को नियंत्रित करें"</string>
   <string name="policylab_watchLogin">"स्‍क्रीन-अनलॉक के प्रयासों पर निगरानी रखें"</string>
-  <string product="tablet" name="policydesc_watchLogin">"स्‍क्रीन अनलॉक करने के दौरान गलत पासवर्ड लिखे जाने की संख्‍या पर नज़र रखता है, और यदि कई बार पासवर्ड गलत लिखा गया हो तो टेबलेट लॉक करता है या टेबलेट के सभी डेटा को मिटा देता है"</string>
-  <string product="default" name="policydesc_watchLogin">"स्‍क्रीन अनलॉक करने के दौरान गलत पासवर्ड लिखे जाने की संख्‍या पर नज़र रखता है, और यदि कई बार पासवर्ड गलत लिखा गया हो तो फ़ोन लॉक करता है या फ़ोन के सभी डेटा को मिटा देता है"</string>
+  <string name="policydesc_watchLogin" product="tablet">"स्‍क्रीन अनलॉक करने के दौरान गलत पासवर्ड लिखे जाने की संख्‍या पर नज़र रखता है, और यदि कई बार पासवर्ड गलत लिखा गया हो तो टेबलेट लॉक करता है या टेबलेट के सभी डेटा को मिटा देता है"</string>
+  <string name="policydesc_watchLogin" product="default">"स्‍क्रीन अनलॉक करने के दौरान गलत पासवर्ड लिखे जाने की संख्‍या पर नज़र रखता है, और यदि कई बार पासवर्ड गलत लिखा गया हो तो फ़ोन लॉक करता है या फ़ोन के सभी डेटा को मिटा देता है"</string>
   <string name="policylab_resetPassword">"स्‍क्रीन-अनलॉक पासवर्ड बदलें"</string>
   <string name="policydesc_resetPassword">"स्‍क्रीन-अनलॉक पासवर्ड बदलें"</string>
   <string name="policylab_forceLock">"स्‍क्रीन लॉक करें"</string>
   <string name="policydesc_forceLock">"नियंत्रित करें कि कैसे और कब स्‍क्रीन लॉक हो"</string>
   <string name="policylab_wipeData">"सभी डेटा मिटाएं"</string>
-  <string product="tablet" name="policydesc_wipeData">"फ़ैक्‍ट्री डेटा रीसेट निष्‍पादित करके बिना चेतावनी के टेबलेट का डेटा मिटाएं"</string>
-  <string product="default" name="policydesc_wipeData">"फ़ैक्‍ट्री डेटा रीसेट करके, बिना चेतावनी के फ़ोन का डेटा मिटाएं"</string>
+  <string name="policydesc_wipeData" product="tablet">"फ़ैक्‍ट्री डेटा रीसेट निष्‍पादित करके बिना चेतावनी के टेबलेट का डेटा मिटाएं"</string>
+  <string name="policydesc_wipeData" product="default">"फ़ैक्‍ट्री डेटा रीसेट करके, बिना चेतावनी के फ़ोन का डेटा मिटाएं"</string>
   <string name="policylab_setGlobalProxy">"उपकरण वैश्विक प्रॉक्‍सी सेट करें"</string>
   <string name="policydesc_setGlobalProxy">"नीति सक्षम होने के दौरान उपकरण वैश्विक प्रॉक्‍सी सेट करें. केवल पहला उपकरण व्‍यवस्‍थापक, प्रभावी वैश्विक प्रॉक्‍सी सेट करता है."</string>
   <string name="policylab_expirePassword">"स्‍क्रीन लॉक करें पासवर्ड समाप्ति सेट करें"</string>
@@ -649,49 +648,6 @@
   <string name="policydesc_encryptedStorage">"संग्रहीत एप्‍लिकेशन डेटा को एन्क्रिप्ट किए जाने की आवश्‍यकता होती है"</string>
   <string name="policylab_disableCamera">"कैमरों को अक्षम करें"</string>
   <string name="policydesc_disableCamera">"सभी उपकरण कैमरों का उपयोग रोकें"</string>
-  <string-array name="phoneTypes">
-        <item>"घर"</item>
-        <item>"मोबाइल"</item>
-        <item>"कार्यालय"</item>
-        <item>"कार्यालय का फ़ैक्स"</item>
-        <item>"घर का फ़ैक्स"</item>
-        <item>"पेजर"</item>
-        <item>"अन्य"</item>
-        <item>"कस्टम"</item>
-    </string-array>
-  <string-array name="emailAddressTypes">
-        <item>"घर"</item>
-        <item>"कार्यालय"</item>
-        <item>"अन्य"</item>
-        <item>"कस्टम"</item>
-    </string-array>
-  <string-array name="postalAddressTypes">
-        <item>"घर"</item>
-        <item>"कार्यालय"</item>
-        <item>"अन्य"</item>
-        <item>"कस्टम"</item>
-    </string-array>
-  <string-array name="imAddressTypes">
-        <item>"घर"</item>
-        <item>"कार्यालय"</item>
-        <item>"अन्य"</item>
-        <item>"कस्टम"</item>
-    </string-array>
-  <string-array name="organizationTypes">
-        <item>"कार्यालय"</item>
-        <item>"अन्य"</item>
-        <item>"कस्टम"</item>
-    </string-array>
-  <string-array name="imProtocols">
-        <item>"AIM"</item>
-        <item>"Windows Live"</item>
-        <item>"Yahoo"</item>
-        <item>"Skype"</item>
-        <item>"QQ"</item>
-        <item>"Google टॉक"</item>
-        <item>"ICQ"</item>
-        <item>"Jabber"</item>
-    </string-array>
   <string name="phoneTypeCustom">"कस्टम"</string>
   <string name="phoneTypeHome">"घर"</string>
   <string name="phoneTypeMobile">"मोबाइल"</string>
@@ -795,8 +751,8 @@
   <string name="lockscreen_low_battery">"अपना चार्जर कनेक्‍ट करें."</string>
   <string name="lockscreen_missing_sim_message_short">"कोई सिम कार्ड नहीं है."</string>
   <string name="lockscreen_blocked_sim_message_short">SIM कार्ड ब्लॉक है.</string>
-  <string product="tablet" name="lockscreen_missing_sim_message">"टेबलेट में कोई सिम कार्ड नहीं है."</string>
-  <string product="default" name="lockscreen_missing_sim_message">"फ़ोन में कोई सिम कार्ड नहीं है."</string>
+  <string name="lockscreen_missing_sim_message" product="tablet">"टेबलेट में कोई सिम कार्ड नहीं है."</string>
+  <string name="lockscreen_missing_sim_message" product="default">"फ़ोन में कोई सिम कार्ड नहीं है."</string>
   <string name="lockscreen_missing_sim_instructions">"कृपया एक सिम कार्ड सम्‍मिलित करें."</string>
   <string name="lockscreen_missing_sim_instructions_long">"सिम कार्ड गुम है या पढ़ने योग्‍य नहीं है. कृपया सिम कार्ड डालें."</string>
   <string name="lockscreen_permanent_disabled_sim_instructions">"आपका सिम कार्ड स्‍थायी रूप से अक्षम है."\n" कोई अन्‍य सिम कार्ड प्राप्त करने के लिए कृपया अपने वायरलेस सेवा प्रदाता से संपर्क करें."</string>
@@ -805,7 +761,7 @@
   <string name="lockscreen_transport_pause_description">"रोकें बटन"</string>
   <string name="lockscreen_transport_play_description">"चलाएं बटन"</string>
   <string name="lockscreen_transport_stop_description">"रोकें बटन"</string>
-  <string msgid="2485604591272668370" name="emergency_calls_only">"केवल आपातकालीन कॉल"</string>
+  <string name="emergency_calls_only" msgid="2485604591272668370">"केवल आपातकालीन कॉल"</string>
   <string name="lockscreen_network_locked_message">"नेटवर्क लॉक किया गया"</string>
   <string name="lockscreen_sim_puk_locked_message">"सिम कार्ड PUK-लॉक किया हुआ है."</string>
   <string name="lockscreen_sim_puk_locked_instructions">"कृपया उपयोगकर्ता मार्गदर्शिका देखें या ग्राहक सहायता से संपर्क करें."</string>
@@ -814,12 +770,12 @@
   <string name="lockscreen_too_many_failed_attempts_dialog_message">"आपने अपना अनलॉक वर्तमान में <xliff:g id="NUMBER_0">%d</xliff:g> बार गलत आरेखित किया है. "\n\n"कृपया <xliff:g id="NUMBER_1">%d</xliff:g> सेकंड में पुन: प्रयास करें."</string>
   <string name="lockscreen_too_many_failed_password_attempts_dialog_message">"आपने अपना पासवर्ड <xliff:g id="NUMBER_0">%d</xliff:g> बार गलत दर्ज किया है. "\n\n"कृपया <xliff:g id="NUMBER_1">%d</xliff:g> सेकंड में पुन: प्रयास करें."</string>
   <string name="lockscreen_too_many_failed_pin_attempts_dialog_message">"आपने अपनी पिन <xliff:g id="NUMBER_0">%d</xliff:g> बार दर्ज की है. "\n\n"कृपया <xliff:g id="NUMBER_1">%d</xliff:g> सेकंड में पुन: प्रयास करें."</string>
-  <string product="tablet" name="lockscreen_failed_attempts_almost_glogin">"आपने अपना अनलॉक प्रतिमान गलत तरीके से <xliff:g id="NUMBER_0">%d</xliff:g> बार आरेखित किया है. <xliff:g id="NUMBER_1">%d</xliff:g> और असफल प्रयासों के बाद, आपसे अपने Google साइन-इन का उपयोग करते हुए अपने टेबलेट को अनलॉक करने को कहा जाएगा."\n\n" कृपया <xliff:g id="NUMBER_2">%d</xliff:g> सेकंड में पुन: प्रयास करें."</string>
-  <string product="default" name="lockscreen_failed_attempts_almost_glogin">"आपने अपना अनलॉक प्रतिमान <xliff:g id="NUMBER_0">%d</xliff:g> बार गलत तरीके से आरेखित किया है. <xliff:g id="NUMBER_1">%d</xliff:g> और असफल प्रयासों के बाद, आपसे अपने Google साइन-इन का उपयोग करते हुए फ़ोन को अनलॉक करने को कहा जाएगा."\n\n" कृपया <xliff:g id="NUMBER_2">%d</xliff:g> सेकंड में पुन: प्रयास करें."</string>
-  <string product="tablet" name="lockscreen_failed_attempts_almost_at_wipe">"आप गलत तरीके से टेबलेट को अनलॉक करने का प्रयास <xliff:g id="NUMBER_0">%d</xliff:g> बार कर चुके हैं. <xliff:g id="NUMBER_1">%d</xliff:g> और असफल प्रयास के बाद, टेबलेट फ़ैक्‍टरी डिफ़ॉल्‍ट पर रीसेट हो जाएगा और सभी उपयोगकर्ता डेटा खो जाएगा."</string>
-  <string product="default" name="lockscreen_failed_attempts_almost_at_wipe">"आप गलत तरीके से फ़ोन को अनलॉक करने का प्रयास <xliff:g id="NUMBER_0">%d</xliff:g> बार कर चुके हैं. <xliff:g id="NUMBER_1">%d</xliff:g> और असफल प्रयास के बाद, फ़ोन फ़ैक्‍टरी डिफ़ॉल्‍ट पर रीसेट हो जाएगा और सभी उपयोगकर्ता डेटा खो जाएगा."</string>
-  <string product="tablet" name="lockscreen_failed_attempts_now_wiping">"आप टेबलेट को गलत तरीके से <xliff:g id="NUMBER">%d</xliff:g> बार अनलॉक करने का प्रयास कर चुके हैं. टेबलेट अब फ़ैक्‍टरी डिफ़ॉल्‍ट पर रीसेट हो जाएगा."</string>
-  <string product="default" name="lockscreen_failed_attempts_now_wiping">"आप फ़ोन को गलत तरीके से <xliff:g id="NUMBER">%d</xliff:g> बार अनलॉक करने का प्रयास कर चुके हैं. फ़ोन अब फ़ैक्‍टरी डिफ़ॉल्‍ट पर रीसेट हो जाएगा."</string>
+  <string name="lockscreen_failed_attempts_almost_glogin" product="tablet">"आपने अपना अनलॉक प्रतिमान गलत तरीके से <xliff:g id="NUMBER_0">%d</xliff:g> बार आरेखित किया है. <xliff:g id="NUMBER_1">%d</xliff:g> और असफल प्रयासों के बाद, आपसे अपने Google साइन-इन का उपयोग करते हुए अपने टेबलेट को अनलॉक करने को कहा जाएगा."\n\n" कृपया <xliff:g id="NUMBER_2">%d</xliff:g> सेकंड में पुन: प्रयास करें."</string>
+  <string name="lockscreen_failed_attempts_almost_glogin" product="default">"आपने अपना अनलॉक प्रतिमान <xliff:g id="NUMBER_0">%d</xliff:g> बार गलत तरीके से आरेखित किया है. <xliff:g id="NUMBER_1">%d</xliff:g> और असफल प्रयासों के बाद, आपसे अपने Google साइन-इन का उपयोग करते हुए फ़ोन को अनलॉक करने को कहा जाएगा."\n\n" कृपया <xliff:g id="NUMBER_2">%d</xliff:g> सेकंड में पुन: प्रयास करें."</string>
+  <string name="lockscreen_failed_attempts_almost_at_wipe" product="tablet">"आप गलत तरीके से टेबलेट को अनलॉक करने का प्रयास <xliff:g id="NUMBER_0">%d</xliff:g> बार कर चुके हैं. <xliff:g id="NUMBER_1">%d</xliff:g> और असफल प्रयास के बाद, टेबलेट फ़ैक्‍टरी डिफ़ॉल्‍ट पर रीसेट हो जाएगा और सभी उपयोगकर्ता डेटा खो जाएगा."</string>
+  <string name="lockscreen_failed_attempts_almost_at_wipe" product="default">"आप गलत तरीके से फ़ोन को अनलॉक करने का प्रयास <xliff:g id="NUMBER_0">%d</xliff:g> बार कर चुके हैं. <xliff:g id="NUMBER_1">%d</xliff:g> और असफल प्रयास के बाद, फ़ोन फ़ैक्‍टरी डिफ़ॉल्‍ट पर रीसेट हो जाएगा और सभी उपयोगकर्ता डेटा खो जाएगा."</string>
+  <string name="lockscreen_failed_attempts_now_wiping" product="tablet">"आप टेबलेट को गलत तरीके से <xliff:g id="NUMBER">%d</xliff:g> बार अनलॉक करने का प्रयास कर चुके हैं. टेबलेट अब फ़ैक्‍टरी डिफ़ॉल्‍ट पर रीसेट हो जाएगा."</string>
+  <string name="lockscreen_failed_attempts_now_wiping" product="default">"आप फ़ोन को गलत तरीके से <xliff:g id="NUMBER">%d</xliff:g> बार अनलॉक करने का प्रयास कर चुके हैं. फ़ोन अब फ़ैक्‍टरी डिफ़ॉल्‍ट पर रीसेट हो जाएगा."</string>
   <string name="lockscreen_too_many_failed_attempts_countdown">"<xliff:g id="NUMBER">%d</xliff:g> सेकंड में पुन: प्रयास करें."</string>
   <string name="lockscreen_forgot_pattern_button_text">"प्रतिमान भूल गए?"</string>
   <string name="lockscreen_glogin_forgot_pattern">"खाता अनलॉक"</string>
@@ -873,8 +829,8 @@
   <string name="permlab_readHistoryBookmarks">"ब्राउज़र का इतिहास और बुकमार्क पढ़ें"</string>
   <string name="permdesc_readHistoryBookmarks">"एप्लिकेशन को ब्राउज़र द्वारा विज़िट किए गए सभी URL और ब्राउज़र के सभी बुकमार्क को पढ़ने की अनुमति देता है."</string>
   <string name="permlab_writeHistoryBookmarks">"ब्राउज़र का इतिहास और बुकमार्क लिखें"</string>
-  <string product="tablet" name="permdesc_writeHistoryBookmarks">"किसी एप्लिकेशन को आपके टेबलेट पर संग्रहीत ब्राउज़र का इतिहास या बुकमार्क संशोधित करने की अनुमति देता है. दुर्भावनापूर्ण एप्लिकेशन आपके ब्राउज़र के डेटा को मिटाने या संशोधित करने में इसका उपयोग कर सकती हैं."</string>
-  <string product="default" name="permdesc_writeHistoryBookmarks">"किसी एप्लिकेशन को आपके फ़ोन पर संग्रहीत ब्राउज़र का इतिहास या बुकमार्क संशोधित करने की सुविधा देता है. दुर्भावनापूर्ण एप्लिकेशन इसका उपयोग आपके ब्राउज़र के डेटा को मिटाने या संशोधित करने में कर सकती हैं."</string>
+  <string name="permdesc_writeHistoryBookmarks" product="tablet">"किसी एप्लिकेशन को आपके टेबलेट पर संग्रहीत ब्राउज़र का इतिहास या बुकमार्क संशोधित करने की अनुमति देता है. दुर्भावनापूर्ण एप्लिकेशन आपके ब्राउज़र के डेटा को मिटाने या संशोधित करने में इसका उपयोग कर सकती हैं."</string>
+  <string name="permdesc_writeHistoryBookmarks" product="default">"किसी एप्लिकेशन को आपके फ़ोन पर संग्रहीत ब्राउज़र का इतिहास या बुकमार्क संशोधित करने की सुविधा देता है. दुर्भावनापूर्ण एप्लिकेशन इसका उपयोग आपके ब्राउज़र के डेटा को मिटाने या संशोधित करने में कर सकती हैं."</string>
   <string name="permlab_setAlarm">"अलार्म क्लॉक में अलार्म सेट करें"</string>
   <string name="permdesc_setAlarm">"किसी एप्लिकेशन को इंस्टॉल की गई अलार्म क्लॉक एप्लिकेशन में अलार्म सेट करने की अनुमति देता है. हो सकता है कुछ अलार्म क्लॉक एप्लिकेशन इस सुविधा को लागू नहीं कर सकें."</string>
   <string name="permlab_addVoicemail">"ध्‍वनिमेल जोड़ें"</string>
@@ -904,75 +860,8 @@
   <string name="searchview_description_voice">"ध्वनि खोज"</string>
   <string name="oneMonthDurationPast">"1 माह पहले"</string>
   <string name="beforeOneMonthDurationPast">"1 माह से पहले"</string>
-  <plurals name="num_seconds_ago">
-        <item quantity="one">"1 सेकंड पहले"</item>
-        <item quantity="other">"<xliff:g id="COUNT">%d</xliff:g> सेकंड पहले"</item>
-    </plurals>
-  <plurals name="num_minutes_ago">
-        <item quantity="one">"1 मिनट पहले"</item>
-        <item quantity="other">"<xliff:g id="COUNT">%d</xliff:g> मिनट पहले"</item>
-    </plurals>
-  <plurals name="num_hours_ago">
-        <item quantity="one">"1 घंटे पहले"</item>
-        <item quantity="other">"<xliff:g id="COUNT">%d</xliff:g> घंटे पहले"</item>
-    </plurals>
-  <plurals name="last_num_days">
-        <item quantity="other">"अंतिम <xliff:g id="COUNT">%d</xliff:g> दिन"</item>
-    </plurals>
   <string name="last_month">"पिछला माह"</string>
   <string name="older">"इससे पुराना"</string>
-  <plurals name="num_days_ago">
-        <item quantity="one">"बीता कल"</item>
-        <item quantity="other">"<xliff:g id="COUNT">%d</xliff:g> दिन पहले"</item>
-    </plurals>
-  <plurals name="in_num_seconds">
-        <item quantity="one">"1 सेकंड में"</item>
-        <item quantity="other">"<xliff:g id="COUNT">%d</xliff:g> सेकंड में"</item>
-    </plurals>
-  <plurals name="in_num_minutes">
-        <item quantity="one">"1 मिनट में"</item>
-        <item quantity="other">"<xliff:g id="COUNT">%d</xliff:g> मिनट में"</item>
-    </plurals>
-  <plurals name="in_num_hours">
-        <item quantity="one">"1 घंटे में"</item>
-        <item quantity="other">"<xliff:g id="COUNT">%d</xliff:g> घंटे में"</item>
-    </plurals>
-  <plurals name="in_num_days">
-        <item quantity="one">"आने वाला कल"</item>
-        <item quantity="other">"<xliff:g id="COUNT">%d</xliff:g> दिन में"</item>
-    </plurals>
-  <plurals name="abbrev_num_seconds_ago">
-        <item quantity="one">"1 सेकंड पहले"</item>
-        <item quantity="other">"<xliff:g id="COUNT">%d</xliff:g> सेकंड पहले"</item>
-    </plurals>
-  <plurals name="abbrev_num_minutes_ago">
-        <item quantity="one">"1 मिनट पहले"</item>
-        <item quantity="other">"<xliff:g id="COUNT">%d</xliff:g> मिनट पहले"</item>
-    </plurals>
-  <plurals name="abbrev_num_hours_ago">
-        <item quantity="one">"1 घंटे पहले"</item>
-        <item quantity="other">"<xliff:g id="COUNT">%d</xliff:g> घंटे पहले"</item>
-    </plurals>
-  <plurals name="abbrev_num_days_ago">
-        <item quantity="one">"बीता कल"</item>
-        <item quantity="other">"<xliff:g id="COUNT">%d</xliff:g> दिन पहले"</item>
-    </plurals>
-  <plurals name="abbrev_in_num_seconds">
-        <item quantity="one">"1 सेकंड में"</item>
-        <item quantity="other">"<xliff:g id="COUNT">%d</xliff:g> सेकंड में"</item>
-    </plurals>
-  <plurals name="abbrev_in_num_minutes">
-        <item quantity="one">"1 मिनट में"</item>
-        <item quantity="other">"<xliff:g id="COUNT">%d</xliff:g> मिनट में"</item>
-    </plurals>
-  <plurals name="abbrev_in_num_hours">
-        <item quantity="one">"1 घंटे में"</item>
-        <item quantity="other">"<xliff:g id="COUNT">%d</xliff:g> घंटे में"</item>
-    </plurals>
-  <plurals name="abbrev_in_num_days">
-        <item quantity="one">"आने वाला कल"</item>
-        <item quantity="other">"<xliff:g id="COUNT">%d</xliff:g> दिन में"</item>
-    </plurals>
   <string name="preposition_for_date">"<xliff:g id="DATE">%s</xliff:g> को"</string>
   <string name="preposition_for_time">"<xliff:g id="TIME">%s</xliff:g> पर"</string>
   <string name="preposition_for_year">"<xliff:g id="YEAR">%s</xliff:g> में"</string>
@@ -1027,9 +916,9 @@
   <string name="chooseActivity">"किसी क्रिया का चयन करें"</string>
   <string name="chooseUsbActivity">"USB उपकरण के लिए किसी एप्‍लिकेशन का चयन करें"</string>
   <string name="noApplications">"कोई एप्‍लिकेशन इस क्रिया को निष्‍पादित नहीं कर सकती."</string>
-  <string msgid="932628488013092776" name="aerr_application">"दुर्भाग्‍यवश, <xliff:g id="APPLICATION">%1$s</xliff:g> रुक गया है."</string>
+  <string name="aerr_application" msgid="932628488013092776">"दुर्भाग्‍यवश, <xliff:g id="APPLICATION">%1$s</xliff:g> रुक गया है."</string>
   <string name="aerr_process">"दुर्भाग्‍यवश, <xliff:g id="PROCESS">%1$s</xliff:g> प्रक्रिया रुक गई है."</string>
-  <string msgid="8339738283149696827" name="anr_activity_application">"<xliff:g id="APPLICATION">%2$s</xliff:g> प्रति‍साद नहीं दे रहा है."\n\n"क्‍या आप इसे बंद करना चाहेंगे?"</string>
+  <string name="anr_activity_application" msgid="8339738283149696827">"<xliff:g id="APPLICATION">%2$s</xliff:g> प्रति‍साद नहीं दे रहा है."\n\n"क्‍या आप इसे बंद करना चाहेंगे?"</string>
   <string name="anr_activity_process">"<xliff:g id="ACTIVITY">%1$s</xliff:g> गति‍वि‍धि‍ प्रति‍साद नहीं दे रही है."\n\n"क्‍या आप इसे बंद करना चाहेंगे?"</string>
   <string name="anr_application_process">"<xliff:g id="APPLICATION">%1$s</xliff:g> प्रति‍साद नहीं  दे रहा है. क्‍या आप इसे बंद करना चाहेंगे?"</string>
   <string name="anr_process">"<xliff:g id="PROCESS">%1$s</xliff:g> प्रक्रि‍या प्रति‍साद नहीं दे रही है."\n\n"क्‍या आप इसे बंद करना चाहेंगे?"</string>
@@ -1076,14 +965,6 @@
   <string name="ringtone_silent">"मौन"</string>
   <string name="ringtone_picker_title">"रिंगटोन"</string>
   <string name="ringtone_unknown">"अज्ञात रिंगटोन"</string>
-  <plurals name="wifi_available">
-        <item quantity="one">"Wi-Fi नेटवर्क उपलब्‍ध"</item>
-        <item quantity="other">"Wi-Fi नेटवर्क उपलब्‍ध"</item>
-    </plurals>
-  <plurals name="wifi_available_detailed">
-        <item quantity="one">"उपलब्‍ध Wi-Fi नेटवर्क खोलें"</item>
-        <item quantity="other">"खुले Wi-Fi नेटवर्क उपलब्‍ध है"</item>
-    </plurals>
   <string name="wifi_available_sign_in">"Wi-Fi नेटवर्क में साइन इन करें"</string>
   <string name="wifi_watchdog_network_disabled">"Wi-Fi से कनेक्‍ट नहीं हो सका"</string>
   <string name="wifi_watchdog_network_disabled_detailed">" के पास एक कमज़ोर इंटरनेट कनेक्‍शन है."</string>
@@ -1117,18 +998,18 @@
   </string>
   <string name="usb_storage_activity_title">"USB विशाल संग्रहण"</string>
   <string name="usb_storage_title">"USB कनेक्ट किया गया"</string>
-  <string product="nosdcard" name="usb_storage_message">"आप USB द्वारा अपने कंप्‍यूटर से कनेक्‍ट हैं. यदि आप अपने कंप्‍यूटर और Android के USB संग्रहण के बीच फ़ाइलों की प्रतिलिपि बनाना चाहते हैं तो नीचे बटन को स्‍पर्श करें."</string>
-  <string product="default" name="usb_storage_message">"आप USB द्वारा अपने कंप्‍यूटर से कनेक्‍ट हैं. यदि आपने कंप्‍यूटर और आपके Android के SD कार्ड के बीच फ़ाइलों की प्रतिलिपि बनाना चाहते हैं तो नीचे बटन को स्‍पर्श करें."</string>
+  <string name="usb_storage_message" product="nosdcard">"आप USB द्वारा अपने कंप्‍यूटर से कनेक्‍ट हैं. यदि आप अपने कंप्‍यूटर और Android के USB संग्रहण के बीच फ़ाइलों की प्रतिलिपि बनाना चाहते हैं तो नीचे बटन को स्‍पर्श करें."</string>
+  <string name="usb_storage_message" product="default">"आप USB द्वारा अपने कंप्‍यूटर से कनेक्‍ट हैं. यदि आपने कंप्‍यूटर और आपके Android के SD कार्ड के बीच फ़ाइलों की प्रतिलिपि बनाना चाहते हैं तो नीचे बटन को स्‍पर्श करें."</string>
   <string name="usb_storage_button_mount">"USB संग्रहण चालू करें"</string>
-  <string product="nosdcard" name="usb_storage_error_message">"USB विशाल संग्रहण के लिए आपके USB संग्रहण के उपयोग में समस्‍या है."</string>
-  <string product="default" name="usb_storage_error_message">"USB विशाल संग्रहण के लिए आपके SD कार्ड का उपयोग करने में समस्‍या है."</string>
+  <string name="usb_storage_error_message" product="nosdcard">"USB विशाल संग्रहण के लिए आपके USB संग्रहण के उपयोग में समस्‍या है."</string>
+  <string name="usb_storage_error_message" product="default">"USB विशाल संग्रहण के लिए आपके SD कार्ड का उपयोग करने में समस्‍या है."</string>
   <string name="usb_storage_notification_title">"USB कनेक्ट किया गया"</string>
   <string name="usb_storage_notification_message">"आपके कंप्‍यूटर में/से फ़ाइल की प्रतिलिपि बनाने के लिए चयन करें."</string>
   <string name="usb_storage_stop_notification_title">"USB संग्रहण बंद करें"</string>
   <string name="usb_storage_stop_notification_message">"USB संग्रहण बंद करने के लिए चयन करें."</string>
   <string name="usb_storage_stop_title">"USB संग्रहण उपयोग में है"</string>
-  <string product="nosdcard" name="usb_storage_stop_message">"USB संग्रहण बंद करने के पहले, सुनिश्चित करें कि आपने अपने कंप्‍यूटर से अपने Android का USB संग्रहण अनमाउंट (“बाहर”) कर दिया है."</string>
-  <string product="default" name="usb_storage_stop_message">"USB संग्रहण बंद करने के पहले, सुनिश्चित करें कि आपने अपने कंप्‍यूटर से Android का SD कार्ड अनमाउंट (“बाहर”) कर दिया है."</string>
+  <string name="usb_storage_stop_message" product="nosdcard">"USB संग्रहण बंद करने के पहले, सुनिश्चित करें कि आपने अपने कंप्‍यूटर से अपने Android का USB संग्रहण अनमाउंट (“बाहर”) कर दिया है."</string>
+  <string name="usb_storage_stop_message" product="default">"USB संग्रहण बंद करने के पहले, सुनिश्चित करें कि आपने अपने कंप्‍यूटर से Android का SD कार्ड अनमाउंट (“बाहर”) कर दिया है."</string>
   <string name="usb_storage_stop_button_mount">"USB संग्रहण बंद करें"</string>
   <string name="usb_storage_stop_error_message">"USB संग्रहण को बंद करने में समस्‍या थी. यह सुनिश्चित करने के लिए चेक करें कि आपने USB होस्‍ट को अनमाउंट किया है या नहीं, फिर पुन: प्रयास करें."</string>
   <string name="dlg_confirm_kill_storage_users_title">"USB संग्रहण चालू करें"</string>
@@ -1141,10 +1022,10 @@
   <string name="usb_accessory_notification_title">"USB सहायक सामग्री से कनेक्‍ट कि‍या गया"</string>
   <string name="usb_cdrom_notification_title">वर्चुअल ड्राइवर चालू है</string>
   <string name="usb_notification_message">"अन्‍य USB विकल्‍पों के लिए स्पर्श करें"</string>
-  <string product="nosdcard" name="extmedia_format_title">"USB संग्रहण प्रारूपित करें"</string>
-  <string product="default" name="extmedia_format_title">"SD कार्ड प्रारूपित करें"</string>
-  <string product="nosdcard" name="extmedia_format_message">"USB संग्रहण में स्‍टोर की गई सभी फ़ाइल मिटाते हुए उसे फ़ार्मेट करें? क्रिया को पूर्ववत नहीं किया जा सकता है!"</string>
-  <string product="default" name="extmedia_format_message">"क्‍या आप वाकई SD कार्ड को प्रारूपित करना चाहते हैं? आपके कार्ड का सारा डेटा खो जाएगा."</string>
+  <string name="extmedia_format_title" product="nosdcard">"USB संग्रहण प्रारूपित करें"</string>
+  <string name="extmedia_format_title" product="default">"SD कार्ड प्रारूपित करें"</string>
+  <string name="extmedia_format_message" product="nosdcard">"USB संग्रहण में स्‍टोर की गई सभी फ़ाइल मिटाते हुए उसे फ़ार्मेट करें? क्रिया को पूर्ववत नहीं किया जा सकता है!"</string>
+  <string name="extmedia_format_message" product="default">"क्‍या आप वाकई SD कार्ड को प्रारूपित करना चाहते हैं? आपके कार्ड का सारा डेटा खो जाएगा."</string>
   <string name="extmedia_format_button_format">"प्रारूपित करें"</string>
   <string name="adb_active_notification_title">"USB डीबग करना कनेक्ट किया गया"</string>
   <string name="adb_active_notification_message">"USB डीबग करना अक्षम करने के लिए चयन करें."</string>
@@ -1156,29 +1037,29 @@
   <string name="candidates_style">
     <u>"उम्‍मीदवार"</u>
   </string>
-  <string product="nosdcard" name="ext_media_checking_notification_title">"USB संग्रहण तैयार किया जा रहा है"</string>
-  <string product="default" name="ext_media_checking_notification_title">"SD कार्ड तैयार कर रहा है"</string>
+  <string name="ext_media_checking_notification_title" product="nosdcard">"USB संग्रहण तैयार किया जा रहा है"</string>
+  <string name="ext_media_checking_notification_title" product="default">"SD कार्ड तैयार कर रहा है"</string>
   <string name="ext_media_checking_notification_message">"त्रुटियों की जांच कर रहा है."</string>
-  <string product="nosdcard" name="ext_media_nofs_notification_title">"रिक्त USB संग्रहण"</string>
-  <string product="default" name="ext_media_nofs_notification_title">"रिक्त SD कार्ड"</string>
-  <string product="nosdcard" name="ext_media_nofs_notification_message">"USB संग्रहण रिक्त है या फ़ाइल सिस्‍टम असमर्थित है."</string>
-  <string product="default" name="ext_media_nofs_notification_message">"SD कार्ड रिक्त है या फ़ाइल सिस्‍टम असमर्थित है."</string>
-  <string product="nosdcard" name="ext_media_unmountable_notification_title">"क्षतिग्रस्‍त USB संग्रहण"</string>
-  <string product="default" name="ext_media_unmountable_notification_title">"क्षतिग्रस्‍त SD कार्ड"</string>
-  <string product="nosdcard" name="ext_media_unmountable_notification_message">"USB संग्रहण क्षतिग्रस्‍त है. आपको उसे पुन: प्रारूपित करना पड़ सकता है."</string>
-  <string product="default" name="ext_media_unmountable_notification_message">"SD कार्ड क्षतिग्रस्‍त है. आपको इसे पुन: प्रारूपित करना पड़ सकता है."</string>
-  <string product="nosdcard" name="ext_media_badremoval_notification_title">"USB संग्रहण अप्रत्‍याशित रूप से निकाला गया"</string>
-  <string product="default" name="ext_media_badremoval_notification_title">"SD कार्ड को अनपेक्षित रूप से निकाल दिया गया"</string>
-  <string product="nosdcard" name="ext_media_badremoval_notification_message">"डेटा हानि से बचने के लिए निकालने से पहले USB संग्रहण अनमाउंट करें."</string>
-  <string product="default" name="ext_media_badremoval_notification_message">"डेटा हानि से बचने के लिए निकालने से पहले SD कार्ड अनमाउंट करें."</string>
-  <string product="nosdcard" name="ext_media_safe_unmount_notification_title">"USB संग्रहण निकालने के लिए सुरक्षित है"</string>
-  <string product="default" name="ext_media_safe_unmount_notification_title">"SD कार्ड निकालने के लिए सुरक्षित है"</string>
-  <string product="nosdcard" name="ext_media_safe_unmount_notification_message">"आप USB संग्रहण को सुरक्षित रूप से निकाल सकते हैं."</string>
-  <string product="default" name="ext_media_safe_unmount_notification_message">"आप SD कार्ड को सुरक्षित रूप से निकाल सकते हैं."</string>
-  <string product="nosdcard" name="ext_media_nomedia_notification_title">"USB संग्रहण निकाला गया"</string>
-  <string product="default" name="ext_media_nomedia_notification_title">"SD कार्ड निकाल दिया गया है"</string>
-  <string product="nosdcard" name="ext_media_nomedia_notification_message">"USB संग्रहण निकाला गया. नया मीडिया सम्‍मिलित करें."</string>
-  <string product="default" name="ext_media_nomedia_notification_message">"SD कार्ड निकाला गया. एक नया सम्‍मिलित करें."</string>
+  <string name="ext_media_nofs_notification_title" product="nosdcard">"रिक्त USB संग्रहण"</string>
+  <string name="ext_media_nofs_notification_title" product="default">"रिक्त SD कार्ड"</string>
+  <string name="ext_media_nofs_notification_message" product="nosdcard">"USB संग्रहण रिक्त है या फ़ाइल सिस्‍टम असमर्थित है."</string>
+  <string name="ext_media_nofs_notification_message" product="default">"SD कार्ड रिक्त है या फ़ाइल सिस्‍टम असमर्थित है."</string>
+  <string name="ext_media_unmountable_notification_title" product="nosdcard">"क्षतिग्रस्‍त USB संग्रहण"</string>
+  <string name="ext_media_unmountable_notification_title" product="default">"क्षतिग्रस्‍त SD कार्ड"</string>
+  <string name="ext_media_unmountable_notification_message" product="nosdcard">"USB संग्रहण क्षतिग्रस्‍त है. आपको उसे पुन: प्रारूपित करना पड़ सकता है."</string>
+  <string name="ext_media_unmountable_notification_message" product="default">"SD कार्ड क्षतिग्रस्‍त है. आपको इसे पुन: प्रारूपित करना पड़ सकता है."</string>
+  <string name="ext_media_badremoval_notification_title" product="nosdcard">"USB संग्रहण अप्रत्‍याशित रूप से निकाला गया"</string>
+  <string name="ext_media_badremoval_notification_title" product="default">"SD कार्ड को अनपेक्षित रूप से निकाल दिया गया"</string>
+  <string name="ext_media_badremoval_notification_message" product="nosdcard">"डेटा हानि से बचने के लिए निकालने से पहले USB संग्रहण अनमाउंट करें."</string>
+  <string name="ext_media_badremoval_notification_message" product="default">"डेटा हानि से बचने के लिए निकालने से पहले SD कार्ड अनमाउंट करें."</string>
+  <string name="ext_media_safe_unmount_notification_title" product="nosdcard">"USB संग्रहण निकालने के लिए सुरक्षित है"</string>
+  <string name="ext_media_safe_unmount_notification_title" product="default">"SD कार्ड निकालने के लिए सुरक्षित है"</string>
+  <string name="ext_media_safe_unmount_notification_message" product="nosdcard">"आप USB संग्रहण को सुरक्षित रूप से निकाल सकते हैं."</string>
+  <string name="ext_media_safe_unmount_notification_message" product="default">"आप SD कार्ड को सुरक्षित रूप से निकाल सकते हैं."</string>
+  <string name="ext_media_nomedia_notification_title" product="nosdcard">"USB संग्रहण निकाला गया"</string>
+  <string name="ext_media_nomedia_notification_title" product="default">"SD कार्ड निकाल दिया गया है"</string>
+  <string name="ext_media_nomedia_notification_message" product="nosdcard">"USB संग्रहण निकाला गया. नया मीडिया सम्‍मिलित करें."</string>
+  <string name="ext_media_nomedia_notification_message" product="default">"SD कार्ड निकाला गया. एक नया सम्‍मिलित करें."</string>
   <string name="activity_list_empty">"कोई मिलती जुलती गतिविधि नहीं मिली"</string>
   <string name="permlab_pkgUsageStats">"घटक उपयोग आंकड़े अपडेट करें"</string>
   <string name="permdesc_pkgUsageStats">"संकलित घटक उपयोग आंकड़ो के संशोधन की अनुमति देता है. सामान्‍य एप्‍लिकेशन द्वारा उपयोग किए जाने के लिए नहीं है."</string>
@@ -1229,31 +1110,21 @@
   <string name="throttled_notification_message">"मोबाइल डेटा उपयोग के बारे में अधिक जानने के लिए स्‍पर्श करें"</string>
   <string name="no_matches">No matches</string>
   <string name="find_on_page">"पृष्ठ पर ढूंढें"</string>
-  <plurals name="matches_found">
-        <!-- Case of one match -->
-        <!--Modify Spreadst of 94151 can't show whole information on webpage  start -->
-        <!-- <item quantity="one">1 match</item> -->
-        <item quantity="one">"1 मिलान"</item>
-        <!-- Case of multiple total matches -->
-        <!-- <item quantity="other"><xliff:g id="index" example="2">%d</xliff:g> of <xliff:g id="total" example="137">%d</xliff:g></item> -->
-        <item quantity="other">"<xliff:g id="TOTAL">%d</xliff:g> में से <xliff:g id="INDEX">%d</xliff:g>"</item>
-        <!--Modify Spreadst of 94151 can't show whole information on webpage  end -->
-        </plurals>
   <string name="stk_refresh_sim_init_message">SIM कार्ड अपडेट हो रहा है</string>
   <string name="stk_refresh_sim_reset_message">फोन रीबूट हो जाएगा</string>
   <string name="action_mode_done">"पूर्ण"</string>
-  <string product="nosdcard" name="progress_unmounting">"USB संग्रहण अनमाउंट कर रहा है..."</string>
-  <string product="default" name="progress_unmounting">"SD कार्ड अनमाउंट कर रहा है..."</string>
-  <string product="nosdcard" name="progress_erasing">"USB संग्रहण मिटा रहा है..."</string>
-  <string product="default" name="progress_erasing">"SD कार्ड मिटा रहा है..."</string>
-  <string product="nosdcard" name="format_error">"USB संग्रहण नहीं मिटाया जा सका."</string>
-  <string product="default" name="format_error">"SD कार्ड नहीं मिटाया जा सका."</string>
+  <string name="progress_unmounting" product="nosdcard">"USB संग्रहण अनमाउंट कर रहा है..."</string>
+  <string name="progress_unmounting" product="default">"SD कार्ड अनमाउंट कर रहा है..."</string>
+  <string name="progress_erasing" product="nosdcard">"USB संग्रहण मिटा रहा है..."</string>
+  <string name="progress_erasing" product="default">"SD कार्ड मिटा रहा है..."</string>
+  <string name="format_error" product="nosdcard">"USB संग्रहण नहीं मिटाया जा सका."</string>
+  <string name="format_error" product="default">"SD कार्ड नहीं मिटाया जा सका."</string>
   <string name="media_bad_removal">"SD कार्ड को अनमाउंट होने से पहले निकाल दिया गया था."</string>
-  <string product="nosdcard" name="media_checking">"USB संग्रहण वर्तमान में जांचा जा रहा है."</string>
-  <string product="default" name="media_checking">"SD कार्ड वर्तमान में जांचा जा रहा है."</string>
+  <string name="media_checking" product="nosdcard">"USB संग्रहण वर्तमान में जांचा जा रहा है."</string>
+  <string name="media_checking" product="default">"SD कार्ड वर्तमान में जांचा जा रहा है."</string>
   <string name="media_removed">"SD कार्ड निकाल दिया गया है."</string>
-  <string product="nosdcard" name="media_shared">"USB संग्रहण का उपयोग वर्तमान में एक कंप्‍यूटर द्वारा किया जा रहा है."</string>
-  <string product="default" name="media_shared">"SD कार्ड का उपयोग वर्तमान में एक कंप्‍यूटर द्वारा किया जा रहा है."</string>
+  <string name="media_shared" product="nosdcard">"USB संग्रहण का उपयोग वर्तमान में एक कंप्‍यूटर द्वारा किया जा रहा है."</string>
+  <string name="media_shared" product="default">"SD कार्ड का उपयोग वर्तमान में एक कंप्‍यूटर द्वारा किया जा रहा है."</string>
   <string name="media_unknown_state">"बाह्य मीडिया अज्ञात स्‍थिति में है."</string>
   <string name="share">"शेयर करें"</string>
   <string name="find">"ढूंढें"</string>
@@ -1432,4 +1303,143 @@
   <string name="description_target_call">कॉल करें </string>
   <string name="description_target_sms">"SMS"</string>
   <string name="ringtone_waning">गलत फ़ाइल, कृपया पुनः चयन करें </string>
+  <skip></skip>
+  <string-array name="phoneTypes">
+        <item>"घर"</item>
+        <item>"मोबाइल"</item>
+        <item>"कार्यालय"</item>
+        <item>"कार्यालय का फ़ैक्स"</item>
+        <item>"घर का फ़ैक्स"</item>
+        <item>"पेजर"</item>
+        <item>"अन्य"</item>
+        <item>"कस्टम"</item>
+    </string-array>
+  <string-array name="emailAddressTypes">
+        <item>"घर"</item>
+        <item>"कार्यालय"</item>
+        <item>"अन्य"</item>
+        <item>"कस्टम"</item>
+    </string-array>
+  <string-array name="postalAddressTypes">
+        <item>"घर"</item>
+        <item>"कार्यालय"</item>
+        <item>"अन्य"</item>
+        <item>"कस्टम"</item>
+    </string-array>
+  <string-array name="imAddressTypes">
+        <item>"घर"</item>
+        <item>"कार्यालय"</item>
+        <item>"अन्य"</item>
+        <item>"कस्टम"</item>
+    </string-array>
+  <string-array name="organizationTypes">
+        <item>"कार्यालय"</item>
+        <item>"अन्य"</item>
+        <item>"कस्टम"</item>
+    </string-array>
+  <string-array name="imProtocols">
+        <item>"AIM"</item>
+        <item>"Windows Live"</item>
+        <item>"Yahoo"</item>
+        <item>"Skype"</item>
+        <item>"QQ"</item>
+        <item>"Google टॉक"</item>
+        <item>"ICQ"</item>
+        <item>"Jabber"</item>
+    </string-array>
+  <plurals name="num_seconds_ago">
+        <item quantity="one">"1 सेकंड पहले"</item>
+        <item quantity="other">"<xliff:g id="COUNT">%d</xliff:g> सेकंड पहले"</item>
+    </plurals>
+  <plurals name="num_minutes_ago">
+        <item quantity="one">"1 मिनट पहले"</item>
+        <item quantity="other">"<xliff:g id="COUNT">%d</xliff:g> मिनट पहले"</item>
+    </plurals>
+  <plurals name="num_hours_ago">
+        <item quantity="one">"1 घंटे पहले"</item>
+        <item quantity="other">"<xliff:g id="COUNT">%d</xliff:g> घंटे पहले"</item>
+    </plurals>
+  <plurals name="last_num_days">
+        <item quantity="other">"अंतिम <xliff:g id="COUNT">%d</xliff:g> दिन"</item>
+    </plurals>
+  <plurals name="num_days_ago">
+        <item quantity="one">"बीता कल"</item>
+        <item quantity="other">"<xliff:g id="COUNT">%d</xliff:g> दिन पहले"</item>
+    </plurals>
+  <plurals name="in_num_seconds">
+        <item quantity="one">"1 सेकंड में"</item>
+        <item quantity="other">"<xliff:g id="COUNT">%d</xliff:g> सेकंड में"</item>
+    </plurals>
+  <plurals name="in_num_minutes">
+        <item quantity="one">"1 मिनट में"</item>
+        <item quantity="other">"<xliff:g id="COUNT">%d</xliff:g> मिनट में"</item>
+    </plurals>
+  <plurals name="in_num_hours">
+        <item quantity="one">"1 घंटे में"</item>
+        <item quantity="other">"<xliff:g id="COUNT">%d</xliff:g> घंटे में"</item>
+    </plurals>
+  <plurals name="in_num_days">
+        <item quantity="one">"आने वाला कल"</item>
+        <item quantity="other">"<xliff:g id="COUNT">%d</xliff:g> दिन में"</item>
+    </plurals>
+  <plurals name="abbrev_num_seconds_ago">
+        <item quantity="one">"1 सेकंड पहले"</item>
+        <item quantity="other">"<xliff:g id="COUNT">%d</xliff:g> सेकंड पहले"</item>
+    </plurals>
+  <plurals name="abbrev_num_minutes_ago">
+        <item quantity="one">"1 मिनट पहले"</item>
+        <item quantity="other">"<xliff:g id="COUNT">%d</xliff:g> मिनट पहले"</item>
+    </plurals>
+  <plurals name="abbrev_num_hours_ago">
+        <item quantity="one">"1 घंटे पहले"</item>
+        <item quantity="other">"<xliff:g id="COUNT">%d</xliff:g> घंटे पहले"</item>
+    </plurals>
+  <plurals name="abbrev_num_days_ago">
+        <item quantity="one">"बीता कल"</item>
+        <item quantity="other">"<xliff:g id="COUNT">%d</xliff:g> दिन पहले"</item>
+    </plurals>
+  <plurals name="abbrev_in_num_seconds">
+        <item quantity="one">"1 सेकंड में"</item>
+        <item quantity="other">"<xliff:g id="COUNT">%d</xliff:g> सेकंड में"</item>
+    </plurals>
+  <plurals name="abbrev_in_num_minutes">
+        <item quantity="one">"1 मिनट में"</item>
+        <item quantity="other">"<xliff:g id="COUNT">%d</xliff:g> मिनट में"</item>
+    </plurals>
+  <plurals name="abbrev_in_num_hours">
+        <item quantity="one">"1 घंटे में"</item>
+        <item quantity="other">"<xliff:g id="COUNT">%d</xliff:g> घंटे में"</item>
+    </plurals>
+  <plurals name="abbrev_in_num_days">
+        <item quantity="one">"आने वाला कल"</item>
+        <item quantity="other">"<xliff:g id="COUNT">%d</xliff:g> दिन में"</item>
+    </plurals>
+  <plurals name="wifi_available">
+        <item quantity="one">"Wi-Fi नेटवर्क उपलब्‍ध"</item>
+        <item quantity="other">"Wi-Fi नेटवर्क उपलब्‍ध"</item>
+    </plurals>
+  <plurals name="wifi_available_detailed">
+        <item quantity="one">"उपलब्‍ध Wi-Fi नेटवर्क खोलें"</item>
+        <item quantity="other">"खुले Wi-Fi नेटवर्क उपलब्‍ध है"</item>
+    </plurals>
+  <plurals name="matches_found">
+        <!-- Case of one match -->
+        <!--Modify Spreadst of 94151 can't show whole information on webpage  start -->
+        <!-- <item quantity="one">1 match</item> -->
+        <item quantity="one">"1 मिलान"</item>
+        <!-- Case of multiple total matches -->
+        <!-- <item quantity="other"><xliff:g id="index" example="2">%d</xliff:g> of <xliff:g id="total" example="137">%d</xliff:g></item> -->
+        <item quantity="other">"<xliff:g id="TOTAL">%d</xliff:g> में से <xliff:g id="INDEX">%d</xliff:g>"</item>
+        <!--Modify Spreadst of 94151 can't show whole information on webpage  end -->
+        </plurals>
+  <string name="low_internal_storage_ignore">अनदेखा</string>
+  <string name="low_internal_storage_display_details">"विवरण"</string>
+  <string name="low_internal_storage_wait">"प्रतीक्षा…"</string>
+  <string name="low_internal_storage_updating_details">"जानकारियां अपडेट हो रही हैं…"</string>
+  <string name="emergency_call_no_service">कोई नेटवर्क उपलब्ध नहीं</string>
+  <string name="usim_recommanded">CUCC कार्ड का उपयोग नहीं हो रहा</string>
+  <string name="usim_recommanded_for_cucc_app">CUCC एप्प, Usim की सिफारिश। जारी?</string>
+  <string name="pick_yes">"जारी रखें"</string>
+  <string name="pick_no">"रद्द करें"</string>
+  <string name="language_automatic">"स्वचालित"</string>
 </resources>

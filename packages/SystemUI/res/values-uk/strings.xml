@@ -16,15 +16,15 @@
  * limitations under the License.
  */
  -->
-<resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string msgid="3541196417659166245" name="dreams_dock_launcher">"Активувати заставку"</string>
-  <string msgid="1163547729015390250" name="status_bar_notification_inspect_item_title">"Інформація про програму"</string>
-  <string msgid="8936620513608443224" name="notifications_off_title">"Сповіщення вимкнено"</string>
-  <string msgid="2529001315769385273" name="notifications_off_text">"Торкніться тут, щоб знову ввімкнути сповіщення."</string>
-  <string msgid="4062780228931590069" name="accessibility_rotation_lock_off">"Екран обертатиметься автоматично."</string>
-  <string msgid="6731197337665366273" name="accessibility_rotation_lock_on_landscape">"Екран заблоковано в альбомній орієнтації."</string>
-  <string msgid="5809367521644012115" name="accessibility_rotation_lock_on_portrait">"Екран заблоковано в книжковій орієнтації."</string>
-  <string msgid="7164937344850004466" name="app_label">"Інтерфейс системи"</string>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" xmlns:android="http://schemas.android.com/apk/res/android">
+  <string name="dreams_dock_launcher" msgid="3541196417659166245">"Активувати заставку"</string>
+  <string name="status_bar_notification_inspect_item_title" msgid="1163547729015390250">"Інформація про програму"</string>
+  <string name="notifications_off_title" msgid="8936620513608443224">"Сповіщення вимкнено"</string>
+  <string name="notifications_off_text" msgid="2529001315769385273">"Торкніться тут, щоб знову ввімкнути сповіщення."</string>
+  <string name="accessibility_rotation_lock_off" msgid="4062780228931590069">"Екран обертатиметься автоматично."</string>
+  <string name="accessibility_rotation_lock_on_landscape" msgid="6731197337665366273">"Екран заблоковано в альбомній орієнтації."</string>
+  <string name="accessibility_rotation_lock_on_portrait" msgid="5809367521644012115">"Екран заблоковано в книжковій орієнтації."</string>
+  <string name="app_label" msgid="7164937344850004466">"Інтерфейс системи"</string>
   <string name="auto_connect">Не запитувати і автоматично підключатися до інших довірених AP</string>
   <string name="weak_signal_message">Сигналу WLAN дуже слабкий, рекомендується вибрати кращий</string>
   <string name="weak_signal_title">Слабкий сигнал</string>
@@ -32,124 +32,120 @@
   <string name="network_disconnect_title">Сповіщення</string>
   <string name="mobile_data_connect_enable">"Так"</string>
   <string name="mobile_data_connect_disable">"Ні"</string>
-  <string msgid="7774721344716731603" name="status_bar_clear_all_button">"Очист."</string>
-  <string msgid="5812628897510997853" name="status_bar_do_not_disturb_button">"Не турбувати"</string>
-  <string msgid="3345398298841572813" name="status_bar_please_disturb_button">"Показувати сповіщення"</string>
-  <string msgid="6026395868129852968" name="status_bar_recent_remove_item_title">"Видалити зі списку"</string>
-  <string msgid="7793624864528818569" name="status_bar_recent_inspect_item_title">"Інформація про програму"</string>
-  <string msgid="6576392951053994640" name="status_bar_no_recent_apps">"Немає останніх програм"</string>
-  <string msgid="4576076075226540105" name="status_bar_accessibility_dismiss_recents">"Відхилити останні програми"</string>
-  <plurals name="status_bar_accessibility_recent_apps">
-    <item msgid="5854176083865845541" quantity="one">"1 остання програма"</item>
-    <item msgid="1040784359794890744" quantity="other">"останніх програм: %d"</item>
-  </plurals>
-  <string msgid="4755261167193833213" name="status_bar_no_notifications_title">"Немає сповіщень"</string>
-  <string msgid="1682504513316879202" name="status_bar_ongoing_events_title">"Поточні"</string>
-  <string msgid="6594767438577593172" name="status_bar_latest_events_title">"Сповіщення"</string>
-  <string msgid="2783104807551211639" name="battery_low_title">"Підключіть зарядний пристрій"</string>
-  <string msgid="1752040062087829196" name="battery_low_subtitle">"Батарея виснажується."</string>
-  <string msgid="1077244949318261761" name="battery_low_percent_format">"Залишилося <xliff:g id="NUMBER">%d%%</xliff:g>"</string>
-  <string msgid="4549105996740522523" name="invalid_charger">"Заряджання USB не підтримується."\n"Використовуйте лише наданий у комплекті зарядний пристрій."</string>
-  <string msgid="7279169609518386372" name="battery_low_why">"Викор. батареї"</string>
-  <string msgid="3023889916699270224" name="status_bar_settings_settings_button">"Настройки"</string>
-  <string msgid="1733928151698311923" name="status_bar_settings_wifi_button">"Wi-Fi"</string>
-  <string msgid="4879879698500955300" name="status_bar_settings_airplane">"Режим польоту"</string>
-  <string msgid="3790482541357798421" name="status_bar_settings_auto_rotation">"Повертати екран автоматично"</string>
-  <string msgid="554682549917429396" name="status_bar_settings_mute_label">"ІГНОР."</string>
-  <string msgid="511453614962324674" name="status_bar_settings_auto_brightness_label">"АВТОМ."</string>
-  <string msgid="397146176280905137" name="status_bar_settings_notifications">"Сповіщення"</string>
-  <string msgid="7094101612161133267" name="bluetooth_tethered">"Створено прив\'язку Bluetooth"</string>
-  <string msgid="3504292471512317827" name="status_bar_input_method_settings_configure_input_methods">"Налаштувати методи введення"</string>
-  <string msgid="3695516942412442936" name="status_bar_use_physical_keyboard">"Викор. реальну клавіатуру"</string>
-  <string msgid="834698001271562057" name="usb_device_permission_prompt">"Надати програмі <xliff:g id="APPLICATION">%1$s</xliff:g> доступ до пристрою USB?"</string>
-  <string msgid="5171775411178865750" name="usb_accessory_permission_prompt">"Надати програмі <xliff:g id="APPLICATION">%1$s</xliff:g> доступ до аксесуара USB?"</string>
-  <string msgid="5161205258635253206" name="usb_device_confirm_prompt">"Відкривати \"<xliff:g id="ACTIVITY">%1$s</xliff:g>\", коли під’єднано пристрій USB?"</string>
-  <string msgid="3808984931830229888" name="usb_accessory_confirm_prompt">"Відкривати \"<xliff:g id="ACTIVITY">%1$s</xliff:g>\", коли під’єднано аксесуар USB?"</string>
-  <string msgid="513450621413733343" name="usb_accessory_uri_prompt">"Установлені прогр. не працюють із цим аксесуаром USB. Більше про цей аксесуар: <xliff:g id="URL">%1$s</xliff:g>"</string>
-  <string msgid="4966265263465181372" name="title_usb_accessory">"Пристрій USB"</string>
-  <string msgid="6304565553218192990" name="label_view">"Переглянути"</string>
-  <string msgid="1450287437017315906" name="always_use_device">"Використовувати за умовчанням для пристрою USB"</string>
-  <string msgid="1210954576979621596" name="always_use_accessory">"Використовувати за умовчанням для аксесуара USB"</string>
-  <string msgid="6623839244840638213" name="compat_mode_on">"Масштабув. на весь екран"</string>
-  <string msgid="4434467572461327898" name="compat_mode_off">"Розтягнути на весь екран"</string>
-  <string msgid="7969493989397529910" name="compat_mode_help_header">"Масштабування для сумісності"</string>
-  <string msgid="4946726776359270040" name="compat_mode_help_body">"Якщо програму призначено для менших екранів, елемент керування масштабом буде відображатися біля годинника."</string>
-  <string msgid="7403652894056693515" name="screenshot_saving_ticker">"Збереження знімка екрана..."</string>
-  <string msgid="8242282144535555697" name="screenshot_saving_title">"Збереження знімка екрана..."</string>
-  <string msgid="2419718443411738818" name="screenshot_saving_text">"Зберігається знімок екрана."</string>
-  <string msgid="6461865960961414961" name="screenshot_saved_title">"Знімок екрана зроблено."</string>
-  <string msgid="1152839647677558815" name="screenshot_saved_text">"Торкніться, щоб переглянути знімок екрана."</string>
-  <string msgid="705781116746922771" name="screenshot_failed_title">"Не вдалося зробити знімок екрана."</string>
-  <string msgid="8134011269572415402" name="screenshot_failed_text">"Не вдалося зберегти знімок екрана. Можливо, пам’ять використовується."</string>
-  <string msgid="6551050377388882787" name="usb_preference_title">"Парам.передав.файлів через USB"</string>
-  <string msgid="4333504413563023626" name="use_mtp_button_title">"Підключити як медіапрогравач (MTP)"</string>
-  <string msgid="7517127540301625751" name="use_ptp_button_title">"Підключити як камеру (PTP)"</string>
-  <string msgid="2312667578562201583" name="installer_cd_button_title">"Установити програму Android File Transfer для Mac"</string>
-  <string msgid="567011538994429120" name="accessibility_back">"Назад"</string>
-  <string msgid="8217216074895377641" name="accessibility_home">"Головна"</string>
-  <string msgid="316839303324695949" name="accessibility_menu">"Меню"</string>
-  <string msgid="8571350598987952883" name="accessibility_recent">"Останні програми"</string>
-  <string msgid="5032926134740456424" name="accessibility_ime_switch_button">"Кнопка перемикання методу введення."</string>
-  <string msgid="8461115318742350699" name="accessibility_compatibility_zoom_button">"Кнопка масштабування сумісності."</string>
-  <string msgid="4220687294564945780" name="accessibility_compatibility_zoom_example">"Збільшення екрана."</string>
-  <string msgid="2707027633242983370" name="accessibility_bluetooth_connected">"Bluetooth під’єднано."</string>
-  <string msgid="7416648669976870175" name="accessibility_bluetooth_disconnected">"Bluetooth від’єднано."</string>
-  <string msgid="358343022352820946" name="accessibility_no_battery">"Немає заряду батареї."</string>
-  <string msgid="7774887721891057523" name="accessibility_battery_one_bar">"Одна смужка заряду батареї."</string>
-  <string msgid="8500650438735009973" name="accessibility_battery_two_bars">"Дві смужки заряду батареї."</string>
-  <string msgid="2302983330865040446" name="accessibility_battery_three_bars">"Три смужки заряду батареї."</string>
-  <string msgid="8909122401720158582" name="accessibility_battery_full">"Повний заряд батареї"</string>
-  <string msgid="4894708937052611281" name="accessibility_no_phone">"Немає сигналу телефону."</string>
-  <string msgid="687699278132664115" name="accessibility_phone_one_bar">"Одна смужка сигналу телефону."</string>
-  <string msgid="8384905382804815201" name="accessibility_phone_two_bars">"Дві смужки сигналу телефону."</string>
-  <string msgid="8521904843919971885" name="accessibility_phone_three_bars">"Три смужки сигналу телефону."</string>
-  <string msgid="6471834868580757898" name="accessibility_phone_signal_full">"Максимальний сигнал телефону."</string>
-  <string msgid="4791966295096867555" name="accessibility_no_data">"Немає сигналу даних."</string>
-  <string msgid="1415625833238273628" name="accessibility_data_one_bar">"Одна смужка сигналу даних."</string>
-  <string msgid="6166018492360432091" name="accessibility_data_two_bars">"Дві смужки сигналу даних."</string>
-  <string msgid="9167670452395038520" name="accessibility_data_three_bars">"Три смужки сигналу даних."</string>
-  <string msgid="2708384608124519369" name="accessibility_data_signal_full">"Максимальний сигнал даних."</string>
-  <string msgid="7455607460517331976" name="accessibility_no_wifi">"Відсутнє з’єднання з Wi-Fi."</string>
-  <string msgid="6854947280074467207" name="accessibility_wifi_one_bar">"Одна смужка сигналу Wi-Fi."</string>
-  <string msgid="3344340012058984348" name="accessibility_wifi_two_bars">"Дві смужки сигналу Wi-Fi."</string>
-  <string msgid="928322805193265041" name="accessibility_wifi_three_bars">"Три смужки сигналу Wi-Fi."</string>
-  <string msgid="1275764416228473932" name="accessibility_wifi_signal_full">"Максимальний сигнал Wi-Fi."</string>
-  <string msgid="4329180129727630368" name="accessibility_no_wimax">"Немає сигналу WiMAX."</string>
-  <string msgid="4170994299011863648" name="accessibility_wimax_one_bar">"Одна смужка сигналу WiMAX."</string>
-  <string msgid="9176236858336502288" name="accessibility_wimax_two_bars">"Дві смужки сигналу WiMAX."</string>
-  <string msgid="6116551636752103927" name="accessibility_wimax_three_bars">"Три смужки сигналу WiMAX."</string>
-  <string msgid="2768089986795579558" name="accessibility_wimax_signal_full">"Максимальний сигнал WiMAX."</string>
-  <string msgid="1606477224486747751" name="accessibility_data_connection_gprs">"GPRS"</string>
-  <string msgid="8628562305003568260" name="accessibility_data_connection_3g">"3G"</string>
-  <string msgid="8664845609981692001" name="accessibility_data_connection_3.5g">"3.5G"</string>
-  <string msgid="7741000750630089612" name="accessibility_data_connection_4g">"4G"</string>
-  <string msgid="6132648193978823023" name="accessibility_data_connection_cdma">"CDMA"</string>
-  <string msgid="4477457051631979278" name="accessibility_data_connection_edge">"Edge"</string>
-  <string msgid="2324496756590645221" name="accessibility_data_connection_wifi">"Wi-Fi"</string>
-  <string msgid="8274017118472455155" name="accessibility_no_sim">"Немає SIM-карти."</string>
-  <string msgid="4102784498140271969" name="accessibility_bluetooth_tether">"Прив’язка Bluetooth."</string>
-  <string msgid="834748999790763092" name="accessibility_airplane_mode">"Режим польоту."</string>
-  <string msgid="7451474187113371965" name="accessibility_battery_level">"Відсотків батареї: <xliff:g id="NUMBER">%d</xliff:g>."</string>
-  <string msgid="799583911231893380" name="accessibility_settings_button">"Настройки системи."</string>
-  <string msgid="4498000369779421892" name="accessibility_notifications_button">"Сповіщення."</string>
-  <string msgid="3603099514902182350" name="accessibility_remove_notification">"Очистити сповіщення."</string>
-  <string msgid="3511469499240123019" name="accessibility_gps_enabled">"GPS увімкнено."</string>
-  <string msgid="8959333351058967158" name="accessibility_gps_acquiring">"Встановлення зв’язку з GPS."</string>
-  <string msgid="4613200365379426561" name="accessibility_tty_enabled">"Телетайп увімкнено."</string>
-  <string msgid="666585363364155055" name="accessibility_ringer_vibrate">"Дзвінок на вібросигналі."</string>
-  <string msgid="9061243307939135383" name="accessibility_ringer_silent">"Дзвінок беззвучний."</string>
-  <string msgid="6803574935084867070" name="accessibility_recents_item_dismissed">"Програму <xliff:g id="APP">%s</xliff:g> закрито."</string>
-  <string msgid="5257833881698644687" name="data_usage_disabled_dialog_3g_title">"Дані 2G–3G вимкнено"</string>
-  <string msgid="4789143363492682629" name="data_usage_disabled_dialog_4g_title">"Дані 4G вимкнено"</string>
-  <string msgid="1046047248844821202" name="data_usage_disabled_dialog_mobile_title">"Мобільне передавання даних вимкнено"</string>
-  <string msgid="2086815304858964954" name="data_usage_disabled_dialog_title">"Використання даних вимкнено"</string>
-  <string msgid="3853117269051806280" name="data_usage_disabled_dialog">"Досягнуто вказаного ліміту використання даних."\n\n"Якщо ввімкнути використання даних знову, оператор може стягнути плату."</string>
-  <string msgid="7729772039208664606" name="data_usage_disabled_dialog_enable">"Повторно ввімкнути дані"</string>
-  <string msgid="1940231521274147771" name="status_bar_settings_signal_meter_disconnected">"Немає з’єднання"</string>
-  <string msgid="6557486452774597820" name="status_bar_settings_signal_meter_wifi_nossid">"Wi-Fi під’єднано"</string>
-  <string msgid="8574247005642736060" name="gps_notification_searching_text">"Виконується пошук GPS-сигналу"</string>
-  <string msgid="4619274244146446464" name="gps_notification_found_text">"Місцезнаходження встановлено за допомогою GPS"</string>
-  <string msgid="5235938559247164925" name="accessibility_clear_all">"Очистити всі сповіщення."</string>
+  <string name="status_bar_clear_all_button" msgid="7774721344716731603">"Очист."</string>
+  <string name="status_bar_do_not_disturb_button" msgid="5812628897510997853">"Не турбувати"</string>
+  <string name="status_bar_please_disturb_button" msgid="3345398298841572813">"Показувати сповіщення"</string>
+  <string name="status_bar_recent_remove_item_title" msgid="6026395868129852968">"Видалити зі списку"</string>
+  <string name="status_bar_recent_inspect_item_title" msgid="7793624864528818569">"Інформація про програму"</string>
+  <string name="status_bar_no_recent_apps" msgid="6576392951053994640">"Немає останніх програм"</string>
+  <string name="status_bar_accessibility_dismiss_recents" msgid="4576076075226540105">"Відхилити останні програми"</string>
+  <string name="status_bar_no_notifications_title" msgid="4755261167193833213">"Немає сповіщень"</string>
+  <string name="status_bar_ongoing_events_title" msgid="1682504513316879202">"Поточні"</string>
+  <string name="status_bar_latest_events_title" msgid="6594767438577593172">"Сповіщення"</string>
+  <string name="battery_low_title" msgid="2783104807551211639">"Підключіть зарядний пристрій"</string>
+  <string name="battery_low_subtitle" msgid="1752040062087829196">"Батарея виснажується."</string>
+  <string name="battery_low_percent_format" msgid="1077244949318261761">"Залишилося <xliff:g id="NUMBER">%d%%</xliff:g>"</string>
+  <string name="invalid_charger" msgid="4549105996740522523">"Заряджання USB не підтримується."\n"Використовуйте лише наданий у комплекті зарядний пристрій."</string>
+  <string name="battery_low_why" msgid="7279169609518386372">"Викор. батареї"</string>
+  <string name="status_bar_settings_settings_button" msgid="3023889916699270224">"Настройки"</string>
+  <string name="status_bar_settings_wifi_button" msgid="1733928151698311923">"Wi-Fi"</string>
+  <string name="status_bar_settings_airplane" msgid="4879879698500955300">"Режим польоту"</string>
+  <string name="status_bar_settings_auto_rotation" msgid="3790482541357798421">"Повертати екран автоматично"</string>
+  <string name="status_bar_settings_mute_label" msgid="554682549917429396">"ІГНОР."</string>
+  <string name="status_bar_settings_auto_brightness_label" msgid="511453614962324674">"АВТОМ."</string>
+  <string name="status_bar_settings_notifications" msgid="397146176280905137">"Сповіщення"</string>
+  <string name="bluetooth_tethered" msgid="7094101612161133267">"Створено прив\'язку Bluetooth"</string>
+  <string name="status_bar_input_method_settings_configure_input_methods" msgid="3504292471512317827">"Налаштувати методи введення"</string>
+  <string name="status_bar_use_physical_keyboard" msgid="3695516942412442936">"Викор. реальну клавіатуру"</string>
+  <string name="usb_device_permission_prompt" msgid="834698001271562057">"Надати програмі <xliff:g id="APPLICATION">%1$s</xliff:g> доступ до пристрою USB?"</string>
+  <string name="usb_accessory_permission_prompt" msgid="5171775411178865750">"Надати програмі <xliff:g id="APPLICATION">%1$s</xliff:g> доступ до аксесуара USB?"</string>
+  <string name="usb_device_confirm_prompt" msgid="5161205258635253206">"Відкривати \"<xliff:g id="ACTIVITY">%1$s</xliff:g>\", коли під’єднано пристрій USB?"</string>
+  <string name="usb_accessory_confirm_prompt" msgid="3808984931830229888">"Відкривати \"<xliff:g id="ACTIVITY">%1$s</xliff:g>\", коли під’єднано аксесуар USB?"</string>
+  <string name="usb_accessory_uri_prompt" msgid="513450621413733343">"Установлені прогр. не працюють із цим аксесуаром USB. Більше про цей аксесуар: <xliff:g id="URL">%1$s</xliff:g>"</string>
+  <string name="title_usb_accessory" msgid="4966265263465181372">"Пристрій USB"</string>
+  <string name="label_view" msgid="6304565553218192990">"Переглянути"</string>
+  <string name="always_use_device" msgid="1450287437017315906">"Використовувати за умовчанням для пристрою USB"</string>
+  <string name="always_use_accessory" msgid="1210954576979621596">"Використовувати за умовчанням для аксесуара USB"</string>
+  <string name="compat_mode_on" msgid="6623839244840638213">"Масштабув. на весь екран"</string>
+  <string name="compat_mode_off" msgid="4434467572461327898">"Розтягнути на весь екран"</string>
+  <string name="compat_mode_help_header" msgid="7969493989397529910">"Масштабування для сумісності"</string>
+  <string name="compat_mode_help_body" msgid="4946726776359270040">"Якщо програму призначено для менших екранів, елемент керування масштабом буде відображатися біля годинника."</string>
+  <string name="screenshot_saving_ticker" msgid="7403652894056693515">"Збереження знімка екрана..."</string>
+  <string name="screenshot_saving_title" msgid="8242282144535555697">"Збереження знімка екрана..."</string>
+  <string name="screenshot_saving_text" msgid="2419718443411738818">"Зберігається знімок екрана."</string>
+  <string name="screenshot_saved_title" msgid="6461865960961414961">"Знімок екрана зроблено."</string>
+  <string name="screenshot_saved_text" msgid="1152839647677558815">"Торкніться, щоб переглянути знімок екрана."</string>
+  <string name="screenshot_failed_title" msgid="705781116746922771">"Не вдалося зробити знімок екрана."</string>
+  <string name="screenshot_failed_text" msgid="8134011269572415402">"Не вдалося зберегти знімок екрана. Можливо, пам’ять використовується."</string>
+  <string name="usb_preference_title" msgid="6551050377388882787">"Парам.передав.файлів через USB"</string>
+  <string name="use_mtp_button_title" msgid="4333504413563023626">"Підключити як медіапрогравач (MTP)"</string>
+  <string name="use_ptp_button_title" msgid="7517127540301625751">"Підключити як камеру (PTP)"</string>
+  <string name="installer_cd_button_title" msgid="2312667578562201583">"Установити програму Android File Transfer для Mac"</string>
+  <string name="accessibility_back" msgid="567011538994429120">"Назад"</string>
+  <string name="accessibility_home" msgid="8217216074895377641">"Головна"</string>
+  <string name="accessibility_menu" msgid="316839303324695949">"Меню"</string>
+  <string name="accessibility_recent" msgid="8571350598987952883">"Останні програми"</string>
+  <string name="accessibility_ime_switch_button" msgid="5032926134740456424">"Кнопка перемикання методу введення."</string>
+  <string name="accessibility_compatibility_zoom_button" msgid="8461115318742350699">"Кнопка масштабування сумісності."</string>
+  <string name="accessibility_compatibility_zoom_example" msgid="4220687294564945780">"Збільшення екрана."</string>
+  <string name="accessibility_bluetooth_connected" msgid="2707027633242983370">"Bluetooth під’єднано."</string>
+  <string name="accessibility_bluetooth_disconnected" msgid="7416648669976870175">"Bluetooth від’єднано."</string>
+  <string name="accessibility_no_battery" msgid="358343022352820946">"Немає заряду батареї."</string>
+  <string name="accessibility_battery_one_bar" msgid="7774887721891057523">"Одна смужка заряду батареї."</string>
+  <string name="accessibility_battery_two_bars" msgid="8500650438735009973">"Дві смужки заряду батареї."</string>
+  <string name="accessibility_battery_three_bars" msgid="2302983330865040446">"Три смужки заряду батареї."</string>
+  <string name="accessibility_battery_full" msgid="8909122401720158582">"Повний заряд батареї"</string>
+  <string name="accessibility_no_phone" msgid="4894708937052611281">"Немає сигналу телефону."</string>
+  <string name="accessibility_phone_one_bar" msgid="687699278132664115">"Одна смужка сигналу телефону."</string>
+  <string name="accessibility_phone_two_bars" msgid="8384905382804815201">"Дві смужки сигналу телефону."</string>
+  <string name="accessibility_phone_three_bars" msgid="8521904843919971885">"Три смужки сигналу телефону."</string>
+  <string name="accessibility_phone_signal_full" msgid="6471834868580757898">"Максимальний сигнал телефону."</string>
+  <string name="accessibility_no_data" msgid="4791966295096867555">"Немає сигналу даних."</string>
+  <string name="accessibility_data_one_bar" msgid="1415625833238273628">"Одна смужка сигналу даних."</string>
+  <string name="accessibility_data_two_bars" msgid="6166018492360432091">"Дві смужки сигналу даних."</string>
+  <string name="accessibility_data_three_bars" msgid="9167670452395038520">"Три смужки сигналу даних."</string>
+  <string name="accessibility_data_signal_full" msgid="2708384608124519369">"Максимальний сигнал даних."</string>
+  <string name="accessibility_no_wifi" msgid="7455607460517331976">"Відсутнє з’єднання з Wi-Fi."</string>
+  <string name="accessibility_wifi_one_bar" msgid="6854947280074467207">"Одна смужка сигналу Wi-Fi."</string>
+  <string name="accessibility_wifi_two_bars" msgid="3344340012058984348">"Дві смужки сигналу Wi-Fi."</string>
+  <string name="accessibility_wifi_three_bars" msgid="928322805193265041">"Три смужки сигналу Wi-Fi."</string>
+  <string name="accessibility_wifi_signal_full" msgid="1275764416228473932">"Максимальний сигнал Wi-Fi."</string>
+  <string name="accessibility_no_wimax" msgid="4329180129727630368">"Немає сигналу WiMAX."</string>
+  <string name="accessibility_wimax_one_bar" msgid="4170994299011863648">"Одна смужка сигналу WiMAX."</string>
+  <string name="accessibility_wimax_two_bars" msgid="9176236858336502288">"Дві смужки сигналу WiMAX."</string>
+  <string name="accessibility_wimax_three_bars" msgid="6116551636752103927">"Три смужки сигналу WiMAX."</string>
+  <string name="accessibility_wimax_signal_full" msgid="2768089986795579558">"Максимальний сигнал WiMAX."</string>
+  <string name="accessibility_data_connection_gprs" msgid="1606477224486747751">"GPRS"</string>
+  <string name="accessibility_data_connection_3g" msgid="8628562305003568260">"3G"</string>
+  <string name="accessibility_data_connection_3.5g" msgid="8664845609981692001">"3.5G"</string>
+  <string name="accessibility_data_connection_4g" msgid="7741000750630089612">"4G"</string>
+  <string name="accessibility_data_connection_cdma" msgid="6132648193978823023">"CDMA"</string>
+  <string name="accessibility_data_connection_edge" msgid="4477457051631979278">"Edge"</string>
+  <string name="accessibility_data_connection_wifi" msgid="2324496756590645221">"Wi-Fi"</string>
+  <string name="accessibility_no_sim" msgid="8274017118472455155">"Немає SIM-карти."</string>
+  <string name="accessibility_bluetooth_tether" msgid="4102784498140271969">"Прив’язка Bluetooth."</string>
+  <string name="accessibility_airplane_mode" msgid="834748999790763092">"Режим польоту."</string>
+  <string name="accessibility_battery_level" msgid="7451474187113371965">"Відсотків батареї: <xliff:g id="NUMBER">%d</xliff:g>."</string>
+  <string name="accessibility_settings_button" msgid="799583911231893380">"Настройки системи."</string>
+  <string name="accessibility_notifications_button" msgid="4498000369779421892">"Сповіщення."</string>
+  <string name="accessibility_remove_notification" msgid="3603099514902182350">"Очистити сповіщення."</string>
+  <string name="accessibility_gps_enabled" msgid="3511469499240123019">"GPS увімкнено."</string>
+  <string name="accessibility_gps_acquiring" msgid="8959333351058967158">"Встановлення зв’язку з GPS."</string>
+  <string name="accessibility_tty_enabled" msgid="4613200365379426561">"Телетайп увімкнено."</string>
+  <string name="accessibility_ringer_vibrate" msgid="666585363364155055">"Дзвінок на вібросигналі."</string>
+  <string name="accessibility_ringer_silent" msgid="9061243307939135383">"Дзвінок беззвучний."</string>
+  <string name="accessibility_recents_item_dismissed" msgid="6803574935084867070">"Програму <xliff:g id="APP">%s</xliff:g> закрито."</string>
+  <string name="data_usage_disabled_dialog_3g_title" msgid="5257833881698644687">"Дані 2G–3G вимкнено"</string>
+  <string name="data_usage_disabled_dialog_4g_title" msgid="4789143363492682629">"Дані 4G вимкнено"</string>
+  <string name="data_usage_disabled_dialog_mobile_title" msgid="1046047248844821202">"Мобільне передавання даних вимкнено"</string>
+  <string name="data_usage_disabled_dialog_title" msgid="2086815304858964954">"Використання даних вимкнено"</string>
+  <string name="data_usage_disabled_dialog" msgid="3853117269051806280">"Досягнуто вказаного ліміту використання даних."\n\n"Якщо ввімкнути використання даних знову, оператор може стягнути плату."</string>
+  <string name="data_usage_disabled_dialog_enable" msgid="7729772039208664606">"Повторно ввімкнути дані"</string>
+  <string name="status_bar_settings_signal_meter_disconnected" msgid="1940231521274147771">"Немає з’єднання"</string>
+  <string name="status_bar_settings_signal_meter_wifi_nossid" msgid="6557486452774597820">"Wi-Fi під’єднано"</string>
+  <string name="gps_notification_searching_text" msgid="8574247005642736060">"Виконується пошук GPS-сигналу"</string>
+  <string name="gps_notification_found_text" msgid="4619274244146446464">"Місцезнаходження встановлено за допомогою GPS"</string>
+  <string name="accessibility_clear_all" msgid="5235938559247164925">"Очистити всі сповіщення."</string>
   <string name="accessibility_ringer_outdoor">На вулиці</string>
   <string name="datanetwork_error_airplane">Ви не можете використовувати мобільні дані в режимі польоту</string>
   <string name="bluetooth_error_airplane">Ви не можете використовувати Bluetooth в режимі польоту</string>
@@ -160,4 +156,8 @@
   <string name="status_bar_expanded_notification_ongoing_button_text">Поточні</string>
   <string name="dataConnectSetting">Передача даних</string>
   <string name="closeData">Закрити</string>
+  <plurals name="status_bar_accessibility_recent_apps">
+    <item quantity="one" msgid="5854176083865845541">"1 остання програма"</item>
+    <item quantity="other" msgid="1040784359794890744">"останніх програм: %d"</item>
+  </plurals>
 </resources>

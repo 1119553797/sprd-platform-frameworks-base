@@ -111,7 +111,7 @@
   <string name="accessibility_ringer_vibrate">নীরব স্পন্দিত</string>
   <string name="accessibility_ringer_silent">রিঙ্গার নীরব</string>
   <string name="accessibility_ringer_outdoor">রিঙ্গার আউট দোর</string>
-  <string name="accessibility_recents_item_dismissed"><xliff:g id="app" example="Calendar">%s</xliff:g> বরখাস্ত.</string>
+  <string name="accessibility_recents_item_dismissed"><xliff:g example="Calendar" id="app">%s</xliff:g> বরখাস্ত.</string>
   <string name="data_usage_disabled_dialog_3g_title">2G-3G তথ্য অক্ষম</string>
   <string name="data_usage_disabled_dialog_4g_title">4G তথ্য অক্ষম</string>
   <string name="data_usage_disabled_dialog_mobile_title">মোবাইল তথ্য অক্ষম</string>
@@ -142,4 +142,6 @@
         <item quantity="one">"1 সাম্প্রতিক অ্যাপ্লিকেশন"</item>
         <item quantity="other">"% ঘ সাম্প্রতিক আবেদন"</item>
     </plurals>
+  <string name="accessibility_no_phone">কোন ফোন সিগনাল নেই</string>
+  <string name="notifications_off_text">বিজ্ঞপ্তি ফিরিয়ে এখানে ট্যাপ.</string>
 </resources>

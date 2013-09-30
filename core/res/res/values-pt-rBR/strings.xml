@@ -6,7 +6,7 @@
   <string name="gigabyteShort">Gb</string>
   <string name="terabyteShort">TB</string>
   <string name="petabyteShort">PB</string>
-  <string name="fileSizeSuffix"><xliff:g id="number" example="123">%1$s</xliff:g><xliff:g id="unit" example="KB">%2$s</xliff:g></string>
+  <string name="fileSizeSuffix"><xliff:g example="123" id="number">%1$s</xliff:g><xliff:g example="KB" id="unit">%2$s</xliff:g></string>
   <string name="untitled">&lt;Untitled&gt;</string>
   <string name="ellipsis">\u2026</string>
   <string name="ellipsis_two_dots">\u2025</string>
@@ -22,7 +22,7 @@
   <string name="serviceRegistered">Registração feita com sucesso</string>
   <string name="serviceErased">Limpeza foi bem sucedida.</string>
   <string name="passwordIncorrect">Palavra passe incorrecta</string>
-  <string msgid="" name="passwordChange">"Senha alterada"</string>
+  <string name="passwordChange" msgid="">"Senha alterada"</string>
   <string name="mmiComplete">IHM completo.</string>
   <string name="badPin">O PIN1 antigo que você digitou não está correto.</string>
   <string name="badPin2">O PIN2 antigo que você digitou não está correto.</string>
@@ -44,22 +44,22 @@
   <string name="ColpMmi">Conectado apresentação da identificação da linha</string>
   <string name="ColrMmi">Restrição da identificação da linha conectada</string>
   <string name="CfMmi">Encaminhamento de chamadas</string>
-  <string msgid="" name="UnConditionCfMmi">"Todas as chamadas condicionais serão reencaminhadas"</string>
-  <string msgid="" name="BusyCfMmi">"Quando ocupado, reencaminhar as chamadas"</string>
-  <string msgid="" name="NoReplyCfMmi">"Quando não houver resposta, reencaminhar as chamadas"</string>
-  <string msgid="" name="NotReachCfMmi">"Quando estiver fora de alcance, reencaminhar as chamadas"</string>
-  <string msgid="" name="AllCfMmi">"Todas as chamadas serão reencaminhadas"</string>
-  <string msgid="" name="ConditionCfMmi">"Todas as chamadas condicionais serão reencaminhadas"</string>
+  <string name="UnConditionCfMmi" msgid="">"Todas as chamadas condicionais serão reencaminhadas"</string>
+  <string name="BusyCfMmi" msgid="">"Quando ocupado, reencaminhar as chamadas"</string>
+  <string name="NoReplyCfMmi" msgid="">"Quando não houver resposta, reencaminhar as chamadas"</string>
+  <string name="NotReachCfMmi" msgid="">"Quando estiver fora de alcance, reencaminhar as chamadas"</string>
+  <string name="AllCfMmi" msgid="">"Todas as chamadas serão reencaminhadas"</string>
+  <string name="ConditionCfMmi" msgid="">"Todas as chamadas condicionais serão reencaminhadas"</string>
   <string name="CwMmi">Chamada em espera</string>
   <string name="BaMmi">Restrição de chamadas</string>
-  <string msgid="" name="BaocMmi">"Restrição de todas as chamadas efetuadas"</string>
-  <string msgid="" name="BaoicMmi">"Restrição de todas as chamadas internacionais efetuadas"</string>
-  <string msgid="" name="BaoicxhMmi">"Restrição de todas as chamadas de saída internacionais excepto as do país de origem"</string>
-  <string msgid="" name="BaicMmi">"Restrição de todas as chamadas recebidas"</string>
-  <string msgid="" name="BaicrMmi">"Restrição de todas as chamadas recebidas em roaming"</string>
-  <string msgid="" name="BaallMmi">"Todos, exceto para todos os serviços básicos"</string>
-  <string msgid="" name="BamoMmi">"Todas as efetuadas para todos os serviços básicos"</string>
-  <string msgid="" name="BamtMmi">"Todas as recebidas para todos os serviços básicos"</string>
+  <string name="BaocMmi" msgid="">"Restrição de todas as chamadas efetuadas"</string>
+  <string name="BaoicMmi" msgid="">"Restrição de todas as chamadas internacionais efetuadas"</string>
+  <string name="BaoicxhMmi" msgid="">"Restrição de todas as chamadas de saída internacionais excepto as do país de origem"</string>
+  <string name="BaicMmi" msgid="">"Restrição de todas as chamadas recebidas"</string>
+  <string name="BaicrMmi" msgid="">"Restrição de todas as chamadas recebidas em roaming"</string>
+  <string name="BaallMmi" msgid="">"Todos, exceto para todos os serviços básicos"</string>
+  <string name="BamoMmi" msgid="">"Todas as efetuadas para todos os serviços básicos"</string>
+  <string name="BamtMmi" msgid="">"Todas as recebidas para todos os serviços básicos"</string>
   <string name="PwdMmi">Alteração de senha</string>
   <string name="PinMmi">Alteração de PIN</string>
   <string name="CnipMmi">Chamando número atual</string>
@@ -72,12 +72,12 @@
   <string name="ActiveConCf">Chamada de reencaminhamento condicional</string>
   <string name="CallForwarded">Chamada reencaminhada</string>
   <string name="CallWaiting">Chamada em espera</string>
-  <string msgid="" name="OutCallBarred">"Saída de chamada barrada"</string>
-  <string msgid="" name="InCallBarred">"Entrada de chamada barrada"</string>
+  <string name="OutCallBarred" msgid="">"Saída de chamada barrada"</string>
+  <string name="InCallBarred" msgid="">"Entrada de chamada barrada"</string>
   <string name="ForwardedCall">Chamada desviada</string>
-  <string msgid="" name="CallHold">"Chamada em espera"</string>
-  <string msgid="" name="CallRetrieved">"Chamada recuperada"</string>
-  <string msgid="" name="IncomingCallForwarded">"Chamada adicional encaminhada"</string>
+  <string name="CallHold" msgid="">"Chamada em espera"</string>
+  <string name="CallRetrieved" msgid="">"Chamada recuperada"</string>
+  <string name="IncomingCallForwarded" msgid="">"Chamada adicional encaminhada"</string>
   <string name="Pin2Mmi">"Mudar PIN2"</string>
   <string name="PukMmi">"Desbloquear PIN"</string>
   <string name="Puk2Mmi">"Desbloquear PIN2"</string>
@@ -141,15 +141,15 @@
   <string name="httpErrorFile">Não foi possível acessar o arquivo.</string>
   <string name="httpErrorFileNotFound">Não foi possível encontrar o arquivo solicitado.</string>
   <string name="httpErrorTooManyRequests">Demasiadas solicitações estão sendo processadas. Tente novamente mais tarde.</string>
-  <string name="notification_title">Erro ao assinar para <xliff:g id="account" example="foo@gmail.com">%1$s</xliff:g></string>
+  <string name="notification_title">Erro ao assinar para <xliff:g example="foo@gmail.com" id="account">%1$s</xliff:g></string>
   <string name="contentServiceSync">Sincronizar</string>
   <string name="contentServiceSyncNotificationTitle">Sincronizar</string>
   <string name="contentServiceTooManyDeletesNotificationDesc">Muitos <xliff:g id="content_type">%s</xliff:g> exclui.</string>
-  <string product="tablet" name="low_memory">Armazenamento do tablet está completo. Excluir alguns arquivos para liberar espaço.</string>
-  <string product="default" name="low_memory">Memória do telefone está cheia. Exclua alguns arquivos para liberar espaço.</string>
+  <string name="low_memory" product="tablet">Armazenamento do tablet está completo. Excluir alguns arquivos para liberar espaço.</string>
+  <string name="low_memory" product="default">Memória do telefone está cheia. Exclua alguns arquivos para liberar espaço.</string>
   <string name="me">Eu</string>
-  <string product="tablet" name="power_dialog">Opções do Tablet</string>
-  <string product="default" name="power_dialog">Opções do telefone</string>
+  <string name="power_dialog" product="tablet">Opções do Tablet</string>
+  <string name="power_dialog" product="default">Opções do telefone</string>
   <string name="silent_mode">Modo silencioso</string>
   <string name="turn_on_radio">Ligar sem fio</string>
   <string name="turn_off_radio">Desligar sem fio</string>
@@ -160,8 +160,8 @@
   <string name="silent_mode_ring">Tocador ligado</string>
   <string name="silent_mode_outdoor">"Campainha exterior"</string>
   <string name="shutdown_progress">Desligando\u2026</string>
-  <string product="tablet" name="shutdown_confirm">Seu tablet desligará</string>
-  <string product="default" name="shutdown_confirm">Seu telefone se desligará</string>
+  <string name="shutdown_confirm" product="tablet">Seu tablet desligará</string>
+  <string name="shutdown_confirm" product="default">Seu telefone se desligará</string>
   <string name="shutdown_confirm_question">Você quer desligar?</string>
   <string name="reboot_safemode_title">Reiniciar em modo de segurança</string>
   <string name="reboot_safemode_confirm">Você quer reiniciar em modo de segurança?
@@ -169,8 +169,8 @@
          Eles serão restaurados quando você reiniciar novamente.</string>
   <string name="recent_tasks_title">Recente</string>
   <string name="no_recent_tasks">Não há aplicativos recentes</string>
-  <string product="tablet" name="global_actions">Opções do Tablet</string>
-  <string product="default" name="global_actions">Opções do telefone</string>
+  <string name="global_actions" product="tablet">Opções do Tablet</string>
+  <string name="global_actions" product="default">Opções do telefone</string>
   <string name="global_action_lock">Bloqueio de tela</string>
   <string name="global_action_power_off">Energia desativada</string>
   <string name="global_action_toggle_silent_mode">Modo silencioso</string>
@@ -187,8 +187,8 @@
   <string name="permgrouplab_messages">Suas mensagens</string>
   <string name="permgroupdesc_messages">Leia e escreva seu SMS, e-mail, e outras mensagens.</string>
   <string name="permgrouplab_personalInfo">Sua informação pessoal</string>
-  <string product="tablet" name="permgroupdesc_personalInfo">O acesso direto aos seus contatos e calendário armazenados no tablet.</string>
-  <string product="default" name="permgroupdesc_personalInfo">O acesso direto aos seus contatos e calendário armazenados no telefone.</string>
+  <string name="permgroupdesc_personalInfo" product="tablet">O acesso direto aos seus contatos e calendário armazenados no tablet.</string>
+  <string name="permgroupdesc_personalInfo" product="default">O acesso direto aos seus contatos e calendário armazenados no telefone.</string>
   <string name="permgrouplab_location">Sua localização</string>
   <string name="permgroupdesc_location">Monitorar sua localização física</string>
   <string name="permgrouplab_network">Detalhes de rede</string>
@@ -204,8 +204,8 @@
   <string name="permgrouplab_developmentTools">Ferramentas de desenvolvimento</string>
   <string name="permgroupdesc_developmentTools">Recursos necessários apenas para desenvolvedores de aplicativos.</string>
   <string name="permgrouplab_storage">Armazenamento</string>
-  <string product="nosdcard" name="permgroupdesc_storage">Acessar o armazenamento USB.</string>
-  <string product="default" name="permgroupdesc_storage">Acessar o cartão SD.</string>
+  <string name="permgroupdesc_storage" product="nosdcard">Acessar o armazenamento USB.</string>
+  <string name="permgroupdesc_storage" product="default">Acessar o cartão SD.</string>
   <string name="permlab_statusBar">desativar ou modificar a barra de status</string>
   <string name="permdesc_statusBar">Permite que o aplicativo desative a barra de status ou adicione e remova ícones do sistema.</string>
   <string name="permlab_statusBarService">Barra de status</string>
@@ -229,11 +229,11 @@
   <string name="permlab_sendSmsNoConfirmation">Enviar mensagens SMS sem confirmação</string>
   <string name="permdesc_sendSmsNoConfirmation">Permite que o aplicativo envie mensagens SMS. Isto pode resultar em custos inesperados. Aplicativos maliciosos podem custar-lhe dinheiro, enviando mensagens sem sua confirmação.</string>
   <string name="permlab_readSms">Ler suas mensagens de texto (SMS ou MMS)</string>
-  <string product="tablet" name="permdesc_readSms">Permite que o aplicativo leia mensagens SMS armazenadas no seu tablet ou cartão SIM. Isso permite que o aplicativo leia todas as mensagens SMS, independentemente do conteúdo ou confidencialidade.</string>
-  <string product="default" name="permdesc_readSms">Permite que o aplicativo leia mensagens SMS armazenadas no seu telefone ou cartão SIM. Isso permite que o aplicativo leia todas as mensagens SMS, independentemente do conteúdo ou confidencialidade.</string>
+  <string name="permdesc_readSms" product="tablet">Permite que o aplicativo leia mensagens SMS armazenadas no seu tablet ou cartão SIM. Isso permite que o aplicativo leia todas as mensagens SMS, independentemente do conteúdo ou confidencialidade.</string>
+  <string name="permdesc_readSms" product="default">Permite que o aplicativo leia mensagens SMS armazenadas no seu telefone ou cartão SIM. Isso permite que o aplicativo leia todas as mensagens SMS, independentemente do conteúdo ou confidencialidade.</string>
   <string name="permlab_writeSms">editar as suas mensagens de texto (SMS ou MMS)</string>
-  <string product="tablet" name="permdesc_writeSms">Permite que o aplicativo leia mensagens SMS armazenadas no seu telefone ou cartão SIM. Aplicativos maliciosos podem excluir suas mensagens.</string>
-  <string product="default" name="permdesc_writeSms">Permite que o aplicativo leia mensagens SMS armazenadas no seu telefone ou cartão SIM. Aplicativos maliciosos podem excluir suas mensagens.</string>
+  <string name="permdesc_writeSms" product="tablet">Permite que o aplicativo leia mensagens SMS armazenadas no seu telefone ou cartão SIM. Aplicativos maliciosos podem excluir suas mensagens.</string>
+  <string name="permdesc_writeSms" product="default">Permite que o aplicativo leia mensagens SMS armazenadas no seu telefone ou cartão SIM. Aplicativos maliciosos podem excluir suas mensagens.</string>
   <string name="permlab_receiveWapPush">Receber mensagens de texto (WAP)</string>
   <string name="permdesc_receiveWapPush">Permite que o aplicativo receba e processe mensagens WAP.  Essa permissão inclui a habilidade de monitorar ou apagar as mensagens enviadas para o dispositivo sem mostrá-las a você.</string>
   <string name="permlab_getTasks">Recuperar aplicativos de execução</string>
@@ -301,8 +301,8 @@
   <string name="permlab_manageAppTokens">Gerenciar códigos de aplicativo</string>
   <string name="permdesc_manageAppTokens">Permite que o aplicativo para criar e gerenciar seus próprios tokens, ignorando a sua normalidade de Z-ordenação. Nunca deve ser necessário para aplicações normais.</string>
   <string name="permlab_injectEvents">Pressione as teclas e os botões de controle</string>
-  <string product="tablet" name="permdesc_injectEvents">Permite que o aplicativo entregue os seus próprios eventos de entrada (teclas pressionadas, etc) para outros aplicativos. Aplicativos maliciosos podem usar isso para desativar recursos importantes do tablet.</string>
-  <string product="default" name="permdesc_injectEvents">Permite que o aplicativo entregue os seus próprios eventos de entrada (teclas pressionadas, etc) para outros aplicativos. Aplicativos maliciosos podem usar isso para desativar recursos importantes do telefone.</string>
+  <string name="permdesc_injectEvents" product="tablet">Permite que o aplicativo entregue os seus próprios eventos de entrada (teclas pressionadas, etc) para outros aplicativos. Aplicativos maliciosos podem usar isso para desativar recursos importantes do tablet.</string>
+  <string name="permdesc_injectEvents" product="default">Permite que o aplicativo entregue os seus próprios eventos de entrada (teclas pressionadas, etc) para outros aplicativos. Aplicativos maliciosos podem usar isso para desativar recursos importantes do telefone.</string>
   <string name="permlab_readInputState">Gravar o que você digita e ações que você toma.</string>
   <string name="permdesc_readInputState">Permite que o aplicativo assista as teclas que você pressiona, mesmo quando estiver interagindo com outro aplicativo (como digitar uma senha). Nunca deve ser necessário para aplicações normais.</string>
   <string name="permlab_bindInputMethod">vincular a um método de entrada</string>
@@ -328,8 +328,8 @@
   <string name="permlab_signalPersistentProcesses">Enviar sinais Linux para os aplicativos</string>
   <string name="permdesc_signalPersistentProcesses">Permite que o aplicativo solicite que o sinal fornecido seja enviado a todos os processos persistentes.</string>
   <string name="permlab_persistentActivity">Fazer o aplicativo funcionar</string>
-  <string product="tablet" name="permdesc_persistentActivity">Permite que o aplicativo faça peças de si mesmo de maneira contínua na memória.  Isso pode limitar a memória disponível para outros aplicativos desacelerando o tablet.</string>
-  <string product="default" name="permdesc_persistentActivity">Permite que o aplicativo faça peças de si mesmo de maneira contínua na memória.  Isso pode limitar a memória disponível para outros aplicativos desacelerando o telefone.</string>
+  <string name="permdesc_persistentActivity" product="tablet">Permite que o aplicativo faça peças de si mesmo de maneira contínua na memória.  Isso pode limitar a memória disponível para outros aplicativos desacelerando o tablet.</string>
+  <string name="permdesc_persistentActivity" product="default">Permite que o aplicativo faça peças de si mesmo de maneira contínua na memória.  Isso pode limitar a memória disponível para outros aplicativos desacelerando o telefone.</string>
   <string name="permlab_deletePackages">excluir aplicativos</string>
   <string name="permdesc_deletePackages">Permite que o aplicativo delete os pacotes Android. Aplicativos maliciosos podem usar isso para para excluir aplicativos importantes.</string>
   <string name="permlab_clearAppUserData">excluir outros aplicativos e banco de dados</string>
@@ -341,20 +341,20 @@
   <string name="permlab_installPackages">instalar aplicativos diretamente</string>
   <string name="permdesc_installPackages">Permite que o aplicativo instale os pacotes Android novos ou atualizados. Aplicativos maliciosos podem usar isso para adicionar novos aplicativos com permissões arbitrariamente fortes.</string>
   <string name="permlab_clearAppCache">apagar todos os dados do cache de aplicativos</string>
-  <string product="tablet" name="permdesc_clearAppCache">Permite que o aplicativo libere o armazenamento gratuito do tablet, excluindo arquivos no diretório de cache do aplicativo. O acesso é normalmente muito restrito ao processo do sistema.</string>
-  <string product="default" name="permdesc_clearAppCache">Permite que o aplicativo libere o armazenamento de telefone gratuito, excluindo arquivos no diretório de cache do aplicativo. O acesso é normalmente muito restrito ao processo do sistema.</string>
+  <string name="permdesc_clearAppCache" product="tablet">Permite que o aplicativo libere o armazenamento gratuito do tablet, excluindo arquivos no diretório de cache do aplicativo. O acesso é normalmente muito restrito ao processo do sistema.</string>
+  <string name="permdesc_clearAppCache" product="default">Permite que o aplicativo libere o armazenamento de telefone gratuito, excluindo arquivos no diretório de cache do aplicativo. O acesso é normalmente muito restrito ao processo do sistema.</string>
   <string name="permlab_movePackage">Mover recursos do aplicativo</string>
   <string name="permdesc_movePackage">Permite que o aplicativo movimente recursos de mídia externa e interna e vice-versa.</string>
   <string name="permlab_readLogs">Ler dados sensíveis dos registro</string>
-  <string product="tablet" name="permdesc_readLogs">Permite que o aplicativo leia a partir dos vários arquivos de registro do sistema.  Isso permite que ele descubra informações gerais sobre o que você está fazendo com o tablet, inclusive possíveis informações pessoais ou privadas.</string>
-  <string product="default" name="permdesc_readLogs">Permite que o aplicativo leia a partir dos vários arquivos de registro do sistema.  Isso permite que ele descubra informações gerais sobre o que você está fazendo com o telefone, inclusive possíveis informações pessoais ou privadas.</string>
+  <string name="permdesc_readLogs" product="tablet">Permite que o aplicativo leia a partir dos vários arquivos de registro do sistema.  Isso permite que ele descubra informações gerais sobre o que você está fazendo com o tablet, inclusive possíveis informações pessoais ou privadas.</string>
+  <string name="permdesc_readLogs" product="default">Permite que o aplicativo leia a partir dos vários arquivos de registro do sistema.  Isso permite que ele descubra informações gerais sobre o que você está fazendo com o telefone, inclusive possíveis informações pessoais ou privadas.</string>
   <string name="permlab_anyCodecForPlayback">Usar qualquer decodificador de mídia para reprodução</string>
   <string name="permdesc_anyCodecForPlayback">Permite que o aplicativo  use qualquer decodificador de mídia instalado para decodificar para reprodução.</string>
   <string name="permlab_diagnostic">Leitura/escrita de recursos próprios pelo diag</string>
   <string name="permdesc_diagnostic">Permite que o aplicativo leia e escreva a qualquer recurso de propriedade do grupo diagnóstico, por exemplo, arquivos em/dev. Isso poderia afetar a estabilidade e segurança do sistema. Esta deve ser apenas ser utilizado APENAS para diagnóstico específico de hardware pelo fabricante ou pelo operador.</string>
   <string name="permlab_changeComponentState">ativar ou desativar os componentes de aplicativos</string>
-  <string product="tablet" name="permdesc_changeComponentState">Permite que o aplicativo altere caso um componente de outro aplicativo esteja habilitado ou não. Aplicativos maliciosos podem usar isso para desativar recursos importantes do tablet. Cuidados devem ser usados ​​com essa permissão, pois é possível obter componentes de aplicativos em um estado inutilizável, inconsistente ou instável.</string>
-  <string product="default" name="permdesc_changeComponentState">Permite que o aplicativo altere caso um componente de outro aplicativo esteja habilitado ou não. Aplicativos maliciosos podem usar isso para desativar recursos de telefone importantes. Cuidados devem ser usados ​​com essa permissão, pois é possível obter componentes de aplicativos em um estado inutilizável, inconsistente ou instável.</string>
+  <string name="permdesc_changeComponentState" product="tablet">Permite que o aplicativo altere caso um componente de outro aplicativo esteja habilitado ou não. Aplicativos maliciosos podem usar isso para desativar recursos importantes do tablet. Cuidados devem ser usados ​​com essa permissão, pois é possível obter componentes de aplicativos em um estado inutilizável, inconsistente ou instável.</string>
+  <string name="permdesc_changeComponentState" product="default">Permite que o aplicativo altere caso um componente de outro aplicativo esteja habilitado ou não. Aplicativos maliciosos podem usar isso para desativar recursos de telefone importantes. Cuidados devem ser usados ​​com essa permissão, pois é possível obter componentes de aplicativos em um estado inutilizável, inconsistente ou instável.</string>
   <string name="permlab_grantRevokePermissions">conceder ou revogar as permissões</string>
   <string name="permdesc_grantRevokePermissions">Permite que um aplicativo conceda ou revogue as permissões específicas para isso ou outras aplicações.  Aplicativos maliciosos podem usar isso para acessar recursos que você não concedeu a eles.</string>
   <string name="permlab_setPreferredApplications">Definir aplicativos preferidos</string>
@@ -366,43 +366,43 @@
   <string name="permlab_writeGservices">Modificar o mapa de serviços Google</string>
   <string name="permdesc_writeGservices">Permite que o aplicativo altere as permissões do mapa de serviços do Google.  Não deve ser usado por aplicativos normais.</string>
   <string name="permlab_receiveBootCompleted">Executar na inicialização</string>
-  <string product="tablet" name="permdesc_receiveBootCompleted">Permite que o aplicativo seja iniciado assim que o boot do sistema tenha sido finalizado.
+  <string name="permdesc_receiveBootCompleted" product="tablet">Permite que o aplicativo seja iniciado assim que o boot do sistema tenha sido finalizado.
         Isso pode fazer com que demore mais tempo para iniciar o tablet e permitir que o aplicativo desacelere o telefone em geral, sempre em execução.</string>
-  <string product="default" name="permdesc_receiveBootCompleted">Permite que o aplicativo seja iniciado assim que o boot do sistema tenha sido finalizado.
+  <string name="permdesc_receiveBootCompleted" product="default">Permite que o aplicativo seja iniciado assim que o boot do sistema tenha sido finalizado.
         Isso pode fazer com que demore mais tempo para iniciar o telefone e permitir que o aplicativo desacelere o telefone em geral, sempre em execução.</string>
   <string name="permlab_broadcastSticky">Enviar transmissão persistente</string>
-  <string product="tablet" name="permdesc_broadcastSticky">Permite que o aplicativo envie broadcasts permantes que permanecem após o término da transmissão. O uso excessivo pode tornar o tablet lento ou instável, fazendo com que ele use muita memória.</string>
-  <string product="default" name="permdesc_broadcastSticky">Permite que o aplicativo envie broadcasts permantes que permanecem após o término da transmissão. O uso excessivo pode tornar o tablet lento ou instável, fazendo com que ele use muita memória.</string>
+  <string name="permdesc_broadcastSticky" product="tablet">Permite que o aplicativo envie broadcasts permantes que permanecem após o término da transmissão. O uso excessivo pode tornar o tablet lento ou instável, fazendo com que ele use muita memória.</string>
+  <string name="permdesc_broadcastSticky" product="default">Permite que o aplicativo envie broadcasts permantes que permanecem após o término da transmissão. O uso excessivo pode tornar o tablet lento ou instável, fazendo com que ele use muita memória.</string>
   <string name="permlab_readContacts">Ler seus contatos</string>
-  <string product="tablet" name="permdesc_readContacts">Permite que o aplicativo leia os dados sobre seus contatos armazenados em seu tablet, incluindo a frequência com que você chamou, e-mail ou comunicou de outras formas com indivíduos específicos. Esta autorização permite que aplicativos para guardem os seus dados de contato e aplicativos maliciosos podem compartilhar dados de contato sem o seu conhecimento.</string>
-  <string product="default" name="permdesc_readContacts">Permite que o aplicativo leia os dados sobre seus contatos armazenados em seu telefone, incluindo a frequência com que você chamou, e-mail ou comunicou de outras formas com indivíduos específicos. Esta autorização permite que aplicativos guardem os seus dados de contato e aplicativos maliciosos podem compartilhar dados de contato sem o seu conhecimento.</string>
+  <string name="permdesc_readContacts" product="tablet">Permite que o aplicativo leia os dados sobre seus contatos armazenados em seu tablet, incluindo a frequência com que você chamou, e-mail ou comunicou de outras formas com indivíduos específicos. Esta autorização permite que aplicativos para guardem os seus dados de contato e aplicativos maliciosos podem compartilhar dados de contato sem o seu conhecimento.</string>
+  <string name="permdesc_readContacts" product="default">Permite que o aplicativo leia os dados sobre seus contatos armazenados em seu telefone, incluindo a frequência com que você chamou, e-mail ou comunicou de outras formas com indivíduos específicos. Esta autorização permite que aplicativos guardem os seus dados de contato e aplicativos maliciosos podem compartilhar dados de contato sem o seu conhecimento.</string>
   <string name="permlab_writeContacts">Modificar seus contatos</string>
-  <string product="tablet" name="permdesc_writeContacts">Permite que o aplicativo modifique os dados sobre seus contatos armazenados em seu tablet, incluindo a frequência com que você chamou, e-mail ou comunicou de outras formas com indivíduos específicos. Esta autorização permite que aplicativos apaguem os seus dados de contato.</string>
-  <string product="default" name="permdesc_writeContacts">Permite que o aplicativo modifique os dados sobre seus contatos armazenados em seu telefone, incluindo a frequência com que você chamou, e-mail ou comunicou de outras formas com indivíduos específicos. Esta autorização permite que aplicativos apaguem os seus dados de contato.</string>
+  <string name="permdesc_writeContacts" product="tablet">Permite que o aplicativo modifique os dados sobre seus contatos armazenados em seu tablet, incluindo a frequência com que você chamou, e-mail ou comunicou de outras formas com indivíduos específicos. Esta autorização permite que aplicativos apaguem os seus dados de contato.</string>
+  <string name="permdesc_writeContacts" product="default">Permite que o aplicativo modifique os dados sobre seus contatos armazenados em seu telefone, incluindo a frequência com que você chamou, e-mail ou comunicou de outras formas com indivíduos específicos. Esta autorização permite que aplicativos apaguem os seus dados de contato.</string>
   <string name="permlab_readCallLog">Ler o registo de chamadas</string>
-  <string product="tablet" name="permdesc_readCallLog">Permite que o aplicativo modifique o registro de chamadas, incluindo dados sobre a entrada e a saída das chamadas.
+  <string name="permdesc_readCallLog" product="tablet">Permite que o aplicativo modifique o registro de chamadas, incluindo dados sobre a entrada e a saída das chamadas.
      Esta autorização permite que aplicativos guardem os seus dados de contato e aplicativos maliciosos podem compartilhar dados de contato sem o seu conhecimento.</string>
-  <string product="default" name="permdesc_readCallLog">Permite que o aplicativo modifique o registro de chamadas, incluindo dados sobre a entrada e a saída das chamadas.
+  <string name="permdesc_readCallLog" product="default">Permite que o aplicativo modifique o registro de chamadas, incluindo dados sobre a entrada e a saída das chamadas.
       Esta autorização permite que aplicativos guardem os seus dados de contato e aplicativos maliciosos podem compartilhar dados de contato sem o seu conhecimento.</string>
   <string name="permlab_writeCallLog">Escrever registro de chamadas</string>
-  <string product="tablet" name="permdesc_writeCallLog">Permite que o aplicativo modifique o registro de chamadas do tablet, incluindo dados sobre a entrada e saída das chamadas.
+  <string name="permdesc_writeCallLog" product="tablet">Permite que o aplicativo modifique o registro de chamadas do tablet, incluindo dados sobre a entrada e saída das chamadas.
         Aplicativos maliciosos podem usar isso para apagar ou modificar seu registro de chamadas.</string>
-  <string product="default" name="permdesc_writeCallLog">Permite que o aplicativo modifique o registro de chamadas, incluindo dados sobre a entrada e saída das chamadas.
+  <string name="permdesc_writeCallLog" product="default">Permite que o aplicativo modifique o registro de chamadas, incluindo dados sobre a entrada e saída das chamadas.
         Aplicativos maliciosos podem usar isso para apagar ou modificar seu registro de chamadas.</string>
   <string name="permlab_readProfile">Ler o seu próprio cartão de contato</string>
-  <string product="default" name="permdesc_readProfile">Permite que o aplicativo leia as informações do perfil pessoal armazenada no seu dispositivo, tal como o seu nome e informações de contato. Isto significa que o aplicativo pode identificá-lo e pode enviar suas informações de perfil para os outros.</string>
+  <string name="permdesc_readProfile" product="default">Permite que o aplicativo leia as informações do perfil pessoal armazenada no seu dispositivo, tal como o seu nome e informações de contato. Isto significa que o aplicativo pode identificá-lo e pode enviar suas informações de perfil para os outros.</string>
   <string name="permlab_writeProfile">Modificar seu cartão de contato próprio</string>
-  <string product="default" name="permdesc_writeProfile">Permite que o aplicativo leia as informações do perfil pessoal armazenada no seu dispositivo, tal como o seu nome e informações de contato.  Isto significa que o aplicativo pode identificá-lo e pode enviar suas informações de perfil para os outros.</string>
-  <string product="default" name="permlab_readSocialStream">Ler seu fluxo social</string>
-  <string product="default" name="permdesc_readSocialStream">Permite que o aplicativo exiba e sincronize atualizações sociais de seus amigos. Tenha cuidado ao compartilhar informações - o que permite que o aplicativo leia as comunicações entre você e seus amigos em redes sociais, independentemente de confidencialidade. Nota: essa permissão não pode ser executada em todas as redes sociais.</string>
-  <string product="default" name="permlab_writeSocialStream">Escrever para sua rede social</string>
-  <string product="default" name="permdesc_writeSocialStream">Permite que o aplicativo exiba atualizações sociais de seus amigos.  Tenha cuidado ao compartilhamento de informações - isso permite que o aplicativo produza mensagens que podem parecem vir de um amigo. Nota: essa permissão não pode ser executada em todas as redes sociais.</string>
+  <string name="permdesc_writeProfile" product="default">Permite que o aplicativo leia as informações do perfil pessoal armazenada no seu dispositivo, tal como o seu nome e informações de contato.  Isto significa que o aplicativo pode identificá-lo e pode enviar suas informações de perfil para os outros.</string>
+  <string name="permlab_readSocialStream" product="default">Ler seu fluxo social</string>
+  <string name="permdesc_readSocialStream" product="default">Permite que o aplicativo exiba e sincronize atualizações sociais de seus amigos. Tenha cuidado ao compartilhar informações - o que permite que o aplicativo leia as comunicações entre você e seus amigos em redes sociais, independentemente de confidencialidade. Nota: essa permissão não pode ser executada em todas as redes sociais.</string>
+  <string name="permlab_writeSocialStream" product="default">Escrever para sua rede social</string>
+  <string name="permdesc_writeSocialStream" product="default">Permite que o aplicativo exiba atualizações sociais de seus amigos.  Tenha cuidado ao compartilhamento de informações - isso permite que o aplicativo produza mensagens que podem parecem vir de um amigo. Nota: essa permissão não pode ser executada em todas as redes sociais.</string>
   <string name="permlab_readCalendar">Ler eventos de calendário além de informação confidencial</string>
-  <string product="tablet" name="permdesc_readCalendar">Permite que o aplicativo leia todos os eventos armazenados em seu tablet, incluindo os de amigos ou colegas de trabalho. Isso pode permitir que o aplicativo para compartilhar ou salvar os dados do calendário, independentemente de confidencialidade ou de sensibilidade.</string>
-  <string product="default" name="permdesc_readCalendar">Permite que o aplicativo leia todos os eventos de calendário armazenados em seu telefone, incluindo os de amigos ou colegas de trabalho. Isso pode permitir que o aplicativo para compartilhar ou salvar os dados do calendário, independentemente de confidencialidade ou de sensibilidade.</string>
+  <string name="permdesc_readCalendar" product="tablet">Permite que o aplicativo leia todos os eventos armazenados em seu tablet, incluindo os de amigos ou colegas de trabalho. Isso pode permitir que o aplicativo para compartilhar ou salvar os dados do calendário, independentemente de confidencialidade ou de sensibilidade.</string>
+  <string name="permdesc_readCalendar" product="default">Permite que o aplicativo leia todos os eventos de calendário armazenados em seu telefone, incluindo os de amigos ou colegas de trabalho. Isso pode permitir que o aplicativo para compartilhar ou salvar os dados do calendário, independentemente de confidencialidade ou de sensibilidade.</string>
   <string name="permlab_writeCalendar">adicionar ou modificar eventos do calendário e enviar e-mail para os hóspedes sem o conhecimento dos donos</string>
-  <string product="tablet" name="permdesc_writeCalendar">Permite que o aplicativo adicione, remova, modifique os eventos que possa modificar no seu tablet, incluindo os de amigos ou colegas de trabalho. Isso pode permitir que o aplicativo envie mensagens que parecem vir de proprietários de calendário, ou modificar eventos sem o conhecimento dos donos.</string>
-  <string product="default" name="permdesc_writeCalendar">Permite que o aplicativo adicione, remova, modifique os eventos que possa modificar no seu telefone, incluindo os de amigos ou colegas de trabalho. Isso pode permitir que o aplicativo envie mensagens que parecem vir de proprietários de calendário, ou modificar eventos sem o conhecimento dos donos.</string>
+  <string name="permdesc_writeCalendar" product="tablet">Permite que o aplicativo adicione, remova, modifique os eventos que possa modificar no seu tablet, incluindo os de amigos ou colegas de trabalho. Isso pode permitir que o aplicativo envie mensagens que parecem vir de proprietários de calendário, ou modificar eventos sem o conhecimento dos donos.</string>
+  <string name="permdesc_writeCalendar" product="default">Permite que o aplicativo adicione, remova, modifique os eventos que possa modificar no seu telefone, incluindo os de amigos ou colegas de trabalho. Isso pode permitir que o aplicativo envie mensagens que parecem vir de proprietários de calendário, ou modificar eventos sem o conhecimento dos donos.</string>
   <string name="permlab_accessMockLocation">Fontes de localização falsa para teste</string>
   <string name="permdesc_accessMockLocation">Criar fontes falsas de localização para testes ou instalar um novo provedor de localização.  Isso permite que o aplicativo que substitui a localização e / ou status retorne por outras fontes de localização, como GPS ou provedores de localização.</string>
   <string name="permlab_accessLocationExtraCommands">acessar comandos adicionais de provedores de localização</string>
@@ -410,8 +410,8 @@
   <string name="permlab_installLocationProvider">permissão para instalar um provedor de localização</string>
   <string name="permdesc_installLocationProvider">Criar fontes falsas de localização para testes ou instalar um novo provedor de localização.  Isso permite que o aplicativo que substitui a localização e / ou status retorne por outras fontes de localização, como GPS ou provedores de localização.</string>
   <string name="permlab_accessFineLocation">Localização necessária do GPS  </string>
-  <string product="tablet" name="permdesc_accessFineLocation">Acessa fontes de localização precisas, tais como o Sistema de Posicionamento Global no telefone. Quando os serviços de localização estão disponíveis e ligados, essa permissão permite que o aplicativo determine a sua localização exata.</string>
-  <string product="default" name="permdesc_accessFineLocation">Acessa fontes de localização precisas, tais como o Sistema de Posicionamento Global no telefone. Quando os serviços de localização estão disponíveis e ligados, essa permissão permite que o aplicativo determine a sua localização exata.</string>
+  <string name="permdesc_accessFineLocation" product="tablet">Acessa fontes de localização precisas, tais como o Sistema de Posicionamento Global no telefone. Quando os serviços de localização estão disponíveis e ligados, essa permissão permite que o aplicativo determine a sua localização exata.</string>
+  <string name="permdesc_accessFineLocation" product="default">Acessa fontes de localização precisas, tais como o Sistema de Posicionamento Global no telefone. Quando os serviços de localização estão disponíveis e ligados, essa permissão permite que o aplicativo determine a sua localização exata.</string>
   <string name="permlab_accessCoarseLocation">localização aproximada (baseada na rede)</string>
   <string name="permdesc_accessCoarseLocation">Acessar localização aproximada de provedores que utilizam fontes de localização de rede, tais como torre de celular e WLAN. Quando os serviços de localização estão disponíveis e ligados, essa permissão garante que o aplicativo determine a sua localização exata.</string>
   <string name="permlab_accessSurfaceFlinger">acesso SurfaceFlinger</string>
@@ -424,19 +424,19 @@
   <string name="permdesc_recordAudio">Permite que o aplicativo para gravar áudio com o microfone.  Esta autorização permite que o aplicativo grave áudio a qualquer momento sem a sua confirmação.</string>
   <string name="permlab_camera">Tirar fotos e vídeos</string>
   <string name="permdesc_camera">Permite que o aplicativo tire fotos e vídeos com a câmera.  Esta autorização permite que o aplicativo use a câmera a qualquer momento sem a sua confirmação.</string>
-  <string product="tablet" name="permlab_brick">Desativar tablet permanentemente</string>
-  <string product="default" name="permlab_brick">Desativar telefone permanentemente</string>
-  <string product="tablet" name="permdesc_brick">Permite que o aplicativo desabilite completamente o tablet. Isso é muito perigoso.</string>
-  <string product="default" name="permdesc_brick">Permite que o aplicativo desabilite completamente o telefone. Isso é muito perigoso.</string>
-  <string product="tablet" name="permlab_reboot">forçar reinicialização tablet </string>
-  <string product="default" name="permlab_reboot">forçar reinicialização do telefone</string>
-  <string product="tablet" name="permdesc_reboot">Permite que o aplicativo force a reiniciação do tablet.</string>
-  <string product="default" name="permdesc_reboot">Permite que o aplicativo force a reiniciação do telefone.</string>
-  <string product="nosdcard" name="permlab_mount_unmount_filesystems">acesso ao armazenamento do sistema de arquivos USB</string>
-  <string product="default" name="permlab_mount_unmount_filesystems">acesso ao sistema de arquivos SD</string>
+  <string name="permlab_brick" product="tablet">Desativar tablet permanentemente</string>
+  <string name="permlab_brick" product="default">Desativar telefone permanentemente</string>
+  <string name="permdesc_brick" product="tablet">Permite que o aplicativo desabilite completamente o tablet. Isso é muito perigoso.</string>
+  <string name="permdesc_brick" product="default">Permite que o aplicativo desabilite completamente o telefone. Isso é muito perigoso.</string>
+  <string name="permlab_reboot" product="tablet">forçar reinicialização tablet </string>
+  <string name="permlab_reboot" product="default">forçar reinicialização do telefone</string>
+  <string name="permdesc_reboot" product="tablet">Permite que o aplicativo force a reiniciação do tablet.</string>
+  <string name="permdesc_reboot" product="default">Permite que o aplicativo force a reiniciação do telefone.</string>
+  <string name="permlab_mount_unmount_filesystems" product="nosdcard">acesso ao armazenamento do sistema de arquivos USB</string>
+  <string name="permlab_mount_unmount_filesystems" product="default">acesso ao sistema de arquivos SD</string>
   <string name="permdesc_mount_unmount_filesystems">Permite que o aplicativo monte e desmonte sistemas de arquivos para armazenamento removível.</string>
-  <string product="nosdcard" name="permlab_mount_format_filesystems">Apagar armazenamento USB</string>
-  <string product="default" name="permlab_mount_format_filesystems">Apagar cartão SD</string>
+  <string name="permlab_mount_format_filesystems" product="nosdcard">Apagar armazenamento USB</string>
+  <string name="permlab_mount_format_filesystems" product="default">Apagar cartão SD</string>
   <string name="permdesc_mount_format_filesystems">Permite que o aplicativo formate o armazenamento interno.</string>
   <string name="permlab_asec_access">obter informações sobre o armazenamento interno</string>
   <string name="permdesc_asec_access">Permite que o aplicativo controle o armazenamento interno.</string>
@@ -465,8 +465,8 @@
   <string name="permlab_callPrivileged">chamar diretamente os números de telefone</string>
   <string name="permdesc_callPrivileged">Permite que o aplicativo efetue chamadas para qualquer telefone, incluindo números de emergências sem sua intervenção.
         Aplicativos maliciosos podem fazer chamadas desnecessárias e ilegais para serviços de emergência.</string>
-  <string product="tablet" name="permlab_performCdmaProvisioning">iniciar diretamente CDMA configuração tablet</string>
-  <string product="default" name="permlab_performCdmaProvisioning">iniciar diretamente a configuração do telefone CDMA</string>
+  <string name="permlab_performCdmaProvisioning" product="tablet">iniciar diretamente CDMA configuração tablet</string>
+  <string name="permlab_performCdmaProvisioning" product="default">iniciar diretamente a configuração do telefone CDMA</string>
   <string name="permdesc_performCdmaProvisioning">Permite que o aplicativo inicie o provisionamento de CDMA.
         Aplicativos maliciosos podem iniciar o provisionamento CDMA desnecessariamente.</string>
   <string name="permlab_locationUpdates">notificações de controle de atualizaçao do local</string>
@@ -480,17 +480,17 @@
   <string name="permdesc_modifyPhoneState">Permite que o aplicativo acesse os recursos de telefone do dispositivo. Um aplicativo com esta permissão pode trocar redes, ligar e desligar o rádio do telefone e assim por diante, sem qualquer notificação.</string>
   <string name="permlab_readPhoneState">Ler o status e identificação do telefone</string>
   <string name="permdesc_readPhoneState">Permite que o aplicativo acesse os recursos de telefone do dispositivo.  Esta autorização permite que o aplicativo determine o número de telefone e IDs de dispositivos, se a chamada está ativa e o número remoto conectado por uma chamada.</string>
-  <string product="tablet" name="permlab_wakeLock">Impedir tablet antes de dormir</string>
-  <string product="default" name="permlab_wakeLock">Impedir telefone antes de dormir</string>
-  <string product="tablet" name="permdesc_wakeLock">Permite que o aplicativo previna a soneca do telefone.</string>
-  <string product="default" name="permdesc_wakeLock">Permite que o aplicativo previna a soneca do telefone.</string>
-  <string product="tablet" name="permlab_devicePower">Ligar tablet/desligar tablet</string>
-  <string product="default" name="permlab_devicePower">Ligar telefone/ desligar telefone</string>
-  <string product="tablet" name="permdesc_devicePower">Permite que o aplicativo ligue e desligue o tablet.</string>
-  <string product="default" name="permdesc_devicePower">Permite que o aplicativo ligue e desligue o telefone.</string>
+  <string name="permlab_wakeLock" product="tablet">Impedir tablet antes de dormir</string>
+  <string name="permlab_wakeLock" product="default">Impedir telefone antes de dormir</string>
+  <string name="permdesc_wakeLock" product="tablet">Permite que o aplicativo previna a soneca do telefone.</string>
+  <string name="permdesc_wakeLock" product="default">Permite que o aplicativo previna a soneca do telefone.</string>
+  <string name="permlab_devicePower" product="tablet">Ligar tablet/desligar tablet</string>
+  <string name="permlab_devicePower" product="default">Ligar telefone/ desligar telefone</string>
+  <string name="permdesc_devicePower" product="tablet">Permite que o aplicativo ligue e desligue o tablet.</string>
+  <string name="permdesc_devicePower" product="default">Permite que o aplicativo ligue e desligue o telefone.</string>
   <string name="permlab_factoryTest">Executar no modo de teste de fábrica.</string>
-  <string product="tablet" name="permdesc_factoryTest">Executar como um teste do fabricante de nível baixo,          permitindo o acesso completo ao hardware do tablet. Disponível somente quando o tablet está em execução no modo de teste do fabricante. </string>
-  <string product="default" name="permdesc_factoryTest">Executar como um teste do fabricante de nível baixo,          permitindo o acesso completo ao hardware do telefone. Disponível somente quando o telefone está em execução no modo de teste do fabricante. </string>
+  <string name="permdesc_factoryTest" product="tablet">Executar como um teste do fabricante de nível baixo,          permitindo o acesso completo ao hardware do tablet. Disponível somente quando o tablet está em execução no modo de teste do fabricante. </string>
+  <string name="permdesc_factoryTest" product="default">Executar como um teste do fabricante de nível baixo,          permitindo o acesso completo ao hardware do telefone. Disponível somente quando o telefone está em execução no modo de teste do fabricante. </string>
   <string name="permlab_setWallpaper">Definir papel de parede</string>
   <string name="permdesc_setWallpaper">Permite que o aplicativo configure o papel de parede.</string>
   <string name="permlab_setWallpaperHints">ajustar o tamanho do seu wallpaper</string>
@@ -498,16 +498,16 @@
   <string name="permlab_masterClear">Redefinir sistema para padrões de fábrica</string>
   <string name="permdesc_masterClear">Permite que o aplicativo redefina completamente o sistema para as configurações de fábrica, apagando todos os dados, configurações e aplicativos instalados.</string>
   <string name="permlab_setTime">Definir hora</string>
-  <string product="tablet" name="permdesc_setTime">Permite que o aplicativo altere a configuração de uso e o horário do tablet.</string>
-  <string product="default" name="permdesc_setTime">Permite que o aplicativo altere a configuração de uso e o horário do telefone.</string>
+  <string name="permdesc_setTime" product="tablet">Permite que o aplicativo altere a configuração de uso e o horário do tablet.</string>
+  <string name="permdesc_setTime" product="default">Permite que o aplicativo altere a configuração de uso e o horário do telefone.</string>
   <string name="permlab_setTimeZone">Definir fuso horário</string>
-  <string product="tablet" name="permdesc_setTimeZone">Permite que o aplicativo altere a configuração de uso e o fuso horário do tablet.</string>
-  <string product="default" name="permdesc_setTimeZone">Permite que o aplicativo altere a configuração de uso e o horário do telefone.</string>
+  <string name="permdesc_setTimeZone" product="tablet">Permite que o aplicativo altere a configuração de uso e o fuso horário do tablet.</string>
+  <string name="permdesc_setTimeZone" product="default">Permite que o aplicativo altere a configuração de uso e o horário do telefone.</string>
   <string name="permlab_accountManagerService">atuar como AccountManagerService</string>
   <string name="permdesc_accountManagerService">Permite que o aplicativo faça chamadas para AccountAuthenticators.</string>
   <string name="permlab_getAccounts">encontrar contas no dispositivo</string>
-  <string product="tablet" name="permdesc_getAccounts">Permite que o aplicativo obtenha a lista de contas conhecidas pelo tablet.  Isso pode incluir todas as contas criadas por aplicativos que você instalou.</string>
-  <string product="default" name="permdesc_getAccounts">Permite que o aplicativo obtenha a lista de contas conhecidas pelo telefone.  Isso pode incluir todas as contas criadas por aplicativos que você instalou.</string>
+  <string name="permdesc_getAccounts" product="tablet">Permite que o aplicativo obtenha a lista de contas conhecidas pelo tablet.  Isso pode incluir todas as contas criadas por aplicativos que você instalou.</string>
+  <string name="permdesc_getAccounts" product="default">Permite que o aplicativo obtenha a lista de contas conhecidas pelo telefone.  Isso pode incluir todas as contas criadas por aplicativos que você instalou.</string>
   <string name="permlab_authenticateAccounts">criar contas e definir senhas</string>
   <string name="permdesc_authenticateAccounts">Permite que o aplicativo utilize as capacidades do autenticador de conta do AccountManager, incluindo a criação de contas e a obtenção e definição de senhas.</string>
   <string name="permlab_manageAccounts">adicionar ou remover contas</string>
@@ -531,19 +531,19 @@
   <string name="permlab_changeWifiState">conectar e desconectar de WLAN</string>
   <string name="permdesc_changeWifiState">Permite que o aplicativo se conecte e desconecte dos pontos de acesso WLAN e faça alterações à configuração do dispositivo para redes WLAN.</string>
   <string name="permlab_changeWifiMulticastState">permitir a recepção Multicast WLAN</string>
-  <string product="tablet" name="permdesc_changeWifiMulticastState">Permite que o aplicativo receba pacotes enviados para todos os dispositivos em uma rede WLAN usando endereços multicast, e não apenas o seu tablet.  Ele usa mais energia do que o modo não-multicast.</string>
-  <string product="default" name="permdesc_changeWifiMulticastState">Permite que o aplicativo receba pacotes enviados para todos os dispositivos em uma rede WLAN usando endereços multicast, e não apenas o seu telefone.  Ele usa mais energia do que o modo não-multicast.</string>
+  <string name="permdesc_changeWifiMulticastState" product="tablet">Permite que o aplicativo receba pacotes enviados para todos os dispositivos em uma rede WLAN usando endereços multicast, e não apenas o seu tablet.  Ele usa mais energia do que o modo não-multicast.</string>
+  <string name="permdesc_changeWifiMulticastState" product="default">Permite que o aplicativo receba pacotes enviados para todos os dispositivos em uma rede WLAN usando endereços multicast, e não apenas o seu telefone.  Ele usa mais energia do que o modo não-multicast.</string>
   <string name="permlab_bluetoothAdmin">acessar as configurações de Bluetooth</string>
-  <string product="tablet" name="permdesc_bluetoothAdmin">Permite que o aplicativo configure o tablet Bluetooth local, para descobrir e emparelhar com dispositivos remotos.</string>
-  <string product="default" name="permdesc_bluetoothAdmin">Permite que o aplicativo configure o telefone Bluetooth local, para descobrir e emparelhar com dispositivos remotos.</string>
+  <string name="permdesc_bluetoothAdmin" product="tablet">Permite que o aplicativo configure o tablet Bluetooth local, para descobrir e emparelhar com dispositivos remotos.</string>
+  <string name="permdesc_bluetoothAdmin" product="default">Permite que o aplicativo configure o telefone Bluetooth local, para descobrir e emparelhar com dispositivos remotos.</string>
   <string name="permlab_accessWimaxState">Visualizar conexões WiMAX</string>
   <string name="permdesc_accessWimaxState">Permite que o aplicativo determine se o WiMAX está ativado e informações sobre todas as redes WiMAX que estão conectados.</string>
   <string name="permlab_changeWimaxState">Alterar o estado WiMAX</string>
-  <string product="tablet" name="permdesc_changeWimaxState">Permite que o aplicativo se conecte e desconecte o tablet de redes WiMAX.</string>
-  <string product="default" name="permdesc_changeWimaxState">Permite que o aplicativo se conecte e desconecte o telefone de redes WiMAX.</string>
+  <string name="permdesc_changeWimaxState" product="tablet">Permite que o aplicativo se conecte e desconecte o tablet de redes WiMAX.</string>
+  <string name="permdesc_changeWimaxState" product="default">Permite que o aplicativo se conecte e desconecte o telefone de redes WiMAX.</string>
   <string name="permlab_bluetooth">Conectar com dispositivos Bluetooth</string>
-  <string product="tablet" name="permdesc_bluetooth">Permite que o aplicativo visualize a configuração do Bluetooth do tablet, para fazer e aceitar conexões com dispositivos emparelhados.</string>
-  <string product="default" name="permdesc_bluetooth">Permite que o aplicativo visualize a configuração do Bluetooth do telefone, para fazer e aceitar conexões com dispositivos emparelhados.</string>
+  <string name="permdesc_bluetooth" product="tablet">Permite que o aplicativo visualize a configuração do Bluetooth do tablet, para fazer e aceitar conexões com dispositivos emparelhados.</string>
+  <string name="permdesc_bluetooth" product="default">Permite que o aplicativo visualize a configuração do Bluetooth do telefone, para fazer e aceitar conexões com dispositivos emparelhados.</string>
   <string name="permlab_nfc">controle Near Field Communication</string>
   <string name="permdesc_nfc">Permite que o aplicativo se comunique com o Field Communication (NFC), etiquetas, cartões e leitores próximo.</string>
   <string name="permlab_disableKeyguard">desativar o bloqueio de tela</string>
@@ -561,16 +561,16 @@
   <string name="permdesc_readDictionary">Permite que o aplicativo leia todas as palavras, nomes e frases que o usuário possam ter armazenadas no dicionário do usuário.</string>
   <string name="permlab_writeDictionary">Escrever ao dicionário definido pelo usuário</string>
   <string name="permdesc_writeDictionary">Permite que o aplicativo escreva novas palavras no dicionário do usuário.</string>
-  <string product="nosdcard" name="permlab_sdcardRead">teste de acesso à memória protegida</string>
-  <string product="default" name="permlab_sdcardRead">teste de acesso à memória protegida</string>
-  <string product="nosdcard" name="permdesc_sdcardRead">Permite que o aplicativo teste a permissão para o armazenamento do cartão SD, que estará disponível em futuros dispositivos.</string>
-  <string product="default" name="permdesc_sdcardRead">Permite que o aplicativo teste a permissão para o cartão SD, que estará disponível em futuros dispositivos.</string>
-  <string product="nosdcard" name="permlab_sdcardWrite">Modificar ou excluir os conteúdos dos seu armazenamento USB</string>
-  <string product="default" name="permlab_sdcardWrite">Modificar ou excluir os conteúdos dos seu cartão SD</string>
-  <string product="nosdcard" name="permdesc_sdcardWrite">Permite que o aplicativo grave no armazenamento USB.</string>
-  <string product="default" name="permdesc_sdcardWrite">Permite que o aplicativo grave no cartão SD.</string>
-  <string product="default" name="permlab_mediaStorageWrite">Modificar/excluir conteúdos de armazenamento de mídia interna</string>
-  <string product="default" name="permdesc_mediaStorageWrite">Permite que o aplicativo modifique o conteúdo de armazenamento da mídia.</string>
+  <string name="permlab_sdcardRead" product="nosdcard">teste de acesso à memória protegida</string>
+  <string name="permlab_sdcardRead" product="default">teste de acesso à memória protegida</string>
+  <string name="permdesc_sdcardRead" product="nosdcard">Permite que o aplicativo teste a permissão para o armazenamento do cartão SD, que estará disponível em futuros dispositivos.</string>
+  <string name="permdesc_sdcardRead" product="default">Permite que o aplicativo teste a permissão para o cartão SD, que estará disponível em futuros dispositivos.</string>
+  <string name="permlab_sdcardWrite" product="nosdcard">Modificar ou excluir os conteúdos dos seu armazenamento USB</string>
+  <string name="permlab_sdcardWrite" product="default">Modificar ou excluir os conteúdos dos seu cartão SD</string>
+  <string name="permdesc_sdcardWrite" product="nosdcard">Permite que o aplicativo grave no armazenamento USB.</string>
+  <string name="permdesc_sdcardWrite" product="default">Permite que o aplicativo grave no cartão SD.</string>
+  <string name="permlab_mediaStorageWrite" product="default">Modificar/excluir conteúdos de armazenamento de mídia interna</string>
+  <string name="permdesc_mediaStorageWrite" product="default">Permite que o aplicativo modifique o conteúdo de armazenamento da mídia.</string>
   <string name="permlab_cache_filesystem">acessar o sistema de arquivos de cache</string>
   <string name="permdesc_cache_filesystem">Permite que o aplicativo leia e escreva no sistema de arquivos de cache.</string>
   <string name="permlab_use_sip">fazer/receber chamadas via internet</string>
@@ -584,15 +584,15 @@
   <string name="policylab_limitPassword">Definir regras de senha</string>
   <string name="policydesc_limitPassword">Controlar o comprimento e os caracteres permitidos em senhas de desbloqueio de telas.</string>
   <string name="policylab_watchLogin">Monitorar tentativas de desbloqueio de tela</string>
-  <string product="tablet" name="policydesc_watchLogin">Monitorar o número de senhas incorretas digitadas quando desbloquear a tela, e bloquear o tablet ou apagar todos os dados do tablet se muitas senhas incorretas forem digitadas.</string>
-  <string product="default" name="policydesc_watchLogin">Monitorar o número de senhas incorretas digitadas quando desbloquear a tela, e bloquear o telefone ou apagar todos os dados do telefone se muitas senhas incorretas forem digitadas.</string>
+  <string name="policydesc_watchLogin" product="tablet">Monitorar o número de senhas incorretas digitadas quando desbloquear a tela, e bloquear o tablet ou apagar todos os dados do tablet se muitas senhas incorretas forem digitadas.</string>
+  <string name="policydesc_watchLogin" product="default">Monitorar o número de senhas incorretas digitadas quando desbloquear a tela, e bloquear o telefone ou apagar todos os dados do telefone se muitas senhas incorretas forem digitadas.</string>
   <string name="policylab_resetPassword">Alterar a senha de desbloqueio de tela</string>
   <string name="policydesc_resetPassword">Alterar a senha de desbloqueio de tela</string>
   <string name="policylab_forceLock">Bloquear a tela</string>
   <string name="policydesc_forceLock">Controlar como e quando os bloqueios de tela acontecem.</string>
   <string name="policylab_wipeData">Apagar todos os dados</string>
-  <string product="tablet" name="policydesc_wipeData">Apague os dados do tablet sem aviso prévio por um reset de dados de fábrica.</string>
-  <string product="default" name="policydesc_wipeData">Apague os dados do telefone sem aviso prévio por um reset de dados de fábrica.</string>
+  <string name="policydesc_wipeData" product="tablet">Apague os dados do tablet sem aviso prévio por um reset de dados de fábrica.</string>
+  <string name="policydesc_wipeData" product="default">Apague os dados do telefone sem aviso prévio por um reset de dados de fábrica.</string>
   <string name="policylab_setGlobalProxy">Definir o dispositivo proxy global</string>
   <string name="policydesc_setGlobalProxy">Definir o dispositivo proxy global para ser usado enquanto a política está habilitada. Somente o primeiro administrador do dispositivo
          define o proxy global eficaz. </string>
@@ -602,49 +602,6 @@
   <string name="policydesc_encryptedStorage">Requer que os dados de aplicativos armazenados sejam criptografados.</string>
   <string name="policylab_disableCamera">Desativar câmeras</string>
   <string name="policydesc_disableCamera">Impedir uso de todos os dispositivos de câmeras.</string>
-  <string-array name="phoneTypes">
-        <item>Página Principal</item>
-        <item>Móvel</item>
-        <item>Palavra</item>
-        <item>Fax do trabalho</item>
-        <item>Fax de Casa</item>
-        <item>Pager</item>
-        <item>Outros</item>
-        <item>Personalizado</item>
-    </string-array>
-  <string-array name="emailAddressTypes">
-        <item>Página Principal</item>
-        <item>Trabalho</item>
-        <item>Outros</item>
-        <item>Personalizado</item>
-    </string-array>
-  <string-array name="postalAddressTypes">
-        <item>Página Principal</item>
-        <item>Trabalho</item>
-        <item>Outros</item>
-        <item>Personalizado</item>
-    </string-array>
-  <string-array name="imAddressTypes">
-        <item>Página Principal</item>
-        <item>Trabalho</item>
-        <item>Outros</item>
-        <item>Personalizado</item>
-    </string-array>
-  <string-array name="organizationTypes">
-        <item>Trabalho</item>
-        <item>Outros</item>
-        <item>Personalizado</item>
-    </string-array>
-  <string-array name="imProtocols">
-        <item>APONTAR</item>
-        <item>Windows Live</item>
-        <item>Yahoo</item>
-        <item>Skype</item>
-        <item>QQ</item>
-        <item>Google Talk</item>
-        <item>ICQ</item>
-        <item>Jabber</item>
-    </string-array>
   <string name="phoneTypeCustom">Personalizado</string>
   <string name="phoneTypeHome">Página Principal</string>
   <string name="phoneTypeMobile">Móvel</string>
@@ -749,8 +706,8 @@
   <string name="lockscreen_low_battery">Conecte seu carregador.</string>
   <string name="lockscreen_missing_sim_message_short">sem Cartão SIM</string>
   <string name="lockscreen_blocked_sim_message_short">Cartão SIM está bloqueado.</string>
-  <string product="tablet" name="lockscreen_missing_sim_message">Não há cartão SIM no tablet.</string>
-  <string product="default" name="lockscreen_missing_sim_message">Não há cartão SIM no telefone</string>
+  <string name="lockscreen_missing_sim_message" product="tablet">Não há cartão SIM no tablet.</string>
+  <string name="lockscreen_missing_sim_message" product="default">Não há cartão SIM no telefone</string>
   <string name="lockscreen_missing_sim_instructions">Inserindo um cartão microSD</string>
   <string name="lockscreen_missing_sim_instructions_long">O cartão SIM está ausente ou não legível. Insira um cartão SIM.</string>
   <string name="lockscreen_permanent_disabled_sim_message_short">Cartão SIM inválido.</string>
@@ -760,7 +717,7 @@
   <string name="lockscreen_transport_pause_description">Botão de pausa</string>
   <string name="lockscreen_transport_play_description">Botão de reprodução</string>
   <string name="lockscreen_transport_stop_description">Botão parar</string>
-  <string msgid="2485604591272668370" name="emergency_calls_only">Só chamadas de emergência</string>
+  <string name="emergency_calls_only" msgid="2485604591272668370">Só chamadas de emergência</string>
   <string name="lockscreen_network_locked_message">Rede bloqueada</string>
   <string name="lockscreen_sim_puk_locked_message">Cartão SIM está bloqueado pelo PUK.</string>
   <string name="lockscreen_sim_puk_locked_instructions">Consulte o Guia do Usuário ou entre em contato com o  Atendimento ao Cliente.</string>
@@ -791,8 +748,8 @@
   <string name="granularity_label_word">Palavra</string>
   <string name="granularity_label_link">Link</string>
   <string name="granularity_label_line">Linha</string>
-  <string name="hour_ampm">"<xliff:g id="hour" example="3">%-l</xliff:g><xliff:g id="ampm" example="pm">%P</xliff:g>"</string>
-  <string name="hour_cap_ampm">"<xliff:g id="hour" example="3">%-l</xliff:g><xliff:g id="ampm" example="pm">%P</xliff:g>"</string>
+  <string name="hour_ampm">"<xliff:g example="3" id="hour">%-l</xliff:g><xliff:g example="pm" id="ampm">%P</xliff:g>"</string>
+  <string name="hour_cap_ampm">"<xliff:g example="3" id="hour">%-l</xliff:g><xliff:g example="pm" id="ampm">%P</xliff:g>"</string>
   <string name="factorytest_failed">Teste de fábrica falhou</string>
   <string name="factorytest_not_system">A ação  FACTORY_TEST é suportado somente para pacotes instalados no /sistema/apllicativo.</string>
   <string name="factorytest_no_action">Não foi encontrado nenhum pacote que fornece a ação FACTORY_TEST</string>
@@ -864,9 +821,9 @@
   <string name="permlab_readHistoryBookmarks">Ler seus favoritos da internet e histórico</string>
   <string name="permdesc_readHistoryBookmarks">Permite que o aplicativo leia a história de todas as URLs visitadas pelo navegador, e todos os favoritos do Navegador. Nota: essa permissão não pode ser executada por navegadores de terceiros ou outras aplicações com capacidades de navegação na web.</string>
   <string name="permlab_writeHistoryBookmarks">Escrever para o seu fluxo social</string>
-  <string product="tablet" name="permdesc_writeHistoryBookmarks">Permite que o aplicativo modifique o histórico do Navegador ou os favoritos armazenados em seu tablet.
+  <string name="permdesc_writeHistoryBookmarks" product="tablet">Permite que o aplicativo modifique o histórico do Navegador ou os favoritos armazenados em seu tablet.
         Isso pode permitir que o aplicativo apague ou modifique os dados do navegador.  Nota: essa permissão não pode ser executada por navegadores de terceiros ou outras aplicações com capacidades de navegação na web.</string>
-  <string product="default" name="permdesc_writeHistoryBookmarks">Permite que o aplicativo modifique o histórico do Navegador ou os favoritos armazenados em seu telefone.
+  <string name="permdesc_writeHistoryBookmarks" product="default">Permite que o aplicativo modifique o histórico do Navegador ou os favoritos armazenados em seu telefone.
         Isso pode permitir que o aplicativo apague ou modifique os dados do navegador.  Nota:
         essa permissão não pode ser executada por navegadores de terceiros ou outras aplicações com capacidades de navegação na web.</string>
   <string name="permlab_setAlarm">Definir um alarme</string>
@@ -905,78 +862,11 @@
   <string name="enable_explore_by_touch_warning_title">Ativar Explorar pelo toque?</string>
   <string name="oneMonthDurationPast">1 mês atrás</string>
   <string name="beforeOneMonthDurationPast">Antes de 1 mês atrás</string>
-  <plurals name="num_seconds_ago">
-        <item quantity="one">1 segundo atrás</item>
-        <item quantity="other"><xliff:g id="count">%d</xliff:g> segundos atrás</item>
-    </plurals>
-  <plurals name="num_minutes_ago">
-        <item quantity="one">1 min atrás</item>
-        <item quantity="other"><xliff:g id="count">%d</xliff:g> mins atrás</item>
-    </plurals>
-  <plurals name="num_hours_ago">
-        <item quantity="one">1 hora atrás</item>
-        <item quantity="other"><xliff:g id="count">%d</xliff:g> horas</item>
-    </plurals>
-  <plurals name="last_num_days">
-        <item quantity="other">Anterior<xliff:g id="count">%d</xliff:g> dias</item>
-    </plurals>
   <string name="last_month">Mês anterior</string>
   <string name="older">Mais antigo</string>
-  <plurals name="num_days_ago">
-        <item quantity="one">ontem</item>
-        <item quantity="other"><xliff:g id="count">%d</xliff:g> dias atrás</item>
-    </plurals>
-  <plurals name="in_num_seconds">
-        <item quantity="one">em 1 segundo</item>
-        <item quantity="other">em <xliff:g id="count">%d</xliff:g> segundos</item>
-    </plurals>
-  <plurals name="in_num_minutes">
-        <item quantity="one">em 1 min</item>
-        <item quantity="other">em <xliff:g id="count">%d</xliff:g> mins</item>
-    </plurals>
-  <plurals name="in_num_hours">
-        <item quantity="one">em 1 hora</item>
-        <item quantity="other">in <xliff:g id="count">%d</xliff:g> horas</item>
-    </plurals>
-  <plurals name="in_num_days">
-        <item quantity="one">Amanhã</item>
-        <item quantity="other">in <xliff:g id="count">%d</xliff:g> dias</item>
-    </plurals>
-  <plurals name="abbrev_num_seconds_ago">
-        <item quantity="one">1 segundo atrás</item>
-        <item quantity="other"><xliff:g id="count">%d</xliff:g> segundos atrás</item>
-    </plurals>
-  <plurals name="abbrev_num_minutes_ago">
-        <item quantity="one">1 min atrás</item>
-        <item quantity="other"><xliff:g id="count">%d</xliff:g> mins atrás</item>
-    </plurals>
-  <plurals name="abbrev_num_hours_ago">
-        <item quantity="one">1 hora atrás</item>
-        <item quantity="other"><xliff:g id="count">%d</xliff:g> horas</item>
-    </plurals>
-  <plurals name="abbrev_num_days_ago">
-        <item quantity="one">ontem</item>
-        <item quantity="other"><xliff:g id="count">%d</xliff:g> dias atrás</item>
-    </plurals>
-  <plurals name="abbrev_in_num_seconds">
-        <item quantity="one">em 1 segundo</item>
-        <item quantity="other">em <xliff:g id="count">%d</xliff:g> segundos</item>
-    </plurals>
-  <plurals name="abbrev_in_num_minutes">
-        <item quantity="one">em 1 min</item>
-        <item quantity="other">em <xliff:g id="count">%d</xliff:g> mins</item>
-    </plurals>
-  <plurals name="abbrev_in_num_hours">
-        <item quantity="one">em 1 hora</item>
-        <item quantity="other">in <xliff:g id="count">%d</xliff:g> horas</item>
-    </plurals>
-  <plurals name="abbrev_in_num_days">
-        <item quantity="one">Amanhã</item>
-        <item quantity="other">in <xliff:g id="count">%d</xliff:g> dias</item>
-    </plurals>
-  <string name="preposition_for_date">ligado <xliff:g id="date" example="May 29">%s</xliff:g></string>
-  <string name="preposition_for_time">em <xliff:g id="time" example="2:33 am">%s</xliff:g></string>
-  <string name="preposition_for_year">em <xliff:g id="year" example="2003">%s</xliff:g></string>
+  <string name="preposition_for_date">ligado <xliff:g example="May 29" id="date">%s</xliff:g></string>
+  <string name="preposition_for_time">em <xliff:g example="2:33 am" id="time">%s</xliff:g></string>
+  <string name="preposition_for_year">em <xliff:g example="2003" id="year">%s</xliff:g></string>
   <string name="day">Dia</string>
   <string name="days">dias</string>
   <string name="hour">hora</string>
@@ -993,13 +883,13 @@
   <string name="VideoView_error_text_invalid_progressive_playback">Este vídeo não é válido pela transmissão para este dispositivo.</string>
   <string name="VideoView_error_text_unknown">Não foi possível exibir este vídeo.</string>
   <string name="VideoView_error_button">OK</string>
-  <string name="relative_time">"<xliff:g id="date" example="4 hours ago">%1$s</xliff:g>, <xliff:g id="time" example="11:00 am">%2$s</xliff:g>"</string>
+  <string name="relative_time">"<xliff:g example="4 hours ago" id="date">%1$s</xliff:g>, <xliff:g example="11:00 am" id="time">%2$s</xliff:g>"</string>
   <string name="noon">"meio-dia"</string>
   <string name="Noon">"meio-dia"</string>
   <string name="midnight">"meia-noite"</string>
   <string name="Midnight">"meia-noite"</string>
-  <string name="elapsed_time_short_format_mm_ss"><xliff:g id="minutes" example="1">%1$02d</xliff:g>:<xliff:g id="seconds" example="23">%2$02d</xliff:g></string>
-  <string name="elapsed_time_short_format_h_mm_ss"><xliff:g id="hours" example="1">%1$d</xliff:g>:<xliff:g id="minutes" example="43">%2$02d</xliff:g>:<xliff:g id="seconds" example="33">%3$02d</xliff:g></string>
+  <string name="elapsed_time_short_format_mm_ss"><xliff:g example="1" id="minutes">%1$02d</xliff:g>:<xliff:g example="23" id="seconds">%2$02d</xliff:g></string>
+  <string name="elapsed_time_short_format_h_mm_ss"><xliff:g example="1" id="hours">%1$d</xliff:g>:<xliff:g example="43" id="minutes">%2$02d</xliff:g>:<xliff:g example="33" id="seconds">%3$02d</xliff:g></string>
   <string name="selectAll">Selecionar tudo</string>
   <string name="cut">Cortar</string>
   <string name="copy">Copiar</string>
@@ -1050,8 +940,8 @@
   <string name="smv_process">O processo <xliff:g id="process">%1$s</xliff:g> violou sua política do modo auto-imposta.</string>
   <string name="android_upgrading_title">Android está atualizando \ u2026</string>
   <string name="android_upgrading_apk">Otimizando aplicativo
-        <xliff:g id="number" example="123">%1$d</xliff:g> of
-        <xliff:g id="number" example="123">%2$d</xliff:g>.</string>
+        <xliff:g example="123" id="number">%1$d</xliff:g> of
+        <xliff:g example="123" id="number">%2$d</xliff:g>.</string>
   <string name="android_upgrading_starting_apps">Iniciando aplicativos.</string>
   <string name="android_upgrading_complete">Terminando inicialização.</string>
   <string name="heavy_weight_notification"><xliff:g id="app">%1$s</xliff:g> executando</string>
@@ -1082,14 +972,6 @@
   <string name="ringtone_silent">Silencioso</string>
   <string name="ringtone_picker_title">Toques</string>
   <string name="ringtone_unknown">Toque desconhecido</string>
-  <plurals name="wifi_available">
-        <item quantity="one">Rede WLAN disponível</item>
-        <item quantity="other">Redes WLAN disponíveis</item>
-    </plurals>
-  <plurals name="wifi_available_detailed">
-        <item quantity="one">Abrir rede WLAN disponível</item>
-        <item quantity="other">Abrir rede WLAN disponível</item>
-    </plurals>
   <string name="wifi_available_sign_in">Entrar na rede WLAN</string>
   <string name="wifi_available_sign_in_detailed">
     <xliff:g id="wifi_network_ssid">%1$s</xliff:g>
@@ -1134,23 +1016,23 @@
     <b>Mostrar todos</b>
   </string>
   <string name="perms_new_perm_prefix">
-    <font fgcolor="#ff900000" size="12">NEW: </font>
+    <font size="12" fgcolor="#ff900000">NEW: </font>
   </string>
   <string name="perms_description_app">Fornecido por <xliff:g id="app_name">%1$s</xliff:g>.</string>
   <string name="usb_storage_activity_title">Armazenamento de massa USB</string>
   <string name="usb_storage_title">USB conectado</string>
-  <string product="nosdcard" name="usb_storage_message">Você estava conectado a um computador através do USB. Toque no botão abaixo se você quiser copiar arquivos entre o computador e o armazenamento USB do seu Android.</string>
-  <string product="default" name="usb_storage_message">Você estava conectado a um computador através do USB. Toque no botão abaixo se você quiser copiar arquivos entre o computador e o cartão SD do seu Android.</string>
+  <string name="usb_storage_message" product="nosdcard">Você estava conectado a um computador através do USB. Toque no botão abaixo se você quiser copiar arquivos entre o computador e o armazenamento USB do seu Android.</string>
+  <string name="usb_storage_message" product="default">Você estava conectado a um computador através do USB. Toque no botão abaixo se você quiser copiar arquivos entre o computador e o cartão SD do seu Android.</string>
   <string name="usb_storage_button_mount">Ativar o armazenamento USB</string>
-  <string product="nosdcard" name="usb_storage_error_message">Há um problema de uso com o seu armazenamento USB para armazenamento de massa USB.</string>
-  <string product="default" name="usb_storage_error_message">Há um problema de uso com o seu cartão SD para armazenamento de massa USB.</string>
+  <string name="usb_storage_error_message" product="nosdcard">Há um problema de uso com o seu armazenamento USB para armazenamento de massa USB.</string>
+  <string name="usb_storage_error_message" product="default">Há um problema de uso com o seu cartão SD para armazenamento de massa USB.</string>
   <string name="usb_storage_notification_title">USB conectado</string>
   <string name="usb_storage_notification_message">Tocar para copiar arquivos para/ do seu computador.</string>
   <string name="usb_storage_stop_notification_title">Desativar o armazenamento USB</string>
   <string name="usb_storage_stop_notification_message">Tocar para desligar o armazenamento USB.</string>
   <string name="usb_storage_stop_title">Armazenamento USB em uso</string>
-  <string product="nosdcard" name="usb_storage_stop_message">Antes de desligar o armazenamento USB, (\"retire\") o armazenamento Android USB do seu computador.</string>
-  <string product="default" name="usb_storage_stop_message">Antes de desligar o armazenamento USB, retire o cartão  SD Android do seu computador.</string>
+  <string name="usb_storage_stop_message" product="nosdcard">Antes de desligar o armazenamento USB, (\"retire\") o armazenamento Android USB do seu computador.</string>
+  <string name="usb_storage_stop_message" product="default">Antes de desligar o armazenamento USB, retire o cartão  SD Android do seu computador.</string>
   <string name="usb_storage_stop_button_mount">Desativar o armazenamento USB</string>
   <string name="usb_storage_stop_error_message">Houve um problema ao desligar o armazenamento USB. Verifique se você desmembrou o host USB, e em seguida tente novamente.</string>
   <string name="dlg_confirm_kill_storage_users_title">Ativar o armazenamento USB</string>
@@ -1163,10 +1045,10 @@
   <string name="usb_accessory_notification_title">Conectado a um acessório USB</string>
   <string name="usb_cdrom_notification_title">Motorista virtual está em</string>
   <string name="usb_notification_message">Tocar para outras opções USB.</string>
-  <string product="nosdcard" name="extmedia_format_title">Formato de armazenamento USB?</string>
-  <string product="default" name="extmedia_format_title">Formatar o cartão SD?</string>
-  <string product="nosdcard" name="extmedia_format_message">Todos os arquivos armazenados em seu cartão USB serão apagados. Esta ação não pode ser revertida!</string>
-  <string product="default" name="extmedia_format_message">Todos os dados do cartão serão perdidos.</string>
+  <string name="extmedia_format_title" product="nosdcard">Formato de armazenamento USB?</string>
+  <string name="extmedia_format_title" product="default">Formatar o cartão SD?</string>
+  <string name="extmedia_format_message" product="nosdcard">Todos os arquivos armazenados em seu cartão USB serão apagados. Esta ação não pode ser revertida!</string>
+  <string name="extmedia_format_message" product="default">Todos os dados do cartão serão perdidos.</string>
   <string name="extmedia_format_button_format">Formato</string>
   <string name="adb_active_notification_title">Depuração USB conectado</string>
   <string name="adb_active_notification_message">Tocar para desativar a depuração USB.</string>
@@ -1181,29 +1063,29 @@
   <string name="candidates_style">
     <u>candidatos</u>
   </string>
-  <string product="nosdcard" name="ext_media_checking_notification_title">Preparando armazenamento USB</string>
-  <string product="default" name="ext_media_checking_notification_title">Preparando cartão SD</string>
+  <string name="ext_media_checking_notification_title" product="nosdcard">Preparando armazenamento USB</string>
+  <string name="ext_media_checking_notification_title" product="default">Preparando cartão SD</string>
   <string name="ext_media_checking_notification_message">Verificação de erros.</string>
-  <string product="nosdcard" name="ext_media_nofs_notification_title">Armazenamento USB em branco</string>
-  <string product="default" name="ext_media_nofs_notification_title">Cartão SD em branco</string>
-  <string product="nosdcard" name="ext_media_nofs_notification_message">Armazenamento USB está em branco ou possui sistema de arquivo não suportado.</string>
-  <string product="default" name="ext_media_nofs_notification_message">Cartão SD está em branco ou não suportou o sistema dos arquivos.</string>
-  <string product="nosdcard" name="ext_media_unmountable_notification_title">Armazenamento USB danificado</string>
-  <string product="default" name="ext_media_unmountable_notification_title">Cartão SD danificado</string>
-  <string product="nosdcard" name="ext_media_unmountable_notification_message">Armazenamento USB está danificado. Tente formatá-lo.</string>
-  <string product="default" name="ext_media_unmountable_notification_message">Cartão SD está danificado. Tente formatá-lo.</string>
-  <string product="nosdcard" name="ext_media_badremoval_notification_title">Armazenamento USB removido inesperadamente.</string>
-  <string product="default" name="ext_media_badremoval_notification_title">Cartão SD removido inesperadamente.</string>
-  <string product="nosdcard" name="ext_media_badremoval_notification_message">Desfazer armazenamento USB antes de remover para evitar perda dos dados.</string>
-  <string product="default" name="ext_media_badremoval_notification_message">Desfazer cartão SD antes de remover para evitar perda dos dados.</string>
-  <string product="nosdcard" name="ext_media_safe_unmount_notification_title">Armazenamento USB seguro para remover</string>
-  <string product="default" name="ext_media_safe_unmount_notification_title">Cartão SD seguro para remover</string>
-  <string product="nosdcard" name="ext_media_safe_unmount_notification_message">Você pode remover com segurança o armazenamento USB.</string>
-  <string product="default" name="ext_media_safe_unmount_notification_message">Você pode remover com segurança o cartão SD.</string>
-  <string product="nosdcard" name="ext_media_nomedia_notification_title">Removido do armazenamento USB</string>
-  <string product="default" name="ext_media_nomedia_notification_title">Removido do cartão SD</string>
-  <string product="nosdcard" name="ext_media_nomedia_notification_message">Armazenamento USB removido. Inserir nova mídia.</string>
-  <string product="default" name="ext_media_nomedia_notification_message">Cartão SD removido. Insira um novo.</string>
+  <string name="ext_media_nofs_notification_title" product="nosdcard">Armazenamento USB em branco</string>
+  <string name="ext_media_nofs_notification_title" product="default">Cartão SD em branco</string>
+  <string name="ext_media_nofs_notification_message" product="nosdcard">Armazenamento USB está em branco ou possui sistema de arquivo não suportado.</string>
+  <string name="ext_media_nofs_notification_message" product="default">Cartão SD está em branco ou não suportou o sistema dos arquivos.</string>
+  <string name="ext_media_unmountable_notification_title" product="nosdcard">Armazenamento USB danificado</string>
+  <string name="ext_media_unmountable_notification_title" product="default">Cartão SD danificado</string>
+  <string name="ext_media_unmountable_notification_message" product="nosdcard">Armazenamento USB está danificado. Tente formatá-lo.</string>
+  <string name="ext_media_unmountable_notification_message" product="default">Cartão SD está danificado. Tente formatá-lo.</string>
+  <string name="ext_media_badremoval_notification_title" product="nosdcard">Armazenamento USB removido inesperadamente.</string>
+  <string name="ext_media_badremoval_notification_title" product="default">Cartão SD removido inesperadamente.</string>
+  <string name="ext_media_badremoval_notification_message" product="nosdcard">Desfazer armazenamento USB antes de remover para evitar perda dos dados.</string>
+  <string name="ext_media_badremoval_notification_message" product="default">Desfazer cartão SD antes de remover para evitar perda dos dados.</string>
+  <string name="ext_media_safe_unmount_notification_title" product="nosdcard">Armazenamento USB seguro para remover</string>
+  <string name="ext_media_safe_unmount_notification_title" product="default">Cartão SD seguro para remover</string>
+  <string name="ext_media_safe_unmount_notification_message" product="nosdcard">Você pode remover com segurança o armazenamento USB.</string>
+  <string name="ext_media_safe_unmount_notification_message" product="default">Você pode remover com segurança o cartão SD.</string>
+  <string name="ext_media_nomedia_notification_title" product="nosdcard">Removido do armazenamento USB</string>
+  <string name="ext_media_nomedia_notification_title" product="default">Removido do cartão SD</string>
+  <string name="ext_media_nomedia_notification_message" product="nosdcard">Armazenamento USB removido. Inserir nova mídia.</string>
+  <string name="ext_media_nomedia_notification_message" product="default">Cartão SD removido. Insira um novo.</string>
   <string name="activity_list_empty">Atividades correspondentes não encontradas.</string>
   <string name="permlab_pkgUsageStats">Estatísticas de uso do componente de atualização</string>
   <string name="permdesc_pkgUsageStats">Permite que o aplicativo modifique as estatísticas de uso de componentes recolhidos. Não deve ser usado por aplicativos normais.</string>
@@ -1220,15 +1102,15 @@
   <string name="ime_action_done">Concluído</string>
   <string name="ime_action_previous">Anterior</string>
   <string name="ime_action_default">Executar</string>
-  <string name="dial_number_using">Disque o número de \ nusing <xliff:g id="number" example="555">%s</xliff:g></string>
-  <string name="create_contact_using">Criar contato \ nusing <xliff:g id="number" example="555">%s</xliff:g></string>
+  <string name="dial_number_using">Disque o número de \ nusing <xliff:g example="555" id="number">%s</xliff:g></string>
+  <string name="create_contact_using">Criar contato \ nusing <xliff:g example="555" id="number">%s</xliff:g></string>
   <string name="grant_credentials_permission_message_header">Um ou mais dos seguintes aplicativos solicitam permissão para acessar a sua conta, agora e no futuro.</string>
   <string name="grant_credentials_permission_message_footer">Você quer permitir este pedido?</string>
   <string name="grant_permissions_header_text">Pedido de acesso</string>
   <string name="allow">Permitir</string>
   <string name="deny">Negar</string>
   <string name="permission_request_notification_title">Permissão solicitada</string>
-  <string name="permission_request_notification_with_subtitle">Permissão solicitada/n por uma conta <xliff:g exemplo="foo@gmail.com" id="account">%s</xliff:g>.</string>
+  <string name="permission_request_notification_with_subtitle">Permissão solicitada/n por uma conta <xliff:g id="account" exemplo="foo@gmail.com">%s</xliff:g>.</string>
   <string name="input_method_binding_label">Métode de introdução</string>
   <string name="sync_binding_label">Sincronizar</string>
   <string name="accessibility_binding_label">Acessibilidade</string>
@@ -1236,9 +1118,9 @@
   <string name="chooser_wallpaper">Alterar papel de parede</string>
   <string name="alternate_eri_file">/data/eri.xml</string>
   <string name="vpn_title">VPN ativado</string>
-  <string name="vpn_title_long">VPN está ativado pelo <xliff:g id="app" example="FooVPN client">%s</xliff:g></string>
+  <string name="vpn_title_long">VPN está ativado pelo <xliff:g example="FooVPN client" id="app">%s</xliff:g></string>
   <string name="vpn_text">Tocar para gerenciar a rede.</string>
-  <string name="vpn_text_long">Conectado a <xliff:g id="session" example="office">%s</xliff:g> . Toque para gerenciar a rede.</string>
+  <string name="vpn_text_long">Conectado a <xliff:g example="office" id="session">%s</xliff:g> . Toque para gerenciar a rede.</string>
   <string name="upload_file">Escolher arquivo</string>
   <string name="no_file_chosen">Nenhum arquivo escolhido</string>
   <string name="reset">Redefinir</string>
@@ -1270,31 +1152,21 @@
   <string name="myAppProcessing">Processamento\u2026</string>
   <string name="no_matches">No matches</string>
   <string name="find_on_page">Localizar na página</string>
-  <plurals name="matches_found">
-        <!-- Case of one match -->
-        <!-- Modify Spreadst of 129900 can't show whole information on webpage start -->
-        <!-- <item quantity="one">1 match</item> -->
-        <!-- Case of multiple total matches -->
-        <!-- <item quantity="other"><xliff:g id="index" example="2">%d</xliff:g> of <xliff:g id="total" example="137">%d</xliff:g></item> -->
-        <item quantity="one">1/1</item>
-        <item quantity="other"><xliff:g id="index" example="2">%d</xliff:g>/<xliff:g id="total" example="137">%d</xliff:g></item>
-        <!-- Modify Spreadst of 129900 can't show whole information on webpage end -->
-    </plurals>
   <string name="stk_refresh_sim_init_message">Cartão SIM está atualizando</string>
   <string name="stk_refresh_sim_reset_message">Telefone irá reiniciar</string>
   <string name="action_mode_done">Concluído</string>
-  <string product="nosdcard" name="progress_unmounting">Desfazendo armazenamento USB\u2026</string>
-  <string product="default" name="progress_unmounting">Desfazendo cartão SD\u2026</string>
-  <string product="nosdcard" name="progress_erasing">Apagando armazenamento USB \ u2026</string>
-  <string product="default" name="progress_erasing">Apagando cartão SD \ u2026</string>
-  <string product="nosdcard" name="format_error">Não foi possível apagar armazenamento USB.</string>
-  <string product="default" name="format_error">Não foi possível apagar cartão SD.</string>
+  <string name="progress_unmounting" product="nosdcard">Desfazendo armazenamento USB\u2026</string>
+  <string name="progress_unmounting" product="default">Desfazendo cartão SD\u2026</string>
+  <string name="progress_erasing" product="nosdcard">Apagando armazenamento USB \ u2026</string>
+  <string name="progress_erasing" product="default">Apagando cartão SD \ u2026</string>
+  <string name="format_error" product="nosdcard">Não foi possível apagar armazenamento USB.</string>
+  <string name="format_error" product="default">Não foi possível apagar cartão SD.</string>
   <string name="media_bad_removal">Cartão SD foi removido antes de ser desfeito.</string>
-  <string product="nosdcard" name="media_checking">Armazenamento USB está sendo verificado atualmente.</string>
-  <string product="default" name="media_checking">Cartão SD está sendo verificado atualmente.</string>
+  <string name="media_checking" product="nosdcard">Armazenamento USB está sendo verificado atualmente.</string>
+  <string name="media_checking" product="default">Cartão SD está sendo verificado atualmente.</string>
   <string name="media_removed">Cartão SD foi removido.</string>
-  <string product="nosdcard" name="media_shared">Armazenamento USB está atualmente em uso por um computador .</string>
-  <string product="default" name="media_shared">Cartão SD está atualmente em uso por um computador.</string>
+  <string name="media_shared" product="nosdcard">Armazenamento USB está atualmente em uso por um computador .</string>
+  <string name="media_shared" product="default">Cartão SD está atualmente em uso por um computador.</string>
   <string name="media_unknown_state">Mídia externa em estado desconhecido.</string>
   <string name="progress_unmounting1">Desfazendo armazenamento interno…</string>
   <string name="progress_erasing1">Apagando armazenamento interno ...</string>
@@ -1311,7 +1183,7 @@
   <string name="find_next_title">Seguinte</string>
   <string name="gpsNotifTicker">Pedido de localização de <xliff:g id="name">%s</xliff:g></string>
   <string name="gpsNotifTitle">Pedido de localização</string>
-  <string name="gpsNotifMessage">Solicitado pelo <xliff:g id="name">%1$s</xliff:g> (<xliff:g id="service" example="SUPL-service">%2$s</xliff:g>)</string>
+  <string name="gpsNotifMessage">Solicitado pelo <xliff:g id="name">%1$s</xliff:g> (<xliff:g example="SUPL-service" id="service">%2$s</xliff:g>)</string>
   <string name="gpsVerifYes">Sim</string>
   <string name="gpsVerifNo">Não</string>
   <string name="sync_too_many_deletes">Excluir limite excedido</string>
@@ -1324,7 +1196,7 @@
   <string name="add_account_button_label">Adicionar conta</string>
   <string name="number_picker_increment_button">Aumentar</string>
   <string name="number_picker_decrement_button">Diminuir</string>
-  <string name="number_picker_increment_scroll_mode"><xliff:g id="value" example="3">%s</xliff:g> toque e mantenha.</string>
+  <string name="number_picker_increment_scroll_mode"><xliff:g example="3" id="value">%s</xliff:g> toque e mantenha.</string>
   <string name="number_picker_increment_scroll_action">Deslize acima para acrescentar e abaixo para reduzir.</string>
   <string name="time_picker_increment_minute_button">Aumente minutos</string>
   <string name="time_picker_decrement_minute_button">Diminuir minutos</string>
@@ -1347,12 +1219,12 @@
   <string name="keyboardview_keycode_enter">Entrar</string>
   <string name="activitychooserview_choose_application">Escolha uma aplicação</string>
   <string name="shareactionprovider_share_with">Compartilhar com</string>
-  <string name="shareactionprovider_share_with_application">Compartilhar com <xliff:g id="application_name" example="Bluetooth">%s</xliff:g></string>
+  <string name="shareactionprovider_share_with_application">Compartilhar com <xliff:g example="Bluetooth" id="application_name">%s</xliff:g></string>
   <string name="content_description_sliding_handle">"Alça deslizante. Toque e segure. "</string>
-  <string name="description_direction_up">Deslize acima para <xliff:g id="target_description" example="Unlock">%s</xliff:g>.</string>
-  <string name="description_direction_down">Deslize abaixo para <xliff:g id="target_description" example="Unlock">%s</xliff:g>.</string>
-  <string name="description_direction_left">"Deslize para a esquerda para <xliff:g id="target_description" example="Unlock">%s</xliff:g>.</string>
-  <string name="description_direction_right">Deslize a direita para <xliff:g id="target_description" example="Unlock">%s</xliff:g>.</string>
+  <string name="description_direction_up">Deslize acima para <xliff:g example="Unlock" id="target_description">%s</xliff:g>.</string>
+  <string name="description_direction_down">Deslize abaixo para <xliff:g example="Unlock" id="target_description">%s</xliff:g>.</string>
+  <string name="description_direction_left">"Deslize para a esquerda para <xliff:g example="Unlock" id="target_description">%s</xliff:g>.</string>
+  <string name="description_direction_right">Deslize a direita para <xliff:g example="Unlock" id="target_description">%s</xliff:g>.</string>
   <string name="description_target_unlock">Desbloquear</string>
   <string name="description_target_camera">Câmara</string>
   <string name="description_target_silent">Silencioso</string>
@@ -1379,7 +1251,7 @@
   <string name="data_usage_4g_limit_snoozed_title">Dados 4G limite excedido</string>
   <string name="data_usage_mobile_limit_snoozed_title">Limite de dados móveis excedidos</string>
   <string name="data_usage_wifi_limit_snoozed_title">Excedido limite dos dados WLAN</string>
-  <string name="data_usage_limit_snoozed_body"><xliff:g id="size" example="3.8GB">%s</xliff:g> acima do limite especificado.</string>
+  <string name="data_usage_limit_snoozed_body"><xliff:g example="3.8GB" id="size">%s</xliff:g> acima do limite especificado.</string>
   <string name="data_usage_restricted_title">Dados em segundo plano restrito</string>
   <string name="data_usage_restricted_body">Tocar para remover restrição.</string>
   <string name="ssl_certificate">Certificado de segurança</string>
@@ -1406,8 +1278,8 @@
   <string name="SetupCallDefault">Atender chamada?</string>
   <string name="activity_resolver_use_always">Sempre</string>
   <string name="activity_resolver_use_once">só uma vez</string>
-  <string product="tablet" name="default_audio_route_name">Tablet</string>
-  <string product="default" name="default_audio_route_name">Telefone</string>
+  <string name="default_audio_route_name" product="tablet">Tablet</string>
+  <string name="default_audio_route_name" product="default">Telefone</string>
   <string name="default_audio_route_name_headphones">Fones de ouvido</string>
   <string name="default_audio_route_name_dock_speakers">Alto-falantes Dock</string>
   <string name="default_audio_route_name_hdmi">Áudio HDMI</string>
@@ -1438,37 +1310,175 @@
         Você já entrou incorretamente o seu PIN por <xliff:g id="number">%d</xliff:g> vezes.
         \n\nTente de novo em <xliff:g id="number">%d</xliff:g> segundos.
     </string>
-  <string product="tablet" name="lockscreen_failed_attempts_almost_glogin">
+  <string name="lockscreen_failed_attempts_almost_glogin" product="tablet">
           Você já desenhou incorretamente o seu desenho de destrancar por <xliff:g id="number">%d</xliff:g> vezes.
         Depois de <xliff:g id="number">%d</xliff:g> mais não com sucesso,
         Você será perguntado para destrancar o seu tablete usando a sua conta de Google.\n\n
        Tente de novo em <xliff:g id="number">%d</xliff:g> segundos.
     </string>
-  <string product="default" name="lockscreen_failed_attempts_almost_glogin">
+  <string name="lockscreen_failed_attempts_almost_glogin" product="default">
          Você já desenhou incorretamente o seu desenho de destrancar por <xliff:g id="number">%d</xliff:g> vezes.
        Depois de <xliff:g id="number">%d</xliff:g> mais não com sucesso,
        Você será perguntado para destrancar o seu telefone usando a sua conta de Google.\n\n
        Tente de novo em <xliff:g id="number">%d</xliff:g> segundos.
     </string>
-  <string product="tablet" name="lockscreen_failed_attempts_almost_at_wipe">
+  <string name="lockscreen_failed_attempts_almost_at_wipe" product="tablet">
        Você já entrou incorretamente por <xliff:g id="number">%d</xliff:g> vezes para destrancar o seu tablete.
        Depois de <xliff:g id="number">%d</xliff:g> mais não com sucesso,
        o tablete será reajustado para o default de fábrica e todos os dados de usuário serão perdidos.</string>
-  <string product="default" name="lockscreen_failed_attempts_almost_at_wipe">
+  <string name="lockscreen_failed_attempts_almost_at_wipe" product="default">
        Você já entrou incorretamente por <xliff:g id="number">%d</xliff:g> vezes para destrancar o seu telefone.
        Depois de <xliff:g id="number">%d</xliff:g> mais vezes não com sucesso,
        o telefone será reajustado para default de fábrica e todos os dados de usuário serão perdidos.</string>
-  <string product="tablet" name="lockscreen_failed_attempts_now_wiping">
+  <string name="lockscreen_failed_attempts_now_wiping" product="tablet">
        Você já entrou incorretamente por <xliff:g id="number">%d</xliff:g> vezes para destrancar o seu tablete.
        O tablete será reajustado agora para o default de fábrica.</string>
-  <string product="default" name="lockscreen_failed_attempts_now_wiping">
+  <string name="lockscreen_failed_attempts_now_wiping" product="default">
        Você já entrou incorretamente por <xliff:g id="number">%d</xliff:g> vezes para destrancar o seu telefone.
        O telefone será reajustado para default de fábrica.
     </string>
-  <string product="tablet" name="enable_explore_by_touch_warning_message">
+  <string name="enable_explore_by_touch_warning_message" product="tablet">
             <xliff:g id="accessibility_service_name">%1$s</xliff:g> quer permitir Explorar por Toque.
             Quando Explorar por Toque é ligado, você pode ouvir ou ver as descrições de o que sub o seu dedo ou realizar os gestos para interagir com o tablete.</string>
-  <string product="default" name="enable_explore_by_touch_warning_message">
+  <string name="enable_explore_by_touch_warning_message" product="default">
             <xliff:g id="accessibility_service_name">%1$s</xliff:g> quer permitir Explorar por Toque.
             Quando Explorar por Toque é ligado, você pode ouvir ou ver as descrições de o que sub o seu dedo ou realizar os gestos para interagir com o telefone.</string>
+  <string-array name="phoneTypes">
+        <item>"Página Principal"</item>
+        <item>"Móvel"</item>
+        <item>"Palavra"</item>
+        <item>"Fax do trabalho"</item>
+        <item>"Fax de Casa"</item>
+        <item>"Pager"</item>
+        <item>"Outros"</item>
+        <item>"Personalizado"</item>
+    </string-array>
+  <string-array name="emailAddressTypes">
+        <item>"Página Principal"</item>
+        <item>"Trabalho"</item>
+        <item>"Outros"</item>
+        <item>"Personalizado"</item>
+    </string-array>
+  <string-array name="postalAddressTypes">
+        <item>"Página Principal"</item>
+        <item>"Trabalho"</item>
+        <item>"Outros"</item>
+        <item>"Personalizado"</item>
+    </string-array>
+  <string-array name="imAddressTypes">
+        <item>"Página Principal"</item>
+        <item>"Trabalho"</item>
+        <item>"Outros"</item>
+        <item>"Personalizado"</item>
+    </string-array>
+  <string-array name="organizationTypes">
+        <item>"Trabalho"</item>
+        <item>"Outros"</item>
+        <item>"Personalizado"</item>
+    </string-array>
+  <string-array name="imProtocols">
+        <item>"APONTAR"</item>
+        <item>"Windows Live"</item>
+        <item>"Yahoo"</item>
+        <item>"Skype"</item>
+        <item>"QQ"</item>
+        <item>"Google Talk"</item>
+        <item>"ICQ"</item>
+        <item>"Jabber"</item>
+    </string-array>
+  <plurals name="num_seconds_ago">
+        <item quantity="one">"1 segundo atrás"</item>
+        <item quantity="other">"<xliff:g id="count">%d</xliff:g> segundos atrás"</item>
+    </plurals>
+  <plurals name="num_minutes_ago">
+        <item quantity="one">"1 min atrás"</item>
+        <item quantity="other">"<xliff:g id="count">%d</xliff:g> mins atrás"</item>
+    </plurals>
+  <plurals name="num_hours_ago">
+        <item quantity="one">"1 hora atrás"</item>
+        <item quantity="other">"<xliff:g id="count">%d</xliff:g> horas"</item>
+    </plurals>
+  <plurals name="last_num_days">
+        <item quantity="other">"Anterior<xliff:g id="count">%d</xliff:g> dias"</item>
+    </plurals>
+  <plurals name="num_days_ago">
+        <item quantity="one">"ontem"</item>
+        <item quantity="other">"<xliff:g id="count">%d</xliff:g> dias atrás"</item>
+    </plurals>
+  <plurals name="in_num_seconds">
+        <item quantity="one">"em 1 segundo"</item>
+        <item quantity="other">"em <xliff:g id="count">%d</xliff:g> segundos"</item>
+    </plurals>
+  <plurals name="in_num_minutes">
+        <item quantity="one">"em 1 min"</item>
+        <item quantity="other">"em <xliff:g id="count">%d</xliff:g> mins"</item>
+    </plurals>
+  <plurals name="in_num_hours">
+        <item quantity="one">"em 1 hora"</item>
+        <item quantity="other">"in <xliff:g id="count">%d</xliff:g> horas"</item>
+    </plurals>
+  <plurals name="in_num_days">
+        <item quantity="one">"Amanhã"</item>
+        <item quantity="other">"in <xliff:g id="count">%d</xliff:g> dias"</item>
+    </plurals>
+  <plurals name="abbrev_num_seconds_ago">
+        <item quantity="one">"1 segundo atrás"</item>
+        <item quantity="other">"<xliff:g id="count">%d</xliff:g> segundos atrás"</item>
+    </plurals>
+  <plurals name="abbrev_num_minutes_ago">
+        <item quantity="one">"1 min atrás"</item>
+        <item quantity="other">"<xliff:g id="count">%d</xliff:g> mins atrás"</item>
+    </plurals>
+  <plurals name="abbrev_num_hours_ago">
+        <item quantity="one">"1 hora atrás"</item>
+        <item quantity="other">"<xliff:g id="count">%d</xliff:g> horas"</item>
+    </plurals>
+  <plurals name="abbrev_num_days_ago">
+        <item quantity="one">"ontem"</item>
+        <item quantity="other">"<xliff:g id="count">%d</xliff:g> dias atrás"</item>
+    </plurals>
+  <plurals name="abbrev_in_num_seconds">
+        <item quantity="one">"em 1 segundo"</item>
+        <item quantity="other">"em <xliff:g id="count">%d</xliff:g> segundos"</item>
+    </plurals>
+  <plurals name="abbrev_in_num_minutes">
+        <item quantity="one">"em 1 min"</item>
+        <item quantity="other">"em <xliff:g id="count">%d</xliff:g> mins"</item>
+    </plurals>
+  <plurals name="abbrev_in_num_hours">
+        <item quantity="one">"em 1 hora"</item>
+        <item quantity="other">"in <xliff:g id="count">%d</xliff:g> horas"</item>
+    </plurals>
+  <plurals name="abbrev_in_num_days">
+        <item quantity="one">"Amanhã"</item>
+        <item quantity="other">"in <xliff:g id="count">%d</xliff:g> dias"</item>
+    </plurals>
+  <plurals name="wifi_available">
+        <item quantity="one">"Rede WLAN disponível"</item>
+        <item quantity="other">"Redes WLAN disponíveis"</item>
+    </plurals>
+  <plurals name="wifi_available_detailed">
+        <item quantity="one">"Abrir rede WLAN disponível"</item>
+        <item quantity="other">"Abrir rede WLAN disponível"</item>
+    </plurals>
+  <plurals name="matches_found">
+        <!-- Case of one match -->
+        <!-- Modify Spreadst of 129900 can't show whole information on webpage start -->
+        <!-- <item quantity="one">1 match</item> -->
+        <!-- Case of multiple total matches -->
+        <!-- <item quantity="other"><xliff:g id="index" example="2">%d</xliff:g> of <xliff:g id="total" example="137">%d</xliff:g></item> -->
+        <item quantity="one">"1/1"</item>
+        <item quantity="other">"<xliff:g example="2" id="index">%d</xliff:g>/<xliff:g example="137" id="total">%d</xliff:g>"</item>
+        <!-- Modify Spreadst of 129900 can't show whole information on webpage end -->
+    </plurals>
+  <string name="low_internal_storage_ignore">Ignorar</string>
+  <string name="low_internal_storage_display_details">Detalhes</string>
+  <string name="low_internal_storage_wait">"Espere…"</string>
+  <string name="low_internal_storage_updating_details">"Detalhes de atualização"</string>
+  <string name="emergency_call_no_service">Sem rede disponível</string>
+  <string name="usim_recommanded">Não Usando CUCC cartão</string>
+  <string name="usim_recommanded_for_cucc_app">CUCC app, Usim recomendado. Continua?</string>
+  <string name="pick_yes">Continuar</string>
+  <string name="pick_no">Cancelar</string>
+  <string name="language_automatic">"Automático"</string>
 </resources>

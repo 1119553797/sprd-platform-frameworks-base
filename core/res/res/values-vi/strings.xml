@@ -17,105 +17,104 @@
 ** limitations under the License.
 */
  -->
-<resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" xmlns:android="http://schemas.android.com/apk/res/android">
   <!-- no translation found for wifi_available_sign_in_detailed (6797764740339907572) -->
-  <string msgid="2625429890869005782" name="imei">"IMEI"</string>
-  <string msgid="4841221237681254195" name="meid">"MEID"</string>
-  <string msgid="319298163018473078" name="silent_mode_silent">"Tắt chuông"</string>
-  <string msgid="7072043388581551395" name="silent_mode_vibrate">"Chuông rung"</string>
-  <string msgid="8592241816194074353" name="silent_mode_ring">"Bật chuông"</string>
-  <string msgid="7054509914500140361" name="reboot_safemode_title">"Khởi động lại ở chế độ an toàn"</string>
-  <string msgid="55293944502784668" name="reboot_safemode_confirm">"Bạn có muốn khởi động lại ở chế độ an toàn không? Thao tác này sẽ tắt tất cả ứng dụng của bên thứ ba mà bạn đã cài đặt. Những ứng dụng này sẽ được khôi phục khi bạn khởi động lại một lần nữa."</string>
-  <string msgid="1598328843619646166" name="permlab_readCellBroadcasts">"đọc tin nhắn quảng bá"</string>
-  <string msgid="6361972776080458979" name="permdesc_readCellBroadcasts">"Cho phép ứng dụng đọc tin nhắn quảng bá mà thiết bị của bạn nhận được. Tin nhắn quảng bá cảnh báo được gửi ở một số địa điểm nhằm cảnh báo cho bạn về các tình huống khẩn cấp. Các ứng dụng độc hại có thể gây ảnh hưởng đến hiệu suất hoặc hoạt động của thiết bị của bạn khi nhận được tin nhắn quảng bá khẩn cấp."</string>
-  <string msgid="6229468674753529501" name="permlab_getDetailedTasks">"truy xuất chi tiết về các ứng dụng đang chạy"</string>
-  <string msgid="153824741440717599" name="permdesc_getDetailedTasks">"Cho phép ứng dụng truy xuất thông tin chi tiết về các tác vụ đã và đang chạy gần đây. Ứng dụng độc hại có thể phát hiện thông tin riêng tư về các ứng dụng khác."</string>
-  <string msgid="2918768238045206456" name="permlab_startAnyActivity">"bắt đầu mọi hoạt động"</string>
-  <string msgid="997823695343584001" name="permdesc_startAnyActivity">"Cho phép ứng dụng bắt đầu mọi hoạt động, bất kể tình trạng bảo vệ quyền hay trạng thái xuất."</string>
-  <string msgid="6975387118861842061" name="permlab_setScreenCompatibility">"đặt độ tương thích màn hình"</string>
-  <string msgid="692043618693917374" name="permdesc_setScreenCompatibility">"Cho phép ứng dụng kiểm soát chế độ tương thích màn hình của ứng dụng khác. Các ứng dụng độc hại có thể phá vỡ hoạt động của các ứng dụng khác."</string>
-  <string msgid="5357733942556031593" name="permlab_bindAccessibilityService">"liên kết với dịch vụ truy cập"</string>
-  <string msgid="7034615928609331368" name="permdesc_bindAccessibilityService">"Cho phép chủ sở hữu liên kết với giao diện cấp cao nhất của dịch vụ truy cập. Không cần thiết cho các ứng dụng thông thường."</string>
-  <string msgid="4778731703600909340" name="permlab_setKeyboardLayout">"thay đổi bố cục bàn phím"</string>
-  <string msgid="8480016771134175879" name="permdesc_setKeyboardLayout">"Cho phép các ứng dụng thay đổi bố cục bàn phím. Không bao giờ cần thiết cho các ứng dụng bình thường."</string>
-  <string msgid="8525189272329086137" product="tablet" name="permdesc_persistentActivity">"Cho phép ứng dụng tạo sự đồng nhất cho các phần của mình trong bộ nhớ. Việc này có thể hạn chế bộ nhớ đối với các ứng dụng khác đang làm chậm máy tính bảng."</string>
-  <string msgid="4384760047508278272" product="default" name="permdesc_persistentActivity">"Cho phép ứng dụng tạo sự đồng nhất cho các phần của mình trong bộ nhớ. Việc này có thể hạn chế bộ nhớ đối với các ứng dụng khác đang làm chậm điện thoại."</string>
-  <string msgid="4627315351093508795" name="permlab_grantRevokePermissions">"cấp hoặc thu hồi quyền"</string>
-  <string msgid="4088642654085850662" name="permdesc_grantRevokePermissions">"Cho phép ứng dụng cấp hoặc thu hồi quyền cụ thể đối với ứng dụng đó hoặc các ứng dụng khác. Các ứng dụng độc hại có thể lợi dụng điều này để truy cập các tính năng mà bạn không cấp."</string>
-  <string msgid="3478133184624102739" name="permlab_readCallLog">"đọc nhật ký cuộc gọi"</string>
-  <string msgid="3700645184870760285" product="tablet" name="permdesc_readCallLog">"Cho phép ứng dụng đọc nhật ký cuộc gọi của máy tính bảng của bạn, bao gồm dữ liệu về các cuộc gọi đến và gọi đi. Quyền này cho phép ứng dụng lưu dữ liệu nhật ký cuộc gọi cả bạn và các ứng dụng độc hại có thể chia sẻ dữ liệu nhật ký cuộc gọi mà bạn không biết."</string>
-  <string msgid="5777725796813217244" product="default" name="permdesc_readCallLog">"Cho phép ứng dụng đọc nhật ký cuộc gọi của điện thoại của bạn, bao gồm dữ liệu về các cuộc gọi đến và gọi đi. Quyền này cho phép ứng dụng lưu dữ liệu nhật ký cuộc gọi cả bạn và các ứng dụng độc hại có thể chia sẻ dữ liệu nhật ký cuộc gọi mà bạn không biết."</string>
-  <string msgid="8552045664743499354" name="permlab_writeCallLog">"ghi nhật ký cuộc gọi"</string>
-  <string msgid="6661806062274119245" product="tablet" name="permdesc_writeCallLog">"Cho phép ứng dụng sửa đổi nhật ký cuộc gọi trên máy tính bảng của bạn, bao gồm dữ liệu về các cuộc gọi đến và gọi đi. Các ứng dụng độc hại có thể sử dụng quyền này để xóa hoặc sửa đổi nhật ký cuộc gọi của bạn."</string>
-  <string msgid="683941736352787842" product="default" name="permdesc_writeCallLog">"Cho phép ứng dụng sửa đổi nhật ký cuộc gọi trên điện thoại của bạn, bao gồm dữ liệu về các cuộc gọi đến và gọi đi. Các ứng dụng độc hại có thể sử dụng quyền này để xóa hoặc sửa đổi nhật ký cuộc gọi của bạn."</string>
-  <string msgid="6679035520113668528" product="tablet" name="permdesc_writeCalendar">"Cho phép ứng dụng thêm, xóa, thay đổi các sự kiện mà bạn có thể sửa đổi trên máy tính bảng của mình, bao gồm những sự kiện của bạn bè hoặc đồng nghiệp. Việc này có thể cho phép ứng dụng gửi tin nhắn dường như đến từ chủ sở hữu lịch hoặc sửa đổi các sự kiện mà chủ sở hữu không biết."</string>
-  <string msgid="2324469496327249376" product="default" name="permdesc_writeCalendar">"Cho phép ứng dụng thêm, xóa, thay đổi các sự kiện mà bạn có thể sửa đổi trên điện thoại của mình, bao gồm những sự kiện của bạn bè hoặc đồng nghiệp. Việc này có thể cho phép ứng dụng gửi tin nhắn dường như đến từ chủ sở hữu lịch hoặc sửa đổi các sự kiện mà chủ sở hữu không biết."</string>
-  <string msgid="5383798877137640762" name="permdesc_accessCoarseLocation">"Truy cập vị trí gần đúng từ nhà cung cấp vị trí bằng cách sử dụng các tài nguyên mạng như tháp phát sóng và WLAN. Khi các dịch vụ định vị này sẵn có và được bật, quyền này cho phép ứng dụng xác định vị trí gần đúng của bạn."</string>
-  <string msgid="2927361537942591841" product="nosdcard" name="permlab_mount_unmount_filesystems">"truy cập hệ thống tệp của bộ lưu trữ USB"</string>
-  <string msgid="4402305049890953810" product="default" name="permlab_mount_unmount_filesystems">"truy cập hệ thống tệp Thẻ SD"</string>
-  <string msgid="6227819582624904972" product="nosdcard" name="permlab_mount_format_filesystems">"xóa bộ lưu trữ USB"</string>
-  <string msgid="262582698639274056" product="default" name="permlab_mount_format_filesystems">"xóa Thẻ SD"</string>
-  <string msgid="7969774021256336548" product="tablet" name="permdesc_changeWifiMulticastState">"Cho phép ứng dụng nhận các gói được gửi đến tất cả các thiết bị trên mạng WLAN các địa chỉ đa hướng, chứ không phải chỉ máy tính bảng của bạn. Chế độ này sử dụng nhiều năng lượng hơn chế độ không phát đa hướng."</string>
-  <string msgid="6851949706025349926" product="default" name="permdesc_changeWifiMulticastState">"Cho phép ứng dụng nhận các gói được gửi đến tất cả các thiết bị trên mạng WLAN các địa chỉ đa hướng, chứ không phải chỉ điện thoại của bạn. Chế độ này sử dụng nhiều năng lượng hơn chế độ không phát đa hướng."</string>
-  <string msgid="3156456504084201805" product="tablet" name="permdesc_changeWimaxState">"Cho phép ứng dụng kết nối máy tính bảng và ngắt kết nối máy tính bảng khỏi mạng WiMAX."</string>
-  <string msgid="697025043004923798" product="default" name="permdesc_changeWimaxState">"Cho phép ứng dụng kết nối điện thoại và ngắt kết nối điện thoại khỏi mạng WiMAX."</string>
-  <string msgid="8235341515605559677" product="nosdcard" name="permlab_sdcardRead">"kiểm tra quyền truy cập vào bộ nhớ được bảo vệ"</string>
-  <string msgid="8235341515605559677" product="default" name="permlab_sdcardRead">"kiểm tra quyền truy cập vào bộ nhớ được bảo vệ"</string>
-  <string msgid="5791957130190763289" product="nosdcard" name="permdesc_sdcardRead">"Cho phép ứng dụng kiểm tra quyền cho bộ lưu trữ USB trên các thiết bị trong tương lai."</string>
-  <string msgid="5914402684685848828" product="default" name="permdesc_sdcardRead">"Cho phép ứng dụng kiểm tra quyền cho thẻ SD sẽ các thiết bị trong tương lai."</string>
-  <string msgid="754137583022792429" name="faceunlock_multiple_failures">"Đã vượt quá số lần Mở khóa bằng khuôn mặt tối đa"</string>
-  <string msgid="5096149665138916184" name="lockscreen_permanent_disabled_sim_message_short">"Thẻ SIM không sử dụng được."</string>
-  <string msgid="7336470535385009523" name="granularity_label_character">"ký tự"</string>
-  <string msgid="7075570328374918660" name="granularity_label_word">"từ"</string>
-  <string msgid="5815508880782488267" name="granularity_label_link">"liên kết"</string>
-  <string msgid="5764267235026120888" name="granularity_label_line">"dòng"</string>
-  <string msgid="546083327654631076" name="permlab_serialPort">"truy cập cổng nối tiếp"</string>
-  <string msgid="2991639985224598193" name="permdesc_serialPort">"Cho phép chủ sở hữu truy cập cổng nối tiếp sử dụng API SerialManager."</string>
-  <string msgid="5077774297943409285" name="permlab_accessContentProvidersExternally">"truy cập vào nhà cung cấp nội dung từ bên ngoài"</string>
-  <string msgid="4544346486697853685" name="permdesc_accessContentProvidersExternally">"Cho phép chủ sở hữu truy cập vào nhà cung cấp nội dung từ bên ngoài. Không bao giờ cần cho ứng dụng thông thường."</string>
-  <string msgid="3527558366616680889" name="permlab_updateLock">"ko khuyến khích cập nhật th.bị tự động"</string>
-  <string msgid="1655625832166778492" name="permdesc_updateLock">"Cho phép chủ sở hữu cung cấp thông tin tới hệ thống về thời điểm thích hợp để khởi động lại không tương tác nhằm nâng cấp thiết bị."</string>
-  <string msgid="7460694070309730149" name="enable_explore_by_touch_warning_title">"Bật Khám phá bằng cách chạm?"</string>
-  <string msgid="8655887539089910577" product="tablet" name="enable_explore_by_touch_warning_message">"<xliff:g id="ACCESSIBILITY_SERVICE_NAME">%1$s</xliff:g> muốn bật Khám phá bằng cách chạm. Khi Khám phá bằng cách chạm được bật, bạn có thể nghe hoặc xem mô tả dưới ngón tay bạn hoặc thực hiện cử chỉ để tương tác với máy tính bảng."</string>
-  <string msgid="2708199672852373195" product="default" name="enable_explore_by_touch_warning_message">"<xliff:g id="ACCESSIBILITY_SERVICE_NAME">%1$s</xliff:g> muốn bật Khám phá bằng cách chạm. Khi Khám phá bằng cách chạm được bật, bạn có thể nghe hoặc xem mô tả dưới ngón tay bạn hoặc thực hiện cử chỉ để tương tác với điện thoại."</string>
-  <string msgid="6640505817617414371" name="low_internal_storage_view_text">"Một số chức năng hệ thống có thể không hoạt động"</string>
-  <string msgid="3272758351138122503" name="webpage_unresponsive">"Trang không phản hồi."\n\n"Bạn có muốn đóng trang không?"</string>
-  <string msgid="1645267259272829559" name="accept">"Đồng ý"</string>
-  <string msgid="2112225451706137894" name="decline">"Từ chối"</string>
-  <string msgid="1318975185112070734" name="wifi_p2p_invitation_sent_title">"Đã gửi thư mời"</string>
-  <string msgid="4958803948658533637" name="wifi_p2p_invitation_to_connect_title">"Thư mời kết nối"</string>
-  <string msgid="570389174731951769" name="wifi_p2p_from_message">"Người gửi:"</string>
-  <string msgid="248968974522044099" name="wifi_p2p_to_message">"Người nhận:"</string>
-  <string msgid="5920929550367828970" name="wifi_p2p_enter_pin_message">"Nhập PIN bắt buộc:"</string>
-  <string msgid="8530563323880921094" name="wifi_p2p_show_pin_message">"Mã PIN:"</string>
-  <string msgid="2507683751759308828" name="date_time_done">"Xong"</string>
-  <string msgid="8257740710754301407" name="perms_new_perm_prefix">
-    <font fgcolor="#ff900000" size="12">"MỚI: "</font>
+  <string name="imei" msgid="2625429890869005782">"IMEI"</string>
+  <string name="meid" msgid="4841221237681254195">"MEID"</string>
+  <string name="silent_mode_silent" msgid="319298163018473078">"Tắt chuông"</string>
+  <string name="silent_mode_vibrate" msgid="7072043388581551395">"Chuông rung"</string>
+  <string name="silent_mode_ring" msgid="8592241816194074353">"Bật chuông"</string>
+  <string name="reboot_safemode_title" msgid="7054509914500140361">"Khởi động lại ở chế độ an toàn"</string>
+  <string name="reboot_safemode_confirm" msgid="55293944502784668">"Bạn có muốn khởi động lại ở chế độ an toàn không? Thao tác này sẽ tắt tất cả ứng dụng của bên thứ ba mà bạn đã cài đặt. Những ứng dụng này sẽ được khôi phục khi bạn khởi động lại một lần nữa."</string>
+  <string name="permlab_readCellBroadcasts" msgid="1598328843619646166">"đọc tin nhắn quảng bá"</string>
+  <string name="permdesc_readCellBroadcasts" msgid="6361972776080458979">"Cho phép ứng dụng đọc tin nhắn quảng bá mà thiết bị của bạn nhận được. Tin nhắn quảng bá cảnh báo được gửi ở một số địa điểm nhằm cảnh báo cho bạn về các tình huống khẩn cấp. Các ứng dụng độc hại có thể gây ảnh hưởng đến hiệu suất hoặc hoạt động của thiết bị của bạn khi nhận được tin nhắn quảng bá khẩn cấp."</string>
+  <string name="permlab_getDetailedTasks" msgid="6229468674753529501">"truy xuất chi tiết về các ứng dụng đang chạy"</string>
+  <string name="permdesc_getDetailedTasks" msgid="153824741440717599">"Cho phép ứng dụng truy xuất thông tin chi tiết về các tác vụ đã và đang chạy gần đây. Ứng dụng độc hại có thể phát hiện thông tin riêng tư về các ứng dụng khác."</string>
+  <string name="permlab_startAnyActivity" msgid="2918768238045206456">"bắt đầu mọi hoạt động"</string>
+  <string name="permdesc_startAnyActivity" msgid="997823695343584001">"Cho phép ứng dụng bắt đầu mọi hoạt động, bất kể tình trạng bảo vệ quyền hay trạng thái xuất."</string>
+  <string name="permlab_setScreenCompatibility" msgid="6975387118861842061">"đặt độ tương thích màn hình"</string>
+  <string name="permdesc_setScreenCompatibility" msgid="692043618693917374">"Cho phép ứng dụng kiểm soát chế độ tương thích màn hình của ứng dụng khác. Các ứng dụng độc hại có thể phá vỡ hoạt động của các ứng dụng khác."</string>
+  <string name="permlab_bindAccessibilityService" msgid="5357733942556031593">"liên kết với dịch vụ truy cập"</string>
+  <string name="permdesc_bindAccessibilityService" msgid="7034615928609331368">"Cho phép chủ sở hữu liên kết với giao diện cấp cao nhất của dịch vụ truy cập. Không cần thiết cho các ứng dụng thông thường."</string>
+  <string name="permlab_setKeyboardLayout" msgid="4778731703600909340">"thay đổi bố cục bàn phím"</string>
+  <string name="permdesc_setKeyboardLayout" msgid="8480016771134175879">"Cho phép các ứng dụng thay đổi bố cục bàn phím. Không bao giờ cần thiết cho các ứng dụng bình thường."</string>
+  <string name="permdesc_persistentActivity" product="tablet" msgid="8525189272329086137">"Cho phép ứng dụng tạo sự đồng nhất cho các phần của mình trong bộ nhớ. Việc này có thể hạn chế bộ nhớ đối với các ứng dụng khác đang làm chậm máy tính bảng."</string>
+  <string name="permdesc_persistentActivity" product="default" msgid="4384760047508278272">"Cho phép ứng dụng tạo sự đồng nhất cho các phần của mình trong bộ nhớ. Việc này có thể hạn chế bộ nhớ đối với các ứng dụng khác đang làm chậm điện thoại."</string>
+  <string name="permlab_grantRevokePermissions" msgid="4627315351093508795">"cấp hoặc thu hồi quyền"</string>
+  <string name="permdesc_grantRevokePermissions" msgid="4088642654085850662">"Cho phép ứng dụng cấp hoặc thu hồi quyền cụ thể đối với ứng dụng đó hoặc các ứng dụng khác. Các ứng dụng độc hại có thể lợi dụng điều này để truy cập các tính năng mà bạn không cấp."</string>
+  <string name="permlab_readCallLog" msgid="3478133184624102739">"đọc nhật ký cuộc gọi"</string>
+  <string name="permdesc_readCallLog" product="tablet" msgid="3700645184870760285">"Cho phép ứng dụng đọc nhật ký cuộc gọi của máy tính bảng của bạn, bao gồm dữ liệu về các cuộc gọi đến và gọi đi. Quyền này cho phép ứng dụng lưu dữ liệu nhật ký cuộc gọi cả bạn và các ứng dụng độc hại có thể chia sẻ dữ liệu nhật ký cuộc gọi mà bạn không biết."</string>
+  <string name="permdesc_readCallLog" product="default" msgid="5777725796813217244">"Cho phép ứng dụng đọc nhật ký cuộc gọi của điện thoại của bạn, bao gồm dữ liệu về các cuộc gọi đến và gọi đi. Quyền này cho phép ứng dụng lưu dữ liệu nhật ký cuộc gọi cả bạn và các ứng dụng độc hại có thể chia sẻ dữ liệu nhật ký cuộc gọi mà bạn không biết."</string>
+  <string name="permlab_writeCallLog" msgid="8552045664743499354">"ghi nhật ký cuộc gọi"</string>
+  <string name="permdesc_writeCallLog" product="tablet" msgid="6661806062274119245">"Cho phép ứng dụng sửa đổi nhật ký cuộc gọi trên máy tính bảng của bạn, bao gồm dữ liệu về các cuộc gọi đến và gọi đi. Các ứng dụng độc hại có thể sử dụng quyền này để xóa hoặc sửa đổi nhật ký cuộc gọi của bạn."</string>
+  <string name="permdesc_writeCallLog" product="default" msgid="683941736352787842">"Cho phép ứng dụng sửa đổi nhật ký cuộc gọi trên điện thoại của bạn, bao gồm dữ liệu về các cuộc gọi đến và gọi đi. Các ứng dụng độc hại có thể sử dụng quyền này để xóa hoặc sửa đổi nhật ký cuộc gọi của bạn."</string>
+  <string name="permdesc_writeCalendar" product="tablet" msgid="6679035520113668528">"Cho phép ứng dụng thêm, xóa, thay đổi các sự kiện mà bạn có thể sửa đổi trên máy tính bảng của mình, bao gồm những sự kiện của bạn bè hoặc đồng nghiệp. Việc này có thể cho phép ứng dụng gửi tin nhắn dường như đến từ chủ sở hữu lịch hoặc sửa đổi các sự kiện mà chủ sở hữu không biết."</string>
+  <string name="permdesc_writeCalendar" product="default" msgid="2324469496327249376">"Cho phép ứng dụng thêm, xóa, thay đổi các sự kiện mà bạn có thể sửa đổi trên điện thoại của mình, bao gồm những sự kiện của bạn bè hoặc đồng nghiệp. Việc này có thể cho phép ứng dụng gửi tin nhắn dường như đến từ chủ sở hữu lịch hoặc sửa đổi các sự kiện mà chủ sở hữu không biết."</string>
+  <string name="permdesc_accessCoarseLocation" msgid="5383798877137640762">"Truy cập vị trí gần đúng từ nhà cung cấp vị trí bằng cách sử dụng các tài nguyên mạng như tháp phát sóng và WLAN. Khi các dịch vụ định vị này sẵn có và được bật, quyền này cho phép ứng dụng xác định vị trí gần đúng của bạn."</string>
+  <string name="permlab_mount_unmount_filesystems" product="nosdcard" msgid="2927361537942591841">"truy cập hệ thống tệp của bộ lưu trữ USB"</string>
+  <string name="permlab_mount_unmount_filesystems" product="default" msgid="4402305049890953810">"truy cập hệ thống tệp Thẻ SD"</string>
+  <string name="permlab_mount_format_filesystems" product="nosdcard" msgid="6227819582624904972">"xóa bộ lưu trữ USB"</string>
+  <string name="permlab_mount_format_filesystems" product="default" msgid="262582698639274056">"xóa Thẻ SD"</string>
+  <string name="permdesc_changeWifiMulticastState" product="tablet" msgid="7969774021256336548">"Cho phép ứng dụng nhận các gói được gửi đến tất cả các thiết bị trên mạng WLAN các địa chỉ đa hướng, chứ không phải chỉ máy tính bảng của bạn. Chế độ này sử dụng nhiều năng lượng hơn chế độ không phát đa hướng."</string>
+  <string name="permdesc_changeWifiMulticastState" product="default" msgid="6851949706025349926">"Cho phép ứng dụng nhận các gói được gửi đến tất cả các thiết bị trên mạng WLAN các địa chỉ đa hướng, chứ không phải chỉ điện thoại của bạn. Chế độ này sử dụng nhiều năng lượng hơn chế độ không phát đa hướng."</string>
+  <string name="permdesc_changeWimaxState" product="tablet" msgid="3156456504084201805">"Cho phép ứng dụng kết nối máy tính bảng và ngắt kết nối máy tính bảng khỏi mạng WiMAX."</string>
+  <string name="permdesc_changeWimaxState" product="default" msgid="697025043004923798">"Cho phép ứng dụng kết nối điện thoại và ngắt kết nối điện thoại khỏi mạng WiMAX."</string>
+  <string name="permlab_sdcardRead" product="nosdcard" msgid="8235341515605559677">"kiểm tra quyền truy cập vào bộ nhớ được bảo vệ"</string>
+  <string name="permlab_sdcardRead" product="default" msgid="8235341515605559677">"kiểm tra quyền truy cập vào bộ nhớ được bảo vệ"</string>
+  <string name="permdesc_sdcardRead" product="nosdcard" msgid="5791957130190763289">"Cho phép ứng dụng kiểm tra quyền cho bộ lưu trữ USB trên các thiết bị trong tương lai."</string>
+  <string name="permdesc_sdcardRead" product="default" msgid="5914402684685848828">"Cho phép ứng dụng kiểm tra quyền cho thẻ SD sẽ các thiết bị trong tương lai."</string>
+  <string name="faceunlock_multiple_failures" msgid="754137583022792429">"Đã vượt quá số lần Mở khóa bằng khuôn mặt tối đa"</string>
+  <string name="lockscreen_permanent_disabled_sim_message_short" msgid="5096149665138916184">"Thẻ SIM không sử dụng được."</string>
+  <string name="granularity_label_character" msgid="7336470535385009523">"ký tự"</string>
+  <string name="granularity_label_word" msgid="7075570328374918660">"từ"</string>
+  <string name="granularity_label_link" msgid="5815508880782488267">"liên kết"</string>
+  <string name="granularity_label_line" msgid="5764267235026120888">"dòng"</string>
+  <string name="permlab_serialPort" msgid="546083327654631076">"truy cập cổng nối tiếp"</string>
+  <string name="permdesc_serialPort" msgid="2991639985224598193">"Cho phép chủ sở hữu truy cập cổng nối tiếp sử dụng API SerialManager."</string>
+  <string name="permlab_accessContentProvidersExternally" msgid="5077774297943409285">"truy cập vào nhà cung cấp nội dung từ bên ngoài"</string>
+  <string name="permdesc_accessContentProvidersExternally" msgid="4544346486697853685">"Cho phép chủ sở hữu truy cập vào nhà cung cấp nội dung từ bên ngoài. Không bao giờ cần cho ứng dụng thông thường."</string>
+  <string name="permlab_updateLock" msgid="3527558366616680889">"ko khuyến khích cập nhật th.bị tự động"</string>
+  <string name="permdesc_updateLock" msgid="1655625832166778492">"Cho phép chủ sở hữu cung cấp thông tin tới hệ thống về thời điểm thích hợp để khởi động lại không tương tác nhằm nâng cấp thiết bị."</string>
+  <string name="enable_explore_by_touch_warning_title" msgid="7460694070309730149">"Bật Khám phá bằng cách chạm?"</string>
+  <string name="enable_explore_by_touch_warning_message" product="tablet" msgid="8655887539089910577">"<xliff:g id="ACCESSIBILITY_SERVICE_NAME">%1$s</xliff:g> muốn bật Khám phá bằng cách chạm. Khi Khám phá bằng cách chạm được bật, bạn có thể nghe hoặc xem mô tả dưới ngón tay bạn hoặc thực hiện cử chỉ để tương tác với máy tính bảng."</string>
+  <string name="enable_explore_by_touch_warning_message" product="default" msgid="2708199672852373195">"<xliff:g id="ACCESSIBILITY_SERVICE_NAME">%1$s</xliff:g> muốn bật Khám phá bằng cách chạm. Khi Khám phá bằng cách chạm được bật, bạn có thể nghe hoặc xem mô tả dưới ngón tay bạn hoặc thực hiện cử chỉ để tương tác với điện thoại."</string>
+  <string name="low_internal_storage_view_text" msgid="6640505817617414371">"Một số chức năng hệ thống có thể không hoạt động"</string>
+  <string name="webpage_unresponsive" msgid="3272758351138122503">"Trang không phản hồi."\n\n"Bạn có muốn đóng trang không?"</string>
+  <string name="accept" msgid="1645267259272829559">"Đồng ý"</string>
+  <string name="decline" msgid="2112225451706137894">"Từ chối"</string>
+  <string name="wifi_p2p_invitation_sent_title" msgid="1318975185112070734">"Đã gửi thư mời"</string>
+  <string name="wifi_p2p_invitation_to_connect_title" msgid="4958803948658533637">"Thư mời kết nối"</string>
+  <string name="wifi_p2p_from_message" msgid="570389174731951769">"Người gửi:"</string>
+  <string name="wifi_p2p_to_message" msgid="248968974522044099">"Người nhận:"</string>
+  <string name="wifi_p2p_enter_pin_message" msgid="5920929550367828970">"Nhập PIN bắt buộc:"</string>
+  <string name="wifi_p2p_show_pin_message" msgid="8530563323880921094">"Mã PIN:"</string>
+  <string name="date_time_done" msgid="2507683751759308828">"Xong"</string>
+  <string name="perms_new_perm_prefix" msgid="8257740710754301407">
+    <font size="12" fgcolor="#ff900000">"MỚI: "</font>
   </string>
-  <string msgid="5139836143293299417" name="perms_description_app">"Được cung cấp bởi <xliff:g id="APP_NAME">%1$s</xliff:g>."</string>
-  <string msgid="6203112478095117625" name="use_physical_keyboard">"Bàn phím thực"</string>
-  <string msgid="7517821086888990278" name="hardware">"Phần cứng"</string>
-  <string msgid="1407367017263030773" name="select_keyboard_layout_notification_title">"Chọn bố cục bàn phím"</string>
-  <string msgid="4465907700449257063" name="select_keyboard_layout_notification_message">"Chạm để chọn bố cục bàn phím."</string>
-  <string msgid="1642024455750414694" name="permlab_route_media_output">"Định tuyến thiết bị ra phương tiện"</string>
-  <string msgid="4932818749547244346" name="permdesc_route_media_output">"Cho phép ứng dụng định tuyến thiết bị ra phương tiện đến các thiết bị bên ngoài khác."</string>
-  <string msgid="3091587249776033139" name="description_target_search">"Tìm kiếm"</string>
-  <string msgid="8017770747801494933" name="activity_resolver_use_always">"Luôn chọn"</string>
-  <string msgid="2404644797149173758" name="activity_resolver_use_once">"Chỉ một lần"</string>
-  <string msgid="4617053898167127471" product="tablet" name="default_audio_route_name">"Máy tính bảng"</string>
-  <string msgid="4239291273420140123" product="default" name="default_audio_route_name">"Điện thoại"</string>
-  <string msgid="8119971843803439110" name="default_audio_route_name_headphones">"Tai nghe"</string>
-  <string msgid="6240602982276591864" name="default_audio_route_name_dock_speakers">"Loa đế"</string>
-  <string msgid="7986404173839007682" name="default_audio_route_name_hdmi">"Âm thanh HDMI"</string>
-  <string msgid="3722811174003886946" name="default_audio_route_category_name">"Hệ thống"</string>
-  <string msgid="8575624030406771015" name="bluetooth_a2dp_audio_route_name">"Âm thanh Bluetooth"</string>
-  <string msgid="7966438307723317169" name="media_route_chooser_grouping_done">"Xong"</string>
-  <string msgid="8340973892742019101" name="byteShort">"B"</string>
-  <string msgid="5973789783504771878" name="kilobyteShort">"KB"</string>
-  <string msgid="6355851576770428922" name="megabyteShort">"MB"</string>
-  <skip></skip>
-  <string msgid="1905800560317137752" name="aerr_title"></string>
-  <string msgid="4351948481459135709" name="anr_title"></string>
+  <string name="perms_description_app" msgid="5139836143293299417">"Được cung cấp bởi <xliff:g id="APP_NAME">%1$s</xliff:g>."</string>
+  <string name="use_physical_keyboard" msgid="6203112478095117625">"Bàn phím thực"</string>
+  <string name="hardware" msgid="7517821086888990278">"Phần cứng"</string>
+  <string name="select_keyboard_layout_notification_title" msgid="1407367017263030773">"Chọn bố cục bàn phím"</string>
+  <string name="select_keyboard_layout_notification_message" msgid="4465907700449257063">"Chạm để chọn bố cục bàn phím."</string>
+  <string name="permlab_route_media_output" msgid="1642024455750414694">"Định tuyến thiết bị ra phương tiện"</string>
+  <string name="permdesc_route_media_output" msgid="4932818749547244346">"Cho phép ứng dụng định tuyến thiết bị ra phương tiện đến các thiết bị bên ngoài khác."</string>
+  <string name="description_target_search" msgid="3091587249776033139">"Tìm kiếm"</string>
+  <string name="activity_resolver_use_always" msgid="8017770747801494933">"Luôn chọn"</string>
+  <string name="activity_resolver_use_once" msgid="2404644797149173758">"Chỉ một lần"</string>
+  <string name="default_audio_route_name" product="tablet" msgid="4617053898167127471">"Máy tính bảng"</string>
+  <string name="default_audio_route_name" product="default" msgid="4239291273420140123">"Điện thoại"</string>
+  <string name="default_audio_route_name_headphones" msgid="8119971843803439110">"Tai nghe"</string>
+  <string name="default_audio_route_name_dock_speakers" msgid="6240602982276591864">"Loa đế"</string>
+  <string name="default_audio_route_name_hdmi" msgid="7986404173839007682">"Âm thanh HDMI"</string>
+  <string name="default_audio_route_category_name" msgid="3722811174003886946">"Hệ thống"</string>
+  <string name="bluetooth_a2dp_audio_route_name" msgid="8575624030406771015">"Âm thanh Bluetooth"</string>
+  <string name="media_route_chooser_grouping_done" msgid="7966438307723317169">"Xong"</string>
+  <string name="byteShort" msgid="8340973892742019101">"B"</string>
+  <string name="kilobyteShort" msgid="5973789783504771878">"KB"</string>
+  <string name="megabyteShort" msgid="6355851576770428922">"MB"</string>
+  <string name="aerr_title" msgid="1905800560317137752"></string>
+  <string name="anr_title" msgid="4351948481459135709"></string>
   <string name="gigabyteShort">"GB"</string>
   <string name="terabyteShort">"TB"</string>
   <string name="petabyteShort">"PB"</string>
@@ -135,7 +134,7 @@
   <string name="serviceRegistered">"Đăng ký thành công."</string>
   <string name="serviceErased">"Xóa thành công."</string>
   <string name="passwordIncorrect">"Mật khẩu không chính xác."</string>
-  <string msgid="" name="passwordChange">"Mật khẩu đã thay đổi"</string>
+  <string name="passwordChange" msgid="">"Mật khẩu đã thay đổi"</string>
   <string name="mmiComplete">"MMI hoàn tất."</string>
   <string name="badPin">"Mã PIN cũ bạn đã nhập không chính xác."</string>
   <string name="badPin2">"Mã PIN2 cũ bạn đã nhập không chính xác."</string>
@@ -155,32 +154,32 @@
   <string name="ColpMmi">Mô tả nhận dạng đường dây kết nối</string>
   <string name="ColrMmi">Hạn chế nhận dạng đường dây kết nối</string>
   <string name="CfMmi">"Chuyển tiếp cuộc gọi"</string>
-  <string msgid="" name="UnConditionCfMmi">"Chuyển tiếp cuộc gọi không điều kiện"</string>
-  <string msgid="" name="BusyCfMmi">"Chuyển tiếp cuộc gọi khi bận"</string>
-  <string msgid="" name="NoReplyCfMmi">"Chuyển tiếp cuộc gọi khi không có trả lời"</string>
-  <string msgid="" name="NotReachCfMmi">"Chuyển tiếp cuộc gọi khi ngoài vùng phủ sóng"</string>
-  <string msgid="" name="AllCfMmi">"Chuyển tiếp tất cả cuộc gọi"</string>
-  <string msgid="" name="ConditionCfMmi">"Chuyển tiếp cuộc gọi có điều kiện"</string>
+  <string name="UnConditionCfMmi" msgid="">"Chuyển tiếp cuộc gọi không điều kiện"</string>
+  <string name="BusyCfMmi" msgid="">"Chuyển tiếp cuộc gọi khi bận"</string>
+  <string name="NoReplyCfMmi" msgid="">"Chuyển tiếp cuộc gọi khi không có trả lời"</string>
+  <string name="NotReachCfMmi" msgid="">"Chuyển tiếp cuộc gọi khi ngoài vùng phủ sóng"</string>
+  <string name="AllCfMmi" msgid="">"Chuyển tiếp tất cả cuộc gọi"</string>
+  <string name="ConditionCfMmi" msgid="">"Chuyển tiếp cuộc gọi có điều kiện"</string>
   <string name="CwMmi">"Chờ cuộc gọi"</string>
   <string name="BaMmi">"Chặn cuộc gọi"</string>
-  <string msgid="" name="BaocMmi">"Chặn Tất cả các cuộc gọi đi"</string>
-  <string msgid="" name="BaoicMmi">"Chặn Tất cả các cuộc gọi đi quốc tế"</string>
-  <string msgid="" name="BaoicxhMmi">"Chặn Tất cả các cuộc gọi đi quốc tế trừ nước sở tại"</string>
-  <string msgid="" name="BaicMmi">"Chặn Tất cả các cuộc gọi đến"</string>
-  <string msgid="" name="BaicrMmi">"Chặn Tất cả các cuộc gọi đến khi chuyển vùng"</string>
-  <string msgid="" name="BaallMmi">"Chặn tất cả cuộc gọi đối với Tất cả các Dịch vụ Cơ bản"</string>
-  <string msgid="" name="BamoMmi">"Tất cả cuộc gọi đi đối với Tất cả các Dịch vụ Cơ bản"</string>
-  <string msgid="" name="BamtMmi">"Tất cả cuộc gọi đến đối với Tất cả các Dịch vụ Cơ bản"</string>
+  <string name="BaocMmi" msgid="">"Chặn Tất cả các cuộc gọi đi"</string>
+  <string name="BaoicMmi" msgid="">"Chặn Tất cả các cuộc gọi đi quốc tế"</string>
+  <string name="BaoicxhMmi" msgid="">"Chặn Tất cả các cuộc gọi đi quốc tế trừ nước sở tại"</string>
+  <string name="BaicMmi" msgid="">"Chặn Tất cả các cuộc gọi đến"</string>
+  <string name="BaicrMmi" msgid="">"Chặn Tất cả các cuộc gọi đến khi chuyển vùng"</string>
+  <string name="BaallMmi" msgid="">"Chặn tất cả cuộc gọi đối với Tất cả các Dịch vụ Cơ bản"</string>
+  <string name="BamoMmi" msgid="">"Tất cả cuộc gọi đi đối với Tất cả các Dịch vụ Cơ bản"</string>
+  <string name="BamtMmi" msgid="">"Tất cả cuộc gọi đến đối với Tất cả các Dịch vụ Cơ bản"</string>
   <string name="ActiveUnconCf">Cuộc gọi đã được chuyển tiếp không điều kiện</string>
   <string name="ActiveConCf">Cuộc gọi đã được chuyển tiếp có điều kiện</string>
   <string name="CallForwarded">Cuộc gọi đã được chuyển tiếp</string>
   <string name="CallWaiting">"Chờ cuộc gọi"</string>
-  <string msgid="" name="OutCallBarred">"Cuộc gọi đi bị chặn"</string>
-  <string msgid="" name="InCallBarred">"Cuộc gọi đến bị chặn"</string>
+  <string name="OutCallBarred" msgid="">"Cuộc gọi đi bị chặn"</string>
+  <string name="InCallBarred" msgid="">"Cuộc gọi đến bị chặn"</string>
   <string name="ForwardedCall">Cuộc gọi đã được chuyển tiếp</string>
-  <string msgid="" name="CallHold">"Đã giữ cuộc gọi"</string>
-  <string msgid="" name="CallRetrieved">"Cuộc gọi đã lấy ra"</string>
-  <string msgid="" name="IncomingCallForwarded">"Cuộc gọi đến bổ sung đã được chuyển tiếp"</string>
+  <string name="CallHold" msgid="">"Đã giữ cuộc gọi"</string>
+  <string name="CallRetrieved" msgid="">"Cuộc gọi đã lấy ra"</string>
+  <string name="IncomingCallForwarded" msgid="">"Cuộc gọi đến bổ sung đã được chuyển tiếp"</string>
   <string name="PwdMmi">"Thay đổi mật khẩu"</string>
   <string name="PinMmi">"Thay đổi mã PIN"</string>
   <string name="Pin2Mmi">"Thay đổi mã PIN2"</string>
@@ -256,24 +255,24 @@
   <string name="contentServiceSync">"Đồng bộ hóa"</string>
   <string name="contentServiceSyncNotificationTitle">"Đồng bộ hóa"</string>
   <string name="contentServiceTooManyDeletesNotificationDesc">"Quá nhiều lần xóa <xliff:g id="CONTENT_TYPE">%s</xliff:g>."</string>
-  <string product="tablet" name="low_memory">"Bộ nhớ máy tính bảng đã đầy! Hãy xóa một số tệp để giải phóng dung lượng."</string>
-  <string product="default" name="low_memory">"Bộ nhớ điện thoại đã đầy! Hãy xóa một số tệp để tạo thêm dung lượng."</string>
+  <string name="low_memory" product="tablet">"Bộ nhớ máy tính bảng đã đầy! Hãy xóa một số tệp để giải phóng dung lượng."</string>
+  <string name="low_memory" product="default">"Bộ nhớ điện thoại đã đầy! Hãy xóa một số tệp để tạo thêm dung lượng."</string>
   <string name="me">"Tôi"</string>
-  <string product="tablet" name="power_dialog">"Tùy chọn máy tính bảng"</string>
-  <string product="default" name="power_dialog">"Tùy chọn điện thoại"</string>
+  <string name="power_dialog" product="tablet">"Tùy chọn máy tính bảng"</string>
+  <string name="power_dialog" product="default">"Tùy chọn điện thoại"</string>
   <string name="silent_mode">"Chế độ im lặng"</string>
   <string name="turn_on_radio">"Bật không dây"</string>
   <string name="turn_off_radio">"Tắt không dây"</string>
   <string name="screen_lock">"Khoá màn hình"</string>
   <string name="power_off">"Tắt nguồn"</string>
   <string name="shutdown_progress">"Đang tắt…"</string>
-  <string product="tablet" name="shutdown_confirm">"Máy tính bảng của bạn sẽ tắt."</string>
-  <string product="default" name="shutdown_confirm">"Điện thoại của bạn sẽ tắt."</string>
+  <string name="shutdown_confirm" product="tablet">"Máy tính bảng của bạn sẽ tắt."</string>
+  <string name="shutdown_confirm" product="default">"Điện thoại của bạn sẽ tắt."</string>
   <string name="shutdown_confirm_question">"Bạn có muốn tắt không?"</string>
   <string name="recent_tasks_title">"Gần đây"</string>
   <string name="no_recent_tasks">"Không có ứng dụng nào gần đây."</string>
-  <string product="tablet" name="global_actions">"Tùy chọn máy tính bảng"</string>
-  <string product="default" name="global_actions">"Tùy chọn điện thoại"</string>
+  <string name="global_actions" product="tablet">"Tùy chọn máy tính bảng"</string>
+  <string name="global_actions" product="default">"Tùy chọn điện thoại"</string>
   <string name="global_action_lock">"Khoá màn hình"</string>
   <string name="global_action_power_off">"Tắt nguồn"</string>
   <string name="global_action_toggle_silent_mode">"Chế độ im lặng"</string>
@@ -290,8 +289,8 @@
   <string name="permgrouplab_messages">"Tin nhắn của bạn"</string>
   <string name="permgroupdesc_messages">"Đọc và soạn SMS, email và các tin nhắn khác của bạn."</string>
   <string name="permgrouplab_personalInfo">"Thông tin cá nhân của bạn"</string>
-  <string product="tablet" name="permgroupdesc_personalInfo">"Quyền truy cập trực tiếp vào danh bạ và lịch của bạn được lưu trữ trên máy tính bảng."</string>
-  <string product="default" name="permgroupdesc_personalInfo">"Quyền truy cập trực tiếp vào danh bạ và lịch của bạn được lưu trữ trên điện thoại."</string>
+  <string name="permgroupdesc_personalInfo" product="tablet">"Quyền truy cập trực tiếp vào danh bạ và lịch của bạn được lưu trữ trên máy tính bảng."</string>
+  <string name="permgroupdesc_personalInfo" product="default">"Quyền truy cập trực tiếp vào danh bạ và lịch của bạn được lưu trữ trên điện thoại."</string>
   <string name="permgrouplab_location">"Vị trí của bạn"</string>
   <string name="permgroupdesc_location">"Giám sát vị trí thực của bạn"</string>
   <string name="permgrouplab_network">"Kết nối mạng"</string>
@@ -307,8 +306,8 @@
   <string name="permgrouplab_developmentTools">"Công cụ phát triển"</string>
   <string name="permgroupdesc_developmentTools">"Các tính năng chỉ cần cho nhà phát triển ứng dụng."</string>
   <string name="permgrouplab_storage">"Dung lượng"</string>
-  <string product="nosdcard" name="permgroupdesc_storage">"Truy cập bộ nhớ USB."</string>
-  <string product="default" name="permgroupdesc_storage">"Truy cập thẻ SD."</string>
+  <string name="permgroupdesc_storage" product="nosdcard">"Truy cập bộ nhớ USB."</string>
+  <string name="permgroupdesc_storage" product="default">"Truy cập thẻ SD."</string>
   <string name="permlab_statusBar">"vô hiệu hóa hoặc sửa đổi thanh trạng thái"</string>
   <string name="permdesc_statusBar">"Cho phép ứng dụng vô hiệu hóa thanh trạng thái hoặc thêm và xóa biểu tượng hệ thống."</string>
   <string name="permlab_statusBarService">"thanh trạng thái"</string>
@@ -328,11 +327,11 @@
   <string name="permlab_sendSmsNoConfirmation">"gửi tin nhắn SMS mà không cần xác nhận"</string>
   <string name="permdesc_sendSmsNoConfirmation">"Cho phép ứng dụng gửi tin nhắn SMS. Các ứng dụng độc hại có thể khiến bạn tốn tiền bằng cách gửi tin nhắn mà không cần xác nhận của bạn."</string>
   <string name="permlab_readSms">"đọc SMS hoặc MMS"</string>
-  <string product="tablet" name="permdesc_readSms">"Cho phép ứng dụng đọc tin nhắn SMS được lưu trữ trên máy tính bảng hoặc thẻ SIM của bạn. Các ứng dụng độc hại có thể đọc tin nhắn bí mật của bạn."</string>
-  <string product="default" name="permdesc_readSms">"Cho phép ứng dụng đọc tin nhắn SMS được lưu trữ trên điện thoại hoặc thẻ SIM của bạn. Các ứng dụng độc hại có thể đọc tin nhắn bí mật của bạn."</string>
+  <string name="permdesc_readSms" product="tablet">"Cho phép ứng dụng đọc tin nhắn SMS được lưu trữ trên máy tính bảng hoặc thẻ SIM của bạn. Các ứng dụng độc hại có thể đọc tin nhắn bí mật của bạn."</string>
+  <string name="permdesc_readSms" product="default">"Cho phép ứng dụng đọc tin nhắn SMS được lưu trữ trên điện thoại hoặc thẻ SIM của bạn. Các ứng dụng độc hại có thể đọc tin nhắn bí mật của bạn."</string>
   <string name="permlab_writeSms">"chỉnh sửa SMS hoặc MMS"</string>
-  <string product="tablet" name="permdesc_writeSms">"Cho phép ứng dụng ghi vào tin nhắn SMS được lưu trữ trên máy tính bảng hoặc thẻ SIM của bạn. Các ứng dụng độc hại có thể xóa tin nhắn của bạn."</string>
-  <string product="default" name="permdesc_writeSms">"Cho phép ứng dụng ghi vào tin nhắn SMS được lưu trữ trên điện thoại hoặc thẻ SIM của bạn. Các ứng dụng độc hại có thể xóa tin nhắn của bạn."</string>
+  <string name="permdesc_writeSms" product="tablet">"Cho phép ứng dụng ghi vào tin nhắn SMS được lưu trữ trên máy tính bảng hoặc thẻ SIM của bạn. Các ứng dụng độc hại có thể xóa tin nhắn của bạn."</string>
+  <string name="permdesc_writeSms" product="default">"Cho phép ứng dụng ghi vào tin nhắn SMS được lưu trữ trên điện thoại hoặc thẻ SIM của bạn. Các ứng dụng độc hại có thể xóa tin nhắn của bạn."</string>
   <string name="permlab_receiveWapPush">"nhận WAP"</string>
   <string name="permdesc_receiveWapPush">"Cho phép ứng dụng nhận và xử lý tin nhắn WAP. Các ứng dụng độc hại có thể giám sát tin nhắn của bạn hoặc xóa chúng mà không cần hiển thị tin nhắn đó cho bạn."</string>
   <string name="permlab_getTasks">"truy xuất các ứng dụng đang chạy"</string>
@@ -388,8 +387,8 @@
   <string name="permlab_manageAppTokens">"quản lý mã thông báo ứng dụng"</string>
   <string name="permdesc_manageAppTokens">"Cho phép ứng dụng tạo và quản lý các mã thông báo riêng của mình, chuyển đổi thứ tự Z thông thường. Không cần thiết cho các ứng dụng thông thường."</string>
   <string name="permlab_injectEvents">"nhấn phím và kiểm soát các nút"</string>
-  <string product="tablet" name="permdesc_injectEvents">"Cho phép ứng dụng phân phát các sự kiện nhập của riêng ứng dụng (số lần nhấn phím. v.v..) đến các ứng dụng khác. Các ứng dụng độc hại có thể sử dụng quyền này để kiểm soát máy tính bảng."</string>
-  <string product="default" name="permdesc_injectEvents">"Cho phép ứng dụng phân phát các sự kiện nhập của riêng ứng dụng (số lần nhấn phím. v.v..) đến các ứng dụng khác. Các ứng dụng độc hại có thể sử dụng quyền này để kiểm soát điện thoại."</string>
+  <string name="permdesc_injectEvents" product="tablet">"Cho phép ứng dụng phân phát các sự kiện nhập của riêng ứng dụng (số lần nhấn phím. v.v..) đến các ứng dụng khác. Các ứng dụng độc hại có thể sử dụng quyền này để kiểm soát máy tính bảng."</string>
+  <string name="permdesc_injectEvents" product="default">"Cho phép ứng dụng phân phát các sự kiện nhập của riêng ứng dụng (số lần nhấn phím. v.v..) đến các ứng dụng khác. Các ứng dụng độc hại có thể sử dụng quyền này để kiểm soát điện thoại."</string>
   <string name="permlab_readInputState">"ghi lại nội dung bạn nhập và tác vụ bạn thực hiện"</string>
   <string name="permdesc_readInputState">"Cho phép ứng dụng xem các phím bạn nhấn ngay cả khi tương tác với ứng dụng khác (chẳng hạn như nhập mật khẩu). Không cần thiết cho các ứng dụng thông thường."</string>
   <string name="permlab_bindInputMethod">"liên kết với phương thức nhập"</string>
@@ -422,20 +421,20 @@
   <string name="permlab_installPackages">"cài đặt trực tiếp ứng dụng"</string>
   <string name="permdesc_installPackages">"Cho phép ứng dụng cài đặt các gói Android mới hoặc đã được cập nhật. Các ứng dụng độc hại có thể sử dụng quyền này để thêm ứng dụng mới có quyền mạnh mẽ tùy ý."</string>
   <string name="permlab_clearAppCache">"xóa tất cả dữ liệu bộ nhớ cache của ứng dụng"</string>
-  <string product="tablet" name="permdesc_clearAppCache">"Cho phép ứng dụng giải phóng bộ nhớ máy tính bảng bằng cách xóa các tệp trong thư mục bộ nhớ cache ứng dụng. Quyền truy cập thường rất hạn chế đối với quy trình hệ thống."</string>
-  <string product="default" name="permdesc_clearAppCache">"Cho phép ứng dụng tạo thêm dung lượng điện thoại bằng cách xóa các tệp trong thư mục bộ nhớ cache ứng dụng. Quyền truy cập thường rất hạn chế đối với quy trình hệ thống."</string>
+  <string name="permdesc_clearAppCache" product="tablet">"Cho phép ứng dụng giải phóng bộ nhớ máy tính bảng bằng cách xóa các tệp trong thư mục bộ nhớ cache ứng dụng. Quyền truy cập thường rất hạn chế đối với quy trình hệ thống."</string>
+  <string name="permdesc_clearAppCache" product="default">"Cho phép ứng dụng tạo thêm dung lượng điện thoại bằng cách xóa các tệp trong thư mục bộ nhớ cache ứng dụng. Quyền truy cập thường rất hạn chế đối với quy trình hệ thống."</string>
   <string name="permlab_movePackage">"Chuyển tài nguyên của ứng dụng"</string>
   <string name="permdesc_movePackage">"Cho phép ứng dụng di chuyển các tài nguyên của ứng dụng từ phương tiện truyền thông bên trong ra phương tiện bên ngoài và ngược lại."</string>
   <string name="permlab_readLogs">"đọc dữ liệu nhật ký nhạy cảm"</string>
-  <string product="tablet" name="permdesc_readLogs">"Cho phép ứng dụng đọc từ nhiều tệp nhật ký khác nhau của hệ thống. Quyền này cho phép ứng dụng phát hiện thông tin chung về những gì bạn đang thực hiện với máy tính bảng, có thể bao gồm thông tin cá nhân hoặc riêng tư."</string>
-  <string product="default" name="permdesc_readLogs">"Cho phép ứng dụng đọc từ nhiều tệp nhật ký khác nhau của hệ thống. Quyền này cho phép ứng dụng phát hiện thông tin chung về những gì bạn đang thực hiện với điện thoại, có thể bao gồm thông tin cá nhân hoặc riêng tư."</string>
+  <string name="permdesc_readLogs" product="tablet">"Cho phép ứng dụng đọc từ nhiều tệp nhật ký khác nhau của hệ thống. Quyền này cho phép ứng dụng phát hiện thông tin chung về những gì bạn đang thực hiện với máy tính bảng, có thể bao gồm thông tin cá nhân hoặc riêng tư."</string>
+  <string name="permdesc_readLogs" product="default">"Cho phép ứng dụng đọc từ nhiều tệp nhật ký khác nhau của hệ thống. Quyền này cho phép ứng dụng phát hiện thông tin chung về những gì bạn đang thực hiện với điện thoại, có thể bao gồm thông tin cá nhân hoặc riêng tư."</string>
   <string name="permlab_anyCodecForPlayback">"sử dụng bất kỳ bộ giải mã phương tiện nào để phát lại"</string>
   <string name="permdesc_anyCodecForPlayback">"Cho phép ứng dụng sử dụng bất kỳ bộ giải mã phương tiện đã cài đặt nào để giải mã phát lại."</string>
   <string name="permlab_diagnostic">"đọc/ghi vào tài nguyên do chẩn đoán sở hữu"</string>
   <string name="permdesc_diagnostic">"Cho phép ứng dụng đọc và ghi vào bất kỳ tài nguyên nào do nhóm chẩn đoán sở hữu; ví dụ: các tệp trong /dev. Quyền này có thể ảnh hưởng đến sự ổn định và bảo mật của hệ thống. CHỈ nên sử dụng quyền này cho các chẩn đoán phần cứng cụ thể bởi nhà sản xuất hoặc nhà cung cấp dịch vụ."</string>
   <string name="permlab_changeComponentState">"bật hoặc vô hiệu hóa các thành phần ứng dụng"</string>
-  <string product="tablet" name="permdesc_changeComponentState">"Cho phép ứng dụng thay đổi việc có nên bật thành phần của ứng dụng khác hay không. Các ứng dụng độc hại có thể sử dụng quyền này để vô hiệu hóa các tính năng quan trọng của máy tính bảng. Phải cẩn thận khi sử dụng quyền này vì nó có thể khiến các thành phần rơi vào trạng thái không sử dụng được, không đồng nhất hoặc không ổn định."</string>
-  <string product="default" name="permdesc_changeComponentState">"Cho phép ứng dụng thay đổi việc có nên bật thành phần của ứng dụng khác hay không. Các ứng dụng độc hại có thể sử dụng quyền này để vô hiệu hóa các tính năng quan trọng của điện thoại. Phải cẩn thận khi sử dụng quyền này vì quyền này có thể khiến các thành phần ứng dụng rơi vào trạng thái không sử dụng được, không đồng nhất hoặc không ổn định."</string>
+  <string name="permdesc_changeComponentState" product="tablet">"Cho phép ứng dụng thay đổi việc có nên bật thành phần của ứng dụng khác hay không. Các ứng dụng độc hại có thể sử dụng quyền này để vô hiệu hóa các tính năng quan trọng của máy tính bảng. Phải cẩn thận khi sử dụng quyền này vì nó có thể khiến các thành phần rơi vào trạng thái không sử dụng được, không đồng nhất hoặc không ổn định."</string>
+  <string name="permdesc_changeComponentState" product="default">"Cho phép ứng dụng thay đổi việc có nên bật thành phần của ứng dụng khác hay không. Các ứng dụng độc hại có thể sử dụng quyền này để vô hiệu hóa các tính năng quan trọng của điện thoại. Phải cẩn thận khi sử dụng quyền này vì quyền này có thể khiến các thành phần ứng dụng rơi vào trạng thái không sử dụng được, không đồng nhất hoặc không ổn định."</string>
   <string name="permlab_setPreferredApplications">"đặt ứng dụng ưa thích"</string>
   <string name="permdesc_setPreferredApplications">"Cho phép ứng dụng sửa đổi các ứng dụng ưa thích của bạn. Quyền này có thể cho phép các ứng dụng độc hại ngầm thay đổi các ứng dụng đã được chạy, giả mạo các ứng dụng hiện có để thu thập dữ liệu cá nhân của bạn."</string>
   <string name="permlab_writeSettings">"sửa đổi cài đặt hệ thống chung"</string>
@@ -445,28 +444,28 @@
   <string name="permlab_writeGservices">"sửa đổi bản đồ dịch vụ của Google"</string>
   <string name="permdesc_writeGservices">"Cho phép ứng dụng sửa đổi bản đồ dịch vụ của Google. Không dành cho các ứng dụng thông thường."</string>
   <string name="permlab_receiveBootCompleted">"tự động bắt đầu khởi động"</string>
-  <string product="tablet" name="permdesc_receiveBootCompleted">"Cho phép ứng dụng tự bắt đầu ngay khi hệ thống hoàn tất khởi động. Quyền này có thể khiến máy tính bảng mất nhiều thời gian khởi động hơn và cho phép ứng dụng giảm tốc độ máy tính bảng nói chung khi luôn chạy."</string>
-  <string product="default" name="permdesc_receiveBootCompleted">"Cho phép ứng dụng tự bắt đầu ngay khi hệ thống hoàn tất khởi động. Quyền này có thể khiến điện thoại mất nhiều thời gian khởi động hơn và cho phép ứng dụng giảm tốc độ điện thoại nói chung khi luôn chạy."</string>
+  <string name="permdesc_receiveBootCompleted" product="tablet">"Cho phép ứng dụng tự bắt đầu ngay khi hệ thống hoàn tất khởi động. Quyền này có thể khiến máy tính bảng mất nhiều thời gian khởi động hơn và cho phép ứng dụng giảm tốc độ máy tính bảng nói chung khi luôn chạy."</string>
+  <string name="permdesc_receiveBootCompleted" product="default">"Cho phép ứng dụng tự bắt đầu ngay khi hệ thống hoàn tất khởi động. Quyền này có thể khiến điện thoại mất nhiều thời gian khởi động hơn và cho phép ứng dụng giảm tốc độ điện thoại nói chung khi luôn chạy."</string>
   <string name="permlab_broadcastSticky">"gửi truyền phát hấp dẫn người xem"</string>
-  <string product="tablet" name="permdesc_broadcastSticky">"Cho phép ứng dụng gửi truyền phát hấp dẫn người xem, tiếp tục sau khi truyền phát kết thúc. Các ứng dụng độc hại có thể làm cho máy tính bảng bị chậm hoặc không ổn định bằng cách khiến ứng dụng sử dụng quá nhiều bộ nhớ."</string>
-  <string product="default" name="permdesc_broadcastSticky">"Cho phép ứng dụng gửi truyền phát hấp dẫn người xem, tiếp tục sau khi truyền phát kết thúc. Các ứng dụng độc hại có thể làm cho điện thoại bị chậm hoặc không ổn định bằng cách khiến ứng dụng sử dụng quá nhiều bộ nhớ."</string>
+  <string name="permdesc_broadcastSticky" product="tablet">"Cho phép ứng dụng gửi truyền phát hấp dẫn người xem, tiếp tục sau khi truyền phát kết thúc. Các ứng dụng độc hại có thể làm cho máy tính bảng bị chậm hoặc không ổn định bằng cách khiến ứng dụng sử dụng quá nhiều bộ nhớ."</string>
+  <string name="permdesc_broadcastSticky" product="default">"Cho phép ứng dụng gửi truyền phát hấp dẫn người xem, tiếp tục sau khi truyền phát kết thúc. Các ứng dụng độc hại có thể làm cho điện thoại bị chậm hoặc không ổn định bằng cách khiến ứng dụng sử dụng quá nhiều bộ nhớ."</string>
   <string name="permlab_readContacts">"đọc dữ liệu liên hệ"</string>
-  <string product="tablet" name="permdesc_readContacts">"Cho phép ứng dụng đọc tất cả dữ liệu (địa chỉ) liên hệ được lưu trữ trong máy tính bảng của bạn. Các ứng dụng độc hại có thể sử dụng quyền này để gửi dữ liệu của bạn cho những người khác."</string>
-  <string product="default" name="permdesc_readContacts">"Cho phép ứng dụng đọc tất cả dữ liệu liên hệ (địa chỉ) được lưu trữ trên điện thoại của bạn. Các ứng dụng độc hại có thể sử dụng quyền này để gửi dữ liệu của bạn cho những người khác."</string>
+  <string name="permdesc_readContacts" product="tablet">"Cho phép ứng dụng đọc tất cả dữ liệu (địa chỉ) liên hệ được lưu trữ trong máy tính bảng của bạn. Các ứng dụng độc hại có thể sử dụng quyền này để gửi dữ liệu của bạn cho những người khác."</string>
+  <string name="permdesc_readContacts" product="default">"Cho phép ứng dụng đọc tất cả dữ liệu liên hệ (địa chỉ) được lưu trữ trên điện thoại của bạn. Các ứng dụng độc hại có thể sử dụng quyền này để gửi dữ liệu của bạn cho những người khác."</string>
   <string name="permlab_writeContacts">"ghi dữ liệu liên hệ"</string>
-  <string product="tablet" name="permdesc_writeContacts">"Cho phép ứng dụng sửa đổi dữ liệu (địa chỉ) liên hệ được lưu trữ trên máy tính bảng của bạn. Các ứng dụng độc hại có thể sử dụng quyền này để xóa hoặc sửa đổi dữ liệu liên hệ của bạn."</string>
-  <string product="default" name="permdesc_writeContacts">"Cho phép ứng dụng sửa đổi dữ liệu liên hệ (địa chỉ) được lưu trữ trên điện thoại của bạn. Các ứng dụng độc hại có thể sử dụng quyền này để xóa hoặc sửa đổi dữ liệu liên hệ của bạn."</string>
+  <string name="permdesc_writeContacts" product="tablet">"Cho phép ứng dụng sửa đổi dữ liệu (địa chỉ) liên hệ được lưu trữ trên máy tính bảng của bạn. Các ứng dụng độc hại có thể sử dụng quyền này để xóa hoặc sửa đổi dữ liệu liên hệ của bạn."</string>
+  <string name="permdesc_writeContacts" product="default">"Cho phép ứng dụng sửa đổi dữ liệu liên hệ (địa chỉ) được lưu trữ trên điện thoại của bạn. Các ứng dụng độc hại có thể sử dụng quyền này để xóa hoặc sửa đổi dữ liệu liên hệ của bạn."</string>
   <string name="permlab_readProfile">"đọc d.liệu t.sử của bạn"</string>
-  <string product="default" name="permdesc_readProfile">"Cho phép ứng dụng đọc thông tin tiểu sử cá nhân được lưu trên thiết bị của bạn, ví dụ như tên và thông tin liên hệ của bạn. Điều này nghĩa là ứng dụng có thể nhận dạng bạn và gửi thông tin tiểu sử của bạn cho những người khác."</string>
+  <string name="permdesc_readProfile" product="default">"Cho phép ứng dụng đọc thông tin tiểu sử cá nhân được lưu trên thiết bị của bạn, ví dụ như tên và thông tin liên hệ của bạn. Điều này nghĩa là ứng dụng có thể nhận dạng bạn và gửi thông tin tiểu sử của bạn cho những người khác."</string>
   <string name="permlab_writeProfile">"ghi dữ liệu t.sử của bạn"</string>
-  <string product="default" name="permdesc_writeProfile">"Cho phép ứng dụng thay đổi hoặc thêm vào thông tin tiểu sử cá nhân được lưu trữ trên thiết bị của bạn, ví dụ như tên và thông tin liên hệ của bạn. Điều này nghĩa là các ứng dụng khác có thể nhận dạng bạn và gửi thông tin tiểu sử của bạn cho những người khác."</string>
-  <string product="default" name="permlab_readSocialStream">"đọc luồng xã hội của bạn"</string>
-  <string product="default" name="permdesc_readSocialStream">"Cho phép ứng dụng truy cập và đồng bộ hóa các bản cập nhật xã hội từ bạn bè của bạn. Các ứng dụng độc hại có thể sử dụng điều này để đọc thông tin liên lạc riêng tư giữa bạn và bạn bè của bạn trên mạng xã hội."</string>
-  <string product="default" name="permlab_writeSocialStream">"ghi luồng xã hội của bạn"</string>
-  <string product="default" name="permdesc_writeSocialStream">"Cho phép ứng dụng hiển thị các bản cập nhật xã hội từ bạn bè của bạn. Các ứng dụng độc hại có thể sử dụng điều này để giả vờ là một người bạn và lừa đảo bạn tiết lộ mật khẩu hoặc thông tin bảo mật khác."</string>
+  <string name="permdesc_writeProfile" product="default">"Cho phép ứng dụng thay đổi hoặc thêm vào thông tin tiểu sử cá nhân được lưu trữ trên thiết bị của bạn, ví dụ như tên và thông tin liên hệ của bạn. Điều này nghĩa là các ứng dụng khác có thể nhận dạng bạn và gửi thông tin tiểu sử của bạn cho những người khác."</string>
+  <string name="permlab_readSocialStream" product="default">"đọc luồng xã hội của bạn"</string>
+  <string name="permdesc_readSocialStream" product="default">"Cho phép ứng dụng truy cập và đồng bộ hóa các bản cập nhật xã hội từ bạn bè của bạn. Các ứng dụng độc hại có thể sử dụng điều này để đọc thông tin liên lạc riêng tư giữa bạn và bạn bè của bạn trên mạng xã hội."</string>
+  <string name="permlab_writeSocialStream" product="default">"ghi luồng xã hội của bạn"</string>
+  <string name="permdesc_writeSocialStream" product="default">"Cho phép ứng dụng hiển thị các bản cập nhật xã hội từ bạn bè của bạn. Các ứng dụng độc hại có thể sử dụng điều này để giả vờ là một người bạn và lừa đảo bạn tiết lộ mật khẩu hoặc thông tin bảo mật khác."</string>
   <string name="permlab_readCalendar">"đọc các sự kiện lịch và thông tin bí mật"</string>
-  <string product="tablet" name="permdesc_readCalendar">"Cho phép ứng dụng đọc tất cả các sự kiện lịch được lưu trữ trên máy tính bảng của bạn, bao gồm các sự kiện của bạn bè hoặc đồng nghiệp. Ứng dụng độc hại có quyền này có thể trích xuất thông tin cá nhân từ những lịch này mà chủ sở hữu không hề biết."</string>
-  <string product="default" name="permdesc_readCalendar">"Cho phép ứng dụng đọc tất cả các sự kiện lịch được lưu trữ trên điện thoại của bạn, bao gồm các sự kiện của bạn bè hoặc đồng nghiệp. Ứng dụng độc hại có quyền này có thể trích xuất thông tin cá nhân từ những lịch này mà chủ sở hữu không hề biết."</string>
+  <string name="permdesc_readCalendar" product="tablet">"Cho phép ứng dụng đọc tất cả các sự kiện lịch được lưu trữ trên máy tính bảng của bạn, bao gồm các sự kiện của bạn bè hoặc đồng nghiệp. Ứng dụng độc hại có quyền này có thể trích xuất thông tin cá nhân từ những lịch này mà chủ sở hữu không hề biết."</string>
+  <string name="permdesc_readCalendar" product="default">"Cho phép ứng dụng đọc tất cả các sự kiện lịch được lưu trữ trên điện thoại của bạn, bao gồm các sự kiện của bạn bè hoặc đồng nghiệp. Ứng dụng độc hại có quyền này có thể trích xuất thông tin cá nhân từ những lịch này mà chủ sở hữu không hề biết."</string>
   <string name="permlab_writeCalendar">"thêm hoặc sửa đổi các sự kiện lịch và gửi email cho khách mà chủ sở hữu không hề biết"</string>
   <string name="permlab_accessMockLocation">"các nguồn vị trí mô phỏng cho thử nghiệm"</string>
   <string name="permdesc_accessMockLocation">"Tạo nguồn vị trí mô phỏng cho thử nghiệm. Các ứng dụng độc hại có thể sử dụng quyền này để ghi đè vị trí và/hoặc trạng thái được trả về bởi các nguồn vị trí thực như nhà cung cấp GPS hoặc Mạng."</string>
@@ -475,8 +474,8 @@
   <string name="permlab_installLocationProvider">"quyền cài đặt nhà cung cấp vị trí"</string>
   <string name="permdesc_installLocationProvider">"Tạo nguồn vị trí mô phỏng cho thử nghiệm. Các ứng dụng độc hại có thể sử dụng quyền này để ghi đè vị trí và/hoặc trạng thái được trả về bởi các nguồn vị trí thực như nhà cung cấp GPS hoặc Mạng hoặc giám sát và báo cáo vị trí của bạn ra nguồn bên ngoài."</string>
   <string name="permlab_accessFineLocation">"vị trí (GPS) chính xác"</string>
-  <string product="tablet" name="permdesc_accessFineLocation">"Truy cập các nguồn vị trí chính xác như Hệ thống định vị toàn cầu trên máy tính bảng, nếu có. Các ứng dụng độc hại có thể sử dụng quyền này để xác định vị trí của bạn và có thể tốn thêm nguồn pin."</string>
-  <string product="default" name="permdesc_accessFineLocation">"Truy cập các nguồn vị trí chính xác như Hệ thống Định vị Toàn cầu trên điện thoại, nếu có. Các ứng dụng độc hại có thể sử dụng quyền này để xác định vị trí của bạn và có thể tốn thêm nguồn pin."</string>
+  <string name="permdesc_accessFineLocation" product="tablet">"Truy cập các nguồn vị trí chính xác như Hệ thống định vị toàn cầu trên máy tính bảng, nếu có. Các ứng dụng độc hại có thể sử dụng quyền này để xác định vị trí của bạn và có thể tốn thêm nguồn pin."</string>
+  <string name="permdesc_accessFineLocation" product="default">"Truy cập các nguồn vị trí chính xác như Hệ thống Định vị Toàn cầu trên điện thoại, nếu có. Các ứng dụng độc hại có thể sử dụng quyền này để xác định vị trí của bạn và có thể tốn thêm nguồn pin."</string>
   <string name="permlab_accessCoarseLocation">"vị trí (dựa trên mạng) tổng thể"</string>
   <string name="permlab_accessSurfaceFlinger">"truy cập SurfaceFlinger"</string>
   <string name="permdesc_accessSurfaceFlinger">"Cho phép ứng dụng sử dụng các tính năng cấp thấp của SurfaceFlinger."</string>
@@ -488,14 +487,14 @@
   <string name="permdesc_recordAudio">"Cho phép ứng dụng truy cập vào đường dẫn bản ghi âm."</string>
   <string name="permlab_camera">"chụp ảnh và quay video"</string>
   <string name="permdesc_camera">"Cho phép ứng dụng chụp ảnh và quay video bằng máy ảnh. Quyền này cho phép ứng dụng thu thập ảnh mà máy ảnh chụp vào bất kỳ thời điểm nào."</string>
-  <string product="tablet" name="permlab_brick">"vô hiệu hóa vĩnh viễn máy tính bảng"</string>
-  <string product="default" name="permlab_brick">"vĩnh viễn vô hiệu hóa điện thoại"</string>
-  <string product="tablet" name="permdesc_brick">"Cho phép ứng dụng vô hiệu hóa vĩnh viễn toàn bộ máy tính bảng. Việc này rất nguy hiểm."</string>
-  <string product="default" name="permdesc_brick">"Cho phép ứng dụng vô hiệu hóa vĩnh viễn toàn bộ điện thoại. Việc này rất nguy hiểm."</string>
-  <string product="tablet" name="permlab_reboot">"buộc máy tính bảng khởi động lại"</string>
-  <string product="default" name="permlab_reboot">"buộc khởi động lại điện thoại"</string>
-  <string product="tablet" name="permdesc_reboot">"Cho phép ứng dụng buộc máy tính bảng khởi động lại."</string>
-  <string product="default" name="permdesc_reboot">"Cho phép ứng dụng buộc điện thoại khởi động lại."</string>
+  <string name="permlab_brick" product="tablet">"vô hiệu hóa vĩnh viễn máy tính bảng"</string>
+  <string name="permlab_brick" product="default">"vĩnh viễn vô hiệu hóa điện thoại"</string>
+  <string name="permdesc_brick" product="tablet">"Cho phép ứng dụng vô hiệu hóa vĩnh viễn toàn bộ máy tính bảng. Việc này rất nguy hiểm."</string>
+  <string name="permdesc_brick" product="default">"Cho phép ứng dụng vô hiệu hóa vĩnh viễn toàn bộ điện thoại. Việc này rất nguy hiểm."</string>
+  <string name="permlab_reboot" product="tablet">"buộc máy tính bảng khởi động lại"</string>
+  <string name="permlab_reboot" product="default">"buộc khởi động lại điện thoại"</string>
+  <string name="permdesc_reboot" product="tablet">"Cho phép ứng dụng buộc máy tính bảng khởi động lại."</string>
+  <string name="permdesc_reboot" product="default">"Cho phép ứng dụng buộc điện thoại khởi động lại."</string>
   <string name="permdesc_mount_unmount_filesystems">"Cho phép ứng dụng lắp và tháo các hệ thống tệp cho bộ nhớ di động."</string>
   <string name="permdesc_mount_format_filesystems">"Cho phép ứng dụng định dạng bộ nhớ di động."</string>
   <string name="permlab_asec_access">"nhận thông tin trên bộ nhớ trong"</string>
@@ -522,8 +521,8 @@
   <string name="permdesc_callPhone">"Cho phép ứng dụng gọi các số điện thoại mà không cần sự can thiệp của bạn. Các ứng dụng độc hại có thể dẫn đến các cuộc gọi không mong muốn trên hóa đơn điện thoại của bạn. Lưu ý rằng quyền này không cho phép ứng dụng gọi các số khẩn cấp."</string>
   <string name="permlab_callPrivileged">"gọi trực tiếp số điện thoại bất kỳ"</string>
   <string name="permdesc_callPrivileged">"Cho phép ứng dụng gọi bất kỳ số điện thoại nào, kể cả số khẩn cấp mà không cần sự can thiệp của bạn. Các ứng dụng độc hại có thể thực hiện các cuộc gọi không cần thiết và bất hợp pháp vào dịch vụ khẩn cấp."</string>
-  <string product="tablet" name="permlab_performCdmaProvisioning">"trực tiếp bắt đầu thiết lập máy tính bảng CDMA"</string>
-  <string product="default" name="permlab_performCdmaProvisioning">"trực tiếp bắt đầu thiết lập điện thoại CDMA"</string>
+  <string name="permlab_performCdmaProvisioning" product="tablet">"trực tiếp bắt đầu thiết lập máy tính bảng CDMA"</string>
+  <string name="permlab_performCdmaProvisioning" product="default">"trực tiếp bắt đầu thiết lập điện thoại CDMA"</string>
   <string name="permdesc_performCdmaProvisioning">"Cho phép ứng dụng bắt đầu cấp phép CDMA. Các ứng dụng độc hại có thể bắt đầu cấp phép CDMA một cách không cần thiết"</string>
   <string name="permlab_locationUpdates">"kiểm soát thông báo cập nhật vị trí"</string>
   <string name="permdesc_locationUpdates">"Cho phép bật/tắt thông báo cập nhật vị trí từ radio. Không dành cho các ứng dụng thông thường."</string>
@@ -535,17 +534,17 @@
   <string name="permdesc_modifyPhoneState">"Cho phép ứng dụng kiểm soát các tính năng điện thoại của thiết bị. Ứng dụng có quyền này có thể chuyển mạng, bật và tắt radio điện thoại và những việc tương tự mà không cần phải thông báo cho bạn."</string>
   <string name="permlab_readPhoneState">"đọc trạng thái và nhận dạng của điện thoại"</string>
   <string name="permdesc_readPhoneState">"Cho phép ứng dụng truy cập các tính năng điện thoại của thiết bị. Ứng dụng có quyền này có thể xác định số điện thoại và số sêri của điện thoại này, cho dù cuộc gọi có hiện hoạt hay không, số mà cuộc gọi đó được kết nối và những việc tương tự."</string>
-  <string product="tablet" name="permlab_wakeLock">"ngăn máy tính bảng chuyển sang chế độ ngủ"</string>
-  <string product="default" name="permlab_wakeLock">"ngăn điện thoại chuyển sang chế độ ngủ"</string>
-  <string product="tablet" name="permdesc_wakeLock">"Cho phép ứng dụng ngăn máy tính bảng chuyển sang chế độ ngủ."</string>
-  <string product="default" name="permdesc_wakeLock">"Cho phép ứng dụng ngăn điện thoại chuyển sang chế độ ngủ."</string>
-  <string product="tablet" name="permlab_devicePower">"bật hoặc tắt máy tính bảng"</string>
-  <string product="default" name="permlab_devicePower">"bật hoặc tắt điện thoại"</string>
-  <string product="tablet" name="permdesc_devicePower">"Cho phép ứng dụng bật hoặc tắt máy tính bảng."</string>
-  <string product="default" name="permdesc_devicePower">"Cho phép ứng dụng bật hoặc tắt điện thoại."</string>
+  <string name="permlab_wakeLock" product="tablet">"ngăn máy tính bảng chuyển sang chế độ ngủ"</string>
+  <string name="permlab_wakeLock" product="default">"ngăn điện thoại chuyển sang chế độ ngủ"</string>
+  <string name="permdesc_wakeLock" product="tablet">"Cho phép ứng dụng ngăn máy tính bảng chuyển sang chế độ ngủ."</string>
+  <string name="permdesc_wakeLock" product="default">"Cho phép ứng dụng ngăn điện thoại chuyển sang chế độ ngủ."</string>
+  <string name="permlab_devicePower" product="tablet">"bật hoặc tắt máy tính bảng"</string>
+  <string name="permlab_devicePower" product="default">"bật hoặc tắt điện thoại"</string>
+  <string name="permdesc_devicePower" product="tablet">"Cho phép ứng dụng bật hoặc tắt máy tính bảng."</string>
+  <string name="permdesc_devicePower" product="default">"Cho phép ứng dụng bật hoặc tắt điện thoại."</string>
   <string name="permlab_factoryTest">"chạy ở chế độ thử nghiệm trong nhà máy"</string>
-  <string product="tablet" name="permdesc_factoryTest">"Chạy dưới dạng thử nghiệm nhà máy cấp thấp, cho phép quyền truy cập hoàn toàn vào phần cứng máy tính bảng. Chỉ khả dụng khi máy tính bảng chạy ở chế độ thử nghiệm trong nhà máy."</string>
-  <string product="default" name="permdesc_factoryTest">"Chạy dưới dạng thử nghiệm nhà máy cấp thấp, cho phép quyền truy cập hoàn toàn vào phần cứng điện thoại. Chỉ khả dụng khi điện thoại chạy ở chế độ thử nghiệm trong nhà máy."</string>
+  <string name="permdesc_factoryTest" product="tablet">"Chạy dưới dạng thử nghiệm nhà máy cấp thấp, cho phép quyền truy cập hoàn toàn vào phần cứng máy tính bảng. Chỉ khả dụng khi máy tính bảng chạy ở chế độ thử nghiệm trong nhà máy."</string>
+  <string name="permdesc_factoryTest" product="default">"Chạy dưới dạng thử nghiệm nhà máy cấp thấp, cho phép quyền truy cập hoàn toàn vào phần cứng điện thoại. Chỉ khả dụng khi điện thoại chạy ở chế độ thử nghiệm trong nhà máy."</string>
   <string name="permlab_setWallpaper">"đặt hình nền"</string>
   <string name="permdesc_setWallpaper">"Cho phép ứng dụng đặt hình nền hệ thống."</string>
   <string name="permlab_setWallpaperHints">"Đặt gợi ý kích thước hình nền"</string>
@@ -553,16 +552,16 @@
   <string name="permlab_masterClear">"đặt lại hệ thống về mặc định ban đầu"</string>
   <string name="permdesc_masterClear">"Cho phép ứng dụng đặt lại toàn bộ hệ thống về cài đặt ban đầu, xóa tất cả dữ liệu, cấu hình và ứng dụng đã cài đặt."</string>
   <string name="permlab_setTime">"đặt giờ"</string>
-  <string product="tablet" name="permdesc_setTime">"Cho phép ứng dụng thay đổi giờ trên đồng hồ của máy tính bảng."</string>
-  <string product="default" name="permdesc_setTime">"Cho phép ứng dụng thay đổi giờ trên đồng hồ của điện thoại."</string>
+  <string name="permdesc_setTime" product="tablet">"Cho phép ứng dụng thay đổi giờ trên đồng hồ của máy tính bảng."</string>
+  <string name="permdesc_setTime" product="default">"Cho phép ứng dụng thay đổi giờ trên đồng hồ của điện thoại."</string>
   <string name="permlab_setTimeZone">"đặt múi giờ"</string>
-  <string product="tablet" name="permdesc_setTimeZone">"Cho phép ứng dụng thay đổi múi giờ của máy tính bảng."</string>
-  <string product="default" name="permdesc_setTimeZone">"Cho phép ứng dụng thay đổi múi giờ của điện thoại."</string>
+  <string name="permdesc_setTimeZone" product="tablet">"Cho phép ứng dụng thay đổi múi giờ của máy tính bảng."</string>
+  <string name="permdesc_setTimeZone" product="default">"Cho phép ứng dụng thay đổi múi giờ của điện thoại."</string>
   <string name="permlab_accountManagerService">"hoạt động như AccountManagerService"</string>
   <string name="permdesc_accountManagerService">"Cho phép ứng dụng thực hiện cuộc gọi đến AccountAuthenticators"</string>
   <string name="permlab_getAccounts">"phát hiện tài khoản đã biết"</string>
-  <string product="tablet" name="permdesc_getAccounts">"Cho phép ứng dụng nhận danh sách các tài khoản mà máy tính bảng biết."</string>
-  <string product="default" name="permdesc_getAccounts">"Cho phép ứng dụng nhận danh sách các tài khoản mà điện thoại biết."</string>
+  <string name="permdesc_getAccounts" product="tablet">"Cho phép ứng dụng nhận danh sách các tài khoản mà máy tính bảng biết."</string>
+  <string name="permdesc_getAccounts" product="default">"Cho phép ứng dụng nhận danh sách các tài khoản mà điện thoại biết."</string>
   <string name="permlab_authenticateAccounts">"hoạt động như trình xác thực tài khoản"</string>
   <string name="permdesc_authenticateAccounts">"Cho phép ứng dụng sử dụng các tính năng của trình xác thực tài khoản của AccountManager, bao gồm tạo tài khoản, nhận và đặt mật khẩu của các tài khoản đó."</string>
   <string name="permlab_manageAccounts">"quản lý danh sách tài khoản"</string>
@@ -590,11 +589,11 @@
   <string name="permdesc_accessWimaxState">"Cho phép ứng dụng xem thông tin về trạng thái của WiMAX."</string>
   <string name="permlab_changeWimaxState">"thay đổi trạng thái WiMAX"</string>
   <string name="permlab_bluetoothAdmin">"quản trị bluetooth"</string>
-  <string product="tablet" name="permdesc_bluetoothAdmin">"Cho phép ứng dụng định cấu hình máy tính bảng Bluetooth nội hạt cũng như phát hiện và ghép nối với các thiết bị từ xa."</string>
-  <string product="default" name="permdesc_bluetoothAdmin">"Cho phép ứng dụng định cấu hình điện thoại Bluetooth nội hạt cũng như phát hiện và ghép nối với các thiết bị từ xa."</string>
+  <string name="permdesc_bluetoothAdmin" product="tablet">"Cho phép ứng dụng định cấu hình máy tính bảng Bluetooth nội hạt cũng như phát hiện và ghép nối với các thiết bị từ xa."</string>
+  <string name="permdesc_bluetoothAdmin" product="default">"Cho phép ứng dụng định cấu hình điện thoại Bluetooth nội hạt cũng như phát hiện và ghép nối với các thiết bị từ xa."</string>
   <string name="permlab_bluetooth">"tạo kết nối Bluetooth"</string>
-  <string product="tablet" name="permdesc_bluetooth">"Cho phép ứng dụng xem cấu hình của máy tính bảng Bluetooth nội hạt cũng như tạo và chấp nhận kết nối với các thiết bị được ghép nối."</string>
-  <string product="default" name="permdesc_bluetooth">"Cho phép ứng dụng xem cấu hình của điện thoại Bluetooth nội hạt cũng như tạo và chấp nhận các kết nối với các thiết bị được ghép nối."</string>
+  <string name="permdesc_bluetooth" product="tablet">"Cho phép ứng dụng xem cấu hình của máy tính bảng Bluetooth nội hạt cũng như tạo và chấp nhận kết nối với các thiết bị được ghép nối."</string>
+  <string name="permdesc_bluetooth" product="default">"Cho phép ứng dụng xem cấu hình của điện thoại Bluetooth nội hạt cũng như tạo và chấp nhận các kết nối với các thiết bị được ghép nối."</string>
   <string name="permlab_nfc">"kiểm soát Liên lạc trường gần"</string>
   <string name="permdesc_nfc">"Cho phép ứng dụng liên lạc với thẻ Liên lạc trường gần (NFC), thẻ và trình đọc."</string>
   <string name="permlab_disableKeyguard">"vô hiệu hóa khóa phím"</string>
@@ -613,12 +612,12 @@
   <string name="permdesc_readDictionary">"Cho phép ứng dụng đọc bất kỳ từ, tên và cụm từ riêng nào mà người dùng có thể đã lưu trữ trong từ điển của người dùng."</string>
   <string name="permlab_writeDictionary">"ghi vào từ điển do người dùng xác định"</string>
   <string name="permdesc_writeDictionary">"Cho phép ứng dụng ghi từ mới vào từ điển của người dùng."</string>
-  <string product="nosdcard" name="permlab_sdcardWrite">"sửa đổi/xóa nội dung bộ nhớ USB"</string>
-  <string product="default" name="permlab_sdcardWrite">"sửa đổi/xóa nội dung thẻ SD"</string>
-  <string product="nosdcard" name="permdesc_sdcardWrite">"C.phép ứ.dụng ghi vào b.nhớ USB."</string>
-  <string product="default" name="permdesc_sdcardWrite">"Cho phép ứng dụng ghi vào thẻ SD."</string>
-  <string product="default" name="permlab_mediaStorageWrite">"sửa đổi/xóa nội dung trên bộ nhớ phương tiện cục bộ"</string>
-  <string product="default" name="permdesc_mediaStorageWrite">"Cho phép ứng dụng sửa đổi nội dung của bộ nhớ phương tiện cục bộ."</string>
+  <string name="permlab_sdcardWrite" product="nosdcard">"sửa đổi/xóa nội dung bộ nhớ USB"</string>
+  <string name="permlab_sdcardWrite" product="default">"sửa đổi/xóa nội dung thẻ SD"</string>
+  <string name="permdesc_sdcardWrite" product="nosdcard">"C.phép ứ.dụng ghi vào b.nhớ USB."</string>
+  <string name="permdesc_sdcardWrite" product="default">"Cho phép ứng dụng ghi vào thẻ SD."</string>
+  <string name="permlab_mediaStorageWrite" product="default">"sửa đổi/xóa nội dung trên bộ nhớ phương tiện cục bộ"</string>
+  <string name="permdesc_mediaStorageWrite" product="default">"Cho phép ứng dụng sửa đổi nội dung của bộ nhớ phương tiện cục bộ."</string>
   <string name="permlab_cache_filesystem">"truy cập hệ thống tệp bộ nhớ cache"</string>
   <string name="permdesc_cache_filesystem">"Cho phép ứng dụng đọc và ghi hệ thống tệp bộ nhớ cache."</string>
   <string name="permlab_use_sip">"thực hiện/nhận cuộc gọi qua Internet"</string>
@@ -632,15 +631,15 @@
   <string name="policylab_limitPassword">"Đặt quy tắc mật khẩu"</string>
   <string name="policydesc_limitPassword">"Kiểm soát độ dài và ký tự được phép trong mật khẩu mở khóa màn hình"</string>
   <string name="policylab_watchLogin">"Giám sát những lần thử mở khóa màn hình"</string>
-  <string product="tablet" name="policydesc_watchLogin">"Giám sát số lượng mật khẩu không chính xác được nhập vào khi mở khóa màn hình và khóa máy tính bảng hoặc xóa tất cả dữ liệu của máy tính bảng nếu có quá nhiều mật khẩu không chính xác được nhập vào"</string>
-  <string product="default" name="policydesc_watchLogin">"Giám sát số lượng mật khẩu không chính xác được nhập khi mở khóa màn hình và khóa điện thoại hoặc xóa tất cả dữ liệu trên điện thoại nếu có quá nhiều mật khẩu không chính xác được nhập vào"</string>
+  <string name="policydesc_watchLogin" product="tablet">"Giám sát số lượng mật khẩu không chính xác được nhập vào khi mở khóa màn hình và khóa máy tính bảng hoặc xóa tất cả dữ liệu của máy tính bảng nếu có quá nhiều mật khẩu không chính xác được nhập vào"</string>
+  <string name="policydesc_watchLogin" product="default">"Giám sát số lượng mật khẩu không chính xác được nhập khi mở khóa màn hình và khóa điện thoại hoặc xóa tất cả dữ liệu trên điện thoại nếu có quá nhiều mật khẩu không chính xác được nhập vào"</string>
   <string name="policylab_resetPassword">"Thay đổi mật khẩu mở khóa màn hình"</string>
   <string name="policydesc_resetPassword">"Thay đổi mật khẩu mở khóa màn hình"</string>
   <string name="policylab_forceLock">"Khóa màn hình"</string>
   <string name="policydesc_forceLock">"Kiểm tra cách và thời điểm khóa màn hình"</string>
   <string name="policylab_wipeData">"Xóa tất cả dữ liệu"</string>
-  <string product="tablet" name="policydesc_wipeData">"Xóa dữ liệu trên máy tính bảng mà không cần cảnh báo, bằng cách thực hiện đặt lại về dữ liệu gốc"</string>
-  <string product="default" name="policydesc_wipeData">"Xóa dữ liệu trên điện thoại mà không cần cảnh báo, bằng cách thực hiện đặt lại về dữ liệu gốc"</string>
+  <string name="policydesc_wipeData" product="tablet">"Xóa dữ liệu trên máy tính bảng mà không cần cảnh báo, bằng cách thực hiện đặt lại về dữ liệu gốc"</string>
+  <string name="policydesc_wipeData" product="default">"Xóa dữ liệu trên điện thoại mà không cần cảnh báo, bằng cách thực hiện đặt lại về dữ liệu gốc"</string>
   <string name="policylab_setGlobalProxy">"Đặt proxy chung của điện thoại"</string>
   <string name="policydesc_setGlobalProxy">"Đặt proxy chung của điện thoại được sử dụng trong khi chính sách được bật. Chỉ quản trị viên đầu tiên của điện thoại mới có thể đặt proxy chung hiệu quả."</string>
   <string name="policylab_expirePassword">"Đặt hết hạn mật khẩu khóa màn hình"</string>
@@ -649,49 +648,6 @@
   <string name="policydesc_encryptedStorage">"Yêu cầu dữ liệu ứng dụng được lưu trữ phải được mã hóa"</string>
   <string name="policylab_disableCamera">"Vô hiệu hóa máy ảnh"</string>
   <string name="policydesc_disableCamera">"Ngăn việc sử dụng tất cả các máy ảnh của điện thoại"</string>
-  <string-array name="phoneTypes">
-        <item>"Nhà riêng"</item>
-        <item>"ĐT di động"</item>
-        <item>"Cơ quan"</item>
-        <item>"Số fax Cơ quan"</item>
-        <item>"Số fax Nhà riêng"</item>
-        <item>"Số máy nhắn tin"</item>
-        <item>"Khác"</item>
-        <item>"Tùy chỉnh"</item>
-    </string-array>
-  <string-array name="emailAddressTypes">
-        <item>"Nhà riêng"</item>
-        <item>"Cơ quan"</item>
-        <item>"Khác"</item>
-        <item>"Tùy chỉnh"</item>
-    </string-array>
-  <string-array name="postalAddressTypes">
-        <item>"Nhà riêng"</item>
-        <item>"Cơ quan"</item>
-        <item>"Khác"</item>
-        <item>"Tùy chỉnh"</item>
-    </string-array>
-  <string-array name="imAddressTypes">
-        <item>"Nhà riêng"</item>
-        <item>"Cơ quan"</item>
-        <item>"Khác"</item>
-        <item>"Tùy chỉnh"</item>
-    </string-array>
-  <string-array name="organizationTypes">
-        <item>"Cơ quan"</item>
-        <item>"Khác"</item>
-        <item>"Tùy chỉnh"</item>
-    </string-array>
-  <string-array name="imProtocols">
-        <item>"AIM"</item>
-        <item>"Windows Live"</item>
-        <item>"Yahoo"</item>
-        <item>"Skype"</item>
-        <item>"QQ"</item>
-        <item>"Google Talk"</item>
-        <item>"ICQ"</item>
-        <item>"Jabber"</item>
-    </string-array>
   <string name="phoneTypeCustom">"Tùy chỉnh"</string>
   <string name="phoneTypeHome">"Nhà riêng"</string>
   <string name="phoneTypeMobile">"ĐT di động"</string>
@@ -795,8 +751,8 @@
   <string name="lockscreen_low_battery">"Kết nối bộ sạc của bạn."</string>
   <string name="lockscreen_missing_sim_message_short">"Không có thẻ SIM nào."</string>
   <string name="lockscreen_blocked_sim_message_short">Thẻ SIM bị chặn.</string>
-  <string product="tablet" name="lockscreen_missing_sim_message">"Không có thẻ SIM nào trong máy tính bảng."</string>
-  <string product="default" name="lockscreen_missing_sim_message">"Không có thẻ SIM nào trong điện thoại."</string>
+  <string name="lockscreen_missing_sim_message" product="tablet">"Không có thẻ SIM nào trong máy tính bảng."</string>
+  <string name="lockscreen_missing_sim_message" product="default">"Không có thẻ SIM nào trong điện thoại."</string>
   <string name="lockscreen_missing_sim_instructions">"Vui lòng lắp thẻ SIM."</string>
   <string name="lockscreen_missing_sim_instructions_long">"Thẻ SIM bị thiếu hoặc không thể đọc được. Vui lòng lắp thẻ SIM."</string>
   <string name="lockscreen_permanent_disabled_sim_instructions">"Thẻ SIM của bạn đã bị vô hiệu hóa vĩnh viễn."\n" Hãy liên hệ với nhà cung cấp dịch vụ không dây của bạn để lấy thẻ SIM khác."</string>
@@ -805,7 +761,7 @@
   <string name="lockscreen_transport_pause_description">"Nút tạm dừng"</string>
   <string name="lockscreen_transport_play_description">"Nút phát"</string>
   <string name="lockscreen_transport_stop_description">"Nút dừng"</string>
-  <string msgid="2485604591272668370" name="emergency_calls_only">"Chỉ cuộc gọi khẩn cấp"</string>
+  <string name="emergency_calls_only" msgid="2485604591272668370">"Chỉ cuộc gọi khẩn cấp"</string>
   <string name="lockscreen_network_locked_message">"Mạng đã khóa"</string>
   <string name="lockscreen_sim_puk_locked_message">"Thẻ SIM đã bị khóa PUK."</string>
   <string name="lockscreen_sim_puk_locked_instructions">"Vui lòng xem Hướng dẫn Người dùng hoặc liên hệ với Trung tâm Chăm sóc Khách hàng."</string>
@@ -814,12 +770,12 @@
   <string name="lockscreen_too_many_failed_attempts_dialog_message">"Bạn đã vẽ không chính xác hình mở khóa của mình <xliff:g id="NUMBER_0">%d</xliff:g> lần. "\n\n"Vui lòng thử lại sau <xliff:g id="NUMBER_1">%d</xliff:g> giây."</string>
   <string name="lockscreen_too_many_failed_password_attempts_dialog_message">"Bạn đã nhập sai mật khẩu <xliff:g id="NUMBER_0">%d</xliff:g> lần. "\n\n"Vui lòng thử lại trong <xliff:g id="NUMBER_1">%d</xliff:g> giấy."</string>
   <string name="lockscreen_too_many_failed_pin_attempts_dialog_message">"Bạn đã nhập sai PIN <xliff:g id="NUMBER_0">%d</xliff:g> lần. "\n\n"Vui lòng thử lại trong <xliff:g id="NUMBER_1">%d</xliff:g> giây."</string>
-  <string product="tablet" name="lockscreen_failed_attempts_almost_glogin">"Bạn đã vẽ không chính xác hình mở khóa của mình <xliff:g id="NUMBER_0">%d</xliff:g> lần. Sau <xliff:g id="NUMBER_1">%d</xliff:g> lần thử không thành công khác, bạn sẽ được yêu cầu mở khóa máy tính bảng bằng thông tin đăng nhập Google của mình."\n\n" Vui lòng thử lại trong <xliff:g id="NUMBER_2">%d</xliff:g> giây."</string>
-  <string product="default" name="lockscreen_failed_attempts_almost_glogin">"Bạn đã vẽ không chính xác hình mở khóa của mình <xliff:g id="NUMBER_0">%d</xliff:g> lần. Sau <xliff:g id="NUMBER_1">%d</xliff:g> lần thử không thành công khác, bạn sẽ được yêu cầu mở khóa điện thoại bằng thông tin đăng nhập Google của mình."\n\n" Vui lòng thử lại trong <xliff:g id="NUMBER_2">%d</xliff:g> giây."</string>
-  <string product="tablet" name="lockscreen_failed_attempts_almost_at_wipe">"Bạn đã mở khóa máy tính bảng không đúng cách <xliff:g id="NUMBER_0">%d</xliff:g> lần. Sau <xliff:g id="NUMBER_1">%d</xliff:g> lần mở khóa không thành công nữa, máy tính bảng sẽ được đặt lại về mặc định ban đầu và tất cả dữ liệu người dùng sẽ bị mất."</string>
-  <string product="default" name="lockscreen_failed_attempts_almost_at_wipe">"Bạn đã mở khóa điện thoại không đúng cách <xliff:g id="NUMBER_0">%d</xliff:g> lần. Sau <xliff:g id="NUMBER_1">%d</xliff:g> lần mở khóa không thành công nữa, điện thoại sẽ được đặt lại về mặc định ban đầu và tất cả dữ liệu người dùng sẽ bị mất."</string>
-  <string product="tablet" name="lockscreen_failed_attempts_now_wiping">"Bạn đã mở khóa máy tính bảng không đúng cách <xliff:g id="NUMBER">%d</xliff:g> lần. Bây giờ, máy tính bảng sẽ được đặt lại về mặc định ban đầu."</string>
-  <string product="default" name="lockscreen_failed_attempts_now_wiping">"Bạn đã mở khóa điện thoại không đúng cách <xliff:g id="NUMBER">%d</xliff:g> lần. Bây giờ, điện thoại sẽ được đặt lại về mặc định ban đầu."</string>
+  <string name="lockscreen_failed_attempts_almost_glogin" product="tablet">"Bạn đã vẽ không chính xác hình mở khóa của mình <xliff:g id="NUMBER_0">%d</xliff:g> lần. Sau <xliff:g id="NUMBER_1">%d</xliff:g> lần thử không thành công khác, bạn sẽ được yêu cầu mở khóa máy tính bảng bằng thông tin đăng nhập Google của mình."\n\n" Vui lòng thử lại trong <xliff:g id="NUMBER_2">%d</xliff:g> giây."</string>
+  <string name="lockscreen_failed_attempts_almost_glogin" product="default">"Bạn đã vẽ không chính xác hình mở khóa của mình <xliff:g id="NUMBER_0">%d</xliff:g> lần. Sau <xliff:g id="NUMBER_1">%d</xliff:g> lần thử không thành công khác, bạn sẽ được yêu cầu mở khóa điện thoại bằng thông tin đăng nhập Google của mình."\n\n" Vui lòng thử lại trong <xliff:g id="NUMBER_2">%d</xliff:g> giây."</string>
+  <string name="lockscreen_failed_attempts_almost_at_wipe" product="tablet">"Bạn đã mở khóa máy tính bảng không đúng cách <xliff:g id="NUMBER_0">%d</xliff:g> lần. Sau <xliff:g id="NUMBER_1">%d</xliff:g> lần mở khóa không thành công nữa, máy tính bảng sẽ được đặt lại về mặc định ban đầu và tất cả dữ liệu người dùng sẽ bị mất."</string>
+  <string name="lockscreen_failed_attempts_almost_at_wipe" product="default">"Bạn đã mở khóa điện thoại không đúng cách <xliff:g id="NUMBER_0">%d</xliff:g> lần. Sau <xliff:g id="NUMBER_1">%d</xliff:g> lần mở khóa không thành công nữa, điện thoại sẽ được đặt lại về mặc định ban đầu và tất cả dữ liệu người dùng sẽ bị mất."</string>
+  <string name="lockscreen_failed_attempts_now_wiping" product="tablet">"Bạn đã mở khóa máy tính bảng không đúng cách <xliff:g id="NUMBER">%d</xliff:g> lần. Bây giờ, máy tính bảng sẽ được đặt lại về mặc định ban đầu."</string>
+  <string name="lockscreen_failed_attempts_now_wiping" product="default">"Bạn đã mở khóa điện thoại không đúng cách <xliff:g id="NUMBER">%d</xliff:g> lần. Bây giờ, điện thoại sẽ được đặt lại về mặc định ban đầu."</string>
   <string name="lockscreen_too_many_failed_attempts_countdown">"Hãy thử lại sau <xliff:g id="NUMBER">%d</xliff:g> giây."</string>
   <string name="lockscreen_forgot_pattern_button_text">"Đã quên hình?"</string>
   <string name="lockscreen_glogin_forgot_pattern">"Mở khóa tài khoản"</string>
@@ -873,8 +829,8 @@
   <string name="permlab_readHistoryBookmarks">"đọc lịch sử và dấu trang của Trình duyệt"</string>
   <string name="permdesc_readHistoryBookmarks">"Cho phép ứng dụng đọc tất cả các URL mà Trình duyệt đã truy cập và tất cả các dấu trang của Trình duyệt."</string>
   <string name="permlab_writeHistoryBookmarks">"xem lịch sử và dấu trang của Trình duyệt"</string>
-  <string product="tablet" name="permdesc_writeHistoryBookmarks">"Cho phép ứng dụng sửa đổi lịch sử hoặc dấu trang của Trình duyệt được lưu trữ trên máy tính bảng của bạn. Các ứng dụng độc hại có thể sử dụng quyền này để xóa hoặc sửa đổi dữ liệu Trình duyệt của bạn."</string>
-  <string product="default" name="permdesc_writeHistoryBookmarks">"Cho phép ứng dụng sửa đổi lịch sử hoặc dấu trang của Trình duyệt được lưu trữ trên điện thoại của bạn. Các ứng dụng độc hại có thể sử dụng quyền này để xóa hoặc sửa đổi dữ liệu Trình duyệt của bạn."</string>
+  <string name="permdesc_writeHistoryBookmarks" product="tablet">"Cho phép ứng dụng sửa đổi lịch sử hoặc dấu trang của Trình duyệt được lưu trữ trên máy tính bảng của bạn. Các ứng dụng độc hại có thể sử dụng quyền này để xóa hoặc sửa đổi dữ liệu Trình duyệt của bạn."</string>
+  <string name="permdesc_writeHistoryBookmarks" product="default">"Cho phép ứng dụng sửa đổi lịch sử hoặc dấu trang của Trình duyệt được lưu trữ trên điện thoại của bạn. Các ứng dụng độc hại có thể sử dụng quyền này để xóa hoặc sửa đổi dữ liệu Trình duyệt của bạn."</string>
   <string name="permlab_setAlarm">"đặt báo thức trong đồng hồ báo thức"</string>
   <string name="permdesc_setAlarm">"Cho phép ứng dụng đặt báo thức trong ứng dụng đồng hồ báo thức được cài đặt. Một số ứng dụng đồng hồ báo thức có thể không sử dụng tính năng này."</string>
   <string name="permlab_addVoicemail">"thêm thư thoại"</string>
@@ -904,75 +860,8 @@
   <string name="searchview_description_voice">"Tìm kiếm bằng giọng nói"</string>
   <string name="oneMonthDurationPast">"1 tháng trước"</string>
   <string name="beforeOneMonthDurationPast">"Trước 1 tháng trước"</string>
-  <plurals name="num_seconds_ago">
-        <item quantity="one">"1 giây trước"</item>
-        <item quantity="other">"<xliff:g id="COUNT">%d</xliff:g> giây trước"</item>
-    </plurals>
-  <plurals name="num_minutes_ago">
-        <item quantity="one">"1 phút trước"</item>
-        <item quantity="other">"<xliff:g id="COUNT">%d</xliff:g> phút trước"</item>
-    </plurals>
-  <plurals name="num_hours_ago">
-        <item quantity="one">"1 giờ trước"</item>
-        <item quantity="other">"<xliff:g id="COUNT">%d</xliff:g> giờ trước"</item>
-    </plurals>
-  <plurals name="last_num_days">
-        <item quantity="other">"<xliff:g id="COUNT">%d</xliff:g> ngày trước"</item>
-    </plurals>
   <string name="last_month">"Tháng trước"</string>
   <string name="older">"Cũ hơn"</string>
-  <plurals name="num_days_ago">
-        <item quantity="one">"hôm qua"</item>
-        <item quantity="other">"<xliff:g id="COUNT">%d</xliff:g> ngày trước"</item>
-    </plurals>
-  <plurals name="in_num_seconds">
-        <item quantity="one">"trong 1 giây"</item>
-        <item quantity="other">"trong <xliff:g id="COUNT">%d</xliff:g> giây"</item>
-    </plurals>
-  <plurals name="in_num_minutes">
-        <item quantity="one">"trong 1 phút"</item>
-        <item quantity="other">"trong <xliff:g id="COUNT">%d</xliff:g> phút"</item>
-    </plurals>
-  <plurals name="in_num_hours">
-        <item quantity="one">"trong 1 giờ"</item>
-        <item quantity="other">"trong <xliff:g id="COUNT">%d</xliff:g> giờ"</item>
-    </plurals>
-  <plurals name="in_num_days">
-        <item quantity="one">"ngày mai"</item>
-        <item quantity="other">"trong <xliff:g id="COUNT">%d</xliff:g> ngày"</item>
-    </plurals>
-  <plurals name="abbrev_num_seconds_ago">
-        <item quantity="one">"1 giây trước"</item>
-        <item quantity="other">"<xliff:g id="COUNT">%d</xliff:g> giây trước"</item>
-    </plurals>
-  <plurals name="abbrev_num_minutes_ago">
-        <item quantity="one">"1 phút trước"</item>
-        <item quantity="other">"<xliff:g id="COUNT">%d</xliff:g> phút trước"</item>
-    </plurals>
-  <plurals name="abbrev_num_hours_ago">
-        <item quantity="one">"1 giờ trước"</item>
-        <item quantity="other">"<xliff:g id="COUNT">%d</xliff:g> giờ trước"</item>
-    </plurals>
-  <plurals name="abbrev_num_days_ago">
-        <item quantity="one">"hôm qua"</item>
-        <item quantity="other">"<xliff:g id="COUNT">%d</xliff:g> ngày trước"</item>
-    </plurals>
-  <plurals name="abbrev_in_num_seconds">
-        <item quantity="one">"trong 1 giây"</item>
-        <item quantity="other">"trong <xliff:g id="COUNT">%d</xliff:g> giây"</item>
-    </plurals>
-  <plurals name="abbrev_in_num_minutes">
-        <item quantity="one">"trong 1 phút"</item>
-        <item quantity="other">"trong <xliff:g id="COUNT">%d</xliff:g> phút"</item>
-    </plurals>
-  <plurals name="abbrev_in_num_hours">
-        <item quantity="one">"trong 1 giờ"</item>
-        <item quantity="other">"trong <xliff:g id="COUNT">%d</xliff:g> giờ"</item>
-    </plurals>
-  <plurals name="abbrev_in_num_days">
-        <item quantity="one">"ngày mai"</item>
-        <item quantity="other">"trong <xliff:g id="COUNT">%d</xliff:g> ngày"</item>
-    </plurals>
   <string name="preposition_for_date">"vào <xliff:g id="DATE">%s</xliff:g>"</string>
   <string name="preposition_for_time">"vào lúc <xliff:g id="TIME">%s</xliff:g>"</string>
   <string name="preposition_for_year">"trong <xliff:g id="YEAR">%s</xliff:g>"</string>
@@ -1027,9 +916,9 @@
   <string name="chooseActivity">"Chọn tác vụ"</string>
   <string name="chooseUsbActivity">"Chọn ứng dụng cho thiết bị USB"</string>
   <string name="noApplications">"Không ứng dụng nào có thể thực hiện tác vụ này."</string>
-  <string msgid="932628488013092776" name="aerr_application">"Rất tiếc, <xliff:g id="APPLICATION">%1$s</xliff:g> đã dừng lại."</string>
+  <string name="aerr_application" msgid="932628488013092776">"Rất tiếc, <xliff:g id="APPLICATION">%1$s</xliff:g> đã dừng lại."</string>
   <string name="aerr_process">"Rất tiếc, quá trình <xliff:g id="PROCESS">%1$s</xliff:g> đã dừng lại."</string>
-  <string msgid="8339738283149696827" name="anr_activity_application">"<xliff:g id="APPLICATION">%2$s</xliff:g> không phản hồi."\n\n"Bạn có muốn đóng ứng dụng này không?"</string>
+  <string name="anr_activity_application" msgid="8339738283149696827">"<xliff:g id="APPLICATION">%2$s</xliff:g> không phản hồi."\n\n"Bạn có muốn đóng ứng dụng này không?"</string>
   <string name="anr_activity_process">"Hoạt động <xliff:g id="ACTIVITY">%1$s</xliff:g> không phản hồi."\n\n"Bạn có muốn đóng hoạt động này không?"</string>
   <string name="anr_application_process">"<xliff:g id="APPLICATION">%1$s</xliff:g> không phản hồi. Bạn có muốn đóng ứng dụng này không?"</string>
   <string name="anr_process">"Quá trình <xliff:g id="PROCESS">%1$s</xliff:g> không phản hồi."\n\n"Bạn có muốn đóng quá trình này không?"</string>
@@ -1076,14 +965,6 @@
   <string name="ringtone_silent">"Im lặng"</string>
   <string name="ringtone_picker_title">"Nhạc chuông"</string>
   <string name="ringtone_unknown">"Nhạc chuông không xác định"</string>
-  <plurals name="wifi_available">
-        <item quantity="one">"Mạng Wi-Fi khả dụng"</item>
-        <item quantity="other">"Mạng Wi-Fi khả dụng"</item>
-    </plurals>
-  <plurals name="wifi_available_detailed">
-        <item quantity="one">"Mở mạng Wi-Fi khả dụng"</item>
-        <item quantity="other">"Mở mạng Wi-Fi khả dụng"</item>
-    </plurals>
   <string name="wifi_available_sign_in">"Đăng nhập vào mạng Wi-Fi"</string>
   <string name="wifi_watchdog_network_disabled">"Không thể kết nối với Wi-Fi"</string>
   <string name="wifi_watchdog_network_disabled_detailed">" có kết nối internet kém."</string>
@@ -1117,18 +998,18 @@
   </string>
   <string name="usb_storage_activity_title">"Thiết bị lưu trữ USB"</string>
   <string name="usb_storage_title">"USB đã kết nối"</string>
-  <string product="nosdcard" name="usb_storage_message">"Bạn đã kết nối với máy tính của mình qua USB. Hãy chạm nút bên dưới nếu bạn muốn sao chép các tệp giữa máy tính và bộ nhớ USB của Android của bạn."</string>
-  <string product="default" name="usb_storage_message">"Bạn đã kết nối với máy tính của mình qua USB. Hãy chạm nút bên dưới nếu bạn muốn sao chép các tệp giữa máy tính và thẻ SD của Android của bạn."</string>
+  <string name="usb_storage_message" product="nosdcard">"Bạn đã kết nối với máy tính của mình qua USB. Hãy chạm nút bên dưới nếu bạn muốn sao chép các tệp giữa máy tính và bộ nhớ USB của Android của bạn."</string>
+  <string name="usb_storage_message" product="default">"Bạn đã kết nối với máy tính của mình qua USB. Hãy chạm nút bên dưới nếu bạn muốn sao chép các tệp giữa máy tính và thẻ SD của Android của bạn."</string>
   <string name="usb_storage_button_mount">"Bật bộ lưu trữ USB"</string>
-  <string product="nosdcard" name="usb_storage_error_message">"Đã xảy ra sự cố khi sử dụng bộ nhớ USB của bạn cho bộ nhớ dung lượng lớn USB."</string>
-  <string product="default" name="usb_storage_error_message">"Đã xảy ra sự cố khi sử dụng thẻ SD của bạn cho bộ nhớ dung lượng lớn USB."</string>
+  <string name="usb_storage_error_message" product="nosdcard">"Đã xảy ra sự cố khi sử dụng bộ nhớ USB của bạn cho bộ nhớ dung lượng lớn USB."</string>
+  <string name="usb_storage_error_message" product="default">"Đã xảy ra sự cố khi sử dụng thẻ SD của bạn cho bộ nhớ dung lượng lớn USB."</string>
   <string name="usb_storage_notification_title">"USB đã kết nối"</string>
   <string name="usb_storage_notification_message">"Chọn để sao chép tệp đến/từ máy tính của bạn."</string>
   <string name="usb_storage_stop_notification_title">"Tắt bộ lưu trữ USB"</string>
   <string name="usb_storage_stop_notification_message">"Chọn tắt bộ lưu trữ USB."</string>
   <string name="usb_storage_stop_title">"Bộ lưu trữ USB đang được sử dụng"</string>
-  <string product="nosdcard" name="usb_storage_stop_message">"Trước khi tắt bộ nhớ USB, đảm bảo rằng bạn đã ngắt kết nối (“đẩy”) bộ nhớ USB của Android khỏi máy tính của mình."</string>
-  <string product="default" name="usb_storage_stop_message">"Trước khi tắt bộ lưu trữ USB, đảm bảo rằng bạn đã tháo (“đẩy”) thẻ SD của Android khỏi máy tính của mình."</string>
+  <string name="usb_storage_stop_message" product="nosdcard">"Trước khi tắt bộ nhớ USB, đảm bảo rằng bạn đã ngắt kết nối (“đẩy”) bộ nhớ USB của Android khỏi máy tính của mình."</string>
+  <string name="usb_storage_stop_message" product="default">"Trước khi tắt bộ lưu trữ USB, đảm bảo rằng bạn đã tháo (“đẩy”) thẻ SD của Android khỏi máy tính của mình."</string>
   <string name="usb_storage_stop_button_mount">"Tắt bộ lưu trữ USB"</string>
   <string name="usb_storage_stop_error_message">"Đã xảy ra sự cố khi tắt bộ lưu trữ USB. Hãy kiểm tra để đảm bảo bạn đã tháo trình điều khiển chủ USB rồi thử lại."</string>
   <string name="dlg_confirm_kill_storage_users_title">"Bật bộ lưu trữ USB"</string>
@@ -1141,10 +1022,10 @@
   <string name="usb_accessory_notification_title">"Đã kết nối với phụ kiện USB"</string>
   <string name="usb_cdrom_notification_title">Trình điều khiển ảo được bật</string>
   <string name="usb_notification_message">"Chạm để có các tùy chọn USB khác"</string>
-  <string product="nosdcard" name="extmedia_format_title">"Định dạng b.nhớ USB"</string>
-  <string product="default" name="extmedia_format_title">"Định dạng thẻ SD"</string>
-  <string product="nosdcard" name="extmedia_format_message">"Định dạng bộ nhớ USB, xóa tất cả tệp được lưu trữ tại đây? Không thể hoàn tác tác vụ!"</string>
-  <string product="default" name="extmedia_format_message">"Bạn có chắc chắn muốn định dạng thẻ SD không? Tất cả dữ liệu trên thẻ của bạn sẽ bị mất."</string>
+  <string name="extmedia_format_title" product="nosdcard">"Định dạng b.nhớ USB"</string>
+  <string name="extmedia_format_title" product="default">"Định dạng thẻ SD"</string>
+  <string name="extmedia_format_message" product="nosdcard">"Định dạng bộ nhớ USB, xóa tất cả tệp được lưu trữ tại đây? Không thể hoàn tác tác vụ!"</string>
+  <string name="extmedia_format_message" product="default">"Bạn có chắc chắn muốn định dạng thẻ SD không? Tất cả dữ liệu trên thẻ của bạn sẽ bị mất."</string>
   <string name="extmedia_format_button_format">"Định dạng"</string>
   <string name="adb_active_notification_title">"Gỡ lỗi USB đã được kết nối"</string>
   <string name="adb_active_notification_message">"Chọn để vô hiệu hóa gỡ lỗi USB."</string>
@@ -1156,29 +1037,29 @@
   <string name="candidates_style">
     <u>"ứng viên"</u>
   </string>
-  <string product="nosdcard" name="ext_media_checking_notification_title">"Đang chuẩn bị bộ nhớ USB"</string>
-  <string product="default" name="ext_media_checking_notification_title">"Đang chuẩn bị thẻ SD"</string>
+  <string name="ext_media_checking_notification_title" product="nosdcard">"Đang chuẩn bị bộ nhớ USB"</string>
+  <string name="ext_media_checking_notification_title" product="default">"Đang chuẩn bị thẻ SD"</string>
   <string name="ext_media_checking_notification_message">"Đang kiểm tra lỗi."</string>
-  <string product="nosdcard" name="ext_media_nofs_notification_title">"Bộ nhớ USB trống"</string>
-  <string product="default" name="ext_media_nofs_notification_title">"Thẻ SD trống"</string>
-  <string product="nosdcard" name="ext_media_nofs_notification_message">"Bộ nhớ USB trống hoặc không có hệ thống tệp được hỗ trợ."</string>
-  <string product="default" name="ext_media_nofs_notification_message">"Thẻ SD trống hoặc có hệ thống tệp không được hỗ trợ."</string>
-  <string product="nosdcard" name="ext_media_unmountable_notification_title">"Bộ nhớ USB bị hỏng"</string>
-  <string product="default" name="ext_media_unmountable_notification_title">"Thẻ SD đã bị hỏng"</string>
-  <string product="nosdcard" name="ext_media_unmountable_notification_message">"Bộ nhớ USB bị hỏng. Bạn có thể phải định dạng lại bộ nhớ USB đó."</string>
-  <string product="default" name="ext_media_unmountable_notification_message">"Thẻ SD bị hỏng. Bạn có thể phải định dạng lại thẻ SD đó."</string>
-  <string product="nosdcard" name="ext_media_badremoval_notification_title">"Bộ nhớ USB bị tháo đột ngột"</string>
-  <string product="default" name="ext_media_badremoval_notification_title">"Thẻ SD bị tháo đột ngột"</string>
-  <string product="nosdcard" name="ext_media_badremoval_notification_message">"Ngắt kết nối USB trước khi tháo nhằm tránh mất dữ liệu."</string>
-  <string product="default" name="ext_media_badremoval_notification_message">"Tháo thẻ SD trước khi gỡ nhằm tránh mất dữ liệu."</string>
-  <string product="nosdcard" name="ext_media_safe_unmount_notification_title">"Bộ nhớ USB an toàn để tháo"</string>
-  <string product="default" name="ext_media_safe_unmount_notification_title">"An toàn để tháo thẻ SD"</string>
-  <string product="nosdcard" name="ext_media_safe_unmount_notification_message">"Bạn có thể tháo an toàn bộ nhớ USB."</string>
-  <string product="default" name="ext_media_safe_unmount_notification_message">"Bạn có thể tháo an toàn thẻ SD."</string>
-  <string product="nosdcard" name="ext_media_nomedia_notification_title">"Bộ nhớ USB đã tháo"</string>
-  <string product="default" name="ext_media_nomedia_notification_title">"Thẻ SD đã bị tháo"</string>
-  <string product="nosdcard" name="ext_media_nomedia_notification_message">"Bộ nhớ USB bị tháo. Hãy lắp phương tiện mới."</string>
-  <string product="default" name="ext_media_nomedia_notification_message">"Thẻ SD đã được tháo. Hãy lắp một thẻ mới."</string>
+  <string name="ext_media_nofs_notification_title" product="nosdcard">"Bộ nhớ USB trống"</string>
+  <string name="ext_media_nofs_notification_title" product="default">"Thẻ SD trống"</string>
+  <string name="ext_media_nofs_notification_message" product="nosdcard">"Bộ nhớ USB trống hoặc không có hệ thống tệp được hỗ trợ."</string>
+  <string name="ext_media_nofs_notification_message" product="default">"Thẻ SD trống hoặc có hệ thống tệp không được hỗ trợ."</string>
+  <string name="ext_media_unmountable_notification_title" product="nosdcard">"Bộ nhớ USB bị hỏng"</string>
+  <string name="ext_media_unmountable_notification_title" product="default">"Thẻ SD đã bị hỏng"</string>
+  <string name="ext_media_unmountable_notification_message" product="nosdcard">"Bộ nhớ USB bị hỏng. Bạn có thể phải định dạng lại bộ nhớ USB đó."</string>
+  <string name="ext_media_unmountable_notification_message" product="default">"Thẻ SD bị hỏng. Bạn có thể phải định dạng lại thẻ SD đó."</string>
+  <string name="ext_media_badremoval_notification_title" product="nosdcard">"Bộ nhớ USB bị tháo đột ngột"</string>
+  <string name="ext_media_badremoval_notification_title" product="default">"Thẻ SD bị tháo đột ngột"</string>
+  <string name="ext_media_badremoval_notification_message" product="nosdcard">"Ngắt kết nối USB trước khi tháo nhằm tránh mất dữ liệu."</string>
+  <string name="ext_media_badremoval_notification_message" product="default">"Tháo thẻ SD trước khi gỡ nhằm tránh mất dữ liệu."</string>
+  <string name="ext_media_safe_unmount_notification_title" product="nosdcard">"Bộ nhớ USB an toàn để tháo"</string>
+  <string name="ext_media_safe_unmount_notification_title" product="default">"An toàn để tháo thẻ SD"</string>
+  <string name="ext_media_safe_unmount_notification_message" product="nosdcard">"Bạn có thể tháo an toàn bộ nhớ USB."</string>
+  <string name="ext_media_safe_unmount_notification_message" product="default">"Bạn có thể tháo an toàn thẻ SD."</string>
+  <string name="ext_media_nomedia_notification_title" product="nosdcard">"Bộ nhớ USB đã tháo"</string>
+  <string name="ext_media_nomedia_notification_title" product="default">"Thẻ SD đã bị tháo"</string>
+  <string name="ext_media_nomedia_notification_message" product="nosdcard">"Bộ nhớ USB bị tháo. Hãy lắp phương tiện mới."</string>
+  <string name="ext_media_nomedia_notification_message" product="default">"Thẻ SD đã được tháo. Hãy lắp một thẻ mới."</string>
   <string name="activity_list_empty">"Không tìm thấy hoạt động nào phù hợp"</string>
   <string name="permlab_pkgUsageStats">"cập nhật thống kê sử dụng thành phần"</string>
   <string name="permdesc_pkgUsageStats">"Cho phép sửa đổi các thống kê sử dụng thành phần được chọn. Không dành cho các ứng dụng thông thường."</string>
@@ -1229,31 +1110,21 @@
   <string name="throttled_notification_message">"Chạm để tìm hiểu thêm về việc sử dụng dữ liệu di động"</string>
   <string name="no_matches">No matches</string>
   <string name="find_on_page">"Tìm kiếm trên trang"</string>
-  <plurals name="matches_found">
-        <!-- Case of one match -->
-        <!--Modify Spreadst of 94151 can't show whole information on webpage  start -->
-        <!-- <item quantity="one">1 match</item> -->
-        <item quantity="one">"1 kết quả phù hợp"</item>
-        <!-- Case of multiple total matches -->
-        <!-- <item quantity="other"><xliff:g id="index" example="2">%d</xliff:g> of <xliff:g id="total" example="137">%d</xliff:g></item> -->
-        <item quantity="other">"<xliff:g id="INDEX">%d</xliff:g> trong tổng số <xliff:g id="TOTAL">%d</xliff:g>"</item>
-        <!--Modify Spreadst of 94151 can't show whole information on webpage  end -->
-        </plurals>
   <string name="stk_refresh_sim_init_message">Thẻ SIM đang cập nhật</string>
   <string name="stk_refresh_sim_reset_message">Điện thoại sẽ khởi động lại</string>
   <string name="action_mode_done">"Xong"</string>
-  <string product="nosdcard" name="progress_unmounting">"Đang ngắt kết nối bộ nhớ USB..."</string>
-  <string product="default" name="progress_unmounting">"Đang ngắt kết nối thẻ SD..."</string>
-  <string product="nosdcard" name="progress_erasing">"Đang xóa bộ nhớ USB..."</string>
-  <string product="default" name="progress_erasing">"Đang xóa thẻ SD..."</string>
-  <string product="nosdcard" name="format_error">"Không thể xóa bộ nhớ USB."</string>
-  <string product="default" name="format_error">"Không thể xóa thẻ SD."</string>
+  <string name="progress_unmounting" product="nosdcard">"Đang ngắt kết nối bộ nhớ USB..."</string>
+  <string name="progress_unmounting" product="default">"Đang ngắt kết nối thẻ SD..."</string>
+  <string name="progress_erasing" product="nosdcard">"Đang xóa bộ nhớ USB..."</string>
+  <string name="progress_erasing" product="default">"Đang xóa thẻ SD..."</string>
+  <string name="format_error" product="nosdcard">"Không thể xóa bộ nhớ USB."</string>
+  <string name="format_error" product="default">"Không thể xóa thẻ SD."</string>
   <string name="media_bad_removal">"Thẻ SD bị tháo trước khi được ngắt kết nối."</string>
-  <string product="nosdcard" name="media_checking">"Bộ nhớ USB hiện đang được kiểm tra."</string>
-  <string product="default" name="media_checking">"Thẻ SD hiện đang được kiểm tra."</string>
+  <string name="media_checking" product="nosdcard">"Bộ nhớ USB hiện đang được kiểm tra."</string>
+  <string name="media_checking" product="default">"Thẻ SD hiện đang được kiểm tra."</string>
   <string name="media_removed">"Thẻ SD đã được tháo."</string>
-  <string product="nosdcard" name="media_shared">"Bộ nhớ USB hiện đang được máy tính sử dụng."</string>
-  <string product="default" name="media_shared">"Thẻ SD hiện đang được máy tính sử dụng."</string>
+  <string name="media_shared" product="nosdcard">"Bộ nhớ USB hiện đang được máy tính sử dụng."</string>
+  <string name="media_shared" product="default">"Thẻ SD hiện đang được máy tính sử dụng."</string>
   <string name="media_unknown_state">"Phương tiện bên ngoài ở trạng thái không xác định."</string>
   <string name="share">"Chia sẻ"</string>
   <string name="find">"Tìm"</string>
@@ -1429,4 +1300,143 @@
   <string name="description_target_call">Gọi</string>
   <string name="description_target_sms">"SMS"</string>
   <string name="ringtone_waning">Tệp tin sai, hãy nhập lại</string>
+  <skip></skip>
+  <string-array name="phoneTypes">
+        <item>"Nhà riêng"</item>
+        <item>"ĐT di động"</item>
+        <item>"Cơ quan"</item>
+        <item>"Số fax Cơ quan"</item>
+        <item>"Số fax Nhà riêng"</item>
+        <item>"Số máy nhắn tin"</item>
+        <item>"Khác"</item>
+        <item>"Tùy chỉnh"</item>
+    </string-array>
+  <string-array name="emailAddressTypes">
+        <item>"Nhà riêng"</item>
+        <item>"Cơ quan"</item>
+        <item>"Khác"</item>
+        <item>"Tùy chỉnh"</item>
+    </string-array>
+  <string-array name="postalAddressTypes">
+        <item>"Nhà riêng"</item>
+        <item>"Cơ quan"</item>
+        <item>"Khác"</item>
+        <item>"Tùy chỉnh"</item>
+    </string-array>
+  <string-array name="imAddressTypes">
+        <item>"Nhà riêng"</item>
+        <item>"Cơ quan"</item>
+        <item>"Khác"</item>
+        <item>"Tùy chỉnh"</item>
+    </string-array>
+  <string-array name="organizationTypes">
+        <item>"Cơ quan"</item>
+        <item>"Khác"</item>
+        <item>"Tùy chỉnh"</item>
+    </string-array>
+  <string-array name="imProtocols">
+        <item>"AIM"</item>
+        <item>"Windows Live"</item>
+        <item>"Yahoo"</item>
+        <item>"Skype"</item>
+        <item>"QQ"</item>
+        <item>"Google Talk"</item>
+        <item>"ICQ"</item>
+        <item>"Jabber"</item>
+    </string-array>
+  <plurals name="num_seconds_ago">
+        <item quantity="one">"1 giây trước"</item>
+        <item quantity="other">"<xliff:g id="COUNT">%d</xliff:g> giây trước"</item>
+    </plurals>
+  <plurals name="num_minutes_ago">
+        <item quantity="one">"1 phút trước"</item>
+        <item quantity="other">"<xliff:g id="COUNT">%d</xliff:g> phút trước"</item>
+    </plurals>
+  <plurals name="num_hours_ago">
+        <item quantity="one">"1 giờ trước"</item>
+        <item quantity="other">"<xliff:g id="COUNT">%d</xliff:g> giờ trước"</item>
+    </plurals>
+  <plurals name="last_num_days">
+        <item quantity="other">"<xliff:g id="COUNT">%d</xliff:g> ngày trước"</item>
+    </plurals>
+  <plurals name="num_days_ago">
+        <item quantity="one">"hôm qua"</item>
+        <item quantity="other">"<xliff:g id="COUNT">%d</xliff:g> ngày trước"</item>
+    </plurals>
+  <plurals name="in_num_seconds">
+        <item quantity="one">"trong 1 giây"</item>
+        <item quantity="other">"trong <xliff:g id="COUNT">%d</xliff:g> giây"</item>
+    </plurals>
+  <plurals name="in_num_minutes">
+        <item quantity="one">"trong 1 phút"</item>
+        <item quantity="other">"trong <xliff:g id="COUNT">%d</xliff:g> phút"</item>
+    </plurals>
+  <plurals name="in_num_hours">
+        <item quantity="one">"trong 1 giờ"</item>
+        <item quantity="other">"trong <xliff:g id="COUNT">%d</xliff:g> giờ"</item>
+    </plurals>
+  <plurals name="in_num_days">
+        <item quantity="one">"ngày mai"</item>
+        <item quantity="other">"trong <xliff:g id="COUNT">%d</xliff:g> ngày"</item>
+    </plurals>
+  <plurals name="abbrev_num_seconds_ago">
+        <item quantity="one">"1 giây trước"</item>
+        <item quantity="other">"<xliff:g id="COUNT">%d</xliff:g> giây trước"</item>
+    </plurals>
+  <plurals name="abbrev_num_minutes_ago">
+        <item quantity="one">"1 phút trước"</item>
+        <item quantity="other">"<xliff:g id="COUNT">%d</xliff:g> phút trước"</item>
+    </plurals>
+  <plurals name="abbrev_num_hours_ago">
+        <item quantity="one">"1 giờ trước"</item>
+        <item quantity="other">"<xliff:g id="COUNT">%d</xliff:g> giờ trước"</item>
+    </plurals>
+  <plurals name="abbrev_num_days_ago">
+        <item quantity="one">"hôm qua"</item>
+        <item quantity="other">"<xliff:g id="COUNT">%d</xliff:g> ngày trước"</item>
+    </plurals>
+  <plurals name="abbrev_in_num_seconds">
+        <item quantity="one">"trong 1 giây"</item>
+        <item quantity="other">"trong <xliff:g id="COUNT">%d</xliff:g> giây"</item>
+    </plurals>
+  <plurals name="abbrev_in_num_minutes">
+        <item quantity="one">"trong 1 phút"</item>
+        <item quantity="other">"trong <xliff:g id="COUNT">%d</xliff:g> phút"</item>
+    </plurals>
+  <plurals name="abbrev_in_num_hours">
+        <item quantity="one">"trong 1 giờ"</item>
+        <item quantity="other">"trong <xliff:g id="COUNT">%d</xliff:g> giờ"</item>
+    </plurals>
+  <plurals name="abbrev_in_num_days">
+        <item quantity="one">"ngày mai"</item>
+        <item quantity="other">"trong <xliff:g id="COUNT">%d</xliff:g> ngày"</item>
+    </plurals>
+  <plurals name="wifi_available">
+        <item quantity="one">"Mạng Wi-Fi khả dụng"</item>
+        <item quantity="other">"Mạng Wi-Fi khả dụng"</item>
+    </plurals>
+  <plurals name="wifi_available_detailed">
+        <item quantity="one">"Mở mạng Wi-Fi khả dụng"</item>
+        <item quantity="other">"Mở mạng Wi-Fi khả dụng"</item>
+    </plurals>
+  <plurals name="matches_found">
+        <!-- Case of one match -->
+        <!--Modify Spreadst of 94151 can't show whole information on webpage  start -->
+        <!-- <item quantity="one">1 match</item> -->
+        <item quantity="one">"1 kết quả phù hợp"</item>
+        <!-- Case of multiple total matches -->
+        <!-- <item quantity="other"><xliff:g id="index" example="2">%d</xliff:g> of <xliff:g id="total" example="137">%d</xliff:g></item> -->
+        <item quantity="other">"<xliff:g id="INDEX">%d</xliff:g> trong tổng số <xliff:g id="TOTAL">%d</xliff:g>"</item>
+        <!--Modify Spreadst of 94151 can't show whole information on webpage  end -->
+        </plurals>
+  <string name="low_internal_storage_ignore">Bỏ qua</string>
+  <string name="low_internal_storage_display_details">"Chi tiết"</string>
+  <string name="low_internal_storage_wait">"Đang đợi..."</string>
+  <string name="low_internal_storage_updating_details">"Đang cập nhật Chi tiết..."</string>
+  <string name="emergency_call_no_service">Không có mạng khả dụng</string>
+  <string name="usim_recommanded">Không sử dụng thẻ CUCC</string>
+  <string name="usim_recommanded_for_cucc_app">Ứng dụng CUCC, khuyến cáo USIM. Tiếp tục?</string>
+  <string name="pick_yes">"Tiếp tục"</string>
+  <string name="pick_no">"Hủy"</string>
+  <string name="language_automatic">"Tự động"</string>
 </resources>

@@ -17,102 +17,101 @@
 ** limitations under the License.
 */
  -->
-<resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" xmlns:android="http://schemas.android.com/apk/res/android">
   <!-- no translation found for wifi_available_sign_in_detailed (6797764740339907572) -->
-  <string msgid="2625429890869005782" name="imei">"IMEI"</string>
-  <string msgid="4841221237681254195" name="meid">"MEID"</string>
-  <string msgid="319298163018473078" name="silent_mode_silent">"Pendering mati"</string>
-  <string msgid="7072043388581551395" name="silent_mode_vibrate">"Pendering bergetar"</string>
-  <string msgid="8592241816194074353" name="silent_mode_ring">"Pendering nyala"</string>
-  <string msgid="7054509914500140361" name="reboot_safemode_title">"Reboot ke mode aman"</string>
-  <string msgid="55293944502784668" name="reboot_safemode_confirm">"Apakah Anda ingin reboot ke mode aman? Tindakan ini akan menonaktifkan semua aplikasi pihak ketiga yang telah dipasang. Aplikasi tersebut akan dipulihkan ketika Anda melakukan reboot lagi."</string>
-  <string msgid="1598328843619646166" name="permlab_readCellBroadcasts">"membaca pesan siaran seluler"</string>
-  <string msgid="6361972776080458979" name="permdesc_readCellBroadcasts">"Mengizinkan aplikasi membaca pesan siaran seluler yang diterima perangkat Anda. Lansiran siaran seluler dikirimkan di beberapa lokasi untuk memperingatkan Anda tentang situasi darurat. Aplikasi berbahaya dapat mengganggu kinerja atau operasi perangkat Anda saat siaran seluler darurat diterima."</string>
-  <string msgid="6229468674753529501" name="permlab_getDetailedTasks">"mengambil detail aplikasi yang sedang berjalan"</string>
-  <string msgid="153824741440717599" name="permdesc_getDetailedTasks">"Izinkan aplikasi mengambil informasi mendetail tentang tugas yang saat ini dan baru-baru ini dijalankan. Aplikasi berbahaya dapat menemukan informasi pribadi tentang aplikasi lain."</string>
-  <string msgid="2918768238045206456" name="permlab_startAnyActivity">"memulai aktivitas apa pun"</string>
-  <string msgid="997823695343584001" name="permdesc_startAnyActivity">"Mengizinkan aplikasi memulai aktivitas apa pun, terlepas dari perlindungan izin atau status yang diekspor."</string>
-  <string msgid="6975387118861842061" name="permlab_setScreenCompatibility">"menyetel kompatibilitas layar"</string>
-  <string msgid="692043618693917374" name="permdesc_setScreenCompatibility">"Memungkinkan apl mengontrol mode kompatibilitas layar aplikasi lain. Aplikasi berbahaya dapat merusak perilaku aplikasi lain."</string>
-  <string msgid="5357733942556031593" name="permlab_bindAccessibilityService">"mengikat ke layanan aksesibilitas"</string>
-  <string msgid="7034615928609331368" name="permdesc_bindAccessibilityService">"Mengizinkan pemegang untuk mengikat antarmuka tingkat tinggi dari suatu layanan. Tidak pernah diperlukan oleh aplikasi normal."</string>
-  <string msgid="4778731703600909340" name="permlab_setKeyboardLayout">"Ubah tata letak keyboard"</string>
-  <string msgid="8480016771134175879" name="permdesc_setKeyboardLayout">"Memungkinkan aplikasi untuk mengubah tata letak keyboard. Tidak pernah dibutuhkan oleh aplikasi normal."</string>
-  <string msgid="8525189272329086137" product="tablet" name="permdesc_persistentActivity">"Memungkinkan aplikasi membuat bagian dari dirinya sendiri terus-menerus berada dalam memori. Izin ini dapat membatasi memori yang tersedia untuk aplikasi lain sehingga menjadikan tablet lambat."</string>
-  <string msgid="4384760047508278272" product="default" name="permdesc_persistentActivity">"Memungkinkan aplikasi membuat bagian dari dirinya sendiri terus-menerus berada dalam memori. Izin ini dapat membatasi memori yang tersedia untuk aplikasi lain sehingga menjadikan ponsel lambat."</string>
-  <string msgid="4627315351093508795" name="permlab_grantRevokePermissions">"memberi atau mencabut izin"</string>
-  <string msgid="4088642654085850662" name="permdesc_grantRevokePermissions">"Memungkinkan aplikasi memberikan atau mencabut izin khusus untuk aplikasi tersebut atau aplikasi lainnya. Aplikasi berbahaya dapat menggunakannya untuk mengakses fitur yang tidak Anda beri izin."</string>
-  <string msgid="3478133184624102739" name="permlab_readCallLog">"membaca log panggilan"</string>
-  <string msgid="3700645184870760285" product="tablet" name="permdesc_readCallLog">"Memungkinkan aplikasi membaca log panggilan tablet Anda, termasuk data tentang panggilan masuk dan keluar. Izin ini memungkinkan aplikasi menyimpan data log panggilan Anda, dan aplikasi berbahaya dapat berbagi data log panggilan tanpa sepengetahuan Anda."</string>
-  <string msgid="5777725796813217244" product="default" name="permdesc_readCallLog">"Memungkinkan aplikasi membaca log panggilan ponsel Anda, termasuk data tentang panggilan masuk dan keluar. Izin ini memungkinkan aplikasi menyimpan data log panggilan Anda, dan aplikasi berbahaya dapat berbagi data log panggilan tanpa sepengetahuan Anda."</string>
-  <string msgid="8552045664743499354" name="permlab_writeCallLog">"menulis log panggilan"</string>
-  <string msgid="6661806062274119245" product="tablet" name="permdesc_writeCallLog">"Memungkinkan apl memodifikasi log panggilan tablet Anda, termasuk data tentang panggilan masuk dan keluar. Apl berbahaya dapat menggunakan ini untuk menghapus atau memodifikasi log panggilan Anda."</string>
-  <string msgid="683941736352787842" product="default" name="permdesc_writeCallLog">"Memungkinkan apl memodifikasi log panggilan ponsel Anda, termasuk data tentang panggilan masuk dan keluar. Apl berbahaya dapat menggunakan ini untuk menghapus atau memodifikasi log panggilan Anda."</string>
-  <string msgid="6679035520113668528" product="tablet" name="permdesc_writeCalendar">"Memungkinkan aplikasi menambahkan, menghapus, mengubah acara yang dapat Anda ubah pada tablet, termasuk acara teman atau rekan kerja. Izin ini memungkinkan aplikasi mengirim pesan yang kelihatannya berasal dari pemilik kalender, atau mengubah acara tanpa sepengetahuan pemilik."</string>
-  <string msgid="2324469496327249376" product="default" name="permdesc_writeCalendar">"Memungkinkan aplikasi menambahkan, menghapus, mengubah acara yang dapat Anda ubah pada ponsel, termasuk acara teman atau rekan kerja. Izin ini memungkinkan aplikasi mengirim pesan yang kelihatannya berasal dari pemilik kalender, atau mengubah acara tanpa sepengetahuan pemilik."</string>
-  <string msgid="5383798877137640762" name="permdesc_accessCoarseLocation">"Mengakses perkiraan lokasi dari penyedia lokasi menggunakan sumber jaringan, misalnya menara seluler dan WLAN. Ketika layanan lokasi ini tersedia dan diaktifkan, izin ini memungkinkan aplikasi menentukan perkiraan lokasi Anda."</string>
-  <string msgid="2927361537942591841" product="nosdcard" name="permlab_mount_unmount_filesystems">"akses sistem file simpanan USB"</string>
-  <string msgid="4402305049890953810" product="default" name="permlab_mount_unmount_filesystems">"akses sistem file Kartu SD"</string>
-  <string msgid="6227819582624904972" product="nosdcard" name="permlab_mount_format_filesystems">"hapus penyimpanan USB"</string>
-  <string msgid="262582698639274056" product="default" name="permlab_mount_format_filesystems">"hapus Kartu SD"</string>
-  <string msgid="7969774021256336548" product="tablet" name="permdesc_changeWifiMulticastState">"Memungkinkan aplikasi menerima paket yang dikirim ke semua perangkat melalui jaringan WLAN menggunakan alamat multicast, bukan hanya tablet Anda. Izin ini akan menggunakan lebih banyak daya daripada mode selain multicast."</string>
-  <string msgid="6851949706025349926" product="default" name="permdesc_changeWifiMulticastState">"Memungkinkan aplikasi menerima paket yang dikirim ke semua perangkat melalui jaringan WLAN menggunakan alamat multicast, bukan hanya ponsel Anda. Izin ini akan menggunakan lebih banyak daya daripada mode selain multicast."</string>
-  <string msgid="3156456504084201805" product="tablet" name="permdesc_changeWimaxState">"Memungkinkan aplikasi menyambungkan tablet ke dan memutus tablet dari jaringan WiMAX."</string>
-  <string msgid="697025043004923798" product="default" name="permdesc_changeWimaxState">"Memungkinkan aplikasi menyambungkan ponsel ke dan memutus ponsel dari jaringan WiMAX."</string>
-  <string msgid="8235341515605559677" product="nosdcard" name="permlab_sdcardRead">"akses uji coba ke penyimpanan yang dilindungi"</string>
-  <string msgid="8235341515605559677" product="default" name="permlab_sdcardRead">"akses uji coba ke penyimpanan yang dilindungi"</string>
-  <string msgid="5791957130190763289" product="nosdcard" name="permdesc_sdcardRead">"Memungkinkan aplikasi menguji izin untuk penyimpanan USB yang akan tersedia pada perangkat yang akan datang."</string>
-  <string msgid="5914402684685848828" product="default" name="permdesc_sdcardRead">"Memungkinkan aplikasi menguji izin untuk kartu SD yang akan tersedia pada perangkat yang akan datang."</string>
-  <string msgid="754137583022792429" name="faceunlock_multiple_failures">"Percobaan Face Unlock melebihi batas maksimum"</string>
-  <string msgid="5096149665138916184" name="lockscreen_permanent_disabled_sim_message_short">"Kartu SIM tidak dapat digunakan."</string>
-  <string msgid="7336470535385009523" name="granularity_label_character">"karakter"</string>
-  <string msgid="7075570328374918660" name="granularity_label_word">"kata"</string>
-  <string msgid="5815508880782488267" name="granularity_label_link">"tautan"</string>
-  <string msgid="5764267235026120888" name="granularity_label_line">"baris"</string>
-  <string msgid="546083327654631076" name="permlab_serialPort">"akses port serial"</string>
-  <string msgid="2991639985224598193" name="permdesc_serialPort">"Memungkinkan pemegangnya mengakses port serial menggunakan API SerialManager."</string>
-  <string msgid="5077774297943409285" name="permlab_accessContentProvidersExternally">"mengakses penyedia konten dari luar"</string>
-  <string msgid="4544346486697853685" name="permdesc_accessContentProvidersExternally">"Memungkinkan pemegang mengakses penyedia konten dari cangkang. Tidak pernah diperlukan untuk apl normal."</string>
-  <string msgid="3527558366616680889" name="permlab_updateLock">"menghindari pembaruan perangkat otomatis"</string>
-  <string msgid="1655625832166778492" name="permdesc_updateLock">"Memungkinkan pemegang untuk menawarkan informasi ke sistem mengenai kapan waktu yang baik bagi pemulaian ulang non-interaktif untuk meningkatkan versi perangkat."</string>
-  <string msgid="7460694070309730149" name="enable_explore_by_touch_warning_title">"Aktifkan Menjelajah dengan Sentuhan?"</string>
-  <string msgid="8655887539089910577" product="tablet" name="enable_explore_by_touch_warning_message">"<xliff:g id="ACCESSIBILITY_SERVICE_NAME">%1$s</xliff:g> ingin mengaktifkan Menjelajah dengan Sentuhan. Saat Menjelajah dengan Sentuhan diaktifkan, Anda dapat melihat atau mendengar deskripsi dari apa yang ada di bawah jari Anda atau melakukan gerakan untuk berinteraksi dengan tablet."</string>
-  <string msgid="2708199672852373195" product="default" name="enable_explore_by_touch_warning_message">"<xliff:g id="ACCESSIBILITY_SERVICE_NAME">%1$s</xliff:g> ingin mengaktifkan Menjelajah dengan Sentuhan. Saat Menjelajah dengan Sentuhan diaktifkan, Anda dapat mendengar atau melihat deskripsi dari apa yang ada di bawah jari Anda atau melakukan gerakan untuk berinteraksi dengan ponsel."</string>
-  <string msgid="6640505817617414371" name="low_internal_storage_view_text">"Beberapa fungsi sistem mungkin tidak dapat bekerja"</string>
-  <string msgid="3272758351138122503" name="webpage_unresponsive">"Laman ini tidak menanggapi."\n\n"Apakah Anda ingin menutupnya?"</string>
-  <string msgid="1645267259272829559" name="accept">"Terima"</string>
-  <string msgid="2112225451706137894" name="decline">"Tolak"</string>
-  <string msgid="1318975185112070734" name="wifi_p2p_invitation_sent_title">"Undangan terkirim"</string>
-  <string msgid="4958803948658533637" name="wifi_p2p_invitation_to_connect_title">"Undangan untuk terhubung"</string>
-  <string msgid="570389174731951769" name="wifi_p2p_from_message">"Dari:"</string>
-  <string msgid="248968974522044099" name="wifi_p2p_to_message">"Kepada:"</string>
-  <string msgid="5920929550367828970" name="wifi_p2p_enter_pin_message">"Ketik PIN yang diminta:"</string>
-  <string msgid="8530563323880921094" name="wifi_p2p_show_pin_message">"PIN:"</string>
-  <string msgid="2507683751759308828" name="date_time_done">"Selesai"</string>
-  <string msgid="8257740710754301407" name="perms_new_perm_prefix">
-    <font fgcolor="#ff900000" size="12">"BARU: "</font>
+  <string name="imei" msgid="2625429890869005782">"IMEI"</string>
+  <string name="meid" msgid="4841221237681254195">"MEID"</string>
+  <string name="silent_mode_silent" msgid="319298163018473078">"Pendering mati"</string>
+  <string name="silent_mode_vibrate" msgid="7072043388581551395">"Pendering bergetar"</string>
+  <string name="silent_mode_ring" msgid="8592241816194074353">"Pendering nyala"</string>
+  <string name="reboot_safemode_title" msgid="7054509914500140361">"Reboot ke mode aman"</string>
+  <string name="reboot_safemode_confirm" msgid="55293944502784668">"Apakah Anda ingin reboot ke mode aman? Tindakan ini akan menonaktifkan semua aplikasi pihak ketiga yang telah dipasang. Aplikasi tersebut akan dipulihkan ketika Anda melakukan reboot lagi."</string>
+  <string name="permlab_readCellBroadcasts" msgid="1598328843619646166">"membaca pesan siaran seluler"</string>
+  <string name="permdesc_readCellBroadcasts" msgid="6361972776080458979">"Mengizinkan aplikasi membaca pesan siaran seluler yang diterima perangkat Anda. Lansiran siaran seluler dikirimkan di beberapa lokasi untuk memperingatkan Anda tentang situasi darurat. Aplikasi berbahaya dapat mengganggu kinerja atau operasi perangkat Anda saat siaran seluler darurat diterima."</string>
+  <string name="permlab_getDetailedTasks" msgid="6229468674753529501">"mengambil detail aplikasi yang sedang berjalan"</string>
+  <string name="permdesc_getDetailedTasks" msgid="153824741440717599">"Izinkan aplikasi mengambil informasi mendetail tentang tugas yang saat ini dan baru-baru ini dijalankan. Aplikasi berbahaya dapat menemukan informasi pribadi tentang aplikasi lain."</string>
+  <string name="permlab_startAnyActivity" msgid="2918768238045206456">"memulai aktivitas apa pun"</string>
+  <string name="permdesc_startAnyActivity" msgid="997823695343584001">"Mengizinkan aplikasi memulai aktivitas apa pun, terlepas dari perlindungan izin atau status yang diekspor."</string>
+  <string name="permlab_setScreenCompatibility" msgid="6975387118861842061">"menyetel kompatibilitas layar"</string>
+  <string name="permdesc_setScreenCompatibility" msgid="692043618693917374">"Memungkinkan apl mengontrol mode kompatibilitas layar aplikasi lain. Aplikasi berbahaya dapat merusak perilaku aplikasi lain."</string>
+  <string name="permlab_bindAccessibilityService" msgid="5357733942556031593">"mengikat ke layanan aksesibilitas"</string>
+  <string name="permdesc_bindAccessibilityService" msgid="7034615928609331368">"Mengizinkan pemegang untuk mengikat antarmuka tingkat tinggi dari suatu layanan. Tidak pernah diperlukan oleh aplikasi normal."</string>
+  <string name="permlab_setKeyboardLayout" msgid="4778731703600909340">"Ubah tata letak keyboard"</string>
+  <string name="permdesc_setKeyboardLayout" msgid="8480016771134175879">"Memungkinkan aplikasi untuk mengubah tata letak keyboard. Tidak pernah dibutuhkan oleh aplikasi normal."</string>
+  <string name="permdesc_persistentActivity" product="tablet" msgid="8525189272329086137">"Memungkinkan aplikasi membuat bagian dari dirinya sendiri terus-menerus berada dalam memori. Izin ini dapat membatasi memori yang tersedia untuk aplikasi lain sehingga menjadikan tablet lambat."</string>
+  <string name="permdesc_persistentActivity" product="default" msgid="4384760047508278272">"Memungkinkan aplikasi membuat bagian dari dirinya sendiri terus-menerus berada dalam memori. Izin ini dapat membatasi memori yang tersedia untuk aplikasi lain sehingga menjadikan ponsel lambat."</string>
+  <string name="permlab_grantRevokePermissions" msgid="4627315351093508795">"memberi atau mencabut izin"</string>
+  <string name="permdesc_grantRevokePermissions" msgid="4088642654085850662">"Memungkinkan aplikasi memberikan atau mencabut izin khusus untuk aplikasi tersebut atau aplikasi lainnya. Aplikasi berbahaya dapat menggunakannya untuk mengakses fitur yang tidak Anda beri izin."</string>
+  <string name="permlab_readCallLog" msgid="3478133184624102739">"membaca log panggilan"</string>
+  <string name="permdesc_readCallLog" product="tablet" msgid="3700645184870760285">"Memungkinkan aplikasi membaca log panggilan tablet Anda, termasuk data tentang panggilan masuk dan keluar. Izin ini memungkinkan aplikasi menyimpan data log panggilan Anda, dan aplikasi berbahaya dapat berbagi data log panggilan tanpa sepengetahuan Anda."</string>
+  <string name="permdesc_readCallLog" product="default" msgid="5777725796813217244">"Memungkinkan aplikasi membaca log panggilan ponsel Anda, termasuk data tentang panggilan masuk dan keluar. Izin ini memungkinkan aplikasi menyimpan data log panggilan Anda, dan aplikasi berbahaya dapat berbagi data log panggilan tanpa sepengetahuan Anda."</string>
+  <string name="permlab_writeCallLog" msgid="8552045664743499354">"menulis log panggilan"</string>
+  <string name="permdesc_writeCallLog" product="tablet" msgid="6661806062274119245">"Memungkinkan apl memodifikasi log panggilan tablet Anda, termasuk data tentang panggilan masuk dan keluar. Apl berbahaya dapat menggunakan ini untuk menghapus atau memodifikasi log panggilan Anda."</string>
+  <string name="permdesc_writeCallLog" product="default" msgid="683941736352787842">"Memungkinkan apl memodifikasi log panggilan ponsel Anda, termasuk data tentang panggilan masuk dan keluar. Apl berbahaya dapat menggunakan ini untuk menghapus atau memodifikasi log panggilan Anda."</string>
+  <string name="permdesc_writeCalendar" product="tablet" msgid="6679035520113668528">"Memungkinkan aplikasi menambahkan, menghapus, mengubah acara yang dapat Anda ubah pada tablet, termasuk acara teman atau rekan kerja. Izin ini memungkinkan aplikasi mengirim pesan yang kelihatannya berasal dari pemilik kalender, atau mengubah acara tanpa sepengetahuan pemilik."</string>
+  <string name="permdesc_writeCalendar" product="default" msgid="2324469496327249376">"Memungkinkan aplikasi menambahkan, menghapus, mengubah acara yang dapat Anda ubah pada ponsel, termasuk acara teman atau rekan kerja. Izin ini memungkinkan aplikasi mengirim pesan yang kelihatannya berasal dari pemilik kalender, atau mengubah acara tanpa sepengetahuan pemilik."</string>
+  <string name="permdesc_accessCoarseLocation" msgid="5383798877137640762">"Mengakses perkiraan lokasi dari penyedia lokasi menggunakan sumber jaringan, misalnya menara seluler dan WLAN. Ketika layanan lokasi ini tersedia dan diaktifkan, izin ini memungkinkan aplikasi menentukan perkiraan lokasi Anda."</string>
+  <string name="permlab_mount_unmount_filesystems" product="nosdcard" msgid="2927361537942591841">"akses sistem file simpanan USB"</string>
+  <string name="permlab_mount_unmount_filesystems" product="default" msgid="4402305049890953810">"akses sistem file Kartu SD"</string>
+  <string name="permlab_mount_format_filesystems" product="nosdcard" msgid="6227819582624904972">"hapus penyimpanan USB"</string>
+  <string name="permlab_mount_format_filesystems" product="default" msgid="262582698639274056">"hapus Kartu SD"</string>
+  <string name="permdesc_changeWifiMulticastState" product="tablet" msgid="7969774021256336548">"Memungkinkan aplikasi menerima paket yang dikirim ke semua perangkat melalui jaringan WLAN menggunakan alamat multicast, bukan hanya tablet Anda. Izin ini akan menggunakan lebih banyak daya daripada mode selain multicast."</string>
+  <string name="permdesc_changeWifiMulticastState" product="default" msgid="6851949706025349926">"Memungkinkan aplikasi menerima paket yang dikirim ke semua perangkat melalui jaringan WLAN menggunakan alamat multicast, bukan hanya ponsel Anda. Izin ini akan menggunakan lebih banyak daya daripada mode selain multicast."</string>
+  <string name="permdesc_changeWimaxState" product="tablet" msgid="3156456504084201805">"Memungkinkan aplikasi menyambungkan tablet ke dan memutus tablet dari jaringan WiMAX."</string>
+  <string name="permdesc_changeWimaxState" product="default" msgid="697025043004923798">"Memungkinkan aplikasi menyambungkan ponsel ke dan memutus ponsel dari jaringan WiMAX."</string>
+  <string name="permlab_sdcardRead" product="nosdcard" msgid="8235341515605559677">"akses uji coba ke penyimpanan yang dilindungi"</string>
+  <string name="permlab_sdcardRead" product="default" msgid="8235341515605559677">"akses uji coba ke penyimpanan yang dilindungi"</string>
+  <string name="permdesc_sdcardRead" product="nosdcard" msgid="5791957130190763289">"Memungkinkan aplikasi menguji izin untuk penyimpanan USB yang akan tersedia pada perangkat yang akan datang."</string>
+  <string name="permdesc_sdcardRead" product="default" msgid="5914402684685848828">"Memungkinkan aplikasi menguji izin untuk kartu SD yang akan tersedia pada perangkat yang akan datang."</string>
+  <string name="faceunlock_multiple_failures" msgid="754137583022792429">"Percobaan Face Unlock melebihi batas maksimum"</string>
+  <string name="lockscreen_permanent_disabled_sim_message_short" msgid="5096149665138916184">"Kartu SIM tidak dapat digunakan."</string>
+  <string name="granularity_label_character" msgid="7336470535385009523">"karakter"</string>
+  <string name="granularity_label_word" msgid="7075570328374918660">"kata"</string>
+  <string name="granularity_label_link" msgid="5815508880782488267">"tautan"</string>
+  <string name="granularity_label_line" msgid="5764267235026120888">"baris"</string>
+  <string name="permlab_serialPort" msgid="546083327654631076">"akses port serial"</string>
+  <string name="permdesc_serialPort" msgid="2991639985224598193">"Memungkinkan pemegangnya mengakses port serial menggunakan API SerialManager."</string>
+  <string name="permlab_accessContentProvidersExternally" msgid="5077774297943409285">"mengakses penyedia konten dari luar"</string>
+  <string name="permdesc_accessContentProvidersExternally" msgid="4544346486697853685">"Memungkinkan pemegang mengakses penyedia konten dari cangkang. Tidak pernah diperlukan untuk apl normal."</string>
+  <string name="permlab_updateLock" msgid="3527558366616680889">"menghindari pembaruan perangkat otomatis"</string>
+  <string name="permdesc_updateLock" msgid="1655625832166778492">"Memungkinkan pemegang untuk menawarkan informasi ke sistem mengenai kapan waktu yang baik bagi pemulaian ulang non-interaktif untuk meningkatkan versi perangkat."</string>
+  <string name="enable_explore_by_touch_warning_title" msgid="7460694070309730149">"Aktifkan Menjelajah dengan Sentuhan?"</string>
+  <string name="enable_explore_by_touch_warning_message" product="tablet" msgid="8655887539089910577">"<xliff:g id="ACCESSIBILITY_SERVICE_NAME">%1$s</xliff:g> ingin mengaktifkan Menjelajah dengan Sentuhan. Saat Menjelajah dengan Sentuhan diaktifkan, Anda dapat melihat atau mendengar deskripsi dari apa yang ada di bawah jari Anda atau melakukan gerakan untuk berinteraksi dengan tablet."</string>
+  <string name="enable_explore_by_touch_warning_message" product="default" msgid="2708199672852373195">"<xliff:g id="ACCESSIBILITY_SERVICE_NAME">%1$s</xliff:g> ingin mengaktifkan Menjelajah dengan Sentuhan. Saat Menjelajah dengan Sentuhan diaktifkan, Anda dapat mendengar atau melihat deskripsi dari apa yang ada di bawah jari Anda atau melakukan gerakan untuk berinteraksi dengan ponsel."</string>
+  <string name="low_internal_storage_view_text" msgid="6640505817617414371">"Beberapa fungsi sistem mungkin tidak dapat bekerja"</string>
+  <string name="webpage_unresponsive" msgid="3272758351138122503">"Laman ini tidak menanggapi."\n\n"Apakah Anda ingin menutupnya?"</string>
+  <string name="accept" msgid="1645267259272829559">"Terima"</string>
+  <string name="decline" msgid="2112225451706137894">"Tolak"</string>
+  <string name="wifi_p2p_invitation_sent_title" msgid="1318975185112070734">"Undangan terkirim"</string>
+  <string name="wifi_p2p_invitation_to_connect_title" msgid="4958803948658533637">"Undangan untuk terhubung"</string>
+  <string name="wifi_p2p_from_message" msgid="570389174731951769">"Dari:"</string>
+  <string name="wifi_p2p_to_message" msgid="248968974522044099">"Kepada:"</string>
+  <string name="wifi_p2p_enter_pin_message" msgid="5920929550367828970">"Ketik PIN yang diminta:"</string>
+  <string name="wifi_p2p_show_pin_message" msgid="8530563323880921094">"PIN:"</string>
+  <string name="date_time_done" msgid="2507683751759308828">"Selesai"</string>
+  <string name="perms_new_perm_prefix" msgid="8257740710754301407">
+    <font size="12" fgcolor="#ff900000">"BARU: "</font>
   </string>
-  <string msgid="5139836143293299417" name="perms_description_app">"Disediakan oleh <xliff:g id="APP_NAME">%1$s</xliff:g>."</string>
-  <string msgid="6203112478095117625" name="use_physical_keyboard">"Keyboard fisik"</string>
-  <string msgid="7517821086888990278" name="hardware">"Perangkat Keras"</string>
-  <string msgid="1407367017263030773" name="select_keyboard_layout_notification_title">"Pilih tata letak keyboard"</string>
-  <string msgid="4465907700449257063" name="select_keyboard_layout_notification_message">"Sentuh untuk memilih tata letak keyboard."</string>
-  <string msgid="1642024455750414694" name="permlab_route_media_output">"Menentukan rute keluaran media"</string>
-  <string msgid="4932818749547244346" name="permdesc_route_media_output">"Memungkinkan aplikasi menentukan rute keluaran media ke perangkat eksternal lainnya."</string>
-  <string msgid="3091587249776033139" name="description_target_search">"Telusuri"</string>
-  <string msgid="8017770747801494933" name="activity_resolver_use_always">"Selalu"</string>
-  <string msgid="2404644797149173758" name="activity_resolver_use_once">"Hanya sekali"</string>
-  <string msgid="4617053898167127471" product="tablet" name="default_audio_route_name">"Tablet"</string>
-  <string msgid="4239291273420140123" product="default" name="default_audio_route_name">"Ponsel"</string>
-  <string msgid="8119971843803439110" name="default_audio_route_name_headphones">"Headphone"</string>
-  <string msgid="6240602982276591864" name="default_audio_route_name_dock_speakers">"Pengeras suara dok"</string>
-  <string msgid="7986404173839007682" name="default_audio_route_name_hdmi">"Audio HDMI"</string>
-  <string msgid="3722811174003886946" name="default_audio_route_category_name">"Sistem"</string>
-  <string msgid="8575624030406771015" name="bluetooth_a2dp_audio_route_name">"Audio Bluetooth"</string>
-  <string msgid="7966438307723317169" name="media_route_chooser_grouping_done">"Selesai"</string>
-  <skip></skip>
-  <string msgid="1905800560317137752" name="aerr_title"></string>
-  <string msgid="4351948481459135709" name="anr_title"></string>
+  <string name="perms_description_app" msgid="5139836143293299417">"Disediakan oleh <xliff:g id="APP_NAME">%1$s</xliff:g>."</string>
+  <string name="use_physical_keyboard" msgid="6203112478095117625">"Keyboard fisik"</string>
+  <string name="hardware" msgid="7517821086888990278">"Perangkat Keras"</string>
+  <string name="select_keyboard_layout_notification_title" msgid="1407367017263030773">"Pilih tata letak keyboard"</string>
+  <string name="select_keyboard_layout_notification_message" msgid="4465907700449257063">"Sentuh untuk memilih tata letak keyboard."</string>
+  <string name="permlab_route_media_output" msgid="1642024455750414694">"Menentukan rute keluaran media"</string>
+  <string name="permdesc_route_media_output" msgid="4932818749547244346">"Memungkinkan aplikasi menentukan rute keluaran media ke perangkat eksternal lainnya."</string>
+  <string name="description_target_search" msgid="3091587249776033139">"Telusuri"</string>
+  <string name="activity_resolver_use_always" msgid="8017770747801494933">"Selalu"</string>
+  <string name="activity_resolver_use_once" msgid="2404644797149173758">"Hanya sekali"</string>
+  <string name="default_audio_route_name" product="tablet" msgid="4617053898167127471">"Tablet"</string>
+  <string name="default_audio_route_name" product="default" msgid="4239291273420140123">"Ponsel"</string>
+  <string name="default_audio_route_name_headphones" msgid="8119971843803439110">"Headphone"</string>
+  <string name="default_audio_route_name_dock_speakers" msgid="6240602982276591864">"Pengeras suara dok"</string>
+  <string name="default_audio_route_name_hdmi" msgid="7986404173839007682">"Audio HDMI"</string>
+  <string name="default_audio_route_category_name" msgid="3722811174003886946">"Sistem"</string>
+  <string name="bluetooth_a2dp_audio_route_name" msgid="8575624030406771015">"Audio Bluetooth"</string>
+  <string name="media_route_chooser_grouping_done" msgid="7966438307723317169">"Selesai"</string>
+  <string name="aerr_title" msgid="1905800560317137752"></string>
+  <string name="anr_title" msgid="4351948481459135709"></string>
   <string name="byteShort">"B"</string>
   <string name="kilobyteShort">Istanbul/Turki</string>
   <string name="megabyteShort">"MB"</string>
@@ -135,7 +134,7 @@
   <string name="serviceRegistered">"Pendaftaran berhasil."</string>
   <string name="serviceErased">"Penghapusan berhasil."</string>
   <string name="passwordIncorrect">"Sandi salah."</string>
-  <string msgid="" name="passwordChange">"Kata sandi diubah"</string>
+  <string name="passwordChange" msgid="">"Kata sandi diubah"</string>
   <string name="mmiComplete">"MMI selesai."</string>
   <string name="badPin">"PIN lama yang Anda ketikkan salah."</string>
   <string name="badPin2">"PIN2 lama yang Anda ketikkan salah."</string>
@@ -155,32 +154,32 @@
   <string name="ColpMmi">"Saluran terhubung penyajian identifikasi"</string>
   <string name="ColrMmi">"Saluran terhubung larangan identifikasi"</string>
   <string name="CfMmi">"Penerusan panggilan"</string>
-  <string msgid="" name="UnConditionCfMmi">"Meneruskan panggilan tanpa syarat"</string>
-  <string msgid="" name="BusyCfMmi">"Saat sibuk panggilan diteruskan"</string>
-  <string msgid="" name="NoReplyCfMmi">"Saat tidak ada balasan panggilan diteruskan"</string>
-  <string msgid="" name="NotReachCfMmi">"Saat tidak terjangkau panggilan diteruskan"</string>
-  <string msgid="" name="AllCfMmi">"Semua panggilan diteruskan"</string>
-  <string msgid="" name="ConditionCfMmi">"Meneruskan panggilan bersyarat"</string>
+  <string name="UnConditionCfMmi" msgid="">"Meneruskan panggilan tanpa syarat"</string>
+  <string name="BusyCfMmi" msgid="">"Saat sibuk panggilan diteruskan"</string>
+  <string name="NoReplyCfMmi" msgid="">"Saat tidak ada balasan panggilan diteruskan"</string>
+  <string name="NotReachCfMmi" msgid="">"Saat tidak terjangkau panggilan diteruskan"</string>
+  <string name="AllCfMmi" msgid="">"Semua panggilan diteruskan"</string>
+  <string name="ConditionCfMmi" msgid="">"Meneruskan panggilan bersyarat"</string>
   <string name="CwMmi">"Nada tunggu"</string>
   <string name="BaMmi">"Pemblokiran panggilan"</string>
-  <string msgid="" name="BaocMmi">"Batasi semua panggilan keluar"</string>
-  <string msgid="" name="BaoicMmi">"Batasi semua panggilan internasional keluar"</string>
-  <string msgid="" name="BaoicxhMmi">"Batasi semua panggilan internasional keluar kecuali negara asal"</string>
-  <string msgid="" name="BaicMmi">"Batasi semua panggilan masuk"</string>
-  <string msgid="" name="BaicrMmi">"Batasi semua panggilan masuk ketika roaming"</string>
-  <string msgid="" name="BaallMmi">"Pembatasan untuk semua layanan dasar"</string>
-  <string msgid="" name="BamoMmi">"Pengeluaran untuk semua layanan dasar"</string>
-  <string msgid="" name="BamtMmi">"Pemasukan untuk semua layanan dasar"</string>
+  <string name="BaocMmi" msgid="">"Batasi semua panggilan keluar"</string>
+  <string name="BaoicMmi" msgid="">"Batasi semua panggilan internasional keluar"</string>
+  <string name="BaoicxhMmi" msgid="">"Batasi semua panggilan internasional keluar kecuali negara asal"</string>
+  <string name="BaicMmi" msgid="">"Batasi semua panggilan masuk"</string>
+  <string name="BaicrMmi" msgid="">"Batasi semua panggilan masuk ketika roaming"</string>
+  <string name="BaallMmi" msgid="">"Pembatasan untuk semua layanan dasar"</string>
+  <string name="BamoMmi" msgid="">"Pengeluaran untuk semua layanan dasar"</string>
+  <string name="BamtMmi" msgid="">"Pemasukan untuk semua layanan dasar"</string>
   <string name="ActiveUnconCf">"Panggilan diteruskan tak bersyarat"</string>
   <string name="ActiveConCf">"Panggilan diteruskan bersyarat"</string>
   <string name="CallForwarded">"Panggilan diteruskan"</string>
   <string name="CallWaiting">"Nada tunggu"</string>
-  <string msgid="" name="OutCallBarred">"Panggilan keluar dibatasi"</string>
-  <string msgid="" name="InCallBarred">"Panggilan masuk dibatasi"</string>
+  <string name="OutCallBarred" msgid="">"Panggilan keluar dibatasi"</string>
+  <string name="InCallBarred" msgid="">"Panggilan masuk dibatasi"</string>
   <string name="ForwardedCall">"Panggilan yang diteruskan"</string>
-  <string msgid="" name="CallHold">"TahanPanggilan"</string>
-  <string msgid="" name="CallRetrieved">"Panggilan dijawab"</string>
-  <string msgid="" name="IncomingCallForwarded">"Panggilan masuk tambahan diteruskan"</string>
+  <string name="CallHold" msgid="">"TahanPanggilan"</string>
+  <string name="CallRetrieved" msgid="">"Panggilan dijawab"</string>
+  <string name="IncomingCallForwarded" msgid="">"Panggilan masuk tambahan diteruskan"</string>
   <string name="PwdMmi">"Sandi berubah"</string>
   <string name="PinMmi">"ubah PIN"</string>
   <string name="Pin2Mmi">"ubah PIN2"</string>
@@ -256,24 +255,24 @@
   <string name="contentServiceSync">"Sinkron"</string>
   <string name="contentServiceSyncNotificationTitle">"Sinkron"</string>
   <string name="contentServiceTooManyDeletesNotificationDesc">"Terlalu banyak <xliff:g id="CONTENT_TYPE">%s</xliff:g> penghapusan."</string>
-  <string product="tablet" name="low_memory">"Penyimpanan tablet penuh! Hapus beberapa berkas untuk menambah ruang kosong."</string>
-  <string product="default" name="low_memory">"Penyimpanan di ponsel penuh! Hapus sebagian berkas untuk mendapatkan ruang."</string>
+  <string name="low_memory" product="tablet">"Penyimpanan tablet penuh! Hapus beberapa berkas untuk menambah ruang kosong."</string>
+  <string name="low_memory" product="default">"Penyimpanan di ponsel penuh! Hapus sebagian berkas untuk mendapatkan ruang."</string>
   <string name="me">"Saya"</string>
-  <string product="tablet" name="power_dialog">"Opsi tablet"</string>
-  <string product="default" name="power_dialog">"Opsi telepon"</string>
+  <string name="power_dialog" product="tablet">"Opsi tablet"</string>
+  <string name="power_dialog" product="default">"Opsi telepon"</string>
   <string name="silent_mode">"Modus senyap"</string>
   <string name="turn_on_radio">"Hidupkan nirkabel"</string>
   <string name="turn_off_radio">"Matikan nirkabel"</string>
   <string name="screen_lock">"Kunci layar"</string>
   <string name="power_off">"Matikan daya"</string>
   <string name="shutdown_progress">"Sedang mematikan..."</string>
-  <string product="tablet" name="shutdown_confirm">"Tablet Anda akan dimatikan."</string>
-  <string product="default" name="shutdown_confirm">"Ponsel Anda akan dimatikan."</string>
+  <string name="shutdown_confirm" product="tablet">"Tablet Anda akan dimatikan."</string>
+  <string name="shutdown_confirm" product="default">"Ponsel Anda akan dimatikan."</string>
   <string name="shutdown_confirm_question">"Apakah Anda ingin mematikannya?"</string>
   <string name="recent_tasks_title">"Terbaru"</string>
   <string name="no_recent_tasks">"Tidak ada aplikasi terkini."</string>
-  <string product="tablet" name="global_actions">"Opsi tablet"</string>
-  <string product="default" name="global_actions">"Opsi telepon"</string>
+  <string name="global_actions" product="tablet">"Opsi tablet"</string>
+  <string name="global_actions" product="default">"Opsi telepon"</string>
   <string name="global_action_lock">"Kunci layar"</string>
   <string name="global_action_power_off">"Matikan daya"</string>
   <string name="global_action_toggle_silent_mode">"Mode senyap"</string>
@@ -290,8 +289,8 @@
   <string name="permgrouplab_messages">"Pesan Anda"</string>
   <string name="permgroupdesc_messages">"Baca dan tulis SMS, email, dan pesan lainnya."</string>
   <string name="permgrouplab_personalInfo">"Informasi pribadi Anda"</string>
-  <string product="tablet" name="permgroupdesc_personalInfo">"Akses langsung ke kenalan dan kalender yang disimpan di tablet."</string>
-  <string product="default" name="permgroupdesc_personalInfo">"akses langsung pada data kenalan dan kalender yang tersimpan pada ponsel."</string>
+  <string name="permgroupdesc_personalInfo" product="tablet">"Akses langsung ke kenalan dan kalender yang disimpan di tablet."</string>
+  <string name="permgroupdesc_personalInfo" product="default">"akses langsung pada data kenalan dan kalender yang tersimpan pada ponsel."</string>
   <string name="permgrouplab_location">"Lokasi Anda"</string>
   <string name="permgroupdesc_location">"Monitor lokasi fisik Anda"</string>
   <string name="permgrouplab_network">"Komunikasi jaringan"</string>
@@ -307,8 +306,8 @@
   <string name="permgrouplab_developmentTools">"Peralatan pengembangan"</string>
   <string name="permgroupdesc_developmentTools">"Fitur hanya dibutuhkan oleh pengembang aplikasi."</string>
   <string name="permgrouplab_storage">"Penyimpanan"</string>
-  <string product="nosdcard" name="permgroupdesc_storage">"Akses penyimpanan USB."</string>
-  <string product="default" name="permgroupdesc_storage">"Akses kartu SD."</string>
+  <string name="permgroupdesc_storage" product="nosdcard">"Akses penyimpanan USB."</string>
+  <string name="permgroupdesc_storage" product="default">"Akses kartu SD."</string>
   <string name="permlab_statusBar">"nonaktifkan atau ubah bilah status"</string>
   <string name="permdesc_statusBar">"Mengizinkan aplikasi mematikan bilah status atau menambahkan dan menghapus ikon sistem."</string>
   <string name="permlab_statusBarService">"bilah status"</string>
@@ -328,11 +327,11 @@
   <string name="permlab_sendSmsNoConfirmation">"mengirim SMS tanpa konfirmasi"</string>
   <string name="permdesc_sendSmsNoConfirmation">"Mengizinkan aplikasi mengirimkan pesan SMS. Aplikasi hasad dapat menyedot uang Anda dengan mengirimkan pesan tanpa konfirmasi."</string>
   <string name="permlab_readSms">"baca SMS atau MMS"</string>
-  <string product="tablet" name="permdesc_readSms">"Mengizinkan aplikasi untuk membaca pesan SMS yang disimpan di tablet atau kartu SIM. Aplikasi berbahaya dapat membaca pesan rahasia Anda."</string>
-  <string product="default" name="permdesc_readSms">"Mengizinkan aplikasi membaca SMS yang tersimpan dalam ponsel atau kartu SIM Anda. Aplikasi hasad dapat membaca pesan rahasia Anda."</string>
+  <string name="permdesc_readSms" product="tablet">"Mengizinkan aplikasi untuk membaca pesan SMS yang disimpan di tablet atau kartu SIM. Aplikasi berbahaya dapat membaca pesan rahasia Anda."</string>
+  <string name="permdesc_readSms" product="default">"Mengizinkan aplikasi membaca SMS yang tersimpan dalam ponsel atau kartu SIM Anda. Aplikasi hasad dapat membaca pesan rahasia Anda."</string>
   <string name="permlab_writeSms">"edit SMS atau MMS"</string>
-  <string product="tablet" name="permdesc_writeSms">"Mengizinkan aplikasi untuk menulis ke pesan SMS yang disimpan di tablet atau kartu SIM. Aplikasi berbahaya dapat menghapus pesan Anda."</string>
-  <string product="default" name="permdesc_writeSms">"Mengizinkan aplikasi untuk menulis pesan SMS yang tersimpan dalam ponsel atau kartu SIM Anda. Aplikasi hasad dapat menghapus pesan Anda."</string>
+  <string name="permdesc_writeSms" product="tablet">"Mengizinkan aplikasi untuk menulis ke pesan SMS yang disimpan di tablet atau kartu SIM. Aplikasi berbahaya dapat menghapus pesan Anda."</string>
+  <string name="permdesc_writeSms" product="default">"Mengizinkan aplikasi untuk menulis pesan SMS yang tersimpan dalam ponsel atau kartu SIM Anda. Aplikasi hasad dapat menghapus pesan Anda."</string>
   <string name="permlab_receiveWapPush">"terima WAP"</string>
   <string name="permdesc_receiveWapPush">"Mengizinkan aplikasi menerima dan memproses pesan WAP. Aplikasi hasad dapat memonitor pesan Anda atau menghapusnya tanpa menampilkannya kepada Anda."</string>
   <string name="permlab_getTasks">"ambil aplikasi yang sedang berjalan"</string>
@@ -388,8 +387,8 @@
   <string name="permlab_manageAppTokens">"kelola token aplikasi"</string>
   <string name="permdesc_manageAppTokens">"Mengizinkan aplikasi untuk membuat dan mengelola tokennya sendiri, memintas pengurutan Z normalnya. Jangan pernah digunakan untuk aplikasi normal."</string>
   <string name="permlab_injectEvents">"tekan kunci dan tombol kontrol"</string>
-  <string product="tablet" name="permdesc_injectEvents">"Mengizinkan aplikasi untuk mengirim aktivitas masukan sendiri (penekanan tombol, dll.) ke aplikasi lain. Aplikasi berbahaya dapat menggunakan ini untuk mengambil alih tablet."</string>
-  <string product="default" name="permdesc_injectEvents">"Mengizinkan aplikasi mengirimkan data masukannya sendiri (penekanan tombol, dll.) ke aplikasi lainnya. Aplikasi hasad dapat menggunakan ini untuk mengambil alih ponsel."</string>
+  <string name="permdesc_injectEvents" product="tablet">"Mengizinkan aplikasi untuk mengirim aktivitas masukan sendiri (penekanan tombol, dll.) ke aplikasi lain. Aplikasi berbahaya dapat menggunakan ini untuk mengambil alih tablet."</string>
+  <string name="permdesc_injectEvents" product="default">"Mengizinkan aplikasi mengirimkan data masukannya sendiri (penekanan tombol, dll.) ke aplikasi lainnya. Aplikasi hasad dapat menggunakan ini untuk mengambil alih ponsel."</string>
   <string name="permlab_readInputState">"rekam apa yang diketik dan tindakan yang dilakukan"</string>
   <string name="permdesc_readInputState">"Mengizinkan aplikasi melihat tombol yang Anda tekan bahkan ketika berinteraksi dengan aplikasi lain (seperti memasukkan sandi). Tidak pernah diperlukan untuk aplikasi normal."</string>
   <string name="permlab_bindInputMethod">"mengikat ke metode masukan"</string>
@@ -422,20 +421,20 @@
   <string name="permlab_installPackages">"pasang aplikasi secara langsung"</string>
   <string name="permdesc_installPackages">"Mengizinkan aplikasi memasang paket Android baru atau yang diperbarui. Aplikasi hasad dapat menggunakan ini untuk menambahkan aplikasi dengan izin yang kuat secara sembarangan."</string>
   <string name="permlab_clearAppCache">"hapus semua data tembolok aplikasi"</string>
-  <string product="tablet" name="permdesc_clearAppCache">"Mengizinkan aplikasi mengosongkan penyimpanan tablet dengan menghapus berkas dalam direktori tembolok aplikasi. Akses sangat dibatasi biasannya pada proses sistem."</string>
-  <string product="default" name="permdesc_clearAppCache">"Mengizinkan aplikasi mengosongkan penyimpanan ponsel dengan menghapus berkas dalam direktori tembolok aplikasi. Akses sangat terbatas, biasanya pada proses sistem."</string>
+  <string name="permdesc_clearAppCache" product="tablet">"Mengizinkan aplikasi mengosongkan penyimpanan tablet dengan menghapus berkas dalam direktori tembolok aplikasi. Akses sangat dibatasi biasannya pada proses sistem."</string>
+  <string name="permdesc_clearAppCache" product="default">"Mengizinkan aplikasi mengosongkan penyimpanan ponsel dengan menghapus berkas dalam direktori tembolok aplikasi. Akses sangat terbatas, biasanya pada proses sistem."</string>
   <string name="permlab_movePackage">"Pindahkan sumber daya aplikasi"</string>
   <string name="permdesc_movePackage">"Mengizinkan aplikasi memindah sumber daya aplikasi dari media internal ke eksternal dan sebaliknya."</string>
   <string name="permlab_readLogs">"baca data log sensitif"</string>
-  <string product="tablet" name="permdesc_readLogs">"Mengizinkan aplikasi membaca dari berbagai berkas log sistem. Ini memungkinkan aplikasi menemukan informasi umum tentang apa yang Anda lakukan dengan tablet, kemungkinan termasuk informasi pribadi."</string>
-  <string product="default" name="permdesc_readLogs">"Mengizinkan aplikasi membaca dari berbagai berkas log sistem. Ini memungkinkan aplikasi menemukan informasi umum tentang apa yang Anda lakukan dengan ponsel, kemungkinan termasuk informasi pribadi."</string>
+  <string name="permdesc_readLogs" product="tablet">"Mengizinkan aplikasi membaca dari berbagai berkas log sistem. Ini memungkinkan aplikasi menemukan informasi umum tentang apa yang Anda lakukan dengan tablet, kemungkinan termasuk informasi pribadi."</string>
+  <string name="permdesc_readLogs" product="default">"Mengizinkan aplikasi membaca dari berbagai berkas log sistem. Ini memungkinkan aplikasi menemukan informasi umum tentang apa yang Anda lakukan dengan ponsel, kemungkinan termasuk informasi pribadi."</string>
   <string name="permlab_anyCodecForPlayback">"menggunakan media pengawasandi apa pun untuk pemutaran"</string>
   <string name="permdesc_anyCodecForPlayback">"Mengizinkan aplikasi menggunakan pengawasandi media apa pun yang terpasang guna mengawasandikan media untuk diputar."</string>
   <string name="permlab_diagnostic">"baca/tulis ke sumber daya yang dimiliki oleh diag"</string>
   <string name="permdesc_diagnostic">"Mengizinkan aplikasi membaca dan menulis ke sumber daya yang dimiliki oleh grup diag; misalnya, berkas dalam /dev. Ini berisiko mempengaruhi kestabilan dan keamanan sistem. Ini sebaiknya HANYA digunakan untuk diagnostik khusus perangkat keras oleh pabrik atau operator."</string>
   <string name="permlab_changeComponentState">"aktifkan atau nonaktifkan komponen aplikasi"</string>
-  <string product="tablet" name="permdesc_changeComponentState">"Izinkan aplikasi mengubah apakah komponen aplikasi lain diaktifkan atau tidak. Aplikasi berbahaya dapat menggunakan ini untuk menonaktifkan kemampuan tablet penting. Hati-hatilah saat menggunakan izin ini, karena komponen aplikasi tidak akan dapat digunakan, tidak konsisten, atau tidak stabil."</string>
-  <string product="default" name="permdesc_changeComponentState">"Izinkan aplikasi untuk mengubah apakah komponen aplikasi lain diaktifkan atau tidak. Aplikasi jahat dapat menggunakan ini untuk menonaktifkan kemampuan ponsel yang penting. Hati-hatilah saat menggunakan izin ini karena berpeluang menyebabkan komponen aplikasi menjadi tidak dapat digunakan, tidak konsisten, atau tidak stabil."</string>
+  <string name="permdesc_changeComponentState" product="tablet">"Izinkan aplikasi mengubah apakah komponen aplikasi lain diaktifkan atau tidak. Aplikasi berbahaya dapat menggunakan ini untuk menonaktifkan kemampuan tablet penting. Hati-hatilah saat menggunakan izin ini, karena komponen aplikasi tidak akan dapat digunakan, tidak konsisten, atau tidak stabil."</string>
+  <string name="permdesc_changeComponentState" product="default">"Izinkan aplikasi untuk mengubah apakah komponen aplikasi lain diaktifkan atau tidak. Aplikasi jahat dapat menggunakan ini untuk menonaktifkan kemampuan ponsel yang penting. Hati-hatilah saat menggunakan izin ini karena berpeluang menyebabkan komponen aplikasi menjadi tidak dapat digunakan, tidak konsisten, atau tidak stabil."</string>
   <string name="permlab_setPreferredApplications">"atur aplikasi yang disukai"</string>
   <string name="permdesc_setPreferredApplications">"Mengizinkan aplikasi memodifikasi aplikasi yang dipilih. Ini dapat dimanfaatkan aplikasi hasad untuk diam-diam mengubah aplikasi yang sedang berjalan, spoofing aplikasi yang ada untuk mengumpulkan data pribadi dari Anda."</string>
   <string name="permlab_writeSettings">"ubah setelan sistem global"</string>
@@ -445,28 +444,28 @@
   <string name="permlab_writeGservices">"ubah peta layanan Google"</string>
   <string name="permdesc_writeGservices">"Mengizinkan aplikasi mengubah peta layanan Google. Tidak untuk digunakan oleh aplikasi normal."</string>
   <string name="permlab_receiveBootCompleted">"mulai secara otomatis pada saat boot"</string>
-  <string product="tablet" name="permdesc_receiveBootCompleted">"Mengizinkan aplikasi menyala sendiri segera setelah sistem selesai booting. Hal ini dapat memperlama waktu memulai tablet dan menyebabkan aplikasi memperlambat tablet secara keseluruhan jika terus berjalan."</string>
-  <string product="default" name="permdesc_receiveBootCompleted">"Mengizinkan aplikasi memulai sendiri segera setelah sistem selesai booting. Ini dapat memperlambat proses memulai ponsel dan menyebabkan aplikasi memperlambat ponsel secara keseluruhan ketika terus berjalan."</string>
+  <string name="permdesc_receiveBootCompleted" product="tablet">"Mengizinkan aplikasi menyala sendiri segera setelah sistem selesai booting. Hal ini dapat memperlama waktu memulai tablet dan menyebabkan aplikasi memperlambat tablet secara keseluruhan jika terus berjalan."</string>
+  <string name="permdesc_receiveBootCompleted" product="default">"Mengizinkan aplikasi memulai sendiri segera setelah sistem selesai booting. Ini dapat memperlambat proses memulai ponsel dan menyebabkan aplikasi memperlambat ponsel secara keseluruhan ketika terus berjalan."</string>
   <string name="permlab_broadcastSticky">"kirim siaran memikat"</string>
-  <string product="tablet" name="permdesc_broadcastSticky">"Mengizinkan aplikasi mengirim siaran permanen, yang tetap ada setelah siaran berakhir. Aplikasi berbahaya dapat memperlambat tablet atau tidak stabil dengan menyebabkan terlalu banyaknya memori yang digunakan."</string>
-  <string product="default" name="permdesc_broadcastSticky">"Mengizinkan aplikasi mengirimkan siaran memikat, yang tetap ada setelah siaran berakhir. Aplikasi hasad dapat memperlambat ponsel atau membuatnya tidak stabil dengan menyebabkannya menggunakan terlalu banyak memori."</string>
+  <string name="permdesc_broadcastSticky" product="tablet">"Mengizinkan aplikasi mengirim siaran permanen, yang tetap ada setelah siaran berakhir. Aplikasi berbahaya dapat memperlambat tablet atau tidak stabil dengan menyebabkan terlalu banyaknya memori yang digunakan."</string>
+  <string name="permdesc_broadcastSticky" product="default">"Mengizinkan aplikasi mengirimkan siaran memikat, yang tetap ada setelah siaran berakhir. Aplikasi hasad dapat memperlambat ponsel atau membuatnya tidak stabil dengan menyebabkannya menggunakan terlalu banyak memori."</string>
   <string name="permlab_readContacts">"baca data kenalan"</string>
-  <string product="tablet" name="permdesc_readContacts">"Mengizinkan aplikasi membaca semua data kenalan (alamat) yang disimpan pada tablet Anda. Aplikasi berbahaya dapat menggunakan ini untuk mengirim data ke orang lain."</string>
-  <string product="default" name="permdesc_readContacts">"Mengizinkan aplikasi membaca semua data kenalan (alamat) yang tersimpan pada ponsel. Aplikasi hasad dapat menggunakan ini untuk mengirimkan data Anda ke orang lain."</string>
+  <string name="permdesc_readContacts" product="tablet">"Mengizinkan aplikasi membaca semua data kenalan (alamat) yang disimpan pada tablet Anda. Aplikasi berbahaya dapat menggunakan ini untuk mengirim data ke orang lain."</string>
+  <string name="permdesc_readContacts" product="default">"Mengizinkan aplikasi membaca semua data kenalan (alamat) yang tersimpan pada ponsel. Aplikasi hasad dapat menggunakan ini untuk mengirimkan data Anda ke orang lain."</string>
   <string name="permlab_writeContacts">"tuliskan data kenalan"</string>
-  <string product="tablet" name="permdesc_writeContacts">"Mengizinkan aplikasi memodifikasi data kenalan (alamat) yang disimpan pada tablet Anda. Aplikasi berbahaya dapat menggunakan ini untuk menghapus atau mengubah data kenalan."</string>
-  <string product="default" name="permdesc_writeContacts">"Mengizinkan aplikasi mengubah data kenalan (alamat) yang tersimpan pada ponsel. Aplikasi hasad dapat menggunakan ini untuk menghapus atau mengubah data kenalan Anda."</string>
+  <string name="permdesc_writeContacts" product="tablet">"Mengizinkan aplikasi memodifikasi data kenalan (alamat) yang disimpan pada tablet Anda. Aplikasi berbahaya dapat menggunakan ini untuk menghapus atau mengubah data kenalan."</string>
+  <string name="permdesc_writeContacts" product="default">"Mengizinkan aplikasi mengubah data kenalan (alamat) yang tersimpan pada ponsel. Aplikasi hasad dapat menggunakan ini untuk menghapus atau mengubah data kenalan Anda."</string>
   <string name="permlab_readProfile">"membaca data profil Anda"</string>
-  <string product="default" name="permdesc_readProfile">"Memungkinkan aplikasi membaca informasi profil pribadi yang tersimpan pada perangkat Anda, seperti nama dan informasi kontak. Artinya aplikasi dapat mengidentifikasi Anda dan mengirimkan informasi profil Anda kepada orang lain."</string>
+  <string name="permdesc_readProfile" product="default">"Memungkinkan aplikasi membaca informasi profil pribadi yang tersimpan pada perangkat Anda, seperti nama dan informasi kontak. Artinya aplikasi dapat mengidentifikasi Anda dan mengirimkan informasi profil Anda kepada orang lain."</string>
   <string name="permlab_writeProfile">"menulis ke data profil Anda"</string>
-  <string product="default" name="permdesc_writeProfile">"Memungkinkan aplikasi mengubah atau menambah informasi profil pribadi yang tersimpan pada perangkat Anda, seperti nama dan informasi kontak. Artinya aplikasi lain dapat mengidentifikasi Anda dan mengirimkan informasi profil Anda kepada orang lain."</string>
-  <string product="default" name="permlab_readSocialStream">"membaca aliran sosial Anda"</string>
-  <string product="default" name="permdesc_readSocialStream">"Mengizinkan aplikasi untuk mengakses dan menyinkronkan pembaruan sosial dari Anda dan teman. Aplikasi berbahaya dapat menggunakan ini untuk membaca komunikasi pribadi antara Anda dan teman di jaringan sosial."</string>
-  <string product="default" name="permlab_writeSocialStream">"menulis ke aliran sosial Anda"</string>
-  <string product="default" name="permdesc_writeSocialStream">"Mengizinkan aplikasi untuk menampilkan pembaruan sosial dari teman Anda. Aplikasi berbahaya dapat menggunakan ini untuk berpura-pura menjadi seorang teman dan menipu Anda untuk mengungkapkan sandi atau informasi rahasia lainnya."</string>
+  <string name="permdesc_writeProfile" product="default">"Memungkinkan aplikasi mengubah atau menambah informasi profil pribadi yang tersimpan pada perangkat Anda, seperti nama dan informasi kontak. Artinya aplikasi lain dapat mengidentifikasi Anda dan mengirimkan informasi profil Anda kepada orang lain."</string>
+  <string name="permlab_readSocialStream" product="default">"membaca aliran sosial Anda"</string>
+  <string name="permdesc_readSocialStream" product="default">"Mengizinkan aplikasi untuk mengakses dan menyinkronkan pembaruan sosial dari Anda dan teman. Aplikasi berbahaya dapat menggunakan ini untuk membaca komunikasi pribadi antara Anda dan teman di jaringan sosial."</string>
+  <string name="permlab_writeSocialStream" product="default">"menulis ke aliran sosial Anda"</string>
+  <string name="permdesc_writeSocialStream" product="default">"Mengizinkan aplikasi untuk menampilkan pembaruan sosial dari teman Anda. Aplikasi berbahaya dapat menggunakan ini untuk berpura-pura menjadi seorang teman dan menipu Anda untuk mengungkapkan sandi atau informasi rahasia lainnya."</string>
   <string name="permlab_readCalendar">"baca acara kalender serta informasi rahasia"</string>
-  <string product="tablet" name="permdesc_readCalendar">"Memungkinkan aplikasi membaca semua acara kalender yang disimpan pada tablet Anda, termasuk acara teman atau rekan kerja. Aplikasi berbahaya dengan izin ini dapat mengambil informasi pribadi dari kalender ini tanpa sepengetahuan pemilik."</string>
-  <string product="default" name="permdesc_readCalendar">"Memungkinkan aplikasi membaca semua acara kalender yang disimpan di ponsel Anda, termasuk acara teman atau rekan kerja. Aplikasi berbahaya dengan izin ini dapat mengambil informasi pribadi dari kalender ini tanpa sepengetahuan pemilik."</string>
+  <string name="permdesc_readCalendar" product="tablet">"Memungkinkan aplikasi membaca semua acara kalender yang disimpan pada tablet Anda, termasuk acara teman atau rekan kerja. Aplikasi berbahaya dengan izin ini dapat mengambil informasi pribadi dari kalender ini tanpa sepengetahuan pemilik."</string>
+  <string name="permdesc_readCalendar" product="default">"Memungkinkan aplikasi membaca semua acara kalender yang disimpan di ponsel Anda, termasuk acara teman atau rekan kerja. Aplikasi berbahaya dengan izin ini dapat mengambil informasi pribadi dari kalender ini tanpa sepengetahuan pemilik."</string>
   <string name="permlab_writeCalendar">"menambah atau mengubah acara kalender dan mengirim email kepada tamu tanpa sepengetahuan pemilik"</string>
   <string name="permlab_accessMockLocation">"sumber lokasi palsu untuk menguji"</string>
   <string name="permdesc_accessMockLocation">"Buat sumber lokasi tiruan untuk menguji. Aplikasi hasad dapat menggunakan ini untuk mengganti lokasi dan/atau status yang dikembalikan oleh sumber lokasi asli seperti GPS atau penyedia Jaringan."</string>
@@ -475,8 +474,8 @@
   <string name="permlab_installLocationProvider">"izin untuk memasang suatu penyedia lokasi"</string>
   <string name="permdesc_installLocationProvider">"Buat sumber lokasi tiruan untuk menguji. Aplikasi hasad dapat menggunakan ini untuk mengganti lokasi dan/atau status yang dikembalikan oleh sumber lokasi asli seperti GPS atau penyedia Jaringan atau memonitor dan melaporkan lokasi Anda ke sumber eksternal."</string>
   <string name="permlab_accessFineLocation">"lokasi terperinci (GPS)"</string>
-  <string product="tablet" name="permdesc_accessFineLocation">"Sumber lokasi kualitas tinggi akses seperti Sistem Penentuan Posisi Global pada tablet, jika tersedia. Aplikasi berbahaya dapat menggunakan ini untuk menentukan perkiraan lokasi Anda, dan dapat menyedot daya baterai."</string>
-  <string product="default" name="permdesc_accessFineLocation">"Akses sumber lokasi detail seperti GPS pada ponsel, jika tersedia. Aplikasi hasad dapat menggunakan ini untuk menentukan lokasi Anda, dapat menguras daya baterai."</string>
+  <string name="permdesc_accessFineLocation" product="tablet">"Sumber lokasi kualitas tinggi akses seperti Sistem Penentuan Posisi Global pada tablet, jika tersedia. Aplikasi berbahaya dapat menggunakan ini untuk menentukan perkiraan lokasi Anda, dan dapat menyedot daya baterai."</string>
+  <string name="permdesc_accessFineLocation" product="default">"Akses sumber lokasi detail seperti GPS pada ponsel, jika tersedia. Aplikasi hasad dapat menggunakan ini untuk menentukan lokasi Anda, dapat menguras daya baterai."</string>
   <string name="permlab_accessCoarseLocation">"lokasi sementara (berdasarkan jaringan)"</string>
   <string name="permlab_accessSurfaceFlinger">"akses SurfaceFlinger"</string>
   <string name="permdesc_accessSurfaceFlinger">"Izinkan aplikasi menggunakan fitur tingkat rendah SurfaceFlinger."</string>
@@ -488,14 +487,14 @@
   <string name="permdesc_recordAudio">"Mengizinkan aplikasi mengakses jalur rekaman audio."</string>
   <string name="permlab_camera">"ambil gambar dan video"</string>
   <string name="permdesc_camera">"Mengizinkan aplikasi mengambil gambar dan video dengan kamera. Ini mengizinkan aplikasi kapan pun untuk mengumpulkan gambar yang dilihat kamera."</string>
-  <string product="tablet" name="permlab_brick">"noaktifkan tablet secara permanen"</string>
-  <string product="default" name="permlab_brick">"nonaktifkan ponsel secara permanen"</string>
-  <string product="tablet" name="permdesc_brick">"Mengizinkan aplikasi menonaktifkan seluruh tablet secara permanen. Ini sangat berbahaya."</string>
-  <string product="default" name="permdesc_brick">"Mengizinkan aplikasi untuk menonaktifkan seluruh ponsel secara permanen. Hal ini sangat berbahaya."</string>
-  <string product="tablet" name="permlab_reboot">"reboot tablet secara paksa"</string>
-  <string product="default" name="permlab_reboot">"paksa reboot ponsel"</string>
-  <string product="tablet" name="permdesc_reboot">"Mengizinkan aplikasi memaksa tablet dinyalakan ulang."</string>
-  <string product="default" name="permdesc_reboot">"Mengizinkan aplikasi memaksa ponsel untuk melakukan reboot."</string>
+  <string name="permlab_brick" product="tablet">"noaktifkan tablet secara permanen"</string>
+  <string name="permlab_brick" product="default">"nonaktifkan ponsel secara permanen"</string>
+  <string name="permdesc_brick" product="tablet">"Mengizinkan aplikasi menonaktifkan seluruh tablet secara permanen. Ini sangat berbahaya."</string>
+  <string name="permdesc_brick" product="default">"Mengizinkan aplikasi untuk menonaktifkan seluruh ponsel secara permanen. Hal ini sangat berbahaya."</string>
+  <string name="permlab_reboot" product="tablet">"reboot tablet secara paksa"</string>
+  <string name="permlab_reboot" product="default">"paksa reboot ponsel"</string>
+  <string name="permdesc_reboot" product="tablet">"Mengizinkan aplikasi memaksa tablet dinyalakan ulang."</string>
+  <string name="permdesc_reboot" product="default">"Mengizinkan aplikasi memaksa ponsel untuk melakukan reboot."</string>
   <string name="permdesc_mount_unmount_filesystems">"Mengizinkan aplikasi memuat dan melepas sistem berkas untuk penyimpanan aman."</string>
   <string name="permdesc_mount_format_filesystems">"Mengizinkan aplikasi memformat penyimpanan aman."</string>
   <string name="permlab_asec_access">"dapatkan informasi pada penyimpanan internal"</string>
@@ -522,8 +521,8 @@
   <string name="permdesc_callPhone">"Mengizinkan aplikasi untuk memanggil nomor telepon tanpa campur tangan Anda. Aplikasi hasad dapat menyebabkan panggilan tak terduga pada tagihan ponsel Anda. Perhatikan bahwa hal ini tidak mengizinkan aplikasi tersebut memanggil nomor darurat."</string>
   <string name="permlab_callPrivileged">"panggil nomor telepon apa pun secara langsung"</string>
   <string name="permdesc_callPrivileged">"Mengizinkan aplikasi untuk memanggil nomor telepon apapun, termasuk nomor darurat, tanpa intervensi Anda. Aplikasi hasad dapat melakukan panggilan ilegal dan tidak perlu ke layanan darurat."</string>
-  <string product="tablet" name="permlab_performCdmaProvisioning">"memulai penyiapan tablet CDMA secara langsung"</string>
-  <string product="default" name="permlab_performCdmaProvisioning">"mulai penyiapan ponsel CDMA secara langsung"</string>
+  <string name="permlab_performCdmaProvisioning" product="tablet">"memulai penyiapan tablet CDMA secara langsung"</string>
+  <string name="permlab_performCdmaProvisioning" product="default">"mulai penyiapan ponsel CDMA secara langsung"</string>
   <string name="permdesc_performCdmaProvisioning">"Mengizinkan aplikasi memulai penyediaan CDMA. Aplikasi hasad dapat tiba-tiba memulai penyediaan CDMA."</string>
   <string name="permlab_locationUpdates">"mengontrol pemberitahuan pembaruan lokasi"</string>
   <string name="permdesc_locationUpdates">"Mengizinkan mengaktifkan/menonaktifkan pemberitahuan pembaruan lokasi dari radio. Tidak untuk digunakan oleh aplikasi normal."</string>
@@ -535,17 +534,17 @@
   <string name="permdesc_modifyPhoneState">"Mengizinkan aplikasi mengendalikan fitur ponsel pada perangkat. Suatu aplikasi dengan izin ini dapat beralih jaringan, menghidupkan dan mematikan radio ponsel dan semacamnya tanpa memberitahukan kepada Anda."</string>
   <string name="permlab_readPhoneState">"baca kondisi dan identitas ponsel"</string>
   <string name="permdesc_readPhoneState">"Mengizinkan aplikasi mengakses fitur ponsel yang ada pada perangkat. Suatu aplikasi dengan izin ini dapat menentukan nomor telepon dan nomor seri telepon, apakah panggilan telah aktif, nomor yang dipanggil, dan semacamnya."</string>
-  <string product="tablet" name="permlab_wakeLock">"cegah tablet dari tidur"</string>
-  <string product="default" name="permlab_wakeLock">"mencegah ponsel menjadi tidak aktif"</string>
-  <string product="tablet" name="permdesc_wakeLock">"Izinkan aplikasi mencegah tablet tidur."</string>
-  <string product="default" name="permdesc_wakeLock">"Mengizinkan aplikasi mencegah ponsel masuk ke mode tidur"</string>
-  <string product="tablet" name="permlab_devicePower">"hidupkan atau matikan tablet"</string>
-  <string product="default" name="permlab_devicePower">"daya ponsel hidup atau mati"</string>
-  <string product="tablet" name="permdesc_devicePower">"Mengizinkan aplikasi untuk menghidupkan atau mematikan tablet."</string>
-  <string product="default" name="permdesc_devicePower">"Mengizinkan aplikasi mematikan dan menghidupkan ponsel."</string>
+  <string name="permlab_wakeLock" product="tablet">"cegah tablet dari tidur"</string>
+  <string name="permlab_wakeLock" product="default">"mencegah ponsel menjadi tidak aktif"</string>
+  <string name="permdesc_wakeLock" product="tablet">"Izinkan aplikasi mencegah tablet tidur."</string>
+  <string name="permdesc_wakeLock" product="default">"Mengizinkan aplikasi mencegah ponsel masuk ke mode tidur"</string>
+  <string name="permlab_devicePower" product="tablet">"hidupkan atau matikan tablet"</string>
+  <string name="permlab_devicePower" product="default">"daya ponsel hidup atau mati"</string>
+  <string name="permdesc_devicePower" product="tablet">"Mengizinkan aplikasi untuk menghidupkan atau mematikan tablet."</string>
+  <string name="permdesc_devicePower" product="default">"Mengizinkan aplikasi mematikan dan menghidupkan ponsel."</string>
   <string name="permlab_factoryTest">"jalankan pada mode uji pabrik"</string>
-  <string product="tablet" name="permdesc_factoryTest">"Menjalankan sebagai uji pabrikan tingkat rendah, mengizinkan akses lengkap ke perangkat keras tablet. Hanya tersedia jika tablet berjalan dalam mode uji pabrikan."</string>
-  <string product="default" name="permdesc_factoryTest">"Jalankan sebagai uji pabrik tingkat rendah, yang memungkinkan akses penuh pada perangkat keras ponsel. Hanya tersedia ketika ponsel berjalan pada mode uji pabrik."</string>
+  <string name="permdesc_factoryTest" product="tablet">"Menjalankan sebagai uji pabrikan tingkat rendah, mengizinkan akses lengkap ke perangkat keras tablet. Hanya tersedia jika tablet berjalan dalam mode uji pabrikan."</string>
+  <string name="permdesc_factoryTest" product="default">"Jalankan sebagai uji pabrik tingkat rendah, yang memungkinkan akses penuh pada perangkat keras ponsel. Hanya tersedia ketika ponsel berjalan pada mode uji pabrik."</string>
   <string name="permlab_setWallpaper">"atur wallpaper"</string>
   <string name="permdesc_setWallpaper">"Mengizinkan aplikasi mengatur wallpaper sistem."</string>
   <string name="permlab_setWallpaperHints">"atur petunjuk ukuran wallpaper"</string>
@@ -553,16 +552,16 @@
   <string name="permlab_masterClear">"setel ulang sistem ke setelan bawaan pabrik"</string>
   <string name="permdesc_masterClear">"Mengizinkan aplikasi menyetel ulang sistem sepenuhnya ke setelan pabriknya, menghapus semua data, konfigurasi, dan aplikasi yang terpasang."</string>
   <string name="permlab_setTime">"atur waktu"</string>
-  <string product="tablet" name="permdesc_setTime">"Izinkan aplikasi mengubah waktu jam pada tablet."</string>
-  <string product="default" name="permdesc_setTime">"Mengizinkan aplikasi mengubah waktu jam ponsel."</string>
+  <string name="permdesc_setTime" product="tablet">"Izinkan aplikasi mengubah waktu jam pada tablet."</string>
+  <string name="permdesc_setTime" product="default">"Mengizinkan aplikasi mengubah waktu jam ponsel."</string>
   <string name="permlab_setTimeZone">"atur zona waktu"</string>
-  <string product="tablet" name="permdesc_setTimeZone">"Izinkan aplikasi mengubah zona waktu pada tablet."</string>
-  <string product="default" name="permdesc_setTimeZone">"Mengizinkan aplikasi mengubah zona waktu ponsel."</string>
+  <string name="permdesc_setTimeZone" product="tablet">"Izinkan aplikasi mengubah zona waktu pada tablet."</string>
+  <string name="permdesc_setTimeZone" product="default">"Mengizinkan aplikasi mengubah zona waktu ponsel."</string>
   <string name="permlab_accountManagerService">"bertindak sebagai AccountManagerService"</string>
   <string name="permdesc_accountManagerService">"Mengizinkan aplikasi melakukan panggilan ke AccountAuthenticators"</string>
   <string name="permlab_getAccounts">"menemukan akun yang diketahui"</string>
-  <string product="tablet" name="permdesc_getAccounts">"Mengizinkan aplikasi untuk mendaftar akun yang diketahui oleh tablet."</string>
-  <string product="default" name="permdesc_getAccounts">"Mengizinkan aplikasi mengubah mendapatkan daftar akun yang dikenali oleh ponsel."</string>
+  <string name="permdesc_getAccounts" product="tablet">"Mengizinkan aplikasi untuk mendaftar akun yang diketahui oleh tablet."</string>
+  <string name="permdesc_getAccounts" product="default">"Mengizinkan aplikasi mengubah mendapatkan daftar akun yang dikenali oleh ponsel."</string>
   <string name="permlab_authenticateAccounts">"bertindak sebagai autentikator akun"</string>
   <string name="permdesc_authenticateAccounts">"Mengizinkan aplikasi menggunakan kemampuan autentikator akun pada AccountManager, termasuk di antaranya membuat akun dan mendapatkan dan mengatur sandi."</string>
   <string name="permlab_manageAccounts">"kelola daftar akun"</string>
@@ -590,11 +589,11 @@
   <string name="permdesc_accessWimaxState">"Mengizinkan aplikasi melihat informasi tentang status WiMAX."</string>
   <string name="permlab_changeWimaxState">"Ganti status WiMAX"</string>
   <string name="permlab_bluetoothAdmin">"Administrasi bluetooth"</string>
-  <string product="tablet" name="permdesc_bluetoothAdmin">"Mengizinkan aplikasi untuk mengonfigurasi tablet Bluetooth lokal, dan menemukan serta memasang dengan perangkat jarak jauh."</string>
-  <string product="default" name="permdesc_bluetoothAdmin">"Mengizinkan aplikasi mengonfigurasi ponsel Bluetooth lokal, dan menemukan dan menyandingkan perangkat jarak jauh."</string>
+  <string name="permdesc_bluetoothAdmin" product="tablet">"Mengizinkan aplikasi untuk mengonfigurasi tablet Bluetooth lokal, dan menemukan serta memasang dengan perangkat jarak jauh."</string>
+  <string name="permdesc_bluetoothAdmin" product="default">"Mengizinkan aplikasi mengonfigurasi ponsel Bluetooth lokal, dan menemukan dan menyandingkan perangkat jarak jauh."</string>
   <string name="permlab_bluetooth">"buat sambungan Bluetooth"</string>
-  <string product="tablet" name="permdesc_bluetooth">"Mengizinkan aplikasi melihat konfigurasi tablet Bluetooth lokal, dan melakukan dan menerima koneksi dengan perangkat terpasang."</string>
-  <string product="default" name="permdesc_bluetooth">"Mengizinkan aplikasi melihat konfigurasi ponsel Bluetooth lokal, dan membuat dan menerima panggilan dengan perangkat yang disandingkan."</string>
+  <string name="permdesc_bluetooth" product="tablet">"Mengizinkan aplikasi melihat konfigurasi tablet Bluetooth lokal, dan melakukan dan menerima koneksi dengan perangkat terpasang."</string>
+  <string name="permdesc_bluetooth" product="default">"Mengizinkan aplikasi melihat konfigurasi ponsel Bluetooth lokal, dan membuat dan menerima panggilan dengan perangkat yang disandingkan."</string>
   <string name="permlab_nfc">"kontrol NFC"</string>
   <string name="permdesc_nfc">"Mengizinkan aplikasi berkomunikasi dengan tag, kartu, dan pembaca Near Field Communication (NFC)."</string>
   <string name="permlab_disableKeyguard">"nonaktifkan kunci tombol"</string>
@@ -613,12 +612,12 @@
   <string name="permdesc_readDictionary">"Mengizinkan aplikasi membaca kata, nama, dan frasa pribadi yang mungkin telah disimpan dalam kamus pengguna."</string>
   <string name="permlab_writeDictionary">"tulis ke kamus buatan pengguna"</string>
   <string name="permdesc_writeDictionary">"Mengizinkan aplikasi menuliskan kata-kata baru ke dalam kamus pengguna."</string>
-  <string product="nosdcard" name="permlab_sdcardWrite">"ubah/hapus konten penyimpanan USB"</string>
-  <string product="default" name="permlab_sdcardWrite">"ubah/hapus isi kartu SD"</string>
-  <string product="nosdcard" name="permdesc_sdcardWrite">"Mengizinkan aplikasi untuk menulis ke penyimpanan USB."</string>
-  <string product="default" name="permdesc_sdcardWrite">"Mengizinkan aplikasi menulis ke kartu SD."</string>
-  <string product="default" name="permlab_mediaStorageWrite">"ubah/hapus konten penyimpanan media internal"</string>
-  <string product="default" name="permdesc_mediaStorageWrite">"Mengizinkan aplikasi mengubah konten penyimpanan media internal."</string>
+  <string name="permlab_sdcardWrite" product="nosdcard">"ubah/hapus konten penyimpanan USB"</string>
+  <string name="permlab_sdcardWrite" product="default">"ubah/hapus isi kartu SD"</string>
+  <string name="permdesc_sdcardWrite" product="nosdcard">"Mengizinkan aplikasi untuk menulis ke penyimpanan USB."</string>
+  <string name="permdesc_sdcardWrite" product="default">"Mengizinkan aplikasi menulis ke kartu SD."</string>
+  <string name="permlab_mediaStorageWrite" product="default">"ubah/hapus konten penyimpanan media internal"</string>
+  <string name="permdesc_mediaStorageWrite" product="default">"Mengizinkan aplikasi mengubah konten penyimpanan media internal."</string>
   <string name="permlab_cache_filesystem">"akses sistem berkas tembolok."</string>
   <string name="permdesc_cache_filesystem">"Mengizinkan aplikasi membaca dan menulis filesystem tembolok."</string>
   <string name="permlab_use_sip">"lakukan//terima panggilan internet"</string>
@@ -632,15 +631,15 @@
   <string name="policylab_limitPassword">"Setel aturan sandi"</string>
   <string name="policydesc_limitPassword">"Kontrol panjangnya dan karakter yang diizinkan dalam sandi pembuka layar"</string>
   <string name="policylab_watchLogin">"Upaya pembukaan kunci layar monitor"</string>
-  <string product="tablet" name="policydesc_watchLogin">"Monitor jumlah sandi yang salah dimasukkan ketika membuka kunci layar, dan mengunci tablet atau menghapus semua data tablet jika terlalu banyak sandi yang salah dimasukkan"</string>
-  <string product="default" name="policydesc_watchLogin">"Monitor jumlah sandi yang salah dimasukkan ketika membuka kunci layar, dan mengunci ponsel atau menghapus semua data ponsel jika terlalu banyak sandi yang salah dimasukkan"</string>
+  <string name="policydesc_watchLogin" product="tablet">"Monitor jumlah sandi yang salah dimasukkan ketika membuka kunci layar, dan mengunci tablet atau menghapus semua data tablet jika terlalu banyak sandi yang salah dimasukkan"</string>
+  <string name="policydesc_watchLogin" product="default">"Monitor jumlah sandi yang salah dimasukkan ketika membuka kunci layar, dan mengunci ponsel atau menghapus semua data ponsel jika terlalu banyak sandi yang salah dimasukkan"</string>
   <string name="policylab_resetPassword">"Ubah sandi pembuka kunci layar"</string>
   <string name="policydesc_resetPassword">"Ubah sandi pembuka kunci layar"</string>
   <string name="policylab_forceLock">"Kunci layar"</string>
   <string name="policydesc_forceLock">"Kontrol cara dan kapan layar mengunci"</string>
   <string name="policylab_wipeData">"Hapus semua data"</string>
-  <string product="tablet" name="policydesc_wipeData">"Hapus data tablet tanpa peringatan, dengan menyetel ulang data pabrik"</string>
-  <string product="default" name="policydesc_wipeData">"Hapus data ponsel tanpa peringatan, dengan menyetel ulang data pabrik"</string>
+  <string name="policydesc_wipeData" product="tablet">"Hapus data tablet tanpa peringatan, dengan menyetel ulang data pabrik"</string>
+  <string name="policydesc_wipeData" product="default">"Hapus data ponsel tanpa peringatan, dengan menyetel ulang data pabrik"</string>
   <string name="policylab_setGlobalProxy">"Setel proxy global perangkat"</string>
   <string name="policydesc_setGlobalProxy">"Setel proxy global perangkat yang akandigunakan ketika kebijakan diaktifkan. Hanya admin perangkat pertama yang menyetel procy global yang berlaku."</string>
   <string name="policylab_expirePassword">"Setel kedaluwarsa sandi pengunci layar"</string>
@@ -649,49 +648,6 @@
   <string name="policydesc_encryptedStorage">"Mengharuskan data aplikasi yang disimpan untuk dienkripsi"</string>
   <string name="policylab_disableCamera">"Nonaktifkan kamera"</string>
   <string name="policydesc_disableCamera">"Mencegah penggunaan semua kamera perangkat"</string>
-  <string-array name="phoneTypes">
-        <item>"Rumah"</item>
-        <item>"Seluler"</item>
-        <item>"Kantor"</item>
-        <item>"Faks Kantor"</item>
-        <item>"Faks Rumah"</item>
-        <item>"Pager"</item>
-        <item>"Lainnya"</item>
-        <item>"Ubahsuaian"</item>
-    </string-array>
-  <string-array name="emailAddressTypes">
-        <item>"Rumah"</item>
-        <item>"Kantor"</item>
-        <item>"Lainnya"</item>
-        <item>"Ubahsuaian"</item>
-    </string-array>
-  <string-array name="postalAddressTypes">
-        <item>"Rumah"</item>
-        <item>"Kantor"</item>
-        <item>"Lainnya"</item>
-        <item>"Ubahsuaian"</item>
-    </string-array>
-  <string-array name="imAddressTypes">
-        <item>"Rumah"</item>
-        <item>"Kantor"</item>
-        <item>"Lainnya"</item>
-        <item>"Ubahsuaian"</item>
-    </string-array>
-  <string-array name="organizationTypes">
-        <item>"Kantor"</item>
-        <item>"Lainnya"</item>
-        <item>"Ubahsuaian"</item>
-    </string-array>
-  <string-array name="imProtocols">
-        <item>"AIM"</item>
-        <item>"Windows Live"</item>
-        <item>"Yahoo"</item>
-        <item>"Skype"</item>
-        <item>"QQ"</item>
-        <item>"Google Talk"</item>
-        <item>"ICQ"</item>
-        <item>"Jabber"</item>
-    </string-array>
   <string name="phoneTypeCustom">"Ubahsuaian"</string>
   <string name="phoneTypeHome">"Rumah"</string>
   <string name="phoneTypeMobile">"Seluler"</string>
@@ -795,8 +751,8 @@
   <string name="lockscreen_low_battery">"Hubungkan pengisi daya."</string>
   <string name="lockscreen_missing_sim_message_short">"Tidak ada kartu SIM."</string>
   <string name="lockscreen_blocked_sim_message_short">"Kartu SIM diblokir."</string>
-  <string product="tablet" name="lockscreen_missing_sim_message">"Tidak ada kartu SIM dalam tablet."</string>
-  <string product="default" name="lockscreen_missing_sim_message">"Tidak ada Kartu SIM di dalam ponsel."</string>
+  <string name="lockscreen_missing_sim_message" product="tablet">"Tidak ada kartu SIM dalam tablet."</string>
+  <string name="lockscreen_missing_sim_message" product="default">"Tidak ada Kartu SIM di dalam ponsel."</string>
   <string name="lockscreen_missing_sim_instructions">"Masukkan kartu SIM"</string>
   <string name="lockscreen_missing_sim_instructions_long">"Kartu SIM tidak ada atau tidak dapat dibaca. Masukkan kartu SIM."</string>
   <string name="lockscreen_permanent_disabled_sim_instructions">"Kartu SIM Anda dinonaktifkan secara permanen."\n" Hubungi penyedia layanan nirkabel Anda untuk mendapatkan kartu SIM lainnya."</string>
@@ -805,7 +761,7 @@
   <string name="lockscreen_transport_pause_description">"Tombol jeda"</string>
   <string name="lockscreen_transport_play_description">"Tombol putar"</string>
   <string name="lockscreen_transport_stop_description">"Tombol hentikan"</string>
-  <string msgid="2485604591272668370" name="emergency_calls_only">"Panggilan darurat saja"</string>
+  <string name="emergency_calls_only" msgid="2485604591272668370">"Panggilan darurat saja"</string>
   <string name="lockscreen_network_locked_message">"Jaringan terkunci"</string>
   <string name="lockscreen_sim_puk_locked_message">"Kartu SIM terkunci PUK."</string>
   <string name="lockscreen_sim_puk_locked_instructions">"Harap lihat Panduan Pengguna atau hubungi Layanan Pelanggan."</string>
@@ -814,12 +770,12 @@
   <string name="lockscreen_too_many_failed_attempts_dialog_message">"Anda telah salah menggambar pola pembuka kunci sebanyak <xliff:g id="NUMBER_0">%d</xliff:g> kali. "\n\n"Harap coba lagi dalam <xliff:g id="NUMBER_1">%d</xliff:g> detik."</string>
   <string name="lockscreen_too_many_failed_password_attempts_dialog_message">"Anda telah salah memasukkan sandi <xliff:g id="NUMBER_0">%d</xliff:g> kali. "\n\n"Coba lagi dalam <xliff:g id="NUMBER_1">%d</xliff:g> detik."</string>
   <string name="lockscreen_too_many_failed_pin_attempts_dialog_message">"Anda telah salah memasukkan PIN <xliff:g id="NUMBER_0">%d</xliff:g> kali. "\n\n"Coba lagi dalam <xliff:g id="NUMBER_1">%d</xliff:g> detik."</string>
-  <string product="tablet" name="lockscreen_failed_attempts_almost_glogin">"Anda telah salah menggambar pola pembuka kunci <xliff:g id="NUMBER_0">%d</xliff:g> kali. Setelah <xliff:g id="NUMBER_1">%d</xliff:g> upaya yang gagal, Anda akan diminta membuka kunci tablet menggunakan info masuk Google."\n\n" Harap masuk lagi dalam <xliff:g id="NUMBER_2">%d</xliff:g> detik."</string>
-  <string product="default" name="lockscreen_failed_attempts_almost_glogin">"Anda telah salah menggambar pola pembuka kunci sebanyak <xliff:g id="NUMBER_0">%d</xliff:g> kali. Setelah <xliff:g id="NUMBER_1">%d</xliff:g> upaya gagal lagi, Anda akan diminta membuka kunci ponsel menggunakan info masuk Google."\n\n" Harap coba lagi dalam <xliff:g id="NUMBER_2">%d</xliff:g> detik."</string>
-  <string product="tablet" name="lockscreen_failed_attempts_almost_at_wipe">"Anda telah gagal mencoba membuka gembok tablet sebanyak <xliff:g id="NUMBER_0">%d</xliff:g> kali. Setelah <xliff:g id="NUMBER_1">%d</xliff:g> upaya gagal lagi, tablet akan disetel ulang ke setelan bawaan pabrik dan semua data pengguna hilang."</string>
-  <string product="default" name="lockscreen_failed_attempts_almost_at_wipe">"Anda telah gagal mencoba membuka gembok ponsel sebanyak <xliff:g id="NUMBER_0">%d</xliff:g> kali. Setelah <xliff:g id="NUMBER_1">%d</xliff:g> upaya gagal lagi, ponsel akan disetel ulang ke setelan bawaan pabrik dan semua data pengguna hilang."</string>
-  <string product="tablet" name="lockscreen_failed_attempts_now_wiping">"Anda telah gagal mencoba membuka gembok tablet sebanyak <xliff:g id="NUMBER">%d</xliff:g> kali. Kini tablet akan disetel ulang ke setelan bawaan pabrik."</string>
-  <string product="default" name="lockscreen_failed_attempts_now_wiping">"Anda telah gagal mencoba membuka gembok ponsel sebanyak <xliff:g id="NUMBER">%d</xliff:g> kali. Kini ponsel akan disetel ulang ke setelan bawaan pabrik."</string>
+  <string name="lockscreen_failed_attempts_almost_glogin" product="tablet">"Anda telah salah menggambar pola pembuka kunci <xliff:g id="NUMBER_0">%d</xliff:g> kali. Setelah <xliff:g id="NUMBER_1">%d</xliff:g> upaya yang gagal, Anda akan diminta membuka kunci tablet menggunakan info masuk Google."\n\n" Harap masuk lagi dalam <xliff:g id="NUMBER_2">%d</xliff:g> detik."</string>
+  <string name="lockscreen_failed_attempts_almost_glogin" product="default">"Anda telah salah menggambar pola pembuka kunci sebanyak <xliff:g id="NUMBER_0">%d</xliff:g> kali. Setelah <xliff:g id="NUMBER_1">%d</xliff:g> upaya gagal lagi, Anda akan diminta membuka kunci ponsel menggunakan info masuk Google."\n\n" Harap coba lagi dalam <xliff:g id="NUMBER_2">%d</xliff:g> detik."</string>
+  <string name="lockscreen_failed_attempts_almost_at_wipe" product="tablet">"Anda telah gagal mencoba membuka gembok tablet sebanyak <xliff:g id="NUMBER_0">%d</xliff:g> kali. Setelah <xliff:g id="NUMBER_1">%d</xliff:g> upaya gagal lagi, tablet akan disetel ulang ke setelan bawaan pabrik dan semua data pengguna hilang."</string>
+  <string name="lockscreen_failed_attempts_almost_at_wipe" product="default">"Anda telah gagal mencoba membuka gembok ponsel sebanyak <xliff:g id="NUMBER_0">%d</xliff:g> kali. Setelah <xliff:g id="NUMBER_1">%d</xliff:g> upaya gagal lagi, ponsel akan disetel ulang ke setelan bawaan pabrik dan semua data pengguna hilang."</string>
+  <string name="lockscreen_failed_attempts_now_wiping" product="tablet">"Anda telah gagal mencoba membuka gembok tablet sebanyak <xliff:g id="NUMBER">%d</xliff:g> kali. Kini tablet akan disetel ulang ke setelan bawaan pabrik."</string>
+  <string name="lockscreen_failed_attempts_now_wiping" product="default">"Anda telah gagal mencoba membuka gembok ponsel sebanyak <xliff:g id="NUMBER">%d</xliff:g> kali. Kini ponsel akan disetel ulang ke setelan bawaan pabrik."</string>
   <string name="lockscreen_too_many_failed_attempts_countdown">"Coba lagi dalam <xliff:g id="NUMBER">%d</xliff:g> detik."</string>
   <string name="lockscreen_forgot_pattern_button_text">"Lupa pola?"</string>
   <string name="lockscreen_glogin_forgot_pattern">"Pembuka kunci akun"</string>
@@ -873,8 +829,8 @@
   <string name="permlab_readHistoryBookmarks">"baca riwayat dan bookmark Peramban"</string>
   <string name="permdesc_readHistoryBookmarks">"Izinkan aplikasi membaca semua URL yang telah dikunjungi Peramban, dam semua bookmark Peramban."</string>
   <string name="permlab_writeHistoryBookmarks">"tuliskan riwayat dan bookmark Peramban"</string>
-  <string product="tablet" name="permdesc_writeHistoryBookmarks">"Mengizinkan aplikasi memodifikasi riwayat atau bookmark Peramban yang disimpan pada tablet Anda. Aplikasi berbahaya dapat menggunakan ini untuk menghapus atau mengubah data Peramban."</string>
-  <string product="default" name="permdesc_writeHistoryBookmarks">"Mengizinkan aplikasi mengubah riwayat atau bookmark Peramban yang tersimpan pada ponsel. Aplikasi hasad dapat menggunakan ini untuk menghapus atau mengubah data Peramban."</string>
+  <string name="permdesc_writeHistoryBookmarks" product="tablet">"Mengizinkan aplikasi memodifikasi riwayat atau bookmark Peramban yang disimpan pada tablet Anda. Aplikasi berbahaya dapat menggunakan ini untuk menghapus atau mengubah data Peramban."</string>
+  <string name="permdesc_writeHistoryBookmarks" product="default">"Mengizinkan aplikasi mengubah riwayat atau bookmark Peramban yang tersimpan pada ponsel. Aplikasi hasad dapat menggunakan ini untuk menghapus atau mengubah data Peramban."</string>
   <string name="permlab_setAlarm">"setel alarm di jam alarm"</string>
   <string name="permdesc_setAlarm">"Perbolehkan aplikasi untuk menyetel alarm di aplikasi jam alarm yang terpasang. Beberapa aplikasi jam alarm tidak dapat menerapkan fitur ini."</string>
   <string name="permlab_addVoicemail">"tambahkan kotak pesan"</string>
@@ -904,75 +860,8 @@
   <string name="searchview_description_voice">"Penelusuran suara"</string>
   <string name="oneMonthDurationPast">"1 bulan yang lalu"</string>
   <string name="beforeOneMonthDurationPast">"Sebelum 1 bulan yang lalu"</string>
-  <plurals name="num_seconds_ago">
-        <item quantity="one">"1 detik lalu"</item>
-        <item quantity="other">"<xliff:g id="COUNT">%d</xliff:g> detik yang lalu"</item>
-    </plurals>
-  <plurals name="num_minutes_ago">
-        <item quantity="one">"1 menit yang lalu"</item>
-        <item quantity="other">"<xliff:g id="COUNT">%d</xliff:g> menit yang lalu"</item>
-    </plurals>
-  <plurals name="num_hours_ago">
-        <item quantity="one">"1 jam yang lalu"</item>
-        <item quantity="other">"<xliff:g id="COUNT">%d</xliff:g> jam yang lalu"</item>
-    </plurals>
-  <plurals name="last_num_days">
-        <item quantity="other">"<xliff:g id="COUNT">%d</xliff:g> hari terakhir"</item>
-    </plurals>
   <string name="last_month">"Bulan lalu"</string>
   <string name="older">"Lawas"</string>
-  <plurals name="num_days_ago">
-        <item quantity="one">"kemarin"</item>
-        <item quantity="other">"<xliff:g id="COUNT">%d</xliff:g> hari yang lalu"</item>
-    </plurals>
-  <plurals name="in_num_seconds">
-        <item quantity="one">"dalam 1 detik"</item>
-        <item quantity="other">"dalam <xliff:g id="COUNT">%d</xliff:g> detik"</item>
-    </plurals>
-  <plurals name="in_num_minutes">
-        <item quantity="one">"dalam 1 menit"</item>
-        <item quantity="other">"dalam <xliff:g id="COUNT">%d</xliff:g> menit"</item>
-    </plurals>
-  <plurals name="in_num_hours">
-        <item quantity="one">"dalam 1 jam"</item>
-        <item quantity="other">"dalam <xliff:g id="COUNT">%d</xliff:g> jam"</item>
-    </plurals>
-  <plurals name="in_num_days">
-        <item quantity="one">"besok"</item>
-        <item quantity="other">"dalam <xliff:g id="COUNT">%d</xliff:g> hari"</item>
-    </plurals>
-  <plurals name="abbrev_num_seconds_ago">
-        <item quantity="one">"1 detik yang lalu"</item>
-        <item quantity="other">"<xliff:g id="COUNT">%d</xliff:g> detik yang lalu"</item>
-    </plurals>
-  <plurals name="abbrev_num_minutes_ago">
-        <item quantity="one">"1 menit yang lalu"</item>
-        <item quantity="other">"<xliff:g id="COUNT">%d</xliff:g> menit yang lalu"</item>
-    </plurals>
-  <plurals name="abbrev_num_hours_ago">
-        <item quantity="one">"1 jam yang lalu"</item>
-        <item quantity="other">"<xliff:g id="COUNT">%d</xliff:g> jam yang lalu"</item>
-    </plurals>
-  <plurals name="abbrev_num_days_ago">
-        <item quantity="one">"kemarin"</item>
-        <item quantity="other">"<xliff:g id="COUNT">%d</xliff:g> hari yang lalu"</item>
-    </plurals>
-  <plurals name="abbrev_in_num_seconds">
-        <item quantity="one">"dalam 1 detik"</item>
-        <item quantity="other">"dalam <xliff:g id="COUNT">%d</xliff:g> detik"</item>
-    </plurals>
-  <plurals name="abbrev_in_num_minutes">
-        <item quantity="one">"dalam 1 menit"</item>
-        <item quantity="other">"dalam <xliff:g id="COUNT">%d</xliff:g> menit"</item>
-    </plurals>
-  <plurals name="abbrev_in_num_hours">
-        <item quantity="one">"dalam 1 jam"</item>
-        <item quantity="other">"dalam <xliff:g id="COUNT">%d</xliff:g> jam"</item>
-    </plurals>
-  <plurals name="abbrev_in_num_days">
-        <item quantity="one">"besok"</item>
-        <item quantity="other">"dalam <xliff:g id="COUNT">%d</xliff:g> hari"</item>
-    </plurals>
   <string name="preposition_for_date">"pada <xliff:g id="DATE">%s</xliff:g>"</string>
   <string name="preposition_for_time">"pada <xliff:g id="TIME">%s</xliff:g>"</string>
   <string name="preposition_for_year">"dalam <xliff:g id="YEAR">%s</xliff:g>"</string>
@@ -1027,9 +916,9 @@
   <string name="chooseActivity">"Pilih tindakan"</string>
   <string name="chooseUsbActivity">"Pilih sebuah aplikasi untuk perangkat USB"</string>
   <string name="noApplications">"Tidak ada aplikasi dapat melakukan tindakan ini."</string>
-  <string msgid="932628488013092776" name="aerr_application">"Sayangnya, <xliff:g id="APPLICATION">%1$s</xliff:g> telah berhenti."</string>
+  <string name="aerr_application" msgid="932628488013092776">"Sayangnya, <xliff:g id="APPLICATION">%1$s</xliff:g> telah berhenti."</string>
   <string name="aerr_process">"Sayangnya, proses <xliff:g id="PROCESS">%1$s</xliff:g> telah berhenti."</string>
-  <string msgid="8339738283149696827" name="anr_activity_application">"<xliff:g id="APPLICATION">%2$s</xliff:g> tidak merespons."\n\n"Apakah Anda ingin menutupnya?"</string>
+  <string name="anr_activity_application" msgid="8339738283149696827">"<xliff:g id="APPLICATION">%2$s</xliff:g> tidak merespons."\n\n"Apakah Anda ingin menutupnya?"</string>
   <string name="anr_activity_process">"Aktivitas <xliff:g id="ACTIVITY">%1$s</xliff:g> tidak merespons."\n\n"Apakah Anda ingin menutupnya?"</string>
   <string name="anr_application_process">"<xliff:g id="APPLICATION">%1$s</xliff:g> tidak merespons. Apakah Anda ingin menutupnya?"</string>
   <string name="anr_process">"Proses <xliff:g id="PROCESS">%1$s</xliff:g> tidak merespons."\n\n"Apakah Anda ingin menutupnya?"</string>
@@ -1076,14 +965,6 @@
   <string name="ringtone_silent">"Senyap"</string>
   <string name="ringtone_picker_title">"Nada dering"</string>
   <string name="ringtone_unknown">"Nada dering tidak dikenal"</string>
-  <plurals name="wifi_available">
-        <item quantity="one">"Jaringan Wi-Fi tersedia"</item>
-        <item quantity="other">"Jaringan Wi-Fi"</item>
-    </plurals>
-  <plurals name="wifi_available_detailed">
-        <item quantity="one">"Jaringan Wi-Fi terbuka tersedia"</item>
-        <item quantity="other">"Jaringan Wi-Fi terbuka tersedia"</item>
-    </plurals>
   <string name="wifi_available_sign_in">"Masuk ke jaringan Wi-Fi"</string>
   <string name="wifi_watchdog_network_disabled">"Tidak dapat tersambung ke Wi-Fi"</string>
   <string name="wifi_watchdog_network_disabled_detailed">" memiliki sambungan internet yang buruk."</string>
@@ -1117,18 +998,18 @@
   </string>
   <string name="usb_storage_activity_title">"Penyimpanan Massal USB"</string>
   <string name="usb_storage_title">"USB terhubung"</string>
-  <string product="nosdcard" name="usb_storage_message">"Anda telah terhubung ke komputer melalui USB. Sentuh tombol di bawah jika Anda ingin menyalin berkas antara komputer dan penyimpanan USB Android Anda."</string>
-  <string product="default" name="usb_storage_message">"Anda telah terhubung ke komputer melalui USB. Sentuh tombol di bawah jika Anda ingin menyalin berkas antara komputer dan kartu SD Android Anda."</string>
+  <string name="usb_storage_message" product="nosdcard">"Anda telah terhubung ke komputer melalui USB. Sentuh tombol di bawah jika Anda ingin menyalin berkas antara komputer dan penyimpanan USB Android Anda."</string>
+  <string name="usb_storage_message" product="default">"Anda telah terhubung ke komputer melalui USB. Sentuh tombol di bawah jika Anda ingin menyalin berkas antara komputer dan kartu SD Android Anda."</string>
   <string name="usb_storage_button_mount">"Hidupkan penyimpanan USB"</string>
-  <string product="nosdcard" name="usb_storage_error_message">"Tidak ada masalah menggunakan penyimpanan USB untuk penyimpanan massal USB."</string>
-  <string product="default" name="usb_storage_error_message">"Tidak ada masalah menggunakan kartu SD untuk penyimpanan massal USB."</string>
+  <string name="usb_storage_error_message" product="nosdcard">"Tidak ada masalah menggunakan penyimpanan USB untuk penyimpanan massal USB."</string>
+  <string name="usb_storage_error_message" product="default">"Tidak ada masalah menggunakan kartu SD untuk penyimpanan massal USB."</string>
   <string name="usb_storage_notification_title">"USB terhubung"</string>
   <string name="usb_storage_notification_message">"Pilih untuk menyalin berkas ke/dari komputer Anda."</string>
   <string name="usb_storage_stop_notification_title">"Matikan penyimpanan USB"</string>
   <string name="usb_storage_stop_notification_message">"Pilih untuk mematikan penyimpanan USB."</string>
   <string name="usb_storage_stop_title">"Penyimpanan USB sedang digunakan"</string>
-  <string product="nosdcard" name="usb_storage_stop_message">"Sebelum mematikan penyimpanan USB, pastikan Anda telah melepas (“dikeluarkan”) penyimpanan USB Android Anda dari komputer."</string>
-  <string product="default" name="usb_storage_stop_message">"Sebelum mematikan penyimpanan USB, pastikan bahwa Anda telah melepas (“dikeluarkan”) kartu SD Android dari komputer."</string>
+  <string name="usb_storage_stop_message" product="nosdcard">"Sebelum mematikan penyimpanan USB, pastikan Anda telah melepas (“dikeluarkan”) penyimpanan USB Android Anda dari komputer."</string>
+  <string name="usb_storage_stop_message" product="default">"Sebelum mematikan penyimpanan USB, pastikan bahwa Anda telah melepas (“dikeluarkan”) kartu SD Android dari komputer."</string>
   <string name="usb_storage_stop_button_mount">"Matikan penyimpanan USB"</string>
   <string name="usb_storage_stop_error_message">"Ada masalah ketika mematikan penyimpanan USB. Periksa untuk memastikan bahwa Anda telah melepaskan inang USB, lalu coba sekali lagi."</string>
   <string name="dlg_confirm_kill_storage_users_title">"Hidupkan penyimpanan USB"</string>
@@ -1141,10 +1022,10 @@
   <string name="usb_accessory_notification_title">"Tersambung ke aksesori USB"</string>
   <string name="usb_cdrom_notification_title">Driver virtual ada di</string>
   <string name="usb_notification_message">"Sentuh untuk opsi USB lainnya"</string>
-  <string product="nosdcard" name="extmedia_format_title">"Format penyimpanan USB"</string>
-  <string product="default" name="extmedia_format_title">"Format kartu SD"</string>
-  <string product="nosdcard" name="extmedia_format_message">"Format penyimpanan USB, menghapus semua berkas yang disimpan di sana? Tindakan tidak dapat diurungkan!"</string>
-  <string product="default" name="extmedia_format_message">"Apakah Anda yakin ingin memformat kartu SD? Semua data pada kartu akan hilang."</string>
+  <string name="extmedia_format_title" product="nosdcard">"Format penyimpanan USB"</string>
+  <string name="extmedia_format_title" product="default">"Format kartu SD"</string>
+  <string name="extmedia_format_message" product="nosdcard">"Format penyimpanan USB, menghapus semua berkas yang disimpan di sana? Tindakan tidak dapat diurungkan!"</string>
+  <string name="extmedia_format_message" product="default">"Apakah Anda yakin ingin memformat kartu SD? Semua data pada kartu akan hilang."</string>
   <string name="extmedia_format_button_format">"Format"</string>
   <string name="adb_active_notification_title">"Debugging USB terhubung"</string>
   <string name="adb_active_notification_message">"Pilih untuk menonaktifkan debugging USB."</string>
@@ -1156,29 +1037,29 @@
   <string name="candidates_style">
     <u>"calon"</u>
   </string>
-  <string product="nosdcard" name="ext_media_checking_notification_title">"Menyiapkan penyimpanan USB"</string>
-  <string product="default" name="ext_media_checking_notification_title">"Menyiapkan kartu SD"</string>
+  <string name="ext_media_checking_notification_title" product="nosdcard">"Menyiapkan penyimpanan USB"</string>
+  <string name="ext_media_checking_notification_title" product="default">"Menyiapkan kartu SD"</string>
   <string name="ext_media_checking_notification_message">"Memeriksa galat."</string>
-  <string product="nosdcard" name="ext_media_nofs_notification_title">"Penyimpanan USB kosong"</string>
-  <string product="default" name="ext_media_nofs_notification_title">"Kartu SD kosong"</string>
-  <string product="nosdcard" name="ext_media_nofs_notification_message">"Penyimpanan USB kosong atau tidak memiliki sistem berkas yang tidak didukung."</string>
-  <string product="default" name="ext_media_nofs_notification_message">"Kartu SD kosong atau memiliki sistem berkas yang tidak didukung."</string>
-  <string product="nosdcard" name="ext_media_unmountable_notification_title">"Penyimpanan USB rusak"</string>
-  <string product="default" name="ext_media_unmountable_notification_title">"Kartu SD rusak"</string>
-  <string product="nosdcard" name="ext_media_unmountable_notification_message">"Penyimpanan USB rusak. Anda mungkin perlu memformat ulang."</string>
-  <string product="default" name="ext_media_unmountable_notification_message">"Kartu SD rusak. Anda mungkin harus memformatnya."</string>
-  <string product="nosdcard" name="ext_media_badremoval_notification_title">"Penyimpanan USB dilepas secara tidak sengaja"</string>
-  <string product="default" name="ext_media_badremoval_notification_title">"Kartu SD tiba-tiba dicabut"</string>
-  <string product="nosdcard" name="ext_media_badremoval_notification_message">"Lepas penyimpanan USB sebelum menghapus untuk menghindari kehilangan data."</string>
-  <string product="default" name="ext_media_badremoval_notification_message">"Lepaskan kartu SD sebelum mencabutnya untuk mencegah hilangnya data."</string>
-  <string product="nosdcard" name="ext_media_safe_unmount_notification_title">"Penyimpanan USB aman untuk dilepas"</string>
-  <string product="default" name="ext_media_safe_unmount_notification_title">"Kartu SD aman dicabut"</string>
-  <string product="nosdcard" name="ext_media_safe_unmount_notification_message">"Anda dapat melepas penyimpanan USB dengan aman."</string>
-  <string product="default" name="ext_media_safe_unmount_notification_message">"Anda dapat melepaskan kartu SD dengan aman."</string>
-  <string product="nosdcard" name="ext_media_nomedia_notification_title">"Penyimpanan USB dihapus"</string>
-  <string product="default" name="ext_media_nomedia_notification_title">"Cabut kartu SD"</string>
-  <string product="nosdcard" name="ext_media_nomedia_notification_message">"Penyimpanan USB dihapus. Masukkan media baru."</string>
-  <string product="default" name="ext_media_nomedia_notification_message">"Kartu SD dicabut. Masukkan yang baru."</string>
+  <string name="ext_media_nofs_notification_title" product="nosdcard">"Penyimpanan USB kosong"</string>
+  <string name="ext_media_nofs_notification_title" product="default">"Kartu SD kosong"</string>
+  <string name="ext_media_nofs_notification_message" product="nosdcard">"Penyimpanan USB kosong atau tidak memiliki sistem berkas yang tidak didukung."</string>
+  <string name="ext_media_nofs_notification_message" product="default">"Kartu SD kosong atau memiliki sistem berkas yang tidak didukung."</string>
+  <string name="ext_media_unmountable_notification_title" product="nosdcard">"Penyimpanan USB rusak"</string>
+  <string name="ext_media_unmountable_notification_title" product="default">"Kartu SD rusak"</string>
+  <string name="ext_media_unmountable_notification_message" product="nosdcard">"Penyimpanan USB rusak. Anda mungkin perlu memformat ulang."</string>
+  <string name="ext_media_unmountable_notification_message" product="default">"Kartu SD rusak. Anda mungkin harus memformatnya."</string>
+  <string name="ext_media_badremoval_notification_title" product="nosdcard">"Penyimpanan USB dilepas secara tidak sengaja"</string>
+  <string name="ext_media_badremoval_notification_title" product="default">"Kartu SD tiba-tiba dicabut"</string>
+  <string name="ext_media_badremoval_notification_message" product="nosdcard">"Lepas penyimpanan USB sebelum menghapus untuk menghindari kehilangan data."</string>
+  <string name="ext_media_badremoval_notification_message" product="default">"Lepaskan kartu SD sebelum mencabutnya untuk mencegah hilangnya data."</string>
+  <string name="ext_media_safe_unmount_notification_title" product="nosdcard">"Penyimpanan USB aman untuk dilepas"</string>
+  <string name="ext_media_safe_unmount_notification_title" product="default">"Kartu SD aman dicabut"</string>
+  <string name="ext_media_safe_unmount_notification_message" product="nosdcard">"Anda dapat melepas penyimpanan USB dengan aman."</string>
+  <string name="ext_media_safe_unmount_notification_message" product="default">"Anda dapat melepaskan kartu SD dengan aman."</string>
+  <string name="ext_media_nomedia_notification_title" product="nosdcard">"Penyimpanan USB dihapus"</string>
+  <string name="ext_media_nomedia_notification_title" product="default">"Cabut kartu SD"</string>
+  <string name="ext_media_nomedia_notification_message" product="nosdcard">"Penyimpanan USB dihapus. Masukkan media baru."</string>
+  <string name="ext_media_nomedia_notification_message" product="default">"Kartu SD dicabut. Masukkan yang baru."</string>
   <string name="activity_list_empty">"Tidak ditemukan aktivitas yang sesuai"</string>
   <string name="permlab_pkgUsageStats">"perbarui statistik penggunaan komponen"</string>
   <string name="permdesc_pkgUsageStats">"Mengizinkan modifikasi statistik penggunaan komponen yang dikumpulkan. Tidak untuk digunakan pada aplikasi normal."</string>
@@ -1229,31 +1110,21 @@
   <string name="throttled_notification_message">"Sentuh untuk mengetahui penggunaan data seluler lebih lengkap"</string>
   <string name="no_matches">No matches</string>
   <string name="find_on_page">"Temukan pada laman"</string>
-  <plurals name="matches_found">
-        <!-- Case of one match -->
-        <!--Modify Spreadst of 94151 can't show whole information on webpage  start -->
-        <!-- <item quantity="one">1 match</item> -->
-        <item quantity="one">"1 kecocokan"</item>
-        <!-- Case of multiple total matches -->
-        <!-- <item quantity="other"><xliff:g id="index" example="2">%d</xliff:g> of <xliff:g id="total" example="137">%d</xliff:g></item> -->
-        <item quantity="other">"<xliff:g id="INDEX">%d</xliff:g> dari <xliff:g id="TOTAL">%d</xliff:g>"</item>
-        <!--Modify Spreadst of 94151 can't show whole information on webpage  end -->
-        </plurals>
   <string name="stk_refresh_sim_init_message">"Kartu SIM memperbarui"</string>
   <string name="stk_refresh_sim_reset_message">"Telepon akan memulai ulang"</string>
   <string name="action_mode_done">"Selesai"</string>
-  <string product="nosdcard" name="progress_unmounting">"Melepas penyimpanan USB..."</string>
-  <string product="default" name="progress_unmounting">"Melepas kartu SD..."</string>
-  <string product="nosdcard" name="progress_erasing">"Menghapus penyimpanan USB..."</string>
-  <string product="default" name="progress_erasing">"Menghapus kartu SD..."</string>
-  <string product="nosdcard" name="format_error">"Tidak dapat menghapus penyimpanan USB."</string>
-  <string product="default" name="format_error">"Tidak dapat menghapus kartu SD."</string>
+  <string name="progress_unmounting" product="nosdcard">"Melepas penyimpanan USB..."</string>
+  <string name="progress_unmounting" product="default">"Melepas kartu SD..."</string>
+  <string name="progress_erasing" product="nosdcard">"Menghapus penyimpanan USB..."</string>
+  <string name="progress_erasing" product="default">"Menghapus kartu SD..."</string>
+  <string name="format_error" product="nosdcard">"Tidak dapat menghapus penyimpanan USB."</string>
+  <string name="format_error" product="default">"Tidak dapat menghapus kartu SD."</string>
   <string name="media_bad_removal">"Kartu SD dihapus sebelum dilepas."</string>
-  <string product="nosdcard" name="media_checking">"Saat ini penyimpanan USB sedang diperiksa."</string>
-  <string product="default" name="media_checking">"Kartu SD sedang diperiksa."</string>
+  <string name="media_checking" product="nosdcard">"Saat ini penyimpanan USB sedang diperiksa."</string>
+  <string name="media_checking" product="default">"Kartu SD sedang diperiksa."</string>
   <string name="media_removed">"Kartu SD telah dihapus."</string>
-  <string product="nosdcard" name="media_shared">"Saat ini penyimpanan USB sedang digunakan oleh komputer."</string>
-  <string product="default" name="media_shared">"Kartu SD sedang digunakan oleh komputer."</string>
+  <string name="media_shared" product="nosdcard">"Saat ini penyimpanan USB sedang digunakan oleh komputer."</string>
+  <string name="media_shared" product="default">"Kartu SD sedang digunakan oleh komputer."</string>
   <string name="media_unknown_state">"Media eksternal dalam status tidak diketahui."</string>
   <string name="share">"Bagikan"</string>
   <string name="find">"Temukan"</string>
@@ -1432,4 +1303,143 @@
   <string name="description_target_call">Panggil</string>
   <string name="description_target_sms">"SMS"</string>
   <string name="ringtone_waning">Berkas salah, harap pilih kembali</string>
+  <skip></skip>
+  <string-array name="phoneTypes">
+        <item>"Rumah"</item>
+        <item>"Seluler"</item>
+        <item>"Kantor"</item>
+        <item>"Faks Kantor"</item>
+        <item>"Faks Rumah"</item>
+        <item>"Pager"</item>
+        <item>"Lainnya"</item>
+        <item>"Ubahsuaian"</item>
+    </string-array>
+  <string-array name="emailAddressTypes">
+        <item>"Rumah"</item>
+        <item>"Kantor"</item>
+        <item>"Lainnya"</item>
+        <item>"Ubahsuaian"</item>
+    </string-array>
+  <string-array name="postalAddressTypes">
+        <item>"Rumah"</item>
+        <item>"Kantor"</item>
+        <item>"Lainnya"</item>
+        <item>"Ubahsuaian"</item>
+    </string-array>
+  <string-array name="imAddressTypes">
+        <item>"Rumah"</item>
+        <item>"Kantor"</item>
+        <item>"Lainnya"</item>
+        <item>"Ubahsuaian"</item>
+    </string-array>
+  <string-array name="organizationTypes">
+        <item>"Kantor"</item>
+        <item>"Lainnya"</item>
+        <item>"Ubahsuaian"</item>
+    </string-array>
+  <string-array name="imProtocols">
+        <item>"AIM"</item>
+        <item>"Windows Live"</item>
+        <item>"Yahoo"</item>
+        <item>"Skype"</item>
+        <item>"QQ"</item>
+        <item>"Google Talk"</item>
+        <item>"ICQ"</item>
+        <item>"Jabber"</item>
+    </string-array>
+  <plurals name="num_seconds_ago">
+        <item quantity="one">"1 detik lalu"</item>
+        <item quantity="other">"<xliff:g id="COUNT">%d</xliff:g> detik yang lalu"</item>
+    </plurals>
+  <plurals name="num_minutes_ago">
+        <item quantity="one">"1 menit yang lalu"</item>
+        <item quantity="other">"<xliff:g id="COUNT">%d</xliff:g> menit yang lalu"</item>
+    </plurals>
+  <plurals name="num_hours_ago">
+        <item quantity="one">"1 jam yang lalu"</item>
+        <item quantity="other">"<xliff:g id="COUNT">%d</xliff:g> jam yang lalu"</item>
+    </plurals>
+  <plurals name="last_num_days">
+        <item quantity="other">"<xliff:g id="COUNT">%d</xliff:g> hari terakhir"</item>
+    </plurals>
+  <plurals name="num_days_ago">
+        <item quantity="one">"kemarin"</item>
+        <item quantity="other">"<xliff:g id="COUNT">%d</xliff:g> hari yang lalu"</item>
+    </plurals>
+  <plurals name="in_num_seconds">
+        <item quantity="one">"dalam 1 detik"</item>
+        <item quantity="other">"dalam <xliff:g id="COUNT">%d</xliff:g> detik"</item>
+    </plurals>
+  <plurals name="in_num_minutes">
+        <item quantity="one">"dalam 1 menit"</item>
+        <item quantity="other">"dalam <xliff:g id="COUNT">%d</xliff:g> menit"</item>
+    </plurals>
+  <plurals name="in_num_hours">
+        <item quantity="one">"dalam 1 jam"</item>
+        <item quantity="other">"dalam <xliff:g id="COUNT">%d</xliff:g> jam"</item>
+    </plurals>
+  <plurals name="in_num_days">
+        <item quantity="one">"besok"</item>
+        <item quantity="other">"dalam <xliff:g id="COUNT">%d</xliff:g> hari"</item>
+    </plurals>
+  <plurals name="abbrev_num_seconds_ago">
+        <item quantity="one">"1 detik yang lalu"</item>
+        <item quantity="other">"<xliff:g id="COUNT">%d</xliff:g> detik yang lalu"</item>
+    </plurals>
+  <plurals name="abbrev_num_minutes_ago">
+        <item quantity="one">"1 menit yang lalu"</item>
+        <item quantity="other">"<xliff:g id="COUNT">%d</xliff:g> menit yang lalu"</item>
+    </plurals>
+  <plurals name="abbrev_num_hours_ago">
+        <item quantity="one">"1 jam yang lalu"</item>
+        <item quantity="other">"<xliff:g id="COUNT">%d</xliff:g> jam yang lalu"</item>
+    </plurals>
+  <plurals name="abbrev_num_days_ago">
+        <item quantity="one">"kemarin"</item>
+        <item quantity="other">"<xliff:g id="COUNT">%d</xliff:g> hari yang lalu"</item>
+    </plurals>
+  <plurals name="abbrev_in_num_seconds">
+        <item quantity="one">"dalam 1 detik"</item>
+        <item quantity="other">"dalam <xliff:g id="COUNT">%d</xliff:g> detik"</item>
+    </plurals>
+  <plurals name="abbrev_in_num_minutes">
+        <item quantity="one">"dalam 1 menit"</item>
+        <item quantity="other">"dalam <xliff:g id="COUNT">%d</xliff:g> menit"</item>
+    </plurals>
+  <plurals name="abbrev_in_num_hours">
+        <item quantity="one">"dalam 1 jam"</item>
+        <item quantity="other">"dalam <xliff:g id="COUNT">%d</xliff:g> jam"</item>
+    </plurals>
+  <plurals name="abbrev_in_num_days">
+        <item quantity="one">"besok"</item>
+        <item quantity="other">"dalam <xliff:g id="COUNT">%d</xliff:g> hari"</item>
+    </plurals>
+  <plurals name="wifi_available">
+        <item quantity="one">"Jaringan Wi-Fi tersedia"</item>
+        <item quantity="other">"Jaringan Wi-Fi"</item>
+    </plurals>
+  <plurals name="wifi_available_detailed">
+        <item quantity="one">"Jaringan Wi-Fi terbuka tersedia"</item>
+        <item quantity="other">"Jaringan Wi-Fi terbuka tersedia"</item>
+    </plurals>
+  <plurals name="matches_found">
+        <!-- Case of one match -->
+        <!--Modify Spreadst of 94151 can't show whole information on webpage  start -->
+        <!-- <item quantity="one">1 match</item> -->
+        <item quantity="one">"1 kecocokan"</item>
+        <!-- Case of multiple total matches -->
+        <!-- <item quantity="other"><xliff:g id="index" example="2">%d</xliff:g> of <xliff:g id="total" example="137">%d</xliff:g></item> -->
+        <item quantity="other">"<xliff:g id="INDEX">%d</xliff:g> dari <xliff:g id="TOTAL">%d</xliff:g>"</item>
+        <!--Modify Spreadst of 94151 can't show whole information on webpage  end -->
+        </plurals>
+  <string name="low_internal_storage_ignore">Abaikan</string>
+  <string name="low_internal_storage_display_details">"Detail"</string>
+  <string name="low_internal_storage_wait">"Silahkan tunggu..."</string>
+  <string name="low_internal_storage_updating_details">"Memperbaharui perincian..."</string>
+  <string name="emergency_call_no_service">Tidak tersedia jaringan</string>
+  <string name="usim_recommanded">Tidak menggunakan kartu CUCC</string>
+  <string name="usim_recommanded_for_cucc_app">Aplikasi CUCC, untuk penggunaannya direkomendasikan menggunakan USIM, Lanjutkan? </string>
+  <string name="pick_yes">"Lanjutkan"</string>
+  <string name="pick_no">"Batal"</string>
+  <string name="language_automatic">"Otomatis"</string>
 </resources>
