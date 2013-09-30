@@ -159,41 +159,50 @@ public class Environment {
             mExternalStorageAndroidData = buildPath(mExternalStorage, DIRECTORY_ANDROID, "data");
             mExternalStorageAndroidMedia = buildPath(mExternalStorage, DIRECTORY_ANDROID, "media");
         }
+        
+        private static File getCanonicalFile(File f){
+        	try {
+				return f.getCanonicalFile();
+			} catch (IOException e) {
+				//ignore 
+				return f;
+			}
+        }
 
         public File getExternalStorageDirectory() {
-            return mLinkPoint;
+        	return getCanonicalFile(mLinkPoint);
         }
 
         public File getExternalStorageObbDirectory() {
-            return mExternalStorageAndroidObb;
+            return getCanonicalFile(mExternalStorageAndroidObb);
         }
 
         public File getExternalStoragePublicDirectory(String type) {
-            return new File(mExternalStorage, type);
+            return getCanonicalFile(new File(mExternalStorage, type));
         }
 
         public File getExternalStorageAndroidDataDir() {
-            return mExternalStorageAndroidData;
+            return getCanonicalFile(mExternalStorageAndroidData);
         }
 
         public File getExternalStorageAppDataDirectory(String packageName) {
-            return new File(mExternalStorageAndroidData, packageName);
+            return getCanonicalFile(new File(mExternalStorageAndroidData, packageName));
         }
 
         public File getExternalStorageAppMediaDirectory(String packageName) {
-            return new File(mExternalStorageAndroidMedia, packageName);
+            return getCanonicalFile(new File(mExternalStorageAndroidMedia, packageName));
         }
 
         public File getExternalStorageAppObbDirectory(String packageName) {
-            return new File(mExternalStorageAndroidObb, packageName);
+            return getCanonicalFile(new File(mExternalStorageAndroidObb, packageName));
         }
 
         public File getExternalStorageAppFilesDirectory(String packageName) {
-            return new File(new File(mExternalStorageAndroidData, packageName), "files");
+            return getCanonicalFile(new File(new File(mExternalStorageAndroidData, packageName), "files"));
         }
 
         public File getExternalStorageAppCacheDirectory(String packageName) {
-            return new File(new File(mExternalStorageAndroidData, packageName), "cache");
+            return getCanonicalFile(new File(new File(mExternalStorageAndroidData, packageName), "cache"));
         }
 
         public File getMediaStorageDirectory() {
