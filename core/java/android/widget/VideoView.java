@@ -863,16 +863,21 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
     public void seekTo(int msec) {
         Log.d(TAG,"seekTo() msec="+msec);
         Log.d(TAG,"seekTo() isInPlaybackState="+isInPlaybackState());
-        if(isStream()){
-            isPlaying = false;
+        //Fix Bug 219446
+        if(canSeekBackward() || canSeekForward())
+        //Fix Bug 219446
+        {
+            if(isStream()){
+                isPlaying = false;
+            }
+            if (isInPlaybackState()) {
+                mMediaPlayer.seekTo(msec);
+                mSeekWhenPrepared = 0;
+            } else {
+                mSeekWhenPrepared = msec;
+            }
+            Log.d(TAG,"seekTo() mSeekWhenPrepared="+mSeekWhenPrepared);
         }
-        if (isInPlaybackState()) {
-            mMediaPlayer.seekTo(msec);
-            mSeekWhenPrepared = 0;
-        } else {
-            mSeekWhenPrepared = msec;
-        }
-        Log.d(TAG,"seekTo() mSeekWhenPrepared="+mSeekWhenPrepared);
     }
 
     public boolean isPlaying() {
