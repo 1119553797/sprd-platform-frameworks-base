@@ -26,10 +26,12 @@ sources := \
     MemoryBase.cpp \
     MemoryHeapBase.cpp \
     MemoryHeapPmem.cpp \
+    MemoryHeapIon.cpp \
     Parcel.cpp \
     PermissionCache.cpp \
     ProcessState.cpp \
     Static.cpp
+
 
 LOCAL_PATH:= $(call my-dir)
 
@@ -37,6 +39,8 @@ include $(CLEAR_VARS)
 LOCAL_LDLIBS += -lpthread
 LOCAL_MODULE := libbinder
 LOCAL_SHARED_LIBRARIES := liblog libcutils libutils
+LOCAL_C_INCLUDES += \
+    $(TARGET_OUT_INTERMEDIATES)/KERNEL/usr/include/video/
 LOCAL_SRC_FILES := $(sources)
 include $(BUILD_SHARED_LIBRARY)
 
@@ -44,4 +48,6 @@ include $(CLEAR_VARS)
 LOCAL_LDLIBS += -lpthread
 LOCAL_MODULE := libbinder
 LOCAL_SRC_FILES := $(sources)
+LOCAL_C_INCLUDES += \
+    $(TARGET_OUT_INTERMEDIATES)/KERNEL/usr/include/video/
 include $(BUILD_STATIC_LIBRARY)
