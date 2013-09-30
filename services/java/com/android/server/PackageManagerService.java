@@ -4812,6 +4812,12 @@ class PackageManagerService extends IPackageManager.Stub {
                 String installerPackageName) {
             this.packageURI = packageURI;
             this.flags = flags;
+            //add bug#214621: in 6820lc, cat't allow install apk in the internal storage
+            if (SystemProperties.getBoolean("ro.ulc.ram", false) && (flags & PackageManager.INSTALL_INTERNAL) != 0) {
+                this.flags &= ~PackageManager.INSTALL_INTERNAL;
+                this.flags |= PackageManager.INSTALL_EXTERNAL;
+            }
+            //end add bug#214621
             this.observer = observer;
             this.installerPackageName = installerPackageName;
         }
