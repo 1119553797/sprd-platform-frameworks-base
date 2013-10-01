@@ -324,7 +324,7 @@ public class DatePicker extends FrameLayout {
     public void setMinDate(long minDate) {
         mTempDate.setTimeInMillis(minDate);
         if (mTempDate.get(Calendar.YEAR) == mMinDate.get(Calendar.YEAR)
-                && mTempDate.get(Calendar.DAY_OF_YEAR) != mMinDate.get(Calendar.DAY_OF_YEAR)) {
+                && mTempDate.get(Calendar.DAY_OF_YEAR) == mMinDate.get(Calendar.DAY_OF_YEAR)) {
             return;
         }
         mMinDate.setTimeInMillis(minDate);
@@ -360,7 +360,7 @@ public class DatePicker extends FrameLayout {
     public void setMaxDate(long maxDate) {
         mTempDate.setTimeInMillis(maxDate);
         if (mTempDate.get(Calendar.YEAR) == mMaxDate.get(Calendar.YEAR)
-                && mTempDate.get(Calendar.DAY_OF_YEAR) != mMaxDate.get(Calendar.DAY_OF_YEAR)) {
+                && mTempDate.get(Calendar.DAY_OF_YEAR) == mMaxDate.get(Calendar.DAY_OF_YEAR)) {
             return;
         }
         mMaxDate.setTimeInMillis(maxDate);
@@ -644,6 +644,12 @@ public class DatePicker extends FrameLayout {
             mMonthSpinner.setDisplayedValues(null);
             mMonthSpinner.setMinValue(mCurrentDate.get(Calendar.MONTH));
             mMonthSpinner.setMaxValue(mCurrentDate.getActualMaximum(Calendar.MONTH));
+
+            if(mDigitMonth){
+                mMonthSpinner.setMinValue(mMonthSpinner.getMinValue() + 1);
+                mMonthSpinner.setMaxValue(mMonthSpinner.getMaxValue() + 1);
+            }
+
             mMonthSpinner.setWrapSelectorWheel(false);
         } else if (mCurrentDate.equals(mMaxDate)) {
             mDaySpinner.setMinValue(mCurrentDate.getActualMinimum(Calendar.DAY_OF_MONTH));
@@ -652,6 +658,12 @@ public class DatePicker extends FrameLayout {
             mMonthSpinner.setDisplayedValues(null);
             mMonthSpinner.setMinValue(mCurrentDate.getActualMinimum(Calendar.MONTH));
             mMonthSpinner.setMaxValue(mCurrentDate.get(Calendar.MONTH));
+
+            if(mDigitMonth){
+                mMonthSpinner.setMinValue(mMonthSpinner.getMinValue() + 1);
+                mMonthSpinner.setMaxValue(mMonthSpinner.getMaxValue() + 1);
+            }
+
             mMonthSpinner.setWrapSelectorWheel(false);
         } else {
             mDaySpinner.setMinValue(1);
@@ -660,14 +672,18 @@ public class DatePicker extends FrameLayout {
             mMonthSpinner.setDisplayedValues(null);
             mMonthSpinner.setMinValue(0);
             mMonthSpinner.setMaxValue(11);
+
+            if(mDigitMonth){
+                mMonthSpinner.setMinValue(mMonthSpinner.getMinValue() + 1);
+                mMonthSpinner.setMaxValue(mMonthSpinner.getMaxValue() + 1);
+            }
+
             mMonthSpinner.setWrapSelectorWheel(true);
         }
 
         // make sure the month names are a zero based array
         // with the months in the month spinner
         if(mDigitMonth){
-            mMonthSpinner.setMinValue(mMonthSpinner.getMinValue() + 1);
-            mMonthSpinner.setMaxValue(mMonthSpinner.getMaxValue() + 1);
             mMonthSpinner.setDisplayedValues(null);
         }else{
             String[] displayedValues = Arrays.copyOfRange(mShortMonths,
