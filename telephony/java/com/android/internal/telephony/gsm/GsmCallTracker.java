@@ -66,8 +66,8 @@ public final class GsmCallTracker extends CallTracker {
     static final String CALL_REASON = "gsm.callreason";
     // Bug#185074 modify end
 
-    private boolean mMoveToBack = false;
-    private static final int THREAD_PRIORITY = -10;
+    //private boolean mMoveToBack = false;
+    //private static final int THREAD_PRIORITY = -10;
     private int mCurrentPriority = android.os.Process.THREAD_PRIORITY_DEFAULT;
 
     //***** Constants
@@ -729,14 +729,14 @@ public final class GsmCallTracker extends CallTracker {
         updatePhoneState();
 
         // for bug 97008 start
-        if (state == Phone.State.IDLE && Build.IS_LOWMEM_VERSION) {
-            int pid = android.os.Process.myPid();
-            int priority = android.os.Process.getThreadPriority(pid);
-            if (priority != mCurrentPriority) {
-                Log.d(LOG_TAG, "setThreadPriority to : " + mCurrentPriority);
-                android.os.Process.setThreadPriority(mCurrentPriority);
-            }
-        }
+        //if (state == Phone.State.IDLE && Build.IS_LOWMEM_VERSION) {
+        //    int pid = android.os.Process.myPid();
+        //    int priority = android.os.Process.getThreadPriority(pid);
+        //    if (priority != mCurrentPriority) {
+        //        Log.d(LOG_TAG, "setThreadPriority to : " + mCurrentPriority);
+        //        android.os.Process.setThreadPriority(mCurrentPriority);
+        //    }
+        //}
         // for bug 97008 end
 
         if (unknownConnectionAppeared) {
@@ -986,7 +986,7 @@ public final class GsmCallTracker extends CallTracker {
                     needsPoll = false;
                     lastRelevantPoll = null;
                     handlePollCalls((AsyncResult)msg.obj);
-                    mMoveToBack = false;
+                    //mMoveToBack = false;
                 }
             break;
 
@@ -1059,16 +1059,16 @@ public final class GsmCallTracker extends CallTracker {
                 Log.d(LOG_TAG,"EVENT_CALL_STATE_CHANGE ...");
                 if (verifyEnable()) {
                     // for bug 97008 start
-                    if (!mMoveToBack && Build.IS_LOWMEM_VERSION) {
-                        mMoveToBack = true;
-                        int pid = android.os.Process.myPid();
-                        int priority = android.os.Process.getThreadPriority(pid);
-                        if (priority != THREAD_PRIORITY) {
-                            mCurrentPriority = priority;
-                            Log.d(LOG_TAG, "setThreadPriority to : " + THREAD_PRIORITY);
-                            android.os.Process.setThreadPriority(THREAD_PRIORITY);
-                        }
-                    }
+                    //if (!mMoveToBack && Build.IS_LOWMEM_VERSION) {
+                    //    mMoveToBack = true;
+                    //    int pid = android.os.Process.myPid();
+                    //    int priority = android.os.Process.getThreadPriority(pid);
+                    //   if (priority != THREAD_PRIORITY) {
+                    //        mCurrentPriority = priority;
+                    //        Log.d(LOG_TAG, "setThreadPriority to : " + THREAD_PRIORITY);
+                    //        android.os.Process.setThreadPriority(THREAD_PRIORITY);
+                    //    }
+                    //}
                     // for bug 97008 start
                     pollCallsWhenSafe();
                 }
