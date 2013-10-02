@@ -187,12 +187,6 @@ public class Ringtone {
             return;
         }
 
-        // Bug 203464 start
-        if (mUri.toString().equals(silentDefaultUri)) {
-            return;
-        }
-        // Bug 203464 end
-
         // TODO: detect READ_EXTERNAL and specific content provider case, instead of relying on throwing
 
         // try opening uri locally before delegating to remote player
@@ -216,18 +210,24 @@ public class Ringtone {
              * Add 20130407 Spreadst of 144891,not reset to default ringtone
              * start
              */
-            if (mStreamType == AudioManager.STREAM_RING) {
-                String ringerUriString = Settings.System.getString(mContext.getContentResolver(),
-                        Settings.System.DEFAULT_RINGTONE);
-                mDefaultRingtoneUri = (ringerUriString != null ? Uri.parse(ringerUriString) : null);
-            } else if (mStreamType == AudioManager.STREAM_NOTIFICATION) {
-                String notifiUriString = Settings.System.getString(mContext.getContentResolver(),
-                        Settings.System.DEFAULT_NOTIFICATION);
-                mDefaultRingtoneUri = (notifiUriString != null ? Uri.parse(notifiUriString) : null);
-            } else if (mStreamType == AudioManager.STREAM_ALARM) {
-                String alarmUriString = Settings.System.getString(mContext.getContentResolver(),
-                        Settings.System.DEFAULT_ALARM);
-                mDefaultRingtoneUri = (alarmUriString != null ? Uri.parse(alarmUriString) : null);
+            // Bug 203464 start
+            if (mUri.toString().equals(silentDefaultUri)) {
+                Log.d(TAG, "setUri silentDefaultUri string is: " + silentDefaultUri);
+            } else {
+                // Bug 203464 end
+                if (mStreamType == AudioManager.STREAM_RING) {
+                    String ringerUriString = Settings.System.getString(mContext.getContentResolver(),
+                            Settings.System.DEFAULT_RINGTONE);
+                    mDefaultRingtoneUri = (ringerUriString != null ? Uri.parse(ringerUriString) : null);
+                } else if (mStreamType == AudioManager.STREAM_NOTIFICATION) {
+                    String notifiUriString = Settings.System.getString(mContext.getContentResolver(),
+                            Settings.System.DEFAULT_NOTIFICATION);
+                    mDefaultRingtoneUri = (notifiUriString != null ? Uri.parse(notifiUriString) : null);
+                } else if (mStreamType == AudioManager.STREAM_ALARM) {
+                    String alarmUriString = Settings.System.getString(mContext.getContentResolver(),
+                            Settings.System.DEFAULT_ALARM);
+                    mDefaultRingtoneUri = (alarmUriString != null ? Uri.parse(alarmUriString) : null);
+                }
             }
 
             mUri = mDefaultRingtoneUri;
