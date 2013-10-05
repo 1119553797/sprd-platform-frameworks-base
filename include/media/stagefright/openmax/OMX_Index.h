@@ -135,6 +135,7 @@ typedef enum OMX_INDEXTYPE {
     OMX_IndexParamAudioEvrc,                /**< reference: OMX_AUDIO_PARAM_EVRCTYPE */
     OMX_IndexParamAudioSmv,                 /**< reference: OMX_AUDIO_PARAM_SMVTYPE */
     OMX_IndexParamAudioVorbis,              /**< reference: OMX_AUDIO_PARAM_VORBISTYPE */
+    OMX_IndexParamAudioFlac,                /**< reference: OMX_AUDIO_PARAM_FLACTYPE */
 
     OMX_IndexConfigAudioMidiImmediateEvent, /**< reference: OMX_AUDIO_CONFIG_MIDIIMMEDIATEEVENTTYPE */
     OMX_IndexConfigAudioMidiControl,        /**< reference: OMX_AUDIO_CONFIG_MIDICONTROLTYPE */
@@ -262,6 +263,19 @@ typedef enum OMX_INDEXTYPE {
        to 0x7FFFFFFE.  This range is not broken out by vendor, so
        private indexes are not guaranteed unique and therefore should
        only be sent to the appropriate component. */
+
+    /* for Android Native Window */
+#define SPRD_INDEX_PARAM_ENABLE_ANB "OMX.google.android.index.enableAndroidNativeBuffers"
+    OMX_IndexParamEnableAndroidBuffers    = 0x7F000011,
+#define SPRD_INDEX_PARAM_GET_ANB "OMX.google.android.index.getAndroidNativeBufferUsage"
+    OMX_IndexParamGetAndroidNativeBuffer  = 0x7F000012,
+#define SPRD_INDEX_PARAM_USE_ANB "OMX.google.android.index.useAndroidNativeBuffer2"
+    OMX_IndexParamUseAndroidNativeBuffer2  = 0x7F000013,
+    /* for Android Store Metadata Inbuffer */
+#define SPRD_INDEX_PARAM_STORE_METADATA_BUFFER "OMX.google.android.index.storeMetaDataInBuffers"
+    OMX_IndexParamStoreMetaDataBuffer     = 0x7F000014,
+
+    OMX_IndexParamAudioImaAdpcm = 0x7FA7B09C,/**< reference: OMX_AUDIO_PARAM_IMAADPCMTYPE */
 
     OMX_IndexMax = 0x7FFFFFFF
 

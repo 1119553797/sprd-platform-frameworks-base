@@ -11,9 +11,13 @@ LOCAL_SRC_FILES:=                     \
         SimpleSoftOMXComponent.cpp    \
         SoftOMXComponent.cpp          \
         SoftOMXPlugin.cpp             \
+        SprdSimpleOMXComponent.cpp    \
+        SprdOMXComponent.cpp          \
+        SprdOMXPlugin.cpp             \
 
 LOCAL_C_INCLUDES += \
-        frameworks/base/media/libstagefright \
+        $(TOP)/frameworks/base/media/libstagefright \
+	$(TOP)/frameworks/base/include/media/stagefright \
         $(TOP)/frameworks/base/include/media/stagefright/openmax
 
 LOCAL_SHARED_LIBRARIES :=               \
