@@ -108,6 +108,9 @@ static sp<MediaSource> InstantiateSoftwareEncoder(
 static const CodecInfo kDecoderInfo[] = {
     { MEDIA_MIMETYPE_IMAGE_JPEG, "OMX.TI.JPEG.decode" },
 //    { MEDIA_MIMETYPE_AUDIO_MPEG, "OMX.TI.MP3.decode" },
+    { MEDIA_MIMETYPE_AUDIO_MPEG, "OMX.sprd.mp3.decoder" },
+    { MEDIA_MIMETYPE_AUDIO_MPEG_LAYER_I, "OMX.sprd.mp3.decoder" },
+    { MEDIA_MIMETYPE_AUDIO_MPEG_LAYER_II, "OMX.sprd.mp3.decoder" },
     { MEDIA_MIMETYPE_AUDIO_MPEG, "OMX.google.mp3.decoder" },
     { MEDIA_MIMETYPE_AUDIO_MPEG_LAYER_II, "OMX.Nvidia.mp2.decoder" },
 //    { MEDIA_MIMETYPE_AUDIO_AMR_NB, "OMX.TI.AMR.decode" },
@@ -118,7 +121,9 @@ static const CodecInfo kDecoderInfo[] = {
     { MEDIA_MIMETYPE_AUDIO_AMR_WB, "OMX.google.amrwb.decoder" },
 //    { MEDIA_MIMETYPE_AUDIO_AAC, "OMX.Nvidia.aac.decoder" },
     { MEDIA_MIMETYPE_AUDIO_AAC, "OMX.TI.AAC.decode" },
+    { MEDIA_MIMETYPE_AUDIO_AAC, "OMX.sprd.aac.decoder" },
     { MEDIA_MIMETYPE_AUDIO_AAC, "OMX.google.aac.decoder" },
+    { MEDIA_MIMETYPE_AUDIO_IMAADPCM, "OMX.google.imaadpcm.decoder" },
     { MEDIA_MIMETYPE_AUDIO_G711_ALAW, "OMX.google.g711.alaw.decoder" },
     { MEDIA_MIMETYPE_AUDIO_G711_MLAW, "OMX.google.g711.mlaw.decoder" },
     { MEDIA_MIMETYPE_VIDEO_MPEG4, "OMX.TI.DUCATI1.VIDEO.DECODER" },
@@ -127,12 +132,16 @@ static const CodecInfo kDecoderInfo[] = {
     { MEDIA_MIMETYPE_VIDEO_MPEG4, "OMX.qcom.video.decoder.mpeg4" },
     { MEDIA_MIMETYPE_VIDEO_MPEG4, "OMX.TI.Video.Decoder" },
     { MEDIA_MIMETYPE_VIDEO_MPEG4, "OMX.SEC.MPEG4.Decoder" },
+    { MEDIA_MIMETYPE_VIDEO_MPEG4, "OMX.sprd.mpeg4.decoder" },
+    { MEDIA_MIMETYPE_VIDEO_MPEG4, "OMX.sprd.soft.mpeg4.decoder" },
     { MEDIA_MIMETYPE_VIDEO_MPEG4, "OMX.google.mpeg4.decoder" },
     { MEDIA_MIMETYPE_VIDEO_H263, "OMX.TI.DUCATI1.VIDEO.DECODER" },
     { MEDIA_MIMETYPE_VIDEO_H263, "OMX.Nvidia.h263.decode" },
     { MEDIA_MIMETYPE_VIDEO_H263, "OMX.qcom.7x30.video.decoder.h263" },
     { MEDIA_MIMETYPE_VIDEO_H263, "OMX.qcom.video.decoder.h263" },
     { MEDIA_MIMETYPE_VIDEO_H263, "OMX.SEC.H263.Decoder" },
+    { MEDIA_MIMETYPE_VIDEO_H263, "OMX.sprd.h263.decoder" },
+    { MEDIA_MIMETYPE_VIDEO_H263, "OMX.sprd.soft.h263.decoder" },
     { MEDIA_MIMETYPE_VIDEO_H263, "OMX.google.h263.decoder" },
     { MEDIA_MIMETYPE_VIDEO_AVC, "OMX.TI.DUCATI1.VIDEO.DECODER" },
     { MEDIA_MIMETYPE_VIDEO_AVC, "OMX.Nvidia.h264.decode" },
@@ -140,6 +149,8 @@ static const CodecInfo kDecoderInfo[] = {
     { MEDIA_MIMETYPE_VIDEO_AVC, "OMX.qcom.video.decoder.avc" },
     { MEDIA_MIMETYPE_VIDEO_AVC, "OMX.TI.Video.Decoder" },
     { MEDIA_MIMETYPE_VIDEO_AVC, "OMX.SEC.AVC.Decoder" },
+    { MEDIA_MIMETYPE_VIDEO_AVC, "OMX.sprd.h264.decoder" },
+    { MEDIA_MIMETYPE_VIDEO_AVC, "OMX.sprd.soft.h264.decoder" },
     { MEDIA_MIMETYPE_VIDEO_AVC, "OMX.google.h264.decoder" },
     { MEDIA_MIMETYPE_VIDEO_AVC, "OMX.google.avc.decoder" },
     { MEDIA_MIMETYPE_AUDIO_VORBIS, "OMX.google.vorbis.decoder" },
@@ -160,6 +171,7 @@ static const CodecInfo kEncoderInfo[] = {
     { MEDIA_MIMETYPE_VIDEO_MPEG4, "OMX.TI.Video.encoder" },
     { MEDIA_MIMETYPE_VIDEO_MPEG4, "OMX.Nvidia.mp4.encoder" },
     { MEDIA_MIMETYPE_VIDEO_MPEG4, "OMX.SEC.MPEG4.Encoder" },
+    { MEDIA_MIMETYPE_VIDEO_MPEG4, "OMX.sprd.mpeg4.encoder" },
     { MEDIA_MIMETYPE_VIDEO_MPEG4, "M4vH263Encoder" },
     { MEDIA_MIMETYPE_VIDEO_H263, "OMX.TI.DUCATI1.VIDEO.MPEG4E" },
     { MEDIA_MIMETYPE_VIDEO_H263, "OMX.qcom.7x30.video.encoder.h263" },
@@ -167,6 +179,7 @@ static const CodecInfo kEncoderInfo[] = {
     { MEDIA_MIMETYPE_VIDEO_H263, "OMX.TI.Video.encoder" },
     { MEDIA_MIMETYPE_VIDEO_H263, "OMX.Nvidia.h263.encoder" },
     { MEDIA_MIMETYPE_VIDEO_H263, "OMX.SEC.H263.Encoder" },
+    { MEDIA_MIMETYPE_VIDEO_H263, "OMX.sprd.h263.encoder" },
     { MEDIA_MIMETYPE_VIDEO_H263, "M4vH263Encoder" },
     { MEDIA_MIMETYPE_VIDEO_AVC, "OMX.TI.DUCATI1.VIDEO.H264E" },
     { MEDIA_MIMETYPE_VIDEO_AVC, "OMX.qcom.7x30.video.encoder.avc" },
@@ -239,6 +252,10 @@ static void InitOMXParams(T *params) {
 
 static bool IsSoftwareCodec(const char *componentName) {
     if (!strncmp("OMX.google.", componentName, 11)) {
+        return true;
+    }
+
+    if (!strncmp("OMX.sprd.soft.", componentName, 14)) {
         return true;
     }
 
@@ -515,6 +532,10 @@ sp<MediaSource> OMXCodec::Create(
 
             LOGV("Failed to configure codec '%s'", componentName);
         }
+        else
+        {
+            LOGV("Fail allocated OMX node '%s'", componentName);
+        }
     }
 
     return NULL;
@@ -659,11 +680,20 @@ status_t OMXCodec::configureCodec(const sp<MetaData> &meta) {
     } else if (!strcasecmp(MEDIA_MIMETYPE_AUDIO_AMR_WB, mMIME)) {
         setAMRFormat(true /* isWAMR */, bitRate);
     } else if (!strcasecmp(MEDIA_MIMETYPE_AUDIO_AAC, mMIME)) {
-        int32_t numChannels, sampleRate;
+        int32_t numChannels, sampleRate, aacProfile;
         CHECK(meta->findInt32(kKeyChannelCount, &numChannels));
         CHECK(meta->findInt32(kKeySampleRate, &sampleRate));
 
-        status_t err = setAACFormat(numChannels, sampleRate, bitRate);
+        if (!meta->findInt32(kKeyAACProfile, &aacProfile)) {
+            aacProfile = OMX_AUDIO_AACObjectNull;
+        }
+
+        int32_t isADTS;
+        if (!meta->findInt32(kKeyIsADTS, &isADTS)) {
+            isADTS = false;
+        }
+
+        status_t err = setAACFormat(numChannels, sampleRate, bitRate, aacProfile, isADTS);
         if (err != OK) {
             CODEC_LOGE("setAACFormat() failed (err = %d)", err);
             return err;
@@ -674,9 +704,41 @@ status_t OMXCodec::configureCodec(const sp<MetaData> &meta) {
         // a variable number of channels.
 
         int32_t numChannels;
+        int32_t sampleRate;
         CHECK(meta->findInt32(kKeyChannelCount, &numChannels));
+        CHECK(meta->findInt32(kKeySampleRate, &sampleRate));
 
-        setG711Format(numChannels);
+        setG711Format(numChannels, sampleRate);
+    } else if (!strcasecmp(MEDIA_MIMETYPE_AUDIO_IMAADPCM, mMIME)) {
+        int32_t numChannels;
+        int32_t sampleRate;
+        int32_t blockAlign;
+        CHECK(meta->findInt32(kKeyChannelCount, &numChannels));
+        CHECK(meta->findInt32(kKeySampleRate, &sampleRate));
+        CHECK(meta->findInt32(kKeyBlockAlign, &blockAlign));
+
+        setIMAADPCMFormat(numChannels, sampleRate, blockAlign);
+    } else if (!strcasecmp(MEDIA_MIMETYPE_AUDIO_RAW, mMIME)) {
+        CHECK(!mIsEncoder);
+
+        int32_t numChannels, sampleRate;
+        CHECK(meta->findInt32(kKeyChannelCount, &numChannels));
+        CHECK(meta->findInt32(kKeySampleRate, &sampleRate));
+
+        setRawAudioFormat(kPortIndexInput, sampleRate, numChannels);
+    } else if(!strcasecmp(MEDIA_MIMETYPE_AUDIO_MPEG, mMIME) ||
+                !strcasecmp(MEDIA_MIMETYPE_AUDIO_MPEG_LAYER_I, mMIME) ||
+                !strcasecmp(MEDIA_MIMETYPE_AUDIO_MPEG_LAYER_II, mMIME) ) {
+        int32_t numChannels;
+        int32_t sampleRate;
+        CHECK(meta->findInt32(kKeyChannelCount, &numChannels));
+        CHECK(meta->findInt32(kKeySampleRate, &sampleRate));
+
+        status_t err = setMP3Format(numChannels, sampleRate);
+        if (err != OK) {
+            CODEC_LOGE("setMP3Format() failed (err = %d)", err);
+            return err;
+        }
     }
 
     if (!strncasecmp(mMIME, "video/", 6)) {
@@ -1826,6 +1888,7 @@ status_t OMXCodec::applyRotation() {
 status_t OMXCodec::allocateOutputBuffersFromNativeWindow() {
     // Get the number of buffers needed.
     OMX_PARAM_PORTDEFINITIONTYPE def;
+    OMX_COLOR_FORMATTYPE colorFormat;
     InitOMXParams(&def);
     def.nPortIndex = kPortIndexOutput;
 
@@ -1842,11 +1905,16 @@ status_t OMXCodec::allocateOutputBuffersFromNativeWindow() {
         return err;
     }
 
+    colorFormat = def.format.video.eColorFormat;
+    if(colorFormat == OMX_COLOR_FormatYUV420SemiPlanar) {
+        colorFormat = (OMX_COLOR_FORMATTYPE)HAL_PIXEL_FORMAT_YCbCr_420_SP;
+    }
+	
     err = native_window_set_buffers_geometry(
             mNativeWindow.get(),
             def.format.video.nFrameWidth,
             def.format.video.nFrameHeight,
-            def.format.video.eColorFormat);
+            colorFormat);
 
     if (err != 0) {
         LOGE("native_window_set_buffers_geometry failed: %s (%d)",
@@ -3554,17 +3622,24 @@ void OMXCodec::setAMRFormat(bool isWAMR, int32_t bitRate) {
     }
 }
 
-status_t OMXCodec::setAACFormat(int32_t numChannels, int32_t sampleRate, int32_t bitRate) {
-    if (numChannels > 2)
-        LOGW("Number of channels: (%d) \n", numChannels);
+status_t OMXCodec::setAACFormat(
+        int32_t numChannels, int32_t sampleRate, int32_t bitRate, int32_t aacProfile, bool isADTS) {
+    if (numChannels > 2) {
+        ALOGW("Number of channels: (%d) \n", numChannels);
+    }
 
     if (mIsEncoder) {
+        if (isADTS) {
+            return -EINVAL;
+        }
+
         //////////////// input port ////////////////////
         setRawAudioFormat(kPortIndexInput, sampleRate, numChannels);
 
         //////////////// output port ////////////////////
         // format
         OMX_AUDIO_PARAM_PORTFORMATTYPE format;
+        InitOMXParams(&format);
         format.nPortIndex = kPortIndexOutput;
         format.nIndex = 0;
         status_t err = OMX_ErrorNone;
@@ -3606,13 +3681,15 @@ status_t OMXCodec::setAACFormat(int32_t numChannels, int32_t sampleRate, int32_t
         profile.nFrameLength = 0;
         profile.nAACtools = OMX_AUDIO_AACToolAll;
         profile.nAACERtools = OMX_AUDIO_AACERNone;
-        profile.eAACProfile = OMX_AUDIO_AACObjectLC;
+        profile.eAACProfile = (OMX_AUDIO_AACPROFILETYPE) aacProfile;
         profile.eAACStreamFormat = OMX_AUDIO_AACStreamFormatMP4FF;
         err = mOMX->setParameter(mNode, OMX_IndexParamAudioAac,
                 &profile, sizeof(profile));
 
         if (err != OK) {
-            CODEC_LOGE("setParameter('OMX_IndexParamAudioAac') failed (err = %d)", err);
+            CODEC_LOGE("setParameter('OMX_IndexParamAudioAac') failed "
+                       "(err = %d)",
+                       err);
             return err;
         }
     } else {
@@ -3626,13 +3703,19 @@ status_t OMXCodec::setAACFormat(int32_t numChannels, int32_t sampleRate, int32_t
 
         profile.nChannels = numChannels;
         profile.nSampleRate = sampleRate;
-        profile.eAACStreamFormat = OMX_AUDIO_AACStreamFormatMP4ADTS;
+
+        profile.eAACStreamFormat =
+            isADTS
+                ? OMX_AUDIO_AACStreamFormatMP4ADTS
+                : OMX_AUDIO_AACStreamFormatMP4FF;
 
         err = mOMX->setParameter(
                 mNode, OMX_IndexParamAudioAac, &profile, sizeof(profile));
 
         if (err != OK) {
-            CODEC_LOGE("setParameter('OMX_IndexParamAudioAac') failed (err = %d)", err);
+            CODEC_LOGE("setParameter('OMX_IndexParamAudioAac') failed "
+                       "(err = %d)",
+                       err);
             return err;
         }
     }
@@ -3640,9 +3723,71 @@ status_t OMXCodec::setAACFormat(int32_t numChannels, int32_t sampleRate, int32_t
     return OK;
 }
 
-void OMXCodec::setG711Format(int32_t numChannels) {
+void OMXCodec::setG711Format(int32_t numChannels, int32_t sampleRate) {
     CHECK(!mIsEncoder);
-    setRawAudioFormat(kPortIndexInput, 8000, numChannels);
+    setRawAudioFormat(kPortIndexInput, sampleRate, numChannels);
+}
+
+void OMXCodec::setIMAADPCMFormat(int32_t numChannels, int32_t sampleRate, int32_t blockAlign) {
+    CHECK(!mIsEncoder);
+
+    // port definition
+    OMX_PARAM_PORTDEFINITIONTYPE def;
+    InitOMXParams(&def);
+    def.nPortIndex = kPortIndexInput;
+    status_t err = mOMX->getParameter(
+            mNode, OMX_IndexParamPortDefinition, &def, sizeof(def));
+    CHECK_EQ(err, (status_t)OK);
+    def.format.audio.eEncoding = OMX_AUDIO_CodingIMAADPCM;
+    CHECK_EQ(mOMX->setParameter(mNode, OMX_IndexParamPortDefinition,
+            &def, sizeof(def)), (status_t)OK);
+
+    // pcm param
+    OMX_AUDIO_PARAM_IMAADPCMTYPE imaadpcmParams;
+    InitOMXParams(&imaadpcmParams);
+    imaadpcmParams.nPortIndex = kPortIndexInput;
+
+    err = mOMX->getParameter(
+            mNode, OMX_IndexParamAudioImaAdpcm, &imaadpcmParams, sizeof(imaadpcmParams));
+
+    CHECK_EQ(err, (status_t)OK);
+
+    imaadpcmParams.nChannels = numChannels;
+    imaadpcmParams.nBitsPerSample = 4;
+    imaadpcmParams.nSampleRate = sampleRate;
+    imaadpcmParams.nBlockAlign = blockAlign;
+
+    err = mOMX->setParameter(
+            mNode, OMX_IndexParamAudioImaAdpcm, &imaadpcmParams, sizeof(imaadpcmParams));
+
+    CHECK_EQ(err, (status_t)OK);
+}
+
+status_t OMXCodec::setMP3Format(int32_t numChannels, int32_t sampleRate) {
+    CHECK(!mIsEncoder);
+
+    if (numChannels > 2) {
+            ALOGW("Number of channels: (%d) \n", numChannels);
+        }
+
+    OMX_AUDIO_PARAM_MP3TYPE type;
+    InitOMXParams(&type);
+    type.nPortIndex = kPortIndexInput;
+
+    type.nChannels = numChannels;
+    type.nSampleRate = sampleRate;
+
+    status_t err = mOMX->setParameter(
+                mNode, OMX_IndexParamAudioMp3, &type, sizeof(type));
+
+        if (err != OK) {
+            CODEC_LOGE("setParameter('OMX_IndexParamAudioMp3') failed "
+                       "(err = %d)",
+                       err);
+            return err;
+        }
+
+    return OK;
 }
 
 void OMXCodec::setImageOutputFormat(

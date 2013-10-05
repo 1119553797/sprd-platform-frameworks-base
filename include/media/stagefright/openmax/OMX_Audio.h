@@ -108,6 +108,7 @@ typedef enum OMX_AUDIO_CODINGTYPE {
     OMX_AUDIO_CodingMIDI,        /**< Any variant of MIDI encoded data */
     OMX_AUDIO_CodingKhronosExtensions = 0x6F000000, /**< Reserved region for introducing Khronos Standard Extensions */ 
     OMX_AUDIO_CodingVendorStartUnused = 0x7F000000, /**< Reserved region for introducing Vendor Extensions */
+    OMX_AUDIO_CodingIMAADPCM,    /**< Any variant of IMAADPCM encoded data */
     OMX_AUDIO_CodingMax = 0x7FFFFFFF
 } OMX_AUDIO_CODINGTYPE;
 
@@ -453,6 +454,21 @@ typedef struct OMX_AUDIO_PARAM_ADPCMTYPE {
     OMX_U32 nSampleRate;        /**< Sampling rate of the source data.  Use 0 for 
                                     variable or unknown sampling rate. */ 
 } OMX_AUDIO_PARAM_ADPCMTYPE; 
+
+/** IMAADPCM stream format parameters */ 
+typedef struct OMX_AUDIO_PARAM_IMAADPCMTYPE { 
+    OMX_U32 nSize;              /**< size of the structure in bytes */ 
+    OMX_VERSIONTYPE nVersion;   /**< OMX specification version information */ 
+    OMX_U32 nPortIndex;         /**< port that this structure applies to */ 
+    OMX_U32 nChannels;          /**< Number of channels in the data stream (not 
+                                     necessarily the same as the number of channels 
+                                     to be rendered. */ 
+    OMX_U32 nBitsPerSample;     /**< Number of bits in each sample */ 
+    OMX_U32 nSampleRate;        /**< Sampling rate of the source data.  Use 0 for 
+                                    variable or unknown sampling rate. */ 
+    OMX_U32 nBlockAlign;        /**< Sampling rate of the source data.	Use 0 for 
+                                    variable or unknown sampling rate. */ 
+} OMX_AUDIO_PARAM_IMAADPCMTYPE; 
 
 
 /** G723 rate */

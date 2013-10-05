@@ -228,8 +228,16 @@ private:
     void setComponentRole();
 
     void setAMRFormat(bool isWAMR, int32_t bitRate);
-    status_t setAACFormat(int32_t numChannels, int32_t sampleRate, int32_t bitRate);
-    void setG711Format(int32_t numChannels);
+
+    status_t setAACFormat(
+            int32_t numChannels, int32_t sampleRate, int32_t bitRate,
+            int32_t aacProfile, bool isADTS);
+
+    void setG711Format(int32_t numChannels, int32_t sampleRate);
+
+    void setIMAADPCMFormat(int32_t numChannels, int32_t sampleRate, int32_t blockAlign);
+
+    status_t setMP3Format(int32_t numChannels, int32_t sampleRate);
 
     status_t setVideoPortFormatType(
             OMX_U32 portIndex,
