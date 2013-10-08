@@ -626,11 +626,15 @@ public class TextUtils {
          */
         public  CharSequence createFromParcel(Parcel p) {
             int kind = p.readInt();
-
+            
+            String str = p.readString();
+            if(str == null) {
+                return null;
+            }
             if (kind == 1)
-                return p.readString();
+                return str;
 
-            SpannableString sp = new SpannableString(p.readString());
+            SpannableString sp = new SpannableString(str);
 
             while (true) {
                 kind = p.readInt();
