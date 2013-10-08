@@ -288,11 +288,23 @@ int main(int argc, char** argv)
 
 #endif
     }
+    /*
+     * Description of audio loopback
+     *
+     * echo value1, value2, value3 > mmi.audio.ctrl
+     *
+     * value1: open(1)/close(0) the lookback test
+     * value2: device of lookback
+     *          1: AUDIO_DEVICE_OUT_EARPIECE
+     *          2: AUDIO_DEVICE_OUT_SPEAKER
+     *          4: AUDIO_DEVICE_OUT_WIRED_HEADSET
+     * value3: volume, max 100
+     * */
     else if(ch == 'a')
     {
 		ALOGE("=== receive PhoneLoopBack test requirement! ===\n");
 		ALOGE("=== PhoneLoopBack test start! ===\n");
-		int error = system("echo 1,2,100 > /dev/pipe/mmi.audio.ctrl");
+		int error = system("echo 1,1,100 > /dev/pipe/mmi.audio.ctrl");
 		if (error == -1 || error == 127) {
 			ALOGE("=== PhoneLoopBack test failed on cmd 1! ===\n");
 			ch = '5';
