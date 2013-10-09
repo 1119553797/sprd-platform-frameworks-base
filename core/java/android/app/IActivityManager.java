@@ -323,7 +323,7 @@ public interface IActivityManager extends IInterface {
     public void revokeUriPermissionFromOwner(IBinder owner, Uri uri,
             int mode) throws RemoteException;
 
-	public void notifySystemUiVisibility(boolean invisible) throws RemoteException;
+	public void notifySystemUiVisibility(boolean visible) throws RemoteException;
 
     /*
      * Private non-Binder interfaces

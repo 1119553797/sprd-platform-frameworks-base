@@ -13312,8 +13312,8 @@ public final class ActivityManagerService extends ActivityManagerNative
     
     final static String SYSTEMUI_PROC_NAME = "com.android.systemui";
     
-    public void notifySystemUiVisibility(boolean invisible) {
-        Log.v(TAG, "[systemUiVisibility] invisible is " + invisible);
+    public void notifySystemUiVisibility(boolean visible) {
+        Log.v(TAG, "[systemUiVisibility] invisible is " + visible);
         ProcessRecord systemUi = null;
         for(ProcessRecord app : mLruProcesses) {
                if(SYSTEMUI_PROC_NAME.equals(app.processName)) {
@@ -13323,12 +13323,13 @@ public final class ActivityManagerService extends ActivityManagerNative
         }
         if(systemUi == null) {
                Log.w(TAG, "can not find com.android.systemui process!");
-               if(invisible) {
+               if(visible) {
                    startSystemUi(null);
+                   mCanRestartSystemUi = true;
                }
                return;
         }
-        if(invisible) {
+        if(visible) {
                systemUi.curAdj = mPreSystemUiAdj;
                mCanRestartSystemUi = true;
                if(!mSystemUiIsAlive) {

@@ -2928,10 +2928,10 @@ class ActivityManagerProxy implements IActivityManager
         reply.recycle();
     }
 
-    public void notifySystemUiVisibility(boolean invisible) throws RemoteException {
+    public void notifySystemUiVisibility(boolean visible) throws RemoteException {
         Parcel data = Parcel.obtain();
         Parcel reply = Parcel.obtain();
-        data.writeInt(invisible ? 1 : 0);
+        data.writeInt(visible ? 1 : 0);
         data.writeInterfaceToken(IActivityManager.descriptor);
         mRemote.transact(NOTIFY_SYSTEMUI_VISIBILITY, data, reply, 0);
         reply.readException();
