@@ -189,9 +189,15 @@ public abstract class AbstractCursor implements CrossProcessCursor {
         if (result == false) {
             mPos = -1;
         } else {
-            mPos = position;
-            if (mRowIdColumnIndex != -1) {
-                mCurrentRowID = Long.valueOf(getLong(mRowIdColumnIndex));
+            int reCount = getCount();
+            if (position >= reCount) {
+                mPos = reCount;
+                result = false;
+            } else {
+                mPos = position;
+                if (mRowIdColumnIndex != -1) {
+                    mCurrentRowID = Long.valueOf(getLong(mRowIdColumnIndex));
+                }
             }
         }
 
