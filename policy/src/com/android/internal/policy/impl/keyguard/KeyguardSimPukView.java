@@ -93,9 +93,13 @@ public class KeyguardSimPukView extends KeyguardAbsKeyInputView
             mPinText="";
             mPukText="";
             state = ENTER_PUK;
-            mSecurityMessageDisplay.setMessage(R.string.kg_puk_enter_puk_hint_sub, true,
-                    mSubId + 1,
-                    mRemainTimes);
+            if (mRemainTimes == -1) {
+                mSecurityMessageDisplay.setMessage(R.string.kg_puk_enter_puk_hint, true);
+            } else {
+                mSecurityMessageDisplay.setMessage(R.string.kg_puk_enter_puk_hint_sub, true,
+                        mSubId + 1,
+                        mRemainTimes);
+            }
             mPasswordEntry.requestFocus();
         }
     }
@@ -275,7 +279,8 @@ public class KeyguardSimPukView extends KeyguardAbsKeyInputView
                                 mSimUnlockProgressDialog.hide();
                             }
                             if (success) {
-                                mCallback.dismiss(true);
+                                KeyguardUpdateMonitor.getInstance(getContext()).reportSimUnlocked(mSubId);
+                                // mCallback.dismiss(true);
                             } else {
                                 mRemainTimes = TelephonyManager.getDefault(mSubId).getRemainTimes(
                                         TelephonyManager.UNLOCK_PUK);
@@ -300,8 +305,13 @@ public class KeyguardSimPukView extends KeyguardAbsKeyInputView
         super.setSubId(subId);
         mRemainTimes = TelephonyManager.getDefault(mSubId).getRemainTimes(
                 TelephonyManager.UNLOCK_PUK);
-        mSecurityMessageDisplay.setMessage(R.string.kg_puk_enter_puk_hint_sub, true, mSubId + 1,
-                mRemainTimes);
+        if (mRemainTimes == -1) {
+            mSecurityMessageDisplay.setMessage(R.string.kg_puk_enter_puk_hint, true);
+        } else {
+            mSecurityMessageDisplay.setMessage(R.string.kg_puk_enter_puk_hint_sub, true,
+                    mSubId + 1,
+                    mRemainTimes);
+        }
     }
 }
 

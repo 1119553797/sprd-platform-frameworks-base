@@ -1066,11 +1066,6 @@ public class KeyguardUpdateMonitor {
         handleSimStateChange(new SimArgs(mSimState, subscription));
     }
 
-    public void reportSimPukRequired(int subscription) {
-        mSimState[subscription] = IccCardConstants.State.PUK_REQUIRED;
-        handleSimStateChange(new SimArgs(mSimState, subscription));
-    }
-
     public CharSequence[] getTelephonyPlmn() {
         return mTelephonyPlmn;
     }

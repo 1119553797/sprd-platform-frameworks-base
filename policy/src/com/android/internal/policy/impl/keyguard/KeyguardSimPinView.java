@@ -57,8 +57,13 @@ public class KeyguardSimPinView extends KeyguardAbsKeyInputView
     }
 
     public void resetState() {
-        mSecurityMessageDisplay.setMessage(R.string.kg_sim_pin_instructions_sub, true, mSubId + 1,
-                mRemainTimes);
+        if (mRemainTimes == -1) {
+            mSecurityMessageDisplay.setMessage(R.string.kg_sim_pin_instructions, true);
+        } else {
+            mSecurityMessageDisplay.setMessage(R.string.kg_sim_pin_instructions_sub, true,
+                    mSubId + 1,
+                    mRemainTimes);
+        }
         mPasswordEntry.setEnabled(true);
     }
 
@@ -208,21 +213,18 @@ public class KeyguardSimPinView extends KeyguardAbsKeyInputView
                                 mSimUnlockProgressDialog.hide();
                             }
                             if (success) {
-                                // before closing the keyguard, report back that the sim is unlocked
-                                // so it knows right away.
-                                // SPRD: Modify 20130904 Spreadst of 210537 keyguard support multi-card
                                 KeyguardUpdateMonitor.getInstance(getContext()).reportSimUnlocked(mSubId);
-                                mCallback.dismiss(true);
                             } else {
-                                mRemainTimes=TelephonyManager.getDefault(mSubId).getRemainTimes(TelephonyManager.UNLOCK_PIN);
+                                mRemainTimes = TelephonyManager.getDefault(mSubId).getRemainTimes(
+                                        TelephonyManager.UNLOCK_PIN);
                                 if (mRemainTimes > 0) {
                                     mSecurityMessageDisplay.setMessage
                                             (R.string.kg_password_wrong_pin_code_times, true,
                                                     mRemainTimes);
                                     mPasswordEntry.setText("");
-                                }else{
-                                    KeyguardUpdateMonitor.getInstance(getContext()).reportSimPukRequired(mSubId);
-                                    mCallback.dismiss(true);
+                                } else {
+                                    mSecurityMessageDisplay.setMessage
+                                            (R.string.kg_password_wrong_pin_code, true);
                                 }
                             }
                             mCallback.userActivity(0);
@@ -237,9 +239,15 @@ public class KeyguardSimPinView extends KeyguardAbsKeyInputView
     @Override
     public void setSubId(int subId) {
         super.setSubId(subId);
-        mRemainTimes=TelephonyManager.getDefault(mSubId).getRemainTimes(TelephonyManager.UNLOCK_PIN);
-        mSecurityMessageDisplay.setMessage(R.string.kg_sim_pin_instructions_sub, true, mSubId + 1,
-                mRemainTimes);
+        mRemainTimes = TelephonyManager.getDefault(mSubId).getRemainTimes(
+                TelephonyManager.UNLOCK_PIN);
+        if (mRemainTimes == -1) {
+            mSecurityMessageDisplay.setMessage(R.string.kg_sim_pin_instructions, true);
+        } else {
+            mSecurityMessageDisplay.setMessage(R.string.kg_sim_pin_instructions_sub, true,
+                    mSubId + 1,
+                    mRemainTimes);
+        }
     }
 }
 
