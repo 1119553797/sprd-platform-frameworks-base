@@ -1798,7 +1798,8 @@ status_t OMXCodec::allocateBuffersOnPort(OMX_U32 portIndex) {
 
         if (err != OK) {
             LOGE("allocate_buffer_with_backup failed");
-            return err;
+            //return err;
+            break;
         }
 
         if (mem != NULL) {
@@ -1826,6 +1827,11 @@ status_t OMXCodec::allocateBuffersOnPort(OMX_U32 portIndex) {
 
         CODEC_LOGV("allocated buffer %p on %s port", buffer,
              portIndex == kPortIndexInput ? "input" : "output");
+    if(err != OK) {
+	status_t ret = freeBuffersOnPort(portIndex);
+	CHECK_EQ(ret, (status_t)OK);
+	return err;
+    }
     }
 
     // dumpPortStatus(portIndex);
@@ -2037,11 +2043,13 @@ status_t OMXCodec::allocateOutputBuffersFromNativeWindow() {
 
     OMX_U32 cancelStart;
     OMX_U32 cancelEnd;
+    int needFreeBuffer = 0;
     if (err != 0) {
         // If an error occurred while dequeuing we need to cancel any buffers
         // that were dequeued.
         cancelStart = 0;
         cancelEnd = mPortBuffers[kPortIndexOutput].size();
+        needFreeBuffer = 1;
     } else {
         // Return the last two buffers to the native window.
         cancelStart = def.nBufferCountActual - minUndequeuedBufs;
@@ -2051,6 +2059,11 @@ status_t OMXCodec::allocateOutputBuffersFromNativeWindow() {
     for (OMX_U32 i = cancelStart; i < cancelEnd; i++) {
         BufferInfo *info = &mPortBuffers[kPortIndexOutput].editItemAt(i);
         cancelBufferToNativeWindow(info);
+    }
+
+    if (needFreeBuffer) {
+	status_t err = freeBuffersOnPort(kPortIndexOutput);
+	CHECK_EQ(err, (status_t)OK);
     }
 
     return err;
@@ -2590,7 +2603,9 @@ void OMXCodec::onEvent(OMX_EVENTTYPE event, OMX_U32 data1, OMX_U32 data2) {
         {
             CODEC_LOGE("ERROR(0x%08lx, %ld)", data1, data2);
 
-            setState(ERROR);
+	    if(data1!=OMX_ErrorStreamCorrupt){
+              setState(ERROR);
+	    }
             break;
         }
 
@@ -3375,11 +3390,6 @@ bool OMXCodec::drainInputBuffer(BufferInfo *info) {
         mNoMoreOutputData = false;
     }
 
-    CODEC_LOGV("Calling emptyBuffer on buffer %p (length %d), "
-               "timestamp %lld us (%.2f secs)",
-               info->mBuffer, offset,
-               timestampUs, timestampUs / 1E6);
-
     if (info == NULL) {
         CHECK(mFlags & kUseSecureInputBuffers);
         CHECK(signalEOS);
@@ -3389,6 +3399,10 @@ bool OMXCodec::drainInputBuffer(BufferInfo *info) {
         // to use it to signal EOS to the codec.
         info = findEmptyInputBuffer();
     }
+    CODEC_LOGV("Calling emptyBuffer on buffer %p (length %d), "
+               "timestamp %lld us (%.2f secs)",
+               info->mBuffer, offset,
+               timestampUs, timestampUs / 1E6);
 
     err = mOMX->emptyBuffer(
             mNode, info->mBuffer, 0, offset,
@@ -3960,6 +3974,23 @@ status_t OMXCodec::stop() {
 
         case ERROR:
         {
+            if (mPortStatus[kPortIndexOutput] == ENABLING) {
+                // Codec is in a wedged state (technical term)
+                // We've seen an output port settings change from the codec,
+                // We've disabled the output port, then freed the output
+                // buffers, initiated re-enabling the output port but
+                // failed to reallocate the output buffers.
+                // There doesn't seem to be a way to orderly transition
+                // from executing->idle and idle->loaded now that the
+                // output port hasn't been reenabled yet...
+                // Simply free as many resources as we can and pretend
+                // that we're in LOADED state so that the destructor
+                // will free the component instance without asserting.
+                freeBuffersOnPort(kPortIndexInput, true /* onlyThoseWeOwn */);
+                freeBuffersOnPort(kPortIndexOutput, true /* onlyThoseWeOwn */);
+                setState(LOADED);
+                break;
+            } else {
             OMX_STATETYPE state = OMX_StateInvalid;
             status_t err = mOMX->getState(mNode, &state);
             CHECK_EQ(err, (status_t)OK);
@@ -3968,6 +3999,8 @@ status_t OMXCodec::stop() {
                 break;
             }
             // else fall through to the idling code
+            }
+
             isError = true;
         }
 
