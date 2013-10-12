@@ -13347,12 +13347,19 @@ public final class ActivityManagerService extends ActivityManagerNative
         Log.d(TAG, systemUi.processName + "-- curAdj: " + systemUi.curAdj + " preSystemUiAdj: " + mPreSystemUiAdj);
     }
     
-    private void startSystemUi(IApplicationThread caller) {
-        Intent intent = new Intent();
-        intent.setComponent(new ComponentName("com.android.systemui",
-                    "com.android.systemui.statusbar.StatusBarService"));
-        Slog.i(TAG, "Starting service: " + intent);
-        startService(caller, intent, null);
-        mSystemUiIsAlive = true;
+    private void startSystemUi(final IApplicationThread caller) {
+        mHandler.post(new Runnable() {
+
+            @Override
+            public void run() {
+                Intent intent = new Intent();
+                intent.setComponent(new ComponentName("com.android.systemui",
+                            "com.android.systemui.statusbar.StatusBarService"));
+                Slog.i(TAG, "Starting service: " + intent);
+                startService(caller, intent, null);
+                mSystemUiIsAlive = true;
+            }
+
+        });
     }
 }
