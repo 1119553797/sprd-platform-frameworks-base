@@ -24,6 +24,9 @@
 #include <math.h>
 
 #include <system/audio.h>
+#include<unistd.h>
+#include<fcntl.h>
+#define FMFIFO "/data/fmpseudopipe"
 
 // ----------------------------------------------------------------------------
 
@@ -667,7 +670,27 @@ status_t AudioSystem::setStreamVolumeIndex(audio_stream_type_t stream, int index
 {
     const sp<IAudioPolicyService>& aps = AudioSystem::get_audio_policy_service();
     if (aps == 0) return PERMISSION_DENIED;
+
+    if (stream == AUDIO_STREAM_FM ) return AudioSystem::setFmVolumeIndex(index);
+
     return aps->setStreamVolumeIndex(stream, index);
+}
+
+status_t AudioSystem::setFmVolumeIndex(int index)
+{
+    int result = INVALID_OPERATION;
+
+    int fifo_id = open( FMFIFO ,O_WRONLY|O_NONBLOCK);
+    if(fifo_id != -1) {
+	int buff = index;
+	result = write(fifo_id,&buff,sizeof(int));
+    } else {
+	LOGE("open FM FIFO error\n");
+    }
+    close(fifo_id);
+
+    LOGE("AudioSystem::setFmVolumeIndex index %d result %d \n",index,result);
+    return result;
 }
 
 status_t AudioSystem::getStreamVolumeIndex(audio_stream_type_t stream, int *index)

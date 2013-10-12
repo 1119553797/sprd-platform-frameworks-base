@@ -243,6 +243,8 @@ private:
     // list of output descriptors containing cached parameters
     // (sampling rate, framecount, channel count...)
     static DefaultKeyedVector<audio_io_handle_t, OutputDescriptor *> gOutputs;
+
+    static status_t setFmVolumeIndex(int index);
 };
 
 };  // namespace android
