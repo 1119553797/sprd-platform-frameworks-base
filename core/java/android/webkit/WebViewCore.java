@@ -147,6 +147,7 @@ final class WebViewCore {
             if (sWebCoreHandler == null) {
                 // Create a global thread and start it.
                 Thread t = new Thread(new WebCoreThread());
+                t.setPriority(Thread.MIN_PRIORITY);
                 t.setName(THREAD_NAME);
                 t.start();
                 try {
@@ -608,6 +609,8 @@ final class WebViewCore {
                             case INITIALIZE:
                                 WebViewCore core = (WebViewCore) msg.obj;
                                 core.initialize();
+                                Process.setThreadPriority(
+                                        Process.THREAD_PRIORITY_DEFAULT);
                                 break;
 
                             case REDUCE_PRIORITY:
