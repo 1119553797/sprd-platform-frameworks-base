@@ -624,6 +624,7 @@ public class ValueAnimator extends Animator {
                     Log.w("ValueAnimator", "IndexOutOfBoundsException: " + e.getMessage());
                     Log.w("ValueAnimator", "IndexOutOfBoundsException: mAnimations.size=" + mAnimations.size() + " ,numAnims=" + numAnims + ", i=" + i);
                     e.printStackTrace();
+                    break;
                 }
             }
             if (mEndingAnims.size() > 0) {
