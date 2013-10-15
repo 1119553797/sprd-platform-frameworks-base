@@ -60,6 +60,11 @@ static jlong android_server_am_ActivityManagerService_readAvailMemNative(JNIEnv*
     char *line;
     int res = 0;
     jlong memFree = 0;
+    jlong Buffers = 0;
+    jlong Cached = 0;
+    jlong  Shmem = 0;
+    jlong  SwapCached = 0;
+    jlong  countMem = 0;
 
     //MYLOGV("readAvailMemNative: \n");
     res = read_little_file_to_buffer(env, "/proc/meminfo", buffer, READ_BUFFER_SIZE);
@@ -73,11 +78,20 @@ static jlong android_server_am_ActivityManagerService_readAvailMemNative(JNIEnv*
             line += 1;
         if (!strncmp("MemFree:", line, 8)) {
             memFree += strtol(line + 8, NULL, 10);
-        } else if (!strncmp("Cached:", line, 7)) {
-            memFree += strtol(line + 7, NULL, 10);
-        }
+        }else if (!strncmp("Buffers:", line, 8)) {
+		Buffers += strtol(line + 8, NULL, 10);
+	}else if (!strncmp("Cached:", line, 7)) {
+	         Cached += strtol(line + 7, NULL, 10);
+        }else if (!strncmp("Shmem:", line, 6)) {
+		  Shmem += strtol(line + 6, NULL, 10);
+         }else if (!strncmp("SwapCached:", line, 11)) {
+		  SwapCached += strtol(line + 11, NULL, 10);
+         }			
+
         line = strtok(NULL, "\n");
     }
+   countMem = ((Buffers + Cached) - Shmem - SwapCached);
+   memFree = ((countMem > memFree) ? countMem : memFree);
 
     return memFree;
 }

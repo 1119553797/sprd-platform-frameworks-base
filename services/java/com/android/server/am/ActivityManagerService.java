@@ -328,7 +328,9 @@ public final class ActivityManagerService extends ActivityManagerNative
 
     // Memory pages are 4K.
     static final int PAGE_SIZE = 4*1024;
-    
+
+    // Memory Reserved 1M.
+    static final int RESERVED_MEMORY = 1024;	
     // Corresponding memory levels for above adjustments.
     static final int EMPTY_APP_MEM;
     static final int HIDDEN_APP_MEM;
@@ -8985,27 +8987,33 @@ public final class ActivityManagerService extends ActivityManagerNative
     boolean checkServicesDelayRestartLocked(ServiceRecord r) {
         boolean needDelay = true;
       
-        for (int i = mLruProcesses.size() - 1 ; i >= 0 ; i--) {
+        /*for (int i = mLruProcesses.size() - 1 ; i >= 0 ; i--) {
             ProcessRecord pr = mLruProcesses.get(i);
+	    raiseToFixAdj(pr);
             if (pr.thread != null &&
                  pr.curAdj >= HIDDEN_APP_MIN_ADJ) {
                 needDelay = false;
             }
         }
-        if (needDelay) {
+        */
+        //if (needDelay) 
+        
+	{
             //if (r.hasFixAdj) 
               {
                 long curClock = SystemClock.uptimeMillis();
-                if (mRecentAvailMem == 0 || (curClock > mRecentAvailMemClock + 10 * 1000)) {
+                if (mRecentAvailMem == 0 || (curClock > mRecentAvailMemClock + 10 * 1000)) 
+		{
                     mRecentAvailMem = readAvailMemory();
 		    mTopProcessPss = getTopProcessPss()*1024;
                     mRecentAvailMemClock = curClock;
                 }
                 int adjustment = SERVICE_B_ADJ;
                 if (r.appAdj != ProcessRecord.TMP_CUR_ADJ_DEFAULT) {
-                    adjustment = r.appAdj;
+                    adjustment = r.appAdj ;
                 }
-                long serviceNeedMem = getMemLevel(adjustment) >> 10;
+                long serviceNeedMem = getMemLevel(adjustment) >> 10 + RESERVED_MEMORY;
+		//Slog.w(TAG, "ServicesDelayRestart: Restart service[" + r.shortName + "]" + ", serviceNeedMem:" + serviceNeedMem +", mRecentAvailMem:" + mRecentAvailMem);
                 if (mRecentAvailMem > serviceNeedMem &&
 		     (mTopProcessPss < 10*1024*1024//10MB
            	     || mRecentAvailMem  >= 30720 //30MB
@@ -9036,6 +9044,10 @@ public final class ActivityManagerService extends ActivityManagerNative
             r.lowMemKilled = false;
             r.delayRestartCount = 0;
         }
+	///////
+	
+	// long curClock2 = SystemClock.uptimeMillis();
+	//Slog.w(TAG,"checkServicesDelayRestartLocked exit cost :"+curClock2 + ", needDelay:" + needDelay);
         return needDelay;
     }
 
@@ -9520,7 +9532,7 @@ public final class ActivityManagerService extends ActivityManagerNative
 	 //whiteList.add("android.process.acore");
 	 whiteList.add("com.android.systemui");
 
-	 hasAlarmList = new HashSet<String>();
+        hasAlarmList = new HashSet<String>();
 	hasAlarmList.add("com.baidu.searchbox");
 	hasAlarmList.add("com.baidu.searchbox:pushservice_v1");
 	hasAlarmList.add("com.facebook.katana");
@@ -9528,10 +9540,10 @@ public final class ActivityManagerService extends ActivityManagerNative
 	hasAlarmList.add("com.tencent.mm:push");
 	 
         fixAdjList = new Hashtable<String, Integer>();
-        fixAdjList.put("com.tencent.mobileqq:MSF", 1);
-        fixAdjList.put("com.tencent.mobileqq", 1);
-        fixAdjList.put("com.tencent.mm:push", 1);
-        fixAdjList.put("com.tencent.mm", 1);
+        fixAdjList.put("com.tencent.mobileqq:MSF", 2);
+        fixAdjList.put("com.tencent.mobileqq", 2);
+        fixAdjList.put("com.tencent.mm:push", 2);
+        fixAdjList.put("com.tencent.mm", 2);
        // fixAdjList.put("com.android.contacts", 2);
         fixAdjList.put("cmccwm.mobilemusic", 2);
         fixAdjList.put("com.android.music", 2);	 
