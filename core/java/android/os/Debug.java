@@ -99,8 +99,8 @@ public final class Debug
     /**
      * Default trace file path and file
      */
-    private static final String DEFAULT_TRACE_PATH_PREFIX = "/data/";  // SPRD: temp
-//        Environment.getLegacyExternalStorageDirectory().getPath() + "/";
+    private static final String DEFAULT_TRACE_PATH_PREFIX =
+        Environment.getLegacyExternalStorageDirectory().getPath() + "/";
     private static final String DEFAULT_TRACE_BODY = "dmtrace";
     private static final String DEFAULT_TRACE_EXTENSION = ".trace";
     private static final String DEFAULT_TRACE_FILE_PATH =
