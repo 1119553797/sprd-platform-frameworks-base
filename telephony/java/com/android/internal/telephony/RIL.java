@@ -2070,7 +2070,9 @@ public abstract class RIL extends SprdBaseCommands implements CommandsInterface 
             rr.mp.writeInt(config[i].getToServiceId());
             rr.mp.writeInt(config[i].getFromCodeScheme());
             rr.mp.writeInt(config[i].getToCodeScheme());
-            rr.mp.writeInt(config[i].isSelected() ? 1 : 0);
+            //modify for <bug#228186> start
+            rr.mp.writeInt(config[i].isSelected() ? 0 : 1);
+            //modify for <bug#228186> end
         }
 
         if (RILJ_LOGD) {
