@@ -303,6 +303,14 @@ public class InputMethodService extends AbstractInputMethodService {
                     ic.performEditorAction(ei.imeOptions&EditorInfo.IME_MASK_ACTION);
                 }
             }
+            //add for bug 225948
+            if(mExtractEditText != null && mExtractEditText.hasSelection()) {
+                CharSequence text = mExtractEditText.getText();
+                if(text != null && !text.equals("")) {
+                    mExtractEditText.setSelection(text.length()-1);
+                }
+            }
+            //end add for bug 225948
         }
     };
 
