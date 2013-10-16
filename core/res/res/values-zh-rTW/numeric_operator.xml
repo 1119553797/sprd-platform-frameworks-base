@@ -229,7 +229,8 @@
         <item>46020=China Tietong</item>
         <item>7321=\t</item>
         <item>7322=Edatel</item>
-        <item>732101=Comcel</item>
+        <!--Bug#211055 Update by Katrina 2013.09.10-->
+        <item>732101=Claro</item>
         <item>732102=movistar</item>
         <item>732103=Tigo</item>
         <item>732111=Tigo</item>
@@ -1652,5 +1653,7 @@
         <item>7246=VIVO</item>
         <item>72416=BrTCel</item>
 	<item>2143=ORANGE</item>
+        <!--Bug#213564 Add by Katrina 2013.09.11-->
+        <item>4707=Airtel</item>
     </string-array>
 </resources>
