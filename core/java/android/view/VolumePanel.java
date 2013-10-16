@@ -301,8 +301,18 @@ public class VolumePanel extends Handler
         }
 
         synchronized (this) {
-            ToneGenerator toneGen = getOrCreateToneGenerator(streamType);
-            toneGen.startTone(ToneGenerator.TONE_PROP_BEEP);
+            /* SPRD: Add catch for RuntimeException  @{ */
+            ToneGenerator toneGen;
+            try {
+                 toneGen = getOrCreateToneGenerator(streamType);
+            } catch (RuntimeException e) {
+                Log.e(TAG, "ToneGenerator constructor failed with RuntimeException: ", e);
+                return;
+            }
+            if (toneGen != null) {
+                toneGen.startTone(ToneGenerator.TONE_PROP_BEEP);
+            }
+            /* @} */
         }
 
         sendMessageDelayed(obtainMessage(MSG_STOP_SOUNDS), BEEP_DURATION);
