@@ -162,9 +162,9 @@ public class PhoneFactory {
                     mIccPhoneBookInterfaceManagerProxy[i] = ((SprdPhoneProxy)sProxyPhone[i]).getIccPhoneBookInterfaceManagerProxy();
                     mPhoneSubInfoProxy[i] = ((SprdPhoneProxy)sProxyPhone[i]).getPhoneSubInfoProxy();
                 }
-//                new CompositeIccSmsInterfaceManagerProxy(mIccSmsInterfaceManagerProxy);
-//                new CompositeIccPhoneBookInterfaceManagerProxy(mIccPhoneBookInterfaceManagerProxy);
-//                new CompositePhoneSubInfoProxy(mPhoneSubInfoProxy);
+                new CompositeIccSmsInterfaceManagerProxy(mIccSmsInterfaceManagerProxy);
+                new CompositeIccPhoneBookInterfaceManagerProxy(mIccPhoneBookInterfaceManagerProxy);
+                new CompositePhoneSubInfoProxy(mPhoneSubInfoProxy);
 
                 sMadeDefaults = true;
             }
@@ -260,7 +260,7 @@ public class PhoneFactory {
 
     public static String getServiceName(String defaultServiceName, int phoneId) {
         if (isMultiSim()) {
-            if (phoneId == getPhoneCount() || phoneId == RAW_DEFAULT_PHONE_ID) {
+            if (phoneId == getPhoneCount()) {
                 return defaultServiceName;
             }
             return defaultServiceName + phoneId;
