@@ -149,8 +149,8 @@ class ServerThread extends Thread {
                     ServiceManager.addService(PhoneFactory.getServiceName("telephony.registry", i),
                             telephonyRegistry[i]);
                 }
-//                ServiceManager.addService("telephony.registry",
-//                        new CompositeTelephonyRegistry(context, telephonyRegistry));
+                ServiceManager.addService("telephony.registry",
+                        new CompositeTelephonyRegistry(context, telephonyRegistry));
             } else {
                 ServiceManager.addService("telephony.registry",
                         new TelephonyRegistry(context, 0));
