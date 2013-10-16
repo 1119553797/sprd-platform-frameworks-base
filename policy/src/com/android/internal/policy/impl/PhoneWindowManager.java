@@ -1792,7 +1792,19 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             litButtonLight();
             WindowManager.LayoutParams attrs = win != null ? win.getAttrs() : null;
             if ((null != attrs) && (null != attrs.packageName) && (attrs.packageName.startsWith("com.spreadst.validationtools"))){
+                // modify by Candice.Chen for bug200402 start
+                String mode = SystemProperties.get("ro.bootmode", "mode");
+                boolean engModeFlag = "engtest".equals(mode)?true:false;
+
+                if((attrs.getTitle().toString().equals("com.spreadst.validationtools/com.spreadst.validationtools.keytest.KeyTestActivity") )
+                    || engModeFlag)
+                {
+                    // modify by Candice.Chen for bug200402 end
                     return 0;
+                    // modify by Candice.Chen for bug200402 start
+                }
+                // modify by Candice.Chen for bug200402 end
+
                 }
             // If we have released the home key, and didn't do anything else
             // while it was pressed, then it is time to go home!
