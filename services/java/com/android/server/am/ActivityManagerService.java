@@ -1881,6 +1881,9 @@ public final class ActivityManagerService extends ActivityManagerNative
     
     private final void startProcessLocked(ProcessRecord app,
             String hostingType, String hostingNameStr) {
+        if(!mSystemUiIsAlive && "com.android.launcher".equals(app.processName)) {
+            startSystemUi(null);
+        }
         if (app.pid > 0 && app.pid != MY_PID) {
             synchronized (mPidsSelfLocked) {
                 mPidsSelfLocked.remove(app.pid);
@@ -13356,8 +13359,10 @@ public final class ActivityManagerService extends ActivityManagerNative
                 intent.setComponent(new ComponentName("com.android.systemui",
                             "com.android.systemui.statusbar.StatusBarService"));
                 Slog.i(TAG, "Starting service: " + intent);
-                startService(caller, intent, null);
-                mSystemUiIsAlive = true;
+                if(!mSystemUiIsAlive) {
+                    mSystemUiIsAlive = true;
+                    startService(caller, intent, null);
+                }
             }
 
         });
