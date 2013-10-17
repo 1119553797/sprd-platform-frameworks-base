@@ -9532,7 +9532,7 @@ public final class ActivityManagerService extends ActivityManagerNative
         fixAdjList.put("com.tencent.mobileqq", 1);
         fixAdjList.put("com.tencent.mm:push", 1);
         fixAdjList.put("com.tencent.mm", 1);
-        fixAdjList.put("com.android.contacts", 2);
+       // fixAdjList.put("com.android.contacts", 2);
         fixAdjList.put("cmccwm.mobilemusic", 2);
         fixAdjList.put("com.android.music", 2);	 
     }
