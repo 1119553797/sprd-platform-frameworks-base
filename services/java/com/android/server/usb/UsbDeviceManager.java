@@ -1006,11 +1006,11 @@ public class UsbDeviceManager {
                     notification.sound = null;
                     notification.vibrate = null;
 
-                    /* SPRD: add for usb functions @{ */
-                    // notification.priority = Notification.PRIORITY_MIN;
-                    // Intent intent = Intent.makeRestartActivityTask(
-                    //         new ComponentName("com.android.settings",
-                    //                 "com.android.settings.UsbSettings"));
+                    notification.priority = Notification.PRIORITY_MIN;
+                    Intent intent = Intent.makeRestartActivityTask(
+                                        new ComponentName("com.android.settings",
+                                                          "com.android.settings.UsbSettings"));
+                    /* SPRD: add for usb functions @{
                     Intent intent;
                     if (id == com.android.internal.R.string.usb_mtp_notification_title
                             || id == com.android.internal.R.string.usb_ptp_notification_title) {
@@ -1024,7 +1024,7 @@ public class UsbDeviceManager {
                                         "com.android.settings",
                                         "com.sprd.settings.SprdUsbSettings"));
                     }
-                    /* @} */
+                     @} */
                     PendingIntent pi = PendingIntent.getActivityAsUser(mContext, 0,
                             intent, 0, null, UserHandle.CURRENT);
                     notification.setLatestEventInfo(mContext, title, message, pi);

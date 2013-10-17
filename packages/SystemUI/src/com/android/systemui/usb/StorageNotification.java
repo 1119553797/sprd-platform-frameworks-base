@@ -155,11 +155,11 @@ public class StorageNotification extends StorageEventListener {
              * for stopping UMS.
              */
             Intent intent = new Intent();
-            /* SPRD: add for usb function @{ */
-            // intent.setClass(mContext, com.android.systemui.usb.UsbStorageActivity.class);
+            intent.setClass(mContext, com.android.systemui.usb.UsbStorageActivity.class);
+            /* SPRD: add for usb function @{
             intent.setComponent(new ComponentName("com.android.settings", "com.sprd.settings.SprdUsbSettings"));
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            /* @} */
+             @} */
             PendingIntent pi = PendingIntent.getActivity(mContext, 0, intent, 0);
             setUsbStorageNotification(
                     com.android.internal.R.string.usb_storage_stop_notification_title,
@@ -283,10 +283,10 @@ public class StorageNotification extends StorageEventListener {
 
         if (available) {
             Intent intent = new Intent();
-            /* SPRD: add for usb function @{ */
-            //intent.setClass(mContext, com.android.systemui.usb.UsbStorageActivity.class);
+            intent.setClass(mContext, com.android.systemui.usb.UsbStorageActivity.class);
+            /* SPRD: add for usb function @{
             intent.setComponent(new ComponentName("com.android.settings", "com.sprd.settings.SprdUsbSettings"));
-            /* @} */
+             @} */
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
             PendingIntent pi = PendingIntent.getActivity(mContext, 0, intent, 0);
