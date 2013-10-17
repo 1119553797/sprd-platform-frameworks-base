@@ -21,4 +21,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center" />
+    
+    <!-- SPRD: Modify 20130909 Spreadst of Bug 213683 original lockscreen change by UUI @{ 
+    	 SPRD: Modify 20131017 ming.li for Bug 228037
+    -->
+    <include layout="@layout/keyguard_glow_pad_view_uui"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="-10dp"/>
+    <!-- @} -->
 </merge>

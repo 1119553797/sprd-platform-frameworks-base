@@ -198,7 +198,12 @@ public class KeyguardSelectorView extends LinearLayout implements KeyguardSecuri
             findViewById(R.id.glow_pad_view).setVisibility(View.GONE);
         } else {
             mGlowPadView = (GlowPadView) findViewById(R.id.glow_pad_view);
-            findViewById(R.id.glow_pad_view_uui).setVisibility(View.GONE);
+            //SPRD:Modify 20131017 ming.li for Bug 228037 
+            View glow_pad_view_uui = findViewById(R.id.glow_pad_view_uui);
+            if (null != glow_pad_view_uui) {
+            	glow_pad_view_uui.setVisibility(View.GONE);
+            }
+            //findViewById(R.id.glow_pad_view_uui).setVisibility(View.GONE);
         }
         /* @} */
         mGlowPadView.setOnTriggerListener(mOnTriggerListener);
