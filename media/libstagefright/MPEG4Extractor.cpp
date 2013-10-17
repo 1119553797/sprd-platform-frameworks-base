@@ -245,6 +245,9 @@ static const char *FourCC2MIME(uint32_t fourcc) {
         case FOURCC('s', 'a', 'w', 'b'):
             return MEDIA_MIMETYPE_AUDIO_AMR_WB;
 
+        case FOURCC('.', 'm', 'p', '3'):
+            return MEDIA_MIMETYPE_AUDIO_MPEG;
+
         case FOURCC('m', 'p', '4', 'v'):
             return MEDIA_MIMETYPE_VIDEO_MPEG4;
 
@@ -374,7 +377,8 @@ status_t MPEG4Extractor::readMetaData() {
 
     if (mInitCheck == OK) {
         if (mHasVideo) {
-            mFileMetaData->setCString(kKeyMIMEType, "video/mp4");
+            mFileMetaData->setCString(
+                    kKeyMIMEType, MEDIA_MIMETYPE_CONTAINER_MPEG4);
         } else {
             mFileMetaData->setCString(kKeyMIMEType, "audio/mp4");
         }
@@ -917,6 +921,7 @@ status_t MPEG4Extractor::parseChunk(off64_t *offset, int depth) {
         case FOURCC('m', 'p', '4', 'a'):
         case FOURCC('s', 'a', 'm', 'r'):
         case FOURCC('s', 'a', 'w', 'b'):
+        case FOURCC('.', 'm', 'p', '3'):
         {
             uint8_t buffer[8 + 20];
             if (chunk_data_size < (ssize_t)sizeof(buffer)) {
@@ -1740,19 +1745,26 @@ status_t MPEG4Extractor::updateAudioTrackInfoFromESDS_MPEG4Audio(
         return ERROR_MALFORMED;
     }
 
+    LOGW("MPEG4Extractor audio objectTypeIndication %d",objectTypeIndication);
+    if ((objectTypeIndication == 0x6b) || (objectTypeIndication == 0x69)) {
+        //mp3 sprd
+        mLastTrack->meta->setCString(kKeyMIMEType, MEDIA_MIMETYPE_AUDIO_MPEG);
+        return OK;
+    }
+
     if (objectTypeIndication == 0xe1) {
         // This isn't MPEG4 audio at all, it's QCELP 14k...
         mLastTrack->meta->setCString(kKeyMIMEType, MEDIA_MIMETYPE_AUDIO_QCELP);
         return OK;
     }
 
-    if (objectTypeIndication  == 0x6b) {
+  /*  if (objectTypeIndication  == 0x6b) {
         // The media subtype is MP3 audio
         // Our software MP3 audio decoder may not be able to handle
         // packetized MP3 audio; for now, lets just return ERROR_UNSUPPORTED
-        LOGE("MP3 track in MP4/3GPP file is not supported");
+        ALOGE("MP3 track in MP4/3GPP file is not supported");
         return ERROR_UNSUPPORTED;
-    }
+    }*/
 
     const uint8_t *csd;
     size_t csd_size;
@@ -2261,7 +2273,8 @@ static bool LegacySniffMPEG4(
         || !memcmp(header, "ftyp3ge6", 8) || !memcmp(header, "ftyp3gg6", 8)
         || !memcmp(header, "ftypisom", 8) || !memcmp(header, "ftypM4V ", 8)
         || !memcmp(header, "ftypM4A ", 8) || !memcmp(header, "ftypf4v ", 8)
-        || !memcmp(header, "ftypkddi", 8) || !memcmp(header, "ftypM4VP", 8)) {
+        || !memcmp(header, "ftypkddi", 8) || !memcmp(header, "ftypM4VP", 8)
+        || !memcmp(header, "ftypMSNV", 8)) {//@jgdu
         *mimeType = MEDIA_MIMETYPE_CONTAINER_MPEG4;
         *confidence = 0.4;
 
