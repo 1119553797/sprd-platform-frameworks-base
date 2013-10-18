@@ -695,7 +695,13 @@ status_t AudioPolicyManagerBase::stopOutput(audio_io_handle_t output,
         }
         device = getNewDevice(output);
 
-        setOutputDevice(output, device, false, 1200);  //delay time stamp
+        /* SPRD: check stream type @{ */
+        if (stream == AudioSystem::ENFORCED_AUDIBLE) {
+            setOutputDevice(output, device, false, 1200);
+        }else{
+            setOutputDevice(output, device, false, 150);
+        }
+        /* @} */
 
 #ifdef WITH_A2DP
         if (mA2dpOutput != 0 && !a2dpUsedForSonification() &&
