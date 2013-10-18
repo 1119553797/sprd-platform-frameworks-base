@@ -32,6 +32,7 @@ import android.media.AudioManager;
 import android.media.IAudioService;
 import android.os.RemoteException;
 import android.os.ServiceManager;
+import android.os.SystemProperties;
 import android.telephony.TelephonyManager;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
@@ -67,6 +68,8 @@ public abstract class KeyguardViewBase extends FrameLayout {
     private WindowManager mWindowManager;
     private WallpaperManager mWallpaperManager;
 
+    private boolean mUniverseui_support = false;
+
     // This is a faster way to draw the background on devices without hardware acceleration
     Drawable mBackgroundDrawable = new Drawable() {
     /* @} */
@@ -95,29 +98,35 @@ public abstract class KeyguardViewBase extends FrameLayout {
 
     public KeyguardViewBase(Context context, AttributeSet attrs) {
         super(context, attrs);
-        /* SPRD: Modify 20130905 Spreadst of Bug 211956 can not set lockscreen wallpaper @{ */
-        Configuration configuration = context.getResources().getConfiguration();
-        DisplayMetrics metric = new DisplayMetrics();
-        if (mWindowManager == null) {
-            mWindowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        }
-        if (mWallpaperManager == null) {
-            mWallpaperManager = (WallpaperManager) context
-                    .getSystemService(Context.WALLPAPER_SERVICE);
-        }
-        Drawable drawable = mWallpaperManager.getDrawable(WallpaperInfo.WALLPAPER_LOCKSCREEN_TYPE);
-        mWindowManager.getDefaultDisplay().getMetrics(metric);
-        int width = metric.widthPixels;
-        int height = metric.heightPixels;
-
-        if (configuration != null) {
-            if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                width = metric.heightPixels;
-                height = metric.widthPixels;
+        /* SPRD: Modify 20131018 Spreadst of Bug 226109 show lockscreen wallpaper is camera widget UI @{ */
+        mUniverseui_support = SystemProperties.getBoolean("universe_ui_support", false);
+        if (mUniverseui_support) {
+            /* SPRD: Modify 20130905 Spreadst of Bug 211956 can not set lockscreen wallpaper @{ */
+            Configuration configuration = context.getResources().getConfiguration();
+            DisplayMetrics metric = new DisplayMetrics();
+            if (mWindowManager == null) {
+                mWindowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
             }
-        }
+            if (mWallpaperManager == null) {
+                mWallpaperManager = (WallpaperManager) context
+                        .getSystemService(Context.WALLPAPER_SERVICE);
+            }
+            Drawable drawable = mWallpaperManager.getDrawable(WallpaperInfo.WALLPAPER_LOCKSCREEN_TYPE);
+            mWindowManager.getDefaultDisplay().getMetrics(metric);
+            int width = metric.widthPixels;
+            int height = metric.heightPixels;
 
-        mBackgroundDrawable = this.getDestDrawale(drawable, width, height);
+            if (configuration != null) {
+                if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                    width = metric.heightPixels;
+                    height = metric.widthPixels;
+                }
+            }
+            if (drawable != null) {
+                mBackgroundDrawable = this.getDestDrawale(drawable, width, height);
+            }
+            /* @} */
+        }
         /* @} */
         resetBackground();
     }
