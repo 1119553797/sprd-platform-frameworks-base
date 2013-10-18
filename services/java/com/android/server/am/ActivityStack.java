@@ -3461,6 +3461,10 @@ final class ActivityStack {
             if (r != null) {
                 mHandler.removeMessages(IDLE_TIMEOUT_MSG, r);
                 r.finishLaunchTickingLocked();
+                if (mPausingActivity != null && r.toString().equals(mPausingActivity.toString())) {
+                   Slog.v(TAG,"idle activity is equal mPausingActivity,just return.r=" + r);
+                   return r;
+                }
             }
 
             // Get the activity record.
