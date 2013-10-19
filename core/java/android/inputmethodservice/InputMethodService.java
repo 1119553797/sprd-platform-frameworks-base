@@ -307,7 +307,7 @@ public class InputMethodService extends AbstractInputMethodService {
             if(mExtractEditText != null && mExtractEditText.hasSelection()) {
                 CharSequence text = mExtractEditText.getText();
                 if(text != null && !text.equals("")) {
-                    mExtractEditText.setSelection(text.length()-1);
+                    mExtractEditText.setSelection(text.length());
                 }
             }
             //end add for bug 225948
