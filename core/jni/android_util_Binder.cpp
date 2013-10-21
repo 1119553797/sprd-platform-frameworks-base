@@ -266,7 +266,12 @@ protected:
     {
         JNIEnv* env = javavm_to_jnienv(mVM);
 
-        LOGV("onTransact() on %p calling object %p in env %p vm %p\n", this, mObject, env, mVM);
+        //if env is null, return directly
+        if(NULL == env){
+          return UNKNOWN_TRANSACTION;
+        }
+
+        LOGV("onTransact() on %p calling object %p in env %p vm %p, &data=0x%x\n", this, mObject, env, mVM, (int32_t)&data);
 
         IPCThreadState* thread_state = IPCThreadState::self();
         const int strict_policy_before = thread_state->getStrictModePolicy();
