@@ -920,6 +920,12 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     Intent.EXTRA_DOCK_STATE_UNDOCKED);
         }
 
+        /* SPRD: Add for bug 229049, Disable Orintation Receiver when shuting down the device@{ */
+        IntentFilter shutdownDialogFilter = new IntentFilter();
+        shutdownDialogFilter.addAction(Intent.ACTION_SHUTDOWN);
+        context.registerReceiver(shutdownDisableOrintationReceiver, shutdownDialogFilter);
+        /* @} */
+
         // register for dream-related broadcasts
         filter = new IntentFilter();
         filter.addAction(Intent.ACTION_DREAMING_STARTED);
@@ -4068,6 +4074,20 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             }
         }
     }
+
+    /* SPRD: Add for bug 229049, disable sensor listener when showing the shut down animation @{ */
+    BroadcastReceiver shutdownDisableOrintationReceiver = new BroadcastReceiver() {
+        public void onReceive(Context context, Intent intent) {
+            if (Intent.ACTION_SHUTDOWN.equals(intent.getAction())) {
+                Log.e(TAG,"Should disable the sensor listener ...");
+                mOrientationListener.disable();
+                mOrientationSensorEnabled = false;
+            } else {
+                Log.e(TAG,"other broadcast coming....");
+            }
+        }
+    };
+    /* @} */
 
     BroadcastReceiver mDockReceiver = new BroadcastReceiver() {
         @Override

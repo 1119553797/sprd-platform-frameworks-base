@@ -228,13 +228,30 @@ status_t BootAnimation::readyToRun() {
     if (status)
         return -1;
 
+    /* SPRD: Add for bug 229049, force the boot animation not to rotation@{ */
     // create the native surface
-    sp<SurfaceControl> control = session()->createSurface(String8("BootAnimation"),
-            dinfo.w, dinfo.h, PIXEL_FORMAT_RGB_565);
+    //sp<SurfaceControl> control = session()->createSurface(String8("BootAnimation"),
+    //        dinfo.w, dinfo.h, PIXEL_FORMAT_RGB_565);
+    sp<SurfaceControl> control;
+    if (dinfo.w > dinfo.h) {
+        control = session()->createSurface(
+                      String8("BootAnimation"), dinfo.h, dinfo.w, PIXEL_FORMAT_RGB_565);
+    } else {
+        control = session()->createSurface(
+                      String8("BootAnimation"), dinfo.w, dinfo.h, PIXEL_FORMAT_RGB_565);
+    }
 
     SurfaceComposerClient::openGlobalTransaction();
     control->setLayer(0x40000000);
+    Rect layerStackRect(dinfo.w, dinfo.h);
+    Rect displayRect(dinfo.w, dinfo.h);
+
+    session()->setDisplayProjection(
+        dtoken, 0 /* 0 degree rotation */,
+        layerStackRect,
+        displayRect);
     SurfaceComposerClient::closeGlobalTransaction();
+    /* @} */
 
     sp<Surface> s = control->getSurface();
 
