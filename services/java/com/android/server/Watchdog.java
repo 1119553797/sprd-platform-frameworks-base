@@ -427,6 +427,12 @@ public class Watchdog extends Thread {
                     ArrayList<Integer> pids = new ArrayList<Integer>();
                     pids.add(Process.myPid());
                     ActivityManagerService.dumpStackTraces(true, pids, null, null);
+                    // The system's been hanging for 30s, another three won't hurt much.
+                    SystemClock.sleep(3000);
+                    if (RECORD_KERNEL_THREADS) {
+                        dumpKernelStackTraces();
+                        SystemClock.sleep(2000);
+                    }
                     waitedHalf = true;
                     continue;
                 }
@@ -456,6 +462,7 @@ public class Watchdog extends Thread {
             // Pull our own kernel thread stacks as well if we're configured for that
             if (RECORD_KERNEL_THREADS) {
                 dumpKernelStackTraces();
+                SystemClock.sleep(2000);
             }
 
             // Try to add the error to the dropbox, but assuming that the ActivityManager
