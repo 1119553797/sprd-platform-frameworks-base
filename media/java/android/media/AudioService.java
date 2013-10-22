@@ -309,6 +309,8 @@ public class AudioService extends IAudioService.Stub {
         intentFilter.addAction(Intent.ACTION_DOCK_EVENT);
         intentFilter.addAction(BluetoothHeadset.ACTION_AUDIO_STATE_CHANGED);
         intentFilter.addAction(Intent.ACTION_FM);
+        intentFilter.addAction(Intent.ACTION_SCREEN_ON);
+        intentFilter.addAction(Intent.ACTION_SCREEN_OFF);
         context.registerReceiver(mReceiver, intentFilter);
 
         // Register for media button intent broadcasts.
@@ -1983,6 +1985,10 @@ public class AudioService extends IAudioService.Stub {
                         }
                     }
                 }
+            } else if (action.equals(Intent.ACTION_SCREEN_ON)) {
+                AudioSystem.setParameters("screen_state=on");
+            } else if (action.equals(Intent.ACTION_SCREEN_OFF)) {
+                AudioSystem.setParameters("screen_state=off");
             } else if (action.equals(Intent.ACTION_FM)){
                Log.v(TAG, "FM Intent received");
                int state = intent.getIntExtra("state", 0);
