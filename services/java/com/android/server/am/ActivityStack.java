@@ -66,7 +66,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import android.os.SystemProperties;
-
+import java.io.FileInputStream;
+import org.apache.http.util.EncodingUtils;
 /**
  * State and management of a single stack of activities.
  */
@@ -1890,7 +1891,30 @@ public class ActivityStack {
         int err = START_SUCCESS;
 
 	if(intent.hasCategory(Intent.CATEGORY_HOME)) {
-		SystemProperties.set("persist.sys.launcher", aInfo.processName);
+		FileInputStream freader = null;
+		byte[] buffer = null;
+		String result = null;
+		try {
+		    freader = new FileInputStream("/system/etc/sma.conf");
+		    buffer = new byte[freader.available()];
+		    try {
+			freader.read(buffer);
+			result = EncodingUtils.getString(buffer, "UTF-8");
+		    } catch (Exception e) {
+			freader.close();
+			Log.e("Readsmaconf", e.toString());
+		    }
+		    freader.close();
+		} catch (Exception e) {
+		    Log.e("Readsmaconf", e.toString());
+		}
+
+		Slog.w(TAG, "Read sma.conf " + result);
+
+		if(result != null && result.startsWith("1")) {
+			Slog.w(TAG, "Set persist.sys.launcher " + aInfo.processName);
+			SystemProperties.set("persist.sys.launcher", aInfo.processName);
+		}
 	}
 
         ProcessRecord callerApp = null;
