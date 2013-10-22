@@ -187,7 +187,7 @@ class DeviceStorageMonitorService extends Binder {
     private final void createTempFile(){
     	long size = getUserSpace();
 		File f = new File("/data/data/.space.temp");
-		int defaultSize = 1024 * 1024 * 5; //default space 5M
+		int defaultSize = 1024 * 1024 * 1; //default space 5M
 		double fileSize = size * 0.8;
 		if(fileSize > defaultSize){
 			fileSize = defaultSize;
