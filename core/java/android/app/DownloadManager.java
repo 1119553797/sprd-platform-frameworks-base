@@ -705,7 +705,8 @@ public class DownloadManager {
             values.put(Downloads.Impl.COLUMN_URI, mUri.toString());
             values.put(Downloads.Impl.COLUMN_IS_PUBLIC_API, true);
             values.put(Downloads.Impl.COLUMN_NOTIFICATION_PACKAGE, packageName);
-            values.put(Downloads.Impl.COLUMN_NOTIFICATION_CLASS, mNotificationClass);//add 20121122 Spreadst oma download
+            //delete for bug226715
+            //values.put(Downloads.Impl.COLUMN_NOTIFICATION_CLASS, mNotificationClass);//add 20121122 Spreadst oma download
             if (mDestinationUri != null) {
                 values.put(Downloads.Impl.COLUMN_DESTINATION, Downloads.Impl.DESTINATION_FILE_URI);
                 values.put(Downloads.Impl.COLUMN_FILE_NAME_HINT, mDestinationUri.toString());
