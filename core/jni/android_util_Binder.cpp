@@ -461,6 +461,7 @@ jobject javaObjectForIBinder(JNIEnv* env, const sp<IBinder>& val)
     // Someone else's...  do we know about it?
     jobject object = (jobject)val->findObject(&gBinderProxyOffsets);
     if (object != NULL) {
+        void *record_this = env;
         jobject res = env->CallObjectMethod(object, gWeakReferenceOffsets.mGet);
         if (res != NULL) {
             LOGV("objectForBinder %p: found existing %p!\n", val.get(), res);
@@ -469,6 +470,10 @@ jobject javaObjectForIBinder(JNIEnv* env, const sp<IBinder>& val)
         LOGV("Proxy object %p of IBinder %p no longer in working set!!!", object, val.get());
         android_atomic_dec(&gNumProxyRefs);
         val->detachObject(&gBinderProxyOffsets);
+        if (env != record_this) {
+            LOGE("this pointer err: before env->CallObjectMethod: %p, after: %p; func->addr: %p; functions: %p\n",
+					record_this, (void *)env, gWeakReferenceOffsets.mGet, env->functions);
+        }
         env->DeleteGlobalRef(object);
     }
 
