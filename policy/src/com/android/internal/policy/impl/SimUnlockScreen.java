@@ -24,6 +24,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Message;
 import android.os.RemoteException;
 import android.os.ServiceManager;
@@ -245,10 +246,20 @@ public class SimUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
         @Override
         public void run() {
             try {
-                final boolean result = ITelephony.Stub.asInterface(
-                        ServiceManager.getService(PhoneFactory.getServiceName(
-                                Context.TELEPHONY_SERVICE, mSub))).supplyPin(mPin);
-                
+                final boolean result;
+                IBinder b = ServiceManager.getService(PhoneFactory.getServiceName(
+                        Context.TELEPHONY_SERVICE, mSub));
+                if (b != null) {
+                    ITelephony service;
+                    service = ITelephony.Stub.asInterface(b);
+                    if (service != null) {
+                        result = service.supplyPin(mPin);
+                    }else{
+                        Log.e("SimUnlockScreen", "service 'phone' == null");
+                    }
+                }else{
+                    Log.e("SimUnlockScreen", "getService('phone') == null");
+                }
                 post(new Runnable() {
                     public void run() {
                         onSimLockChangedResponse(result);
