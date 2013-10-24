@@ -86,7 +86,7 @@ public class GsmConnection extends Connection {
     static final int EVENT_WAKE_LOCK_TIMEOUT = 4;
 
     //***** Constants
-    static final int PAUSE_DELAY_FIRST_MILLIS = 100;
+    static final int PAUSE_DELAY_FIRST_MILLIS = 4000;
     static final int PAUSE_DELAY_MILLIS = 3 * 1000;
     static final int WAKE_LOCK_TIMEOUT_MILLIS = 60*1000;
 
