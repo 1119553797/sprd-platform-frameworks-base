@@ -123,6 +123,14 @@ public class NetworkController extends BroadcastReceiver {
     String[] mContentDescriptionCombinedSignal;
     String[] mContentDescriptionDataType;
 
+    //Added for bug#213435 sim lock begin
+    boolean[] mSimLock;
+    boolean[] mNetworkLocked;
+    boolean[] mNetworkSubsetLocked;
+    boolean[] mServiceProviderLocked;
+    boolean[] mCorporateLocked;
+    //Added for bug#213435 sim lock end
+
     // wifi
     final WifiManager mWifiManager;
     AsyncChannel mWifiChannel;
@@ -261,6 +269,14 @@ public class NetworkController extends BroadcastReceiver {
         mLastSignalLevel = new int[numPhones];
         mDataIconList = new int[numPhones][TelephonyIcons.DATA_G[0].length];
 
+        //Added for bug#213435 sim lock begin
+        mSimLock = new boolean[numPhones];
+        mNetworkLocked = new boolean[numPhones];
+        mNetworkSubsetLocked = new boolean[numPhones];
+        mServiceProviderLocked = new boolean[numPhones];
+        mCorporateLocked = new boolean[numPhones];
+        //Added for bug#213435 sim lock end
+
         ConnectivityManager cm = (ConnectivityManager)mContext.getSystemService(
                 Context.CONNECTIVITY_SERVICE);
         mHasMobileDataFeature = cm.isNetworkSupported(ConnectivityManager.TYPE_MOBILE);
@@ -317,6 +333,13 @@ public class NetworkController extends BroadcastReceiver {
             mLastSimColor[i] = -1;
             mNetworkName[i] = mNetworkNameDefault;
             mDataIconList[i] = TelephonyIcons.DATA_G[0];
+            //Added for bug#213435 sim lock begin
+            mSimLock[i] = false;
+            mNetworkLocked[i] = false;
+            mNetworkSubsetLocked[i] = false;
+            mServiceProviderLocked[i] = false;
+            mCorporateLocked[i] = false;
+            //Added for bug#213435 sim lock end
         }
         mHspaDataDistinguishable = mContext.getResources().getBoolean(
                 R.bool.config_hspa_data_distinguishable);
@@ -492,6 +515,11 @@ public class NetworkController extends BroadcastReceiver {
             int phoneId = intent.getIntExtra(IccCard.INTENT_KEY_PHONE_ID, 0);
             updateSimState(intent);
             updateDataIcon(phoneId);
+            //Added for bug#213435 sim lock begin
+            if(mPhone[phoneId].checkSimLocked(context, phoneId)){
+                updateNetworkName(false, null, false, null, phoneId);
+            }
+            //Added for bug#213435 sim lock end
             refreshViews(phoneId);
         } else if (action.equals(Telephony.Intents.SPN_STRINGS_UPDATED_ACTION)) {
             final int phoneId = intent.getIntExtra(Intents.EXTRA_PHONE_ID, 0);
@@ -627,9 +655,31 @@ public class NetworkController extends BroadcastReceiver {
             else if (IccCard.INTENT_VALUE_LOCKED_ON_PUK.equals(lockedReason)) {
                 mSimState[phoneId] = IccCard.State.PUK_REQUIRED;
             }
-            else {
+            //Modified for bug#213435 sim lock begin
+            else if (IccCard.INTENT_VALUE_LOCKED_NETWORK.equals(lockedReason)) {
                 mSimState[phoneId] = IccCard.State.NETWORK_LOCKED;
+                mNetworkLocked[phoneId] = true;
             }
+            else if (IccCard.INTENT_VALUE_LOCKED_NETWORK_SUBSET.equals(lockedReason)) {
+                mSimState[phoneId] = IccCard.State.NETWORK_SUBSET_LOCKED;
+                mNetworkSubsetLocked[phoneId] = true;
+            }
+            else if (IccCard.INTENT_VALUE_LOCKED_SERVICE_PROVIDER.equals(lockedReason)) {
+                mSimState[phoneId] = IccCard.State.SERVICE_PROVIDER_LOCKED;
+                mServiceProviderLocked[phoneId] = true;
+            }
+            else if (IccCard.INTENT_VALUE_LOCKED_CORPORATE.equals(lockedReason)) {
+                mSimState[phoneId] = IccCard.State.CORPORATE_LOCKED;
+                mCorporateLocked[phoneId] = true;
+            }
+            else if (IccCard.INTENT_VALUE_LOCKED_SIM.equals(lockedReason)) {
+                mSimState[phoneId] = IccCard.State.SIM_LOCKED;
+                mSimLock[phoneId] = true;
+            }
+            else {
+                mSimState[phoneId] = IccCard.State.UNKNOWN;
+            }
+            //Modified for bug#213435 sim lock end
         } else {
             mSimState[phoneId] = IccCard.State.UNKNOWN;
         }
@@ -1115,19 +1165,33 @@ public class NetworkController extends BroadcastReceiver {
 		                    && plmn != null
 		                    && plmn.equals(mContext
 		                            .getString(com.android.internal.R.string.lockscreen_carrier_default))) {
-		                if (!hasSim) {
+                                //Modified for bug#213435 sim lock begin
+		                if (!hasSim && !mPhone[phoneId].checkSimLocked(mContext, phoneId)) {
+                                //Modified for bug#213435 sim lock end
 		                    str.append(" | ");
 		                    str.append(mContext
 		                            .getString(com.android.internal.R.string.lockscreen_missing_sim_message_short));
 		                }
 		            }
+		            //Added for bug#213435 sim lock begin
+		            if(mPhone[phoneId].checkSimLocked(mContext, phoneId)) {
+		                str.append(addSimLockName(phoneId));
+		            }
+		            //Added for bug#213435 sim lock end
 		        } else {
 		            str.append(mContext.getString(com.android.internal.R.string.lockscreen_carrier_default));
-		            if (!hasSim) {
+                            //Modified for bug#213435 sim lock begin
+		            if (!hasSim && !mPhone[phoneId].checkSimLocked(mContext, phoneId)) {
+                            //Modified for bug#213435 sim lock end
 		                str.append(" | ");
 		                str.append(mContext
 		                        .getString(com.android.internal.R.string.lockscreen_missing_sim_message_short));
 		            }
+	                    //Added for bug#213435 sim lock begin
+	                    else if(mPhone[phoneId].checkSimLocked(mContext, phoneId)) {
+	                        str.append(addSimLockName(phoneId));
+	                    }
+	                    //Added for bug#213435 sim lock end
 		        }
       }
       mNetworkName[phoneId] = str.toString();
@@ -2131,4 +2195,31 @@ public class NetworkController extends BroadcastReceiver {
         }
     };
     //add by spreadst_lc for cmcc wifi feature end
+
+    //Added for bug#213435 sim lock begin
+    private String addSimLockName(int phoneId){
+        StringBuilder lockString = new StringBuilder();
+        if(mSimLock[phoneId]){
+            lockString.append(" | ");
+            lockString.append(mContext.getString(com.android.internal.R.string.lockscreen_sim_card_locked_message));
+        }
+        if(mNetworkLocked[phoneId]){
+            lockString.append(" | ");
+            lockString.append(mContext.getString(com.android.internal.R.string.lockscreen_sim_network_locked_message));
+        }
+        if (mNetworkSubsetLocked[phoneId]) {
+            lockString.append(" | ");
+            lockString.append(mContext.getString(com.android.internal.R.string.lockscreen_sim_nws_locked_message));
+        }
+        if (mServiceProviderLocked[phoneId]) {
+            lockString.append(" | ");
+            lockString.append(mContext.getString(com.android.internal.R.string.lockscreen_sim_sp_locked_message));
+        }
+        if (mCorporateLocked[phoneId]) {
+            lockString.append(" | ");
+            lockString.append(mContext.getString(com.android.internal.R.string.lockscreen_sim_corporate_locked_message));
+        }
+        return lockString.toString();
+    }
+    //Added for bug#213435 sim lock end
 }

@@ -365,19 +365,39 @@ public class PhoneFactory {
                 settingPhoneId = TelephonyManager.getSettingPhoneId(sContext);
             }
             boolean isHasCardAbsent = false;
+            //Modified for bug#213435 sim lock begin
+            int lockCount = 0;
+            boolean simLocked[] = new boolean [TelephonyManager.getPhoneCount()];
             for (int i = 0; i < TelephonyManager.getPhoneCount(); i++){
                 isHasCardAbsent |= getSimState(i) == State.ABSENT && i == defaultPhoneId;
+                simLocked[i] = false;
+                if (TelephonyManager.checkSimLocked(sContext, i)) {
+                    lockCount ++;
+                    simLocked[i] = true;
+                }
             }
             Log.d(LOG_TAG, "isHasCardAbsent= "+isHasCardAbsent);
+
+            boolean simLockedNotAll = lockCount > 0 && lockCount < TelephonyManager.getPhoneCount();
+
             if(UNIVERSEUI_SUPPORT){
                 if (isUpdate || isHasCardAbsent && settingPhoneId != defaultPhoneId&& !isCardExist(defaultPhoneId)){
                     updateDefaultPhoneId(settingPhoneId);
                 }
             }else{
-                if (isUpdate || isHasCardAbsent && settingPhoneId != defaultPhoneId) {
+                if (isUpdate || isHasCardAbsent || (simLockedNotAll && !simLocked[settingPhoneId]) && settingPhoneId != defaultPhoneId) {
                     updateDefaultPhoneId(settingPhoneId);
                 }
+                else if (simLockedNotAll) {
+                    for (int i = 0; i < TelephonyManager.getPhoneCount(); i++){
+                        if (!simLocked[i] && isCardExist(i)) {
+                            updateDefaultPhoneId(i);
+                            break;
+                        }
+                    }
+                }
             }
+            //Modified for bug#213435 sim lock end
 
             if (!UNIVERSEUI_SUPPORT) {
                 setDefaultValue();

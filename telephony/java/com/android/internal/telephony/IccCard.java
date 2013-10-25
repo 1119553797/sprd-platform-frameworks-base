@@ -74,6 +74,12 @@ public class IccCard {
     private RegistrantList mNetworkLockedRegistrants = new RegistrantList();
     protected RegistrantList mReadyRegistrants = new RegistrantList();
     protected RegistrantList mRuimReadyRegistrants = new RegistrantList();
+    //Added for bug#213435 sim lock begin
+    private RegistrantList mNetworkSubsetLockedRegistrants = new RegistrantList(); //network subset lock
+    private RegistrantList mServiceProviderLockedRegistrants = new RegistrantList(); //service provider lock
+    private RegistrantList mCorporateLockedRegistrants = new RegistrantList(); //corporate lock
+    private RegistrantList mSimLockedRegistrants = new RegistrantList(); //sim lock
+    //Added for bug#213435 sim lock end
 
     private boolean mDesiredPinLocked;
     private boolean mDesiredFdnEnabled;
@@ -85,6 +91,11 @@ public class IccCard {
 
     private boolean mIccSimEnabled = false;
     private boolean mIccNetworkEnabled = false;
+    //Added for bug#213435 sim lock begin
+    private boolean mIccNetworkSubsetEnabled = false;
+    private boolean mIccServiceProviderEnabled = false;
+    private boolean mIccCorporateEnabled = false;
+    //Added for bug#213435 sim lock end
 
     private boolean mIccPin2Blocked = false; // Default to disabled.
     // Will be updated when sim status changes.
@@ -123,6 +134,11 @@ public class IccCard {
     /* NETWORK means ICC is locked on NETWORK PERSONALIZATION */
     static public final String INTENT_VALUE_LOCKED_NETWORK = "NETWORK";
     static public final String INTENT_VALUE_LOCKED_SIM = "SIM";
+    //Added for bug#213435 sim lock begin
+    static public final String INTENT_VALUE_LOCKED_NETWORK_SUBSET = "NETWORK_SUBSET"; //network subset lock
+    static public final String INTENT_VALUE_LOCKED_SERVICE_PROVIDER = "SERVICE_PROVIDER"; //service provider lock
+    static public final String INTENT_VALUE_LOCKED_CORPORATE = "CORPORATE"; //corporate lock
+    //Added for bug#213435 sim lock end
     /* PERM_DISABLED means ICC is permanently disabled due to puk fails */
     static public final String INTENT_VALUE_ABSENT_ON_PERM_DISABLED = "PERM_DISABLED";
 
@@ -158,6 +174,14 @@ public class IccCard {
     private static final int EVENT_CHANGE_FACILITY_NETWORK_DONE = 20;
     private static final int EVENT_QUERY_FACILITY_SIM_DONE = 21;
     private static final int EVENT_CHANGE_FACILITY_SIM_DONE = 22;
+    //Added for bug#213435 sim lock begin
+    private static final int EVENT_QUERY_FACILITY_NETWORK_SUBSET_DONE = 23;
+    private static final int EVENT_CHANGE_FACILITY_NETWORK_SUBSET_DONE = 24;
+    private static final int EVENT_QUERY_FACILITY_SERVICE_PROVIDER_DONE = 25;
+    private static final int EVENT_CHANGE_FACILITY_SERVICE_PROVIDER_DONE = 26;
+    private static final int EVENT_QUERY_FACILITY_CORPORATE_DONE = 27;
+    private static final int EVENT_CHANGE_FACILITY_CORPORATE_DONE = 28;
+    //Added for bug#213435 sim lock end
 
     /*
       UNKNOWN is a transient state, for example, after uesr inputs ICC pin under
@@ -173,6 +197,11 @@ public class IccCard {
         READY,
         BLOCKED,
         SIM_LOCKED,
+        //Added for bug#213435 sim lock begin
+        NETWORK_SUBSET_LOCKED,//network subset lock
+        SERVICE_PROVIDER_LOCKED,//Service Provider lock
+        CORPORATE_LOCKED,//Corporate lock
+        //Added for bug#213435 sim lock end
         NOT_READY,
         PERM_DISABLED;
 
@@ -299,6 +328,68 @@ public class IccCard {
     public void unregisterForNetworkLocked(Handler h) {
         mNetworkLockedRegistrants.remove(h);
     }
+
+    //Added for bug#213435 sim lock begin
+    /**
+     * Notifies handler of any transition into State.NETWORK_SUBSET_LOCKED
+     */
+    public void registerForNetworkSubsetLocked(Handler h, int what, Object obj) {
+        Registrant r = new Registrant (h, what, obj);
+        mNetworkSubsetLockedRegistrants.add(r);
+        if (getState() == State.NETWORK_SUBSET_LOCKED) {
+            r.notifyRegistrant();
+        }
+    }
+
+    public void unregisterForNetworkSubsetLocked(Handler h) {
+        mNetworkSubsetLockedRegistrants.remove(h);
+    }
+
+    /**
+     * Notifies handler of any transition into State.SERVICE_PROVIDER_LOCKED
+     */
+    public void registerForServiceProviderLocked(Handler h, int what, Object obj) {
+        Registrant r = new Registrant (h, what, obj);
+        mServiceProviderLockedRegistrants.add(r);
+        if (getState() == State.SERVICE_PROVIDER_LOCKED) {
+            r.notifyRegistrant();
+        }
+    }
+
+    public void unregisterForServiceProviderLocked(Handler h) {
+        mServiceProviderLockedRegistrants.remove(h);
+    }
+
+    /**
+     * Notifies handler of any transition into State.CORPORATE_LOCKED
+     */
+    public void registerForCorporateLocked(Handler h, int what, Object obj) {
+        Registrant r = new Registrant (h, what, obj);
+        mCorporateLockedRegistrants.add(r);
+        if (getState() == State.CORPORATE_LOCKED) {
+            r.notifyRegistrant();
+        }
+    }
+
+    public void unregisterForCorporateLocked(Handler h) {
+        mCorporateLockedRegistrants.remove(h);
+    }
+
+    /**
+     * Notifies handler of any transition into State.SIM_LOCKED
+     */
+    public void registerForSimLocked(Handler h, int what, Object obj) {
+        Registrant r = new Registrant (h, what, obj);
+        mSimLockedRegistrants.add(r);
+        if (getState() == State.SIM_LOCKED) {
+            r.notifyRegistrant();
+        }
+    }
+
+    public void unregisterForSimLocked(Handler h) {
+        mSimLockedRegistrants.remove(h);
+    }
+    //Added for bug#213435 sim lock end
 
     /**
      * Notifies handler of any transition into State.isPinLocked()
@@ -470,6 +561,30 @@ public class IccCard {
                  mHandler.obtainMessage(EVENT_CHANGE_FACILITY_NETWORK_DONE, onComplete));
      }
 
+     //Added for bug#213435 sim lock begin
+     public void setNetworkSubsetLockEnabled (boolean enabled,
+             String password, Message onComplete) {
+         int serviceClassX = 0;
+         mPhone.mCM.setFacilityLock(CommandsInterface.CB_FACILITY_BA_PU,
+                 enabled, password, serviceClassX,
+                 mHandler.obtainMessage(EVENT_CHANGE_FACILITY_NETWORK_SUBSET_DONE, onComplete));
+     }
+     public void setServiceProviderLockEnabled (boolean enabled,
+             String password, Message onComplete) {
+         int serviceClassX = 0;
+         mPhone.mCM.setFacilityLock(CommandsInterface.CB_FACILITY_BA_PP,
+                 enabled, password, serviceClassX,
+                 mHandler.obtainMessage(EVENT_CHANGE_FACILITY_SERVICE_PROVIDER_DONE, onComplete));
+     }
+     public void setCorporateLockEnabled (boolean enabled,
+             String password, Message onComplete) {
+         int serviceClassX = 0;
+         mPhone.mCM.setFacilityLock(CommandsInterface.CB_FACILITY_BA_PC,
+                 enabled, password, serviceClassX,
+                 mHandler.obtainMessage(EVENT_CHANGE_FACILITY_CORPORATE_DONE, onComplete));
+     }
+     //Added for bug#213435 sim lock end
+
      /**
       * @return No. of Attempts remaining to unlock PIN1/PUK1
       */
@@ -619,6 +734,11 @@ public class IccCard {
         boolean isIccCardRemoved;
         boolean isIccCardAdded;
         boolean transitionedIntoCardPresent;
+        //Added for bug#213435 sim lock begin
+        boolean transitionedIntoNetworkSubsetLocked;
+        boolean transitionedIntoServicePorviderLocked;
+        boolean transitionedIntoCorporateLocked;
+        //Added for bug#213435 sim lock end
 
         State oldState, newState;
         State oldRuimState = getRuimState();
@@ -650,6 +770,11 @@ public class IccCard {
         transitionedIntoNetworkLocked = (oldState != State.NETWORK_LOCKED
                 && newState == State.NETWORK_LOCKED);
         transitionedIntoSimLocked = (oldState != State.SIM_LOCKED && newState == State.SIM_LOCKED);
+        //Added for bug#213435 sim lock begin
+        transitionedIntoNetworkSubsetLocked = (oldState != State.NETWORK_SUBSET_LOCKED && newState == State.NETWORK_SUBSET_LOCKED);
+        transitionedIntoServicePorviderLocked = (oldState != State.SERVICE_PROVIDER_LOCKED && newState == State.SERVICE_PROVIDER_LOCKED);
+        transitionedIntoCorporateLocked = (oldState != State.CORPORATE_LOCKED && newState == State.CORPORATE_LOCKED);
+        //Added for bug#213435 sim lock end
         transitionedIntoIccBlocked = (oldState != State.BLOCKED && newState == State.BLOCKED);
         transitionedIntoPermBlocked = (oldState != State.PERM_DISABLED
                 && newState == State.PERM_DISABLED);
@@ -681,8 +806,27 @@ public class IccCard {
                   INTENT_VALUE_LOCKED_NETWORK);
         } else if (transitionedIntoSimLocked){
             if(mDbg) log("Notify SIM locked.");
+            //Added for bug#213435 sim lock begin
+            mSimLockedRegistrants.notifyRegistrants();
+            //Added for bug#213435 sim lock end
             broadcastIccStateChangedIntent(INTENT_VALUE_ICC_LOCKED, INTENT_VALUE_LOCKED_SIM);
-        } else if (transitionedIntoPermBlocked) {
+        }
+        //Added for bug#213435 sim lock begin
+        else if(transitionedIntoNetworkSubsetLocked) {
+            if(mDbg) log("Notify SIM network subset locked.");
+            mNetworkSubsetLockedRegistrants.notifyRegistrants();
+            broadcastIccStateChangedIntent(INTENT_VALUE_ICC_LOCKED,INTENT_VALUE_LOCKED_NETWORK_SUBSET);
+        } else if(transitionedIntoServicePorviderLocked) {
+            if(mDbg) log("Notify SIM service porvider locked.");
+            mServiceProviderLockedRegistrants.notifyRegistrants();
+            broadcastIccStateChangedIntent(INTENT_VALUE_ICC_LOCKED,INTENT_VALUE_LOCKED_SERVICE_PROVIDER);
+        } else if(transitionedIntoCorporateLocked) {
+            if(mDbg) log("Notify SIM corporate locked.");
+            mCorporateLockedRegistrants.notifyRegistrants();
+            broadcastIccStateChangedIntent(INTENT_VALUE_ICC_LOCKED,INTENT_VALUE_LOCKED_CORPORATE);
+        }
+        //Added for bug#213435 sim lock end
+        else if (transitionedIntoPermBlocked) {
             if (mDbg) log("Notify SIM permanently disabled.");
             broadcastIccStateChangedIntent(INTENT_VALUE_ICC_ABSENT,
                     INTENT_VALUE_ABSENT_ON_PERM_DISABLED);
@@ -1115,6 +1259,53 @@ public class IccCard {
                                                         = arc.exception;
                     ((Message)arc.userObj).sendToTarget();
                     break;
+                //Added for bug#213435 sim lock begin
+                case EVENT_CHANGE_FACILITY_NETWORK_SUBSET_DONE:
+                    ar = (AsyncResult)msg.obj;
+
+                    if (ar.exception == null) {
+                        mIccNetworkSubsetEnabled = mDesiredNetworkEnabled;
+                        if (mDbg) log("EVENT_CHANGE_FACILITY_NETWORK_SUBSET_DONE: " +
+                                "mIccNetworkSubsetEnabled=" + mIccNetworkSubsetEnabled);
+                    } else {
+                        Log.e(mLogTag, "Error change facility network subset with exception "
+                                + ar.exception);
+                    }
+                    AsyncResult.forMessage(((Message)ar.userObj)).exception
+                                                        = ar.exception;
+                    ((Message)ar.userObj).sendToTarget();
+                    break;
+                case EVENT_CHANGE_FACILITY_SERVICE_PROVIDER_DONE:
+                    ar = (AsyncResult)msg.obj;
+
+                    if (ar.exception == null) {
+                        mIccServiceProviderEnabled = mDesiredNetworkEnabled;
+                        if (mDbg) log("EVENT_CHANGE_FACILITY_SERVICE_PROVIDER_DONE: " +
+                                "mIccServiceProviderEnabled=" + mIccServiceProviderEnabled);
+                    } else {
+                        Log.e(mLogTag, "Error change facility service provider with exception "
+                                + ar.exception);
+                    }
+                    AsyncResult.forMessage(((Message)ar.userObj)).exception
+                                                        = ar.exception;
+                    ((Message)ar.userObj).sendToTarget();
+                    break;
+                case EVENT_CHANGE_FACILITY_CORPORATE_DONE:
+                    ar = (AsyncResult)msg.obj;
+
+                    if (ar.exception == null) {
+                        mIccCorporateEnabled = mDesiredNetworkEnabled;
+                        if (mDbg) log("EVENT_CHANGE_FACILITY_CORPORATE_DONE: " +
+                                "mIccNetworkEnabled=" + mIccCorporateEnabled);
+                    } else {
+                        Log.e(mLogTag, "Error change facility corporate with exception "
+                                + ar.exception);
+                    }
+                    AsyncResult.forMessage(((Message)ar.userObj)).exception
+                                                        = ar.exception;
+                    ((Message)ar.userObj).sendToTarget();
+                    break;
+                //Added for bug#213435 sim lock end
                 case EVENT_CHANGE_ICC_PASSWORD_DONE:
                 case EVENT_CHANGE_FDN_PASSWORD_DONE:
                     if (msg.what == EVENT_CHANGE_ICC_PASSWORD_DONE) {
@@ -1252,7 +1443,19 @@ public class IccCard {
             return IccCard.State.BLOCKED;
         }
         if (app.app_state.isSubscriptionPersoEnabled()) {
-            return IccCard.State.NETWORK_LOCKED;
+            //Modified for bug#213435 sim lock begin
+            if (app.perso_substate.isNetworkBlocked()){
+                return IccCard.State.NETWORK_LOCKED;
+            } else if (app.perso_substate.isNetworkSubsetBlocked()) {
+                return IccCard.State.NETWORK_SUBSET_LOCKED;
+            } else if (app.perso_substate.isServiceProviderBlocked()) {
+                return IccCard.State.SERVICE_PROVIDER_LOCKED;
+            } else if (app.perso_substate.isCorporateBlocked()) {
+                return IccCard.State.CORPORATE_LOCKED;
+            } else if (app.perso_substate.isSimBlocked()) {
+                return IccCard.State.SIM_LOCKED;
+            }
+            //Modified for bug#213435 sim lock end
         }
         if (app.app_state.isAppReady()) {
             return IccCard.State.READY;

@@ -128,5 +128,8 @@ public interface SprdVideoPhone {
      * create MO and the other has MT at the sametime
      */
     public void recordPhoneState(Phone.State state);
+    //Added for bug#213435 sim lock begin
+    public int getSimLockRemainTimes(int type);
+    //Added for bug#213435 sim lock end
 }
 

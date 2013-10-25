@@ -70,5 +70,9 @@ public interface SprdCommandsInterface {
 
     public void registerForSimNotDetected(Handler h, int what, Object obj);
     public void unregisterForSimNotDetected(Handler h);
+
+    //Added for bug#213435 sim lock begin
+    public void getSimLockRemainTimes(int type, Message result);
+    //Added for bug#213435 sim lock end
 }
 

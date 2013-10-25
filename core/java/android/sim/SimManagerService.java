@@ -92,6 +92,11 @@ public class SimManagerService extends ISimManager.Stub {
         filter.addAction(TelephonyIntents.ACTION_SIM_STATE_CHANGED);
         filter.addAction(TelephonyIntents.ACTION_SIM_ACTIVED_STATE);
         filter.addAction(Intents.SPN_STRINGS_UPDATED_ACTION);
+        //Added for bug#213435 sim lock begin
+        for (int i=0; i<TelephonyManager.getPhoneCount(); i++) {
+            filter.addAction(TelephonyIntents.ACTION_SIM_DONE_LOAD_ICCID + i);
+        }
+        //Added for bug#213435 sim lock end
         mContext.registerReceiver(mReceiver, filter);
 
         mPreferences = mContext.getSharedPreferences(PREFS_NAME, 0);
@@ -122,39 +127,54 @@ public class SimManagerService extends ISimManager.Stub {
 
         public void onReceive(Context context, Intent intent) {
 
-            int phoneId = intent.getIntExtra(IccCard.INTENT_KEY_PHONE_ID, 0);
-            TelephonyManager telManager = (TelephonyManager) context.getSystemService(PhoneFactory .getServiceName(Context.TELEPHONY_SERVICE, phoneId));
-            if (TelephonyIntents.ACTION_SIM_STATE_CHANGED.equals(intent.getAction())) {
-                String state = intent.getStringExtra(IccCard.INTENT_KEY_ICC_STATE);
-
-                Log.i(TAG, "ACTION_SIM_STATE_CHANGED:phoneId=" + phoneId + ", state=" + state);
-                if (!IccCard.INTENT_VALUE_ICC_LOADED.equals(state)) {
-                    Log.i(TAG, "sim didn't loaded");
+            //Modified for bug#213435 sim lock begin
+            int phoneId = 0;
+            TelephonyManager telManager = null;
+            if (intent.getAction().startsWith(TelephonyIntents.ACTION_SIM_DONE_LOAD_ICCID)){
+                phoneId = Integer.parseInt(intent.getAction().substring(TelephonyIntents.ACTION_SIM_DONE_LOAD_ICCID.length()));
+                Log.d(TAG, "SimLoadedReceiver-->ACTION_SIM_DONE_LOAD_ICCID, phoneId = " + phoneId);
+                if (!TelephonyManager.checkSimLocked(context, phoneId)) {
+                    Log.d(TAG, "SimLoadedReceiver-->RETURNED FOR SIM NOT LOCKED!");
                     return;
                 }
-            } else if (intent.getAction().startsWith(Intents.SPN_STRINGS_UPDATED_ACTION)) {
-                Sim sim = mSimCacheByPhoneId.get(phoneId);
-                if (sim == null || !TextUtils.isEmpty(sim.getName())) {
-                    return;
-                }
-                String operator = telManager.getNetworkOperatorName();
-                if (TextUtils.isEmpty(operator)) {
-                    Log.i(TAG, "Can not get the operator info now, and the operator is " + operator);
-                    return;
-                }
-                String name = "";
-                int serial = sim.getSerialNum();
-                if (serial < 10) {
-                    name = operator + " 0" + serial;
-                } else {
-                    name = operator + " " + serial;
-                }
-                SharedPreferences.Editor editor = mPreferences.edit();
-                editor.putString(SIM_NAME + serial, name);
-                editor.commit();
-                sim.setName(name);
-                return;
+                telManager = (TelephonyManager) context.getSystemService(PhoneFactory.getServiceName(Context.TELEPHONY_SERVICE, phoneId));
             }
+            else {
+                phoneId = intent.getIntExtra(IccCard.INTENT_KEY_PHONE_ID, 0);
+                telManager = (TelephonyManager) context.getSystemService(PhoneFactory .getServiceName(Context.TELEPHONY_SERVICE, phoneId));
+                if (TelephonyIntents.ACTION_SIM_STATE_CHANGED.equals(intent.getAction())) {
+                    String state = intent.getStringExtra(IccCard.INTENT_KEY_ICC_STATE);
+
+                    Log.i(TAG, "ACTION_SIM_STATE_CHANGED:phoneId=" + phoneId + ", state=" + state);
+                    if (!IccCard.INTENT_VALUE_ICC_LOADED.equals(state) && !TelephonyManager.checkSimLocked(context, phoneId)) {
+                        Log.i(TAG, "sim didn't loaded");
+                        return;
+                    }
+                } else if (intent.getAction().startsWith(Intents.SPN_STRINGS_UPDATED_ACTION)) {
+                    Sim sim = mSimCacheByPhoneId.get(phoneId);
+                    if (sim == null || !TextUtils.isEmpty(sim.getName())) {
+                        return;
+                    }
+                    String operator = telManager.getNetworkOperatorName();
+                    if (TextUtils.isEmpty(operator)) {
+                        Log.i(TAG, "Can not get the operator info now, and the operator is " + operator);
+                        return;
+                    }
+                    String name = "";
+                    int serial = sim.getSerialNum();
+                    if (serial < 10) {
+                        name = operator + " 0" + serial;
+                    } else {
+                        name = operator + " " + serial;
+                    }
+                    SharedPreferences.Editor editor = mPreferences.edit();
+                    editor.putString(SIM_NAME + serial, name);
+                    editor.commit();
+                    sim.setName(name);
+                    return;
+                }
+            }
+            //Modified for bug#213435 sim lock end
 
             Log.i(TAG, "onReceive:" + intent.getAction());
             Log.i(TAG, "phoneId=" + phoneId);

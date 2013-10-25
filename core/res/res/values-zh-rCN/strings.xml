@@ -1414,4 +1414,9 @@
   <string name="pick_yes">继续</string>
   <string name="pick_no">取消</string>
   <string name="language_automatic">自动</string>
+  <!-- Added for bug#213435 sim lock begin -->
+  <string name="lockscreen_sim_nws_locked_message">网络子集锁已锁</string>
+  <string name="lockscreen_sim_sp_locked_message">服务商锁已锁</string>
+  <string name="lockscreen_sim_corporate_locked_message">集团锁已锁</string>
+  <!-- Added for bug#213435 sim lock end -->
 </resources>

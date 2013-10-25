@@ -261,6 +261,14 @@ public class CDMALTEPhone extends CDMAPhone {
     public boolean getCallForwardingIndicator(int serviceClass) {
         return false;
     }
+
+    //Added for bug#213435 sim lock begin
+    @Override
+    public int getSimLockRemainTimes(int type) {
+        return 0;
+    }
+    //Added for bug#213435 sim lock end
+
     @Override
     protected void log(String s) {
             Log.d(LOG_TAG, "[CDMALTEPhone] " + s);

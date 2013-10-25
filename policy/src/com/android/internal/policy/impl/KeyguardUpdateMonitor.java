@@ -189,7 +189,17 @@ public class KeyguardUpdateMonitor {
                     state[simSubscription] = IccCard.State.NETWORK_LOCKED;
                 } else if (IccCard.INTENT_VALUE_LOCKED_SIM.equals(lockedReason)) {
                     state[simSubscription] = IccCard.State.SIM_LOCKED;
-                } else {
+                }
+                //Added for bug#213435 sim lock begin
+                else if (IccCard.INTENT_VALUE_LOCKED_NETWORK_SUBSET.equals(lockedReason)) {
+                    state[simSubscription] = IccCard.State.NETWORK_SUBSET_LOCKED;
+                } else if (IccCard.INTENT_VALUE_LOCKED_SERVICE_PROVIDER.equals(lockedReason)) {
+                    state[simSubscription] = IccCard.State.SERVICE_PROVIDER_LOCKED;
+                } else if (IccCard.INTENT_VALUE_LOCKED_CORPORATE.equals(lockedReason)) {
+                    state[simSubscription] = IccCard.State.CORPORATE_LOCKED;
+                }
+                //Added for bug#213435 sim lock end
+                else {
                     state[simSubscription] = IccCard.State.UNKNOWN;
                 }
             } else if (IccCard.INTENT_VALUE_ICC_NOT_READY.equals(stateExtra)) {
