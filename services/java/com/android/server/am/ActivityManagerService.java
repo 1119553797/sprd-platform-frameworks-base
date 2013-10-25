@@ -783,7 +783,7 @@ public final class ActivityManagerService extends ActivityManagerNative
     /**
      * Temporary to avoid allocations.  Protected by main lock.
      */
-    final StringBuilder mStringBuilder = new StringBuilder(256);
+    final StringBuilder mStringBuilder = new StringBuilder(512);
     
     /**
      * Used to control how we initialize the service.
@@ -9544,7 +9544,6 @@ public final class ActivityManagerService extends ActivityManagerNative
         fixAdjList.put("com.tencent.mobileqq", 2);
         fixAdjList.put("com.tencent.mm:push", 2);
         fixAdjList.put("com.tencent.mm", 2);
-       // fixAdjList.put("com.android.contacts", 2);
         fixAdjList.put("cmccwm.mobilemusic", 2);
         fixAdjList.put("com.android.music", 2);	 
     }
