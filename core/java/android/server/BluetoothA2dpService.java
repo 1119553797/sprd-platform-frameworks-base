@@ -25,6 +25,7 @@ package android.server;
 import android.bluetooth.BluetoothA2dp;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothProfile;
 import android.bluetooth.BluetoothUuid;
 import android.bluetooth.IBluetoothA2dp;
 import android.content.BroadcastReceiver;
@@ -35,6 +36,7 @@ import android.media.AudioManager;
 import android.os.Handler;
 import android.os.Message;
 import android.os.ParcelUuid;
+import android.os.RemoteException;
 import android.provider.Settings;
 import android.util.Log;
 
@@ -514,6 +516,11 @@ public class BluetoothA2dpService extends IBluetoothA2dp.Stub {
             mContext.sendBroadcast(intent, BLUETOOTH_PERM);
 
             if (DBG) log("A2DP state : device: " + device + " State:" + prevState + "->" + state);
+            if ((prevState == BluetoothA2dp.STATE_PLAYING) && ((state ==  BluetoothA2dp.STATE_DISCONNECTED)
+                    ||(state ==  BluetoothA2dp.STATE_DISCONNECTING))) {
+                prevState = BluetoothA2dp.STATE_CONNECTED;
+            }
+            mBluetoothService.sendConnectionStateChange(device, BluetoothProfile.A2DP, state,prevState);
         }
     }
 
