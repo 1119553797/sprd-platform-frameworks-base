@@ -80,17 +80,17 @@ public class ExternalStorageFormatter extends Service
             mAlwaysReset = true;
         }
 
-        if (mProgressDialog == null) {
-            mProgressDialog = new ProgressDialog(this);
-            mProgressDialog.setIndeterminate(true);
-            mProgressDialog.setCancelable(true);
-            mProgressDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
-            if (!mAlwaysReset) {
-                mProgressDialog.setOnCancelListener(this);
-            }
+//        if (mProgressDialog == null) {
+//            mProgressDialog = new ProgressDialog(this);
+//            mProgressDialog.setIndeterminate(true);
+//            mProgressDialog.setCancelable(true);
+//            mProgressDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+//            if (!mAlwaysReset) {
+//                mProgressDialog.setOnCancelListener(this);
+//            }
             updateProgressState();
-            mProgressDialog.show();
-        }
+//            mProgressDialog.show();
+//        }
 
         return Service.START_REDELIVER_INTENT;
     }
@@ -203,15 +203,16 @@ public class ExternalStorageFormatter extends Service
     }
 
     public void updateProgressDialog(int msg) {
-        if (mProgressDialog == null) {
-            mProgressDialog = new ProgressDialog(this);
-            mProgressDialog.setIndeterminate(true);
-            mProgressDialog.setCancelable(false);
-            mProgressDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
-            mProgressDialog.show();
-        }
-
-        mProgressDialog.setMessage(getText(msg));
+//        if (mProgressDialog == null) {
+//            mProgressDialog = new ProgressDialog(this);
+//            mProgressDialog.setIndeterminate(true);
+//            mProgressDialog.setCancelable(false);
+//            mProgressDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+//            mProgressDialog.show();
+//        }
+//
+//        mProgressDialog.setMessage(getText(msg));
+        Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
     }
 
     IMountService getMountService() {
