@@ -246,7 +246,7 @@ public class SimUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
         @Override
         public void run() {
             try {
-                final boolean result;
+                boolean result = false;
                 IBinder b = ServiceManager.getService(PhoneFactory.getServiceName(
                         Context.TELEPHONY_SERVICE, mSub));
                 if (b != null) {
@@ -260,9 +260,10 @@ public class SimUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
                 }else{
                     Log.e("SimUnlockScreen", "getService('phone') == null");
                 }
+                final boolean tmp = result;
                 post(new Runnable() {
                     public void run() {
-                        onSimLockChangedResponse(result);
+                        onSimLockChangedResponse(tmp);
                     }
                 });
             } catch (RemoteException e) {
