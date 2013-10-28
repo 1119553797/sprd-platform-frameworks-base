@@ -13331,6 +13331,7 @@ public final class ActivityManagerService extends ActivityManagerNative
         ProcessRecord systemUi = null;
         for(ProcessRecord app : mLruProcesses) {
                if(SYSTEMUI_PROC_NAME.equals(app.processName)) {
+                       Log.w(TAG, "[systemUiVisibility] find systemui! pid="+app.pid+"");
                        systemUi = app;
                        break;
                }
@@ -13343,12 +13344,15 @@ public final class ActivityManagerService extends ActivityManagerNative
                }
                return;
         }
+
         if(visible) {
                systemUi.curAdj = mPreSystemUiAdj;
                mCanRestartSystemUi = true;
                if(!mSystemUiIsAlive) {
+                   Log.w(TAG, "[systemUiVisibility]mSystemUiIsAlive=false, start systemui!");
                    startSystemUi(systemUi.thread);
                } else {
+                   Log.w(TAG, "[systemUiVisibility]mSystemUiIsAlive=true, don't start systemui!");
                    systemUi.persistent = true;
                }
         } else {
@@ -13362,10 +13366,12 @@ public final class ActivityManagerService extends ActivityManagerNative
     }
     
     private void startSystemUi(final IApplicationThread caller) {
-        mHandler.post(new Runnable() {
+      Log.w(TAG, "enter startsystemui!");  
+      mHandler.post(new Runnable() {
 
             @Override
             public void run() {
+                Log.w(TAG, "enter startsystemui Runnable!");
                 Intent intent = new Intent();
                 intent.setComponent(new ComponentName("com.android.systemui",
                             "com.android.systemui.statusbar.StatusBarService"));
