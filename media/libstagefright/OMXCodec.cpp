@@ -120,7 +120,7 @@ static const CodecInfo kDecoderInfo[] = {
     { MEDIA_MIMETYPE_AUDIO_AMR_WB, "OMX.TI.WBAMR.decode" },
     { MEDIA_MIMETYPE_AUDIO_AMR_WB, "OMX.google.amrwb.decoder" },
 //    { MEDIA_MIMETYPE_AUDIO_AAC, "OMX.Nvidia.aac.decoder" },
-    { MEDIA_MIMETYPE_AUDIO_AAC, "OMX.TI.AAC.decode" },
+//    { MEDIA_MIMETYPE_AUDIO_AAC, "OMX.TI.AAC.decode" },
     { MEDIA_MIMETYPE_AUDIO_AAC, "OMX.sprd.aac.decoder" },
     { MEDIA_MIMETYPE_AUDIO_AAC, "OMX.google.aac.decoder" },
     { MEDIA_MIMETYPE_AUDIO_IMAADPCM, "OMX.google.imaadpcm.decoder" },
