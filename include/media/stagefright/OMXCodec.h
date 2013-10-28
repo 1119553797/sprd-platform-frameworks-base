@@ -76,9 +76,9 @@ struct OMXCodec : public MediaSource,
 
     virtual status_t read(
             MediaBuffer **buffer, const ReadOptions *options = NULL);
-
+#if 0
     virtual status_t pause();
-
+#endif
     // from MediaBufferObserver
     virtual void signalBufferReturned(MediaBuffer *buffer);
 

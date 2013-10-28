@@ -4797,6 +4797,7 @@ void OMXCodec::initOutputFormat(const sp<MetaData> &inputFormat) {
     }
 }
 
+#if 0
 status_t OMXCodec::pause() {
     Mutex::Autolock autoLock(mLock);
 
@@ -4804,6 +4805,7 @@ status_t OMXCodec::pause() {
 
     return OK;
 }
+#endif
 
 ////////////////////////////////////////////////////////////////////////////////
 
