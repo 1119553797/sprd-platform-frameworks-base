@@ -69,7 +69,7 @@ public class KeyguardSimPinView extends KeyguardAbsKeyInputView
 
     @Override
     protected int getPasswordTextViewId() {
-        return R.id.pinEntry;
+        return R.id.pinEntry_pin;
     }
 
     @Override
@@ -91,8 +91,9 @@ public class KeyguardSimPinView extends KeyguardAbsKeyInputView
             cancel.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mCallback.updatePinUnlockCancel(mSubId);
-                    mCallback.dismiss(true);
+                    KeyguardUpdateMonitor.getInstance(getContext()).updatePinUnlockCancel(mSubId);
+                    KeyguardUpdateMonitor.getInstance(getContext()).reportCancel(mSubId);
+                    // mCallback.dismiss(true);
                 }
             });
         }

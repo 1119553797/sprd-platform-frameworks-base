@@ -105,10 +105,10 @@ public class KeyguardSecurityModel {
         for (int i = 0; i < phoneCount; i++) {
             simState[i] = updateMonitor.getSimState(i);
             Log.d(TAG, "simState = " + simState[i] + ", i = " + i);
-            if (simState[i] == IccCardConstants.State.PIN_REQUIRED && !mIsPinUnlockCancelled[i]) {
+            if (simState[i] == IccCardConstants.State.PIN_REQUIRED && !updateMonitor.mIsPinUnlockCancelled[i]) {
                 mode = i == 0 ? SecurityMode.SimPin : SecurityMode.Sim2Pin;
                 return mode;
-            } else if (simState[i] == IccCardConstants.State.PUK_REQUIRED && !mIsPukUnlockCancelled[i]) {
+            } else if (simState[i] == IccCardConstants.State.PUK_REQUIRED && !updateMonitor.mIsPukUnlockCancelled[i]) {
                 mode = i == 0 ? SecurityMode.SimPuk : SecurityMode.Sim2Puk;
                 return mode;
             }

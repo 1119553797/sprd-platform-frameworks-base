@@ -119,7 +119,7 @@ public class KeyguardSimPukView extends KeyguardAbsKeyInputView
 
     @Override
     protected int getPasswordTextViewId() {
-        return R.id.pinEntry;
+        return R.id.pinEntry_puk;
     }
 
     @Override
@@ -141,8 +141,8 @@ public class KeyguardSimPukView extends KeyguardAbsKeyInputView
             cancel.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mCallback.updatePukUnlockCancel(mSubId);
-                    mCallback.dismiss(true);
+                    KeyguardUpdateMonitor.getInstance(getContext()).updatePukUnlockCancel(mSubId);
+                    KeyguardUpdateMonitor.getInstance(getContext()).reportCancel(mSubId);
                 }
             });
         }

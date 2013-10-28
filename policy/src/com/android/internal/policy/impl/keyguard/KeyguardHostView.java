@@ -1209,6 +1209,7 @@ public class KeyguardHostView extends KeyguardViewBase {
         // Once the screen turns off, we no longer consider this to be first boot and we want the
         // biometric unlock to start next time keyguard is shown.
         KeyguardUpdateMonitor.getInstance(mContext).setAlternateUnlockEnabled(true);
+        KeyguardUpdateMonitor.getInstance(mContext).resetUnlockCancel();
         // We use mAppWidgetToShow to show a particular widget after you add it-- once the screen
         // turns off we reset that behavior
         clearAppWidgetToShow();
@@ -1229,6 +1230,7 @@ public class KeyguardHostView extends KeyguardViewBase {
     @Override
     public void show() {
         if (DEBUG) Log.d(TAG, "show()");
+        KeyguardUpdateMonitor.getInstance(mContext).resetUnlockCancel();
         showPrimarySecurityScreen(false);
     }
 

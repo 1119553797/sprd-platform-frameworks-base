@@ -150,6 +150,9 @@ public class KeyguardUpdateMonitor {
 
     private boolean mSwitchingUser;
 
+    boolean[] mIsPinUnlockCancelled;
+    boolean[] mIsPukUnlockCancelled;
+
     private final Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -607,6 +610,12 @@ public class KeyguardUpdateMonitor {
         } catch (RemoteException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+        }
+        mIsPinUnlockCancelled = new boolean[phoneCount];
+        mIsPukUnlockCancelled = new boolean[phoneCount];
+        for (int i = 0; i < phoneCount; i++) {
+            mIsPinUnlockCancelled[i] = false;
+            mIsPukUnlockCancelled[i] = false;
         }
     }
 
@@ -1066,6 +1075,11 @@ public class KeyguardUpdateMonitor {
         handleSimStateChange(new SimArgs(mSimState, subscription));
     }
 
+
+    public void reportCancel(int subscription){
+        handleSimStateChange(new SimArgs(mSimState, subscription));
+    }
+
     public CharSequence[] getTelephonyPlmn() {
         return mTelephonyPlmn;
     }
@@ -1221,4 +1235,20 @@ public class KeyguardUpdateMonitor {
         return status.level < LOW_BATTERY_THRESHOLD;
     }
     /* @} */
+
+    public void updatePinUnlockCancel(int subscription) {
+        mIsPinUnlockCancelled[subscription] = true;
+    }
+
+    public void updatePukUnlockCancel(int subscription) {
+        mIsPukUnlockCancelled[subscription] = true;
+    }
+
+    public void resetUnlockCancel() {
+        int phoneCount = TelephonyManager.getPhoneCount();
+        for (int i = 0; i < phoneCount; i++) {
+            mIsPinUnlockCancelled[i] = false;
+            mIsPukUnlockCancelled[i] = false;
+        }
+    }
 }
