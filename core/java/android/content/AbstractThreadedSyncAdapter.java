@@ -160,21 +160,10 @@ public abstract class AbstractThreadedSyncAdapter {
                     if (mAutoInitialize
                             && extras != null
                             && extras.getBoolean(ContentResolver.SYNC_EXTRAS_INITIALIZE, false)) {
-                        /* SPRD: This fix ensures that onFinished() is always called in a syncClient 
-                         * even if the application lacks the READ_SYNC_SETTINGS permission. @{ */
-                        // @orig
-//                        if (ContentResolver.getIsSyncable(account, authority) < 0) {
-//                            ContentResolver.setIsSyncable(account, authority, 1);
-//                        }
-//                        syncContextClient.onFinished(new SyncResult());
-                        try {
-                            if (ContentResolver.getIsSyncable(account, authority) < 0) {
-                                ContentResolver.setIsSyncable(account, authority, 1);
-                            }
-                        } finally {
-                            syncContextClient.onFinished(new SyncResult());
+                        if (ContentResolver.getIsSyncable(account, authority) < 0) {
+                            ContentResolver.setIsSyncable(account, authority, 1);
                         }
-                        /* @} */
+                        syncContextClient.onFinished(new SyncResult());
                         return;
                     }
                     SyncThread syncThread = new SyncThread(
