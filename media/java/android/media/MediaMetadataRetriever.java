@@ -59,6 +59,14 @@ public class MediaMetadataRetriever
      * @throws IllegalArgumentException If the path is invalid.
      */
     public void setDataSource(String path) throws IllegalArgumentException {
+        /* SPRD: According to the API documentation and the ICS implementation
+         * the setDataSource(String) method throws an
+         * IllegalArgumentException if path is null. @{ */
+        if (path == null) {
+            throw new IllegalArgumentException();
+        }
+        /* @} */
+
         FileInputStream is = null;
         try {
             is = new FileInputStream(path);
