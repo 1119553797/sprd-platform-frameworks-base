@@ -386,12 +386,19 @@ public class ToggleListener extends BroadcastReceiver implements View.OnClickLis
             return;
         }
 
+        //Modified for bug#213435 sim lock begin
+        int defaultDatePhoneId = 0;
         if (numPhones > 1) {
-            mDataDefaultNetworkOn = mConnManager.getMobileDataEnabledByPhoneId(TelephonyManager
-                    .getDefaultDataPhoneId(mContext));
+            defaultDatePhoneId = TelephonyManager.getDefaultDataPhoneId(mContext);
+            mDataDefaultNetworkOn = mConnManager.getMobileDataEnabledByPhoneId(defaultDatePhoneId);
         } else {
             mDataDefaultNetworkOn = mConnManager.getMobileDataEnabled();
         }
+        boolean dataPhoneisSimLock = TelephonyManager.checkSimLocked(mContext, defaultDatePhoneId);
+        if (dataPhoneisSimLock) {
+            mDataDefaultNetworkOn = false;
+        }
+        //Modified for bug#213435 sim lock end
         Log.d(TAG, "mDataDefaultNetworkOn = " + mDataDefaultNetworkOn);
         if(closeFlag)
           imageID = R.drawable.quick_switch_mobile_data_ing_sprd;
@@ -745,6 +752,13 @@ public class ToggleListener extends BroadcastReceiver implements View.OnClickLis
             return;
         }
         setPhoneId = TelephonyManager.getDefaultDataPhoneId(mContext);
+        //Added for bug#213435 sim lock begin
+        boolean dataPhoneisSimLock = TelephonyManager.checkSimLocked(mContext, setPhoneId);
+        if(dataPhoneisSimLock) {
+            Log.d(TAG, "toggleAutoDataConnection->dataPhoneisSimLock is TRUE, so just return.");
+            return;
+        }
+        //Added for bug#213435 sim lock end
         SimManager simManager = SimManager.get(mContext);
 //20130718 BUG 189145 data connection icon defect START
         int  mPhoneNumber = TelephonyManager.getPhoneCount();

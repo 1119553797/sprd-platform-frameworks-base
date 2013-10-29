@@ -208,7 +208,10 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
 //20130716 Wenny Cheng BUG189864 show no network service and disable emergencycall button in lockscreen START
             }else if(TelephonyIntents.ACTION_SIM_STATE_CHANGED.equals(intent.getAction())&&
                      intent.getIntExtra("phone_id",-1)==phone.getPhoneId() &&
-                     IccCard.INTENT_VALUE_ICC_ABSENT.equals(intent.getStringExtra(IccCard.INTENT_KEY_ICC_STATE))){
+                     //Modified for bug#213435 sim lock begin
+                     (IccCard.INTENT_VALUE_ICC_ABSENT.equals(intent.getStringExtra(IccCard.INTENT_KEY_ICC_STATE))
+                         || IccCard.INTENT_VALUE_ICC_LOCKED.equals(intent.getStringExtra(IccCard.INTENT_KEY_ICC_STATE)))){
+                     //Modified for bug#213435 sim lock end
                 Message msg=new Message();
                 msg.what=EVENT_ICC_STATUS_CHANGED;
                 GsmServiceStateTracker.this.handleMessage(msg);

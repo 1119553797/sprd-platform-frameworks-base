@@ -1143,4 +1143,11 @@ public class SipPhone extends SipPhoneBase {
 		// TODO Auto-generated method stub
 
 	}
+
+    //Added for bug#213435 sim lock begin
+    @Override
+    public int getSimLockRemainTimes(int type) {
+        return 0;
+    }
+    //Added for bug#213435 sim lock end
 }

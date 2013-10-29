@@ -99,6 +99,9 @@ public final class TDPhone extends GSMPhone {
     protected static final int EVENT_GET_SIM_TYPE_DONE       = 105;
     protected static final int EVENT_GET_REGISTRATION_STATE_DONE       = 106;
     protected static final int EVENT_GET_REMIAN_TIMES_DONE       = 107;
+    //Added for bug#213435 sim lock begin
+    protected static final int EVENT_GET_SIMLOCK_REMIAN_TIMES_DONE = 108;
+    //Added for bug#213435 sim lock end
 
     // Constructors
 
@@ -417,6 +420,9 @@ public final class TDPhone extends GSMPhone {
     private String mSimType = null;
     private String[] mRegistrationState = null;
     private int mRemainTimes = -1;
+    //Added for bug#213435 sim lock begin
+    private int mSimlockRemainTimes = -1;
+    //Added for bug#213435 sim lock end
     SyncHandler mHandler;
     class SyncHandler extends Handler
     {
@@ -496,7 +502,21 @@ public final class TDPhone extends GSMPhone {
                         mLock.notifyAll();
                     }
                     break;
-
+                //Added for bug#213435 sim lock begin
+                case EVENT_GET_SIMLOCK_REMIAN_TIMES_DONE:
+                    ar = (AsyncResult) msg.obj;
+                    Log.d(LOG_TAG, "handleMessage EVENT_GET_SIMLOCK_REMIAN_TIMES_DONE");
+                    synchronized (mLock) {
+                        if (ar.exception == null) {
+                            int[] ints = (int[])ar.result;
+                            mSimlockRemainTimes = ints[0] - ints[1];
+                        } else {
+                            mSimlockRemainTimes = -1;
+                        }
+                        mLock.notifyAll();
+                    }
+                    break;
+                //Added for bug#213435 sim lock end
             }
         }
     }
@@ -678,5 +698,26 @@ public final class TDPhone extends GSMPhone {
     public void recordPhoneState(Phone.State state){
         mCT.recordPhoneState(state);
     }
+
+    //Added for bug#213435 sim lock begin
+    public int getSimLockRemainTimes(int type) {
+        Log.d(LOG_TAG, "getSimLockRemainTimes type:"+type);
+
+        synchronized(mLock) {
+            Message response = mHandler.obtainMessage(EVENT_GET_SIMLOCK_REMIAN_TIMES_DONE);
+            mCM.getSimLockRemainTimes(type,response);
+            Log.d(LOG_TAG, "getSimLockRemainTimes type wait");
+            try {
+                mLock.wait();
+                Log.d(LOG_TAG, "sim leave mLock.wait");
+            } catch (InterruptedException e) {
+                Log.d(LOG_TAG,"interrupted while trying to get sim remain times");
+            }
+        }
+
+        Log.d(LOG_TAG, "getSimLockRemainTimes:"+mSimlockRemainTimes);
+        return mSimlockRemainTimes;
+    }
+    //Added for bug#213435 sim lock end
 }
 

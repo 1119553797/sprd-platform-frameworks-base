@@ -622,4 +622,11 @@ class SipCommandInterface extends SprdBaseCommands implements CommandsInterface 
     @Override
     public void unregisterForSimNotDetected(Handler h) {
     }
+
+    //Added for bug#213435 sim lock begin
+    @Override
+    public void getSimLockRemainTimes(int type, Message result) {
+       // TODO Auto-generated method stub
+    }
+    //Added for bug#213435 sim lock end
 }

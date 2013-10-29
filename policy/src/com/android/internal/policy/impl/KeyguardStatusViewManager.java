@@ -748,6 +748,14 @@ class KeyguardStatusViewManager implements OnClickListener {
             case BLOCKED:
             case PERM_DISABLED:
                 return StatusMode.SimPermDisabled;
+            //Added for bug#213435 sim lock begin
+            case NETWORK_SUBSET_LOCKED:
+                return StatusMode.NetworkSubsetLocked;
+            case SERVICE_PROVIDER_LOCKED:
+                return StatusMode.ServiceProviderLocked;
+            case CORPORATE_LOCKED:
+                return StatusMode.CorporateLocked;
+            //Added for bug#213435 sim lock end
             case UNKNOWN:
                 return StatusMode.SimMissing;
         }
@@ -830,6 +838,23 @@ class KeyguardStatusViewManager implements OnClickListener {
                         mEmergencyButtonEnabledBecauseSimLocked = true;
                     }
                     break;
+
+                //Added for bug#213435 sim lock begin
+                case NetworkSubsetLocked:
+                    carrierText[phoneId] = makeCarierString(mPlmn[phoneId],
+                            getContext().getText(R.string.lockscreen_sim_nws_locked_message));
+                    break;
+
+                case ServiceProviderLocked:
+                    carrierText[phoneId] = makeCarierString(mPlmn[phoneId],
+                            getContext().getText(R.string.lockscreen_sim_sp_locked_message));
+                    break;
+
+                case CorporateLocked:
+                    carrierText[phoneId] = makeCarierString(mPlmn[phoneId],
+                            getContext().getText(R.string.lockscreen_sim_corporate_locked_message));
+                    break;
+                //Added for bug#213435 sim lock end
             }
         setCarrierText(carrierText[phoneId],phoneId);
         Log.d("KeyguardStatusViewManager", "updateCarrierTextWithSimStatus()--" +
@@ -899,6 +924,12 @@ class KeyguardStatusViewManager implements OnClickListener {
          * The sim card is locked.
          */
         SimLocked(true),
+
+        //Added for bug#213435 sim lock begin
+        NetworkSubsetLocked(true),
+        ServiceProviderLocked(true),
+        CorporateLocked(true),
+        //Added for bug#213435 sim lock end
 
         /**
          * The sim card is permanently disabled due to puk unlock failure

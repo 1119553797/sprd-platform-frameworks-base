@@ -1057,4 +1057,10 @@ public abstract class PhoneProxy extends Handler implements Phone {
     public PhoneSubInfoProxy getPhoneSubInfoProxy() {
         return mPhoneSubInfoProxy;
     }
+
+    //Added for bug#213435 sim lock begin
+    public int getSimLockRemainTimes(int type) {
+        return mActivePhone.getSimLockRemainTimes(type);
+    }
+    //Added for bug#213435 sim lock end
 }

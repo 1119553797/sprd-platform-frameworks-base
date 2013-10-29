@@ -291,7 +291,13 @@ public class SimUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
                             // the sim is unlocked so it knows right away
                             mUpdateMonitor.reportSimUnlocked(mSub);
                             mCallback.goToUnlockScreen();
-                        } else {
+                        }
+                        //Added for bug#213435 sim lock begin
+                        else if(TelephonyManager.checkSimLocked(mContext, mSub)) {
+                            mCallback.goToUnlockScreen();
+                        }
+                        //Added for bug#213435 sim lock end
+                        else {
 //                            remainTimes = remainTimes - 1;
 //                            String headerText = mContext.getResources().getString(R.string.keyguard_password_wrong_pin_code)
 //                                +  "(" + remainTimes + ")";

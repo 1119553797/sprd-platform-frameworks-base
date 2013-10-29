@@ -3819,4 +3819,12 @@
   <java-symbol type="string" name="pick_yes" />
   <java-symbol type="string" name="pick_no" />
   <java-symbol type="string" name="language_automatic" />
+
+  <!-- Added for bug#213435 sim lock begin -->
+  <java-symbol type="string" name="lockscreen_sim_nws_locked_message" />
+  <java-symbol type="string" name="lockscreen_sim_sp_locked_message" />
+  <java-symbol type="string" name="lockscreen_sim_corporate_locked_message" />
+  <java-symbol type="string" name="lockscreen_sim_network_locked_message" />
+  <java-symbol type="string" name="lockscreen_sim_card_locked_message" />
+  <!-- Added for bug#213435 sim lock end -->
 </resources>

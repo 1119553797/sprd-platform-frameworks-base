@@ -393,6 +393,10 @@ public final class SprdRIL extends RIL {
                     case RIL_REQUEST_SET_CMMS: ret =  responseVoid(p); break;
                     case RIL_REQUEST_SIM_POWER: ret =  responseVoid(p); break;
                     case RIL_REQUEST_SET_SPEED_MODE: ret =  responseVoid(p); break;
+                    //Added for bug#213435 sim lock begin
+                    case RIL_REQUEST_GET_SIMLOCK_REMAIN_TIMES: ret = responseInts(p); break;
+                    //Added for bug#213435 sim lock end
+
                     default:
                         synchronized (mRequestsList) {
                             mRequestsList.add(rr);
@@ -748,6 +752,9 @@ public final class SprdRIL extends RIL {
 			 case RIL_REQUEST_GET_SIM_CAPACITY: return "GET_SIM_CAPACITY";
 			 case RIL_REQUEST_GET_REMAIN_TIMES: return "REMAIN_TIMES";
 			 case RIL_REQUEST_SET_SPEED_MODE: return "SET_SPEED_MODE";
+                         //Added for bug#213435 sim lock begin
+                         case RIL_REQUEST_GET_SIMLOCK_REMAIN_TIMES: return "SIMLOCK_REMAIN_TIMES";
+                         //Added for bug#213435 sim lock end
 			 default: return requestToString(request);
 		 }
 	 }
@@ -871,4 +878,17 @@ public final class SprdRIL extends RIL {
 
      }
 
+     //Added for bug#213435 sim lock begin
+     @Override
+     public void getSimLockRemainTimes(int type, Message result){
+         riljLog("getSimLockRemainTimes ril!!!!!");
+         RILRequest rr = RILRequest.obtain(RIL_REQUEST_GET_SIMLOCK_REMAIN_TIMES, result);
+         rr.mp.writeInt(2);
+         rr.mp.writeInt(type);
+         rr.mp.writeInt(1);
+
+         if (RILJ_LOGD) riljLog(rr.serialString() + "> " + sprdRequestToString(rr.mRequest));
+         send(rr);
+    }
+    //Added for bug#213435 sim lock end
 }

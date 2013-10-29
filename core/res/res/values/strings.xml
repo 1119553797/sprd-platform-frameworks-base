@@ -3692,4 +3692,9 @@
     <string name="pick_yes">continue</string>
     <string name="pick_no">cancel</string>
     <string name="language_automatic">Automatic</string>
+    <!-- Added for bug#213435 sim lock begin -->
+    <string name="lockscreen_sim_nws_locked_message">Phone is SIM Network Subset locked</string>
+    <string name="lockscreen_sim_sp_locked_message">Phone is SIM Service Provider locked</string>
+    <string name="lockscreen_sim_corporate_locked_message">Phone is SIM Corporate locked</string>
+    <!-- Added for bug#213435 sim lock end -->
 </resources>

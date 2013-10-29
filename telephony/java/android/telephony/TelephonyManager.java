@@ -74,6 +74,19 @@ public class TelephonyManager {
     private static final String simCardFavoriteMmskey = "sim_card_favorite_mms";
     private static final String sharedActivityName = "com.android.phone";
 
+    //Added for bug#213435 sim lock begin
+    /** @hide */
+    public static final int UNLOCK_SIM = 1;
+    /** @hide */
+    public static final int UNLOCK_NETWORK = 2;
+    /** @hide */
+    public static final int UNLOCK_NETWORK_SUBSET = 3;
+    /** @hide */
+    public static final int UNLOCK_SERVICE_PROVIDER = 4;
+    /** @hide */
+    public static final int UNLOCK_CORPORATE = 5;
+    //Added for bug#213435 sim lock end
+
     /** @hide */
     public TelephonyManager(Context context) {
         if (sContext == null) {
@@ -657,6 +670,16 @@ public class TelephonyManager {
     public static final int SIM_STATE_NETWORK_LOCKED = 4;
     /** SIM card state: Ready */
     public static final int SIM_STATE_READY = 5;
+    //Added for bug#213435 sim lock begin
+    /** @hide */
+    public static final int SIM_STATE_NETWORKSUBSET_LOCKED = 6;
+    /** @hide */
+    public static final int SIM_STATE_SERVICEPROVIDER_LOCKED = 7;
+    /** @hide */
+    public static final int SIM_STATE_CORPORATE_LOCKED = 8;
+    /** @hide */
+    public static final int SIM_STATE_SIM_LOCKED = 9;
+    //Added for bug#213435 sim lock end
 
     /**
      * @return true if a ICC card is present
@@ -718,6 +741,20 @@ public class TelephonyManager {
         else if ("READY".equals(prop)) {
             return SIM_STATE_READY;
         }
+        //Added for bug#213435 sim lock begin
+        else if ("NETWORK_SUBSET_LOCKED".equals(prop)) {
+            return SIM_STATE_NETWORKSUBSET_LOCKED;
+        }
+        else if ("SERVICE_PROVIDER_LOCKED".equals(prop)) {
+            return SIM_STATE_SERVICEPROVIDER_LOCKED;
+        }
+        else if ("CORPORATE_LOCKED".equals(prop)) {
+            return SIM_STATE_CORPORATE_LOCKED;
+        }
+        else if ("SIM_LOCKED".equals(prop)) {
+            return SIM_STATE_SIM_LOCKED;
+        }
+        //Added for bug#213435 sim lock end
         else {
             return SIM_STATE_UNKNOWN;
         }
@@ -1804,4 +1841,21 @@ public class TelephonyManager {
         Settings.Secure.putInt(context.getContentResolver(),
                 Settings.Secure.RADIO_OPERATION, mRadioPower ? 1 : 0);
     }
+
+    //Added for bug#213435 sim lock begin
+    /** @hide */
+    public static boolean checkSimLocked(Context context,int phoneId){
+        int simState = -1;
+        TelephonyManager tm = (TelephonyManager) context.getSystemService(PhoneFactory.getServiceName(Context.TELEPHONY_SERVICE, phoneId));
+        if (tm != null) {
+             simState = tm.getSimState();
+             if(simState == TelephonyManager.SIM_STATE_NETWORK_LOCKED || simState == TelephonyManager.SIM_STATE_NETWORKSUBSET_LOCKED
+                     || simState == TelephonyManager.SIM_STATE_SERVICEPROVIDER_LOCKED || simState == TelephonyManager.SIM_STATE_CORPORATE_LOCKED
+                     || simState == TelephonyManager.SIM_STATE_SIM_LOCKED){
+                 return true;
+             }
+         }
+        return false;
+    }
+    //Added for bug#213435 sim lock end
 }

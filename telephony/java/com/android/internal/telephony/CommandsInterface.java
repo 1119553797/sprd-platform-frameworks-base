@@ -76,6 +76,11 @@ public interface CommandsInterface extends SprdCommandsInterface{
     static final String CB_FACILITY_BA_FD        = "FD";
     static final String CB_FACILITY_BA_PS        = "PS";
     static final String CB_FACILITY_BA_PN        = "PN";
+    //Added for bug#213435 sim lock begin
+    static final String CB_FACILITY_BA_PU        = "PU"; //network subset lock
+    static final String CB_FACILITY_BA_PP        = "PP"; //service provider(sp) lock
+    static final String CB_FACILITY_BA_PC        = "PC"; //corporate lock
+    //Added for bug#213435 sim lock end
 
     static final int CB_REASON_AO    = 0;
     static final int CB_REASON_OI    = 1;

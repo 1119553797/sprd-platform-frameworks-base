@@ -104,6 +104,28 @@ public class IccCardApplication {
         boolean isPersoSubStateUnknown() {
             return this == PERSOSUBSTATE_UNKNOWN;
         }
+
+        //Added for bug#213435 sim lock begin
+        boolean isSimBlocked(){
+            return this == PERSOSUBSTATE_SIM_SIM;
+        }
+
+        boolean isNetworkBlocked(){
+            return this == PERSOSUBSTATE_SIM_NETWORK;
+        }
+
+        boolean isNetworkSubsetBlocked(){
+            return this == PERSOSUBSTATE_SIM_NETWORK_SUBSET;
+        }
+
+        boolean isServiceProviderBlocked(){
+            return this == PERSOSUBSTATE_SIM_SERVICE_PROVIDER;
+        }
+
+        boolean isCorporateBlocked(){
+            return this == PERSOSUBSTATE_SIM_CORPORATE;
+        }
+        //Added for bug#213435 sim lock end
     };
 
     public AppType        app_type;

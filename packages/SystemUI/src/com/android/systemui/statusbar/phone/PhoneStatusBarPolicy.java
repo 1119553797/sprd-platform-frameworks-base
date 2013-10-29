@@ -258,9 +258,26 @@ public class PhoneStatusBarPolicy {
             else if (IccCard.INTENT_VALUE_LOCKED_ON_PUK.equals(lockedReason)) {
                 mSimState = IccCard.State.PUK_REQUIRED;
             }
-            else {
+            //Modified for bug#213435 sim lock begin
+            else if (IccCard.INTENT_VALUE_LOCKED_NETWORK.equals(lockedReason)) {
                 mSimState = IccCard.State.NETWORK_LOCKED;
             }
+            else if (IccCard.INTENT_VALUE_LOCKED_NETWORK_SUBSET.equals(lockedReason)) {
+                mSimState = IccCard.State.NETWORK_SUBSET_LOCKED;
+            }
+            else if (IccCard.INTENT_VALUE_LOCKED_SERVICE_PROVIDER.equals(lockedReason)) {
+                mSimState = IccCard.State.SERVICE_PROVIDER_LOCKED;
+            }
+            else if (IccCard.INTENT_VALUE_LOCKED_CORPORATE.equals(lockedReason)) {
+                mSimState = IccCard.State.CORPORATE_LOCKED;
+            }
+            else if (IccCard.INTENT_VALUE_LOCKED_SIM.equals(lockedReason)) {
+                mSimState = IccCard.State.SIM_LOCKED;
+            }
+            else {
+                mSimState = IccCard.State.UNKNOWN;
+            }
+            //Modified for bug#213435 sim lock end
         } else {
             mSimState = IccCard.State.UNKNOWN;
         }
