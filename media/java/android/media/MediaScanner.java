@@ -979,13 +979,15 @@ public class MediaScanner
                             needToSetSettings = true;
                         }
                     } else if (ringtones ) {
-                        for(int i = 0;i< PHONE_COUNT && !mDefaultRingtoneSet[i]; i++) {
-	                        if (TextUtils.isEmpty(mDefaultRingtoneFilename[i]) ||
+                        // bug 232866 start
+                        for(int i = 0;i< PHONE_COUNT; i++) {
+	                        if (!mDefaultRingtoneSet[i] && TextUtils.isEmpty(mDefaultRingtoneFilename[i]) ||
 	                                doesPathHaveFilename(entry.mPath, mDefaultRingtoneFilename[i])) {
 	                                needToSetSettings = true;
                                         break;
 	                        }
                         }
+                        // bug 232866 end
                     } else if (alarms && !mDefaultAlarmSet) {
                         if (TextUtils.isEmpty(mDefaultAlarmAlertFilename) ||
                                 doesPathHaveFilename(entry.mPath, mDefaultAlarmAlertFilename)) {
