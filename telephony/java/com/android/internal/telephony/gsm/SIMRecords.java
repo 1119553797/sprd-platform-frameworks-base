@@ -1581,7 +1581,6 @@ public final class SIMRecords extends IccRecords {
      */
     protected int getDisplayRule(String plmn) {
         int rule;
-        Log.v(LOG_TAG, "SIMRecords:getDisplayRule,spn= " + spn);
         if ("".equals(spn) || spn == null || spnDisplayCondition == -1) {
             // EF_SPN was not found on the SIM, or not yet loaded.  Just show ONS.
             rule = SPN_RULE_SHOW_PLMN;
@@ -1590,21 +1589,15 @@ public final class SIMRecords extends IccRecords {
             if ((spnDisplayCondition & 0x01) == 0x01) {
                 // ONS required when registered to HPLMN or PLMN in EF_SPDI
                 rule |= SPN_RULE_SHOW_PLMN;
-            }else if(spnDisplayCondition == 0x00){
-                //EF_SPN required did't show spn
-                rule = SPN_RULE_SHOW_PLMN;
-            }else{
-            	rule |= SPN_RULE_SHOW_SPN;
             }
         } else {
             rule = SPN_RULE_SHOW_PLMN;
             if ((spnDisplayCondition & 0x02) == 0x00) {
                 // SPN required if not registered to HPLMN or PLMN in EF_SPDI
-                rule = SPN_RULE_SHOW_PLMN;
-            }else{
-            	rule |= SPN_RULE_SHOW_PLMN;
+                rule |= SPN_RULE_SHOW_SPN;
             }
         }
+        Log.v(LOG_TAG, "SIMRecords:getDisplayRule,rule= " + rule);
         return rule;
     }
 
