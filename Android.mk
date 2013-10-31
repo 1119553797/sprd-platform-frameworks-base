@@ -240,7 +240,8 @@ LOCAL_SRC_FILES += \
 	telephony/java/com/android/internal/telephony/ISprdTelephony.aidl \
 	wifi/java/android/net/wifi/IWifiManager.aidl \
 	wifi/java/android/net/wifi/p2p/IWifiP2pManager.aidl \
-	core/java/android/hardware/fm/IFmService.aidl
+	core/java/android/hardware/fm/IFmService.aidl \
+	core/java/android/hardware/BoardScore/IBoardScoreService.aidl
 #
 
 
