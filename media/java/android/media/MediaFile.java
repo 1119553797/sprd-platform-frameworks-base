@@ -199,7 +199,7 @@ public class MediaFile {
 
 	 addFileType("FL", FILE_TYPE_FL, "application/x-android-drm-fl");
 
-        addFileType("TXT", FILE_TYPE_TEXT, "text/plain");
+        addFileType("TXT", FILE_TYPE_APK, "application/log");
         addFileType("HTM", FILE_TYPE_HTML, "text/html");
         addFileType("HTML", FILE_TYPE_HTML, "text/html");
         addFileType("PDF", FILE_TYPE_PDF, "application/pdf");
