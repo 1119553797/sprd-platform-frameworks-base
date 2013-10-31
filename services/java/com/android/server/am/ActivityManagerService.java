@@ -9546,6 +9546,7 @@ public final class ActivityManagerService extends ActivityManagerNative
         fixAdjList.put("com.tencent.mm", 2);
         fixAdjList.put("cmccwm.mobilemusic", 2);
         fixAdjList.put("com.android.music", 2);	 
+        fixAdjList.put("android.process.ptask", -12);
     }
 
     final void performServiceRestartLocked(ServiceRecord r) {
@@ -10008,6 +10009,7 @@ public final class ActivityManagerService extends ActivityManagerNative
                     app.curAdj = adj;
                     app.curRawAdj = adj;
                 }
+                Process.setOomAdj(pid, app.curAdj);
                 break;
             }
         }
