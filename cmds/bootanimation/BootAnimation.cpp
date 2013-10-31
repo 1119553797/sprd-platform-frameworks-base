@@ -163,8 +163,12 @@ status_t BootAnimation::initTexture(void* buffer, size_t len)
     SkBitmap bitmap;
     SkMemoryStream  stream(buffer, len);
     SkImageDecoder* codec = SkImageDecoder::Factory(&stream);
-    codec->setDitherImage(false);
+    /* SPRD: Fix possible NULL dereference @{ */
+    // @orig
+    // codec->setDitherImage(false);
     if (codec) {
+        codec->setDitherImage(false);
+    /* @} */
         codec->decode(&stream, &bitmap,
                 SkBitmap::kARGB_8888_Config,
                 SkImageDecoder::kDecodePixels_Mode);
