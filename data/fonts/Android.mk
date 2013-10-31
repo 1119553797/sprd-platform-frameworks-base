@@ -29,6 +29,10 @@ copy_from :=                \
     DroidSansMono.ttf        \
     Clockopia.ttf
 
+ifeq ($(MULTILANGUAGE_SUPPORT),true)
+    copy_from += Lohit-Tamil.ttf \
+                 Lohit-Telugu.ttf 
+endif
 
 ifneq ($(NO_FALLBACK_FONT),true)
 ifeq ($(filter %system/fonts/DroidSansFallback.ttf,$(PRODUCT_COPY_FILES)),)
