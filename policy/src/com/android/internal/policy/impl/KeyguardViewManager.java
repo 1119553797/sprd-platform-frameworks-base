@@ -113,7 +113,10 @@ public class KeyguardViewManager implements KeyguardWindowController {
                     flags, PixelFormat.TRANSLUCENT);
             lp.softInputMode = WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN;
             lp.windowAnimations = com.android.internal.R.style.Animation_LockScreen;
-            lp.screenOrientation = ActivityInfo.SCREEN_ORIENTATION_NOSENSOR;
+            /* SPRD: Modify 20131031 Spreadst of Bug 230891 show lockscreen orientation is land
+            lp.screenOrientation = ActivityInfo.SCREEN_ORIENTATION_NOSENSOR; @{ */
+            lp.screenOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+            /* @} */
             lp.setTitle("Keyguard");
             mWindowLayoutParams = lp;
 
