@@ -84,7 +84,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
     private KeyguardScreenCallback mCallback;
 
     private int mCallSub;
-    
+
 //    private TextView mCarrier;
     private TextView[] mCarrier;
     private SlidingTab mSelector;
@@ -123,7 +123,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
     private java.text.DateFormat mTimeFormat;
     private boolean mEnableMenuKeyInLockScreen;
     private int[] mResId = new int[]{R.id.carrier, R.id.carrier_sub2};
-    
+
  // ************Modify by luning at01-07-01 begin************
     private Context mContext;
     private IccText mSimText;
@@ -132,13 +132,13 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
     private PhoneStateListener[] mPhoneStateListener;
  // ************Modify by luning at01-07-01 end************
     private int numPhones = 0;
-    
+
 	private static final String INTENT_MISSMMS = "android.intent.action.missMms";
 	private static final String INTENT_MISSPHONE = "com.android.phone.action.RECENT_CALLS";
-	
+
 	private boolean hasMissPhone =false;
 	private boolean hasMissMms =false;
-	
+
 	private CObserver smsObserver;
 	private CObserver callObserver;
 	private CObserver mmsObserver;
@@ -154,7 +154,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
    	private Bitmap mRightBitmap;
 
 	private static final int ON_KEYDOWN_TIMEOUT_MS = 3600000;
-    
+
     /**
      * The status of this lock screen.
      */
@@ -237,11 +237,11 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
             KeyguardUpdateMonitor updateMonitor,
             KeyguardScreenCallback callback) {
         super(context);
-        
+
      // ************Modify by luning at01-07-01 begin************
         mContext = context;
      // ************Modify by luning at01-07-01 end************
-        
+
         mLockPatternUtils = lockPatternUtils;
         mUpdateMonitor = updateMonitor;
         mCallback = callback;
@@ -282,7 +282,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
             mCarrier[i].setVisibility(View.VISIBLE);
 			mStatus[i] = Status.Normal;
         }
-        
+
 
         mDate = (TextView) findViewById(R.id.date);
         mStatus1 = (TextView) findViewById(R.id.status1);
@@ -330,9 +330,9 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
         mSelector.setOnTriggerListener(this);
 
         resetStatusInfo(updateMonitor);
-        
+
         mPhoneStateListener = new PhoneStateListener[numPhones];
-        
+
 		for (int i = 0; i < numPhones; i++) {
 			// register for phone state notifications.
 			mPhoneStateListener[i] = getPhoneStateListener(i);
@@ -374,7 +374,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
         mBatteryLevel = updateMonitor.getBatteryLevel();
 //        mStatus = getCurrentStatus(updateMonitor.getSimState());
 //        updateLayout(mStatus);
-        
+
         for (int i = 0; i < TelephonyManager.getPhoneCount(); i++) {
             mStatus[i] = getCurrentStatus(updateMonitor.getSimState(i));
             updateLayout(mStatus[i], i);
@@ -422,10 +422,10 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
                 mContext.startActivity(it);
         		return;
         	}
-        	
+
             // toggle silent mode
             mSilentMode = !mSilentMode;
-            
+
          // ************Modify by luning at01-07-01 begin************
             if (mSilentMode) {
 //                final boolean vibe = (Settings.System.getInt(
@@ -445,7 +445,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
             } else {
                 mAudioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
             }
-                      
+
 //            if(mSilentMode)
 //        	{
 //        		//change to profiles mode:silent
@@ -489,9 +489,9 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
 //        		//restore last ring mode
 //        		mAudioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
 //        	}
-             		
-         // ************Modify by luning at01-07-01 end************   
-    		
+
+         // ************Modify by luning at01-07-01 end************
+
             updateRightTabResources();
 
             String message = mSilentMode ?
@@ -509,8 +509,8 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
             mCallback.pokeWakelock();
         }
     }
- 
-    
+
+
     /** {@inheritDoc} */
     public void onGrabbedStateChange(View v, int grabbedState) {
 
@@ -745,7 +745,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
             case NetworkLocked:
                 // The carrier string shows both sim card status (i.e. No Sim Card) and
                 // carrier's name and/or "Emergency Calls Only" status
-           
+
                 //Modify start on 2012-01-17
 //                mCarrier.setText(
 //                		getSprdCarrierString(
@@ -812,7 +812,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
                 break;
             case SimLocked:
                 // text
-            	
+
                 //Modify start on 2012-01-17
 //                mCarrier.setText(
 //                		getSprdCarrierString(
@@ -883,7 +883,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
             return "";
         }
     }
-    
+
     //add by liguxiang 08-25-11 for display radiotype(3G) on LockScreen begin
     public  CharSequence getSprdCarrierString(CharSequence telephonyPlmn, CharSequence telephonySpn) {
         CharSequence radioType = mUpdateMonitor.getRadioType();
@@ -934,6 +934,8 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
 
     void updateConfiguration() {
         Configuration newConfig = getResources().getConfiguration();
+        // SPRD: Modify 20131031 Spreadst of Bug 230891 add log
+        if (DBG) Log.d(TAG,"newConfig.orientation = " + newConfig.orientation);
         if (newConfig.orientation != mCreationOrientation) {
             mCallback.recreateMe(newConfig);
         } else if (newConfig.hardKeyboardHidden != mKeyboardHidden) {
@@ -1029,7 +1031,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
             updateRightTabResources();
         }
     }
-    
+
     private PhoneStateListener getPhoneStateListener(int subscription) {
     	//add by liguxiang 08-25-11 for display radiotype(3G) on LockScreen begin
     	return new PhoneStateListener(subscription) {
@@ -1040,7 +1042,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
     				updateLayout(mStatus[mSubscription],mSubscription);
     			}
     		}
-    		
+
     	};
     	//add by liguxiang 08-25-11 for display radiotype(3G) on LockScreen end
     }
@@ -1124,7 +1126,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
     }
     //add end
 	private class CObserver extends ContentObserver {
-		
+
 		public CObserver(){
 			super(new Handler());
 		}
@@ -1136,7 +1138,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
 			updateSlidingTab();
 		}
 	};
-	
+
 	private void registerObserver() {
 		smsObserver = new CObserver();
 		mmsObserver = new CObserver();
@@ -1148,7 +1150,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
 		mContext.getContentResolver().registerContentObserver(
 				CallLog.Calls.CONTENT_URI, true, callObserver);
 	}
-	
+
 	private void unregisterObserver() {
 		if (smsObserver != null) {
 			mContext.getContentResolver()
@@ -1163,8 +1165,8 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
 					.unregisterContentObserver(mmsObserver);
 		}
 	}
-	
-	
+
+
 	private void updateSlidingTab() {
 		int missPhoneCount = getMissCallCount();
 		int missMmsCount = getUnReadSmsCount()+getUnReadMmsCount();
@@ -1194,7 +1196,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
 		}
 
 	}
-	
+
 	private void resetSlidingTab() {
 		mSelector.setLeftTabResources(R.drawable.ic_jog_dial_unlock,
 				R.drawable.jog_tab_target_green,
@@ -1203,7 +1205,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
 
 		updateRightTabResources();
 	}
-	
+
     private void initValues() {
         mPaint.setAntiAlias(true);
         mPaint.setColor(Color.WHITE);
@@ -1261,7 +1263,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
         canvas.drawText(endstr, x, y-mOffsetY, mPaint);
         return thumb;
     }
-    
+
     private int getMissCallCount() {
 		Cursor cur = null;
 		int unRead = 3;
