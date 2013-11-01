@@ -2098,6 +2098,15 @@ public abstract class Context {
     public static final String FM_SERVICE = "fm";
 
     /**
+    * Use with {@link #getSystemService} to retrieve a
+    * {@link android.hardware.BoardScore.BoardScoreService} for improving the performance of benchmark software.
+    *
+    * @see #getSystemService
+    * @see android.hardware.BoardScore.BoardScoreService
+    */
+    public static final String BoardScore_SERVICE = "board_score";
+
+    /**
      * Use with {@link #getSystemService} to retrieve a
      * {@link android.media.MediaRouter} for controlling and managing
      * routing of media.

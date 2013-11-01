@@ -5728,6 +5728,7 @@ package android.content {
     field public static final int BIND_NOT_FOREGROUND = 4; // 0x4
     field public static final int BIND_WAIVE_PRIORITY = 32; // 0x20
     field public static final java.lang.String BLUETOOTH_SERVICE = "bluetooth";
+    field public static final java.lang.String BoardScore_SERVICE = "board_score";
     field public static final java.lang.String CLIPBOARD_SERVICE = "clipboard";
     field public static final java.lang.String CONNECTIVITY_SERVICE = "connectivity";
     field public static final int CONTEXT_IGNORE_SECURITY = 2; // 0x2
@@ -10493,6 +10494,28 @@ package android.hardware {
   public abstract class TriggerEventListener {
     ctor public TriggerEventListener();
     method public abstract void onTrigger(android.hardware.TriggerEvent);
+  }
+
+}
+
+package android.hardware.BoardScore {
+
+  public class BoardScoreService extends android.hardware.BoardScore.IBoardScoreService.Stub {
+    ctor public BoardScoreService(android.content.Context);
+    method public void StartBoardScoreService();
+    method public void getSoftwareList();
+    method public void setSoftwareList(java.util.List<java.lang.String>);
+  }
+
+  public abstract interface IBoardScoreService implements android.os.IInterface {
+    method public abstract void StartBoardScoreService() throws android.os.RemoteException;
+  }
+
+  public static abstract class IBoardScoreService.Stub extends android.os.Binder implements android.hardware.BoardScore.IBoardScoreService {
+    ctor public IBoardScoreService.Stub();
+    method public android.os.IBinder asBinder();
+    method public static android.hardware.BoardScore.IBoardScoreService asInterface(android.os.IBinder);
+    method public boolean onTransact(int, android.os.Parcel, android.os.Parcel, int) throws android.os.RemoteException;
   }
 
 }

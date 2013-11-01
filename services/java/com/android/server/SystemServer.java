@@ -29,6 +29,7 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.media.AudioService;
 import android.hardware.fm.FmService;
+import android.hardware.BoardScore.BoardScoreService;
 import android.net.wifi.p2p.WifiP2pService;
 import android.os.Environment;
 import android.os.Handler;
@@ -668,7 +669,13 @@ class ServerThread extends Thread {
                     reportWtf("starting Fm Service", e);
                 }
             }
-
+            try {
+                Slog.i(TAG, "BoardScoreService Service");
+                ServiceManager.addService(Context.BoardScore_SERVICE,
+                        new BoardScoreService(context));
+            } catch (Throwable e) {
+                reportWtf("starting BoardScoreService Service", e);
+            }
             try {
                 Slog.i(TAG, "Dock Observer");
                 // Listen for dock station changes
