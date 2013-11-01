@@ -4680,9 +4680,17 @@ class PackageManagerService extends IPackageManager.Stub {
             final String installerPackageName) {
         mContext.enforceCallingOrSelfPermission(
                 android.Manifest.permission.INSTALL_PACKAGES, null);
-
+        boolean canInstall = true;
+        int flag = flags == 0 ? PackageManager.INSTALL_EXTERNAL : flags;
+        String status = Environment.getExternalStorageState();
+        canInstall = (flag & PackageManager.INSTALL_EXTERNAL) == 0 || Environment.MEDIA_MOUNTED.equals(status);
+        Uri newUri = packageURI;
+        if(!canInstall) {
+            newUri = Uri.parse(packageURI + "canNotInstall");
+            Log.w(TAG, "can not install: flags " + flags + " packageURI: " + packageURI + " status: " + status);
+        }
         Message msg = mHandler.obtainMessage(INIT_COPY);
-        msg.obj = new InstallParams(packageURI, observer, flags,
+        msg.obj = new InstallParams(newUri, observer, flags,
                 installerPackageName);
         mHandler.sendMessage(msg);
     }
