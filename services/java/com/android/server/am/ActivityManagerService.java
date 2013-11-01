@@ -1902,7 +1902,7 @@ public final class ActivityManagerService extends ActivityManagerNative
         
         System.arraycopy(mProcDeaths, 0, mProcDeaths, 1, mProcDeaths.length-1);
         mProcDeaths[0] = 0;
-        
+        boolean isLaunchDownloadProvider = false;
         try {
             int uid = app.info.uid;
             int[] gids = null;
@@ -1966,6 +1966,8 @@ public final class ActivityManagerService extends ActivityManagerNative
             if (hostingNameStr != null) {
                 buf.append(" ");
                 buf.append(hostingNameStr);
+                isLaunchDownloadProvider = "android.process.media".equals(app.processName) 
+                        && launchDownloadAction.contains(hostingNameStr);
             }
             buf.append(": pid=");
             buf.append(pid);
@@ -2010,7 +2012,10 @@ public final class ActivityManagerService extends ActivityManagerNative
         if ( fixAdjList.containsKey(app.processName)) {
             app.fixAdj = fixAdjList.get(app.processName);
             Slog.v(TAG, "app[" + app.processName + "] has fix adj:" + app.fixAdj);
-        }		
+        } else if(isLaunchDownloadProvider) {
+            app.fixAdj = -1;
+            Slog.v(TAG, "launch DownloadProvider process has fix adj: " + app.fixAdj + " pid: " + app.pid);
+        }
     }
 
     void updateUsageStats(ActivityRecord resumedComponent, boolean resumed) {
@@ -9522,6 +9527,9 @@ public final class ActivityManagerService extends ActivityManagerNative
     private static HashSet<String> whiteList;
     private static HashSet<String> hasAlarmList;	
     private static Hashtable<String, Integer> fixAdjList;
+    private static HashSet<String> launchDownloadAction;
+    private static HashSet<String> cantChangeAdjProcWhenPtaskRunning;
+    private static HashSet<String> cantChangeAdjServiceInPtask;
 
     static {
 	 whiteList = new HashSet<String>();
@@ -9547,6 +9555,17 @@ public final class ActivityManagerService extends ActivityManagerNative
         fixAdjList.put("cmccwm.mobilemusic", 2);
         fixAdjList.put("com.android.music", 2);	 
         fixAdjList.put("android.process.ptask", -12);
+        
+        launchDownloadAction = new HashSet<String>();
+        launchDownloadAction.add("com.android.providers.downloads/.DownloadProvider");
+        launchDownloadAction.add("com.android.providers.downloads/.DownloadService");
+        launchDownloadAction.add("com.android.providers.downloads/.DownloadReceiver");
+
+        cantChangeAdjProcWhenPtaskRunning = new HashSet<String>();
+        cantChangeAdjProcWhenPtaskRunning.add("android.process.media");
+
+        cantChangeAdjServiceInPtask = new HashSet<String>();
+        cantChangeAdjServiceInPtask.add("com.android.music.MediaPlaybackService");
     }
 
     final void performServiceRestartLocked(ServiceRecord r) {
@@ -9992,9 +10011,16 @@ public final class ActivityManagerService extends ActivityManagerNative
     }
     // Used by application to change it's oom_adj tempropraly
     public void setProcessAdj(int pid, int adj, boolean reset) {
-        for (int j = mLruProcesses.size() - 1; j >= 0; j--) {
-            ProcessRecord app = mLruProcesses.get(j);
-	    int def = ProcessRecord.TMP_CUR_ADJ_DEFAULT;
+        String ptaskName = "android.process.ptask";
+        ProcessRecord ptask = null;
+        boolean canSetAdj = false;
+        boolean curProcCanChange = false;
+        for (int index = mLruProcesses.size() - 1; index >= 0; index--) {
+            ProcessRecord app = mLruProcesses.get(index);
+            if(ptaskName.equals(app.processName)) {
+                ptask = app;
+            }
+            int def = ProcessRecord.TMP_CUR_ADJ_DEFAULT;
             if (app.pid == pid) {
                 if(reset) {
                     app.curAdj = app.tmpCurAdj;
@@ -10009,11 +10035,29 @@ public final class ActivityManagerService extends ActivityManagerNative
                     app.curAdj = adj;
                     app.curRawAdj = adj;
                 }
-                Process.setOomAdj(pid, app.curAdj);
-                break;
+                canSetAdj = true;
+                adj = app.curAdj;
+                curProcCanChange = cantChangeAdjProcWhenPtaskRunning.contains(app.processName);
             }
         }
+        if(curProcCanChange && ptask != null && !reset) {
+            for(ServiceRecord sr : ptask.services) {
+                if(sr.name == null) {
+                    continue;
+                }
+                if(cantChangeAdjServiceInPtask.contains(sr.name.getClassName())) {
+                    canSetAdj = false;
+                    Log.d(TAG, "can not change pid: " + pid + " adj, because service: " + sr.name + " is running in ptask proc");
+                    break;
+                }
+            }
+        } else {
+        }
+        if(canSetAdj) {
+            Process.setOomAdj(pid, adj);
+        }
     }
+    
     public void updateServiceForegroundLocked(ProcessRecord proc, boolean oomAdj) {
         boolean anyForeground = false;
         for (ServiceRecord sr : proc.services) {
