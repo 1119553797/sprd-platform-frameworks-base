@@ -64,6 +64,8 @@ public class Build {
 
     /** A hardware serial number, if available.  Alphanumeric only, case-insensitive. */ 
     public static final String SERIAL = getString("ro.serialno");
+
+    public static final boolean IS_LOWMEM_VERSION = SystemProperties.getBoolean("ro.ulc.ram", false);
   
     /** Various version strings. */
     public static class VERSION {

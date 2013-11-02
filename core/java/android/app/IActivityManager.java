@@ -325,6 +325,8 @@ public interface IActivityManager extends IInterface {
 
 	public void notifySystemUiVisibility(boolean visible) throws RemoteException;
 
+    public void killStopFrontApp(int func) throws RemoteException;
+
     /*
      * Private non-Binder interfaces
      */
@@ -537,4 +539,5 @@ public interface IActivityManager extends IInterface {
     int REVOKE_URI_PERMISSION_FROM_OWNER_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+117;
     int SET_PROCESS_ADJ_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+200;
 	int NOTIFY_SYSTEMUI_VISIBILITY = IBinder.FIRST_CALL_TRANSACTION+201;
+    int KILL_STOP_FRONT_APP_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+202;
 }

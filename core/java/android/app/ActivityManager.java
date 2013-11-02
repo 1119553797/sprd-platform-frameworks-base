@@ -39,6 +39,18 @@ public class ActivityManager {
     private static String TAG = "ActivityManager";
     private static boolean DEBUG = false;
     private static boolean localLOGV = DEBUG || android.util.Config.LOGV;
+    /**
+    *@hide
+    */
+    public static final int KILL_CONT_STOPPED_APP = 0;
+    /**
+    *@hide
+    */
+    public static final int KILL_STOP_FRONT_APP = 1;
+    /**
+    *@hide
+    */
+    public static final int CANCEL_KILL_STOP_TIMEOUT = 2;
 
     private final Context mContext;
     private final Handler mHandler;

@@ -223,6 +223,8 @@ public class Process {
     public static final int SIGNAL_QUIT = 3;
     public static final int SIGNAL_KILL = 9;
     public static final int SIGNAL_USR1 = 10;
+    public static final int SINGLE_STOP = 19;
+    public static final int SIGNAL_CONT = 18;
     
     // State for communicating with zygote process
 

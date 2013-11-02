@@ -978,6 +978,7 @@ public final class ActivityManagerService extends ActivityManagerNative
     static final int CHECK_EXCESSIVE_WAKE_LOCKS_MSG = 27;
     static final int CLEAR_DNS_CACHE = 28;
     static final int GET_AVAIL_MEM_MSG = 35;
+    static final int KILL_STOP_TIMEOUT = 36;
 
     // for LC_RAM_SUPPORT
     long mRecentAvailMem = 0;
@@ -1277,6 +1278,15 @@ public final class ActivityManagerService extends ActivityManagerNative
                 } catch (RemoteException e) {
                 }
             } break;
+            case KILL_STOP_TIMEOUT: {
+                Slog.w(TAG, "KILL_STOP_TIMEOUT,kill mStopingPid=" + mStopingPid);
+                if (mStopingPid > 0) {
+                    Process.sendSignal(mStopingPid, Process.SIGNAL_KILL);
+                    mStopingPid = -1;
+                    mIsKillStop = false;
+                }
+                break;
+            }
             case CHECK_EXCESSIVE_WAKE_LOCKS_MSG: {
                 synchronized (ActivityManagerService.this) {
                     checkExcessivePowerUsageLocked(true);
@@ -6541,6 +6551,11 @@ public final class ActivityManagerService extends ActivityManagerNative
                 EventLog.writeEvent(EventLogTags.AM_KILL, app.pid,
                         app.processName, app.setAdj, "user's request after error");
                 Process.killProcess(app.pid);
+                if (Build.IS_LOWMEM_VERSION && mIsKillStop) {
+                    Slog.w(TAG,"dont kill app:lowmem and mIsKillStop");
+                } else {
+                    Process.killProcessQuiet(app.pid);
+                }
             }
         }
     }
@@ -9530,6 +9545,7 @@ public final class ActivityManagerService extends ActivityManagerNative
     private static HashSet<String> launchDownloadAction;
     private static HashSet<String> cantChangeAdjProcWhenPtaskRunning;
     private static HashSet<String> cantChangeAdjServiceInPtask;
+    private static Set<String> canKillFrontSystemApp;
 
     static {
 	 whiteList = new HashSet<String>();
@@ -9566,6 +9582,9 @@ public final class ActivityManagerService extends ActivityManagerNative
 
         cantChangeAdjServiceInPtask = new HashSet<String>();
         cantChangeAdjServiceInPtask.add("com.android.music.MediaPlaybackService");
+
+        canKillFrontSystemApp = new HashSet<String>();
+        canKillFrontSystemApp.add("com.android.camera");
     }
 
     final void performServiceRestartLocked(ServiceRecord r) {
@@ -13429,5 +13448,73 @@ public final class ActivityManagerService extends ActivityManagerNative
             }
 
         });
+    }
+
+    
+    // add for lowmem & incall
+    static final int KILL_STOP_TIMEOUT_DELAY = 5 * 1000;// 5s
+    
+    private boolean mIsKillStop = false;
+    private int mStopingPid = -1;
+    
+    public void killStopFrontApp(int func) {
+        if(!Build.IS_LOWMEM_VERSION) {
+            Log.d(TAG,"is not lowmem version,will not killStop the front app,just return.");
+            return;
+        }
+        if (mIsKillStop && func == ActivityManager.KILL_STOP_FRONT_APP) {
+            Slog.w(TAG,"other thread is already call killStopFrontApp,return.");
+            return;
+        }
+        if (func == ActivityManager.KILL_STOP_FRONT_APP
+            && curProcCanKill()) {
+            int pid = mMainStack.mResumedActivity.app.pid;
+            Slog.d(TAG, "KILL_STOP_FRONT_APP.activity=" + mMainStack.mResumedActivity.packageName + " pid: " + pid + " HOME_APP_ADJ: " + HOME_APP_ADJ);
+            boolean hasBackApp = false;
+            for(ProcessRecord pr :  mLruProcesses) {
+                if(pr.thread != null && pr.curAdj >= HOME_APP_ADJ) {
+                    hasBackApp = true;
+                    break;
+                }
+            }
+            if(hasBackApp) {
+                Process.sendSignal(pid, Process.SINGLE_STOP);
+                if (!mHandler.hasMessages(KILL_STOP_TIMEOUT)) {
+                    Slog.d(TAG, "send kill_stop_timeout");
+                    mIsKillStop = true;
+                    mStopingPid = pid;
+                    Message msg = mHandler.obtainMessage(KILL_STOP_TIMEOUT);
+                    mHandler.sendMessageDelayed(msg, KILL_STOP_TIMEOUT_DELAY);
+                }
+            } else {
+                Slog.w(TAG, "kill the front app anyway");
+                Process.killProcessQuiet(pid);
+            }
+        } else if (func == ActivityManager.KILL_CONT_STOPPED_APP) {
+            Slog.w(TAG, "KILL_CONT_STOPPED_APP.mStopingPid=" + mStopingPid);
+            mIsKillStop = false;
+            if (mStopingPid > 0) {
+                Process.sendSignal(mStopingPid, Process.SIGNAL_CONT);
+                mHandler.removeMessages(KILL_STOP_TIMEOUT);
+                mStopingPid = -1;
+            }
+        } else if (func == ActivityManager.CANCEL_KILL_STOP_TIMEOUT) {
+            Slog.w(TAG, "CANCEL_KILL_STOP_TIMEOUT,mStopingPid=" + mStopingPid);
+            mIsKillStop = false;
+            mStopingPid = -1;
+            mHandler.removeMessages(KILL_STOP_TIMEOUT);
+        } else {
+            Slog.w(TAG, "mResumeActivity is null or app is system app");
+        }
+    }
+
+    private boolean curProcCanKill() {
+        if(mMainStack.mResumedActivity == null || mMainStack.mResumedActivity.isHomeActivity) {
+            return false;
+        } else if(canKillFrontSystemApp.contains(mMainStack.mResumedActivity.app.processName)) {
+            return true;
+        } else {
+            return (mMainStack.mResumedActivity.app.info.flags & (ApplicationInfo.FLAG_SYSTEM)) == 0;
+        }
     }
 }
