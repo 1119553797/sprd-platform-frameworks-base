@@ -1387,6 +1387,10 @@ ResTable::Theme::package_info* ResTable::Theme::copy_package(package_info* pi)
 {
     package_info* newpi = (package_info*)malloc(
         sizeof(package_info) + (pi->numTypes*sizeof(type_info)));
+    if (newpi == NULL) {
+	LOGD("No enough memory, newpi = NULL");
+	return NULL;
+    }
     newpi->numTypes = pi->numTypes;
     for (size_t j=0; j<newpi->numTypes; j++) {
         size_t cnt = pi->types[j].numEntries;
@@ -1394,7 +1398,11 @@ ResTable::Theme::package_info* ResTable::Theme::copy_package(package_info* pi)
         theme_entry* te = pi->types[j].entries;
         if (te != NULL) {
             theme_entry* newte = (theme_entry*)malloc(cnt*sizeof(theme_entry));
-            newpi->types[j].entries = newte;
+            if (newte == NULL) {
+		LOGD("No enough memory, newte = NULL");
+		return NULL;
+	    }
+	    newpi->types[j].entries = newte;
             memcpy(newte, te, cnt*sizeof(theme_entry));
         } else {
             newpi->types[j].entries = NULL;
@@ -1522,6 +1530,9 @@ status_t ResTable::Theme::setTo(const Theme& other)
             }
             if (i == 0 && other.mPackages[i] != NULL) {
                 mPackages[i] = copy_package(other.mPackages[i]);
+		if (mPackages[i] == NULL) {
+		    return NO_MEMORY;
+		}
             } else {
                 mPackages[i] = NULL;
             }
