@@ -3,6 +3,8 @@ package com.android.internal.telephony;
 
 import static com.android.internal.telephony.RILConstants.*;
 
+import android.app.ActivityManager;
+import android.app.ActivityManagerNative;
 import android.content.Context;
 
 import android.os.AsyncResult;
@@ -14,6 +16,7 @@ import android.os.Parcel;
 import android.os.RegistrantList;
 import android.os.Registrant;
 import android.os.Bundle;
+import android.os.RemoteException;
 import android.telephony.SmsManager;
 import android.telephony.SmsMessage;
 import android.util.Log;
@@ -50,6 +53,8 @@ public final class SprdRIL extends RIL {
     protected Registrant mVPMediaStartRegistrant;
 	protected RegistrantList mVideoCallStateRegistrants = new RegistrantList();
     protected Registrant mStkStinRegistrant;
+    
+    static Thread mThread;
 
 	private final class DSCIInfo {
 		int id;
@@ -951,7 +956,26 @@ public final class SprdRIL extends RIL {
 					break;
 				case RIL_UNSOL_RESPONSE_CALL_STATE_CHANGED:
 					if (RILJ_LOGD) unsljLog(response);
-
+					// for bug 233668 start
+					if (mThread == null) {
+					    mThread = new Thread(new Runnable() {
+					        public void run() {
+					            try {
+					                if (RILJ_LOGD)riljLog("ActivityManagerNative.moveTaskToBack() start");
+					                ActivityManagerNative.getDefault().killStopFrontApp(ActivityManager.KILL_STOP_FRONT_APP);
+					                if (RILJ_LOGD)riljLog("ActivityManagerNative.moveTaskToBack() end ");
+					                Thread.sleep(3000);
+					            } catch (RemoteException e) {
+					                e.printStackTrace();
+					            } catch (InterruptedException e) {
+					                e.printStackTrace();
+					            }
+					            mThread = null;
+					        }
+					    });
+					    mThread.start();
+					}
+					// for bug 233668 start
 					mCallStateRegistrants
 						.notifyRegistrants(new AsyncResult(null, null, null));
 					break;
