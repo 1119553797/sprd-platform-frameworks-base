@@ -24,6 +24,8 @@ import android.util.Log;
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Map;
+import android.os.SystemProperties;
+
 
 
 /**
@@ -302,8 +304,8 @@ public abstract class AbstractCursor implements CrossProcessCursor {
     public int getColumnIndexOrThrow(String columnName) {
         final int index = getColumnIndex(columnName);
         if (index < 0) {
-            throw new IllegalArgumentException("column '" + columnName + "' does not exist");
-        }
+             throw new IllegalArgumentException("column '" + columnName + "' does not exist");
+         }
         return index;
     }
 

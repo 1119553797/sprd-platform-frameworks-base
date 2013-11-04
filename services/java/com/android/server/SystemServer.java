@@ -70,6 +70,7 @@ import dalvik.system.Zygote;
 import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
+import com.android.security.SecurityService;
 
 class ServerThread extends Thread {
     private static final String TAG = "SystemServer";
@@ -156,7 +157,7 @@ class ServerThread extends Thread {
 
         //Bug#185069 fix low storage ,check the space&delete the temp file weather need.
         DeviceStorageMonitorService.freeSpace();
-
+        SecurityService security = null;
         // Critical services...
         try {
             Slog.i(TAG, "Entropy Mixer");
@@ -166,6 +167,13 @@ class ServerThread extends Thread {
             power = new PowerManagerService();
             ServiceManager.addService(Context.POWER_SERVICE, power);
 
+            if (SystemProperties.get("persist.support.securetest").equals("1"))
+            {
+		Slog.i(TAG, "Security Service");
+            	security = new SecurityService();
+            	ServiceManager.addService("security", security);
+            }
+		
             Slog.i(TAG, "Activity Manager");
             context = ActivityManagerService.main(factoryTest);
 
@@ -832,6 +840,8 @@ class ServerThread extends Thread {
         final DreamManagerService dreamyF = dreamy;
         final InputManagerService inputManagerF = inputManager;
         final BluetoothService bluetoothF = bluetooth;
+	
+	final SecurityService securityF = security;
 
         // We now tell the activity manager it is okay to run third party
         // code.  It will call back into us once it has gotten to the state
@@ -947,6 +957,15 @@ class ServerThread extends Thread {
                     if (inputManagerF != null) inputManagerF.systemReady(bluetoothF);
                 } catch (Throwable e) {
                     reportWtf("making InputManagerService ready", e);
+                }
+                if (SystemProperties.get("persist.support.securetest").equals("1")) {
+                    if (securityF != null) {
+                        try {
+                            securityF.systemReady(contextF);
+                        } catch (Throwable e) {
+                            reportWtf("Security Service ready", e);
+                        }
+                    }
                 }
             }
         });

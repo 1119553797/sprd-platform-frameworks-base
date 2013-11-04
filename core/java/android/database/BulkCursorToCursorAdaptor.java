@@ -19,7 +19,7 @@ package android.database;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.util.Log;
-
+import android.os.SystemProperties;
 /**
  * Adapts an {@link IBulkCursor} to a {@link Cursor} for use in the local process.
  *
@@ -60,8 +60,8 @@ public final class BulkCursorToCursorAdaptor extends AbstractWindowedCursor {
     }
 
     private void throwIfCursorIsClosed() {
-        if (mBulkCursor == null) {
-            throw new StaleDataException("Attempted to access a cursor after it has been closed.");
+        if (mBulkCursor == null) { 
+ 	     throw new StaleDataException("Attempted to access a cursor after it has been closed.");
         }
     }
 

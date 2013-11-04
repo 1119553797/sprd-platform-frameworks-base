@@ -288,7 +288,8 @@ LOCAL_SRC_FILES := $(call find-other-java-files,$(SECONDARY_FRAMEWORKS_SUBDIRS))
 
 LOCAL_SRC_FILES += $(SECONDARY_SRC_FILES)
 LOCAL_SRC_FILES += \
-       core/java/android/sim/ISimManager.aidl
+        core/java/android/sim/ISimManager.aidl\
+        core/java/android/os/ISecurityService.aidl
 
 LOCAL_NO_STANDARD_LIBRARIES := true
 LOCAL_JAVA_LIBRARIES := bouncycastle core core-junit ext framework

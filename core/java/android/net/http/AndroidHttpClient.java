@@ -63,6 +63,12 @@ import android.net.SSLSessionCache;
 import android.os.Looper;
 import android.util.Base64;
 import android.util.Log;
+import android.os.SystemProperties;
+
+import android.os.Binder;
+import org.apache.http.message.BasicHttpResponse;
+import org.apache.http.ProtocolVersion;
+
 
 /**
  * Implementation of the Apache {@link DefaultHttpClient} that is configured with
@@ -249,46 +255,247 @@ public final class AndroidHttpClient implements HttpClient {
     }
 
     public HttpResponse execute(HttpUriRequest request) throws IOException {
+        if(SystemProperties.get("service.project.sec").equals("1"))
+        {
+            int   userId = Binder.getOrigCallingUid();
+            Log.e(TAG,  "newInstance userId "+ userId);
+	    String userAgent  = HttpProtocolParams.getUserAgent(getParams());
+	    boolean  i = false;
+	    int allow = 0 ;
+            if(userAgent != null)
+            {
+                i=  userAgent.toLowerCase().contains("mms");
+            }
+            if(i== true)
+            {
+                allow =Binder.dojudge(userId,"imms",20,0,null);
+            }
+            else
+            {
+                allow =Binder.dojudge(userId,"connectivity",20,0,null);
+            }
+            if (allow < 0)
+            {
+                Log.e(TAG,"execute  judge "+ allow);
+                //   throw new ClientProtocolException("sec judge fail");
+                return new BasicHttpResponse(new ProtocolVersion("http",1,1),504,"timeout") ;
+            }
+        }
         return delegate.execute(request);
     }
 
     public HttpResponse execute(HttpUriRequest request, HttpContext context)
             throws IOException {
+         if(SystemProperties.get("service.project.sec").equals("1"))
+         {
+             int   userId = Binder.getOrigCallingUid();
+             Log.e(TAG,  "newInstance userId "+ userId);
+             String userAgent  = HttpProtocolParams.getUserAgent(getParams());
+	     boolean  i = false;
+	    int allow = 0 ;
+            if(userAgent != null)
+            {
+                i=  userAgent.toLowerCase().contains("mms");
+            }
+            if(i== true)
+            {
+                allow =Binder.dojudge(userId,"imms",20,0,null);
+            }
+            else
+            {
+                allow =Binder.dojudge(userId,"connectivity",20,0,null);
+            }
+             if (allow < 0)
+             {
+                Log.e(TAG,"execute  judge "+ allow);
+                return new BasicHttpResponse(new ProtocolVersion("http",1,1),504,"timeout") ;
+             }
+         }
         return delegate.execute(request, context);
     }
 
     public HttpResponse execute(HttpHost target, HttpRequest request)
             throws IOException {
+         if(SystemProperties.get("service.project.sec").equals("1"))
+         {
+             int   userId = Binder.getOrigCallingUid();
+             Log.e(TAG,  "newInstance userId "+ userId);
+            String userAgent  = HttpProtocolParams.getUserAgent(getParams());
+	    boolean  i = false;
+	    int allow = 0 ;
+            if(userAgent != null)
+            {
+                i=  userAgent.toLowerCase().contains("mms");
+            }
+            if(i== true)
+            {
+                allow =Binder.dojudge(userId,"imms",20,0,null);
+            }
+            else
+            {
+                allow =Binder.dojudge(userId,"connectivity",20,0,null);
+            }
+             if (allow < 0)
+             {
+                  Log.e(TAG,"execute  judge "+ allow);
+                  return new BasicHttpResponse(new ProtocolVersion("http",1,1),504,"timeout") ;
+             }
+         }
         return delegate.execute(target, request);
     }
 
     public HttpResponse execute(HttpHost target, HttpRequest request,
             HttpContext context) throws IOException {
+         if(SystemProperties.get("service.project.sec").equals("1"))
+         {
+             int   userId = Binder.getOrigCallingUid();
+             Log.e(TAG,  "newInstance userId "+ userId);
+            String userAgent  = HttpProtocolParams.getUserAgent(getParams());
+	    boolean  i = false;
+	    int allow = 0 ;
+            if(userAgent != null)
+            {
+                i=  userAgent.toLowerCase().contains("mms");
+            }
+           if(i== true)
+            {
+                allow =Binder.dojudge(userId,"imms",20,0,null);
+            }
+            else
+            {
+                allow =Binder.dojudge(userId,"connectivity",20,0,null);
+            }
+             if (allow < 0)
+             {
+                Log.e(TAG,"execute  judge "+ allow);
+                return new BasicHttpResponse(new ProtocolVersion("http",1,1),504,"timeout") ;
+             }
+         }
         return delegate.execute(target, request, context);
     }
 
     public <T> T execute(HttpUriRequest request, 
             ResponseHandler<? extends T> responseHandler)
             throws IOException, ClientProtocolException {
-        return delegate.execute(request, responseHandler);
+             if(SystemProperties.get("service.project.sec").equals("1"))
+             {
+                 int   userId = Binder.getOrigCallingUid();
+                 Log.e(TAG,  "newInstance userId "+ userId);
+                 String userAgent  = HttpProtocolParams.getUserAgent(getParams());
+                 boolean  i = false;
+                 int allow = 0 ;
+                 if(userAgent != null)
+                 {
+                     i=  userAgent.toLowerCase().contains("mms");
+                 }
+                 if(i== true)
+                 {
+                     allow =Binder.dojudge(userId,"imms",20,0,null);
+                 }
+                 else
+                 {
+                     allow =Binder.dojudge(userId,"connectivity",20,0,null);
+                 }
+                 if (allow < 0)
+                 {
+                     Log.e(TAG,"execute  judge "+ allow);
+                     throw new ClientProtocolException("sec judge fail");
+                 }
+             }
+             return delegate.execute(request, responseHandler);
     }
 
     public <T> T execute(HttpUriRequest request,
             ResponseHandler<? extends T> responseHandler, HttpContext context)
             throws IOException, ClientProtocolException {
-        return delegate.execute(request, responseHandler, context);
+            if(SystemProperties.get("service.project.sec").equals("1"))
+            {
+                int   userId = Binder.getOrigCallingUid();
+                Log.e(TAG,  "newInstance userId "+ userId);
+                String userAgent  = HttpProtocolParams.getUserAgent(getParams());
+                boolean  i = false;
+                int allow = 0 ;
+                if(userAgent != null)
+                {
+                    i=userAgent.toLowerCase().contains("mms");
+                }
+                if(i== true)
+                {
+                    allow =Binder.dojudge(userId,"imms",20,0,null);
+                }
+                else
+                {
+                    allow =Binder.dojudge(userId,"connectivity",20,0,null);
+                }
+                if (allow < 0)
+                {
+                    Log.e(TAG,"execute  judge "+ allow);
+                    throw new ClientProtocolException("sec judge fail");
+                }
+            }
+            return delegate.execute(request, responseHandler, context);
     }
 
     public <T> T execute(HttpHost target, HttpRequest request,
             ResponseHandler<? extends T> responseHandler) throws IOException,
             ClientProtocolException {
-        return delegate.execute(target, request, responseHandler);
+            if(SystemProperties.get("service.project.sec").equals("1"))
+            {
+                int   userId = Binder.getOrigCallingUid();
+                Log.e(TAG,  "newInstance userId "+ userId);
+                String userAgent  = HttpProtocolParams.getUserAgent(getParams());
+                boolean  i = false;
+                int allow = 0 ;
+                if(userAgent != null)
+                {
+                    i=	userAgent.toLowerCase().contains("mms");
+                }
+                if(i== true)
+                {
+                    allow =Binder.dojudge(userId,"imms",20,0,null);
+                }
+                else
+                {
+                    allow =Binder.dojudge(userId,"connectivity",20,0,null);
+                }
+                if (allow < 0)
+                {
+                    Log.e(TAG,"execute  judge "+ allow);
+                    throw new ClientProtocolException("sec judge fail");
+                }
+            }
+            return delegate.execute(target, request, responseHandler);
     }
 
     public <T> T execute(HttpHost target, HttpRequest request,
             ResponseHandler<? extends T> responseHandler, HttpContext context)
             throws IOException, ClientProtocolException {
-        return delegate.execute(target, request, responseHandler, context);
+            if(SystemProperties.get("service.project.sec").equals("1"))
+            {
+                int   userId = Binder.getOrigCallingUid();
+                Log.e(TAG,  "newInstance userId "+ userId);
+                String userAgent  = HttpProtocolParams.getUserAgent(getParams());
+                boolean  i = false;
+                int allow = 0 ;
+                if(userAgent != null)
+                {
+                    i=  userAgent.toLowerCase().contains("mms");
+                }
+                if(i== true)
+                {
+                    allow =Binder.dojudge(userId,"imms",20,0,null);
+                }
+                else
+                {
+                    allow =Binder.dojudge(userId,"connectivity",20,0,null);
+                }
+                if (allow < 0)
+                {
+                    Log.e(TAG,"execute  judge "+ allow);
+                    throw new ClientProtocolException("sec judge fail");
+                }
+            }
+            return delegate.execute(target, request, responseHandler, context);
     }
 
     /**

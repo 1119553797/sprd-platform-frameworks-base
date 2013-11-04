@@ -48,6 +48,7 @@ public class Binder implements IBinder {
      */
     private static final boolean FIND_POTENTIAL_LEAKS = false;
     private static final String TAG = "Binder";
+    private static IBinder gSecurityService = null;
 
     /* mObject is used by native code, do not remove or rename */
     private int mObject;
@@ -87,6 +88,27 @@ public class Binder implements IBinder {
         } else {
             return getCallingUid();
         }
+    }
+    public static int  dojudge(int uid,  String name, int oprID, int	oprType, String param)
+    {
+            if (gSecurityService == null)
+                gSecurityService = ServiceManager.getService("security") ;
+            Parcel data =  Parcel.obtain() ;
+            Parcel reply = Parcel.obtain();
+            data.writeInterfaceToken("android.os.ISecurityService");
+            data.writeInt(uid);
+            data.writeString(name);
+            data.writeInt(oprID);
+            data.writeInt(oprType);
+            data.writeString(param);
+            try {
+                gSecurityService.transact(3, data, reply, 0);
+                reply.readExceptionCode();
+            }
+            catch (android.os.RemoteException e)
+            {
+            }
+            return reply.readInt();
     }
 
     private static final native int getOrigCallingUidNative();

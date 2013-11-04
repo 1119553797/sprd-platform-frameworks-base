@@ -415,4 +415,8 @@
     <item>com.broadcom.bt.app.fm</item>
     <item>com.thunderst.radio</item>
     </string-array>
+    <string name="toggle_data_alert">Attention</string>
+    <string name="alert_ok">OK</string>
+    <string name="alert_cancel">Cancel</string>
+  	<string name="toggle_data_message">About to open data connection, which may result in data traffic and related costs.</string>
 </resources>

@@ -96,7 +96,8 @@ public class ToggleListener extends BroadcastReceiver implements View.OnClickLis
     // indicate whether the data network is on
     private boolean mDataDefaultNetworkOn = false;
     private AlertDialog alertDialog = null;
-    boolean closeFlag = false;
+    private AlertDialog confirmDialog = null;
+    boolean moblieDataOpeningFlag = false;
 
     public ToggleListener(ToggleViewGroup toggleViewGroup) {
         mToggleViewGroup = toggleViewGroup;
@@ -197,6 +198,8 @@ public class ToggleListener extends BroadcastReceiver implements View.OnClickLis
         filter.addAction(Intent.ACTION_DEFAULT_PHONE_CHANGE);
         filter.addAction(TelephonyIntents.ACTION_SIM_STATE_CHANGED);
         filter.addAction(Intent.ACTION_DATA_CONNECTION_DETTACH);
+        filter.addAction(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
+        filter.addAction(TelephonyIntents.ACTION_ANY_DATA_CONNECTION_STATE_CHANGED);
         mToggleViewGroup.getContext().registerReceiver(this, filter);
 
         // listen the fields changed, then refresh the UI
@@ -268,7 +271,21 @@ public class ToggleListener extends BroadcastReceiver implements View.OnClickLis
             Log.d(TAG, "ACTION_DATA_CONNECTION_DETTACH");
             updateButtonImage(R.id.quick_switch_mobile_net_icon, sDataNetSyncImages[0]);
             dataViewEnable(true);
-            closeFlag = false;
+            moblieDataOpeningFlag = false;
+            updateDataNetworkButton();
+        } else if (action.equals(Intent.ACTION_CLOSE_SYSTEM_DIALOGS)){
+          Log.w(TAG, "Intent.ACTION_CLOSE_SYSTEM_DIALOGS");
+          if (alertDialog != null){
+               alertDialog.dismiss();
+          }
+          if (confirmDialog != null){
+              confirmDialog.dismiss();
+          }
+        }
+        else if (action.equals(TelephonyIntents.ACTION_ANY_DATA_CONNECTION_STATE_CHANGED)) {
+            dataViewEnable(true);
+            moblieDataOpeningFlag = false;
+            updateDataNetworkButton();
         }
     }
 
@@ -370,7 +387,7 @@ public class ToggleListener extends BroadcastReceiver implements View.OnClickLis
         if (alertDialog != null)
             alertDialog.dismiss();
         updateButtonImage(R.id.quick_switch_mobile_net_icon, sDataNetSyncImages[1]);
-        if (closeFlag) {
+        if (moblieDataOpeningFlag) {
             dataViewEnable(false);
             updateButtonImage(R.id.quick_switch_mobile_net_icon, sDataNetSyncImages[2]);
         }
@@ -400,7 +417,7 @@ public class ToggleListener extends BroadcastReceiver implements View.OnClickLis
         }
         //Modified for bug#213435 sim lock end
         Log.d(TAG, "mDataDefaultNetworkOn = " + mDataDefaultNetworkOn);
-        if(closeFlag)
+        if(moblieDataOpeningFlag)
           imageID = R.drawable.quick_switch_mobile_data_ing_sprd;
         else
           imageID = mDataDefaultNetworkOn ? R.drawable.quick_switch_mobile_data_on_sprd : R.drawable.quick_switch_mobile_data_off_sprd;
@@ -810,24 +827,18 @@ public class ToggleListener extends BroadcastReceiver implements View.OnClickLis
                         Log.d(TAG, "onClick-- position = " + phoneId);
                         if (phoneId != -1) {
                             Log.d(TAG, "enter into phoneid = " + phoneId);
-                            mSimConnManager[position].setMobileDataEnabledByPhoneId(phoneId, true);
-                            closeFlag = true;
+                         // SPRD: Set layout resource into the window
+                            showDialog(position, phoneId);
                         } else {
                             if(setPhoneId != -1){
                                 mSimConnManager[setPhoneId].setMobileDataEnabledByPhoneId(setPhoneId,false);
-                            closeFlag = false;
+                                moblieDataOpeningFlag = false;
                             setPhoneId = -1;
                                 mContext.sendBroadcast(new Intent(Intent.ACTION_DEFAULT_PHONE_CHANGE));
                             }
                         }
                         toggleDataNetwork();
-                        if (phoneId != -1) {
-                            Intent intent = new Intent();
-                            intent.putExtra("SIM_ID", phoneId);
-                            intent.putExtra("SETTING_ID", setPhoneId);
-                            intent.setAction(Intent.ACTION_DATA_CONNECTION_CHANGED);
-                            mContext.sendBroadcast(intent);
-                        }}
+                    }
                 }, com.android.internal.R.layout.select_sim_singlechoice, isCloseData);
 //20130718 BUG 189145 data connection icon defect END
         AlertDialog.Builder b = new AlertDialog.Builder(mContext);
@@ -873,6 +884,66 @@ public class ToggleListener extends BroadcastReceiver implements View.OnClickLis
     private void updateButtonImage(int viewId, int drawableId, boolean clickable) {
         ImageView itemView = (ImageView) mToggleViewGroup.findViewById(viewId);
         itemView.setImageResource(drawableId);
+    }
+
+    private  void  showDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        builder.setTitle(R.string.toggle_data_alert);
+        builder.setMessage(R.string.toggle_data_message);
+        builder.setPositiveButton(R.string.alert_ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+
+        if(confirmDialog != null)
+            confirmDialog.dismiss();
+
+        confirmDialog = builder.create();
+        confirmDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ERROR);
+        confirmDialog.show();
+    }
+    /** SPRD: click ok setup dataconnection @{ */
+    private void doAutoDataConnection (int position, int phoneId) {
+        mSimConnManager[position]
+                .setMobileDataEnabledByPhoneId(phoneId, true);
+        moblieDataOpeningFlag = true;
+        if (phoneId != -1) {;
+            Intent intent = new Intent();
+            intent.putExtra("SIM_ID", phoneId);
+            intent.putExtra("SETTING_ID", setPhoneId);
+            intent.setAction(Intent.ACTION_DATA_CONNECTION_CHANGED);
+            mContext.sendBroadcast(intent);
+        }
+    }
+    /** @} */
+    private void showDialog(final int position, final int phoneId) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        builder.setTitle(R.string.toggle_data_alert);
+        builder.setMessage(R.string.toggle_data_message);
+        builder.setPositiveButton(R.string.alert_ok,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                     // SPRD: click ok setup dataconnection
+                        doAutoDataConnection(position, phoneId);
+                    }
+                });
+        // SPRD: click cancel do nothing
+        builder.setNegativeButton(R.string.alert_cancel,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+
+        if(null!= confirmDialog)
+            confirmDialog.dismiss();
+
+        confirmDialog = builder.create();
+        confirmDialog.getWindow()
+                .setType(WindowManager.LayoutParams.TYPE_SYSTEM_ERROR);
+        confirmDialog.show();
     }
 
     private ContentObserver mMobileDataObserver = new ContentObserver(

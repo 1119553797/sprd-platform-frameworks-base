@@ -77,6 +77,8 @@ import com.android.internal.util.AsyncChannel;
 import com.android.internal.util.Protocol;
 import com.android.internal.util.State;
 import com.android.internal.util.StateMachine;
+import android.os.SystemProperties;
+
 
 /**
  * Track the state of Wifi connectivity. All event handling is done here,
@@ -1844,8 +1846,15 @@ public class WifiStateMachine extends StateMachine {
                     replyToMessage(message, message.what, FAILURE);
                     break;
                 case CMD_GET_CONFIGURED_NETWORKS:
-                    replyToMessage(message, message.what, (List<WifiConfiguration>) null);
-                    break;
+                    if (SystemProperties.get("service.project.sec").equals("1"))
+                    {
+                        replyToMessage(message, message.what, new ArrayList<WifiConfiguration>());
+                    }
+                    else
+                    {
+                       replyToMessage(message, message.what, (List<WifiConfiguration>) null);
+                    }
+                   break;
                 case CMD_ENABLE_RSSI_POLL:
                     mEnableRssiPolling = (message.arg1 == 1);
                     break;

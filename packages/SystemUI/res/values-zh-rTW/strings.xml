@@ -164,4 +164,8 @@
   <string name="weak_signal_title">信號弱</string>
   <string name="weak_signal_message">當前WLAN的信號較弱，建議您選擇信號較好的無線存取點</string>
   <string name="auto_connect">不再詢問，總是自動連接其他信任無線存取點</string>
+  <string name="toggle_data_alert">注意</string>
+  <string name="alert_ok">確定</string>
+  <string name="alert_cancel">取消</string>
+  <string name="toggle_data_message">網絡數據連接即將打開，將可能產生數據流量和相關費用，請知悉</string>
 </resources>

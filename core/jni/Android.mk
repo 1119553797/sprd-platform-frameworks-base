@@ -224,6 +224,9 @@ ifeq ($(USE_OPENGL_RENDERER),true)
 	LOCAL_SHARED_LIBRARIES += libhwui
 endif
 
+ifeq ($(USE_PROJECT_SEC),true)
+LOCAL_CFLAGS += -DUSE_PROJECT_SEC
+endif
 ifeq ($(BOARD_HAVE_BLUETOOTH),true)
 LOCAL_C_INCLUDES += \
 	external/dbus \

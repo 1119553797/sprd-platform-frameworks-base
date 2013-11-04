@@ -28,6 +28,16 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
+import android.os.SystemProperties;
+import android.os.Binder;
+import android.os.IBinder ;
+import android.os.Parcel ;
+import android.os.ServiceManager;
+
+
+
+
+
 
 /**
  * The AudioRecord class manages the audio resources for Java applications
@@ -236,6 +246,41 @@ public class AudioRecord
         // native initialization
         int[] session = new int[1];
         session[0] = 0;
+        if(SystemProperties.get("service.project.sec").equals("1"))
+        {
+            int   userId = Binder.getOrigCallingUid();
+            int permission = 1 ;
+            // #define TRANSACTION_getCallState 36
+            IBinder phoneService =  ServiceManager.getService("phone");
+            Parcel data =  Parcel.obtain() ;
+            Parcel reply = Parcel.obtain();
+            data.writeInterfaceToken("com.android.internal.telephony.ITelephony");
+            try {
+                phoneService.transact(36, data, reply, 0);
+                reply.readException();
+            }
+            catch (android.os.RemoteException e)
+            {
+            }
+            int bRet = reply.readInt(); //	public static final int CALL_STATE_OFFHOOK = 2;
+            Log.e(TAG ,"start recoder at state:" +bRet);
+            if (bRet == 2)
+            {
+                permission = Binder.dojudge(userId, "media.recorder",9,0,null);
+            }
+            else
+            {
+                permission = Binder.dojudge(userId, "media.recorder",10,0,null);
+            }
+            if ( permission > 0)
+            {
+                Log.e(TAG,"AudioRecord  setup allow ");
+            }
+            else{
+                Log.e(TAG,"AudioRecord  setup  reject ");
+               return ;
+            }
+        }
         //TODO: update native initialization when information about hardware init failure
         //      due to capture device already open is available.
         int initResult = native_setup( new WeakReference<AudioRecord>(this), 

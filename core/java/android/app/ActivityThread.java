@@ -4400,8 +4400,24 @@ public final class ActivityThread {
 
         try {
             ActivityManagerNative.getDefault().publishContentProviders(
-                getApplicationThread(), results);
-        } catch (RemoteException ex) {
+            getApplicationThread(), results);
+            if (SystemProperties.get("persist.support.securetest").equals("1"))
+            {
+                for(IActivityManager.ContentProviderHolder holder : results)
+                {
+                    Log.i(TAG , "add content provider authority:" + holder.info.authority + ", provider binder:" + holder.provider.asBinder());
+                    String  proviedname [] = {"sms","mms","mms-sms","call_log","contacts;com.android.contacts",null} ;
+                    for (int i = 0 ; proviedname[i]  != null ; i++)
+                    {
+                        if (proviedname[i].equals(holder.info.authority))
+                        {
+                            ServiceManager.addService(holder.info.authority , holder.provider.asBinder());
+                        }
+                    }
+                }
+            }
+
+	 } catch (RemoteException ex) {
         } catch (SecurityException se) {
             //could not find the calling app in AMS,just finish self
             if (Debug.isMonkey()) {
