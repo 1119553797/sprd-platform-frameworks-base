@@ -9585,6 +9585,7 @@ public final class ActivityManagerService extends ActivityManagerNative
 
         canKillFrontSystemApp = new HashSet<String>();
         canKillFrontSystemApp.add("com.android.camera");
+        canKillFrontSystemApp.add("com.android.browser");
     }
 
     final void performServiceRestartLocked(ServiceRecord r) {
