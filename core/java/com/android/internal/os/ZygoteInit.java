@@ -247,6 +247,19 @@ public class ZygoteInit {
         }
     }
 
+    static void preload() {
+        boolean engModeFlag = false;
+        engModeFlag = "engtest".equals(SystemProperties.get("ro.bootmode",
+                "mode")) ? true : false;
+        if (false == engModeFlag) {
+            preloadClasses();
+            preloadResources();
+        } else {
+            Log.d(TAG,
+                    "engModeFlag mode ,we should not preload resource for fast boot");
+        }
+    }
+
     /**
      * Performs Zygote process initialization. Loads and initializes
      * commonly used classes.
@@ -575,9 +588,10 @@ public class ZygoteInit {
             registerZygoteSocket();
             EventLog.writeEvent(LOG_BOOT_PROGRESS_PRELOAD_START,
                 SystemClock.uptimeMillis());
-            preloadClasses();
+//            preloadClasses();
             //cacheRegisterMaps();
-            preloadResources();
+//           preloadResources();
+            preload();
             EventLog.writeEvent(LOG_BOOT_PROGRESS_PRELOAD_END,
                 SystemClock.uptimeMillis());
 

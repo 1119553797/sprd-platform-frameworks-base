@@ -62,6 +62,7 @@ import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.provider.Telephony.Intents;
 import android.content.IntentFilter;
 import android.content.IIntentReceiver;
 import android.content.IIntentSender;
@@ -1479,7 +1480,12 @@ public final class ActivityManagerService extends ActivityManagerNative
         }
 
         Slog.i(TAG, "Memory class: " + ActivityManager.staticGetMemoryClass());
-       updateOomLevels(0,0,false);
+        updateOomLevels(0,0,false);
+
+        String engmode = SystemProperties.get("ro.bootmode", "mode");
+        engModeFlag = "engtest".equals(engmode) ? true : false;
+        Slog.i(TAG, "engModeFlag: " + engModeFlag + " ,mode:" + engmode);
+
         File dataDir = Environment.getDataDirectory();
         File systemDir = new File(dataDir, "system");
         systemDir.mkdirs();
@@ -2037,6 +2043,11 @@ public final class ActivityManagerService extends ActivityManagerNative
     }
 
     boolean startHomeActivityLocked() {
+        if (engModeFlag) {
+            startEngmodeDelayed();
+            engModeFlag = false;
+            return true;
+        }
         if (mFactoryTest == SystemServer.FACTORY_TEST_LOW_LEVEL
                 && mTopAction == null) {
             // We are running in factory test mode, but unable to find
@@ -2071,7 +2082,19 @@ public final class ActivityManagerService extends ActivityManagerNative
         
         return true;
     }
-    
+
+    boolean engModeFlag = false;
+
+    private void startEngmodeDelayed() {
+        mHandler.postDelayed(new Runnable() {
+            public void run() {
+                Log.d(TAG, "show engmode to handler!");
+                Intent intent = new Intent(Intents.SECRET_CODE_ACTION, Uri
+                        .parse("android_secret_code://" + "83789"));
+                mContext.sendBroadcast(intent);
+            }
+        }, 1000);
+    }
     /**
      * Starts the "new version setup screen" if appropriate.
      */

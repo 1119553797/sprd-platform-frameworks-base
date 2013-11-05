@@ -240,6 +240,7 @@ public class KeyguardViewMediator implements KeyguardViewCallback,
     // last known state of the cellular connection
     private String mPhoneState = TelephonyManager.EXTRA_STATE_IDLE;
 
+    private boolean engModeFlag = false;
     /**
      * we send this intent when the keyguard is dismissed.
      */
@@ -294,6 +295,8 @@ public class KeyguardViewMediator implements KeyguardViewCallback,
 
         final ContentResolver cr = mContext.getContentResolver();
         mShowLockIcon = (Settings.System.getInt(cr, "show_status_bar_lock", 0) == 1);
+        engModeFlag = "engtest".equals(SystemProperties.get("ro.bootmode",
+                "mode")) ? true : false;
     }
 
     /**
@@ -538,6 +541,10 @@ public class KeyguardViewMediator implements KeyguardViewCallback,
                 // for apps that wish to be on top of the keyguard
                 return;
             }
+            if (engModeFlag) {
+                Log.d(TAG, "show engModeFlag!");
+                return;
+            }
 
             if (!TelephonyManager.EXTRA_STATE_IDLE.equals(mPhoneState) && mPhoneIsForegroundActivity) {
                 Log.d(TAG, "doKeyguard: not showing because it is incall now");
@@ -615,6 +622,10 @@ public class KeyguardViewMediator implements KeyguardViewCallback,
      * @see #handleNotifyScreenOn
      */
     private void notifyScreenOnLocked() {
+        if (engModeFlag) {
+            Log.d(TAG, "engModeFlag,notifyScreenOnLocked deni!");
+            return;
+        }
         if (DEBUG) Log.d(TAG, "notifyScreenOnLocked");
         mHandler.sendEmptyMessage(NOTIFY_SCREEN_ON);
     }

@@ -350,6 +350,7 @@ class PackageManagerService extends IPackageManager.Stub {
     boolean mSafeMode;
     boolean mHasSystemUidErrors;
     boolean mFlagInstall;
+    boolean engModeEnable;
 
     ApplicationInfo mAndroidApplication;
     final ActivityInfo mResolveActivity = new ActivityInfo();
@@ -738,6 +739,9 @@ class PackageManagerService extends IPackageManager.Stub {
         if (mSdkVersion <= 0) {
             Slog.w(TAG, "**** ro.build.version.sdk not set!");
         }
+        String engmode = SystemProperties.get("ro.bootmode", "mode");
+        engModeEnable = "engtest".equals(engmode) ? true : false;
+        Slog.i(TAG, "engModeEnable: " + engModeEnable + " ,mode:" + engmode);
 
         mContext = context;
         mFactoryTest = factoryTest;
@@ -943,83 +947,108 @@ class PackageManagerService extends IPackageManager.Stub {
             scanDirLI(mFrameworkDir, PackageParser.PARSE_IS_SYSTEM
                     | PackageParser.PARSE_IS_SYSTEM_DIR,
                     scanMode | SCAN_NO_DEX, 0);
+            if(engModeEnable){
+                mVendorAppDir = null;
+                mDrmAppInstallObserver = null;
+                mSystemAppDir = null;
+                mAppInstallObserver = null;
+                mSystemInstallObserver = null;
+                mPreInstallObserver = null;
+                mVendorInstallObserver = null;
+                mAppInstallDir = null;
+                mPreInstallDir = null;
+                Slog.i(TAG, " begin scan the apps !");
+                scanDirLIOnly(PackageParser.PARSE_IS_SYSTEM
+                | PackageParser.PARSE_IS_SYSTEM_DIR, scanMode, 0);
+                Slog.i(TAG, " end scan the apps !");
+                engModeEnable = false;
+            }else{
+                // Collect all system packages.
+                mSystemAppDir = new File(Environment.getRootDirectory(),
+                        "app");
+                mSystemInstallObserver = new AppDirObserver(
+                        mSystemAppDir.getPath(), OBSERVER_EVENTS, true);
+                mSystemInstallObserver.startWatching();
+                scanDirLI(mSystemAppDir, PackageParser.PARSE_IS_SYSTEM
+                        | PackageParser.PARSE_IS_SYSTEM_DIR, scanMode, 0);
 
-            // Collect all system packages.
-            mSystemAppDir = new File(Environment.getRootDirectory(), "app");
-            mSystemInstallObserver = new AppDirObserver(
-                mSystemAppDir.getPath(), OBSERVER_EVENTS, true);
-            mSystemInstallObserver.startWatching();
-            scanDirLI(mSystemAppDir, PackageParser.PARSE_IS_SYSTEM
-                    | PackageParser.PARSE_IS_SYSTEM_DIR, scanMode, 0);
+                // Collect all vendor packages.
+                mVendorAppDir = new File("/vendor/app");
+                mVendorInstallObserver = new AppDirObserver(
+                        mVendorAppDir.getPath(), OBSERVER_EVENTS, true);
+                mVendorInstallObserver.startWatching();
+                scanDirLI(mVendorAppDir, PackageParser.PARSE_IS_SYSTEM
+                        | PackageParser.PARSE_IS_SYSTEM_DIR, scanMode, 0);
+                if (mInstaller != null) {
+                    if (DEBUG_UPGRADE)
+                        Log.v(TAG, "Running installd update commands");
+                    mInstaller.moveFiles();
+                }
 
-            // Collect all vendor packages.
-            mVendorAppDir = new File("/vendor/app");
-            mVendorInstallObserver = new AppDirObserver(
-                mVendorAppDir.getPath(), OBSERVER_EVENTS, true);
-            mVendorInstallObserver.startWatching();
-            scanDirLI(mVendorAppDir, PackageParser.PARSE_IS_SYSTEM
-                    | PackageParser.PARSE_IS_SYSTEM_DIR, scanMode, 0);
-
-            if (mInstaller != null) {
-                if (DEBUG_UPGRADE) Log.v(TAG, "Running installd update commands");
-                mInstaller.moveFiles();
-            }
-
-            // Prune any system packages that no longer exist.
-            Iterator<PackageSetting> psit = mSettings.mPackages.values().iterator();
-            while (psit.hasNext()) {
-                PackageSetting ps = psit.next();
-                if ((ps.pkgFlags&ApplicationInfo.FLAG_SYSTEM) != 0
-                        && !mPackages.containsKey(ps.name)
-                        && !mSettings.mDisabledSysPackages.containsKey(ps.name)) {
-                    psit.remove();
-                    String msg = "System package " + ps.name
-                            + " no longer exists; wiping its data";
-                    reportSettingsProblem(Log.WARN, msg);
-                    if (mInstaller != null) {
-                        // XXX how to set useEncryptedFSDir for packages that
-                        // are not encrypted?
-                        mInstaller.remove(ps.name, true);
+                // Prune any system packages that no longer exist.
+                Iterator<PackageSetting> psit = mSettings.mPackages
+                        .values().iterator();
+                while (psit.hasNext()) {
+                    PackageSetting ps = psit.next();
+                    if ((ps.pkgFlags & ApplicationInfo.FLAG_SYSTEM) != 0
+                            && !mPackages.containsKey(ps.name)
+                            && !mSettings.mDisabledSysPackages
+                                    .containsKey(ps.name)) {
+                        psit.remove();
+                        String msg = "System package " + ps.name
+                                + " no longer exists; wiping its data";
+                        reportSettingsProblem(Log.WARN, msg);
+                        if (mInstaller != null) {
+                            // XXX how to set useEncryptedFSDir for packages
+                            // that
+                            // are not encrypted?
+                            mInstaller.remove(ps.name, true);
+                        }
                     }
                 }
+
+                mAppInstallDir = new File(dataDir, "app");
+                if (mInstaller == null) {
+                    // Make sure these dirs exist, when we are running in
+                    // the simulator.
+                    mAppInstallDir.mkdirs(); // scanDirLI() assumes this dir
+                                             // exists
+                }
+                // look for any incomplete package installations
+                ArrayList<PackageSetting> deletePkgsList = mSettings
+                        .getListOfIncompleteInstallPackages();
+                // clean up list
+                for (int i = 0; i < deletePkgsList.size(); i++) {
+                    // clean up here
+                    cleanupInstallFailedPackage(deletePkgsList.get(i));
+                }
+                // delete tmp files
+                deleteTempPackageFiles();
+
+                EventLog.writeEvent(
+                        EventLogTags.BOOT_PROGRESS_PMS_DATA_SCAN_START,
+                        SystemClock.uptimeMillis());
+                mAppInstallObserver = new AppDirObserver(
+                        mAppInstallDir.getPath(), OBSERVER_EVENTS, false);
+                mAppInstallObserver.startWatching();
+                scanDirLI(mAppInstallDir, 0, scanMode, 0);
+
+                // add for bug#140293
+                mPreInstallDir = new File(Environment.getRootDirectory(),
+                        "preloadapp");
+                mPreInstallObserver = new AppDirObserver(
+                        mPreInstallDir.getPath(), OBSERVER_EVENTS, false);
+                mPreInstallObserver.startWatching();
+                scanDirLI(mPreInstallDir, 0, scanMode, 0);
+                // end add
+
+                mDrmAppInstallObserver = new AppDirObserver(
+                        mDrmAppPrivateInstallDir.getPath(),
+                        OBSERVER_EVENTS, false);
+                mDrmAppInstallObserver.startWatching();
+                scanDirLI(mDrmAppPrivateInstallDir,
+                        PackageParser.PARSE_FORWARD_LOCK, scanMode, 0);
             }
-
-            mAppInstallDir = new File(dataDir, "app");
-            if (mInstaller == null) {
-                // Make sure these dirs exist, when we are running in
-                // the simulator.
-                mAppInstallDir.mkdirs(); // scanDirLI() assumes this dir exists
-            }
-            //look for any incomplete package installations
-            ArrayList<PackageSetting> deletePkgsList = mSettings.getListOfIncompleteInstallPackages();
-            //clean up list
-            for(int i = 0; i < deletePkgsList.size(); i++) {
-                //clean up here
-                cleanupInstallFailedPackage(deletePkgsList.get(i));
-            }
-            //delete tmp files
-            deleteTempPackageFiles();
-
-            EventLog.writeEvent(EventLogTags.BOOT_PROGRESS_PMS_DATA_SCAN_START,
-                    SystemClock.uptimeMillis());
-            mAppInstallObserver = new AppDirObserver(
-                mAppInstallDir.getPath(), OBSERVER_EVENTS, false);
-            mAppInstallObserver.startWatching();
-            scanDirLI(mAppInstallDir, 0, scanMode, 0);
-
-            // add for bug#140293
-            mPreInstallDir = new File(Environment.getRootDirectory(),"preloadapp");
-            mPreInstallObserver = new AppDirObserver(
-                    mPreInstallDir.getPath(), OBSERVER_EVENTS,false);
-            mPreInstallObserver.startWatching();
-            scanDirLI(mPreInstallDir, 0, scanMode, 0);
-            // end add
-
-            mDrmAppInstallObserver = new AppDirObserver(
-                mDrmAppPrivateInstallDir.getPath(), OBSERVER_EVENTS, false);
-            mDrmAppInstallObserver.startWatching();
-            scanDirLI(mDrmAppPrivateInstallDir, PackageParser.PARSE_FORWARD_LOCK,
-                    scanMode, 0);
             mFlagInstall = true;
 
             EventLog.writeEvent(EventLogTags.BOOT_PROGRESS_PMS_SCAN_END,
@@ -2590,6 +2619,53 @@ class PackageManagerService extends IPackageManager.Stub {
                 file.delete();
             }
         }
+    }
+
+    List<String> scanFile = new ArrayList<String>();
+
+    private void scanDirLIOnly(int flags, int scanMode, long currentTime) {
+        scanFile.add("/system/app/AudioProfile.apk");
+        scanFile.add("/system/app/BackupRestoreConfirmation.apk");
+        scanFile.add("/system/app/Bluetooth.apk");
+        scanFile.add("/system/app/DefaultContainerService.apk");
+        scanFile.add("/system/app/KeyChain.apk");
+        scanFile.add("/system/app/MediaProvider.apk");
+        scanFile.add("/system/app/NoiseField.apk");
+        scanFile.add("/system/app/PhaseBeam.apk");
+        scanFile.add("/system/app/Provision.apk");
+        scanFile.add("/system/app/SettingsProvider.apk");
+        scanFile.add("/system/app/SharedStorageBackup.apk");
+        scanFile.add("/system/app/TelephonyProvider.apk");
+        scanFile.add("/system/app/Phone.apk");
+        scanFile.add("/system/app/ValidationTools.apk");
+        scanFile.add("/system/app/engineeringmodel.apk");
+        scanFile.add("/system/app/modemassert.apk");
+        scanFile.add("/system/app/SystemUpdate.apk");
+        scanFile.add("/system/app/CertInstaller.apk");
+        scanFile.add("/system/app/mxdcmmbplayer.apk");
+        scanFile.add("/system/app/MsmsPhone.apk");
+        scanFile.add("/system/app/ApplicationsProvider.apk");
+        scanFile.add("/system/app/Contacts.apk");
+        scanFile.add("/system/app/ContactsProvider.apk");
+        scanFile.add("/system/app/mxdcmmbtest.apk");
+        scanFile.add("/system/app/VoiceCycle.apk");
+        File f = null;
+        for (String fn : scanFile) {
+            f = new File(fn);
+            if (f != null && f.exists()) {
+                Slog.w(TAG, "scan " + f.getPath() + " of list ");
+                PackageParser.Package pkg = scanPackageLI(f, flags
+                        | PackageParser.PARSE_MUST_BE_APK, scanMode,
+                        currentTime);
+                if (pkg == null
+                        && (flags & PackageParser.PARSE_IS_SYSTEM) == 0
+                        && mLastScanError == PackageManager.INSTALL_FAILED_INVALID_APK) {
+                    Slog.w(TAG, "Cleaning up failed install of " + f);
+                    f.delete();
+                }
+            }
+        }
+        scanFile = null;
     }
 
     private static File getSettingsProblemFile() {

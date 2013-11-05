@@ -113,6 +113,10 @@ class ServerThread extends Thread {
         int factoryTest = "".equals(factoryTestStr) ? SystemServer.FACTORY_TEST_OFF
                 : Integer.parseInt(factoryTestStr);
 
+        boolean engModeFlag = false;
+        String engmode = SystemProperties.get("ro.bootmode", "mode");
+        engModeFlag = "engtest".equals(engmode) ? true : false;
+        Slog.i(TAG, "engModeFlag: " + engModeFlag + " ,mode:" + engmode);
         LightsService lights = null;
         PowerManagerService power = null;
         BatteryService battery = null;
@@ -266,12 +270,14 @@ class ServerThread extends Thread {
                 Slog.e(TAG, "Failure starting StatusBarManagerService", e);
             }
 
-            try {
-                Slog.i(TAG, "Clipboard Service");
-                ServiceManager.addService(Context.CLIPBOARD_SERVICE,
-                        new ClipboardService(context));
-            } catch (Throwable e) {
-                Slog.e(TAG, "Failure starting Clipboard Service", e);
+            if (engModeFlag == false) {
+                try {
+                    Slog.i(TAG, "Clipboard Service");
+                    ServiceManager.addService(Context.CLIPBOARD_SERVICE,
+                            new ClipboardService(context));
+                } catch (Throwable e) {
+                    Slog.e(TAG, "Failure starting Clipboard Service", e);
+                }
             }
 
             try {
@@ -305,14 +311,15 @@ class ServerThread extends Thread {
             } catch (Throwable e) {
                 Slog.e(TAG, "Failure starting Connectivity Service", e);
             }
-
-            try {
-                Slog.i(TAG, "Throttle Service");
-                throttle = new ThrottleService(context);
-                ServiceManager.addService(
-                        Context.THROTTLE_SERVICE, throttle);
-            } catch (Throwable e) {
-                Slog.e(TAG, "Failure starting ThrottleService", e);
+            if (engModeFlag == false) {
+                try {
+                    Slog.i(TAG, "Throttle Service");
+                    throttle = new ThrottleService(context);
+                    ServiceManager.addService(Context.THROTTLE_SERVICE,
+                            throttle);
+                } catch (Throwable e) {
+                    Slog.e(TAG, "Failure starting ThrottleService", e);
+                }
             }
 
             try {
@@ -401,13 +408,14 @@ class ServerThread extends Thread {
             } catch (Throwable e) {
                 Slog.e(TAG, "Failure starting HeadsetObserver", e);
             }
-
-            try {
-                Slog.i(TAG, "Dock Observer");
-                // Listen for dock station changes
-                dock = new DockObserver(context, power);
-            } catch (Throwable e) {
-                Slog.e(TAG, "Failure starting DockObserver", e);
+            if (engModeFlag == false) {
+                try {
+                    Slog.i(TAG, "Dock Observer");
+                    // Listen for dock station changes
+                    dock = new DockObserver(context, power);
+                } catch (Throwable e) {
+                    Slog.e(TAG, "Failure starting DockObserver", e);
+                }
             }
 
             try {
