@@ -161,6 +161,16 @@ public class MediaScanner
             Audio.Genres.NAME, // 1
     };
 
+    private static final int ID_FILES_COLUMN_INDEX = 0;
+    private static final int PATH_FILES_COLUMN_INDEX = 1;
+    private static final int DATE_MODIFIED_FILES_COLUMN_INDEX = 2;
+
+    private static final String[] FILES_PROJECTION = new String[] {
+            Files.FileColumns._ID, // 0
+            Files.FileColumns.DATA, // 1
+            Files.FileColumns.DATE_MODIFIED, // 2
+    };
+
     private static final String RINGTONES_DIR = "/ringtones/";
     private static final String NOTIFICATIONS_DIR = "/notifications/";
     private static final String ALARMS_DIR = "/alarms/";
@@ -1053,6 +1063,42 @@ public class MediaScanner
                     c = null;
                 }
             }
+
+            /* fix bug 230443 File insert to database repeat   {@  */
+            if (filePath != null) {
+                where = MediaStore.Files.FileColumns.DATA + "=?";
+            } else {
+                where = null;
+            }
+            c = mMediaProvider.query(mFilesUri, FILES_PROJECTION, where, selectionArgs, null);
+            if (c != null) {
+                try {
+                    while (c.moveToNext()) {
+                        long rowId = c.getLong(ID_FILES_COLUMN_INDEX);
+                        String path = c.getString(PATH_FILES_COLUMN_INDEX);
+                        long lastModified = c.getLong(DATE_MODIFIED_FILES_COLUMN_INDEX);
+
+                        // Only consider entries with absolute path names.
+                        // This allows storing URIs in the database without the
+                        // media scanner removing them.
+                        if (path.startsWith("/")) {
+                            String key = path;
+                            if (mCaseInsensitivePaths) {
+                                key = path.toLowerCase();
+                            }
+                            mFileCache.put(key, new FileCacheEntry(mFilesUri, rowId, path,
+                                        lastModified));
+                        }
+                    }
+                } finally {
+                    try {
+                        c.close();
+                    } catch(Exception e) {
+                    }
+                    c = null;
+                }
+            }
+            /* fix bug 230433  @} */
 
             if (mProcessPlaylists) {
                 // Read existing files from the playlists table
