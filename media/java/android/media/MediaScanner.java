@@ -1346,7 +1346,9 @@ public class MediaScanner
 
             File file = new File(path);
             // always scan the file, so we can return the content://media Uri for existing files
-            return mClient.doScanFile(path, mimeType, file.lastModified(), file.length(), true);
+            /* SPRD: bug 234098 - Date of images getting from download or bluetooth is not correct @{ */
+            return mClient.doScanFile(path, mimeType, file.lastModified() / 1000, file.length(), true);
+            /* SPRD: bug 234098 - Date of images getting from download or bluetooth is not correct @} */
         } catch (RemoteException e) {
             Log.e(TAG, "RemoteException in MediaScanner.scanFile()", e);
             return null;
