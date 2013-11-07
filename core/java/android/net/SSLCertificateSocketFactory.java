@@ -492,7 +492,11 @@ public class SSLCertificateSocketFactory extends SSLSocketFactory {
 
     @Override
     public String[] getDefaultCipherSuites() {
-        return getDelegate().getSupportedCipherSuites();
+        // SPRD: Return DefaultCipherSuites @{
+        // @orig
+        // return getDelegate().getSupportedCipherSuites();
+        return getDelegate().getDefaultCipherSuites();
+        // @}
     }
 
     @Override
