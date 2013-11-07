@@ -766,13 +766,21 @@ jboolean android_os_Process_parseProcLineArray(JNIEnv* env, jobject clazz,
 
         jsize end = -1;
         if ((mode&PROC_PARENS) != 0) {
-            while (buffer[i] != ')' && i < endIndex) {
+            /* SPRD: @{ */
+            // @orig
+            // while (buffer[i] != ')' && i < endIndex) {
+            while (i < endIndex && buffer[i] != ')') {
+            /* @} */
                 i++;
             }
             end = i;
             i++;
         }
-        while (buffer[i] != term && i < endIndex) {
+        /* SPRD: @{ */
+        // @orig
+        // while (buffer[i] != term && i < endIndex) {
+        while (i < endIndex && buffer[i] != term) {
+        /* @} */
             i++;
         }
         if (end < 0) {
@@ -782,7 +790,11 @@ jboolean android_os_Process_parseProcLineArray(JNIEnv* env, jobject clazz,
         if (i < endIndex) {
             i++;
             if ((mode&PROC_COMBINE) != 0) {
-                while (buffer[i] == term && i < endIndex) {
+                /* SPRD: @{ */
+                // @orig
+                // while (buffer[i] == term && i < endIndex) {
+                while (i < endIndex && buffer[i] == term) {
+                /* @} */
                     i++;
                 }
             }
