@@ -2193,10 +2193,14 @@ status_t writeResourceSymbols(Bundle* bundle, const sp<AaptAssets>& assets,
 
         status_t err = writeSymbolClass(fp, assets, includePrivate, symbols,
                 className, 0, bundle->getNonConstantId());
+        /* SPRD: Close the file before return @{ */
+        fclose(fp);
         if (err != NO_ERROR) {
             return err;
         }
-        fclose(fp);
+        // @orig
+        // fclose(fp);
+        /* @} */
 
         if (textSymbolsDest != NULL && R == className) {
             String8 textDest(textSymbolsDest);
