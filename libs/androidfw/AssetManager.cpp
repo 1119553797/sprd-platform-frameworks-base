@@ -2069,10 +2069,14 @@ void AssetManager::updateResTableFromAssetPath(ResTable *rt, const asset_path& a
         }
     } else {
         ALOGV("loading resource table %s\n", ap.path.string());
-        Asset* ass = const_cast<AssetManager*>(this)->
+        /* SPRD: Domain error. @{ */
+        // @orig
+        // Asset* ass = const_cast<AssetManager*>(this)->
+        ass = const_cast<AssetManager*>(this)->
             openNonAssetInPathLocked("resources.arsc",
 				     Asset::ACCESS_BUFFER,
 				     ap);
+        /* @} */
         shared = false;
     }
     if ((ass != NULL || sharedRes != NULL) && ass != kExcludedAsset) {
