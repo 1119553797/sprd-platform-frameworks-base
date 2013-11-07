@@ -846,6 +846,8 @@ parse_preprocessed_file(const string& filename)
     if (!feof(f)) {
         fprintf(stderr, "%s:%d: error reading file, line to long.\n",
                 filename.c_str(), lineno);
+        // SPRD: Close the file.
+        fclose(f);
         return 1;
     }
 
