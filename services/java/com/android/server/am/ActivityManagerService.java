@@ -9589,6 +9589,8 @@ public final class ActivityManagerService extends ActivityManagerNative
         fixAdjList = new Hashtable<String, Integer>();
         fixAdjList.put("com.tencent.mobileqq:MSF", 2);
         fixAdjList.put("com.tencent.mobileqq", 2);
+        fixAdjList.put("com.tencent.qq:MSF", 2);
+        fixAdjList.put("com.tencent.qq", 2);		
         fixAdjList.put("com.tencent.mm:push", 2);
         fixAdjList.put("com.tencent.mm", 2);
         fixAdjList.put("cmccwm.mobilemusic", 2);
