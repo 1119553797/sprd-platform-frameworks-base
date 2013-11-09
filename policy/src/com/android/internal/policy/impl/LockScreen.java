@@ -876,7 +876,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
         if (telephonyPlmn != null && telephonySpn == null) {
             return telephonyPlmn;
         } else if (telephonyPlmn != null && telephonySpn != null) {
-            return telephonyPlmn;
+            return telephonyPlmn + "|" + telephonySpn;
         } else if (telephonyPlmn == null && telephonySpn != null) {
             return telephonySpn;
         } else {
