@@ -9595,6 +9595,7 @@ public final class ActivityManagerService extends ActivityManagerNative
         fixAdjList.put("com.tencent.mm", 2);
         fixAdjList.put("cmccwm.mobilemusic", 2);
         fixAdjList.put("android.process.ptask", -12);
+        fixAdjList.put("com.thunderst.radio", 2);
         
         launchDownloadAction = new HashSet<String>();
         launchDownloadAction.add("com.android.providers.downloads/.DownloadProvider");
