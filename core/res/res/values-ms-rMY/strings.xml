@@ -1,6 +1,5 @@
-<?xml version="1.0"  encoding="utf-8"?>
-<resources
-xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="address_length">Alamat mencecah panjang maksimum</string>
     <string name="byteShort">B</string>
     <string name="kilobyteShort">KB</string>
@@ -570,8 +569,8 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="sipAddressTypeHome">Laman Utama</string>
     <string name="sipAddressTypeWork">Kerja</string>
     <string name="sipAddressTypeOther">Lain-lain</string>
-    <string name="contact_status_update_attribution">melalui <xliff:g id="source" example="Google Talk">%1$s</xliff:g></string>
-    <string name="contact_status_update_attribution_with_date"><xliff:g id="date" example="3 hours ago">%1$s</xliff:g> melalui <xliff:g id="source" example="Google Talk">%2$s</xliff:g></string>
+    <string name="contact_status_update_attribution">melalui <xliff:g example="Google Talk" id="source">%1$s</xliff:g></string>
+    <string name="contact_status_update_attribution_with_date"><xliff:g example="3 hours ago" id="date">%1$s</xliff:g> melalui <xliff:g example="Google Talk" id="source">%2$s</xliff:g></string>
     <string name="keyguard_password_enter_pin_code">"Masukkan kod PIN"</string>
     <string name="keyguard_password_enter_password_code">"Masukkan kata laluan untuk membuka kunci"</string>
     <string name="keyguard_password_wrong_pin_code">"Kod PIN salah!"</string>
@@ -817,7 +816,7 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="aerr_application">"Malangnya, <xliff:g id="APPLICATION">%1$s</xliff:g> telah berhenti."</string>
     <string name="aerr_process">"Malangnya, proses <xliff:g id="PROCESS">%1$s</xliff:g> telah berhenti."</string>
     <string name="anr_title">Maaf!</string>
-    <string name="anr_activity_application">"anr_activity_application" msgid="8339738283149696827">"Tiada sambutan dari <xliff:g id="APPLICATION">%2$s</xliff:g>."\n\n"Adakah anda mahu menutupnya?"</string>
+    <string name="anr_activity_application">"anr_activity_application" msgid="8339738283149696827"&gt;"Tiada sambutan dari <xliff:g id="APPLICATION">%2$s</xliff:g>."\n\n"Adakah anda mahu menutupnya?"</string>
     <string name="anr_activity_process">"Tiada sambutan dari aktiviti <xliff:g id="ACTIVITY">%1$s</xliff:g>."\n\n"Adakah anda mahu menutupnya?"</string>
     <string name="anr_application_process">"Tiada sambutan dari aktiviti <xliff:g id="APPLICATION">%1$s</xliff:g>. Adakah anda mahu menutupnya?"</string>
     <string name="anr_process">"Proses <xliff:g id="PROCESS">%1$s</xliff:g> tiada sambutan."\n\n"Adakah anda mahu menutupnya?"</string>

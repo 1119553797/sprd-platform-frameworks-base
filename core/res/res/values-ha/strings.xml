@@ -1,6 +1,5 @@
-<?xml version="1.0"  encoding="utf-8"?>
-<resources
-xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="gigabyteShort">GB</string>
     <string name="terabyteShort">TB</string>
     <string name="petabyteShort">PB</string>
@@ -896,7 +895,7 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="byteShort">B</string>
     <string name="kilobyteShort">KB</string>
     <string name="megabyteShort">MB</string>
-    <string name="fileSizeSuffix"><xliff:g id="number" example="123">%1$s</xliff:g><xliff:g id="unit" example="KB">%2$s</xliff:g></string>
+    <string name="fileSizeSuffix"><xliff:g example="123" id="number">%1$s</xliff:g><xliff:g example="KB" id="unit">%2$s</xliff:g></string>
     <string name="untitled">&lt;marar take&gt;</string>
     <string name="ellipsis">\u2026</string>
     <string name="defaultMsisdnAlphaTag">MSISDN1</string>
@@ -907,7 +906,7 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="cfTemplateForwardedTime"><xliff:g id="bearer_service_code">{0}</xliff:g>: <xliff:g id="dialing_number">{1}</xliff:g> bayan <xliff:g id="time_delay">{2}</xliff:g> dakika</string>
     <string name="cfTemplateRegistered"><xliff:g id="bearer_service_code">{0}</xliff:g>: Ba a tura gaba ba</string>
     <string name="cfTemplateRegisteredTime"><xliff:g id="bearer_service_code">{0}</xliff:g>: Ba a tura gaba ba</string>
-    <string name="notification_title">Kuskuren budewa ta <xliff:g id="account" example="foo@gmail.com">%1$s</xliff:g></string>
+    <string name="notification_title">Kuskuren budewa ta <xliff:g example="foo@gmail.com" id="account">%1$s</xliff:g></string>
     <string name="contentServiceTooManyDeletesNotificationDesc">Masu yawa <xliff:g id="content_type">%s</xliff:g> sharewa.</string>
     <string name="permgroupdesc_storage" product="default">Sami damar shiga SD card.</string>
     <string name="permlab_statusBarService">ragayar matsayi</string>
@@ -933,8 +932,8 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="sipAddressTypeHome">Shafin farko</string>
     <string name="sipAddressTypeWork">Aiki</string>
     <string name="sipAddressTypeOther">Wani na daban</string>
-    <string name="contact_status_update_attribution">ta cikin <xliff:g id="source" example="Google Talk">%1$s</xliff:g></string>
-    <string name="contact_status_update_attribution_with_date"><xliff:g id="date" example="3 hours ago">%1$s</xliff:g> ta cikin <xliff:g id="source" example="Google Talk">%2$s</xliff:g></string>
+    <string name="contact_status_update_attribution">ta cikin <xliff:g example="Google Talk" id="source">%1$s</xliff:g></string>
+    <string name="contact_status_update_attribution_with_date"><xliff:g example="3 hours ago" id="date">%1$s</xliff:g> ta cikin <xliff:g example="Google Talk" id="source">%2$s</xliff:g></string>
     <string name="lockscreen_plugged_in">Ana caji (<xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g>)</string>
     <string name="lockscreen_battery_short"><xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
     <string name="lockscreen_too_many_failed_attempts_dialog_message">Ka zana nau\'in mabudinka ba daidai ba <xliff:g id="number">%d</xliff:g> sau.
@@ -943,8 +942,8 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="password_keyboard_label_symbol_key">\?123</string>
     <string name="password_keyboard_label_alpha_key">ABC</string>
     <string name="password_keyboard_label_alt_key">ALT</string>
-    <string name="hour_ampm">"<xliff:g id="hour" example="3">%-l</xliff:g><xliff:g id="ampm" example="pm">%P</xliff:g>"</string>
-    <string name="hour_cap_ampm">"<xliff:g id="hour" example="3">%-l</xliff:g><xliff:g id="ampm" example="PM">%p</xliff:g>"</string>
+    <string name="hour_ampm">"<xliff:g example="3" id="hour">%-l</xliff:g><xliff:g example="pm" id="ampm">%P</xliff:g>"</string>
+    <string name="hour_cap_ampm">"<xliff:g example="3" id="hour">%-l</xliff:g><xliff:g example="PM" id="ampm">%p</xliff:g>"</string>
     <string name="js_dialog_title">Shafin da ke \'<xliff:g id="title">%s</xliff:g>\' ya kan fadin:</string>
     <string name="js_dialog_before_unload">Kana son fita daga wannan shafin?\n\n<xliff:g id="message">%s</xliff:g>\n\nZabi YA YI don cigaba, ko Soke don cigaba a wannan shafi.</string>
     <string name="permlab_setAlarm">saita kararrawa a agogo mai kararrawa</string>
@@ -952,14 +951,14 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <plurals name="last_num_days">
         <item quantity="other">Na karshe <xliff:g id="count">%d</xliff:g> kwanaki</item>
     </plurals>
-    <string name="preposition_for_date">a kan <xliff:g id="date" example="May 29">%s</xliff:g></string>
-    <string name="preposition_for_time">a <xliff:g id="time" example="2:33 am">%s</xliff:g></string>
-    <string name="preposition_for_year">a cikin <xliff:g id="year" example="2003">%s</xliff:g></string>
+    <string name="preposition_for_date">a kan <xliff:g example="May 29" id="date">%s</xliff:g></string>
+    <string name="preposition_for_time">a <xliff:g example="2:33 am" id="time">%s</xliff:g></string>
+    <string name="preposition_for_year">a cikin <xliff:g example="2003" id="year">%s</xliff:g></string>
     <string name="second">dakika</string>
-    <string name="relative_time">"<xliff:g id="date" example="4 hours ago">%1$s</xliff:g>, <xliff:g id="time" example="11:00 am">%2$s</xliff:g>"</string>
-    <string name="elapsed_time_short_format_mm_ss"><xliff:g id="minutes" example="1">%1$02d</xliff:g>:<xliff:g id="seconds" example="23">%2$02d</xliff:g></string>
-    <string name="elapsed_time_short_format_h_mm_ss"><xliff:g id="hours" example="1">%1$d</xliff:g>:<xliff:g id="minutes" example="43">%2$02d</xliff:g>:<xliff:g id="seconds" example="33">%3$02d</xliff:g></string>
-    <string name="addToDictionary">"Kara \"<xliff:g id="word" example="rickroll">%s</xliff:g>\" zuwa kamus</string>
+    <string name="relative_time">"<xliff:g example="4 hours ago" id="date">%1$s</xliff:g>, <xliff:g example="11:00 am" id="time">%2$s</xliff:g>"</string>
+    <string name="elapsed_time_short_format_mm_ss"><xliff:g example="1" id="minutes">%1$02d</xliff:g>:<xliff:g example="23" id="seconds">%2$02d</xliff:g></string>
+    <string name="elapsed_time_short_format_h_mm_ss"><xliff:g example="1" id="hours">%1$d</xliff:g>:<xliff:g example="43" id="minutes">%2$02d</xliff:g>:<xliff:g example="33" id="seconds">%3$02d</xliff:g></string>
+    <string name="addToDictionary">"Kara \"<xliff:g example="rickroll" id="word">%s</xliff:g>\" zuwa kamus</string>
     <string name="chooseUsbActivity">Zabi shiri don na\'urar USB</string>
     <string name="crash_title">Yi hakuri!</string>
     <string name="crash_application">Shirin <xliff:g id="application">%1$s</xliff:g>
@@ -1010,9 +1009,9 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="ext_media_safe_unmount_notification_message" product="default">Ba matsala za ka iya cire SD card.</string>
     <string name="ext_media_nomedia_notification_title" product="default">SD card da aka cire</string>
     <string name="ext_media_nomedia_notification_message" product="default">An cire SD card. Shigar da sabo.</string>
-    <string name="dial_number_using">Buga lamba\nta amfani da <xliff:g id="number" example="555">%s</xliff:g></string>
-    <string name="create_contact_using">Kirkiri matuntuba\nta amfani da <xliff:g id="number" example="555">%s</xliff:g></string>
-    <string name="permission_request_notification_with_subtitle">An bukaci izini\ndon asusu <xliff:g id="account" example="foo@gmail.com">%s</xliff:g></string>
+    <string name="dial_number_using">Buga lamba\nta amfani da <xliff:g example="555" id="number">%s</xliff:g></string>
+    <string name="create_contact_using">Kirkiri matuntuba\nta amfani da <xliff:g example="555" id="number">%s</xliff:g></string>
+    <string name="permission_request_notification_with_subtitle">An bukaci izini\ndon asusu <xliff:g example="foo@gmail.com" id="account">%s</xliff:g></string>
     <string name="alternate_eri_file">/bayanai/eri.xml</string>
     <string name="cta_tethered_notification_title">Durewa</string>
     <string name="custom_china_mobile">Wayar tafi-d-gidanka ta Chaina</string>

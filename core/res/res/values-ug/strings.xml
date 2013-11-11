@@ -1,13 +1,12 @@
-<?xml version="1.0"  encoding="utf-8"?>
-<resources
-xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="address_length">ئادىرىس ئەڭ چوڭ ئۇزۇنلۇق چىكىگە يەتتى</string>
     <string name="byteShort">B</string>
     <string name="megabyteShort">مىگابايت</string>
     <string name="gigabyteShort">GB</string>
     <string name="terabyteShort">TB</string>
     <string name="petabyteShort">PB</string>
-    <string name="fileSizeSuffix"><xliff:g id="number" example="123">%1$s</xliff:g><xliff:g id="unit" example="KB">%2$s</xliff:g></string>
+    <string name="fileSizeSuffix"><xliff:g example="123" id="number">%1$s</xliff:g><xliff:g example="KB" id="unit">%2$s</xliff:g></string>
     <string name="untitled">&lt;تېمىسى يوق&gt;</string>
     <string name="ellipsis">\u2026</string>
     <string name="emptyPhoneNumber">(تېلىفۇن نۇمۇرى يوق)</string>
@@ -144,7 +143,7 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="httpErrorFile">ھۆججەتنى ئاچقىلى بولمىدى.</string>
     <string name="httpErrorFileNotFound">تەلەپ قىلىنغان ھۆججەت تېپىلمىدى.</string>
     <string name="httpErrorTooManyRequests">بۇيرۇق كۆپ بولۇپ كەتتى، كېيىنرەك سىناپ بېقىڭ.</string>
-    <string name="notification_title"><xliff:g id="account" example="foo@gmail.com">%1$s</xliff:g> غا ئىمزالانغاندا چىققان خاتالىق</string>
+    <string name="notification_title"><xliff:g example="foo@gmail.com" id="account">%1$s</xliff:g> غا ئىمزالانغاندا چىققان خاتالىق</string>
     <string name="contentServiceSync">ماس قەدەملىك</string>
     <string name="contentServiceSyncNotificationTitle">ماس قەدەملىك</string>
     <string name="contentServiceTooManyDeletesNotificationDesc">تىخمۇ كۆپ<xliff:g id="content_type">%s</xliff:g> ئۆچۈرۈش.</string>
@@ -564,8 +563,8 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="orgTypeWork">خىزمەت</string>
     <string name="orgTypeOther">باشقا </string>
     <string name="orgTypeCustom">خېرىدار</string>
-    <string name="contact_status_update_attribution">ئارقىلىق <xliff:g id="source" example="Google Talk">%1$s</xliff:g></string>
-    <string name="contact_status_update_attribution_with_date"><xliff:g id="date" example="3 hours ago">%1$s</xliff:g> via <xliff:g id="source" example="Google Talk">%2$s</xliff:g></string>
+    <string name="contact_status_update_attribution">ئارقىلىق <xliff:g example="Google Talk" id="source">%1$s</xliff:g></string>
+    <string name="contact_status_update_attribution_with_date"><xliff:g example="3 hours ago" id="date">%1$s</xliff:g> via <xliff:g example="Google Talk" id="source">%2$s</xliff:g></string>
     <string name="keyguard_password_enter_pin_code">PIN نومۇرىنى كىرگۈزۈش</string>
     <string name="keyguard_password_enter_password_code">قولۇپنى ئېچىش ئۈچۈن مەخپى شىفىرنى كىرگۈزۈش</string>
     <string name="keyguard_password_wrong_pin_code">خاتا PIN نۇمۇرى!</string>
@@ -650,8 +649,8 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="lockscreen_sound_off_label">ئاۋازنى ئېتىش</string>
     <string name="password_keyboard_label_symbol_key">\?123</string>
     <string name="password_keyboard_label_alpha_key">ABC</string>
-    <string name="hour_ampm">"<xliff:g id="hour" example="3">%-l</xliff:g><xliff:g id="ampm" example="pm">%P</xliff:g>"</string>
-    <string name="hour_cap_ampm">"<xliff:g id="hour" example="3">%-l</xliff:g><xliff:g id="ampm" example="PM">%p</xliff:g>"</string>
+    <string name="hour_ampm">"<xliff:g example="3" id="hour">%-l</xliff:g><xliff:g example="pm" id="ampm">%P</xliff:g>"</string>
+    <string name="hour_cap_ampm">"<xliff:g example="3" id="hour">%-l</xliff:g><xliff:g example="PM" id="ampm">%p</xliff:g>"</string>
     <string name="factorytest_failed">زاۋۇت سىنىقى مەغلۇپ بولدى</string>
     <string name="factorytest_not_system">/سېستىما /app مەشغۇلاتىنى FACTORY_TEST دە قاچىلانغان قاپتىلا ئېلىپ بارغىلى بولىدۇ.</string>
     <string name="factorytest_no_action">زاۋۇت سىنىقى تەمىنلەيدىغان پوسۇلكا تېپىلمىدى.</string>
@@ -753,9 +752,9 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
         <item quantity="one">ئەتە</item>
         <item quantity="other">دا  <xliff:g id="count">%d</xliff:g> كۈن</item>
     </plurals>
-    <string name="preposition_for_date"><xliff:g id="date" example="May 29">%s</xliff:g> دا</string>
-    <string name="preposition_for_time">دا <xliff:g id="time" example="2:33 am">%s</xliff:g></string>
-    <string name="preposition_for_year">دا <xliff:g id="year" example="2003">%s</xliff:g></string>
+    <string name="preposition_for_date"><xliff:g example="May 29" id="date">%s</xliff:g> دا</string>
+    <string name="preposition_for_time">دا <xliff:g example="2:33 am" id="time">%s</xliff:g></string>
+    <string name="preposition_for_year">دا <xliff:g example="2003" id="year">%s</xliff:g></string>
     <string name="day">كۈن</string>
     <string name="days">كۈن</string>
     <string name="hour">سائەت</string>
@@ -772,13 +771,13 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="VideoView_error_text_invalid_progressive_playback">كەچۈرۈڭ، بۇ سىن تېلېغوندا قويۇلمايدۇ.</string>
     <string name="VideoView_error_text_unknown">كەچۈرۈڭ، بۇ سن قويۇلمايدۇ. </string>
     <string name="VideoView_error_button">مۇقىملاش</string>
-    <string name="relative_time">"<xliff:g id="date" example="4 hours ago">%1$s</xliff:g>, <xliff:g id="time" example="11:00 am">%2$s</xliff:g>"</string>
+    <string name="relative_time">"<xliff:g example="4 hours ago" id="date">%1$s</xliff:g>, <xliff:g example="11:00 am" id="time">%2$s</xliff:g>"</string>
     <string name="noon">چۈش</string>
     <string name="Noon">چۈش</string>
     <string name="midnight">يېرىم كىچە</string>
     <string name="Midnight">يېرىم كىچە</string>
-    <string name="elapsed_time_short_format_mm_ss"><xliff:g id="minutes" example="1">%1$02d</xliff:g>:<xliff:g id="seconds" example="23">%2$02d</xliff:g></string>
-    <string name="elapsed_time_short_format_h_mm_ss"><xliff:g id="hours" example="1">%1$d</xliff:g>:<xliff:g id="minutes" example="43">%2$02d</xliff:g>:<xliff:g id="seconds" example="33">%3$02d</xliff:g></string>
+    <string name="elapsed_time_short_format_mm_ss"><xliff:g example="1" id="minutes">%1$02d</xliff:g>:<xliff:g example="23" id="seconds">%2$02d</xliff:g></string>
+    <string name="elapsed_time_short_format_h_mm_ss"><xliff:g example="1" id="hours">%1$d</xliff:g>:<xliff:g example="43" id="minutes">%2$02d</xliff:g>:<xliff:g example="33" id="seconds">%3$02d</xliff:g></string>
     <string name="selectAll">ھەممىنى تاللاش</string>
     <string name="selectText">ئۇچۇرنى تاللاش</string>
     <string name="cut">كېسىش</string>
@@ -786,7 +785,7 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="paste">چاپلاش</string>
     <string name="copyUrl">URL نى كۆپەيتىش</string>
     <string name="inputMethod">كىرگۈزۈش ئۇسۇلى</string>
-    <string name="addToDictionary">لۇغەتكە \"<xliff:g id="word" example="rickroll">%s</xliff:g>\" قېتىۋىلىش</string>
+    <string name="addToDictionary">لۇغەتكە \"<xliff:g example="rickroll" id="word">%s</xliff:g>\" قېتىۋىلىش</string>
     <string name="editTextMenuTitle">تىكىستنى تەھرىرلەش</string>
     <string name="low_internal_storage_view_title">تۆۋەنلىكى ۋە ئورنى</string>
     <string name="low_internal_storage_view_text">تېلفۇن ساقلىغۇچ توشۇپ كېتىش ئالدىدا.</string>
@@ -935,8 +934,8 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="ime_action_next">كېيىنكى</string>
     <string name="ime_action_done">تامام</string>
     <string name="ime_action_default">ئىجرا قىلىش</string>
-    <string name="dial_number_using">ئۇرغان نۇمۇر\n <xliff:g id="number" example="555">%s</xliff:g>نى ئىشلىتىۋاتىدۇ</string>
-    <string name="create_contact_using">ئالاقىلاشقۇچىلارنى قۇرۇش \nئىشلىتىۋاتىدۇ <xliff:g id="number" example="555">%s</xliff:g></string>
+    <string name="dial_number_using">ئۇرغان نۇمۇر\n <xliff:g example="555" id="number">%s</xliff:g>نى ئىشلىتىۋاتىدۇ</string>
+    <string name="create_contact_using">ئالاقىلاشقۇچىلارنى قۇرۇش \nئىشلىتىۋاتىدۇ <xliff:g example="555" id="number">%s</xliff:g></string>
     <string name="accessibility_compound_button_selected">تەكشۈرۈلدى</string>
     <string name="accessibility_compound_button_unselected">تەكشۈرۈلمىگەن</string>
     <string name="grant_credentials_permission_message_header">تۆۋەندىكى بىرنى ئۆز ئىچىگە ئالغان نۇرغۇن قوللىنىشچان دىتاللار سىزنىڭ ئابونتىڭىزغا كىرىشنى ئېلتىماس قىلدى ھەم قىلىۋاتىدۇ. </string>
@@ -945,7 +944,7 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="allow">رۇخسەت</string>
     <string name="deny">ئىنكار قىلىش</string>
     <string name="permission_request_notification_title">رۇخسەت بېرىش تەلەپ قىلىندى</string>
-    <string name="permission_request_notification_with_subtitle">تەلەپ قىلىنغان ھوقۇق \n ۋە ئابۇنىت  <xliff:g id="account" example="foo@gmail.com">%s</xliff:g></string>
+    <string name="permission_request_notification_with_subtitle">تەلەپ قىلىنغان ھوقۇق \n ۋە ئابۇنىت  <xliff:g example="foo@gmail.com" id="account">%s</xliff:g></string>
     <string name="input_method_binding_label">كىرگۈزۈش ئۇسۇلى</string>
     <string name="sync_binding_label">ماس قەدەملىك</string>
     <string name="accessibility_binding_label">زىيارەت قىلىشچانلىقى</string>
@@ -999,7 +998,7 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="charge_active_notification_title">USB ئۇلانغاندا پەقەتلا توك قاچىلاش ھالىتىنى ئىشلىتىش</string>
     <string name="shutdown_after_seconds"> <xliff:g id="NUMBER">%d</xliff:g> سىكونتتىن كىيىن تېلفۇن ئىتىلىدۇ</string>
     <string name="lockscreen_password_error">مەخپى نۇمۇر خاتا ،قايتا كىرگۈزۈڭ!</string>
-    <string name="lockscreen_too_many_password_failed_attempts_dialog_message">سىز ئىچىش پارولنى چوقۇم توغرا كىرگۈزىشىڭىز كىرەك<xliff:g id="number">%d</xliff:g> قىتىم،\n\n <xliff:g id="number">%d</xliff:g >مىنۇت ئىچىدە قايتا سىناپ بېقىڭ.</string>
+    <string name="lockscreen_too_many_password_failed_attempts_dialog_message">سىز ئىچىش پارولنى چوقۇم توغرا كىرگۈزىشىڭىز كىرەك<xliff:g id="number">%d</xliff:g> قىتىم،\n\n <xliff:g id="number">%d</xliff:g>مىنۇت ئىچىدە قايتا سىناپ بېقىڭ.</string>
     <string name="progress_unmounting" product="nosdcard">USB ئۈسكۈنىسىنى چىقىرۋىتىش ...</string>
     <string name="progress_unmounting" product="default">SD كارتىنى چىقىرۋىتىش ...</string>
     <string name="progress_erasing" product="nosdcard">USB ساقلىغۇچنى تازلاش...</string>

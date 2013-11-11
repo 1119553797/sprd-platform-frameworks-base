@@ -1,6 +1,5 @@
-<?xml version="1.0"  encoding="utf-8"?>
-<resources
-xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="address_length">ས་གནས་རིང་ཚད་གྲངས་ཆེ་ཤོས་ལ་སླེབས་ཟིན།</string>
     <string name="megabyteShort">"MB"</string>
     <string name="gigabyteShort">GB</string>
@@ -1000,9 +999,6 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="imProtocolMsn">"Windows Live"</string>
     <string name="imProtocolIcq">"ICQ"</string>
     <string name="lockscreen_pin_locked_message">SIMཁཱ་ཟྭ་རྒྱག</string>
-    <string name="sim3_puk_requried">SIM3 PINགྲངས་སྒོ་རྒྱབ་ཟིན། PUKགྲངས་ནང་འཇུག་སྟེ་སྒོ་ཕྱེ་དགོས།</string>
-    <string name="keyguard_password_enter_sim3_pin_code">SIM 3PIN གྲངས་ནང་འཇུག</string>
-    <string name="keyguard_sim3_pin_accepted">SIM3 PINགྲངས་སྒོ་ཕྱེ་ལེགས་གྲུབ།</string>
     <string name="password_keyboard_label_symbol_key">"?123"</string>
     <string name="password_keyboard_label_alpha_key">"ABC"</string>
     <string name="password_keyboard_label_alt_key">"ALT"</string>

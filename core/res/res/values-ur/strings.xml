@@ -1,13 +1,12 @@
-<?xml version="1.0"  encoding="utf-8"?>
-<resources
-xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="address_length">ایڈریس زیادہ سے زیادہ لمبائی تک پہنچ گیا ہے </string>
     <string name="byteShort">B</string>
     <string name="megabyteShort">ایم بی</string>
     <string name="gigabyteShort">جی بی</string>
     <string name="terabyteShort">ٹی بی</string>
     <string name="petabyteShort">روشن رخشندہ</string>
-    <string name="fileSizeSuffix"><xliff:g id="number" example="123">%1$s</xliff:g><xliff:g id="unit" example="KB">%2$s</xliff:g></string>
+    <string name="fileSizeSuffix"><xliff:g example="123" id="number">%1$s</xliff:g><xliff:g example="KB" id="unit">%2$s</xliff:g></string>
     <string name="untitled">&lt;گمنام&gt;</string>
     <string name="ellipsis">u2026\ </string>
     <string name="emptyPhoneNumber">(کوئی فون نمبر)</string>
@@ -144,7 +143,7 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="httpErrorFile">فائل تک رسائی حاصل نہیں ا ہے.</string>
     <string name="httpErrorFileNotFound">درخواست کی گئ فائل   نہیں ملی .</string>
     <string name="httpErrorTooManyRequests"> بہت سے درخواستوں پر عملدرآمد کیا جا رہا ہے. کچھ دیر بعد دوبارہ کوشش کریں.</string>
-    <string name="notification_title">سائن ان میں غلطی کے لئے <xliff:g id="account" example="foo@gmail.com">%1$s</xliff:g></string>
+    <string name="notification_title">سائن ان میں غلطی کے لئے <xliff:g example="foo@gmail.com" id="account">%1$s</xliff:g></string>
     <string name="contentServiceSync">ہم وقت ساز کریں</string>
     <string name="contentServiceSyncNotificationTitle">ہم وقت ساز کریں</string>
     <string name="contentServiceTooManyDeletesNotificationDesc"> \'بہت سارے<xliff:g id="content_type">%s</xliff:g> اخراج.</string>
@@ -571,8 +570,8 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="orgTypeWork">لفظ تجاویز</string>
     <string name="orgTypeOther">دیگر</string>
     <string name="orgTypeCustom">اپنی مرضی کے</string>
-    <string name="contact_status_update_attribution">کے ذریعے <xliff:g id="source" example="Google Talk">%1$s</xliff:g></string>
-    <string name="contact_status_update_attribution_with_date"><xliff:g id="date" example="3 hours ago">%1$s</xliff:g> کے ذریعے <xliff:g id="source" example="Google Talk">%2$s</xliff:g></string>
+    <string name="contact_status_update_attribution">کے ذریعے <xliff:g example="Google Talk" id="source">%1$s</xliff:g></string>
+    <string name="contact_status_update_attribution_with_date"><xliff:g example="3 hours ago" id="date">%1$s</xliff:g> کے ذریعے <xliff:g example="Google Talk" id="source">%2$s</xliff:g></string>
     <string name="keyguard_password_enter_pin_code">PIN کوڈ درج کریں</string>
     <string name="keyguard_password_enter_password_code">انلاک پاس ورڈ درج کریں</string>
     <string name="keyguard_password_wrong_pin_code">غلط PIN کوڈ!</string>
@@ -659,8 +658,8 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="lockscreen_sound_off_label">آواز بند ہو</string>
     <string name="password_keyboard_label_symbol_key">\?123</string>
     <string name="password_keyboard_label_alpha_key">ABC</string>
-    <string name="hour_ampm">"<xliff:g id="hour" example="3">%-l</xliff:g><xliff:g id="ampm" example="pm">%P</xliff:g>"</string>
-    <string name="hour_cap_ampm">"<xliff:g id="hour" example="3">%-l</xliff:g><xliff:g id="ampm" example="PM">%p</xliff:g>"</string>
+    <string name="hour_ampm">"<xliff:g example="3" id="hour">%-l</xliff:g><xliff:g example="pm" id="ampm">%P</xliff:g>"</string>
+    <string name="hour_cap_ampm">"<xliff:g example="3" id="hour">%-l</xliff:g><xliff:g example="PM" id="ampm">%p</xliff:g>"</string>
     <string name="factorytest_failed">فیکٹری ٹیسٹ ناکام</string>
     <string name="factorytest_not_system"> فیکٹری_\'ٹیسٹ  کارروائی صرف نظام / ایپلی کیشنز میں نصب پیکجوں کے لئے  ہے</string>
     <string name="factorytest_no_action">"کوئی پیکج نہیں پایا گیا ہے کہ فیکٹری  ٹیسٹ  فراہم کرتا ہے."          </string>
@@ -763,9 +762,9 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
         <item quantity="one">کل</item>
         <item quantity="other">میں  <xliff:g id="count">%d</xliff:g> دن</item>
     </plurals>
-    <string name="preposition_for_date">شروع  <xliff:g id="date" example="May 29">%s</xliff:g></string>
-    <string name="preposition_for_time">پر <xliff:g id="time" example="2:33 am">%s</xliff:g></string>
-    <string name="preposition_for_year">میں <xliff:g id="year" example="2003">%s</xliff:g></string>
+    <string name="preposition_for_date">شروع  <xliff:g example="May 29" id="date">%s</xliff:g></string>
+    <string name="preposition_for_time">پر <xliff:g example="2:33 am" id="time">%s</xliff:g></string>
+    <string name="preposition_for_year">میں <xliff:g example="2003" id="year">%s</xliff:g></string>
     <string name="day">یوم</string>
     <string name="days">ایام</string>
     <string name="hour">گھنٹے</string>
@@ -782,13 +781,13 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="VideoView_error_text_invalid_progressive_playback">معاف کیجئے گا، یہ ویڈیو اس آلے کے لئے  درست نہیں ہے.</string>
     <string name="VideoView_error_text_unknown">معاف کیجئے گا، اس ویڈیو ادا نہیں کیا جا سکتا ہے.</string>
     <string name="VideoView_error_button">اوکے</string>
-    <string name="relative_time">"<xliff:g id="date" example="4 hours ago">%1$s</xliff:g>, <xliff:g id="time" example="11:00 am">%2$s</xliff:g>"</string>
+    <string name="relative_time">"<xliff:g example="4 hours ago" id="date">%1$s</xliff:g>, <xliff:g example="11:00 am" id="time">%2$s</xliff:g>"</string>
     <string name="noon">دوپہر</string>
     <string name="Noon">دوپہر</string>
     <string name="midnight">"آدھی رات"</string>
     <string name="Midnight">"آدھی رات"</string>
-    <string name="elapsed_time_short_format_mm_ss"><xliff:g id="minutes" example="1">%1$02d</xliff:g>:<xliff:g id="seconds" example="23">%2$02d</xliff:g></string>
-    <string name="elapsed_time_short_format_h_mm_ss"><xliff:g id="hours" example="1">%1$d</xliff:g>:<xliff:g id="minutes" example="43">%2$02d</xliff:g>:<xliff:g id="seconds" example="33">%3$02d</xliff:g></string>
+    <string name="elapsed_time_short_format_mm_ss"><xliff:g example="1" id="minutes">%1$02d</xliff:g>:<xliff:g example="23" id="seconds">%2$02d</xliff:g></string>
+    <string name="elapsed_time_short_format_h_mm_ss"><xliff:g example="1" id="hours">%1$d</xliff:g>:<xliff:g example="43" id="minutes">%2$02d</xliff:g>:<xliff:g example="33" id="seconds">%3$02d</xliff:g></string>
     <string name="selectAll">تمام منتخب </string>
     <string name="selectText">متن کو منتخب کریں</string>
     <string name="cut">کاٹو</string>
@@ -796,7 +795,7 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="paste">چسپاں</string>
     <string name="copyUrl">کاپی یو آر ایل</string>
     <string name="inputMethod">ان پٹ کا طریقہ</string>
-    <string name="addToDictionary">"شامل کریں\"<xliff:g id="word" example="rickroll">%s</xliff:g>\" ڈکشنری میں</string>
+    <string name="addToDictionary">"شامل کریں\"<xliff:g example="rickroll" id="word">%s</xliff:g>\" ڈکشنری میں</string>
     <string name="editTextMenuTitle">متن میں ترمیم کریں</string>
     <string name="low_internal_storage_view_title">جگہ کم</string>
     <string name="low_internal_storage_view_text">فون سٹوریج کی جگہ کم ہو رہی ہے.</string>
@@ -945,8 +944,8 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="ime_action_next">اگلا</string>
     <string name="ime_action_done">مکمل</string>
     <string name="ime_action_default">ایگزیکیوٹ</string>
-    <string name="dial_number_using">نمبر ڈائل کریںn\ کا استعمال <xliff:g id="number" example="555">%s</xliff:g></string>
-    <string name="create_contact_using"> رابطہ بنائیں \n استعمال <xliff:g id="number" example="555">%s</xliff:g></string>
+    <string name="dial_number_using">نمبر ڈائل کریںn\ کا استعمال <xliff:g example="555" id="number">%s</xliff:g></string>
+    <string name="create_contact_using"> رابطہ بنائیں \n استعمال <xliff:g example="555" id="number">%s</xliff:g></string>
     <string name="accessibility_compound_button_selected">چیک کئے گئے</string>
     <string name="accessibility_compound_button_unselected">نہیں کی جانچ پڑتال</string>
     <string name="grant_credentials_permission_message_header">مندرجہ ذیل ایک یا ایک سے زیادہ ایپلی کیشنز سے کہ وہ آپ کے اکاؤنٹ تک رسائی حاصل کرنے کی  درخواست  ہے، اب اور مستقبل میں.</string>
@@ -955,7 +954,7 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="allow">اجازت دیں</string>
     <string name="deny">انکار کرتے ہیں</string>
     <string name="permission_request_notification_title">اجازت کی درخواست</string>
-    <string name="permission_request_notification_with_subtitle">کی  اکاؤنٹ  کے لیے n\ اجازت کی درخواست <xliff:g id="account" example="foo@gmail.com">%s</xliff:g></string>
+    <string name="permission_request_notification_with_subtitle">کی  اکاؤنٹ  کے لیے n\ اجازت کی درخواست <xliff:g example="foo@gmail.com" id="account">%s</xliff:g></string>
     <string name="input_method_binding_label">ان پٹ کا طریقہ</string>
     <string name="sync_binding_label">ہم وقت ساز کریں</string>
     <string name="accessibility_binding_label">رسائی</string>

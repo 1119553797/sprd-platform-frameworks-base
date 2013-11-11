@@ -1,12 +1,11 @@
-<?xml version="1.0"  encoding="utf-8"?>
-<resources
-xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="address_length">Anuani imefikia urefu wa juu kabisa</string>
     <string name="megabyteShort">MB</string>
     <string name="gigabyteShort">GB</string>
     <string name="terabyteShort">TB</string>
     <string name="petabyteShort">PB</string>
-    <string name="fileSizeSuffix"><xliff:g id="number" example="123">%1$s</xliff:g><xliff:g id="unit" example="KB">%2$s</xliff:g></string>
+    <string name="fileSizeSuffix"><xliff:g example="123" id="number">%1$s</xliff:g><xliff:g example="KB" id="unit">%2$s</xliff:g></string>
     <string name="untitled">&lt;Bila ya kichwa cha habari&gt;</string>
     <string name="emptyPhoneNumber">(Hapana nambari ya simu)</string>
     <string name="unknownName">(Haijulikani)</string>
@@ -140,7 +139,7 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="httpErrorFile">Faili inakuwa haliwezi kupatikana.</string>
     <string name="httpErrorFileNotFound">Faili lililoombwa halionekani.</string>
     <string name="httpErrorTooManyRequests">Maombi mengi sana yanachakatuliwa.Jaribu tena baadae.</string>
-    <string name="notification_title">Hitilafu ya kuingia ndani kwa <xliff:g id="account" example="foo@gmail.com">%1$s</xliff:g></string>
+    <string name="notification_title">Hitilafu ya kuingia ndani kwa <xliff:g example="foo@gmail.com" id="account">%1$s</xliff:g></string>
     <string name="contentServiceSync">Wezesha</string>
     <string name="contentServiceSyncNotificationTitle">Wezesha</string>
     <string name="contentServiceTooManyDeletesNotificationDesc">Kuna <xliff:g id="content_type">%s</xliff:g> kufuta kwingi </string>
@@ -610,8 +609,8 @@ Inaruhusu maombi ili kuweka  nguvu kwa
     <string name="sipAddressTypeHome">Nyumbani</string>
     <string name="sipAddressTypeWork">Kazi</string>
     <string name="sipAddressTypeOther">Nyingine</string>
-    <string name="contact_status_update_attribution">kupitia <xliff:g id="source" example="Google Talk">%1$s</xliff:g></string>
-    <string name="contact_status_update_attribution_with_date"><xliff:g id="date" example="3 hours ago">%1$s</xliff:g> kupitia<xliff:g id="source" example="Google Talk">%2$s</xliff:g></string>
+    <string name="contact_status_update_attribution">kupitia <xliff:g example="Google Talk" id="source">%1$s</xliff:g></string>
+    <string name="contact_status_update_attribution_with_date"><xliff:g example="3 hours ago" id="date">%1$s</xliff:g> kupitia<xliff:g example="Google Talk" id="source">%2$s</xliff:g></string>
     <string name="keyguard_password_enter_pin_code">Ingiza PIN Codi</string>
     <string name="keyguard_password_enter_password_code">Ingiza paswadi ili kutoa loki</string>
     <string name="keyguard_password_wrong_pin_code">PIN codi sio sahihi!</string>
@@ -695,8 +694,8 @@ Inaruhusu maombi ili kuweka  nguvu kwa
     <string name="lockscreen_sound_off_label">Sauti imeziwma</string>
     <string name="password_keyboard_label_symbol_key">\?123</string>
     <string name="password_keyboard_label_alpha_key">ABC</string>
-    <string name="hour_ampm">"<xliff:g id="hour" example="3">%-l</xliff:g><xliff:g id="ampm" example="pm">%P</xliff:g>"</string>
-    <string name="hour_cap_ampm">"<xliff:g id="hour" example="3">%-l</xliff:g><xliff:g id="ampm" example="PM">%p</xliff:g>"</string>
+    <string name="hour_ampm">"<xliff:g example="3" id="hour">%-l</xliff:g><xliff:g example="pm" id="ampm">%P</xliff:g>"</string>
+    <string name="hour_cap_ampm">"<xliff:g example="3" id="hour">%-l</xliff:g><xliff:g example="PM" id="ampm">%p</xliff:g>"</string>
     <string name="factorytest_failed">Jaribio la kiwanda limefeli</string>
     <string name="factorytest_not_system">KIWANDA_JARIBIO kitendo kinaungwa mkono tu kwa uwekaji wa vifurushi katika /mfumo/app.</string>
     <string name="factorytest_no_action">Hakuna kifurushi kilichonekana ambacho kinatoa kitendo cha JARIBIO_KIWANDA.</string>
@@ -800,9 +799,9 @@ Inaruhusu maombi ili kuweka  nguvu kwa
         <item quantity="one">kesho</item>
         <item quantity="other">katika <xliff:g id="count">%d</xliff:g> siku</item>
     </plurals>
-    <string name="preposition_for_date">katika <xliff:g id="date" example="May 29">%s</xliff:g></string>
-    <string name="preposition_for_time">kwa <xliff:g id="time" example="2:33 am">%s</xliff:g></string>
-    <string name="preposition_for_year">katika <xliff:g id="year" example="2003">%s</xliff:g></string>
+    <string name="preposition_for_date">katika <xliff:g example="May 29" id="date">%s</xliff:g></string>
+    <string name="preposition_for_time">kwa <xliff:g example="2:33 am" id="time">%s</xliff:g></string>
+    <string name="preposition_for_year">katika <xliff:g example="2003" id="year">%s</xliff:g></string>
     <string name="day">siku</string>
     <string name="days">siku</string>
     <string name="hour">saa</string>
@@ -819,13 +818,13 @@ Inaruhusu maombi ili kuweka  nguvu kwa
     <string name="VideoView_error_text_invalid_progressive_playback">Samahani,video hii sio halali kwa mkondo wa kifaa hiki.</string>
     <string name="VideoView_error_text_unknown">Samahani,video hii haiwezi kuchezeshwa.</string>
     <string name="VideoView_error_button">Ndio</string>
-    <string name="relative_time">"<xliff:g id="date" example="4 hours ago">%1$s</xliff:g>, <xliff:g id="time" example="11:00 am">%2$s</xliff:g>"</string>
+    <string name="relative_time">"<xliff:g example="4 hours ago" id="date">%1$s</xliff:g>, <xliff:g example="11:00 am" id="time">%2$s</xliff:g>"</string>
     <string name="noon">Mchana</string>
     <string name="Noon">Mchana</string>
     <string name="midnight">"Katikati ya Usiku"</string>
     <string name="Midnight">"Katikati ya Usiku"</string>
-    <string name="elapsed_time_short_format_mm_ss"><xliff:g id="minutes" example="1">%1$02d</xliff:g>:<xliff:g id="seconds" example="23">%2$02d</xliff:g></string>
-    <string name="elapsed_time_short_format_h_mm_ss"><xliff:g id="hours" example="1">%1$d</xliff:g>:<xliff:g id="minutes" example="43">%2$02d</xliff:g>:<xliff:g id="seconds" example="33">%3$02d</xliff:g></string>
+    <string name="elapsed_time_short_format_mm_ss"><xliff:g example="1" id="minutes">%1$02d</xliff:g>:<xliff:g example="23" id="seconds">%2$02d</xliff:g></string>
+    <string name="elapsed_time_short_format_h_mm_ss"><xliff:g example="1" id="hours">%1$d</xliff:g>:<xliff:g example="43" id="minutes">%2$02d</xliff:g>:<xliff:g example="33" id="seconds">%3$02d</xliff:g></string>
     <string name="selectAll">Teua zote</string>
     <string name="selectText">Chagua makala</string>
     <string name="cut">Kata</string>
@@ -833,7 +832,7 @@ Inaruhusu maombi ili kuweka  nguvu kwa
     <string name="paste">Bandika</string>
     <string name="copyUrl">Nakili URL</string>
     <string name="inputMethod">Njia ya Ingizo</string>
-    <string name="addToDictionary">"Ongeza\"<xliff:g id="word" example="rickroll">%s</xliff:g>\" katika kamusi </string>
+    <string name="addToDictionary">"Ongeza\"<xliff:g example="rickroll" id="word">%s</xliff:g>\" katika kamusi </string>
     <string name="editTextMenuTitle">Hariri matini</string>
     <string name="low_internal_storage_view_title">Ndogo katika nafasi</string>
     <string name="low_internal_storage_view_text">Nafasi ya Hifadhi ya simu inaelekea kuwa ndogo.</string>
@@ -980,8 +979,8 @@ Inaruhusu maombi ili kuweka  nguvu kwa
     <string name="ime_action_next">Hatua ya pili</string>
     <string name="ime_action_done">Maliza</string>
     <string name="ime_action_default">Kufanya</string>
-    <string name="dial_number_using">Nambari ya kupiga\nukwa kutumia <xliff:g id="number" example="555">%s</xliff:g></string>
-    <string name="create_contact_using">Buni wasiliano\nkwa kutumia <xliff:g id="number" example="555">%s</xliff:g></string>
+    <string name="dial_number_using">Nambari ya kupiga\nukwa kutumia <xliff:g example="555" id="number">%s</xliff:g></string>
+    <string name="create_contact_using">Buni wasiliano\nkwa kutumia <xliff:g example="555" id="number">%s</xliff:g></string>
     <string name="accessibility_compound_button_selected">Iliyochunguzwa</string>
     <string name="accessibility_compound_button_unselected">Hakujachunguzwa</string>
     <string name="grant_credentials_permission_message_header">Moja Inayofuata au matumizi zaidi yameomba ruhusa ya kupata akaunti yako,kwa sasa na kwa baadae.</string>
@@ -990,7 +989,7 @@ Inaruhusu maombi ili kuweka  nguvu kwa
     <string name="allow">Ruhusu</string>
     <string name="deny">Kukana</string>
     <string name="permission_request_notification_title">Ruhusa imeombwa</string>
-    <string name="permission_request_notification_with_subtitle">Ruhusa imeombwa \nkwa akaunti <xliff:g id="account" example="foo@gmail.com">%s</xliff:g></string>
+    <string name="permission_request_notification_with_subtitle">Ruhusa imeombwa \nkwa akaunti <xliff:g example="foo@gmail.com" id="account">%s</xliff:g></string>
     <string name="input_method_binding_label">Njia ya Ingizo</string>
     <string name="sync_binding_label">Wezesha</string>
     <string name="accessibility_binding_label">Upatikanaji</string>

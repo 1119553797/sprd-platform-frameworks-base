@@ -1,6 +1,5 @@
-<?xml version="1.0"  encoding="utf-8"?>
-<resources
-xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="gigabyteShort">GB</string>
     <string name="terabyteShort">TB</string>
     <string name="petabyteShort">PB</string>
@@ -865,7 +864,7 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="internal_memory_low">SD card nga imbakan hapit na mapuno! Palihug ug delete ug uban mga file para muluwas ug spasyo.</string>
     <string name="button_close">Sarado</string>
     <string name="address_length">Mga address kay naabot sa pinakadako nga katas-on</string>
-    <string name="fileSizeSuffix"><xliff:g id="number" example="123">%1$s</xliff:g><xliff:g id="unit" example="KB">%2$s</xliff:g></string>
+    <string name="fileSizeSuffix"><xliff:g example="123" id="number">%1$s</xliff:g><xliff:g example="KB" id="unit">%2$s</xliff:g></string>
     <string name="untitled">&lt;Walay title&gt;</string>
     <string name="mmiFdnError">Ang operasyon kay nastriktuhan ra sa mga numero nga fixed dialing.</string>
     <string name="cfTemplateNotForwarded"><xliff:g id="bearer_service_code">{0}</xliff:g>: Wala naabante</string>
@@ -873,7 +872,7 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="cfTemplateForwardedTime"><xliff:g id="bearer_service_code">{0}</xliff:g>: <xliff:g id="dialing_number">{1}</xliff:g> after <xliff:g id="time_delay">{2}</xliff:g> ka mga segundo</string>
     <string name="cfTemplateRegistered"><xliff:g id="bearer_service_code">{0}</xliff:g>: Wala naabante</string>
     <string name="cfTemplateRegisteredTime"><xliff:g id="bearer_service_code">{0}</xliff:g>: Wala naabante</string>
-    <string name="notification_title">Sign-in mali para sa <xliff:g id="account" example="foo@gmail.com">%1$s</xliff:g></string>
+    <string name="notification_title">Sign-in mali para sa <xliff:g example="foo@gmail.com" id="account">%1$s</xliff:g></string>
     <string name="contentServiceTooManyDeletesNotificationDesc">Daghan ra kaayo <xliff:g id="content_type">%s</xliff:g> nga mga delet.</string>
     <string name="permgroupdesc_storage" product="nosdcard">Access sa imbakan sa USB.</string>
     <string name="permgroupdesc_storage" product="default">Access sa SD card.</string>
@@ -898,8 +897,8 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="sipAddressTypeHome">Home</string>
     <string name="sipAddressTypeWork">Trabaho</string>
     <string name="sipAddressTypeOther">Uban</string>
-    <string name="contact_status_update_attribution">pinaagi sa <xliff:g id="source" example="Google Talk">%1$s</xliff:g></string>
-    <string name="contact_status_update_attribution_with_date"><xliff:g id="date" example="3 hours ago">%1$s</xliff:g> pinaagi sa <xliff:g id="source" example="Google Talk">%2$s</xliff:g></string>
+    <string name="contact_status_update_attribution">pinaagi sa <xliff:g example="Google Talk" id="source">%1$s</xliff:g></string>
+    <string name="contact_status_update_attribution_with_date"><xliff:g example="3 hours ago" id="date">%1$s</xliff:g> pinaagi sa <xliff:g example="Google Talk" id="source">%2$s</xliff:g></string>
     <string name="lockscreen_plugged_in">Nagkarga (<xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g>)</string>
     <string name="lockscreen_battery_short"><xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
     <string name="lockscreen_too_many_failed_attempts_dialog_message">
@@ -911,22 +910,22 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
        Kahuman sa <xliff:g id="number">%d</xliff:g> ka mga dili malampuson nga pagsuway, pangutan-on ka nga i-unlock ang imu phone gamit ang Google sign-in.\n\n
     </string>
     <string name="lockscreen_too_many_failed_attempts_countdown">Suway balik sulod sa <xliff:g id="number">%d</xliff:g> ka segundo.</string>
-    <string name="hour_ampm">"<xliff:g id="hour" example="3">%-l</xliff:g><xliff:g id="ampm" example="pm">%P</xliff:g>"</string>
-    <string name="hour_cap_ampm">"<xliff:g id="hour" example="3">%-l</xliff:g><xliff:g id="ampm" example="PM">%p</xliff:g>"</string>
+    <string name="hour_ampm">"<xliff:g example="3" id="hour">%-l</xliff:g><xliff:g example="pm" id="ampm">%P</xliff:g>"</string>
+    <string name="hour_cap_ampm">"<xliff:g example="3" id="hour">%-l</xliff:g><xliff:g example="PM" id="ampm">%p</xliff:g>"</string>
     <string name="js_dialog_before_unload">Suroy pagawas ani nga pahina? \n\n<xliff:g id="message">%s</xliff:g>\n\nPili-a ang Ok para mupadayon, o Cancel para mupabilin sa karon nga pahina.</string>
     <string name="permlab_setAlarm">I-takda ang alarma sa alarma nga orasan</string>
     <string name="permdesc_setAlarm">Mutugot sa aplikasyon nga mutakda ug alarma sa mga na-install nga orasan nga alarma nga aplikasyon. Uban mga orasan nga alarma nga aplikasyon kay pwede dili ma-implementa ani nga tampok.</string>
     <plurals name="last_num_days">
         <item quantity="other">Uwahi <xliff:g id="count">%d</xliff:g> ka mga adlaw</item>
     </plurals>
-    <string name="preposition_for_date">sa <xliff:g id="date" example="May 29">%s</xliff:g></string>
-    <string name="preposition_for_time">sa <xliff:g id="time" example="2:34 am">%s</xliff:g></string>
-    <string name="preposition_for_year">sa <xliff:g id="year" example="2003">%s</xliff:g></string>
+    <string name="preposition_for_date">sa <xliff:g example="May 29" id="date">%s</xliff:g></string>
+    <string name="preposition_for_time">sa <xliff:g example="2:34 am" id="time">%s</xliff:g></string>
+    <string name="preposition_for_year">sa <xliff:g example="2003" id="year">%s</xliff:g></string>
     <string name="minute">MIN</string>
     <string name="minutes">mga min</string>
-    <string name="relative_time">"<xliff:g id="date" example="4 hours ago">%1$s</xliff:g>, <xliff:g id="time" example="11:00 am">%2$s</xliff:g>"</string>
-    <string name="elapsed_time_short_format_mm_ss"><xliff:g id="minutes" example="1">%1$02d</xliff:g>:<xliff:g id="seconds" example="23">%2$02d</xliff:g></string>
-    <string name="elapsed_time_short_format_h_mm_ss"><xliff:g id="hours" example="1">%1$d</xliff:g>:<xliff:g id="minutes" example="43">%2$02d</xliff:g>:<xliff:g id="seconds" example="33">%3$02d</xliff:g></string>
+    <string name="relative_time">"<xliff:g example="4 hours ago" id="date">%1$s</xliff:g>, <xliff:g example="11:00 am" id="time">%2$s</xliff:g>"</string>
+    <string name="elapsed_time_short_format_mm_ss"><xliff:g example="1" id="minutes">%1$02d</xliff:g>:<xliff:g example="23" id="seconds">%2$02d</xliff:g></string>
+    <string name="elapsed_time_short_format_h_mm_ss"><xliff:g example="1" id="hours">%1$d</xliff:g>:<xliff:g example="43" id="minutes">%2$02d</xliff:g>:<xliff:g example="33" id="seconds">%3$02d</xliff:g></string>
     <string name="chooseUsbActivity">Pili ug aplikasyon para sa USB nga device</string>
     <string name="aerr_application">Ang aplikasyon nga <xliff:g id="application">%1$s</xliff:g>
         (process <xliff:g id="process">%2$s</xliff:g>) kay wa gidahum nga nihunong. Palihug ug suway balik.</string>
@@ -985,9 +984,9 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="ext_media_nomedia_notification_title" product="default">Tanggala sa SD card</string>
     <string name="ext_media_nomedia_notification_message" product="nosdcard">Imbakan sa USB natanggal. Pagsuksok ug bago nga media.</string>
     <string name="ext_media_nomedia_notification_message" product="default">SD card natanggal. Suksok ug bago.</string>
-    <string name="dial_number_using">I-dial ang numero\ngamit ang <xliff:g id="number" example="555">%s</xliff:g></string>
-    <string name="create_contact_using">Naghimu ug kontak\ngamit ang <xliff:g id="number" example="555">%s</xliff:g></string>
-    <string name="permission_request_notification_with_subtitle">Permiso gihangyo\npara sa account nga <xliff:g id="account" example="foo@gmail.com">%s</xliff:g></string>
+    <string name="dial_number_using">I-dial ang numero\ngamit ang <xliff:g example="555" id="number">%s</xliff:g></string>
+    <string name="create_contact_using">Naghimu ug kontak\ngamit ang <xliff:g example="555" id="number">%s</xliff:g></string>
+    <string name="permission_request_notification_with_subtitle">Permiso gihangyo\npara sa account nga <xliff:g example="foo@gmail.com" id="account">%s</xliff:g></string>
     <string name="cta_tethered_notification_title">Nagtether</string>
     <string name="custom_china_mobile">Mobile sa Tsina</string>
     <string name="custom_china_unicom">Unicom sa Tsina</string>
@@ -1022,7 +1021,7 @@ xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="phoneTypeIsdn">ISDN</string>
     <string name="phoneTypeTtyTdd">TTY TDD</string>
     <string name="js_dialog_title">Ang pahina sa \'<xliff:g id="title">%s</xliff:g>\' kay nag-ingun:</string>
-    <string name="addToDictionary">"Dugang ug \"<xliff:g id="word" example="rickroll">%s</xliff:g>\" ngadto sa diksyunaryo</string>
+    <string name="addToDictionary">"Dugang ug \"<xliff:g example="rickroll" id="word">%s</xliff:g>\" ngadto sa diksyunaryo</string>
     <string name="crash_title">Sori!</string>
     <string name="crash_application">Ang aplikasyon nga <xliff:g id="application">%1$s</xliff:g>
         (proseso <xliff:g id="process">%2$s</xliff:g>) kay wa gidahum nga nihunongg. Sistema dili malampuson sa pag-ayo sa mali. Palihug gamit ug lain software.</string>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <!-- 
 /* //device/apps/common/assets/res/any/strings.xml
 **
@@ -17,9 +17,7 @@
 ** limitations under the License.
 */
  -->
-
-<resources xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" xmlns:android="http://schemas.android.com/apk/res/android">
     <string name="address_length">地址長度已達到最大值</string>
     <string name="byteShort" msgid="8340973892742019101">"位元組"</string>
     <string name="kilobyteShort" msgid="5973789783504771878">"KB"</string>
@@ -772,10 +770,6 @@
     <string name="editTextMenuTitle" msgid="1672989176958581452">"編輯文字"</string>
     <string name="low_internal_storage_view_title" msgid="1399732408701697546">"儲存空間即將不足"</string>
     <string name="low_internal_storage_view_text" msgid="635106544616378836">"手機儲存空間即將不足。"</string>
-    <string name="low_internal_storage_ignore">"忽略"</string>
-    <string name="low_internal_storage_display_details">"查看詳情"</string>
-    <string name="low_internal_storage_wait">"請等待…"</string>
-    <string name="low_internal_storage_updating_details">"正在更新詳情…"</string>
     <string name="ok" msgid="5970060430562524910">"確定"</string>
     <string name="cancel" msgid="6442560571259935130">"取消"</string>
     <string name="yes" msgid="5362982303337969312">"確定"</string>
