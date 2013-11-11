@@ -1733,12 +1733,14 @@ uint32_t AudioPolicyManagerBase::getDeviceForStrategy(routing_strategy strategy,
 
     case STRATEGY_MEDIA: {
         uint32_t device2 = mAvailableOutputDevices & AudioSystem::DEVICE_OUT_AUX_DIGITAL;
-	     switch (mForceUse[AudioSystem::FOR_MEDIA]) {
-	     case AudioSystem::FORCE_SPEAKER:
-	          if (device2 == 0) {
-		          device2 = mAvailableOutputDevices & AudioSystem::DEVICE_OUT_SPEAKER;
-	          }
-	     }
+        if (strategy != STRATEGY_SONIFICATION) {
+             switch (mForceUse[AudioSystem::FOR_MEDIA]) {
+             case AudioSystem::FORCE_SPEAKER:
+              if (device2 == 0) {
+                  device2 = mAvailableOutputDevices & AudioSystem::DEVICE_OUT_SPEAKER;
+              }
+            }
+        }
 #ifdef WITH_A2DP
         if (mA2dpOutput != 0) {
             if (strategy == STRATEGY_SONIFICATION && !a2dpUsedForSonification()) {
