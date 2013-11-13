@@ -1,27 +1,35 @@
-<?xml version="1.0"  encoding="utf-8"?>
-<resources
-xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="app_label">"Thanh trạng thái"</string>
-    <string name="status_bar_clear_all_button">"Xoá"</string>
-    <string name="status_bar_no_notifications_title">"Không có thông báo nào"</string>
-    <string name="status_bar_ongoing_events_title">"Đang diễn ra"</string>
-    <string name="status_bar_latest_events_title">"Thông báo"</string>
-    <string name="battery_low_title">"Vui lòng kết nối bộ sạc"</string>
-    <string name="battery_low_subtitle">"Pin đang yếu:"</string>
-    <string name="battery_low_percent_format">"còn <xliff:g id="NUMBER">%d%%</xliff:g> hoặc ít hơn."</string>
-    <string name="battery_low_why">"Sử dụng pin"</string>
-    <string name="usb_accessory_permission_prompt">Cho phép ứng dụng %1$s truy cập phụ kiện USB?</string>
-    <string name="usb_device_confirm_prompt">Mở %1$s khi thiết bị USB này được kết nối?</string>
-    <string name="usb_accessory_confirm_prompt">Mở %1$s khi thiết bị USB này được kết nối?</string>
-    <string name="usb_accessory_uri_prompt">"Không có ứng dụng được cài đặt nào hoạt động với phụ kiện USB này. Tìm hiểu thêm về phụ kiện này tại <xliff:g id="URL">%1$s</xliff:g>"</string>
-    <string name="title_usb_accessory">"Phụ kiện USB"</string>
-    <string name="label_view">"Xem"</string>
-    <string name="always_use_accessory">"Sử dụng theo mặc định cho phụ kiện USB này"</string>
-    <string name="mobile_data_connect_disable">Không</string>
-    <string name="mobile_data_connect_enable">Có</string>
-    <string name="network_disconnect_title">Thông báo</string>
-    <string name="network_disconnect_message">Mạng WLAN đã bị ngắt kết nối. \nKết nối qua 3G chứ? \nNếu bạn không có gói dữ liệu, bạn có thể mất thêm phí.</string>
-    <string name="weak_signal_title">TÍN HIỆU YẾU</string>
-    <string name="weak_signal_message">Tín hiệu mạng WLAN hiện tại rất yếu, bạn nên chọn mạng có tín hiệu tốt hơn</string>
-    <string name="auto_connect">Không hỏi và tự động kết nối với ứng dụng tin cậy khác</string>
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="app_label">"Thanh trạng thái"</string>
+  <string name="status_bar_clear_all_button">"Xoá"</string>
+  <string name="status_bar_no_notifications_title">"Không có thông báo nào"</string>
+  <string name="status_bar_ongoing_events_title">"Đang diễn ra"</string>
+  <string name="status_bar_latest_events_title">"Thông báo"</string>
+  <string name="battery_low_title">"Vui lòng kết nối bộ sạc"</string>
+  <string name="battery_low_subtitle">"Pin đang yếu:"</string>
+  <string name="battery_low_percent_format">"còn <xliff:g id="NUMBER">%d%%</xliff:g> hoặc ít hơn."</string>
+  <string name="battery_low_why">"Sử dụng pin"</string>
+  <string name="usb_accessory_permission_prompt">Cho phép ứng dụng %1$s truy cập phụ kiện USB?</string>
+  <string name="usb_device_confirm_prompt">Mở %1$s khi thiết bị USB này được kết nối?</string>
+  <string name="usb_accessory_confirm_prompt">Mở %1$s khi thiết bị USB này được kết nối?</string>
+  <string name="usb_accessory_uri_prompt">"Không có ứng dụng được cài đặt nào hoạt động với phụ kiện USB này. Tìm hiểu thêm về phụ kiện này tại <xliff:g id="URL">%1$s</xliff:g>"</string>
+  <string name="title_usb_accessory">"Phụ kiện USB"</string>
+  <string name="label_view">"Xem"</string>
+  <string name="always_use_accessory">"Sử dụng theo mặc định cho phụ kiện USB này"</string>
+  <string name="mobile_data_connect_disable">Không</string>
+  <string name="mobile_data_connect_enable">Có</string>
+  <string name="network_disconnect_title">Thông báo</string>
+  <string name="network_disconnect_message">Mạng WLAN đã bị ngắt kết nối. \nKết nối qua 3G chứ? \nNếu bạn không có gói dữ liệu, bạn có thể mất thêm phí.</string>
+  <string name="weak_signal_title">TÍN HIỆU YẾU</string>
+  <string name="weak_signal_message">Tín hiệu mạng WLAN hiện tại rất yếu, bạn nên chọn mạng có tín hiệu tốt hơn</string>
+  <string name="auto_connect">Không hỏi và tự động kết nối với ứng dụng tin cậy khác</string>
+  <string name="bluetooth_name">Bluetooth</string>
+  <string name="sound_name">Âm thanh</string>
+  <string name="mode_silent_name">Yên lặng</string>
+  <string name="mode_vibrate_name">Rung</string>
+  <string name="mode_sound_name">Âm thanh</string>
+  <string name="auto_rotate_name">xoay</string>
+  <string name="mobile_net_name">Dữ liệu</string>
+  <string name="datanetwork_error_airplane">Bạn không thể sử dụng Mạng dữ liệu khi điện thoại ở chế độ trên máy bay.</string>
+  <string name="bluetooth_error_airplane">Bạn không thể sử dụng Bluetooth khi điện thoại ở chế độ trên máy bay.</string>
 </resources>

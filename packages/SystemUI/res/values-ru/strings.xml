@@ -1,27 +1,35 @@
-<?xml version="1.0"  encoding="utf-8"?>
-<resources
-xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="app_label">"Строка состояния"</string>
-    <string name="status_bar_clear_all_button">"Очистить"</string>
-    <string name="status_bar_no_notifications_title">"Нет уведомлений"</string>
-    <string name="status_bar_ongoing_events_title">"Текущие"</string>
-    <string name="status_bar_latest_events_title">"Уведомления"</string>
-    <string name="battery_low_title">"Подключите зарядное устройство"</string>
-    <string name="battery_low_subtitle">"Батарея разряжена:"</string>
-    <string name="battery_low_percent_format">"Осталось <xliff:g id="NUMBER">%d%%</xliff:g> или меньше."</string>
-    <string name="battery_low_why">"Расход заряда батареи"</string>
-    <string name="usb_accessory_permission_prompt">Разрешить приложению %1$s получить доступ к USB аксессуару?</string>
-    <string name="usb_device_confirm_prompt">Открыть %1$s когда это USB устройство подсоединено?</string>
-    <string name="usb_accessory_confirm_prompt">Открыть %1$s когда этот USB аксессуар подсоединен?</string>
-    <string name="usb_accessory_uri_prompt">"Установленные приложения не поддерживают этот USB-аксессуар. Подробнее о нем читайте здесь: <xliff:g id="URL">%1$s</xliff:g>."</string>
-    <string name="title_usb_accessory">"USB-устройство"</string>
-    <string name="label_view">"Просмотр"</string>
-    <string name="always_use_accessory">"Использовать по умолчанию для этого USB-аксессуара"</string>
-    <string name="mobile_data_connect_disable">Нет</string>
-    <string name="mobile_data_connect_enable">Да</string>
-    <string name="network_disconnect_title">Примечание</string>
-    <string name="network_disconnect_message">Локальная сеть отключена. \ nПодсоединитьсяt через 3G? \ nЕсли да, то план данных может потребовать дополнительной оплаты.</string>
-    <string name="weak_signal_title">СЛАБЫЙ СИГНАЛ</string>
-    <string name="weak_signal_message">Текущий сигнал локальной сети очень слабый, советуем выбрать более подходящий</string>
-    <string name="auto_connect">Не спрашивайте и автоматически подключайте другие проверенные приложения</string>
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="app_label">"Строка состояния"</string>
+  <string name="status_bar_clear_all_button">"Очистить"</string>
+  <string name="status_bar_no_notifications_title">"Нет уведомлений"</string>
+  <string name="status_bar_ongoing_events_title">"Текущие"</string>
+  <string name="status_bar_latest_events_title">"Уведомления"</string>
+  <string name="battery_low_title">"Подключите зарядное устройство"</string>
+  <string name="battery_low_subtitle">"Батарея разряжена:"</string>
+  <string name="battery_low_percent_format">"Осталось <xliff:g id="NUMBER">%d%%</xliff:g> или меньше."</string>
+  <string name="battery_low_why">"Расход заряда батареи"</string>
+  <string name="usb_accessory_permission_prompt">Разрешить приложению %1$s получить доступ к USB аксессуару?</string>
+  <string name="usb_device_confirm_prompt">Открыть %1$s когда это USB устройство подсоединено?</string>
+  <string name="usb_accessory_confirm_prompt">Открыть %1$s когда этот USB аксессуар подсоединен?</string>
+  <string name="usb_accessory_uri_prompt">"Установленные приложения не поддерживают этот USB-аксессуар. Подробнее о нем читайте здесь: <xliff:g id="URL">%1$s</xliff:g>."</string>
+  <string name="title_usb_accessory">"USB-устройство"</string>
+  <string name="label_view">"Просмотр"</string>
+  <string name="always_use_accessory">"Использовать по умолчанию для этого USB-аксессуара"</string>
+  <string name="mobile_data_connect_disable">Нет</string>
+  <string name="mobile_data_connect_enable">Да</string>
+  <string name="network_disconnect_title">Примечание</string>
+  <string name="network_disconnect_message">Локальная сеть отключена. \ nПодсоединитьсяt через 3G? \ nЕсли да, то план данных может потребовать дополнительной оплаты.</string>
+  <string name="weak_signal_title">СЛАБЫЙ СИГНАЛ</string>
+  <string name="weak_signal_message">Текущий сигнал локальной сети очень слабый, советуем выбрать более подходящий</string>
+  <string name="auto_connect">Не спрашивайте и автоматически подключайте другие проверенные приложения</string>
+  <string name="bluetooth_name">Bluetooth</string>
+  <string name="sound_name">Звук</string>
+  <string name="mode_silent_name">Бесшумный</string>
+  <string name="mode_vibrate_name">Виброзвонок</string>
+  <string name="mode_sound_name">Звук</string>
+  <string name="auto_rotate_name">вращать</string>
+  <string name="mobile_net_name">Данные</string>
+  <string name="datanetwork_error_airplane">Вы не можете использовать DataNetwork в режиме в самолете.</string>
+  <string name="bluetooth_error_airplane">Вы не можете использовать Bluetooth в режиме в самолете.</string>
 </resources>

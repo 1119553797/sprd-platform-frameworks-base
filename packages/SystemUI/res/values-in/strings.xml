@@ -1,27 +1,35 @@
-<?xml version="1.0"  encoding="utf-8"?>
-<resources
-xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="app_label">"Bilah Status"</string>
-    <string name="status_bar_clear_all_button">"Bersihkan"</string>
-    <string name="status_bar_no_notifications_title">"Tidak ada pemberitahuan"</string>
-    <string name="status_bar_ongoing_events_title">"Berkelanjutan"</string>
-    <string name="status_bar_latest_events_title">"Pemberitahuan"</string>
-    <string name="battery_low_title">"Harap hubungkan ke pengisi daya"</string>
-    <string name="battery_low_subtitle">"Baterai kekurangan daya:"</string>
-    <string name="battery_low_percent_format">"<xliff:g id="NUMBER">%d%%</xliff:g> atau kurang yang tersisa."</string>
-    <string name="battery_low_why">"Penggunaan baterai"</string>
-    <string name="usb_accessory_permission_prompt">Izinkan aplikasi %1$s untuk mengakses aksesori USB?</string>
-    <string name="usb_device_confirm_prompt">Buka %1$s saat perangkat USB ini tehubung?</string>
-    <string name="usb_accessory_confirm_prompt">Buka %1$s saat aksesori USB ini tehubung?</string>
-    <string name="usb_accessory_uri_prompt">"Tidak ada aplikasi terpasang yang bekerja dengan aksesori USB ini. Pelajari aksesori ini lebih lanjut di <xliff:g id="URL">%1$s</xliff:g>"</string>
-    <string name="title_usb_accessory">"Aksesori USB"</string>
-    <string name="label_view">"Lihat"</string>
-    <string name="always_use_accessory">"Gunakan secara bawaan untuk aksesori USB ini"</string>
-    <string name="mobile_data_connect_disable">Tidak</string>
-    <string name="mobile_data_connect_enable">Ya</string>
-    <string name="network_disconnect_title">Beritahu</string>
-    <string name="network_disconnect_message">Jaringan WLAN terputus.\nHubungkan melalui 3G?\nJika Anda tidak memiliki perencanaan data, mungkin dikenakan biaya tambahan.</string>
-    <string name="weak_signal_title">SINYAL LEMAH</string>
-    <string name="weak_signal_message">Sinyal WLAN saat ini sangat lemah, sebaiknya pilih yang lebih baik</string>
-    <string name="auto_connect">Jangan tanya dan secara otomatis hubungkan ke ap terpercaya lainnya</string>
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="app_label">"Bilah Status"</string>
+  <string name="status_bar_clear_all_button">"Bersihkan"</string>
+  <string name="status_bar_no_notifications_title">"Tidak ada pemberitahuan"</string>
+  <string name="status_bar_ongoing_events_title">"Berkelanjutan"</string>
+  <string name="status_bar_latest_events_title">"Pemberitahuan"</string>
+  <string name="battery_low_title">"Harap hubungkan ke pengisi daya"</string>
+  <string name="battery_low_subtitle">"Baterai kekurangan daya:"</string>
+  <string name="battery_low_percent_format">"<xliff:g id="NUMBER">%d%%</xliff:g> atau kurang yang tersisa."</string>
+  <string name="battery_low_why">"Penggunaan baterai"</string>
+  <string name="usb_accessory_permission_prompt">Izinkan aplikasi %1$s untuk mengakses aksesori USB?</string>
+  <string name="usb_device_confirm_prompt">Buka %1$s saat perangkat USB ini tehubung?</string>
+  <string name="usb_accessory_confirm_prompt">Buka %1$s saat aksesori USB ini tehubung?</string>
+  <string name="usb_accessory_uri_prompt">"Tidak ada aplikasi terpasang yang bekerja dengan aksesori USB ini. Pelajari aksesori ini lebih lanjut di <xliff:g id="URL">%1$s</xliff:g>"</string>
+  <string name="title_usb_accessory">"Aksesori USB"</string>
+  <string name="label_view">"Lihat"</string>
+  <string name="always_use_accessory">"Gunakan secara bawaan untuk aksesori USB ini"</string>
+  <string name="mobile_data_connect_disable">Tidak</string>
+  <string name="mobile_data_connect_enable">Ya</string>
+  <string name="network_disconnect_title">Beritahu</string>
+  <string name="network_disconnect_message">Jaringan WLAN terputus.\nHubungkan melalui 3G?\nJika Anda tidak memiliki perencanaan data, mungkin dikenakan biaya tambahan.</string>
+  <string name="weak_signal_title">SINYAL LEMAH</string>
+  <string name="weak_signal_message">Sinyal WLAN saat ini sangat lemah, sebaiknya pilih yang lebih baik</string>
+  <string name="auto_connect">Jangan tanya dan secara otomatis hubungkan ke ap terpercaya lainnya</string>
+  <string name="bluetooth_name">Bluetooth</string>
+  <string name="sound_name">Suara</string>
+  <string name="mode_silent_name">Diam</string>
+  <string name="mode_vibrate_name">Getar</string>
+  <string name="mode_sound_name">Suara</string>
+  <string name="auto_rotate_name">Putar</string>
+  <string name="mobile_net_name">Data</string>
+  <string name="datanetwork_error_airplane">Anda tidak dapat menggunakan Jaringan Data saat telepon berada dalam mode pesawat.</string>
+  <string name="bluetooth_error_airplane">Anda tidak dapat menggunakan Bluetooth saat telepon berada dalam mode pesawat.</string>
 </resources>

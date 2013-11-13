@@ -1,27 +1,35 @@
-<?xml version="1.0"  encoding="utf-8"?>
-<resources
-xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="app_label">"แถบสถานะ"</string>
-    <string name="status_bar_clear_all_button">"ล้างข้อมูล"</string>
-    <string name="status_bar_no_notifications_title">"ไม่มีการแจ้งเตือน"</string>
-    <string name="status_bar_ongoing_events_title">"ดำเนินอยู่"</string>
-    <string name="status_bar_latest_events_title">"การแจ้งเตือน"</string>
-    <string name="battery_low_title">"โปรดเสียบอุปกรณ์ชาร์จ"</string>
-    <string name="battery_low_subtitle">"แบตเตอรี่เหลือน้อย"</string>
-    <string name="battery_low_percent_format">"เหลือ <xliff:g id="NUMBER">%d%%</xliff:g> หรือน้อยกว่า"</string>
-    <string name="battery_low_why">"การใช้แบตเตอรี่"</string>
-    <string name="usb_accessory_permission_prompt">ยินยอมให้โปรแกรม %1$s เชื่อมต่อกับอุปกรณ์USB?</string>
-    <string name="usb_device_confirm_prompt">เปิด %1$s เมื่ออุปกรณ์ USB นี้ถูกเชื่อมต่อ ?</string>
-    <string name="usb_accessory_confirm_prompt">เปิด %1$s เมื่ออุปกรณ์พ่วง USB ถูกเชื่อมต่อ?</string>
-    <string name="usb_accessory_uri_prompt">"แอปพลิเคชันที่ติดตั้งใช้กับอุปกรณ์ USB นี้ไม่ได้ เรียนรู้เพิ่มเติมที่ <xliff:g id="URL">%1$s</xliff:g>"</string>
-    <string name="title_usb_accessory">"อุปกรณ์เสริม USB"</string>
-    <string name="label_view">"ดู"</string>
-    <string name="always_use_accessory">"ใช้ค่าเริ่มต้นสำหรับอุปกรณ์เสริม USB นี้"</string>
-    <string name="mobile_data_connect_disable">ไม่</string>
-    <string name="mobile_data_connect_enable">ใช่</string>
-    <string name="network_disconnect_title">เตือน</string>
-    <string name="network_disconnect_message">เครือข่าย WLAN ถูกตัด \n เชื่อมต่อผ่านระบบ 3G หรือไม่?\n ถ้าคุณไม่ได้ใช้แพ็คเก็จอินเตอร์เน็ต ตรงนี้จะมีค่าใช้จ่ายสูง</string>
-    <string name="weak_signal_title">สัญญาณต่ำ</string>
-    <string name="weak_signal_message">สัญญาณ WLAN ในตอนนี้อ่อนมาก แนะนำว่าคุณควรเลือกสัญญาณอื่นที่ดีกว่า</string>
-    <string name="auto_connect">ไม่ถามการเชื่อมต่อไปยัง ap ที่คาดหวังอื่น ๆ โดยอัตโมติ</string>
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="app_label">"แถบสถานะ"</string>
+  <string name="status_bar_clear_all_button">"ล้างข้อมูล"</string>
+  <string name="status_bar_no_notifications_title">"ไม่มีการแจ้งเตือน"</string>
+  <string name="status_bar_ongoing_events_title">"ดำเนินอยู่"</string>
+  <string name="status_bar_latest_events_title">"การแจ้งเตือน"</string>
+  <string name="battery_low_title">"โปรดเสียบอุปกรณ์ชาร์จ"</string>
+  <string name="battery_low_subtitle">"แบตเตอรี่เหลือน้อย"</string>
+  <string name="battery_low_percent_format">"เหลือ <xliff:g id="NUMBER">%d%%</xliff:g> หรือน้อยกว่า"</string>
+  <string name="battery_low_why">"การใช้แบตเตอรี่"</string>
+  <string name="usb_accessory_permission_prompt">ยินยอมให้โปรแกรม %1$s เชื่อมต่อกับอุปกรณ์USB?</string>
+  <string name="usb_device_confirm_prompt">เปิด %1$s เมื่ออุปกรณ์ USB นี้ถูกเชื่อมต่อ ?</string>
+  <string name="usb_accessory_confirm_prompt">เปิด %1$s เมื่ออุปกรณ์พ่วง USB ถูกเชื่อมต่อ?</string>
+  <string name="usb_accessory_uri_prompt">"แอปพลิเคชันที่ติดตั้งใช้กับอุปกรณ์ USB นี้ไม่ได้ เรียนรู้เพิ่มเติมที่ <xliff:g id="URL">%1$s</xliff:g>"</string>
+  <string name="title_usb_accessory">"อุปกรณ์เสริม USB"</string>
+  <string name="label_view">"ดู"</string>
+  <string name="always_use_accessory">"ใช้ค่าเริ่มต้นสำหรับอุปกรณ์เสริม USB นี้"</string>
+  <string name="mobile_data_connect_disable">ไม่</string>
+  <string name="mobile_data_connect_enable">ใช่</string>
+  <string name="network_disconnect_title">เตือน</string>
+  <string name="network_disconnect_message">เครือข่าย WLAN ถูกตัด \n เชื่อมต่อผ่านระบบ 3G หรือไม่?\n ถ้าคุณไม่ได้ใช้แพ็คเก็จอินเตอร์เน็ต ตรงนี้จะมีค่าใช้จ่ายสูง</string>
+  <string name="weak_signal_title">สัญญาณต่ำ</string>
+  <string name="weak_signal_message">สัญญาณ WLAN ในตอนนี้อ่อนมาก แนะนำว่าคุณควรเลือกสัญญาณอื่นที่ดีกว่า</string>
+  <string name="auto_connect">ไม่ถามการเชื่อมต่อไปยัง ap ที่คาดหวังอื่น ๆ โดยอัตโมติ</string>
+  <string name="bluetooth_name">บลูทูธ</string>
+  <string name="sound_name">เสียง</string>
+  <string name="mode_silent_name">ปิดเสียง</string>
+  <string name="mode_vibrate_name">สั่น</string>
+  <string name="mode_sound_name">เสียง</string>
+  <string name="auto_rotate_name">การหมุน</string>
+  <string name="mobile_net_name">ข้อมูล</string>
+  <string name="datanetwork_error_airplane">คุณไม่สามารถใช้ข้อมูลเน็ตเวิร์คเมื่อโทรศัพท์อยู่ในโหมดปรับใช้งานบนเครื่องบิน</string>
+  <string name="bluetooth_error_airplane">คุณไม่สามารถใช้บลูทูธได้เมื่อโทรศัพท์อยู่ในโหมดปรับใช้งานบนเครื่องบิน</string>
 </resources>
