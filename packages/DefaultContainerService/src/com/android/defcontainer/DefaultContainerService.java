@@ -36,6 +36,7 @@ import android.os.Process;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.StatFs;
+import android.app.ActivityManagerNative;
 import android.app.IntentService;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -425,6 +426,9 @@ public class DefaultContainerService extends IntentService {
                 // Check external storage and return
                 checkExt = true;
                 break check_inner;
+            } else if ((flags & PackageManager.INSTALL_REPLACE_EXISTING) != 0){
+                checkExt = true;
+                break check_inner;
             }
             // Check for manifest option
             if (installLocation == PackageInfo.INSTALL_LOCATION_INTERNAL_ONLY) {
@@ -589,5 +593,18 @@ public class DefaultContainerService extends IntentService {
     		Log.e(TAG, "run " + command + " has Exception, log followed\n" + e);
     	}
     }
+
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		try {
+		    if (localLOGV){
+		        Log.d(TAG, "defcontainerService change adj");
+		    }
+			ActivityManagerNative.getDefault().setProcessAdj(Process.myPid(), 6, false);
+		} catch(RemoteException e) {
+			Log.w(TAG, "defcontainerService set ptask adj failed!");
+		}
+	}
 
 }
