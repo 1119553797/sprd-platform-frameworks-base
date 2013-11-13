@@ -2029,7 +2029,7 @@ public final class ActivityManagerService extends ActivityManagerNative
             app.fixAdj = fixAdjList.get(app.processName);
             Slog.v(TAG, "app[" + app.processName + "] has fix adj:" + app.fixAdj);
         } else if(isLaunchDownloadProvider) {
-            app.fixAdj = -1;
+            app.fixAdj = 2;
             Slog.v(TAG, "launch DownloadProvider process has fix adj: " + app.fixAdj + " pid: " + app.pid);
         }
     }
