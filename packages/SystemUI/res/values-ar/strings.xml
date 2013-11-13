@@ -1,27 +1,35 @@
-<?xml version="1.0"  encoding="utf-8"?>
-<resources
-xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="app_label">"شريط الحالة"</string>
-    <string name="status_bar_clear_all_button">"محو"</string>
-    <string name="status_bar_no_notifications_title">"ليس هناك أي تنبيهات"</string>
-    <string name="status_bar_ongoing_events_title">"مستمر"</string>
-    <string name="status_bar_latest_events_title">"التنبيهات"</string>
-    <string name="battery_low_title">"الرجاء توصيل الشاحن"</string>
-    <string name="battery_low_subtitle">"البطارية منخفضة:"</string>
-    <string name="battery_low_percent_format">"يتبقى <xliff:g id="NUMBER">%d%%</xliff:g> أو أقل."</string>
-    <string name="battery_low_why">"استخدام البطارية"</string>
-    <string name="usb_accessory_permission_prompt">السماح للتطبيق  %1$s الدخول الى ملحقات اليو اس بي؟</string>
-    <string name="usb_device_confirm_prompt">افتح   %1$s عندما يكون جهاز اليو اس بي موصلا؟</string>
-    <string name="usb_accessory_confirm_prompt">افتح   %1$s عندما يكون ملحقات جهاز اليو اس بي موصلا؟</string>
-    <string name="usb_accessory_uri_prompt">"لا يعمل أي تطبيق مثبت مع ملحق UEB هذا. تعرف على المزيد عن هذا الملحق على <xliff:g id="URL">%1$s</xliff:g>."</string>
-    <string name="title_usb_accessory">"ملحق USB"</string>
-    <string name="label_view">"عرض"</string>
-    <string name="always_use_accessory">"الاستخدام بشكل افتراضي لملحق USB هذا"</string>
-    <string name="mobile_data_connect_disable">لا</string>
-    <string name="mobile_data_connect_enable">نعم </string>
-    <string name="network_disconnect_title">ملاحظات</string>
-    <string name="network_disconnect_message">تم فصل الشبكة للاسلكية المحلية.  \n هل تريد الاتصال عبر  3G؟  \n هل يكلفك هذا الامر بعض التكاليف.</string>
-    <string name="weak_signal_title">اشارة ضعيفة</string>
-    <string name="weak_signal_message">إشارات الشبكة للاسلكية المحلية ضعيفة جدا. قم بتحديد شبكة اخرى</string>
-    <string name="auto_connect">لا تسأل وقم بتوصيل الى التطبيقات الموثوقه تلقائيا</string>
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="app_label">"شريط الحالة"</string>
+  <string name="status_bar_clear_all_button">"محو"</string>
+  <string name="status_bar_no_notifications_title">"ليس هناك أي تنبيهات"</string>
+  <string name="status_bar_ongoing_events_title">"مستمر"</string>
+  <string name="status_bar_latest_events_title">"التنبيهات"</string>
+  <string name="battery_low_title">"الرجاء توصيل الشاحن"</string>
+  <string name="battery_low_subtitle">"البطارية منخفضة:"</string>
+  <string name="battery_low_percent_format">"يتبقى <xliff:g id="NUMBER">%d%%</xliff:g> أو أقل."</string>
+  <string name="battery_low_why">"استخدام البطارية"</string>
+  <string name="usb_accessory_permission_prompt">السماح للتطبيق  %1$s الدخول الى ملحقات اليو اس بي؟</string>
+  <string name="usb_device_confirm_prompt">افتح   %1$s عندما يكون جهاز اليو اس بي موصلا؟</string>
+  <string name="usb_accessory_confirm_prompt">افتح   %1$s عندما يكون ملحقات جهاز اليو اس بي موصلا؟</string>
+  <string name="usb_accessory_uri_prompt">"لا يعمل أي تطبيق مثبت مع ملحق UEB هذا. تعرف على المزيد عن هذا الملحق على <xliff:g id="URL">%1$s</xliff:g>."</string>
+  <string name="title_usb_accessory">"ملحق USB"</string>
+  <string name="label_view">"عرض"</string>
+  <string name="always_use_accessory">"الاستخدام بشكل افتراضي لملحق USB هذا"</string>
+  <string name="mobile_data_connect_disable">لا</string>
+  <string name="mobile_data_connect_enable">نعم </string>
+  <string name="network_disconnect_title">ملاحظات</string>
+  <string name="network_disconnect_message">تم فصل الشبكة للاسلكية المحلية.  \n هل تريد الاتصال عبر  3G؟  \n هل يكلفك هذا الامر بعض التكاليف.</string>
+  <string name="weak_signal_title">اشارة ضعيفة</string>
+  <string name="weak_signal_message">إشارات الشبكة للاسلكية المحلية ضعيفة جدا. قم بتحديد شبكة اخرى</string>
+  <string name="auto_connect">لا تسأل وقم بتوصيل الى التطبيقات الموثوقه تلقائيا</string>
+  <string name="bluetooth_name">بلوتوث</string>
+  <string name="sound_name">الصوت</string>
+  <string name="mode_silent_name">صامت</string>
+  <string name="mode_vibrate_name">اهتزاز</string>
+  <string name="mode_sound_name">الصوت</string>
+  <string name="auto_rotate_name">تدوير</string>
+  <string name="mobile_net_name">البيانات</string>
+  <string name="datanetwork_error_airplane">لا يمكن استخدام بيانات الشبكة اذا كان الهاتف في وضع السماعه.</string>
+  <string name="bluetooth_error_airplane">لا يمكن استخدام البلوتوث اذا كان الهاتف في وضع السماعه.</string>
 </resources>

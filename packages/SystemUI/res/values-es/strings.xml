@@ -1,27 +1,35 @@
-<?xml version="1.0"  encoding="utf-8"?>
-<resources
-xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="app_label">"Barra de estado"</string>
-    <string name="status_bar_clear_all_button">"Borrar"</string>
-    <string name="status_bar_no_notifications_title">"No tienes notificaciones"</string>
-    <string name="status_bar_ongoing_events_title">"Entrante"</string>
-    <string name="status_bar_latest_events_title">"Notificaciones"</string>
-    <string name="battery_low_title">"Conecta el cargador"</string>
-    <string name="battery_low_subtitle">"Se está agotando la batería:"</string>
-    <string name="battery_low_percent_format">"<xliff:g id="NUMBER">%d%%</xliff:g> o menos disponible"</string>
-    <string name="battery_low_why">"Uso de la batería"</string>
-    <string name="usb_accessory_permission_prompt">¿Permitir a la aplicación %1$s acceder al accesorio USB?</string>
-    <string name="usb_device_confirm_prompt">¿Abrir %1$s cuando este dispositivo USB esté conectado?</string>
-    <string name="usb_accessory_confirm_prompt">¿Abrir %1$s cuando este accesorio USB esté conectado?</string>
-    <string name="usb_accessory_uri_prompt">"Ninguna aplicación instalada funciona con este accesorio USB. Más información: <xliff:g id="URL">%1$s</xliff:g>"</string>
-    <string name="title_usb_accessory">"Accesorio USB"</string>
-    <string name="label_view">"Ver"</string>
-    <string name="always_use_accessory">"Usar de forma predeterminada para este accesorio USB"</string>
-    <string name="mobile_data_connect_disable">No</string>
-    <string name="mobile_data_connect_enable">Sí</string>
-    <string name="network_disconnect_title">Aviso</string>
-    <string name="network_disconnect_message">La red WLAN está desconectada. \nConectar vía 3G? \nSi tiene plan de datos, podría incurrir en cargos extras.</string>
-    <string name="weak_signal_title">SEÑAL DÉBIL</string>
-    <string name="weak_signal_message">The current WLAN signal is very weak, recommend that you select a better one</string>
-    <string name="auto_connect">Do not ask and automatically connect to other trusted ap</string>
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="app_label">"Barra de estado"</string>
+  <string name="status_bar_clear_all_button">"Borrar"</string>
+  <string name="status_bar_no_notifications_title">"No tienes notificaciones"</string>
+  <string name="status_bar_ongoing_events_title">"Entrante"</string>
+  <string name="status_bar_latest_events_title">"Notificaciones"</string>
+  <string name="battery_low_title">"Conecta el cargador"</string>
+  <string name="battery_low_subtitle">"Se está agotando la batería:"</string>
+  <string name="battery_low_percent_format">"<xliff:g id="NUMBER">%d%%</xliff:g> o menos disponible"</string>
+  <string name="battery_low_why">"Uso de la batería"</string>
+  <string name="usb_accessory_permission_prompt">¿Permitir a la aplicación %1$s acceder al accesorio USB?</string>
+  <string name="usb_device_confirm_prompt">¿Abrir %1$s cuando este dispositivo USB esté conectado?</string>
+  <string name="usb_accessory_confirm_prompt">¿Abrir %1$s cuando este accesorio USB esté conectado?</string>
+  <string name="usb_accessory_uri_prompt">"Ninguna aplicación instalada funciona con este accesorio USB. Más información: <xliff:g id="URL">%1$s</xliff:g>"</string>
+  <string name="title_usb_accessory">"Accesorio USB"</string>
+  <string name="label_view">"Ver"</string>
+  <string name="always_use_accessory">"Usar de forma predeterminada para este accesorio USB"</string>
+  <string name="mobile_data_connect_disable">No</string>
+  <string name="mobile_data_connect_enable">Sí</string>
+  <string name="network_disconnect_title">Aviso</string>
+  <string name="network_disconnect_message">La red WLAN está desconectada. \nConectar vía 3G? \nSi tiene plan de datos, podría incurrir en cargos extras.</string>
+  <string name="weak_signal_title">SEÑAL DÉBIL</string>
+  <string name="weak_signal_message">The current WLAN signal is very weak, recommend that you select a better one</string>
+  <string name="auto_connect">Do not ask and automatically connect to other trusted ap</string>
+  <string name="bluetooth_name">Bluetooth</string>
+  <string name="sound_name">Sonido</string>
+  <string name="mode_silent_name">Silencioso</string>
+  <string name="mode_vibrate_name">Vibración</string>
+  <string name="mode_sound_name">Sonido</string>
+  <string name="auto_rotate_name">girar</string>
+  <string name="mobile_net_name">Datos</string>
+  <string name="datanetwork_error_airplane">Usted no puede usar DataNetwork cuando el teléfono está en modo avión.</string>
+  <string name="bluetooth_error_airplane">Usted no puede usar Bluetooth cuando el teléfono está en modo avión.</string>
 </resources>
