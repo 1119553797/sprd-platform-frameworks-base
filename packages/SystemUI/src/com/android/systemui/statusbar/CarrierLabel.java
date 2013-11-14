@@ -180,6 +180,9 @@ public class CarrierLabel extends TextView {
 			if(spn != null && plmn != null){
 				setText(plmn+networkType);
 			}
+			if(spn != null && plmn == null){
+				setText(com.android.internal.R.string.lockscreen_carrier_default);
+			}
 			if(spn == null && plmn != null){
 				setText(plmn+networkType);
 			}
