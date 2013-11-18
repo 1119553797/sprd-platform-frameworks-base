@@ -1373,8 +1373,8 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
             Slog.d(TAG, "updateExpandedViewPos after  expandedPosition=" + expandedPosition
                     + " mTrackingParams.y=" + mTrackingParams.y
                     + " mTrackingPosition=" + mTrackingPosition
-                    + " mExpandedParams.y=" + mExpandedParams.y
-                    + " mExpandedParams.height=" + mExpandedParams.height);
+                    + " mExpandedParams.y=" + ((mExpandedParams == null) ? "??!" : mExpandedParams.y)
+                    + " mExpandedParams.height=" + ((mExpandedParams == null) ? "??!" : mExpandedParams.height));
         }
     }
 
