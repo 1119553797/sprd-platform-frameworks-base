@@ -9612,6 +9612,7 @@ public final class ActivityManagerService extends ActivityManagerNative
         canKillFrontSystemApp.add("com.android.camera");
         canKillFrontSystemApp.add("com.android.browser");
         canKillFrontSystemApp.add("com.cooliris.media");
+        canKillFrontSystemApp.add("com.thunderst.radio");
     }
 
     final void performServiceRestartLocked(ServiceRecord r) {
