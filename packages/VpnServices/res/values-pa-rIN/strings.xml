@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+<string name="app_label">VPN ਸੇਵਾਵਾਂ</string>
+<string name="vpn_notification_title_connected">&amp;amp;lt;xliff:g id=profilename&amp;amp;gt;%s&amp;amp;lt;/xliff:g&amp;amp;gt; VPN ਕੁਨੈਕਟ ਹੋਇਆ</string>
+<string name="vpn_notification_title_disconnected">&amp;amp;lt;xliff:g id=profilename&amp;amp;gt;%s&amp;amp;lt;/xliff:g&amp;amp;gt; VPN ਡਿਸਕੁਨੈਕਟ ਹੋਇਆ</string>
+<string name="vpn_notification_hint_disconnected">VPN ਨਾਲ ਦੁਬਾਰਾ ਕੁਨੈਕਟ ਕਰਨ ਲਈ ਟਚ ਕਰੋ।</string>
+</resources>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+<string name="app_label">"የVPN አገልግሎቶች"</string>
+<string name="vpn_notification_title_connected">"&amp;amp;lt;xliff:g id="profilename"&amp;amp;gt;%s&amp;amp;lt;/xliff:g&amp;amp;gt; VPN ተያይዟል"</string>
+<string name="vpn_notification_title_disconnected">"&amp;amp;lt;xliff:g id="profilename"&amp;amp;gt;%s&amp;amp;lt;/xliff:g&amp;amp;gt; VPN ተቋርጧል"</string>
+<string name="vpn_notification_hint_disconnected">"ከ VPN ጋረ መልሶ ለመገናኘት ይንኩ፡፡"</string>
+</resources>
