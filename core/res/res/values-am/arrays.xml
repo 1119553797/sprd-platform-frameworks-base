@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <integer-array name="maps_starting_lat_lng">
+<integer-array name="maps_starting_lat_lng">
 <item>36149777</item>
 <item>-95993398</item>
 </integer-array>
-  <integer-array name="maps_starting_zoom">
+<integer-array name="maps_starting_zoom">
 <item>3</item>
 </integer-array>
 </resources>
