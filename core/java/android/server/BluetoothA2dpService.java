@@ -516,11 +516,11 @@ public class BluetoothA2dpService extends IBluetoothA2dp.Stub {
             mContext.sendBroadcast(intent, BLUETOOTH_PERM);
 
             if (DBG) log("A2DP state : device: " + device + " State:" + prevState + "->" + state);
-            if ((prevState == BluetoothA2dp.STATE_PLAYING) && ((state ==  BluetoothA2dp.STATE_DISCONNECTED)
-                    ||(state ==  BluetoothA2dp.STATE_DISCONNECTING))) {
-                prevState = BluetoothA2dp.STATE_CONNECTED;
-            }
-            mBluetoothService.sendConnectionStateChange(device, BluetoothProfile.A2DP, state,prevState);
+            //if ((prevState == BluetoothA2dp.STATE_PLAYING) && ((state ==  BluetoothA2dp.STATE_DISCONNECTED)
+            //        ||(state ==  BluetoothA2dp.STATE_DISCONNECTING))) {
+            //    prevState = BluetoothA2dp.STATE_CONNECTED;
+            //}
+            //mBluetoothService.sendConnectionStateChange(device, BluetoothProfile.A2DP, state,prevState);
         }
     }
 
