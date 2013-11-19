@@ -992,7 +992,8 @@ public class ActivityStack {
 
         // Now for any activities that aren't visible to the user, make
         // sure they no longer are keeping the screen frozen.
-        while (i >= 0) {
+        int size = mHistory.size();
+        while (i >= 0 && i < size) {
             r = (ActivityRecord)mHistory.get(i);
             if (DEBUG_VISBILITY) Slog.v(
                     TAG, "Make invisible? " + r + " finishing=" + r.finishing
