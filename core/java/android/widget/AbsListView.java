@@ -694,7 +694,11 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
             return false;
         }
 
-        return getChildAt(0).getTop() >= 0 && getChildAt(childCount - 1).getBottom() <= mBottom;
+        // SPRD: check view's bound for overscroll bounce @{
+        //return getChildAt(0).getTop() >= 0 && getChildAt(childCount - 1).getBottom() <= mBottom;
+        return getChildAt(0).getTop() >= mListPadding.top &&
+                getChildAt(childCount - 1).getBottom() <= getHeight() - mListPadding.bottom;
+        // SPRD: @}
     }
 
     /**
@@ -2515,11 +2519,13 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
                 int initialVelocity = (int) velocityTracker.getYVelocity(mActivePointerId);
 				initialVelocity /= 2; 
                 reportScrollStateChange(OnScrollListener.SCROLL_STATE_FLING);
-                if (Math.abs(initialVelocity) > mMinimumVelocity) {
-                    mFlingRunnable.startOverfling(-initialVelocity);
-                } else {
+                // SPRD: remove for overscroll bounce @{
+                //if (Math.abs(initialVelocity) > mMinimumVelocity) {
+                //    mFlingRunnable.startOverfling(-initialVelocity);
+                //} else {
                     mFlingRunnable.startSpringback();
-                }
+                //}
+                // SPRD: @}
 
                 break;
             }
