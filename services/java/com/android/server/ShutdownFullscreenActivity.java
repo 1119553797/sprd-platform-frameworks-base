@@ -43,7 +43,8 @@ public class ShutdownFullscreenActivity extends Activity {
     private static final String TAG = "ShutdownFullScreenActivity";
     private boolean mConfirm;
     private int mSeconds = 15;
-	private AlertDialog mDialog; 
+	private AlertDialog mDialog;
+	private MediaPlayer mPlayer;
 
     private Handler myHandler = new Handler();
     private Runnable myRunnable = new Runnable() {	
@@ -108,6 +109,10 @@ public class ShutdownFullscreenActivity extends Activity {
                     public void onClick(DialogInterface dialog, int which) {
                         myHandler.removeCallbacks(myRunnable);
                         dialog.cancel();
+                        if (mPlayer != null) {
+                            mPlayer.reset();
+                            mPlayer.release();
+                        }
                         unregisterReceiver(mReceiver);
                         finish();
                     }});
@@ -121,17 +126,17 @@ public class ShutdownFullscreenActivity extends Activity {
         		final ContentResolver cr = getContentResolver();
         		String path=Settings.System.getString(cr,Settings.System.NOTIFICATION_SOUND);
 				
-				MediaPlayer mplayer=new MediaPlayer();
+				mPlayer=new MediaPlayer();
 				try{
-					mplayer.reset();
+				    mPlayer.reset();
 					if(null!=path){
-						mplayer.setDataSource(path);
+					    mPlayer.setDataSource(path);
 					}
 					else{
-						mplayer.setDataSource("/system/media/audio/notifications/Heaven.ogg");
+					    mPlayer.setDataSource("/system/media/audio/notifications/Heaven.ogg");
 					}
-					mplayer.prepare();
-					mplayer.start();
+					mPlayer.prepare();
+					mPlayer.start();
 				}
 				catch(IOException e){}
         	}
