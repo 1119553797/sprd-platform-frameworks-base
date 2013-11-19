@@ -1168,7 +1168,8 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
 
 
 	private void updateSlidingTab() {
-		int missPhoneCount = getMissCallCount();
+		//int missPhoneCount = getMissCallCount();
+		int missPhoneCount = 0;
 		int missMmsCount = getUnReadSmsCount()+getUnReadMmsCount();
 		hasMissPhone = missPhoneCount > 0;
 		hasMissMms = missMmsCount > 0;
