@@ -849,7 +849,7 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
                     mGsmRoaming = regCodeIsRoaming(regState);
                     newSS.setState (regCodeToServiceState(regState));
 
-                    if (regState == 3 || regState == 6 || regState == 10 || regState == 12 || regState == 13 || regState == 14) {
+                    if (regState == 3 || regState == 6 || regState == 10 || regState == 12 || regState == 13 || regState == 14 || regState == 8) {
                         mEmergencyOnly = true;
                     } else {
                         mEmergencyOnly = false;
@@ -1444,6 +1444,7 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
             case 12:// same as 2, but indicates that emergency call is possible.
             case 13:// same as 3, but indicates that emergency call is possible.
             case 14:// same as 4, but indicates that emergency call is possible.
+            case 8: //8 is attach to emergency network
                 return ServiceState.STATE_OUT_OF_SERVICE;
 
             case 1:
