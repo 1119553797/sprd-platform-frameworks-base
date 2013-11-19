@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+<string name="app_label">ਸਥਿਤੀ ਬਾਰ</string>
+<string name="status_bar_clear_all_button">ਮਿਟਾਓ</string>
+<string name="status_bar_no_notifications_title">ਕੋਈ ਸੂਚਨਾ ਨਹੀਂ</string>
+<string name="status_bar_ongoing_events_title">ਚਲ ਰਿਹਾ</string>
+<string name="status_bar_latest_events_title">ਸੂਚਨਾਵਾਂ</string>
+<string name="battery_low_title">ਕਿਰਪਾ ਕਰਕੇ ਚਾਰਜਰ ਲਗਾਓ</string>
+<string name="battery_low_subtitle">ਬੈਟਰੀ ਘੱਟ ਹੋ ਰਹੀ ਹੈ :</string>
+<string name="battery_low_percent_format">&amp;amp;lt;xliff:g id=number&amp;amp;gt;%d%%&amp;amp;lt;/xliff:g&amp;amp;gt; ਜਾਂ ਘੱਟ ਬਚੇ।</string>
+<string name="battery_low_why">ਬੈਟਰੀ ਦੀ ਵਰਤੋਂ</string>
+<string name="usb_accessory_uri_prompt">ਇਸ USB ਐਕਸੈਸਰੀਜ਼ ਨਾਲ ਕੋਈ ਸਥਾਪਿਤ ਅਨੁਪ੍ਰਯੋਗ ਕੰਮ ਨਹੀਂ।  &amp;amp;lt;xliff:g id=url&amp;amp;gt;%1$s&amp;amp;lt;/xliff:g&amp;amp;gt; ਤੇ ਇਸ ਐਕਸੈਸਰੀਜ਼ ਬਾਰੇ ਹੋਰ ਪੜ੍ਹੋ</string>
+<string name="title_usb_accessory">USB ਸਹਾਇਕ ਸਮੱਗਰੀ</string>
+<string name="label_view">ਦੇਖੋ</string>
+<string name="always_use_accessory">ਇਸ USB ਸਹਾਇਕ ਸਮੱਗਰੀ ਲਈ ਬਾਈ ਡਿਫਾਲਟ ਵਰਤੋ</string>
+<string name="mobile_data_connect_disable">ਨਹੀਂ</string>
+<string name="mobile_data_connect_enable">ਹਾਂ</string>
+<string name="network_disconnect_title">ਨੋਟਿਸ</string>
+<string name="network_disconnect_message">WLAN ਨੈਟਵਰਕ ਡਿਸਕੁਨੈਕਟ ਹੋ ਗਿਆ ਹੈ। \n ਕੀ 8G ਦੁਆਰਾ ਕੁਨੈਕਟ ਕਰਨਾ ਚਾਹੁੰਦੇ ਹੋ? \n ਜੇਕਰ ਤੁਹਾਡੇ ਕੋਲ ਨੈਟ ਡਾਟਾ ਪਲਾਨ ਨਹੀਂ ਹੈ ਤਾਂ ਇਸ ਦੇ ਵਾਧੂ ਚਾਰਜਿਜ਼ ਲੱਗ ਸਕਦੇ ਹਨ।</string>
+<string name="weak_signal_title">ਕਮਜ਼ੋਰ ਸੰਕੇਤ</string>
+<string name="weak_signal_message">ਵਰਤਮਾਨ WLAN ਸੰਕੇਤ ਕਮਜ਼ੋਰ ਹੈ, ਤੁਹਾਨੁੰ ਇੱਕ ਬਿਹਤਰ ਚੁਣਨ ਦੀ ਸਲਾਹ ਦਿੱਤੀ ਜਾਂਦੀ ਹੈ</string>
+<string name="auto_connect">ਕੁਝ ਨਾ ਪੁੱਛੋ ਅਤੇ ਆਟੋਮੈਟਿਕਲੀ ਦੂਜੇ ਭਰੋਸੇਮੰਦ ਅਨੁਪ੍ਰਣੋਗ ਨਾਲ ਕੁਨੈਕਟ ਹੋ ਜਾਵੋ</string>
+<string name="bluetooth_name">ਬਲੂਟੂਥ</string>
+<string name="sound_name">ਧੁਨੀ</string>
+<string name="mode_silent_name">ਚੁਪਚਾਪ</string>
+<string name="mode_vibrate_name">ਵਾਈਬ੍ਰੇਟ</string>
+<string name="mode_sound_name">ਧੁਨੀ</string>
+<string name="auto_rotate_name">ਘੁੰਮਾਓ</string>
+<string name="mobile_net_name">ਡਾਟਾ</string>
+<string name="datanetwork_error_airplane">ਜਦ ਫੋਨ ਹਵਾਈ ਜਹਾਜ਼ ਮੋਡ ਵਿੱਚ ਹੋਵੇ ਤਾਂ ਤੁਸੀ ਡਾਟਾ ਨੈਟਵਰਕ ਨਹੀਂ ਵਰਤ ਸਕਦੇ।</string>
+<string name="bluetooth_error_airplane">ਜਦ ਫੋਨ ਹਵਾਈ ਜਹਾਜ਼ ਮੋਡ ਵਿੱਚ ਹੋਵੇ ਤਾਂ ਤੁਸੀ ਬਲੂਟੂਥ ਵਰਤ ਨਹੀਂ ਨਹੀਂ  ਸਕਦੇ।</string>
+</resources>

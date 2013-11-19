@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+<string name="app_label">Barra de status</string>
+<string name="status_bar_clear_all_button">"Limpar"</string>
+<string name="status_bar_no_notifications_title">"Sem notificações"</string>
+<string name="status_bar_ongoing_events_title">"Contínuo"</string>
+<string name="status_bar_latest_events_title">"Notificações"</string>
+<string name="battery_low_title">Por favor, ligue o carregador</string>
+<string name="battery_low_subtitle">A bateria está ficando fraca:</string>
+<string name="battery_low_percent_format">&amp;amp;lt;xliff:g id=número&amp;amp;gt;%d%%&amp;amp;lt;/xliff:g&amp;amp;gt; ou menos restante.</string>
+<string name="battery_low_why">"Utilização de bateria"</string>
+<string name="usb_accessory_uri_prompt">Nenhum aplicativo instalado opera com esse acessório USB. Saiba mais sobre esse acessório em &amp;amp;lt;xliff:g id=url&amp;amp;gt;%1$s&amp;amp;lt;/xliff:g&amp;amp;gt;</string>
+<string name="title_usb_accessory">"Acessório USB"</string>
+<string name="label_view">"Visualizar"</string>
+<string name="always_use_accessory">"Usar por padrão para este acessório USB"</string>
+<string name="mobile_data_connect_disable">"Não"</string>
+<string name="mobile_data_connect_enable">"Sim"</string>
+<string name="network_disconnect_title">"Aviso"</string>
+<string name="network_disconnect_message">"A rede WLAN está desconectada. Conectar via 4G? Se você não tiver um plano de dados, pode incorrer em taxas adicionais."</string>
+<string name="weak_signal_title">"SINAL FRACO"</string>
+<string name="weak_signal_message">"O sinal WLAN atual está muito fraco, recomendamos que você selecione um melhor"</string>
+<string name="auto_connect">"Não perguntar e conectar automaticamente a outra app de confiança"</string>
+<string name="bluetooth_name">"Bluetooth"</string>
+<string name="sound_name">"Som"</string>
+<string name="mode_silent_name">"Silencioso"</string>
+<string name="mode_vibrate_name">"Vibrar"</string>
+<string name="mode_sound_name">"Som"</string>
+<string name="auto_rotate_name">"Rotar"</string>
+<string name="mobile_net_name">"Dado"</string>
+<string name="datanetwork_error_airplane">Você não pode usar o DataNetwork quando o telefone está em modo de avião.</string>
+<string name="bluetooth_error_airplane">Você não pode usar o Bluetooth quando o telefone está em modo de avião.</string>
+</resources>

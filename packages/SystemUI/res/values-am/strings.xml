@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+<string name="app_label">"የሁኔታ አሞሌ"</string>
+<string name="status_bar_clear_all_button">"አጽዳ"</string>
+<string name="status_bar_no_notifications_title">"ምንም ማስታወቂያዎች የሉም"</string>
+<string name="status_bar_ongoing_events_title">"ቀጣይነት"</string>
+<string name="status_bar_latest_events_title">"ማስታወቂያዎች"</string>
+<string name="battery_low_title">"ቻርጅሩን ን አያይዝ"</string>
+<string name="battery_low_subtitle">"ባትሪው እያለቀ ነው፤"</string>
+<string name="battery_low_percent_format">"&amp;amp;lt;xliff:g id="number"&amp;amp;gt;%d%%&amp;amp;lt;/xliff:g&amp;amp;gt;ወይም ትንሽ ይቀራል።"</string>
+<string name="battery_low_why">"የባትሪ ጥቅም"</string>
+<string name="usb_accessory_uri_prompt">"ምንም  የተጫነ መተግበሪያዎች ከUSB ተቀጥላዎች ጋር አይሰሩም፡፡ ስለነዚህ ተቀጥላዎች ተማር በ &amp;amp;lt;xliff:g id="url"&amp;amp;gt;%1$s&amp;amp;lt;/xliff:g&amp;amp;gt;"</string>
+<string name="title_usb_accessory">"USB ተጨማሪ"</string>
+<string name="label_view">"እይታ"</string>
+<string name="always_use_accessory">"ለዚህ USB ተጨማሪ ነባሪ ተጠቀም"</string>
+<string name="mobile_data_connect_disable">"አይ"</string>
+<string name="mobile_data_connect_enable">"አዎ"</string>
+<string name="network_disconnect_title">"ማስታወቂያ"</string>
+<string name="network_disconnect_message">"የWLAN አውታረ መረብ ትቋርጧል ።\n በ 3G ይያያዝ?\n የውሂብ ዕቅድ ከሌልዎት ተጨማሪ ክፍያዎችን ሊከፍሉ ይችላሉ።"</string>
+<string name="weak_signal_title">"ደካማ ምልክት"</string>
+<string name="weak_signal_message">"ያሁኑ የWLAN ምልክት በጣም ደካማ ነው፣ የተሻለ እንዲመርጡ ይመከራሉ"</string>
+<string name="auto_connect">"ለሌሎች የታመኑ የመድረሻ ነጥቦችን  ሳትጠይቅ በራስ ስር አያያዝ"</string>
+<string name="bluetooth_name">"የብሉ ቱዝ"</string>
+<string name="sound_name">"ድምጽ"</string>
+<string name="mode_silent_name">"ጸጥታ"</string>
+<string name="mode_vibrate_name">"ንዘር"</string>
+<string name="mode_sound_name">"ድምጽ"</string>
+<string name="auto_rotate_name">"አሽከርክር"</string>
+<string name="mobile_net_name">"የውሂብ"</string>
+<string name="datanetwork_error_airplane">"ስልኩ በአውሮፕላን ቅጥ ላይ እያለ የውሂብ አዉታረ መረብን መጠቀም አይችሉም።"</string>
+<string name="bluetooth_error_airplane">"ስልኩ በአውሮፕላን ሁነታ ላይ እያለ ብሉቱዝ መጠቀም አይችሉም።"</string>
+</resources>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+<string name="app_label">"સ્ટેટસ બાર"</string>
+<string name="status_bar_clear_all_button">"સાફ"</string>
+<string name="status_bar_no_notifications_title">"કોઇ જાણકારી નથી"</string>
+<string name="status_bar_ongoing_events_title">"આગામી"</string>
+<string name="status_bar_latest_events_title">"સૂચનો"</string>
+<string name="battery_low_title">"કૃપા કરી ચાર્જર જોડો"</string>
+<string name="battery_low_subtitle">બેટરી ઘટી ગઇ છે:</string>
+<string name="battery_low_percent_format">&amp;amp;lt;xliff:g id=number&amp;amp;gt;%d%%&amp;amp;lt;/xliff:g&amp;amp;gt;અથવા ઓછું બાકી રહે છે. </string>
+<string name="battery_low_why">બેટરી વપરાશ</string>
+<string name="usb_accessory_uri_prompt">આ USB એસેસરી સાથે કોઈ સ્થાપિત ઍપ્લિકેશન કામ કરતી નથી.  આ એસેસરી વિશે &amp;amp;lt;xliff:g id=url&amp;amp;gt;%1$s&amp;amp;lt;/xliff:g&amp;amp;gt;પર વધુ જાણો. </string>
+<string name="title_usb_accessory">"USB એસેસરી"</string>
+<string name="label_view">"જોવું"</string>
+<string name="always_use_accessory">આ USB સાધન માટે પૂર્વનિર્ધારીત દ્વારા ઉપયોગ કરો</string>
+<string name="mobile_data_connect_disable">ના </string>
+<string name="mobile_data_connect_enable">હા </string>
+<string name="network_disconnect_title">"નોટિસ"</string>
+<string name="network_disconnect_message">"WLAN નેટવર્ક જોડાણ કપાઈ ગયું છે. \n 3જી મારફત જોડાવું છે?\n જો તમારી પાસે ડેટા પ્લાન ન હોય તો, તે વધારાના ચાર્જ લગાવી શકે છે."</string>
+<string name="weak_signal_title">"નબળાં સિગ્નલ"</string>
+<string name="weak_signal_message">"વર્તમાન WLAN સિગ્નલ ખૂબ નબળું છે, તમે એક શ્રેષ્ઠ પસંદ કરો તેવું સૂચન છે"</string>
+<string name="auto_connect">"પૂછો નહીં અને અન્ય વિશ્વસનીય અનુપ્રયોગ સાથે સ્વયં જોડાણ કરો"</string>
+<string name="bluetooth_name">"બ્લ્યુટુથ"</string>
+<string name="sound_name">ધ્વનિ</string>
+<string name="mode_silent_name">શાંત</string>
+<string name="mode_vibrate_name">ધ્રુજારી </string>
+<string name="mode_sound_name">"ધ્વનિ"</string>
+<string name="auto_rotate_name">"ગોળ ફેરવવું"</string>
+<string name="mobile_net_name">"ડેટા"</string>
+<string name="datanetwork_error_airplane">"ફોન એરોપ્લેન મોડમાં હોય ત્યારે તમે ડેટાનેટવર્કનો ઉપયોગ કરી શકશો નહીં."</string>
+<string name="bluetooth_error_airplane">"ફોન એરોપ્લેન મોડમાં હોય ત્યારે તમે બ્લુટુથનો ઉપયોગ કરી શકશો નહીં."</string>
+</resources>

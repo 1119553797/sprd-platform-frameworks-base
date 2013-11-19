@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+<string name="app_label">របារកម្មវិធីស្តេតទ័សបា</string>
+<string name="status_bar_clear_all_button">លុបចោល</string>
+<string name="status_bar_no_notifications_title">គ្មានសេចក្តីជូនដំណឹង</string>
+<string name="status_bar_ongoing_events_title">កំពុងតែដំណើរការ</string>
+<string name="status_bar_latest_events_title">ការឲ្យដំណឹងនានា</string>
+<string name="battery_low_title">សូមភ្ជាប់ប្រដាប់បញ្ចូលភ្លើង</string>
+<string name="battery_low_subtitle">ថ្មមានកម្លាំងខ្សោយ៖</string>
+<string name="battery_low_percent_format">&amp;amp;lt;xliff:g id=number&amp;amp;gt;%d%%&amp;amp;lt;/xliff:g&amp;amp;gt;ឬសល់តិចជាង។</string>
+<string name="battery_low_why">ការប្រើប្រាស់ថ្ម</string>
+<string name="usb_accessory_uri_prompt">គ្មានការងារកម្មវិធីដែលបានបញ្ចូលជាមួយនឹងឧបករណ៍ USB ឡើយ។ សូមសិក្សាបន្ថែមអំពីឧបករណ៍នេះនៅឯ &amp;amp;lt;xliff:g id=url&amp;amp;gt;%1$s&amp;amp;lt;/xliff:g&amp;amp;gt;</string>
+<string name="title_usb_accessory">គ្រឿងបន្លាស់ USB</string>
+<string name="label_view">ពិនិត្យមើល</string>
+<string name="always_use_accessory">ប្រើប្រាស់តាមលំនាំដើមសម្រាប់ USB គ្រឿងបន្លាស់នេះ</string>
+<string name="mobile_data_connect_disable">គ្មាន</string>
+<string name="mobile_data_connect_enable">បាទ/ចាស៎</string>
+<string name="network_disconnect_title">សេចក្តីជូនដំណឹង</string>
+<string name="network_disconnect_message">បណ្តាញ WLAN ត្រូវបានផ្តា​ច់តំណភ្ជាប់។ \nតើត្រូវតភ្ជាប់តាម 4G ឬ? \nប្រសិនបើលោកអ្នកមានបណ្តាញ ដែលមានផែនការទិន្នន័យ វាអាចធ្វើឲ្យមានការបង់ថ្លៃបន្ថែមទៀត។</string>
+<string name="weak_signal_title">សញ្ញាខ្សោយ</string>
+<string name="weak_signal_message">សញ្ញា WLAN បច្ចុប្បន្ននេះ ខ្សោយណាស់ សូមឲ្យអនុសាសន៍ថាលោកអ្នកត្រូវជ្រើសរើសថ្មមួយ</string>
+<string name="auto_connect">កុំសាកសួរ ហើយតំណភ្ជាប់ដោយស្វ័យប្រវត្តិចំពោះព័ត៌មានដែលជឿទុកចិត្តផ្សេងទៀត</string>
+<string name="bluetooth_name">ប្លូធូត្ស</string>
+<string name="sound_name">សម្លេង</string>
+<string name="mode_silent_name">ស្ងៀមស្ងាត់</string>
+<string name="mode_vibrate_name">ញ័រ</string>
+<string name="mode_sound_name">សម្លេង</string>
+<string name="auto_rotate_name">បង្វិល</string>
+<string name="mobile_net_name">ទិន្នន័</string>
+<string name="datanetwork_error_airplane">លោកអ្នកមិនអាចប្រើបណ្តាញទិន្នន័យ នៅពេលណាទូរស័ព្ទស្ថិតក្នុងកម្មវិធីអែរផ្លេនម៉ូដ។</string>
+<string name="bluetooth_error_airplane">លោកអ្នកមិនអាចប្រើប្លូធូត្ស នៅពេលណាទូរស័ព្ទស្ថិតក្នុងកម្មវិធីអែរផ្លេនម៉ូដ។</string>
+</resources>

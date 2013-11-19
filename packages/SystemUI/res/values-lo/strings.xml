@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+<string name="app_label">"ແຖບສະຖານະ"</string>
+<string name="status_bar_clear_all_button">ລົບອອກ</string>
+<string name="status_bar_no_notifications_title">"ບໍ່ໄດ້ແຈ້ງ"</string>
+<string name="status_bar_ongoing_events_title">"ກໍາລັງດໍາເນີນການ"</string>
+<string name="status_bar_latest_events_title">"ການແຈ້ງເຕືອນ"</string>
+<string name="battery_low_title">"ກະລຸນາເຊື່ອມຕໍ່ອຸປະກອນສາກ"</string>
+<string name="battery_low_subtitle">"ພະລັງງານໄຟຍັງເຫຼືອບໍ່ຫຼາຍ:"</string>
+<string name="battery_low_percent_format">"&amp;amp;lt;xliff:g id=number&amp;amp;gt;%d%%&amp;amp;lt;/xliff:g&amp;amp;gt; ຫຼືນ້ອຍກວ່າທີ່ເຫຼືອ."</string>
+<string name="battery_low_why">"ການໃຊ້ແບັດເຕີຣີ"</string>
+<string name="usb_accessory_uri_prompt">"ອຸປະກອນ USB ສໍາຫຼັບການປະຍຸກໃຊ້ບໍ່ໄດ້ຕິດຕັ້ງ.ຕ້ອງການຮຽນຮູ້ເພີ່ມເຕີມກ່ຽວກັບລາຍລະອຽດຂອງອຸປະກອນນີ້,ກະລຸນາເຂົ້າເຖິງ:&amp;amp;lt;xliff:g id=url&amp;amp;gt;%1$s&amp;amp;lt;/xliff:g&amp;amp;gt;"</string>
+<string name="title_usb_accessory">"ອຸປະກອນ USB "</string>
+<string name="label_view">"ເບີ່ງ"</string>
+<string name="always_use_accessory">"ສໍາລັບຄ່າເລີ່ມຕົ້ນອຸປະກອນ USB "</string>
+<string name="mobile_data_connect_disable">"ບໍ່"</string>
+<string name="mobile_data_connect_enable">"ຕົກລົງ"</string>
+<string name="network_disconnect_title">"ແຈ້ງການ"</string>
+<string name="network_disconnect_message">"ເຄືອຂ່າຍ WLAN ຖືກຕັດ. \nເຊື່ອມຕໍ່ຜ່ານ 3G ບໍ? \nຖ້າທ່ານບໍ່ມີແຜນຂໍ້ມູນ, ອາດຈະຕ້ອງໄດ້ເສຍຄ່າໃຊ້ຈ່າຍເພີ່ມ."</string>
+<string name="weak_signal_title">"ສັນຍານອອ່ນ"</string>
+<string name="weak_signal_message">"ສັນຍານ WLAN ໃນຂະນະນີ້ຂ້ອນຂ້າງອ່ອນ,ແນະນໍາໃຫ້ທ່ານເລືອກຈຸດເຊື່ອມຕໍ່ສັນຍານທີ່ດີກວ່າ"</string>
+<string name="auto_connect">"ບໍ່ຕ້ອງຖາມແລະເຊື່ອມຕໍ່ຢ່າງອັດຕະໂນມັດກັບບຸກຄົນອື່ນທີ່ເຊື່ອຖືໄດ້ ap"</string>
+<string name="bluetooth_name">"ບລູທູດ"</string>
+<string name="sound_name">"ສຽງ"</string>
+<string name="mode_silent_name">"ຄົ້ນຫາ"</string>
+<string name="mode_vibrate_name">"ສັ່ນສະເທືອນ"</string>
+<string name="mode_sound_name">"ສຽງ"</string>
+<string name="auto_rotate_name">"ໝຸນ"</string>
+<string name="mobile_net_name">"ຂໍ້ມູນ"</string>
+<string name="datanetwork_error_airplane">"ກາດບໍ່ໄດ້ກຽມພ້ອມເທື່ອ,ທ່ານບໍ່ສາມາດໃຊ້ກິດຈະການຂໍ້ມູນເຄື່ອຄ່າຍ."</string>
+<string name="bluetooth_error_airplane">"ມືຖືຢູ່ໃນໂໝດບີນ,ທ່ານບໍ່ສາມາດໃຊ້ບຣູທູດ."</string>
+</resources>

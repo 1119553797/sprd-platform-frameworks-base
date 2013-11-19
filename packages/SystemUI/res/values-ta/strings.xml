@@ -1,6 +1,5 @@
-<?xml version="1.0"  encoding="utf-8"?>
-<resources
-xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_label">ஸ்டேட்டஸ் பார் </string>
     <string name="status_bar_no_notifications_title">அறிவிப்புக்கள் இல்லை</string>
     <string name="status_bar_ongoing_events_title">நடப்பில் இருக்கும்</string>
