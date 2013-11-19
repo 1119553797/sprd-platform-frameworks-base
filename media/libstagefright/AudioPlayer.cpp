@@ -288,7 +288,7 @@ size_t AudioPlayer::fillBuffer(void *data, size_t size) {
     if (mReachedEOS) {
         return 0;
     }
-
+    bool postSeekComplete = false;
     size_t size_done = 0;
     size_t size_remaining = size;
     while (size_remaining > 0) {
@@ -315,7 +315,7 @@ size_t AudioPlayer::fillBuffer(void *data, size_t size) {
 
                 mSeeking = false;
                 if (mObserver) {
-                    mObserver->postAudioSeekComplete();
+                    postSeekComplete = true;
                 }
             }
         }
@@ -400,6 +400,10 @@ size_t AudioPlayer::fillBuffer(void *data, size_t size) {
 
     Mutex::Autolock autoLock(mLock);
     mNumFramesPlayed += size_done / mFrameSize;
+    if (postSeekComplete) {
+        LOGE("postSeekComplete");
+        mObserver->postAudioSeekComplete();
+    }
 
     return size_done;
 }
