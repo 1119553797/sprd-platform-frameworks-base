@@ -291,12 +291,12 @@ public abstract class RIL extends BaseCommands implements CommandsInterface {
     //change OperatorAlphaLong to chinese show
     private String getCarrierNameByNumeric(String numeric) {
         Resources r = Resources.getSystem();
-        Log.d(LOG_TAG, " getOperatorAlphaShortToChinese: old name= null numeric="+numeric);
+        Log.d(LOG_TAG, "getOperatorAlphaShortToChinese: old name= null numeric="+numeric);
         String itemList[] = r.getStringArray(R.array.numeric_to_operator);
         for (String item:itemList){
             String numerics[] = item.split("=");
-            Log.d(LOG_TAG, "numeric_to_operator" + item + " numerics[0] " + numerics[0]);
             if( numerics[0].equalsIgnoreCase(numeric)){
+                Log.d(LOG_TAG, "numeric_to_operator = " + item + ", numerics[0] = " + numerics[0]);
                 return numerics[1];
             }
         }
@@ -304,12 +304,18 @@ public abstract class RIL extends BaseCommands implements CommandsInterface {
     }
 
     protected String[] responseOperatorString(String response[], int index) {
-
-        Log.d(LOG_TAG, " change before:long " + response[index] + "short =" + response[index + 1]
+        Log.d(LOG_TAG, "change before:long " + response[index] + "short =" + response[index + 1]
                 + "numeric=" + response[index + 2]);
         if ((response[index] == null) && (response[index + 1] == null)) {
-            response[index] = getCarrierNameByNumeric(response[index + 2]);
-            response[index + 1] = getCarrierNameByNumeric(response[index + 2]);
+            String mcc = response[index + 2].substring(0, 3);
+            String mnc = response[index + 2].substring(3);
+            int mncShort = Integer.parseInt(mnc);
+            String tmpMccMnc = "";
+            tmpMccMnc = mcc + mncShort;
+            Log.d(LOG_TAG, " responseOperatorString tmpMccMnc = " + tmpMccMnc);
+
+            response[index] = getCarrierNameByNumeric(tmpMccMnc);
+            response[index + 1] = getCarrierNameByNumeric(tmpMccMnc);
         } else if (response[index] == null || response[index].length() == 0) {
             response[index] = response[index + 1];
         } else if (response[index + 1] == null || response[index + 1].length() == 0) {
@@ -328,8 +334,8 @@ public abstract class RIL extends BaseCommands implements CommandsInterface {
         String itemList[] = r.getStringArray(R.array.operator);
         for (String item:itemList){
             String  parts[] = item.split("=");
-            Log.d(LOG_TAG, "itemList " + item + " parts[0] " + parts[0]);
             if( parts[0].equalsIgnoreCase(name)){
+                Log.d(LOG_TAG, "itemList = " + item + ", parts[0] = " + parts[0]);
                 ret = parts[1];
                 break;
             }
