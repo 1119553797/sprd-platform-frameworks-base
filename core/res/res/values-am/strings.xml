@@ -1,0 +1,987 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+<string name="address_length">"የአድራሻው ጽሁፍ የተፈቀደው መጠን ላይ ደርሷል"</string>
+<string name="fileSizeSuffix">"<xliff:g id="NUMBER">%1$s</xliff:g><xliff:g id="UNIT">%2$s</xliff:g>"</string>
+<string name="untitled">"&amp;amp;amp;amp;lt;ያልተሰየመ&amp;amp;amp;amp;gt;"</string>
+<string name="ellipsis">"\u2026"</string>
+<string name="emptyPhoneNumber">"(ስልክ ቁጥር የለም)"</string>
+<string name="unknownName">"(ያልታወቀ)"</string>
+<string name="defaultVoiceMailAlphaTag">"የድምጽ መእልክት"</string>
+<string name="mmiError">"የተያያዥነት ችግር ወይም የተሳሳተ MMI ኮድ"</string>
+<string name="mmiFdnError">"ክንዋኔው ለትክል መደወያ ቁጥሮች ብቻ የተወሰነ ነው፡፡"</string>
+<string name="serviceEnabled">"አገልግሎቱ ተቅቷዋል፡፡"</string>
+<string name="serviceEnabledFor">"አገልግሎቱ የንቃው፤"</string>
+<string name="serviceDisabled">"አገልግሎቱ ቦዝኗል፡፡"</string>
+<string name="serviceRegistered">"ምዝገባው የተሳካ ነበር፡፡"</string>
+<string name="serviceErased">"ማጥፋቱ ተሳቷል"</string>
+<string name="passwordIncorrect">"የተሳሳተ ፓስዎርድ"</string>
+<string name="passwordChange">"የይልፍ ቃል ተቀይሯል"</string>
+<string name="mmiComplete">"MMI ጨርሷል፡፡"</string>
+<string name="badPin">"የተየቡት የቀድሞ PIN የተሳሳተ ነው፡፡"</string>
+<string name="badPin2">"የተየቡት የቀድሞ PIN2 የተሳሳተ ነው፡፡"</string>
+<string name="badPuk">"የተየቡት PUK ትክክል አይደለም፡፡"</string>
+<string name="badPuk2">"የተየቡት PUK2 ትክክል አይደለም፡፡"</string>
+<string name="mismatchPin">"ያስገቡት PIN አቻ አይደሉም፡፡"</string>
+<string name="mismatchPin2">"ያስገቡት PIN2 አቻ አይደሉም፡፡"</string>
+<string name="mismatchPuk">"ያስገቡት PUK አቻ አይደሉም፡፡"</string>
+<string name="mismatchPuk2">"ያስገቡት PUK2 አቻ አይደሉም፡፡"</string>
+<string name="invalidPin">"ከ 4 እስክ 8 ቁጥሮች ያሉት PIN ይተይቡ፡፡"</string>
+<string name="invalidPuk">"ባለ 8 ቁጥሮች ወይም ከዚያ በላይ የሆነ PUK ይተይቡ፡፡"</string>
+<string name="needPuk">"የSIM ካርድዎ PUK ተቆልፏል፡፡  ለመክፈት PUK ኮድዎን ያስገቡ፡፡"</string>
+<string name="needPuk2">"SIM ካርዱን ለማስከፈት PUK2ን ይተይቡ፡፡"</string>
+<string name="needPinLock">"የPIN ቅንብሮችን ለዉጥ PIN-ትቆልፏል፡፡"</string>
+<string name="ClipMmi">"የመጪ ጥሪ የደዋይ አይዲ"</string>
+<string name="ClirMmi">"የወጪ ደዋይ አይ ዲ"</string>
+<string name="ColpMmi">"የተያያዝውን መስመር መለያ አሳዋቂ"</string>
+<string name="ColrMmi">"የተያያዝውን መስመር መለያ ማገጃ"</string>
+<string name="CfMmi">"ጥሪን በማስተላልፍ ላይ"</string>
+<string name="UnConditionCfMmi">"ያለ ቅድመ ሁኔታ ጥሪዎችን በማስተላለፍ ላይ"</string>
+<string name="BusyCfMmi">"በጥሪ ላይ ከሆነ ጥሪውን አስተላልፍ"</string>
+<string name="NoReplyCfMmi">" መልስ ከሌለ ጥሪውን አስተላልፍ"</string>
+<string name="NotReachCfMmi">" የማይድረስበት ከሆነ ጥሪውን አስተላልፍ"</string>
+<string name="AllCfMmi">"ሁሉንም ጥሪዎች በማስተላለፍ ላይ"</string>
+<string name="ConditionCfMmi">"እንደ ሁኔታው ጥሪን አስተላልፍ"</string>
+<string name="CwMmi">"የጥሪ ማቆያ"</string>
+<string name="BaMmi">"ደውልን ማገጃ"</string>
+<string name="BaocMmi">"ሁሉንም ወጪ ጥሪዎች  እገዳ"</string>
+<string name="BaoicMmi">"ሁሉንም አለም አቀፍ ወጪ ጥሪዎችን እገዳ"</string>
+<string name="BaoicxhMmi">"ከቤት አገር በስተቀር ሁሉንም አለም አቀፍ ወጪ ጥሪዎችን እገዳ"</string>
+<string name="BaicMmi">"ሁሉንም መጪ ጥሪዎች በማገድ ላይ"</string>
+<string name="BaicrMmi">"በመዞር ጊዜ ሁሉንም መጪ ጥሪዎች  እገዳ"</string>
+<string name="BaallMmi">"ለመሠርታዊ አግልግሎቶች ሁሉንም ከልክል"</string>
+<string name="BamoMmi">" ሁሉንም ውወጪዎች ለመሠርታዊ አግልግሎቶች "</string>
+<string name="BamtMmi">" ሁሉንም መጪዎች ለመሠርታዊ አግልግሎቶች "</string>
+<string name="ActiveUnconCf">"ያለ ቅድመ ሁኔታ ጥሪ ተላልፏል"</string>
+<string name="ActiveConCf">"በቅድመ ሁኔታ ጥሪ ተላልፏል"</string>
+<string name="CallForwarded">"ጥሪ ተሸጋግሯል"</string>
+<string name="CallWaiting">"የጥሪ ማቆያ"</string>
+<string name="CugCall">"CUG ጥሪ"</string>
+<string name="OutCallBarred">"ወጪ ስልኮች ታግደዋል"</string>
+<string name="InCallBarred">"በመምጣት ላይ ያለው ስልክ ታግዷል"</string>
+<string name="ClirRejected">"የCLIR ጭቆና ተቀባይነት አላገኘም"</string>
+<string name="ForwardedCall">"ጥሪን አስተላልፍ"</string>
+<string name="CallHold">"ጥሪ ታግዷል"</string>
+<string name="CallRetrieved">"ጥሪ ተሰርስሮ ወጥቷል"</string>
+<string name="MultiCall">"ብዙኃነ ፓርቲ ጥሪ"</string>
+<string name="HoldCallReleased">"በመያዝ ጊዜ ጥሪው ይለቀቃል"</string>
+<string name="ConnectingEct">"ECTን በማያያዝ ላይ"</string>
+<string name="ConnectedEct">"ECT ተያይዟል"</string>
+<string name="IncomingCallForwarded">"ተጨማሪ በመምጣት ላይ ያለ ጥሪ ተላልፏል"</string>
+<string name="PwdMmi">"የይለፍ ቃል ለውጥ"</string>
+<string name="PinMmi">"PIN ቀይር"</string>
+<string name="Pin2Mmi">"PIN2 ቀይር"</string>
+<string name="PukMmi">"PIN መክፈቻ"</string>
+<string name="Puk2Mmi">"PIN2 መክፈቻ"</string>
+<string name="CnipMmi">"የመደወያ ቁጥር አለ"</string>
+<string name="CnirMmi">"የመደወያው ቁጥር ተወስኗል"</string>
+<string name="ThreeWCMmi">"የሶስት አቅጣጫ  ጥሪ"</string>
+<string name="RuacMmi">"አላስፈላጊና አስቸጋሪ ጥሪዎች ክልከላ"</string>
+<string name="CndMmi">"በመደወል ላይ ያለው ቁጥር አድራሽ"</string>
+<string name="DndMmi">"አይረብሹኝ"</string>
+<string name="CLIRDefaultOnNextCallOn">"የደዋይ ID ነባሪዋች የተወሰነ ይሁን፡፡ የሚቀጥለው ጥሪ፤ይወሰን"</string>
+<string name="CLIRDefaultOnNextCallOff">"የደዋይ ID ነባሪዋች የተወሰነ ይሁን፡፡ የሚቀጥለው ጥሪ፤ ያልተወሰነ"</string>
+<string name="CLIRDefaultOffNextCallOn">"የደዋይ ID ነባሪዋች ያለተወሰነ ይሁን፡፡ የሚቀጥለው ጥሪ፤ ይወሰን"</string>
+<string name="CLIRDefaultOffNextCallOff">"የደዋይ ID ነባሪዋች ያለተወሰነ ይሁን፡፡ የሚቀጥለው ጥሪ፤ ያልተወሰነ"</string>
+<string name="serviceNotProvisioned">"አገልግሎቱ ያለ ቅድመ ሁኔታ፡፡"</string>
+<string name="CLIRPermanent">"የደዋዩ ID ቅንብር ሊለወጥ አይችልም፡፡"</string>
+<string name="RestrictedChangedTitle">"የተወሰነ ተደራሽነት ተቀሯል"</string>
+<string name="RestrictedOnData">"የውሂብ አገልግሎት ታግዷል"</string>
+<string name="RestrictedOnEmergency">"የድንገተኛ አገልግሎት ታግዷል፡፡"</string>
+<string name="RestrictedOnNormal">"የድምጽ አገልግሎት ታግዷል፡፡"</string>
+<string name="RestrictedOnAllVoice">"ሁሉም የድምጽ አገልግሎቶች ታግደዋል"</string>
+<string name="RestrictedOnSms">"የSMS አገልግሎት ታግዷል።"</string>
+<string name="RestrictedOnVoiceData">"ድምጽ/ውሂብ አገልግሎቶች ታግደዋል፡፡"</string>
+<string name="RestrictedOnVoiceSms">"ድምጽ/SMS   አገልግሎቶች ታግደዋል፡፡"</string>
+<string name="RestrictedOnAll">"ሁሉም የድምጽ/ውሂብ/SMS አገልግሎቶች ታግደዋል"</string>
+<string name="serviceClassVoice">"የደምፅ"</string>
+<string name="serviceClassData">"የውሂብ"</string>
+<string name="serviceClassFAX">"ፋክስ"</string>
+<string name="serviceClassSMS">"SMS"</string>
+<string name="serviceClassDataAsync">"ማሳመሪያ"</string>
+<string name="serviceClassDataSync">"አመሳስል"</string>
+<string name="serviceClassPacket">"ጥቅል"</string>
+<string name="roamingText0">"የመዘዋወር አመልካች በርቷል"</string>
+<string name="roamingText1">"የመዘዋወር አመልካች ጠፍቷል"</string>
+<string name="roamingText2">"በማዛወር ላይ -የመዛወር አመልካች በመብራት ላይ"</string>
+<string name="roamingText3">"ከሰፈሩ ውጪ"</string>
+<string name="roamingText4">"ከህንጻው ውጪ"</string>
+<string name="roamingText5">"በማዛወር ላይ -የተመረጠ ስርዓት"</string>
+<string name="roamingText6">"በማዛወር ላይ- ያለ ስርዓት"</string>
+<string name="roamingText7">"በማዛወር ላይ - አሊያንሰር አጋር"</string>
+<string name="roamingText8">"በማዛወር ላይ -ፕርሚየም አጋር"</string>
+<string name="roamingText9">"በማዛወር ላይ- ሙሉ ተግባር አገልግሎት"</string>
+<string name="roamingText10">"በማዛወር ላይ -ግማሽ ተግባር አገልግሎት"</string>
+<string name="roamingText11">"በማዛወር ላይ- የማዘዋወሪያ ሰንደቅ በርቷል"</string>
+<string name="roamingText12">"በማዛወር ላይ- የማዘዋወሪያ ሰንደቅ ጠቷል"</string>
+<string name="roamingTextSearching">"አገልግሎት በመፈለግ ላይ"</string>
+<string name="cfTemplateNotForwarded">"<xliff:g id="bearer_service_code">{0}</xliff:g>፤ አልተላለፈም"</string>
+<string name="cfTemplateForwarded">"<xliff:g id="BEARER_SERVICE_CODE">{0}</xliff:g>: <xliff:g id="DIALING_NUMBER">{1}</xliff:g>"</string>
+<string name="cfTemplateForwardedTime">"<xliff:g id="BEARER_SERVICE_CODE">{0}</xliff:g>፡<xliff:g id="DIALING_NUMBER">{1}</xliff:g> ከ<xliff:g id="TIME_DELAY">{2}</xliff:g> ሰከንዶች በኋላ"</string>
+<string name="cfTemplateRegistered">"<xliff:g id="bearer_service_code">{0}</xliff:g>፤ አልተላለፈም"</string>
+<string name="cfTemplateRegisteredTime">"<xliff:g id="bearer_service_code">{0}</xliff:g>፤ አልተላለፈም"</string>
+<string name="fcComplete">"ባህሪይ ኮድ ጨርሷል፡፡"</string>
+<string name="fcError">"የተያያዥነት ችግር ወይም  የተሣሣተ ኮድ ባህሪይ፡፡"</string>
+<string name="httpErrorOk">"ጥሩ"</string>
+<string name="httpError">"ድረ ገጹ ስህተት አካቷል፡፡"</string>
+<string name="httpErrorLookup">"URLሉ ሊገኝ አልቻለም"</string>
+<string name="httpErrorUnsupportedAuthScheme">"የአውደ ማረጋገጫ ሙሉ ምስርት የተደገፈ አይደለም፡፡"</string>
+<string name="httpErrorAuth">"ማረጋገጡ አልተሳካም"</string>
+<string name="httpErrorProxyAuth">"በእጅ አዙር አግልጋይ ዉስጥ ማረጋገጡ አልተሳካም"</string>
+<string name="httpErrorConnect">"ወደ አገልጋዩ  የተደረገው ተያያዥነት አልተሳካም፡፡"</string>
+<string name="httpErrorIO">"አገልጋዩ ሊግባባ አልቻለም፡፡ ቆይተው እንደገና ይሞክሩ፡፡"</string>
+<string name="httpErrorTimeout">"ከአገልጋዩ ጋር ያለው ግንኙነት ጊዜ አልቋል፡፡"</string>
+<string name="httpErrorRedirectLoop">"ገጹ በጣም ብዙ የአገልጋይ ምልልሶች ይዟል፡፡"</string>
+<string name="httpErrorUnsupportedScheme">"ፕሮቶኮሉ የተደገፈ አይደለም፡፡"</string>
+<string name="httpErrorFailedSslHandshake">"የተጠበቀ ተያያዥነት መፍጠር አልተቻለም"</string>
+<string name="httpErrorBadUrl">"URL የተሳሳተ ስለሆነ ገጹ ሊከፈት አልቻለም፡፡"</string>
+<string name="httpErrorFile">"ፋይሉ ሊደረስበት አልተቻለም፡፡"</string>
+<string name="httpErrorFileNotFound">"የጠየቁት ፋይል አልተገኝም፡፡"</string>
+<string name="httpErrorTooManyRequests">"በጣም ብዙ ትዕዛዞች በመከናወን ላይ ናቸው፡፡ ቆይተው እንደገና ይሞክሩ፡፡"</string>
+<string name="notification_title">"ወደ"<xliff:g id="account" example="foo@gmail፡፡com">%1$s</xliff:g>"ከፍቶ ለመግባይ ችግር አጋጥሟል"</string>
+<string name="contentServiceSync">"አመሳስል"</string>
+<string name="contentServiceSyncNotificationTitle">"አመሳስል"</string>
+<string name="contentServiceTooManyDeletesNotificationDesc">"በጣም ብዙ <xliff:g id="content_type">%s</xliff:g> ስረዛዎች፡፡"</string>
+<string name="low_memory">"የስልኩ ማከማቻ ሞቷል!ቦታ ነጻ ለማርግ ጥቂት ፍይሎችን ሰርዝ፡፡"</string>
+<string name="me">"እኔ"</string>
+<string name="power_dialog">"ስልክ አማራጮች"</string>
+<string name="silent_mode">"የጸጥታ ሁኔታ"</string>
+<string name="turn_on_radio">"ገመድ የለሽን አብራ"</string>
+<string name="turn_off_radio">"ገመድ የለሽን አጥፋ"</string>
+<string name="screen_lock">"ማያ ቁልፍ"</string>
+<string name="power_off">"ሃይል ጠፍቷል"</string>
+<string name="shutdown_progress">"በመዝጋት ላይ\u2026"</string>
+<string name="shutdown_confirm">"ስልክዎ ይዘጋል።"</string>
+<string name="recent_tasks_title">"የቅርብ"</string>
+<string name="no_recent_tasks">"የቅርብ መተግበሪያዎች የሉም፡፡"</string>
+<string name="global_actions">"ስልክ አማራጮች"</string>
+<string name="global_action_lock">"ማያ ቁልፍ"</string>
+<string name="global_action_power_off">"ሃይል ጠፍቷል"</string>
+<string name="global_action_toggle_silent_mode">"የጸጥታ ሁኔታ"</string>
+<string name="global_action_silent_mode_on_status">"ድምፅ ጠፍቷል"</string>
+<string name="global_action_silent_mode_off_status">"ድምፅ በርቷል"</string>
+<string name="global_actions_toggle_airplane_mode">"የአይሮፕላን ሁኔታ"</string>
+<string name="global_actions_airplane_mode_on_status">"የአውሮፕላን ሁነት በርቷል"</string>
+<string name="global_actions_airplane_mode_off_status">"የአውሮፕላን ሁነት ጠፍቷል"</string>
+<string name="safeMode">"አስተማማኝ ቅጥ"</string>
+<string name="android_system_label">"የአንድሮይድ ስርዓት"</string>
+<string name="permgrouplab_costMoney">"ገንዘብህን የሚያጠፉ አገልግሎቶች"</string>
+<string name="permgroupdesc_costMoney">"መተግበርያ ገንዘብ የሚያስወጥዎትን  ተግባራት እንዲሰራ ፍቀድ"</string>
+<string name="permgrouplab_messages">"መልእክቶችዎ"</string>
+<string name="permgroupdesc_messages">" SMS፤ኢ ሜይል እና ሌሎች መልዕክቶችህ አንብበህ ጻፍ"</string>
+<string name="permgrouplab_personalInfo">"የግል መረጃዎ"</string>
+<string name="permgroupdesc_personalInfo">"በስልኩ ላይ የተከማቹ ዕውቂያዎችና የቀን መቁጠርያዎችዎን ቀጥታ ዕድል ።"</string>
+<string name="permgrouplab_location">"አካባቢዎ"</string>
+<string name="permgroupdesc_location">"ቦታህን ተቆጣጠር"</string>
+<string name="permgrouplab_network">"የአውተር መረብ ተያያዢነት "</string>
+<string name="permgroupdesc_network">"መተግበርያዎች የተለያዩ የኔትዎርክ ዓይነቶች እንዲያገኙ ፍቀድ።"</string>
+<string name="permgrouplab_accounts">"መለያዎችዎ"</string>
+<string name="permgroupdesc_accounts">"ያሉትን መለያዎች ድርስ"</string>
+<string name="permgrouplab_hardwareControls">"የሃርድ ዌር  መቆጣጠሪያዎች "</string>
+<string name="permgroupdesc_hardwareControls">"በጀሮ ማዳመጫው የሚገኝ ውጫዊ አካል ቀጥታ ዕድል።"</string>
+<string name="permgrouplab_phoneCalls">"የስልክ ጥሪዎች"</string>
+<string name="permgroupdesc_phoneCalls">"የስልክ ጥሪዎችን መዝግብ፤ቅዳና ስራ።"</string>
+<string name="permgrouplab_systemTools">"የስርዓት መሳሪያዎች"</string>
+<string name="permgroupdesc_systemTools">"የታችኛው ዕድልና የስርዓቱ መቆጣጠርያ።"</string>
+<string name="permgrouplab_developmentTools">"የመሻሻያ መገልገያዎች "</string>
+<string name="permgroupdesc_developmentTools">"ለመተግበርያ ማበልጸግያዎች ብቻ የሚያስፈልጉ ባህርያት።"</string>
+<string name="permgrouplab_storage">"ማከማቻ"</string>
+<string name="permgroupdesc_storage" product="nosdcard">"የ USB ማከማቻን ድረስ"</string>
+<string name="permgroupdesc_storage" product="default">"የ SD ካርድን ድረስ"</string>
+<string name="permlab_statusBar">"የሁኔታ አሞሌን አስተካክል ወይም አንቀላፋ "</string>
+<string name="permdesc_statusBar">"መተግበርያው ሁኔታ አሞሌ ወይም የስርዓቱ መለያዎች እንደያስወግድ ፍቀድ"</string>
+<string name="permlab_statusBarService">"የሁኔታ አሞሌ"</string>
+<string name="permdesc_statusBarService">"መተግበሪያው የሁኔታ አሞሌ እንዲሆን ይፈቅዳል።"</string>
+<string name="permlab_expandStatusBar">"ዘርጋ/ ሰብስብ  ሁኔታ አመል "</string>
+<string name="permdesc_expandStatusBar">"መተግበርያው ሁኔታ አሞሌውእንዲያስፋፋ ወይም አንዲያጠፋ ፍቀድ "</string>
+<string name="permlab_processOutgoingCalls">"ወጪ ስልኮችን ጥለፍ "</string>
+<string name="permdesc_processOutgoingCalls">"መተግበርያው ወጪ ጥሪዎቸን እንዲያሰኬሂድና የሚደወለውን ቁጥር እንዲቀይር አስችል።"መሊሸስ መተግበርያዎች ወጪ ጥሪዎችን ሊመዘግቡ፤ እንዲያዙና ሊከላከሉ ይችላሉ"።</string>
+<string name="permlab_receiveSms">"SMSን ተቀበል"</string>
+<string name="permdesc_receiveSms">"መተግበርያው SMS መልዕክቶችን እንዲቀበልና  እንዲያሰናዳ ፍቀድ።መሊሸስ መተግበርያዎች መልዕክቶችህን ሊመዘግቡ ወይም አንተን ሳያሳዩ ሊያጠፈፋዋቸው ይችላሉ።."</string>
+<string name="permlab_receiveMms">"MMSን  ተቀበል"</string>
+<string name="permdesc_receiveMms">"መተግበርያው MMS  መልዕክቶችን እንዲቀበልና  እንዲያዘጋጅ ፍቀድ።መሊሸስ መተግበርያዎች መልዕክቶችህን ሊመዘግቡ ወይም እርስዎን ሳያሳዩ ሊያጠፈፋዋቸው ይችላሉ።."</string>
+<string name="permlab_sendSms">" SMS መልክቶችን ላክ"</string>
+<string name="permdesc_sendSms">"መተግበርያው SMS እንዲልኩ ፍቀድ ።መሊሸስ መተግበርያዎች ከእርስዎ ዕውቅና ውጭ  መልዕክቶችን በመላክ ገንዘብ ሊስወጡዎት ይችላሉ ይችላሉ።"</string>
+<string name="permlab_readSms">"SMS ወይንም MMSን አንብብ "</string>
+<string name="permdesc_readSms">"መተግበርያው  በስልክዎ ወይም በSIM ካርድ  የተከማቹ SMS መልዕክቶችእንዲያነብ   ፍቀድ።መሊሸስ መተግበርያዎች የሚስጢር መልዕክትዎችዎን ሊያነቡ ይችላሉ።"</string>
+<string name="permlab_writeSms">"SMS ወይም MMSን አርታእ "</string>
+<string name="permdesc_writeSms">"መተግበርያው በስልክዎ ወይም  SIM ካርድ የተከማቹ   SMS መልዕክቶችእንዲጽፉ ፍቀድ።መሊሸስ መተግበርያዎች  መልዕክትዎችዎን ሊያጠፉ ይችላሉ።"</string>
+<string name="permlab_receiveWapPush">"WAPን ተቀበል"</string>
+<string name="permdesc_receiveWapPush">"መተግበርያው WAP  መልዕክቶችን እንዲቀበልና  እንዲያሰናዳ ፍቀድ።መሊሸስ መተግበርያዎች መልዕክቶችህን ሊመዘግቡ ወይም አንተን ሳያሳዩ ሊያጠፈፋዋቸው ይችላሉ።."</string>
+<string name="permlab_getTasks">"በሂደት ላይ ያሉ መተግበሪያዎችን ሰርስረህ አውጣ  "</string>
+<string name="permdesc_getTasks">"መተግበርያው በአሁኑ ወቅት እየተከናወኑ ስላሉ ስራዎች መረጃ እንዲፈልግ ፍቀድ።ምናልባት መሊሸስ መተግበርያዎች የሌላ መተግበርያዎች የግል መረጃዎች እንዲፈልጉ ፍቀድ።"</string>
+<string name="permlab_reorderTasks">"በማሄድ  ላይ ያለውን ዳግም አስተካክል "</string>
+<string name="permdesc_reorderTasks">"መተግበርያው ስራዎች ወደፊትናወደሃላእንዲያንቀሳቅስ ፍቀድ።መሊሸስ መተግበርያዎች ከእርስዎ ቁጥጥር ውጭ ወደፊት ሊመጡ ይችላሉ።"</string>
+<string name="permlab_setDebugApp">"መተግበሪያ አራሚን አንቃ"</string>
+<string name="permdesc_setDebugApp">"መተግበርያው እንዲያበራና ሌሎች መተግበርያዎች እንዲያነሳ ፍቀድ።መሊሸስ መተግበርያዎች ይህ ሌሎቸ መተግበርያዎች ለመግደል ሊጠቀሙበት ይችላሉ።</string>
+<string name="permlab_changeConfiguration">"የተጠቃሚ መዋዋያ ቅንብሮችህን ቀይር"</string>
+<string name="permdesc_changeConfiguration">"መተግበርያው  እንደ አካቢያዊ ወይም አጠቃላይ  የቁምፊ ቅርጽ መጠን ወቅታዊ ውቅረት እንዲያስተካክል ፍቀድ።"</string>
+<string name="permlab_enableCarMode">"የመኪና ሁኔታን አንቃ "</string>
+<string name="permdesc_enableCarMode">"መተግበርያው የመኪና ሁኔታ እንዲያስችል ፍቀድ።"</string>
+<string name="permlab_killBackgroundProcesses">"የዳራ ሂደቶችን ግደል "</string>
+<string name="permdesc_killBackgroundProcesses">"መተግበርያው ማህደረ ትውስታ ዝቅተኛ ባይሆን እንኳ  የሌሎች መተግበርያዎች የሃላ አዘጋጅ እንዲገድል ፍቀድ።"</string>
+<string name="permlab_forceStopPackages">"ሌሎችን መተግበሪያዎችን በግድ አቁም "</string>
+<string name="permdesc_forceStopPackages">" መተግበርያው ሌሎች መተግበርያዎች በሃይል አንዲያስቆምፍቀድ።"</string>
+<string name="permlab_forceBack">"መተግበሪያዎች እንዲዘኑ አስገድድ "</string>
+<string name="permdesc_forceBack">"መተግበርያ  ከፊትለፊት ለመዝጋትና ወደሃላ ለመመለስ የሚያስችል እንቅስቃሴ እንዲያስገድድ ፍቀድ።ለተለመዱ መተግበርያዎች በፍጹም አያስፈልግም።"</string>
+<string name="permlab_dump">"የስርዓቱን ውስጣዊ ሁኔታ  ሰርስረህ አውጣ "</string>
+<string name="permdesc_dump">"መተግበርያው የስርዓቱ  ውስጣዊ አካል እንዲፈልግ ፍቀድ።መሊሸስ መተግበርያዎች  ሰፊ የተለያዩ  የግል የሆነና የተጠበቀ እንዲሁም በተለመደ ሁኔታ የማይፈለግ  መረጃ  ፈልገው ሊያመጡ ይችላሉ።</string>
+<string name="permlab_shutdown">"በከፊል ዝጋ "</string>
+<string name="permdesc_shutdown">"የእንቅስቃሴው ሃላፊ በ መዝጊያው አካል አስቀምጠው።ሙሉ አዘጋግ አያከናውንም። "</string>
+<string name="permlab_stopAppSwitches">"መተግበሪያ ለውጦችን ከልክል "</string>
+<string name="permdesc_stopAppSwitches">"ተቃሚው ሌላ መተግበርያ እንዳይከፈት ከልክል።"</string>
+<string name="permlab_runSetActivityWatcher">"ሁሉንም የሚጀምሩ መተግበሪያዎችን ተቆጣጠር  እና  እይ"</string>
+<string name="permdesc_runSetActivityWatcher">"መተግበርያው ስርዓቱ እንቅስቃሴዎቸን አንዴት  እንደሚጀምር እንዲከታተልና እንዲቆጣጠር ፍቀድ።መሊሸስ መተግበርያዎች ስርዓቱን ሊያስታርቁ ይችላሉ።ይህ ፈቃድ ለዕድገት ብቻ ነው የሚያስፈልገው፤ለመደበኛ የስልክ አጠቃቅም አይውልም።"</string>
+<string name="permlab_broadcastPackageRemoved">"የመላኪያ ጥቅል ከማሰራጫ ተወግዷል"</string>
+<string name="permdesc_broadcastPackageRemoved">"የመተግበርያው መጠቅሊያ መነቀሉን የሚያሳይ ምልክት እንዲያስተላለፍ መተግበርያውን ፍቀድለት። መሊሸስ  መተግበርያዎች   ይህ ሌላ በሂደት ላይ ያለ መተግበርያ ለመግደል ሊጠቀሙበት ይችላሉ።"</string>
+<string name="permlab_broadcastSmsReceived">" SMS የተቀበልከውን ማሰራጫዎች ላክ"</string>
+<string name="permdesc_broadcastSmsReceived">"መተግበርያው SMS መልዕክት መቀበሉን የሚያሳይ ምልክት እንዲያስተላለፍ ፍቀድ።መሊሸስ መተግበርያዎች ይህ ሌሎች ገቢ SMS መልዕክቶች እንዲዘገዩ ለማድረግ ሊጠቀሙበት ይችላሉ"።</string>
+<string name="permlab_broadcastWapPush">"WAP-PUSH  ተቀባይ ማሰራጫዎችን ላክ"</string>
+<string name="permdesc_broadcastWapPush">"መተግበርያውWAP PUSH መልዕክት መቀበሉን የሚያሳይ ምልክት እንዲያስተላለፍ ፍቀድ።ይህ መሊሸስ መተግበርያዎች MMS መልዕክቶች እንዲዘገዩ  ወይም የመሊሸስ ይዘት ያለው ማንኛውም ድረ ገጽ ይዘት በትንሹም ቢሆን እንዲቀየር ሊጠቀሙበት ይችላሉ።"</string>
+<string name="permlab_setProcessLimit">"በሂደት ላይ ስርአቶች ወስን "</string>
+<string name="permdesc_setProcessLimit">" መተግበርያው ለመተግበር የተዘጋጁ የመጨረሻ ከፍተኛ ቁጥሮች እንዲቆጣጠር ፍቀድ።ለመደበኛ መተግበርያዎች በፍጹም አያስፈልገም።</string>
+<string name="permlab_setAlwaysFinish">"ሁሉንም የዳራ  መተግበሪያው  እንዲዘጋ አድርግ"</string>
+<string name="permdesc_setAlwaysFinish">"መተግበርያው ሁሌም እንቅስቃሴዎች እንደተጠናቀቁ ወዲያው ወደ ሃላ መግባታቸው እንዲቆጣጠር ፍቀድ።ለመደበኛ መተግበርያዎች አያስፈልግም።</string>
+<string name="permlab_batteryStats">"የባትሪ ስታቲስቲክስን  አስተካክል "</string>
+<string name="permdesc_batteryStats">"የባትሪው የስተስቲክስ ስብስብ እንዲሻሻል ፍቀድ።ለመደበኛ መተግበርያዎች እንዳትጠቀምበት።"</string>
+<string name="permlab_backup">"እነበረበት መላሽንና መጠባበቂያን ተቆጣጠር "</string>
+<string name="permdesc_backup">"መተግበርያው የተተኪና የዳግም ማከማቻ ዘዴ እንዲቆጣጠር ፍቀድ።ለማንኛውም የተለመዱ መተግበርያዎች እንዳይጠቀሙበት"።</string>
+<string name="permlab_internalSystemWindow">"ያልተፈቀደላቸውን ዊንዶዎች በማሳየት ላይ "</string>
+<string name="permdesc_internalSystemWindow">"መተግበርያው ለ ውስጣዊ የበይነገጽ ተጠቃሚ ሰርዓት የሚውል መስኮት እንዲፈጥር ፍቀድ።ለማንኛውም የተለመዱ መተግበርያዎች እንዳይጠቀሙበት"።</string>
+<string name="permlab_systemAlertWindow">"የስርዓት ደረጀ ማስጠንቀቂየዎተን በማሳየት ላይ "</string>
+<string name="permdesc_systemAlertWindow">"መተግበርያው የመስኮት ምልክት ሰርዓትን እንዲያሳይ ፍቀድ።መሊሸስ መተግበርያዎች የስልኩ ስክሪን ውስጣዊ አካል ሊቆጣጠሩት ይችላሉ።"</string>
+<string name="permlab_setAnimationScale">"ሉላዊ የእነማ ፍጥነትን አስተካክል"</string>
+<string name="permdesc_setAnimationScale">"መተግበርያው የዓለም እነማ ፍጥነት(በማንኛውም ጊዜ ፈጣን ወይም ቀርፋፋ እነማዎች) እንዲቀይር ፍቀድ።"</string>
+<string name="permlab_manageAppTokens">"የመተግበሪያዎችን ቶክኖችን ምነጃ"</string>
+<string name="permdesc_manageAppTokens">"መተግበርያዎቹ የራሳቸውን ተለዋጭ ስም ማስተላለፊያ የራሳቸው መደበኛ  Z-ማዘዣ እንዲፈጥሩና እንዲያስተዳድሩ ፍቀድ።ለመደበኛ መተግበርያዎች አያስፈልጉም።"</string>
+<string name="permlab_injectEvents">"ቁልፎቹንና የመቆጣጠሪያ አዘራሮቹን ተጫን "</string>
+<string name="permdesc_injectEvents">መተግብርያው የራሱን ግቤት ሁነቶች( ቁልፍ መጫን ወዘተ ) እንዲያደርስ ፍቀድ።ይህ መሊሸስ መተግበርያዎች ከስልኩ በላይ ለመውጣት ሊጠቀሙበት ይችላሉ።</string>
+<string name="permlab_readInputState">"የምትጠይቀውንና የምትወስደውን ድርጊትህን ቅዳ "</string>
+<string name="permdesc_readInputState">"መተግበርያዎቹ እርስዎ ከሌላ መተግበርያ ያገናኙትም (እንደ የይለፍ ቃል  ያሉ) የጫኗቸው ቁልፎች እንዲያዩ ፍቀድ።ለመደበኛ መተግበርያዎች በፍጹም አያስፈልጉም።"</string>
+<string name="permlab_bindInputMethod">"ከገባት ዘዴ ጋር ለብድ"</string>
+<string name="permdesc_bindInputMethod">" ባለይዞታው  የላይኛው በይነ ገጽ የግቤት መተድ  እንዲያስር ፍቀድ።ለመደበኛ መተግበርያዎች በፍጹም አያገለግሉም።"</string>
+<string name="permlab_bindWallpaper">"ከልጣፍ ጋር ለብድ"</string>
+<string name="permdesc_bindWallpaper">" ባለይዞታው  የላይኛው በይነ ገጽ ልጣፍ  እንዲያስር ፍቀድ።ለመደበኛ መተግበርያዎች አያገለግሉም።"</string>
+<string name="permlab_bindDeviceAdmin">"ከመሳሪያዎች መምሪያ ጋር ተገናኝ"</string>
+<string name="permdesc_bindDeviceAdmin">"ባለይዞታው ፍላጎቶች ወደ መሳሪያው አስተዳዳሪ እንዲላኩ ፈቀድ።ለመደበኛ መተግበርያዎች በፍጹም አያሰፈልግም ።"</string>
+<string name="permlab_setOrientation">"የማያ አቀማመጠ ገጽ ቀይር"</string>
+<string name="permdesc_setOrientation">"መተግበርያው የስክሪኑን እሽክርክሪት በፈለገው ጊዜ እንዲቀይር ፍቀድ ።ለመደበኛ መተግበርያዎች በፍጹም አያሰፈልግም ።"</string>
+<string name="permlab_signalPersistentProcesses">"የላየኑክስ ምልክቶችን ወደ መተግበሪያዎች ላክ"</string>
+<string name="permdesc_signalPersistentProcesses">"መተግበርያው የተዘጋጀ ምልክት ለሁሉም የማያቋርጡ  ሂደቶችእንዲልክ  ፍቀድ"</string>
+<string name="permlab_persistentActivity">"መተግበሪያው ሁሌም እንዲሄድ አድርግ "</string>
+<string name="permdesc_persistentActivity">"መተግበርያው ስርዓቱ ሌሎች መተግበርያዎች እንዳይጠቀሙበት የራሱን  የማያቋርጥ እንዲሆን አስችል።"</string>
+<string name="permlab_deletePackages">"መተግበሪያዎችን ሰርዝ "</string>
+<string name="permdesc_deletePackages">" መተግበርያው የአንድሮይድ ጥቅሎቸን እንዲያጠፋ ፍቀድ።ይህ መሊሸስ መተግበርያዎች ጠቃሚ መተግበርያዎች ለማጥፋት ሊጠቀሙበት ይችላሉ።"</string>
+<string name="permlab_clearAppUserData">"ሌሎች የመተግበሪያዎች\'ውሂብን  ሰርዝ"</string>
+<string name="permdesc_clearAppUserData">"መተግበሪያውየተጠቃሚን ውሂብ እንዲያጸዳ ይፈቅዳል"</string>
+<string name="permlab_deleteCacheFiles">"ሌሎች የመተግበሪያዎች\'መሸጎጫዎችን ሰርዝ"</string>
+<string name="permdesc_deleteCacheFiles">"መተግበርያው የካች ፋይሎችን እንዲያጠፋ ፍቀድ"</string>
+<string name="permlab_getPackageSize">"የቅንብር ማከማቻ ቦታን ለካ  "</string>
+<string name="permdesc_getPackageSize">"መተግበያው ኮድ፤ውሂብና የቻች መጠን እንዲፈልግ ፍቀድ"</string>
+<string name="permlab_installPackages">"መተግበሪያዎቹን በቀጥታ ጫን "</string>
+<string name="permdesc_installPackages">"መተግበርያው አዲስና የዘመነ አንድሮይድ ጥቅሎች እንዲጭን ፍቀድ።ይህ መሊሸስ መተግበርያዎች አዲዲስ ሃይለኛና በዘፈቀደ የሚሰሩ መተግብያዎች ለመጨመር ሊጠቀሙበት ይችላሉ።"</string>
+<string name="permlab_clearAppCache">"ሁሉንም የመተግበሪያ መሸጎጫ ውሂብን ሰርዝ"</string>
+<string name="permdesc_clearAppCache">"መተግበርያው በመሸጎጫ  ማውጫ ላይ ያሉ ፋይሎቸን በማጥፋት ነጻ እንዲሆን ፍቀድ።ተደራሽነቱ አብዛኛውን ጊዜ  በጥብቅ  ለስርዓቱ ሂደት ብቻ ነው።</string>
+<string name="permlab_movePackage">"የመተግበሪያውን  ጥሬ እቃአንቀሳቅስ"</string>
+<string name="permdesc_movePackage">"መተግበሪያውየመተግበሪያ ግብአቶችን ከውስጥ ማህደረመረጃ ወደ ውጪ እንዲሁም በተገላቢጦሽ እንዲያዛውር ይፈቅዳል።"</string>
+<string name="permlab_readLogs">"ጠንቃቃ  የመግባት ውሂቦችን አንብብ "</string>
+<string name="permdesc_readLogs">"መተግበርያው ከተለያዩ የተመዘገቡ የፋይል ስርዓት/ቶች እንዲያነብ ፍቀድ።ይህ   የግል መረጃን ያከተተ በስልኩ ውስጥ  ምን እየተከናወነ እንደሆነ የሚመለከት  አጠቃላይ መረጃ ለመፈለግ ያስችላል።"</string>
+<string name="permlab_diagnostic">"በdiag ባለቤትነት ያሉ ጥሬ እቃዎችን አንብብ/ጻፍ"</string>
+<string name="permdesc_diagnostic">"መተግበርያው በዲያግ ቡድን የሚታዘዝ ማንኛውም ንብረት እንዲያነብና እንዲጽፍ ፍቀድ።ይህ የስርዓቱ መረጋጋትና ጸጥታ የመጉዳት አቅም አለው።ይህ ለአምራቹ ወይም ለስልክ ማዘሪያው ለተለዩ ውጫዊ ዲያግኖስቲክስ ብቻ ያገለግላል።</string>
+<string name="permlab_changeComponentState">"የመተግበሪየ ክፍሎችን አሠናክል /አንቃ "</string>
+<string name="permdesc_changeComponentState">"መተግበርያው የሌላ መተግበርያ አካል መንቃት እንደሚችልና    እንደማይችል እንዲቀይር  ፍቀድ።መሊሸስ መተግብረያዎች ጠቃሚ የስልክ አቅሞች ሊያበላሹ ይችላሉ።ከመተግበርያው ያልተረጋጉ፤ተለዋዋጭ  ሊኖሩ ስለሚችሉ ይጠንቀቁ።</string>
+<string name="permlab_setPreferredApplications">"የተመረጡ መተግብሪያዎችን ወስን"</string>
+<string name="permdesc_setPreferredApplications">"መተግበርያው የተመረጡ መተግብረያዎትን እንዲያሻሽል ፍቀድ።ይህ መሊሸስ መተግበርያዎች ጸጥ ብለው በስራ ላይ ያሉ መተግበርያዎች  እንዲቀይሩ ሊያስችላቸው  ይችላል፤ የእርስዎ የግል ውሂቦች ለመሰብሰብም ዕድል ሊሰጣቸው ይችላል።</string>
+<string name="permlab_writeSettings">"ሉላዊ የስረዓት ቅንብሮችን አስተካክል "</string>
+<string name="permdesc_writeSettings">"መተግበርያው የውሂብ መቀናበርያ ስርዓት/ቶች እንዲያሻሽል ፍቀድ።መሊሸስ መተግበርያዎች የውቀረት ስርዓትዎን/ቶችዎን ሊበላሽቦት ይችላሉ።"</string>
+<string name="permlab_writeSecureSettings">"የደህንነት ስርዓት ቅንብሮችን አስተካክል "</string>
+<string name="permdesc_writeSecureSettings">"መተግበርያው ስርዓቱን የተጠበቀ  የውሂብ ማቀናበርያዎች እንዲያሻሽል ፍቀድ።ለመደበኛ መተግበርያዎች ጥቅም ላይ አይውልም።"</string>
+<string name="permlab_writeGservices">"የGoogle አገልግሎቶች  ካርታን አስተካክል "</string>
+<string name="permdesc_writeGservices">"መተግበርያው የ ጎግል የአገልግሎት ካርታ እንዲያሻሽል ፍቀድ።ለመደበኛ መተግበርያዎች ጥቅም ላይ አይውልም።"</string>
+<string name="permlab_receiveBootCompleted">"በዳግም ጅመራ ጊዜ በራሰ ሰር ጀምር"</string>
+<string name="permdesc_receiveBootCompleted">"መተግበርያው ስርዓቱ  ስራው ሲጨርስ ራሱ እንዲጀምር ፍቀድ።ይህ ስልኩ የሚጀምርበት ጊዜ እንዲዘረዝምና አጠቃላይ  እየሰራ እንዲዘገይ ይደርገዋል።"</string>
+<string name="permlab_broadcastSticky">"አጣባቂ ማሰራጫዎችን ላክ"</string>
+<string name="permdesc_broadcastSticky">"መተግበርያው የተለጠፉ ብሮድካስቶች እንዲልክ ፍቀድ።መሊሸስ መተግበርያዎች  ሰፊ ማህደረ ትውስታ በመጠቀም ስልኩን ዘገምተኛ ወይም ያልተረጋጋ ሊያደርጉት ይችላሉ።"</string>
+<string name="permlab_readContacts">"የዕውቂያ ውሂብን አንብብ"</string>
+<string name="permdesc_readContacts">"መተግበርያው በስልክዎ የተከማቹ  ሁሉም ዕውቂያዎች (አድራሻዎችን)እንዲያነብ ፍቀድ።መሊሸስ መተግበርያዎች ይህ የዕውቂያ ውሂብ ለማሻሻል ወይም ለማጥፋት ሊጠቀሙበት ይችላሉ።"</string>
+<string name="permlab_writeContacts">"የዕውቂያ ውሂብ ጻፍ"</string>
+<string name="permdesc_writeContacts">"መተግበርያው በስልክዎ የተከማቹ  ሁሉም ዕውቂያዎች (አድራሻዎችን)እንዲያሻሽል ፍቀድ።መሊሸስ መተግበርያዎች ይህ የዕውቂያ ውሂብ ለማሻሻል ወይም ለማጥፋት ሊጠቀሙበት ይችላሉ።"</string>
+<string name="permlab_readCalendar">"የቀን መቁጠሪያውን  ክስተቶችን አንብብ"</string>
+<string name="permdesc_readCalendar">"መተግበርያው በስልክዎ ውስጥ የተከማቹ የቀን መቁጠርያ ሁነቶች እንዲያነብ ፍቀድ።መሊሸስ መተግበርያዎች ይህ የቀን መቁጠርያ  ወደ ሌሎች ለመላክ ሊጠቀሙበት ይችላሉ።"</string>
+<string name="permlab_writeCalendar">"የቀን መቁጠሪያ ክስተቶችን አክል ወይም ቀንስ፣ ለእንግዶች ኢሜይል ላክ "</string>
+<string name="permdesc_writeCalendar">"መተግበርያው  ምናልባት ለእንግዶች የሚላክ በቀን መቁጠርያዎ የሚገኙ ሁነቶች እንዲጨምር ወይም እንዲቀይር ፍቀድ። መሊሸስ መተግበርያዎች ይህ  የቀን መቁጠርያ ሁነቶች  ለማሻሻል  ወይም ለደንበኞች መልዕክት ለመላክ   ሊጠቀሙበት ይችላሉ።"</string>
+<string name="permlab_accessMockLocation">"ለፍተሻ የውሽት ቦታ ምንጮች"</string>
+<string name="permdesc_accessMockLocation">" ለሙከራ ምንጭነት የሚሆኑ ግልጽ ቦታዎች ፍጠር።መሊሸስ መተግበርያዎች ይህ ቦታውን ለመቆጣጠርና/ወይምእንደ  GPS ወይም አውታረ መረብ አቅራቢዎች ወደ ትክክለኛው ቦታ ለመመለስ ሊጠቀሙበት ይችላሉ።"</string>
+<string name="permlab_accessLocationExtraCommands">"ተጨማሪ የአቅራቢ ቦታ ትእእዛትን ድረስ"</string>
+<string name="permdesc_accessLocationExtraCommands">" የተጨማሪ የቦታ አቅራቢዎች ትዕዛዞች መዳረሻ።መሊሸስ መተግበርያዎች ይህ የGPS  ወይም በሌሎች የቦታ ምንጮች   በክዋኔው ጣልቃ ለመግባት ሊጠቀሙበት ይችላሉ።</string>
+<string name="permlab_installLocationProvider">"ቦታ አቅራቢን ለመጫን ፍቃድ  "</string>
+<string name="permdesc_installLocationProvider">ለሙከራ የሚሆኑ ግልጽ ቦታዎች ፍጠር።መሊሸስ መተግበርያዎች ይህ ቦታውን ለመቆጣጠርና/ወይምእንደ  GPS ወይም አውታረ መረብ አቅራቢዎች ወይም ለመቆጣጠርና  ወደ የእርስዎ ቦታ ወደ ውጨዊ ምንጭ  ሪፖርት ለማድረግ  ወደ ትክክለኛው ቦታ ለመመለስ ሊጠቀሙበት ይችላሉ።"</string>
+<string name="permlab_accessFineLocation">"የ (GPS) ቦታን አጥራ"</string>
+<string name="permdesc_accessFineLocation">"እንደ ዓለምአቀፉ ማስቀመጫ ሰርዓት ያሉ ጥሩ ቦታዎች ስልክዎ ባለበት እንዲያፈኝ ተደራሽ ይሁን።መሊሸየስ መተግበርያዎች ይህ እርስዎ የት እንዳሉና ምናልበትም ተጨማሪ የባትሪ ሃይል ያስፈልግዎት እንደሆነ ለማወቅ ሊጠቀሙበት ይችላሉ።"</string>
+<string name="permlab_accessCoarseLocation">"ቦታ"</string>
+<string name="permdesc_accessCoarseLocation">" እንደ ሴሉላር በይነ አውታር የውሂብ ጎታ ያሉ የቦታ ምንጮች  ስልኩ ያለበትን ቦታ የሚመለከት  ግምታዊ  መረጃ እንዲያመላክቱ አድርግ።መሊሸስ መተግበርያዎች ይህ በግምት እርስዎ የት እንዳሉ ለማወቅ ሊጠቀሙበት ይችላሉ።</string>
+<string name="permlab_accessSurfaceFlinger">"SurfaceFlingerን ድረስ"</string>
+<string name="permdesc_accessSurfaceFlinger">" መተግበርያው የሰርፌስ ፍሊንገር ታችኛው ደረጃ ባህርያት እንዲጠቀሙ ፍቀድ።"</string>
+<string name="permlab_readFrameBuffer">"የቅቋት ፍሬምን አንብብ"</string>
+<string name="permdesc_readFrameBuffer">" መተግበርያው የክፈፉን ቋት እንዲያነብ ፍቀድ።"</string>
+<string name="permlab_modifyAudioSettings">"የድምጽን ቅንብሮችህን ቀይር"</string>
+<string name="permdesc_modifyAudioSettings">"መተግበርያው እንደ የድምጽ መጠን  ፈለግ ያሉ ዓለም አቀፍ የድምፅ ማቀናበርያዎች እንዲያሻሽል ፍቀድ።"</string>
+<string name="permlab_recordAudio">"ድምፅ ቅዳ"</string>
+<string name="permdesc_recordAudio">"መተግበርያው ለድምጽ መቅጃ ዱካ ተደራሽ እንዲሆን ፍቀድ።"</string>
+<string name="permlab_camera">"ምስሎች እና ቪዲዮዎች አንሳ"</string>
+<string name="permdesc_camera">"መተግበርያው በካሜራው  ፎቶዎችን እንዲያነሳና ቪዲዮዎችን እንዲቀዳ ፍቀድ።ይህ መተግበረያው  ካሜራው በተቀነባረበት ማንኛውንም ጊዜ ምስሎችን እንዲሰበስብ ያስችላዋል።</string>
+<string name="permlab_brick">"በቋሚነት ስልኩን አቦዝን"</string>
+<string name="permdesc_brick">"መተግበርያው የስልኩን ውስጣዊ ክፍል በቋሚነት እንዳያነቃ ፍቀድ።ይህ በጣም አደገኛ ነው።</string>
+<string name="permlab_reboot">"ስልኩ ደግሞእንዲነሳ አስገድድ "</string>
+<string name="permdesc_reboot">"መተግበርያው ስልኩን በሃይል  እንዲያስነሳ ፍቀድ።"</string>
+<string name="permlab_mount_unmount_filesystems">"የፋይል ስርዓቶችን ጫን /አውርድ"</string>
+<string name="permdesc_mount_unmount_filesystems">"መተግበርያው የማከማቻው አስወጋጅ የፋይል ስርዓት እንዲጭንና አንዳይጭን  ፍቀድ።"</string>
+<string name="permlab_mount_format_filesystems">"የውጪን ማከማቻን ቅረጽ"</string>
+<string name="permdesc_mount_format_filesystems">"መተግበሪያው ተወጋጅ  ማከማቻን እንዲቀርጽ ይፈቅዳል።"</string>
+<string name="permlab_asec_access">"በውስጣዊ ማከማቻ ላይ መረጃ አግኝ"</string>
+<string name="permdesc_asec_access">"መተግበሪያው በውስጣዊ ማከማቻ ላይ ያለ መረጃ እንዲያገኝ ይፈቅዳል።"</string>
+<string name="permlab_asec_create">"ውስጣዊ ማከማቻን ፍጠር"</string>
+<string name="permdesc_asec_create">"መተግበሪያው ውስጣዊ ማከማቻን እንዲፈጥር ይፈቅዳል።"</string>
+<string name="permlab_asec_destroy">"ውስጣዊ ማከማቻን አጥፋ"</string>
+<string name="permdesc_asec_destroy">"መተግበሪያው ውስጣዊ ማከማቻን እንዲያወድም ይፈቅዳል።"</string>
+<string name="permlab_asec_mount_unmount">"ውስጣዊ ማከማቻን ጫን /አውርድ"</string>
+<string name="permdesc_asec_mount_unmount">"መተግበሪያው ውስጣዊ ማከማቻን እንዲተክል/እንዲነቅል ይፈቅዳል።"</string>
+<string name="permlab_asec_rename">"ውስጣዊ ማከማቻውን ዳግም ሰይም"</string>
+<string name="permdesc_asec_rename">"መተግበሪያው ውስጣዊ ማከማቻን ስም እንዲቀይር ይፈቅዳል።"</string>
+<string name="permlab_vibrate">"ንዝረትን ተቆጣጠር "</string>
+<string name="permdesc_vibrate">"መተግበርያው ንዝርን እንዲቆጣጠር ፍቀድ።"</string>
+<string name="permlab_flashlight">"የብልጭታ መብራት ተቆጣጠር "</string>
+<string name="permdesc_flashlight">"መተግበርያው ብልጭታ ብርሃን እንዲቆጣጠር ፍቀድ።"</string>
+<string name="permlab_manageUsb">"ለ USB መሳሪያዎች ተመራጮችና ፍቃዶችን ምነጃ"</string>
+<string name="permdesc_manageUsb">"መተግበሪያው የUSB መሳሪያዎችን ምርጫዎችና ፈቃዶችን እንዲያስተዳድር ይፈቅዳል።"</string>
+<string name="permlab_hardware_test">"ሃርድዌር ፈትሽ"</string>
+<string name="permdesc_hardware_test">"መተግበርያው ውጫዊ አካሉን ለመፈተሽ ሲባል የተላያዩ  አንስተኛ ነገሮች እንዲቆጣጠር ፈቀድ ።"</string>
+<string name="permlab_callPhone">"በቀጥታየስልክ ቁጠሮችን ደውል "</string>
+<string name="permdesc_callPhone">"መተግበርያው  ከእርስዎ ጣልቃ ገብት ወጭ የስልክ ቁጥሮች እንዲጠራ ፍቀድ።መሊሸስ መተግበርያዎች በስልክዎ መመዝገብያ ያልተጠበቁ ጥሪዎች ሊያስከትሉ ይችላሉ።ይህ መተግበርያው የአደጋ ጊዜ ጥሪ ቁጥሮቸን እንደማይፈቅድ መገዘብ ግድ ይላል።"</string>
+<string name="permlab_callPrivileged">"ማንኛውንም የስልክ ቁጥር በቀጥታ ደውል "</string>
+<string name="permdesc_callPrivileged">"መተግበርያው ካለ እርስዎ ጣልቃ ገብነት የአደጋ ጊዜ ጥሪዎችን ጨምሮ ማንኛውንም  የስልክ ቁጥር እንዲጠራ ፍቀድ።መሊሸስ መተግበርያዎች ለአደጋ ጊዜ ተጠሪ አገልግሎት የማያስፈልጉና  ህገ ወጥ ጥሪ ሊያሰፍሩ ይችላሉ።"</string>
+<string name="permlab_performCdmaProvisioning">"የCDMA  ስልክ አዘጋጅን በቀጥታ ደመር "</string>
+<string name="permdesc_performCdmaProvisioning">"መትግበርያው CDMA አገልግሎት እንዲሰጥ ፍቀድ።መሊሸስ መተግበርያዎች የማያስፈልግ የ  CDMA አገልግለት ሊጀመሩ ይችላሉ።"</string>
+<string name="permlab_locationUpdates">"የቦታ ማዘመኛ ማሳወቂያዎችን ተቆጣጠር "</string>
+<string name="permdesc_locationUpdates">"ከሬድዮው  የዘመኑ የቦታ ምልከቶችን እንዲነቁ/እንዳይነቁ ፍቀድ።ለመደበኛ መተግበርያዎች ጥቅም ላይ አይውሉም።"</string>
+<string name="permlab_checkinProperties">"የመድርሻ ባህሪ ፍትሻ"</string>
+<string name="permdesc_checkinProperties">"አገልግሎት በመፈተሽ የተጫኑ ነገሮች የማንበብና የመጻፍ ዕድል እንዲያገኙ ፍቀድ።ለመደበኛ መተግበርያዎች ጥቅም ላይ አይውሉም።"</string>
+<string name="permlab_bindGadget">"ዊድጅቶችን  ምረጥ"</string>
+<string name="permdesc_bindGadget">"መተግበርያው የትኛውመተግበርያ በየተኛው ስርዓት እንደሚጠቀም እንዲያሳውቅ ፍቀድ።በዚህ ፍቃደዶችመ ተግባሪያዎች ግላዊ ውሂብ ለሌሎች መተግበርያዎች የመስጠት ዕድል አላቸው።ለመደበኛ መተግበርያዎች ጥቅም ላይ አይውሉም።"</string>
+<string name="permlab_modifyPhoneState">"የስልክ ሁኔታን አስተካክል "</string>
+<string name="permdesc_modifyPhoneState">"መተግበርያው የመሳሪያውን የስልክ ባህርያት እንዲቆጣጠር ፍቀድ።ይህን ፈቃድ ያለው መተግበርያ  አርስዎ ሳያውቁ አውታረ መረብ ይከፍታሉ፤ሬድዮ ይከፍታሉ እንዲሁም ይዘጋሉ።"</string>
+<string name="permlab_readPhoneState">"የስልኩን ሁኔታና ማንነት አንብብ"</string>
+<string name="permdesc_readPhoneState">"መተግበርያው የመሳሪያውን የስልክ ባህሪያት እንዲያገኝ ፍቀድ።ይህ ፈቃድ ያለው መተግበርያ  በዚህ ስልክ ያሉ  ስልክ ቁጥርንና የሴሪያል ቁጥር ጥሪ  እንዲሁም እየሰራም ግንኙነት ያደረገ  ቁጥርና የመሳሰሉ  ያውቃል።"</string>
+<string name="permlab_wakeLock">"ስልኩን ከማንቀላፋት ከልክል "</string>
+<string name="permdesc_wakeLock">"መተግበርያው ስልኩን ወደ እንቅልፍ ከመሄድ እንዲከለክለው ፍቀድ።"</string>
+<string name="permlab_devicePower">"የስልኩንሃይል አጥፋ ወይም አብራ"</string>
+<string name="permdesc_devicePower">"መተግበርያው ስልኩን እንዲዘጋና እንዲከፍት ፍቀድ።"</string>
+<string name="permlab_factoryTest">"በፋብሪካ ፍተሻ ሁነት እንዳለ አሂድ"</string>
+<string name="permdesc_factoryTest">"እንደ ዝቅተኛ አመራች ፈታሽ  አዘጋጅ፤ ለ ስልኩ ውጫዊ አካል ሙሉ ዕድል ስጥ።ስልክህ በአምራች ፈታሽ ዘዴ ሲሆን ብቻ ይገኛል።"</string>
+<string name="permlab_setWallpaper">"ልጣፍን  አዘጋጅ"</string>
+<string name="permdesc_setWallpaper">"መተግበርያው የልጣፍ ስርዓት እንዲያዘጋጅ ፍቀድ"</string>
+<string name="permlab_setWallpaperHints">"የልጣፍ መጠን ፍንጭ አዘጋጅ"</string>
+<string name="permdesc_setWallpaperHints">"መተግበርያው የልጣፍ   ስርዓት መጠን ፍንጭ እንዲያዘጋጅ ፈቃድ። "</string>
+<string name="permlab_masterClear">"ወደ ፋብሪካው ነባሪ ስርዓቱን ዳግም አስጀምር "</string>
+<string name="permdesc_masterClear">"መተግበርያው ስርዓቱ  ሙሉ በሙሉ   ከፋብሪካ ማቀናበርያዎች ሁሉም ውሂቦች እንዲጠፉ፤ውቅረትና የተጫኑ መተግበርያዎች በድጋሜ እንዲያዘጋጅ ፍቀድ።</string>
+<string name="permlab_setTime">"ሰዓት ሙላ"</string>
+<string name="permdesc_setTime">"መተግበርያው የስልኩን የሰዓት ጊዜ እንዲቀይር ፍቀድ።"</string>
+<string name="permlab_setTimeZone">"የጊዜ ሰቅ አቀናብር"</string>
+<string name="permdesc_setTimeZone">"መተግበርያው የስልኩን የቀጠና የጊዜ አቆጣጠር እንዲቀይር ፍቀድ።"</string>
+<string name="permlab_accountManagerService">"እንደ መለያ መናጅ አገልግሎት ተውን"</string>
+<string name="permdesc_accountManagerService">" መተግበርያው ጥሪዎች የመለያ ማረጋጋጫ  እንዲሆኑ እንዲያደርግ ፍቀድ። "</string>
+<string name="permlab_getAccounts">"የታወቁ መለያዎችን አግኝ "</string>
+<string name="permdesc_getAccounts">"መተግበርያው በስልኩ የታወቁ መለያ ዝርዝሮች እንዲያገኝ ፍቀድ።"</string>
+<string name="permlab_authenticateAccounts">"እንደ መለያ አረጋጋጭ ተውን"</string>
+<string name="permdesc_authenticateAccounts">"መተግበርያው  የመለያው ሃላፊ መለያዎችን መፍጠር የይለፍ ቃላቸውን ማግኘትና  ማቀናበር ያካተተ  የመለያ ማረጋጋጫ  ችሎታዎች እንዲጠቀም ፍቀድ።"</string>
+<string name="permlab_manageAccounts">"የመለያዎችን ዝርዝሮች ምነጃ "</string>
+<string name="permdesc_manageAccounts">"መተግበርያው  እንደ መደመርና መለያዎች ማስወገድ እንዲሁም የይለፍ ቃል ማጥፋትን ያሉ ተግባራት እንዲያከናውን ፈቀድ።"</string>
+<string name="permlab_useCredentials">"use the authenticationcredentials of an account"</string>
+<string name="permdesc_useCredentials">"መተግበርያው የተለዋጭ ስም ማረጋጋጫ እንዲጠይቅ ፍቀድ።"</string>
+<string name="permlab_accessNetworkState">"የበይነ መረብ ቡኔታ አሳይ"</string>
+<string name="permdesc_accessNetworkState">"መተግበርያው የሁሉም አውታረ መረቦች ክፍል እንዲያይ ፍቀድ።"</string>
+<string name="permlab_createNetworkSockets">"ሙሉ የበይና መረብ መዳረሻ"</string>
+<string name="permdesc_createNetworkSockets">"መትግበርያው የአውታረ መረብ የኤሌክትሪክ ሃይል መሰኪያ እንዲፈጥር ፍቀድ።"</string>
+<string name="permlab_writeApnSettings">"የመዳራሻ ነጥብ ስም ቅንብሮችን ጻፍ"</string>
+<string name="permdesc_writeApnSettings">"መተግበርያው  እንደ ሁሉም APN እጅ አዙርና ወደብ ያሉ የAPN ማቀናበርያዎች እንዲያሻሽል ፍቀድ።"</string>
+<string name="permlab_changeNetworkState">"አውታረ መረብ ትይይዝን ቀይር"</string>
+<string name="permdesc_changeNetworkState">"መተግበርያው የእውታረ መረብ ግንኙነቱ አካል እንዲቀይር ፍቀድ።"</string>
+<string name="permlab_changeTetherState">"የቲተርድ ትይይዝን ቀይር"</string>
+<string name="permdesc_changeTetherState">"መተግበርያው የቲትሄረድ እውታረ መረብ ግንኙነቱ አካል እንዲቀይር ፍቀድ።"</string>
+<string name="permlab_changeBackgroundDataSetting">"የድህረ ገጽ ውሂብ አጠቃቀም ቅንብሮችን ቀይር፡፡"</string>
+<string name="permdesc_changeBackgroundDataSetting">"መተግበርያው የውሂብ ዳራ ቅንብር  አጠቃቀም እንዲቀይር ፍቀድ።"</string>
+<string name="permlab_accessWifiState">"የWLAN ሁኔታ አሳይ"</string>
+<string name="permdesc_accessWifiState">"መተግበርያው WLAN አካል የሚመለከት መረጃ እንዲያይ  ፍቀድ።"</string>
+<string name="permlab_changeWifiState">"የ  WLAN  ሁነታ ቀይር"</string>
+<string name="permdesc_changeWifiState">"መተግበርያው ከWLAN  የመጠቀሚያ ነጥቦችና   እንዲገናኝና እንዲቋርጥ እንዲሁም WLAN አውታረ መረቦች  ውቅረት ለመቀየር  ፍቀድ።"</string>
+<string name="permlab_changeWifiMulticastState">"WLAN  ለዘርፈ ብዙ ተዋናይ ተቀባዮች ፍቀድ"</string>
+<string name="permdesc_changeWifiMulticastState">"መተግበርያው የእርስዎን መሳሪያ በቀጥታ የማይመለከቱ ጥቅሎች እንዲቀበል ፍቀድ።ይህ በቅርብ ላይ  አገልግሎት ሲገኝ ይጠቅማል።ዘርፈ ብዙ ካልሆኑ  ተዋናዮች ዘዴ የበለጠ ሃይል ይጠቀማል።"</string>
+<string name="permlab_accessWimaxState">"የWiMAX ሁኔታ አሳይ"</string>
+<string name="permdesc_accessWimaxState">"መተግበርያው ስለ WiMAX ክፍል መረጃ እንዲያይ ፍቀድ።"</string>
+<string name="permlab_changeWimaxState">"የWiMAXሁነታ ቀይር"</string>
+<string name="permdesc_changeWimaxState">"መተግበርያው  ከ WiMAX በይነ አውታር እንዲገናኝና እንዲነቀል ፍቀድ።"</string>
+<string name="permlab_bluetoothAdmin">"ብሉ ቱዝ መምሪያዎች"</string>
+<string name="permdesc_bluetoothAdmin">"መተግበርያው አከባቢያዊ የስልክ  ብሉ ትዝ እንዲወቅር፤ ራቅ ያሉ መሳሪያዎች እንዲፈልግና ጥንድ እንዲሆን ፍቀድ።"</string>
+<string name="permlab_bluetooth">"የብሉ ቱዝ የተያያዥነቶችን ፍጠር "</string>
+<string name="permdesc_bluetooth">"መተግበርያው አከባቢያዊ የስልክ  ብሉትዝ ውቅርት እንዲያይ እንዲሁም ከጥንድ መሳሪያዎች ግንኙነት እንዲፈጥርና እንዲቀበል ፍቀድ።"</string>
+<string name="permlab_nfc">"የቅርብ መስክ ግኑኝነትን ተቆጣጠር "</string>
+<string name="permdesc_nfc">"መተግበርያው በቅርብ ካለ የግንኙነት ዘዴ(NFC) የሚለጠፉ ምልከቶች፤ካርዶችናአንባቢዎች እንዲግባባ ፍቀድ።"</string>
+<string name="permlab_disableKeyguard">"የቁልፍ መዝጊያን አንቀላፋ "</string>
+<string name="permdesc_disableKeyguard">"መተግበርያው መቆለፍያና  ሌሎች ተያያዠነት ያለው የደህነነት  የይለፍ ቃል እንዳያነቃ ፍቀድ።ስልኩ  ገቢ የስልክ ጥሪ ሲቀበል    መቆለፍያው እንዳይነቃ አድርጎ ጥሪውን ካለቀ በሃላ እንደገና እንዲነቃ  ማድረግ ለዚህ ተገቢ ምሳሌ ነው።"</string>
+<string name="permlab_readSyncSettings">"የማሳመሪያ ቅንጅቶችን አንብብ "</string>
+<string name="permdesc_readSyncSettings">"መተግበርያው የነቁ የሲንክ ዕውቂያዎች የመሳሰሉ የሲንክ ማቀናበርያዎች  እንዲያነብ ፍቀድ።"</string>
+<string name="permlab_writeSyncSettings">"የአመሳስል ቅንብሮችን ይፃፉ"</string>
+<string name="permdesc_writeSyncSettings">"መተግበርያው የነቁ የሲንክ ዕውቂያዎች የመሳሰሉ የሲንክ ማቀናበርያዎች  እንዲያሻሽሉ ፍቀድ።"</string>
+<string name="permlab_readSyncStats">"የማሳመሪያ  መረጃዎችን አንብብ "</string>
+<string name="permdesc_readSyncStats">መተግበርያው  የተቀናበረው የሲንክ ክፍል እንዲያነብ ፍቀድ;ለምሳሌ የሚተከሰተውን  የተቀናበረው ታሪክ።"</string>
+<string name="permlab_subscribedFeedsRead">"የደንበኛውን ምግባዎችን አንብብ"</string>
+<string name="permdesc_subscribedFeedsRead">"መተግበሪያውበአሁኑ ጊዜ የተሳመሩ ምገባዎችን ዝርዝር እንዲያገኝ ይፈቅዳል።"</string>
+<string name="permlab_subscribedFeedsWrite">"ምዝገባ የተደረገባቸው ምግቦችን ይፃፉ"</string>
+<string name="permdesc_subscribedFeedsWrite">"መተግበርያው የአሁኑ የእርስዎ ሲንክ እንዲሻሻል ፍቀድ።መሊሸስ መተግበርያዎች ይህ የእርስዎን ቅንብር ለመቀየር ያስለቸዋል።"</string>
+<string name="permlab_readDictionary">"በተጠቃሚ የተገለጸ መዝገበ ቃላቶችን አንብብ "</string>
+<string name="permdesc_readDictionary">"መተግበርያው ምናልባት  ተጠቃሚው በመዝገበ ቃላት ያከማቻቸውን ማንኛውም የግል ቃላት፤ስሞችንና ሃረጋት እንደያነብ ፍቀድ።"</string>
+<string name="permlab_writeDictionary">"በተጠቃሚ የተበየነ መዝገበ ቃላት ይፃፉ"</string>
+<string name="permdesc_writeDictionary">"መተግበርያው በተጠቃሚው መዝገበ ቃላት አዲስ ቃላት እንዲጽፍ ፍቀድ።"</string>
+<string name="permlab_sdcardWrite" product="nosdcard">"የUSB ማከማቻ ይዘትን አስተካክል/ሰርዝ"</string>
+<string name="permlab_sdcardWrite" product="default">"የSD ካርድን አስተካክል/ሰርዝ"</string>
+<string name="permdesc_sdcardWrite" product="nosdcard">"መተግበሪያው ወደ USBማከማቻ እንዲጽፍ ይፈቅዳል"</string>
+<string name="permdesc_sdcardWrite" product="default">"መተግበሪያውወደ SD እንዲጽፍ ይፈቅዳል"</string>
+<string name="permlab_cache_filesystem">"ያሉትን የ ሙዳየ ሲዲ የፋይል ስርዓት ድረስ"</string>
+<string name="permdesc_cache_filesystem">"መተግበሪያውየ መሸጎጫ ፋይል ስርዓት ላይ እንዲጽፍና እንዲያነብ ይፈቅዳል።"</string>
+<string name="permlab_use_sip">"የአዉታረ መረብ ጥሪዎችን አድርግ /ተቀበል"</string>
+<string name="permdesc_use_sip">"መተግበሪያውየ SIP አገልግሎትን ለበይነመረብ ጥሪዎችን ለመደወልና ጥሪ ለመቀበል እንዲጠቀምበት ይፈቅዳል።"</string>
+<string name="policylab_limitPassword">"የይለፍ ቃል ህጎችን አዘጋጅ"</string>
+<string name="policydesc_limitPassword">"በስክሪን የተፈቀዱ ክፈት የይለፍ ፊደላት ርዝመትና ባህርይ ተቆጣጠር።"</string>
+<string name="policylab_watchLogin">"የማያ መክፈት ሙከራዎችን ተቆጣጠር "</string>
+<string name="policydesc_watchLogin">"ስክሪኑን ሲከፈት ስልኩ ሲጠፋ ወይም ብዙ የተሳሳቱ የይለፍ ቃላት ገብተው  የስልክ ውሂቦች ሲሰረዙ የገቡ በጣም ብዙ የተሳሳቱ የይለፍ ቃላት ተቆጣጠር።"</string>
+<string name="policylab_resetPassword">"የማያውን መፍቻ የይለፍ ቃል ቀይር"</string>
+<string name="policydesc_resetPassword">"የማያውን መፍቻ የይለፍ ቃል ቀይር"</string>
+<string name="policylab_forceLock">"ማያውን ቆልፍ"</string>
+<string name="policydesc_forceLock">"ማያው መቼና እንዴት እንደሚቆልፍ ተቆጣጠር"</string>
+<string name="policylab_wipeData">"ሁሉንም ውሂብ አጥፋ"</string>
+<string name="policydesc_wipeData">"የፍብሪካውን  ውሂብ  ዳግም በማስጀመር፣የስልኩን ውሂብ ካለማስጠንቀቂያ ያጠፋል"</string>
+<string-array name="phoneTypes">
+<item>"ቤት"</item>
+<item>"ሞባይል"</item>
+<item>"ስራ"</item>
+<item>"ፋክስ ስራ"</item>
+<item>"የቤት ፋክስ"</item>
+<item>"ፔጀር"</item>
+<item>"ሌላ"</item>
+<item>"ብጁ"</item>
+</string-array>
+<string-array name="emailAddressTypes">
+<item>"ቤት"</item>
+<item>"ስራ"</item>
+<item>"ሌላ"</item>
+<item>"ብጁ"</item>
+</string-array>
+<string-array name="postalAddressTypes">
+<item>"ቤት"</item>
+<item>"ስራ"</item>
+<item>"ሌላ"</item>
+<item>"ብጁ"</item>
+</string-array>
+<string-array name="imAddressTypes">
+<item>"ቤት"</item>
+<item>"ስራ"</item>
+<item>"ሌላ"</item>
+<item>"ብጁ"</item>
+</string-array>
+<string-array name="organizationTypes">
+<item>"ስራ"</item>
+<item>"ሌላ"</item>
+<item>"ብጁ"</item>
+</string-array>
+<string-array name="imProtocols">
+<item></item>
+<item></item>
+<item>"Yahoo"</item>
+<item>"ስካይፒ"</item>
+<item>"QQ"</item>
+<item>"ጎግል ንግግር"</item>
+<item></item>
+<item></item>
+</string-array>
+<string name="phoneTypeCustom">"ብጁ"</string>
+<string name="phoneTypeHome">"ቤት"</string>
+<string name="phoneTypeMobile">"ሞባይል"</string>
+<string name="phoneTypeWork">"ስራ"</string>
+<string name="phoneTypeFaxWork">"ፋክስ ስራ"</string>
+<string name="phoneTypeFaxHome">"የቤት ፋክስ"</string>
+<string name="phoneTypePager">"ፔጀር"</string>
+<string name="phoneTypeOther">"ሌላ"</string>
+<string name="phoneTypeCallback">"መልሰህ ደውል"</string>
+<string name="phoneTypeCar">"መኪና"</string>
+<string name="phoneTypeCompanyMain">"የካምፓኒ ዋና"</string>
+<string name="phoneTypeMain">"ዋና"</string>
+<string name="phoneTypeOtherFax">"ሌላ  Fax"</string>
+<string name="phoneTypeRadio">"ራዲዮ"</string>
+<string name="phoneTypeTelex">"ቴሌግራም"</string>
+<string name="phoneTypeWorkMobile">"ሞባይል ስራ"</string>
+<string name="phoneTypeWorkPager">"ፔጀር ስራ"</string>
+<string name="phoneTypeAssistant">"አጋዥ"</string>
+<string name="phoneTypeMms">"Mms"</string>
+<string name="eventTypeBirthday">"የትውልድ ቀን"</string>
+<string name="eventTypeAnniversary">"አመታዊ ክብረ በዓል"</string>
+<string name="eventTypeOther">"ክስተት"</string>
+<string name="emailTypeCustom">"ብጁ"</string>
+<string name="emailTypeHome">"ቤት"</string>
+<string name="emailTypeWork">"ስራ"</string>
+<string name="emailTypeOther">"ሌላ"</string>
+<string name="emailTypeMobile">"ሞባይል"</string>
+<string name="postalTypeCustom">"ብጁ"</string>
+<string name="postalTypeHome">"ቤት"</string>
+<string name="postalTypeWork">"ስራ"</string>
+<string name="postalTypeOther">"ሌላ"</string>
+<string name="imTypeCustom">"ብጁ"</string>
+<string name="imTypeHome">"ቤት"</string>
+<string name="imTypeWork">"ስራ"</string>
+<string name="imTypeOther">"ሌላ"</string>
+<string name="imProtocolCustom">"ብጁ"</string>
+<string name="imProtocolYahoo">"Yahoo"</string>
+<string name="orgTypeWork">"ስራ"</string>
+<string name="orgTypeOther">"ሌላ"</string>
+<string name="orgTypeCustom">"ብጁ"</string>
+<string name="sipAddressTypeCustom">"ብጁ"</string>
+<string name="sipAddressTypeHome">"ቤት"</string>
+<string name="sipAddressTypeWork">"ስራ"</string>
+<string name="sipAddressTypeOther">"ሌላ"</string>
+<string name="contact_status_update_attribution">"በ <xliff:g id="source" example="Google Talk">%1$s</xliff:g>"</string>
+<string name="contact_status_update_attribution_with_date">"<xliff:g id="date" example="3 hours ago">%1$s</xliff:g> በ <xliff:g id="source" example="Google Talk">%2$s</xliff:g>"</string>
+<string name="keyguard_password_enter_pin_code">"PIN ኮድ አስገባ"</string>
+<string name="keyguard_password_enter_password_code">"ለመክፈት የይለፍ ቃል አስገባ"</string>
+<string name="keyguard_password_wrong_pin_code">"የተሳሳተ PIN ኮድ!"</string>
+<string name="pinpuk_attempts">"\nየቀሩ ሙከራዎች፤"</string>
+<string name="keyguard_label_text">"ለመከፈት፣ ምናሌን ከተጫኑ በኋላ 0ን ይንኩ፡፡"</string>
+<string name="emergency_call_dialog_number_for_display">"የድንገተኛ ጊዜ ቁጥር"</string>
+<string name="lockscreen_pin_locked_message">"ሲም/USIM  ካርዱ ተቆልፏል"</string>
+<string name="lockscreen_sim_network_locked_message">"የስልኩ SIM አውታረ መረብ ተቆላፏል"</string>
+<string name="sim1_puk_requried">"የSIM1 PIN ታግዷል፣ለመክፈት PUK አስገባ"</string>
+<string name="sim2_puk_requried">"የSIM2 PIN ታግዷል፣ለመክፈት PUK አስገባ"</string>
+<string name="sim_puk_requried">"የsim PIN ታግዷል፣ለመክፈት PUK አስገባ"</string>
+<string name="keyguard_password_enter_sim1_pin_code">"የSIM1  PIN ኮድ አስገባ"</string>
+<string name="keyguard_password_enter_sim2_pin_code">"የSIM2  PIN ኮድ አስገባ"</string>
+<string name="keyguard_password_enter_sim_pin_code">"የSIM  PIN ኮድ አስገባ"</string>
+<string name="keyguard_sim1_pin_accepted">"SIM1 PIN መክፈቱ ተሳክቷል"</string>
+<string name="keyguard_sim2_pin_accepted">"SIM2 PIN መክፈቱ ተሳክቷል"</string>
+<string name="keyguard_sim_pin_accepted">"SIM PIN መክፈቱ ተሳክቷል"</string>
+<string name="puk_accept">"PUK ተቀባይነት አግኝቷል"</string>
+<string name="unblocking_fail">"አለማገድ አልተሳካም፣ PUK መልሰው ያስገቡ"</string>
+<string name="keyguard_password_wrong_puk_code">"የተሳሳተ PUK ኮድ !"</string>
+<string name="new_pin">"አዲስ PIN አስገባ"</string>
+<string name="reenter">"PIN በድጋሚ አስገባ"</string>
+<string name="lockscreen_carrier_default">"(አገለግሎት የለም)"</string>
+<string name="lockscreen_screen_locked">"ማያ ተቆልፏል"</string>
+<string name="lockscreen_instructions_when_pattern_enabled">"ለመክፈት ወይም ለአደጋ ጥሪ ምናሌ ን ተጫን፡፡"</string>
+<string name="lockscreen_instructions_when_pattern_disabled">"ለመክፈት ምራሌን ተጫን፡፡"</string>
+<string name="lockscreen_pattern_instructions">"ለመክፈት ሰርአተ ጥለትን  ሳል"</string>
+<string name="lockscreen_emergency_call">"የድንገተኛ ጥሪ"</string>
+<string name="lockscreen_return_to_call">"ወደ ጥሪ ተመለስ"</string>
+<string name="lockscreen_pattern_correct">"አስተካክል !"</string>
+<string name="lockscreen_pattern_wrong">"ይቅርታ፣ እንደገና ይሞክሩ"</string>
+<string name="lockscreen_plugged_in">"ኃይል በመሙላት ላይ (<xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g>)"</string>
+<string name="lockscreen_charged">"ኃይል ተሞልቷል"</string>
+<string name="lockscreen_low_battery">"ቻርጀርህን አያይዝ"</string>
+<string name="lockscreen_missing_sim_message_short">"ሲም ካርድ የለውም"</string>
+<string name="lockscreen_missing_sim_message">"ስልኩ ውስጥ SIM ካርድ የለም፡፡"</string>
+<string name="lockscreen_missing_sim_instructions">"SIM ካርድ አስገባ፡፡"</string>
+<string name="lockscreen_blocked_sim_message_short">"SIM ካርድ ታግዷል፡፡"</string>
+<string name="emergency_calls_only">"የድንገተኛ ጥሪዎች ብቻ"</string>
+<string name="lockscreen_network_locked_message">"አውታረ  መረቡ ተቆልፏል"</string>
+<string name="lockscreen_sim_puk_locked_message">"SIM ካርድ PUK ተቆልፏል፡፡"</string>
+<string name="lockscreen_sim_puk_locked_instructions">"እባክህ የተጠቃሚን መረጃ ተመልከት ወይም የደንበኛን ጥንቃቄ አግኝ፡፡"</string>
+<string name="lockscreen_sim_locked_message">"SIM ካርድ ተቆልፏል፡፡"</string>
+<string name="lockscreen_sim_unlock_progress_dialog_message">"SIM ካርድ በመክፈት ላይ\u2026"</string>
+<string name="lockscreen_too_many_failed_attempts_dialog_message">"<xliff:g id="number">%d</xliff:g>ጊዚያት የተሳሳተ ስርዓተ ጥለት ስለዋል። \n\nእባክዎ እንደገና ይሞክሩ <xliff:g id="number">%d</xliff:g> ሴኮንዶች።"</string>
+<string name="lockscreen_failed_attempts_almost_glogin"><xliff:g id="number">%d</xliff:g> ጊዚያት የተሳሳተ መዝግያ ስርዓተ ጥለት ስለዋል ። <xliff:g id="number">%d</xliff:g>በሃላ ተጨማሪ ያልተሳኩ ሙከራዎች ፤  በጎግል አድራሻዎ እንዲገቡ ይጠየቃሉ።\n\n እባክዎ እንደገና ይሞከሩ <xliff:g id="number">%d</xliff:g> ሴኮንዶች። "</string>
+<string name="lockscreen_too_many_failed_attempts_countdown">"በ<xliff:g id="number">%d</xliff:g> ሰከንዶች ውስጥ  እንደገና ሞክሩ ።"</string>
+<string name="lockscreen_forgot_pattern_button_text">"ዱካን ተርስቷል?"</string>
+<string name="lockscreen_glogin_forgot_pattern">"መለያን ክፈት"</string>
+<string name="lockscreen_glogin_too_many_attempts">"በጣም ብዙ የስርዓተ ጥለት ሙከራዎች!"</string>
+<string name="lockscreen_glogin_instructions">"ለመክፈት፣ በጉግል መለያዎ ይግቡ"</string>
+<string name="lockscreen_glogin_username_hint">"የተጠቃሚ ስም (ኢሜይል)"</string>
+<string name="lockscreen_glogin_password_hint">"የይለፍ"</string>
+<string name="lockscreen_glogin_submit_button">"ከፍተህ ግባ"</string>
+<string name="lockscreen_glogin_invalid_input">"ትክክል ያልሆነ የተጠቃሚ ስም ወይምየ ይለፍ  ቃል"</string>
+<string name="lockscreen_glogin_checking_password">"በመፈተሽ  ላይ …"</string>
+<string name="lockscreen_unlock_label">"አትቆልፍ"</string>
+<string name="lockscreen_sound_on_label">"ድምጹን ይክፈቱ"</string>
+<string name="lockscreen_sound_off_label">"ድምጹን ያጥፉ"</string>
+<string name="password_keyboard_label_symbol_key">"\?123"</string>
+<string name="hour_ampm">"<xliff:g id="hour" example="3">%-l</xliff:g><xliff:g id="ampm" example="pm">%P</xliff:g>"</string>
+<string name="hour_cap_ampm">"<xliff:g id="hour" example="3">%-l</xliff:g><xliff:g id="ampm" example="pm">%P</xliff:g>"</string>
+<string name="factorytest_failed">"የፋብሪካ ፍተሻ አልተሳካም"</string>
+<string name="factorytest_not_system">" የፋብሪካ _መፈተሻ ተግባራት በ /ስርዓት/መተግበርያዎች ለተጫኑ ጥቅሎች  ብቻ ያገለግላል።""</string>
+<string name="factorytest_no_action">"በፋብሪካ _መፈተሻ ስራ ያካተተው ምንም ዓይነትጥቅል የለም።"</string>
+<string name="factorytest_reboot">"ዳግም አስጀምር"</string>
+<string name="js_dialog_title">"\'<xliff:g id="title">%s</xliff:g>\' ላይ ያለው ገጽ የሚለው፤"</string>
+<string name="js_dialog_before_unload">"ከዚህ ገጽ ወደ ሌላ መዳሰስ ትፈልጋልህ?\n\n<xliff:g id="message">%s</xliff:g>\n\n ለመቀጠል አዎን ተጫን፣ ወይም ለምቆየት ለረዝን ተጫን፡፡"</string>
+<string name="save_password_label">"አረጋግጥ"</string>
+<string name="double_tap_toast">"ጠቃሚ ምክር፤ ለማሳነስ ወይም ለማጉላተ ሁለቴ ነካ ያርጉ፡፡"</string>
+<string name="permlab_readHistoryBookmarks">"የማሰሻውን ታሪክና እልባቶች አንብብ"</string>
+<string name="permdesc_readHistoryBookmarks">"መተግበርያው URL አሳሹ የጎበኘውንና ሁሉም አሳሽ /ሶች  እልባት እንዲያነብ ፍቀድ።</string>
+<string name="permlab_writeHistoryBookmarks">"የማሰሻ ታሪክ እና እልባቶች ጻፍ"</string>
+<string name="permdesc_writeHistoryBookmarks">"መተግበርያው በስልክዎ የተከማቹ የአሳሹ ታሪክ ወይም ዕልባቶች እንዲያሻሽል ፍቀድ።መሊሸስ መተግበርያዎች ይህ የውሂብ አሳሾችን ለማስተካከል ወይም ለማጥፋት ሊጠቀሙበት ይችላሉ።"</string>
+<string name="permlab_setAlarm">"የየማንቂያ ደወል ሰዓት በየማንቂያ ደወል ውስጥ አዘጋጅ"</string>
+<string name="permdesc_setAlarm">"መተግብርያው በተጫነው የሰዓት ማንቅያ ደወል ላይ የማንቅያ ደወል እንዲያዘጋጅ ፍቀድ።አንድንድ የደወል ማንቂያ ሰዓት ይህ ባህርያ ላይተገብሩት ይችላሉ።"</string>
+<string name="permlab_writeGeolocationPermissions">"የማሰሻ ጂአኦግራፊካል ቦታ ፈቃዶችን አስተካክል"</string>
+<string name="permdesc_writeGeolocationPermissions">"መተግበርያው የአሳሹን የሚገኝበት ቦታ ፈቃድ እንዲያሻሽል ፍቀድ።መሊሸስ መተግበርዎች ይህ በዘፈቀደ ዕውቅና ወዳልታወቁ  ድረ ገጾች መረጃ ለመላክ ሊጠቀሙበት የችላሉ።"</string>
+<string name="save_password_message">"ይህንን የይለፍ ቃል ዳሣሹ እዲያስታውስ ትፈልጋለህ?"</string>
+<string name="save_password_notnow">"አሁን አይሁን"</string>
+<string name="save_password_remember">"አስታውስ"</string>
+<string name="save_password_never">"መቼም"</string>
+<string name="open_permission_deny">"ይህንን ገፅ ለመክፈት ፈቃድ የልዎትም።"</string>
+<string name="text_copied">"ጽሁፉ ወደ ቅንጥብ ሰሌዳ ተቀድቷል፡፡"</string>
+<string name="more_item_label">"ተጨማሪ"</string>
+<string name="menu_space_shortcut_label">"ሕዋ"</string>
+<string name="menu_enter_shortcut_label">"አስገቡ"</string>
+<string name="menu_delete_shortcut_label">"አጽዳ"</string>
+<string name="search_go">"ፈልግ"</string>
+<string name="oneMonthDurationPast">"ከ1 ወር በፊት"</string>
+<string name="beforeOneMonthDurationPast">"ከ 1 ወር በፊት"</string>
+<plurals name="num_seconds_ago">
+<item quantity="one">"ከ1 ስከንድ በፊት"</item>
+<item quantity="other">"<xliff:g id="count">%d</xliff:g> ሰከንዶች በፊት"</item>
+</plurals>
+<plurals name="num_minutes_ago">
+<item quantity="one">"ከ1 ደቂቃ በፊት"</item>
+<item quantity="other">"<xliff:g id="count">%d</xliff:g> ደቂቃዎች በፊት"</item>
+</plurals>
+<plurals name="num_hours_ago">
+<item quantity="one">"ከ1 ሰአት በፊት"</item>
+<item quantity="other">"<xliff:g id="count">%d</xliff:g> ሰዓታት በፊት"</item>
+</plurals>
+<plurals name="last_num_days">
+<item quantity="other">"የመጨረሻ <xliff:g id="count">%d</xliff:g>ቀናቶች"</item>
+</plurals>
+<string name="last_month">"ያለፈው ወር"</string>
+<string name="older">"ያረጀ"</string>
+<plurals name="num_days_ago">
+<item quantity="one">"ትላንት"</item>
+<item quantity="other">"<xliff:g id="count">%d</xliff:g> ቀናት በፊት"</item>
+</plurals>
+<plurals name="in_num_seconds">
+<item quantity="one">"በ 1 ሰኮንድ  ውስጥ"</item>
+<item quantity="other">"በ<xliff:g id="count">%d</xliff:g>ሰኮንዶች"</item>
+</plurals>
+<plurals name="in_num_minutes">
+<item quantity="one">"በ 1 ደቂቃ ውስጥ"</item>
+<item quantity="other">"በ<xliff:g id="count">%d</xliff:g>ደቂቃዎች"</item>
+</plurals>
+<plurals name="in_num_hours">
+<item quantity="one">"በ 1ሰዓት ውስጥ"</item>
+<item quantity="other">"በ<xliff:g id="count">%d</xliff:g>ሰዓታት"</item>
+</plurals>
+<plurals name="in_num_days">
+<item quantity="one">"ነገ"</item>
+<item quantity="other">"በ<xliff:g id="count">%d</xliff:g>ቀናት"</item>
+</plurals>
+<plurals name="abbrev_num_seconds_ago">
+<item quantity="one">"ከ1 ሰከንድ በፊት"</item>
+<item quantity="other">"<xliff:g id="count">%d</xliff:g> ሰከንዶች በፊት"</item>
+</plurals>
+<plurals name="abbrev_num_minutes_ago">
+<item quantity="one">"ከ1 ደቂቃ በፊት"</item>
+<item quantity="other">"<xliff:g id="count">%d</xliff:g> ሚነትስ በፊት"</item>
+</plurals>
+<plurals name="abbrev_num_hours_ago">
+<item quantity="one">"ከ1 ሰአት በፊት"</item>
+<item quantity="other">"<xliff:g id="count">%d</xliff:g> ሰዓታት በፊት"</item>
+</plurals>
+<plurals name="abbrev_num_days_ago">
+<item quantity="one">"ትላንት"</item>
+<item quantity="other">"<xliff:g id="count">%d</xliff:g> ቀናት በፊት"</item>
+</plurals>
+<plurals name="abbrev_in_num_seconds">
+<item quantity="one">"በ 1 ሰኮንድ  ውስጥ"</item>
+<item quantity="other">"በ<xliff:g id="count">%d</xliff:g>ሰኮንዶች"</item>
+</plurals>
+<plurals name="abbrev_in_num_minutes">
+<item quantity="one">"በ 1 ደቂቃ ውስጥ"</item>
+<item quantity="other">"በ<xliff:g id="count">%d</xliff:g>ደቂቃዎች"</item>
+</plurals>
+<plurals name="abbrev_in_num_hours">
+<item quantity="one">"በ 1ሰዓት ውስጥ"</item>
+<item quantity="other">"በ<xliff:g id="count">%d</xliff:g>ሰዓታት"</item>
+</plurals>
+<plurals name="abbrev_in_num_days">
+<item quantity="one">"ነገ"</item>
+<item quantity="other">"በ<xliff:g id="count">%d</xliff:g>ቀናት"</item>
+</plurals>
+<string name="preposition_for_date">"<xliff:g id="date" example="May 29">%s</xliff:g>ላይ"</string>
+<string name="preposition_for_time">"<xliff:g id="time" example="2:33 am">%s</xliff:g> ላይ"</string>
+<string name="preposition_for_year">"በ<xliff:g id="year" example="2003">%s</xliff:g>ውስጥ"</string>
+<string name="day">"ቀን"</string>
+<string name="days">"ቀናት"</string>
+<string name="hour">"ሰዓት"</string>
+<string name="hours">"ሰዓታት"</string>
+<string name="minute">"MIN"</string>
+<string name="minutes">"ሚንስ"</string>
+<string name="second">"ሰከንድ"</string>
+<string name="seconds">"ሰከንድ"</string>
+<string name="week">"ሳምንት"</string>
+<string name="weeks">"ሳምንታት"</string>
+<string name="year">"አመት"</string>
+<string name="years">"ዓመታት"</string>
+<string name="VideoView_error_title">"ቪዲዮ ማጫወት አይችልም፡፡"</string>
+<string name="VideoView_error_text_invalid_progressive_playback">"ይቅርታ፣ ይህ ቪዲዮ በዚህ መሳሪያ ላይ ለመልቀቅ የተሳሳተ ነው፡፡"</string>
+<string name="VideoView_error_text_unknown">"ይቅርታ፣ ይህ ቪዲዮ ሊጫወት አይችልም፡፡"</string>
+<string name="VideoView_error_button">"ጥሩ"</string>
+<string name="relative_time">"<xliff:g id="date" example="4 hours ago">%1$s</xliff:g>፣ <xliff:g id="time" example="11:00 am">%2$s</xliff:g>"</string>
+<string name="noon">"ቅትር"</string>
+<string name="Noon">"ቅትር"</string>
+<string name="midnight">"እኩለ ሌሊት"</string>
+<string name="Midnight">"እኩለ ሌሊት"</string>
+<string name="elapsed_time_short_format_mm_ss">"<xliff:g id="MINUTES">%1$02d</xliff:g>:<xliff:g id="SECONDS">%2$02d</xliff:g>"</string>
+<string name="elapsed_time_short_format_h_mm_ss">"<xliff:g id="HOURS">%1$d</xliff:g>:<xliff:g id="MINUTES">%2$02d</xliff:g>:<xliff:g id="SECONDS">%3$02d</xliff:g>"</string>
+<string name="selectAll">"ሁሉንም ምረጥ"</string>
+<string name="selectText">"ቃል ምረጥ"</string>
+<string name="cut">"ቁረጥ"</string>
+<string name="copy">"ቅዳ"</string>
+<string name="paste">"ለጥፍ"</string>
+<string name="copyUrl">"URLን ይገልብጡ"</string>
+<string name="inputMethod">"የግብዓት ዘዴ"</string>
+<string name="addToDictionary">""ወደ መዝገበ ቃላት \"<xliff:g id="word" example="rickroll">%s</xliff:g>\" አክል"</string>
+<string name="editTextMenuTitle">"ጽሁፍ አርታኢ አድርግ"</string>
+<string name="low_internal_storage_view_title">"ቦታ እያነሰ ነው"</string>
+<string name="low_internal_storage_view_text">"የስልክ ማከማቻው ቦታ እየቀነስ ነው፡፡"</string>
+<string name="ok">"ጥሩ"</string>
+<string name="cancel">"ሰርዝ"</string>
+<string name="yes">"ጥሩ"</string>
+<string name="no">"ሰርዝ"</string>
+<string name="dialog_alert_title">"ሃሳብ"</string>
+<string name="capital_on">"ላይ"</string>
+<string name="capital_off">"አጥፋ"</string>
+<string name="whichApplication">"ድርጊቱን"</string>
+<string name="alwaysUse">"ለዚህ እርምጃ ነባሪ ተጠቀም"</string>
+<string name="clearDefaultHintMsg">"የቤት ውስጥ ነባሪዎች ቅንብሮችን አጽዳ &amp;amp;amp;amp;gt; መተግበሪያዎች &amp;amp;amp;amp;gt; መተግበሪያዎችን አስተዳድር፡፡"</string>
+<string name="chooseActivity">"ድርጊት ምረጥ"</string>
+<string name="chooseUsbActivity">"ለUSB መሳሪያዎች መተግበሪያ ምረጥ"</string>
+<string name="noApplications">"ምንም መተግበሪያ ይህንን መስራት አይችልም ፡፡"</string>
+<string name="crash_title">"አዝናለሁ!"</string>
+<string name="crash_application">"መተግበርያው<xliff:g id="application">%1$s</xliff:g>(ሂደት <xliff:g id="process">%2$s</xliff:g>) ሳይተሰብ ቆሟል።ስርዓቱ ስህተቱን ማስተካከል አልቻለም። እባክዎ ሌላ ሶፍትዌር ይጠቀሙ።"</string>
+<string name="crash_process">"ሂደቱ <xliff:g id="process">%1$s</xliff:g> በድነገት ቆሟል፡፡ ስርዓቱ ስህተቱን ለመጠገን አልቻለም፡፡ እባክዎ ሌላ ሶፍትዌር ይጠቀሙ፡፡"</string>
+<string name="aerr_title">"አዝናለሁ!"</string>
+<string name="aerr_application">"መተግበርያው <xliff:g id="application">%1$s</xliff:g>(ሂደት <xliff:g id="process">%2$s</xliff:g>) ሳይጠበቅ ቆማል።. እባክዎ በድጋሜ ይሞክሩ።"</string>
+<string name="aerr_process">"ሂደቱ <xliff:g id="process">%1$s</xliff:g> ሳይጠበቅ ቆሟል።እባክዎ በድጋሜ ይሞክሩ።"</string>
+<string name="anr_title">"አዝናለሁ!"</string>
+<string name="anr_activity_application">"እንቅስቃሴ <xliff:g id="activity">%1$s</xliff:g> (በ<xliff:g id="application">%2$s</xliff:g>)መተግበሪያ ውስጥ አይመልስም፡፡"</string>
+<string name="anr_activity_process">"<xliff:g id="activity">%1$s</xliff:g> (በሂደት ላይ <xliff:g id="process">%2$s</xliff:g>) አይመልስም፡፡"</string>
+<string name="anr_application_process">"መተግበሪያው <xliff:g id="application">%1$s</xliff:g> (በሂደት ላይ <xliff:g id="process">%2$s</xliff:g>)አይመልስም፡፡"</string>
+<string name="anr_process">"ሂደት<xliff:g id="process">%1$s</xliff:g>አይመልስም፡፡"</string>
+<string name="crash_close">"ጥሩ"</string>
+<string name="force_close">"በግድ ዝጋ"</string>
+<string name="report">"ሪፖርት"</string>
+<string name="wait">"ጠብቅ"</string>
+<string name="launch_warning_title">"መተግበሪያው ዳግም ተላልፏል"</string>
+<string name="launch_warning_replace">"<xliff:g id="app_name">%1$s</xliff:g>አሁን እየሄደ ነው፡፡"</string>
+<string name="launch_warning_original">"<xliff:g id="app_name">%1$s</xliff:g> በኦርጅናሌ ጀምሯል፡፡"</string>
+<string name="smv_application">"መተግበርያው <xliff:g id="application">%1$s</xliff:g>(ዝግጅት <xliff:g id="process">%2$s</xliff:g>) ራሱን የማስገደድጥብቅ ፖሊሲ ሁነታ ጥሷል።"</string>
+<string name="smv_process">"ሂደቱ <xliff:g id="process">%1$s</xliff:g> ራሱን የማስገደድ ጥብቅ ፖሊሲ ሁነታ ጥሷል።"</string>
+<string name="heavy_weight_notification">"<xliff:g id="app">%1$s</xliff:g> በማሄድ ላይ"</string>
+<string name="heavy_weight_notification_detail">"ወደ መተግበሪያ ለመለወጥ ምረጥ"</string>
+<string name="heavy_weight_switcher_title">"መተገበሪያዎች ይቀያየር?"</string>
+<string name="heavy_weight_switcher_text">"ሌላ መተግበርያ በሂደት ላይ ነውአዲስ ከመጀመርዎ በፊት እሱን መቆም አለበት።"</string>
+<string name="old_app_action">"ተመለስ ወደ<xliff:g id="old_app">%1$s</xliff:g>"</string>
+<string name="old_app_description">"አዲስ መተግብሪያ አትጀምር"</string>
+<string name="new_app_action">"ጀምር<xliff:g id="old_app">%1$s</xliff:g>"</string>
+<string name="new_app_description">"ሳታስቀምጥ የቀድሞውን መተግበሪያ አቁም፡፡"</string>
+<string name="sendText">"ለጽሁፍ ድርጊት ምረጥ"</string>
+<string name="volume_ringtone">"የደወል የድምጽ መጠን"</string>
+<string name="volume_music">"የማሃደር መረጃ ማጠራቀሚያ ድምጸ መጠን"</string>
+<string name="volume_fm">"FM የድምጽ መጠን"</string>
+<string name="volume_music_hint_playing_through_bluetooth">"በብሉቱዝ ውስጥ  በማጫወት  ላይ"</string>
+<string name="volume_music_hint_silent_ringtone_selected">"የጸጥታ መጥሪያ ደወል ተመርጧል"</string>
+<string name="volume_music_hint_silent_sim1_ringtone_selected">"SIM1 የጸጥታ መጥሪያ ደወል ተመርጧል"</string>
+<string name="volume_music_hint_sim2_silent_ringtone_selected">"SIM2 የጸጥታ መጥሪያ ደወል ተመርጧል"</string>
+<string name="volume_music_hint_sim1_and_sim2_silent_ringtone_selected">"SIM1 እና SIM2 የጸጥታ መጥሪያ ደወል ተመርጧል"</string>
+<string name="volume_call">"የጥሪ ላይ የድምጽ መጠን"</string>
+<string name="volume_bluetooth_call">"የብሉ ቱዝ መጪ-ጥሪ መጠነ ድምጽ"</string>
+<string name="volume_alarm">"የማንቂያ ደወል ድምጽ ከፍታ"</string>
+<string name="volume_notification">"የማሰታወቂያ የድምጽ መጠን"</string>
+<string name="volume_unknown">"የድምፅ መጠን"</string>
+<string name="ringtone_default">"ነባሪ የጥሪ ድምጽ"</string>
+<string name="ringtone_default_with_actual">"ነባሪ የጥሪ ድምጽ  (<xliff:g id="actual_ringtone">%1$s</xliff:g>)"</string>
+<string name="ringtone_silent">"ጸጥታ"</string>
+<string name="ringtone_picker_title">"የጥሪ ድምፆች"</string>
+<string name="ringtone_unknown">"ያልታወቀ የጥሪ ድምጽ"</string>
+<plurals name="wifi_available">
+<item quantity="one">"WLAN በይነ መረብ አለ"</item>
+<item quantity="other">"የWLAN በይነ መረቦች አሉ"</item>
+</plurals>
+<plurals name="wifi_available_detailed">
+<item quantity="one">"ያለውን የ WLAN አዉታረ መረብ ክፈት"</item>
+<item quantity="other">"ያሉትን የ WLAN አዉታረ መረቦች ክፈት"</item>
+</plurals>
+<string name="select_character">"ቀምፊን አስገባ"</string>
+<string name="sms_control_default_app_name">"የማይታወቅ ማመልከት"</string>
+<string name="sms_control_title">"SMS መልክቶችን ላክ"</string>
+<string name="sms_control_message">"ትልቅ ቁጥር ያለው የማህደር ብዙ መርጃ መለክት እየተላከ ነው፡፡  ለመቀጠል  \"እሺ\"ን ፣ ወይም መላኩን ለማቋረጥ \"ሰርዝ\"ን  ምረጥ፡፡"</string>
+<string name="sms_control_yes">"ጥሩ"</string>
+<string name="sms_control_no">"ሰርዝ"</string>
+<string name="date_time_set">"አዘጋጅ"</string>
+<string name="default_permission_group">"ነባሪ"</string>
+<string name="no_permissions">"ምንም ፍቃድ አያስፈልግም"</string>
+<string name="perms_hide">"<b>ደብቅ</b>"</string>
+<string name="perms_show_all">"<b>ሁሉን አሳይ</b>"</string>
+<string name="usb_storage_activity_title">"USB ሰፊ ማከማቻ"</string>
+<string name="usb_storage_title">"USB ተገናኝቷል"</string>
+<string name="usb_storage_message" product="nosdcard">"ስልክዎን ከኮምፒውተርዎ ጋር በUSB አገናኝተዋል። በኮምፒውተርዎ እና በAndroidዎች USB ማከማቻ መካከል ፋይሎችን መቅዳት ከፈለጉ ከዚህ በታች ያለውን አዝራር ይምረጡ።"</string>
+<string name="usb_storage_message" product="default">"ስልክዎን ከኮምፒውተርዎ ጋር በUSB አገናኝተዋል። በኮምፒውተርዎ እና በAndroidዎች SD ካርድዎ መካከል ፋይሎችን መቅዳት ከፈለጉ ከዚህ በታች ያለውን አዝራር ይምረጡ።"</string>
+<string name="usb_storage_button_mount">"USB ማከማቻን አብራ"</string>
+<string name="usb_storage_error_message" product="nosdcard">"ለUSB ሰፊ ማከማቻ USB ማከማቻዎን ለመጠቀም ችግር አለ፡፡"</string>
+<string name="usb_storage_error_message" product="default">"ለUSB ሰፊ ማከማቻ SD ካርድዎን ለመጠቀም ችግር አለ፡፡"</string>
+<string name="usb_storage_notification_title">"USB ተገናኝቷል"</string>
+<string name="usb_storage_notification_message">"ፋይሎችን ወደ / ከ ኮምፒውተር ለመገልበጥ ምረጥ፡፡"</string>
+<string name="usb_storage_stop_notification_title">"USB ማከማቻ አጥፉ"</string>
+<string name="usb_storage_stop_notification_message">"USB ማከማቻን ለማጥፋት ምረጥ፡፡"</string>
+<string name="usb_storage_stop_title">"USB ማከማቻ በጥቅም ላይ"</string>
+<string name="usb_storage_stop_message" product="nosdcard">"የ USB ማከማቻን ከመዝጋትህ በፊት Android USB ማከማቻ ከኮምፒውተሩ ማውጣትህን አረጋግጥ(\u201cማውጣትu201d)፡፡"</string>
+<string name="usb_storage_stop_message" product="default">"የ USB ማከማቻን ከመዝጋትህ በፊት፣Android SD ካርድ ከኮምፒውተሩ ማውጣትህን አረጋግጥ (\u201cማውጣት\u201d)"</string>
+<string name="usb_storage_stop_button_mount">"USB ማከማቻ አጥፉ"</string>
+<string name="usb_storage_stop_error_message">"USB ማከማቻን ለማጥፋት ችግር ገጥሟል፡፡ የUSB ስመ ካዳምን መንቀልዎን ካረጋገጡ በኋላ እንደገና ይሞክሩ፡፡"</string>
+<string name="dlg_confirm_kill_storage_users_title">"USB ማከማቻን አብራ"</string>
+<string name="dlg_confirm_kill_storage_users_text">"USB ማከማቻውን ካበራህ፣ እየተጠቀምክባቸው ያሉት አንዳንድ መተግበሪያዎች USBን እስክታጠፋ ድርስ ላይኖሩ ይችላሉ"</string>
+<string name="dlg_error_title">"USB ክወና አልተሳካም"</string>
+<string name="dlg_ok">"ጥሩ"</string>
+<string name="extmedia_format_title" product="nosdcard">"የUSB ማከማቻን ቅርጽ"</string>
+<string name="extmedia_format_title" product="default">"SD ካርዱን ቅረጽ"</string>
+<string name="extmedia_format_message" product="nosdcard">" USB ማካማቻ አጥፋ ፤በዚህ ላይ የተከመቹ ሁሉንምፋይሎች ይጥፉ?ድርጊት አይመለስም!"</string>
+<string name="extmedia_format_message" product="default">"ካርዱን ለመቅርጽ መፈለግህን እርግጠኛ ነህ? ሁሉም በካርድህ ላይ ያሉት ውሂቦች ይጠፋሉ፡፡"</string>
+<string name="extmedia_format_button_format">"ቅርጸት"</string>
+<string name="adb_active_notification_title">"USB ማረሚያ ተገናኝቷል"</string>
+<string name="adb_active_notification_message">"የ USB ማረሚያን ለማቦዘን ምረጥ፡፡"</string>
+<string name="select_input_method">"የግባት ዘዴን ምረጥ"</string>
+<string name="fast_scroll_alphabet">"\u0020ABCDEFGHIJKLMNOPQRSTUVWXYZ"</string>
+<string name="fast_scroll_numeric_alphabet">"\u00200123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"</string>
+<string name="candidates_style">"<u>እጩዎች</u>"</string>
+<string name="ext_media_checking_notification_title" product="nosdcard">"USB ማከማቻ በማዘጋጀት ላይ"</string>
+<string name="ext_media_checking_notification_title" product="default">"SD ካርድ በማዘጋጀት ላይ"</string>
+<string name="ext_media_checking_notification_message">"ስህተቶች ይኖሩ እንደሁ በመፈተሽ ላይ"</string>
+<string name="ext_media_nofs_notification_title" product="nosdcard">"ባዶ USB ማከማቻ"</string>
+<string name="ext_media_nofs_notification_title" product="default">"ባዶ SD ካርድ"</string>
+<string name="ext_media_nofs_notification_message" product="nosdcard">"USB ማከማቻ ባዶ ነው ወይም ያልተደገፈ የፋይል ስርዓት ይዟል፡፡"</string>
+<string name="ext_media_nofs_notification_message" product="default">"SD  ካርዱ ባዶ ነው ወይም የማይደገፍ ፋይል ስርዓት፡፡"</string>
+<string name="ext_media_unmountable_notification_title" product="nosdcard">"የተጎዳ USB ማከማቻ"</string>
+<string name="ext_media_unmountable_notification_title" product="default">"የተጎዳ SD ካርድ"</string>
+<string name="ext_media_unmountable_notification_message" product="nosdcard">"USB ማከማቻ ተጎድቷል፡፡ ቅርጸቱን ማስተካከል ሊያስፈልግ ይችላል፡፡"</string>
+<string name="ext_media_unmountable_notification_message" product="default">"SD  ካርዱ ተጎድቷል ደግሞ መቀረጽ አለበት፡፡"</string>
+<string name="ext_media_badremoval_notification_title" product="nosdcard">"USB ማከማቻው ሰይጠበቅ ተወግዷል"</string>
+<string name="ext_media_badremoval_notification_title" product="default">"ሳይጠበቅ SD ካርዱ ተወስዷል"</string>
+<string name="ext_media_badremoval_notification_message" product="nosdcard">"የውሂብ እጦትን ለማስቀረት ከማስወገድዎ በፊት USB ማከማቻን ይንቀሉ፡፡"</string>
+<string name="ext_media_badremoval_notification_message" product="default">"የውሂብ እጦትን ለማስቀረት ከማስወገድዎ በፊት SD ካርድዎን ይንቀሉ"</string>
+<string name="ext_media_safe_unmount_notification_title" product="nosdcard">"USB ማከማቻው ለማስወገድ ምቹ ነው"</string>
+<string name="ext_media_safe_unmount_notification_title" product="default">"SD  ካርድ ለማስወገድ  ይቻላል"</string>
+<string name="ext_media_safe_unmount_notification_message" product="nosdcard">"USB ማከማቻውን ማውጣት ይችላሉ።"</string>
+<string name="ext_media_safe_unmount_notification_message" product="default">"SD ካርዱን       ማውጣት ይችላሉ።"</string>
+<string name="ext_media_nomedia_notification_title" product="nosdcard">"USB ማከማቻን አስወግድ"</string>
+<string name="ext_media_nomedia_notification_title" product="default">"SD ካርድን አስውግድ"</string>
+<string name="ext_media_nomedia_notification_message" product="nosdcard">"USB ማከማቻው ተወግዷል፡፡ አዲስ ማህደረመረጃ አስገቡ፡፡"</string>
+<string name="ext_media_nomedia_notification_message" product="default">"SD  ካርዱ ተወዷል አዲስ አስገባ፡፡"</string>
+<string name="activity_list_empty">"ምንም አቻ እንቅስቃሴዎች አልተገኙም ፡፡"</string>
+<string name="permlab_pkgUsageStats">"ምንዝር ስታትስቲክስ ጠቀሜታ አዘምን"</string>
+<string name="permdesc_pkgUsageStats">"የተሰበሰበው ምንዝር አጠቃቀም ስታትስቲክስ እንዲቀየር ይፈቅዳል። ለአዘቦት መተግበሪያዎች መጠቀሚያ አይውልም።"</string>
+<string name="permlab_copyProtectedData">"ነባሪ ማኖሪያ አገልግሎትን ይዘትን ለመገልበጥ እንዲያስነሳ ይፈቅዳል። ለአዘቦት መተግበሪያዎች መጠቀሚያ አይውልም።"</string>
+<string name="permdesc_copyProtectedData">"ነባሪ ማኖሪያ አገልግሎትን ይዘትን ለመገልበጥ እንዲያስነሳ ይፈቅዳል። ለአዘቦት መተግበሪያዎች መጠቀሚያ አይውልም።"</string>
+<string name="tutorial_double_tap_to_zoom_message_short">"ለማጉያ መቆጣጠሪያ ሁለት ጊዜ ይንኩ"</string>
+<string name="gadget_host_error_inflating">"የዊጀት መብዛት  ስህተት"</string>
+<string name="ime_action_go">"ሂድ"</string>
+<string name="ime_action_search">"ፈልግ"</string>
+<string name="ime_action_send">"ላክ"</string>
+<string name="ime_action_next">"ቀጣይ"</string>
+<string name="ime_action_done">"ጨርሷል"</string>
+<string name="ime_action_default">"ስራ"</string>
+<string name="dial_number_using">"ቁጥሩን ደውል <xliff:g id="number" example="555">%s</xliff:g>\ በመጠቀም"</string>
+<string name="create_contact_using">"ን በመጠቀም ዕውቂያን \nፍጠር <xliff:g id="number" example="555">%s</xliff:g>"</string>
+<string name="accessibility_compound_button_selected">"ተፈትሿል፡፡"</string>
+<string name="accessibility_compound_button_unselected">"አልተፈተሸ ም"</string>
+<string name="grant_credentials_permission_message_header">"የሚከተሉት አንድ ወይም ከዚያ በላይ መተግበሪያዎች፡፡"</string>
+<string name="grant_credentials_permission_message_footer">"ይህን ፈቃድ  እንዲፈቃድ ትፈለጋለህ ?"</string>
+<string name="grant_permissions_header_text">"ጥየቃን ድረስ"</string>
+<string name="allow">"ፍቀድ"</string>
+<string name="deny">"ውድቅ አድርግ"</string>
+<string name="permission_request_notification_title">"ፍቃድ ተጠይቋል"</string>
+<string name="permission_request_notification_with_subtitle">"ፍቃድ ለ<xliff:g id="account" example="foo@gmail.com">%s</xliff:g> መለያተጠይቋል"</string>
+<string name="input_method_binding_label">"የግብዓት ዘዴ"</string>
+<string name="sync_binding_label">"አመሳስል"</string>
+<string name="accessibility_binding_label">"ተደራሽነት"</string>
+<string name="wallpaper_binding_label">"ልጣፍ"</string>
+<string name="chooser_wallpaper">"ልጣፉን ቀይር"</string>
+<string name="pptp_vpn_description">"ነጥብ ወደ ነጥብ ማስተላለፊያ አሰራር"</string>
+<string name="l2tp_vpn_description">"ንጣፍ 2 ተነሊንግ ፕሮቶኮል"</string>
+<string name="l2tp_ipsec_psk_vpn_description">"ቅድመ መጋራት ቁልፍ  የተመረኮዘL2TP/IPSec VPN"</string>
+<string name="l2tp_ipsec_crt_vpn_description">"ምስክር ላይ የተመሰረተ L2TP/IPSec VPN"</string>
+<string name="upload_file">"ፋይል ምረጥ"</string>
+<string name="reset">"ዳግም አስጀምር"</string>
+<string name="submit">"አስገባ"</string>
+<string name="description_star">"ተፈላጊ"</string>
+<string name="car_mode_disable_notification_title">"መኪና ሁነት ተችሏል፡፡"</string>
+<string name="car_mode_disable_notification_message">"ወደ መኪና መውጫ ሁኔታ ምረጥ፡፡"</string>
+<string name="tethered_notification_title">"ቲተሪንግ ወይም ሆትስፖት ገባሪ"</string>
+<string name="cta_tethered_notification_title">"ቴተሪንግ"</string>
+<string name="tethered_notification_message">"ለማዋቀር ይንኩ"</string>
+<string name="throttle_warning_notification_title">"የክፍተኛ ሞባይል  ውሂብ ጥቅም"</string>
+<string name="throttle_warning_notification_message">"ስለ ሞባይል ውሂብ አጠቃቀም በተጨማሪ ለማወቅ ይንኩ"</string>
+<string name="throttled_notification_title">"የሞባይል ውሂብ ወሰን አልፏል"</string>
+<string name="throttled_notification_message">"ስለ ሞባይል ውሂብ አጠቃቀም በተጨማሪ ለማወቅ ይንኩ"</string>
+<string name="Low_Memory_Alert">"የስልክ ማከማቻው ቦታ እየቀነስ ነው፡፡ የስልኩን ደህንነት ለማረጋገጥ ጥቂት ውሂቦችን አስወግድ፡፡"</string>
+<string name="Low_Memory_Free">"ባዶ"</string>
+<string name="Low_Memory_Application">"መተግበሪያዎች"</string>
+<string name="Low_Memory_Mail">"ደብዳቤ"</string>
+<string name="Low_Memory_Sms_Mms">"SMS/MMS"</string>
+<string name="Low_Memory_System">"ስርዓት"</string>
+<string name="Btn_Select_Clear">"ምረጥ/ አጽዳ"</string>
+<string name="myAppTip">"ለመያዝ መተግበሪያዎችን ምረጥ"</string>
+<string name="myApp_Start_Btn">"ጀምር"</string>
+<string name="myApp_Move2Sd_ChkBox">"ወደ SD አንቀሳቅስ"</string>
+<string name="myApp_ClearData_ChkBox">"ውሂብን አጽዳ"</string>
+<string name="myApp_Uninstall_ChkBox">"አውርድ"</string>
+<string name="myAppLoading">"በማስገባት ላይ\u2026"</string>
+<string name="myAppProcessing">"በሂደት ላይ\u2026"</string>
+<string name="keyguard_password_enter_puk_code">"PUK ኮድ አስገባ"</string>
+<string name="keyguard_password_enter_new_pin_first_code">"አዲስ PIN ኮድ አስገባ"</string>
+<string name="keyguard_password_enter_new_pin_second_code">"እንደገና አዲስ PIN ኮድ አስገባ"</string>
+<string name="ums_active_notification_message">"USB ሰፊ ማከማቻ ነቅቷል"</string>
+<string name="modem_active_notification_title">"የሞደም ማረሚያ ሁነታ ተጠቀም"</string>
+<string name="modem_active_notification_message">"የሞደም ስህተት አራሚ ነቅቷል"</string>
+<string name="china_mobile_numeric_values">"ቻይና ሞባይል"</string>
+<string name="china_unicom_numeric_values">"China  Unicom"</string>
+<string name="china_telecom_numeric_values">"China  Telecom"</string>
+<string name="stk_refresh_sim_init_message">"SIM ካርድ በመታደስ ላይ"</string>
+<string name="stk_refresh_sim_reset_message">"ስልክ እንደገና ይንሳል"</string>
+<string name="custom_china_mobile">"ቻይና ሞባይል"</string>
+<string name="custom_china_unicom">"China  Unicom"</string>
+<string name="charge_active_notification_message">"ቻርጅ ብቻ ሁኔታ ተስችሏል"</string>
+<string name="charge_active_notification_title">"USB ሲያያዝ ሙሌት ብቻን ተጠቀም"</string>
+<string name="shutdown_after_seconds">"ስልኩ<xliff:g id="NUMBER">%d</xliff:g>ሰከንዶች  በኋላ  ይዘጋል"</string>
+<string name="lockscreen_password_error">"የይለፍ ቃሉ ተሳስቷል፣ እንደገና ይሞክሩ!"</string>
+<string name="lockscreen_too_many_password_failed_attempts_dialog_message">" የተሳሳተ የይለፍ ቃል መክፈቻ  አስገብተዋል  <xliff:g id="number">%d</xliff:g> ጊዚያት። \n\nእባክዎ እንደገና ይሞክሩ <xliff:g id="number">%d</xliff:g> ሴኮንዶች."</string>
+<string name="progress_unmounting" product="nosdcard">"USB ማከማቻ በነቀላ ላይ..."</string>
+<string name="progress_unmounting" product="default">"SD ካርድ በመንቀል ላይ..."</string>
+<string name="progress_erasing" product="nosdcard">"SD ማጠራቀሚያን በማጥፋት ላይ ..."</string>
+<string name="progress_erasing" product="default">"SD ካርዱን በማጥፋት ላይ ..."</string>
+<string name="format_error" product="nosdcard">"USB ማከማቻን ማጥፋት አልተቻለም"</string>
+<string name="format_error" product="default">"SD ካርዱን ማጥፋት አልተቻለም"</string>
+<string name="media_bad_removal">"SD ካርዱ ከመወገዱ በፊት ተወስዷል፡፡"</string>
+<string name="media_checking" product="nosdcard">"USB ማከማቻው በአሁን ውቅት እየተረጋገጠ ነው፡፡"</string>
+<string name="media_checking" product="default">"SD  ካርዱ  በአሁኑ ሰዓት  እየተፈተሸ ነው፡፡"</string>
+<string name="media_removed">"SD  ካርዱ ተወስዷል፡፡"</string>
+<string name="media_shared" product="nosdcard">"USB ማከማቻው በአሁን ወቅት በኮምፒውተሩ ጥቅም ላይ ነው፡፡"</string>
+<string name="media_shared" product="default">"SD  ካርዱ  በአሁኑ ሰዓት  ኮምፒውተሩ እየተጠቀመበት ነው፡፡"</string>
+<string name="media_unknown_state">"የውጪ መጫን  ሚዲያ ባልታወቀ ሁኔታ ላይ"</string>
+<string name="audio_play_failed">"ይቅርታ፣ ይህ ተሰሚ ሊጫወት አይችልም፡፡ ይህንን እንደ መጥሪያድምጽ አያዘጋጁ፡፡"</string>
+<string name="sms_full_title">"የጽሁፍ መልእክት ማህደረትውስታ ሞልቷል"</string>
+<string name="sms_full_body">"ማህደረ ማስታወሻው በመሙላቱ ምክንያት የመጣው መልእክት ተቀባይነት አላገኘም፡፡ እባክህ የቆዩ መልእክቶችን ሰርዝ፡፡"</string>
+<string name="dialog_warning">"ማስጠንቀቂያ"</string>
+<string name="internal_memory_low">"SD ማከማቻ ሊሞላ ተቃርቧል! እባክህ ባዶ ቦታ እንዲኖርህ ጥቂት ፋይሎችን ሰርዝ፡፡"</string>
+<string name="button_close">"ዝጋ"</string>
+<string name="unlock_screen_pin_error">"pin የተሳሳተ ነው!"</string>
+<string name="ap_disconnected">"ተቋርጧል"</string>
+<string name="sim_chooser_title">"SIM ምረጥ"</string>
+<string name="lockscreen_miss_phone">"ሚስ ስልክ"</string>
+<string name="lockscreen_miss_mms">"ሚስ sms"</string>
+<string name="lockscreen_sim_card_locked_message">"SIM ካርድ ተቆልፏል፡፡"</string>
+<string name="upload_file_size_too_large">"የሚሰቅሉት ፋይል በጣም ትልቅ ነው፣ እባክዎ ወደ ትንንሽ ፋይሎች ይከፋፍሉዋቸው"</string>
+<string name="cant_open_airplane_mode_when_phone_busy">"የአይሮፕላን ሁኔታን መክፈት አልተቻለም፣ ስልኩ አሁን በጥቅም ላይ ነው።"</string>
+<string name="staticip_invalid">" የተሳሳተ የማይነቃነቅ IP ማቀናበርያ፤የማይነቃነቅ IP ውቅረትአታስችል።"</string>
+</resources>

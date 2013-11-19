@@ -1,0 +1,990 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+<string name="address_length">"ທີ່ຢູ່ຄວາມຍາວເກີນຄ່າໃຫຍ່ສຸດ"</string>
+<string name="fileSizeSuffix">"<xliff:g id="number" example="123">%1$s</xliff:g><xliff:g id="unit" example="KB">%2$s</xliff:g>"</string>
+<string name="untitled">"ບໍ່ມີຊື່"</string>
+<string name="ellipsis">"\u2026"</string>
+<string name="emptyPhoneNumber">"(ໝາຍເລກໂທລະສັບບໍ່ມີ)"</string>
+<string name="unknownName">"(ບໍ່ຮູ້ຈັກ)"</string>
+<string name="defaultVoiceMailAlphaTag">"ຝາກຂໍ້ຄວາມສຽງ"</string>
+<string name="mmiError">"ເກີດບັນຫາການເຊື່ອມຕໍ່ຫຼືລະຫັດ MMI ບໍ່ຖືກຕ້ອງ."</string>
+<string name="mmiFdnError">"ຄົງທີ່ໝາຍເລກໂທພຽງຮູບແບບຂອງການດໍາເນີນການນີ້."</string>
+<string name="serviceEnabled">"ໄດ້ເປີດໃຊ້ຍໍລິການ."</string>
+<string name="serviceEnabledFor">"ໄດ້ຮັບການເປີດໃຊ້ງານສໍາລັບບໍລິການຕໍ່ໄປນີ້:"</string>
+<string name="serviceDisabled">"ໄດ້ຢຸດບໍລິການ."</string>
+<string name="serviceRegistered">"ລົງທະບຽນສໍາເລັດ."</string>
+<string name="serviceErased">"ລ້າງສໍາເລັດ."</string>
+<string name="passwordIncorrect">"ລະຫັດ​ຜ່ານ​ບໍ່​ຖືກຕ້ອງ"</string>
+<string name="passwordChange">"ລະຫັດໄດ້ປັບປຸງ"</string>
+<string name="mmiComplete">"ລະຫັດ MMI ໄດ້ສໍາເລັດ."</string>
+<string name="badPin">"ທ່ານພິມ PIN ເກົ່າບໍ່ຖືກຕ້ອງ."</string>
+<string name="badPin2">"ທ່ານພິມ PIN2 ເກົ່າບໍ່ຖືກຕ້ອງ."</string>
+<string name="badPuk">"ທ່ານພິມລະຫັດ PUK ບໍ່ຖືກຕ້ອງ."</string>
+<string name="badPuk2">"ທ່ານພິມລະຫັດ PUK2 ບໍ່ຖືກຕ້ອງ."</string>
+<string name="mismatchPin">"ທ່ານພິມລະຫັດ PIN ບໍ່ຄືກັນ."</string>
+<string name="mismatchPin2">"ທ່ານພິມລະຫັດ PIN2 ບໍ່ຄືກັນ."</string>
+<string name="mismatchPuk">"ທ່ານພິມລະຫັດ PUK ບໍ່ຄືກັນ."</string>
+<string name="mismatchPuk2">"ທ່ານພິມລະຫັດ PUK2 ບໍ່ຄືກັນ."</string>
+<string name="invalidPin">"ພິມລະຫັດ 4 ຫາ 8 ຕັວເລກຂອງ PIN."</string>
+<string name="invalidPuk">"ກະລຸນາພິມຢ່າງໜ້ອຍ 8 ຕັວເລກຂອງລະຫັດ PUK."</string>
+<string name="needPuk">"SIM ກາດ ໄດ້ດໍາເນີນການລ໋ອກ PUK.ພິມເຂົ້າເພື່ອປົດລ໋ອກ PUK."</string>
+<string name="needPuk2">"ພິມລະຫັດ PUK2 ເພື່ອປົດລ໋ອກ SIM ກາດ."</string>
+<string name="needPinLock">"SIMກາດ ລະຫັດPIN ບໍ່ໄດ້ເປີດ,ກະລຸນາເປີດລ໋ອກ PIN ."</string>
+<string name="ClipMmi">"ສະແດງສາຍເຂົ້າ"</string>
+<string name="ClirMmi">"ເບີໂທເຄື່ອງນີ້"</string>
+<string name="ColpMmi">"ສະແດງໝາຍເລກໂຕຈິງທີ່ຮັບຟັງ"</string>
+<string name="ColrMmi">"ເຊື່ອງໝາຍເລກໂຕຈິງທີ່ຮັບຟັງ"</string>
+<string name="CfMmi">"ການໂອນສາຍໂທເຂົ້າ"</string>
+<string name="UnConditionCfMmi">"ໂອງສາຍທີ່ບໍ່ມີເງື່ອນໄຂ"</string>
+<string name="BusyCfMmi">"ໂອນສາຍໃນເວລາບໍ່ຫວ່າງ"</string>
+<string name="NoReplyCfMmi">"ໂອນສາຍໃນເວລາສາຍເຂົ້າທີ່ບໍ່ມີການຕອບຮັບ"</string>
+<string name="NotReachCfMmi">"ໂອນສາຍໃນເວລາທີ່ບໍ່ສາມາດຕິດຕໍ່ໄດ້"</string>
+<string name="AllCfMmi">"ການຮັບສາຍໂອນເອີ້ນເຂົ້າທັງໝົດ"</string>
+<string name="ConditionCfMmi">"ເລື່ອນໄຂສາຍເອີ້ນເຂົ້າທັງໝົດໄດ້ໂອນສາຍ"</string>
+<string name="CwMmi">"ລໍສາຍ"</string>
+<string name="BaMmi">"ຈໍາກັດສາຍໂທອອກ"</string>
+<string name="BaocMmi">"ຈໍາກັດສາຍໂທອອກທັງໝົດ"</string>
+<string name="BaoicMmi">"ຈໍາກັດສາຍໂທອອກທັງໝົດ"</string>
+<string name="BaoicxhMmi">"ນອກຈາກພາຍໃນແລ້ວຈໍາກັດສາຍໂທອອກຕ່າງປະເທດທັງໝົດ"</string>
+<string name="BaicMmi">"ຈໍາກັດສາຍເອີ້ນເຂົ້າທັງໝົດ"</string>
+<string name="BaicrMmi">"ຈໍາກັດສາຍເອີ້ນເຂົ້າເວລາຢູ່ຕ່າງແດນ"</string>
+<string name="BaallMmi">"ການເຂົ້າໃຈ"</string>
+<string name="BamoMmi">"ທັງໝົດຍົກເວັ້ນການບໍລິການທີ່ອອກໄປ"</string>
+<string name="BamtMmi">"ທັງໝົດຍົກເວັ້ນການບໍລິການທີ່ເຂົ້າມາ"</string>
+<string name="ActiveUnconCf">"ເປີດໃຊ້ການໂອນສາຍທີ່ບໍ່ມີເງື່ອນໄຂສາຍໂທອອກ"</string>
+<string name="ActiveConCf">"ເປີດໃຊ້ການໂອນສາຍທີ່ມີເງື່ອນໄຂສາຍໂທອອກ"</string>
+<string name="CallForwarded">"ສາຍໂທອອກໄດ້ໂອນສາຍ"</string>
+<string name="CallWaiting">"ລໍສາຍ"</string>
+<string name="CugCall">"ໂທ CUG"</string>
+<string name="OutCallBarred">"ການໂທອອກໄດ້ຖືກຢຸດ"</string>
+<string name="InCallBarred">"ການເອີ້ນເຂົ້າໄດ້ຖືກຢຸດ"</string>
+<string name="ClirRejected">"CLIRໄດ້ຖືກຢຸດ"</string>
+<string name="ForwardedCall">"ໂອນສາຍເອີ້ນເຂົ້າ"</string>
+<string name="CallHold">"ສາຍໄດ້ຖືກບຣ໋ອກ"</string>
+<string name="CallRetrieved">"ສາຍໄດ້ເປີດໃຊ້ງານ"</string>
+<string name="MultiCall">"ເຂົ້າສູ່ການສົນທະນາຫຼາຍຝ່າຍ"</string>
+<string name="HoldCallReleased">"ໄດ້ຮັບການປົດປ່ອຍອອກມາຈາກການລ໋ອກສາຍ"</string>
+<string name="ConnectingEct">"ກໍາລັງເຊື່ອມຕໍ່ ECT"</string>
+<string name="ConnectedEct">"ເຊື່ອມຕໍ່ ECT"</string>
+<string name="IncomingCallForwarded">"ໄດ້ໂອນສາຍເອີ້ນເຂົ້າ"</string>
+<string name="PwdMmi">"ປ່ຽນແປງລະຫັດ"</string>
+<string name="PinMmi">"ປ່ຽນລະຫັດ PIN "</string>
+<string name="Pin2Mmi">"ປ່ຽນລະຫັດ PIN2 "</string>
+<string name="PukMmi">"ປົດລະຫັດລ໋ອກ PIN"</string>
+<string name="Puk2Mmi">"ປົດລະຫັດລ໋ອກ PIN2"</string>
+<string name="CnipMmi">"ສະແດງໝາຍເລກ"</string>
+<string name="CnirMmi">"ສະແດງສາຍເອີ້ນເຂົ້າຖືກຈໍາກັດ"</string>
+<string name="ThreeWCMmi">"ສົນທະນາສາມຝ່າຍ"</string>
+<string name="RuacMmi">"ປະຕິເສດບໍ່ຢາກຮັບສຽງລົບກວນ"</string>
+<string name="CndMmi">"ສົ່ງໝາຍເລກໂທອອກ"</string>
+<string name="DndMmi">"ຫ້າມລົບກວນ"</string>
+<string name="CLIRDefaultOnNextCallOn">"ບໍ່ສະແດງໝາຍເລກເຄື່ອງນີ້,ແລະບໍ່ສະແດງການສົນທະນາ:ໃນຄັ້ງໜ້າ"</string>
+<string name="CLIRDefaultOnNextCallOff">"ບໍ່ສະແດງໝາຍເລກເຄື່ອງນີ້,ແລະສະແດງການສົນທະນາ:ໃນຄັ້ງໜ້າ"</string>
+<string name="CLIRDefaultOffNextCallOn">"ສະແດງໝາຍເລກເຄື່ອງນີ້,ແລະບໍ່ສະແດງການສົນທະນາ:ໃນຄັ້ງໜ້າ"</string>
+<string name="CLIRDefaultOffNextCallOff">"ສະແດງໝາຍເລກເຄື່ອງນີ້,ແລະສະແດງການສົນທະນາ:ໃນຄັ້ງໜ້າ"</string>
+<string name="serviceNotProvisioned">"ບໍ່ໄດ້ສະໜອງການບໍລິການ."</string>
+<string name="CLIRPermanent">"ຕັ້ງຄ່າສະແດງໝາຍເລກເຄື່ອງນີ້ບໍ່ສາມາດປ່ຽຮແປງໄດ້."</string>
+<string name="RestrictedChangedTitle">"ສະຖານທີ່ຈໍາກັດການເຂົ້າເຖິງທີ່ມີການປ່ຽນແປງ"</string>
+<string name="RestrictedOnData">"ການບໍລິການຂໍ້ມູນໄດ້ຢຸດໃຊ້."</string>
+<string name="RestrictedOnEmergency">"ບໍລິການສຸກເສີນໄດ້ຢຸດໃຊ້."</string>
+<string name="RestrictedOnNormal">"ໄດຢຸດໃຊ້ພາສາສຽງຄົ້ນຫາ."</string>
+<string name="RestrictedOnAllVoice">"ໄດ້ຢຸດໃຊ້ການບໍລິການພາສາສຽງທັງໝົດ."</string>
+<string name="RestrictedOnSms">"ໄດ້ຢຸດໃຊ້ບໍລິການຂໍ້ຄວາມ."</string>
+<string name="RestrictedOnVoiceData">"ໄດ້ຢຸດໃຊ້ພາສາສຽງ/ຂໍ້ມູນບໍລິການ."</string>
+<string name="RestrictedOnVoiceSms">"ພາສາສຽງ/SMS ບໍລິການໄດ້ຖືກບຣ໋ອກ."</string>
+<string name="RestrictedOnAll">"ໄດ້ຢຸດໃຊ້ພາສາສຽງທັງໝົດ/ຂໍ້ມູນ/ການບໍລິການ SMS."</string>
+<string name="serviceClassVoice">"ສຽງ"</string>
+<string name="serviceClassData">"ຂໍ້ມູນ"</string>
+<string name="serviceClassFAX">"ແຟ໋ກ"</string>
+<string name="serviceClassSMS">SMS</string>
+<string name="serviceClassDataAsync">"Async"</string>
+<string name="serviceClassDataSync">"ໄປພ້ອມກັນ"</string>
+<string name="serviceClassPacket">"ແພກເກັດ"</string>
+<string name="roamingText0">"ເປີດໃຊ້ເຄື່ອງໝາຍສະແດງບໍລິການຂ້າມແດນ"</string>
+<string name="roamingText1">"ປິດໃຊ້ເຄື່ອງໝາຍສະແດງບໍລິການຂ້າມແດນ"</string>
+<string name="roamingText2">"ຕົວບົ່ງກະພິບສະແດງເຄື່ອງໝາຍບໍລິການຂ້າມແດນ"</string>
+<string name="roamingText3">"ບໍ່ຢູ່ໃກ້ຄຽງ"</string>
+<string name="roamingText4">"ນອກຫ້ອງ"</string>
+<string name="roamingText5">"ບໍລິການຂ້າມແດນ-ເລືອກລະບົບທໍາອິດ"</string>
+<string name="roamingText6">"ບໍລິການຂ້າມແດນ-ລະບົບທີ່ໃຊ້ໄດ້"</string>
+<string name="roamingText7">"ບໍລິການຂ້າມແດນ-ພັນທະມິດ"</string>
+<string name="roamingText8">"ບໍລິການຂ້າມແດນ-ການຮ່ວມມືຂັ້ນສູງ"</string>
+<string name="roamingText9">"ບໍລິການຂ້າມແດນ-ຟັງຊັ້ນບໍລິການທັງໝົດ"</string>
+<string name="roamingText10">"ບໍລິການຂ້າມແດນ-ຟັງຊັ້ນບໍລິການບໍ່ຄົບຖ້ວນ"</string>
+<string name="roamingText11">"ເປີດບໍລິການຂ້າມແດນແບນເນີ້"</string>
+<string name="roamingText12">"ປິດບໍລິການຂ້າມແດນແບນເນີ້"</string>
+<string name="roamingTextSearching">"ກໍາລັງຄົ້ນຫາບໍລິການ"</string>
+<string name="cfTemplateNotForwarded">"<xliff:g id="bearer_service_code">{0}</xliff:g>:ບໍ່ສາມາດໂອນສາຍ"</string>
+<string name="cfTemplateForwarded">"<xliff:g id="bearer_service_code">{0}</xliff:g>: <xliff:g id="dialing_number">{1}</xliff:g>"</string>
+<string name="cfTemplateForwardedTime">"<xliff:g id="bearer_service_code">{0}</xliff:g>: <xliff:g id="dialing_number">{1}</xliff:g>  ຫຼັງຈາກ<xliff:g id="time_delay">{2}</xliff:g> seconds"</string>
+<string name="cfTemplateRegistered">"<xliff:g id="bearer_service_code">{0}</xliff:g>:ບໍ່ສາມາດໂອນສາຍ"</string>
+<string name="cfTemplateRegisteredTime">"<xliff:g id="bearer_service_code">{0}</xliff:g>:ບໍ່ສາມາດໂອນສາຍ"</string>
+<string name="fcComplete">"ລະຫັດທີ່ມີລັກສະນະພິເສດສົມບູນ"</string>
+<string name="fcError">"ເກີດບັນຫາການເຊືອມຕໍ່ຫຼືລະຫັດຟັງຊັ້ນບໍ່ຖືກຕ້ອງ."</string>
+<string name="httpErrorOk"></string>
+<string name="httpError">"ເວັບໄຊ້ນີ້ມີຂໍ້ຜິດພາດ."</string>
+<string name="httpErrorLookup">"ຊອກທີ່ຢູ່ເວັບນີ້ບໍ່ເຫັນ."</string>
+<string name="httpErrorUnsupportedAuthScheme">"ເວັບໄຊ້ນີ້ບໍ່ສະໜັບສະໜູນການກວດສອບແຜນນີ້."</string>
+<string name="httpErrorAuth">"ການຢືນຢັນລົ້ມເຫຼວ."</string>
+<string name="httpErrorProxyAuth">"ຜ່ານການກວດສອບພອດຊື້ເຊີເວີ້ລົ້ມເຫຼວ."</string>
+<string name="httpErrorConnect">"ບໍ່ໄດ້ເຊື່ອມຕໍ່ກັບເຊີເວີ້."</string>
+<string name="httpErrorIO">"ເຊີເວີ້ນີ້ບໍ່ສາມາດສື່ສານ,ກະລຸນາລອງໃໝ່ຄັ້ງໜ້າ."</string>
+<string name="httpErrorTimeout">"ກັບການເຊື່ອມຕໍ່ເຊີເວີ້ໄດ້ເກີນເວລາ."</string>
+<string name="httpErrorRedirectLoop">"ໜ້າປ່ຽນເສັ້ນທາງມີເຊີເວີ້ຫຼາຍເກີນໄປ."</string>
+<string name="httpErrorUnsupportedScheme">"ບໍ່ສະໜັບສະໜູນຂໍ້ຕົກລົງນີ້."</string>
+<string name="httpErrorFailedSslHandshake">"ບໍ່ສາມາດສ້າງການເຊື່ອມຕໍ່ທີ່ປອດໄພ."</string>
+<string name="httpErrorBadUrl">"ທີຢູ່ເວັບບໍ່ຖືກຕ້ອງ,ເວັບນີ້ບໍ່ສາມາດເປີດ."</string>
+<string name="httpErrorFile">"ບໍ່ສາມາດເຂົ້າເຖິງໄຟ້ນີ້."</string>
+<string name="httpErrorFileNotFound">"ຊອກໄຟ້ຮ້ອງຂໍບໍ່ພົບ."</string>
+<string name="httpErrorTooManyRequests">"ກໍາລັງຈັດການຄໍາຮ້ອງຂໍທີ່ຫຼາຍເກີນໄປ.ກະລຸນາລອງໃໝ່ພາຍໜ້າ."</string>
+<string name="notification_title">"<xliff:g id="account" example="foo@gmail.com">%1$s</xliff:g>ການເຂົ້າສູ່ລະບົບເກີດຜິດພາດ"</string>
+<string name="contentServiceSync">"ໄປພ້ອມກັນ"</string>
+<string name="contentServiceSyncNotificationTitle">"ໄປພ້ອມກັນ"</string>
+<string name="contentServiceTooManyDeletesNotificationDesc">"ຫຼາຍເກີນໄປ<xliff:g id="content_type">%s</xliff:g>ລົບລາຍການ."</string>
+<string name="low_memory">"ຈັດເກັບຂໍ້ມູນມືຖືໄດ້ໃຊ້ໝົດ!ກະລຸນາລົບໄຟ້ບາງໄຟ້ເພື່ອເພ່ມພຶ້ນທີ່ຫວ່າງ."</string>
+<string name="me">"ຂ້ອຍ"</string>
+<string name="power_dialog">"ຕົວເລືອກມືຖື"</string>
+<string name="silent_mode">"ໂໝດສຽງງຽບ"</string>
+<string name="turn_on_radio">"ເປີດວິທະຍຸ"</string>
+<string name="turn_off_radio">"ປິດວິທະຍຸ"</string>
+<string name="screen_lock">"ສະໄຕຣການລອກໜ້າຈໍ"</string>
+<string name="power_off">"ບ່ອນເປີດເຄື່ອງປິດ"</string>
+<string name="shutdown_progress">"ກໍາລັງປິດ\u2026"</string>
+<string name="shutdown_confirm">"ມືຖືຂອງທ່ານຈະປິດເຄື່ອງ."</string>
+<string name="recent_tasks_title">"ບໍ່ດົນມານີ້ ( ໄວໆນີ້ )"</string>
+<string name="no_recent_tasks">"ບໍ່ມີໂປຣແກມປະຍຸກໃນໄລຍະນີ້."</string>
+<string name="global_actions">"ຕົວເລືອກມືຖື"</string>
+<string name="global_action_lock">"ສະໄຕຣການລອກໜ້າຈໍ"</string>
+<string name="global_action_power_off">"ບ່ອນເປີດເຄື່ອງປິດ"</string>
+<string name="global_action_toggle_silent_mode">"ໂໝດສຽງງຽບ"</string>
+<string name="global_action_silent_mode_on_status">"ສຽງໄດ້ປິດ"</string>
+<string name="global_action_silent_mode_off_status">"ສຽງໄດ້ເປີດ"</string>
+<string name="global_actions_toggle_airplane_mode">"ໂໝດເຮືອບິນ"</string>
+<string name="global_actions_airplane_mode_on_status">"ເປີດໂໝດບິນ"</string>
+<string name="global_actions_airplane_mode_off_status">"ປິດໂໝດບິນ"</string>
+<string name="safeMode">"ໂໝດຄວາມປອດໄພ"</string>
+<string name="android_system_label">"ລະບົບ Android"</string>
+<string name="permgrouplab_costMoney">"ທ່ານຕ້ອງຈ່າຍສໍາລັບຄ່າບໍລິການ"</string>
+<string name="permgroupdesc_costMoney">"ຊ່ວຍໃຫ້ໂປແກມເຮັດໃນສິ່ງທີ່ທ່ານສາມາດໃຊ້ເງິນ."</string>
+<string name="permgrouplab_messages">"ຂໍ້ມູນຂອງທ່ານ"</string>
+<string name="permgroupdesc_messages">""</string>
+<string name="permgrouplab_personalInfo">"ຂໍ້ມູນສ່ວນຕົວຂອງທ່ານ"</string>
+<string name="permgroupdesc_personalInfo">"ການເຂົ້າເຖິງໂດຍກົງໄປຍັງລາຍຊື່ຕິດຕໍ່ຊອງທ່ານແລະປະຕິທິນທີ່ຈັດເກັບໄວ້ໃນໂທລະສັບ."</string>
+<string name="permgrouplab_location">"ຕໍາແໜ່ງຂອງທ່ານ"</string>
+<string name="permgroupdesc_location">"ກວດສອບຕໍາແໜ່ງຟີຊິກຂອງທ່ານ"</string>
+<string name="permgrouplab_network">"ການຊື່ສານເຄື່ອຄ່າຍ"</string>
+<string name="permgroupdesc_network">"ຊ່ວຍໃຫ້ໂປແກມເຂົ້າເຖິງຄຸນລັກສະນະຂອງເຄືອຂ່າຍຕ່າງໆ."</string>
+<string name="permgrouplab_accounts">"ແອກເຄົ້າຂອງທ່ານ"</string>
+<string name="permgroupdesc_accounts">"ການເຂົ້າເຖິງແອກເຄົ້າທີ່ໃຊ້ໄດ້."</string>
+<string name="permgrouplab_hardwareControls">"ຄວບຄຸມຮາກແວ"</string>
+<string name="permgroupdesc_hardwareControls">""</string>
+<string name="permgrouplab_phoneCalls">"ການສົນທະນາມືຖື"</string>
+<string name="permgroupdesc_phoneCalls">"ການຕິດຕາມການເຄື່ອນໄຫວ, ການບັນທຶກ, ແລະຂະບວນການໂທ."</string>
+<string name="permgrouplab_systemTools">"ເຄື່ອງມືລະບົບ"</string>
+<string name="permgroupdesc_systemTools">"ການເຂົ້າເຖິງລະດັບຕ່ຳກວ່າ ແລະການຄວບຄຸມຂອງລະບົບ."</string>
+<string name="permgrouplab_developmentTools">"ເຄື່ອງມືພັດທະນາ"</string>
+<string name="permgroupdesc_developmentTools">"ປະຕິທິນ"</string>
+<string name="permgrouplab_storage">"ບ່ອນເກັບຂໍ້ມູນ"</string>
+<string name="permgroupdesc_storage" product="nosdcard">"ເຂົ້າເຖິງອຸປະກອນເກັບຂໍ້ມູນ USB ."</string>
+<string name="permgroupdesc_storage" product="default">"ເຂົ້າເຖິງ SDກາດ."</string>
+<string name="permlab_statusBar">"ຢຸດໃຊ້ຫຼືປັບປ່ຽນແຖບສະຖານະ"</string>
+<string name="permdesc_statusBar">"ຊ່ວຍໃຫ້ໂປແກມປິດການໃຊ້ງານແຖບສະຖານະ ຫຼື ເພີ້ມແລະລົບໄອຄອນຂອງລະບົບ."</string>
+<string name="permlab_statusBarService">"ແຖບສະຖານະ"</string>
+<string name="permdesc_statusBarService">"ອະນຸຍາດໄຫ້ຮູບແບບຂອງແຖບສະຖານະຈະສະແດງການປະຍຸກໃຊ້."</string>
+<string name="permlab_expandStatusBar">"ຂະຫຍາຍ/ຍຸບແທບສະຖານະ"</string>
+<string name="permdesc_expandStatusBar">"ຊ່ວຍໃຫ້ໂປແກມຂະຫຍາຍ ຫຼື ຍົກເລີກແຖບທີ່ສະແດງສະຖານະ."</string>
+<string name="permlab_processOutgoingCalls">"ສະກັດກັ້ນສາຍໂທອອກ"</string>
+<string name="permdesc_processOutgoingCalls">"ຊ່ວຍໃຫ້ໂປແກມດຳເນີນການໂທອອກແລະປ່ຽນໝາຍເລກທີ່ຈະໂທອອກ. ໂປແກມທີ່ເປັນອັນຕະລາຍອາດຈະຕິດຕາມກວດກາ, ປ່ຽນເສັ້ນທາງ, ຫຼືປ້ອງກັນການໂທອອກ."</string>
+<string name="permlab_receiveSms">"ຮັບຂໍ້ຄວາມ"</string>
+<string name="permdesc_receiveSms">"ຊ່ວຍໃຫ້ໂປແກມຮັບແລະຈັດການກັບຂໍ້ຄວາມ MMS. ໂປແກມອັນຕະລາຍອາດຈະກວດສອບຕິດຕາມຂໍ້ຄວາມຂອງທ່ານແລະລົບພວກມັນອອກໂດຍປະສະຈາກການສະແດງພວກມັນໃຫ້ທ່ານເຫັນ."</string>
+<string name="permlab_receiveMms">"ຮັບ MMS"</string>
+<string name="permdesc_receiveMms">"ຊ່ວຍໃຫ້ໂປແກມຮັບແລະຈັດການກັບຂໍ້ຄວາມ MMS. ໂປແກມອັນຕະລາຍອາດຈະກວດສອບຕິດຕາມຂໍ້ຄວາມຂອງທ່ານແລະລົບພວກມັນອອກໂດຍປະສະຈາກການສະແດງພວກມັນໃຫ້ທ່ານເຫັນ."</string>
+<string name="permlab_sendSms">"ສົ່ງຂໍ້ຄວາມ"</string>
+<string name="permdesc_sendSms">"ຊ່ວຍໃຫ້ໂປແກມສົ່ງຂໍ້ຄວາມ SMS. ໂປແກມທີ່ເປັນອັນຕະລາຍອາດຈະເຮັດໃຫ້ທ່ານມີຄ່າໃຊ້ຈ່າຍໂດຍການສົ່ງຂໍ້ຄວາມໂດຍປະສະຈາກການຢືນຢັນຂອງທ່ານ."</string>
+<string name="permlab_readSms">"ອ່ານຂໍ້ຄວາມແລະ MMS"</string>
+<string name="permdesc_readSms">"ຊ່ວຍໃຫ້ໂປແກມອ່ານຂໍ້ຄວາມ SMS ທີ່ຈັດເກັບໄວ້ໃນໂທລະສັບ ຫຼື SIM ກາດຂອງທ່ານ. ໂປແກມທີ່ເປັນອັນຕະລາຍອາດຈະອ່ານຂໍ້ຄວາມທີ່ເປັນຄວາມລັບຂອງທ່ານ."</string>
+<string name="permlab_writeSms">"ດັດແກ້ SMS ຫຼື MMS"</string>
+<string name="permdesc_writeSms">"ຊ່ວຍໃຫ້ໂປແກມຂຽນຂໍ້ຄວາມ SMS ຈັດເກັບໄວ້ໃນໂທລະສັບ ຫຼື SIM ກາດຂອງທ່ານ. ໂປແກມອັນຕະລາຍອາດຈະລົບຂໍ້ຄວາມຂອງທ່ານ."</string>
+<string name="permlab_receiveWapPush">"ຮັບ WAP"</string>
+<string name="permdesc_receiveWapPush">"ກໍາລັງຢຸດ"</string>
+<string name="permlab_getTasks">"ຄົ້ນຫາໂປຣແກມປະຍຸກທີ່ດໍາເນີນໃນຂະນະນີ້"</string>
+<string name="permdesc_getTasks">"ຊ່ວຍໃຫ້ໂປແກມດຶງເອົາຂໍ້ມູນກ່ຽວກັບການດຳເນີນງານໃນປະຈຸບັນແລະເມື່ອບໍ່ດົນມານີ້. ອາດຈະເຮັດໃຫ້ໂປແກມທີ່ເປັນອັນຕະລາຍຄົ້ນພົບຂໍ້ມູນສ່ວນຕົວກ່ຽວກັບໂປແກມການໃຊ້ງານອື່ນໆ."</string>
+<string name="permlab_reorderTasks">"ກໍາລັງດໍາເນີນງານຂອງໂປຣແກມປະຍຸກຈະຈັດລໍາດັບຄືນ"</string>
+<string name="permdesc_reorderTasks">""</string>
+<string name="permlab_setDebugApp">"ເປີດໃຊ້ການປັບໂປຣແກມປະຍຸກ"</string>
+<string name="permdesc_setDebugApp">""</string>
+<string name="permlab_changeConfiguration">"ປ່ຽນການຕັ້ງຄ່າອິນເຕີເຟດຜູ້ໃຊ້"</string>
+<string name="permdesc_changeConfiguration">""</string>
+<string name="permlab_enableCarMode">"ເປີດໃຊ້ມືຖືໃນລົດ"</string>
+<string name="permdesc_enableCarMode">"ຊ່ວຍໃຫ້ໂປແກມເປີດໃຊ້ງານໃນໂໝດຂອງລົດ."</string>
+<string name="permlab_killBackgroundProcesses">"ຢຸດຂະບວນການພຶ້ນຫຼັງ"</string>
+<string name="permdesc_killBackgroundProcesses">"ຊ່ວຍໃຫ້ໂປແກມທຳລາຍຂັ້ນຕອນເບື້ອງຫຼັງຂອງໂປແກມອື່ນໆ, ເຖິງແມ່ນວ່າຄວາມຈຳບໍ່\ຕ່ຳ."</string>
+<string name="permlab_forceStopPackages">"ຢຸດບັງຄັບໂປຣແກມປະຍຸກອື່ນໆ"</string>
+<string name="permdesc_forceStopPackages">"ຊ່ວຍໃຫ້ໂປແກມບັງຄັບຢຸດການໃຊ້ງານຂອງໂປແກມອື່ນ."</string>
+<string name="permlab_forceBack">"ການບັງຄັບໂປແກມໃຫ້ປິດ"</string>
+<string name="permdesc_forceBack">""</string>
+<string name="permlab_dump">"ຄົ້ນຫາສະຖານະລະບົບພາຍໃນ"</string>
+<string name="permdesc_dump">"ຊ່ວຍໃຫ້ໂປແກມດຶງເອົາສະພາວະພາຍໃນຂອງລະບົບ. ໂປແກມທີ່ເປັນອັນຕະລາຍອາດຈະດຶງເອົາຂໍ້ມູນສ່ວນຕົວແລະຂໍ້ມູນທີ່ມີຄວາມປອດໄພຫຼາຍໆຢ່າງທີ່ປົກກະຕິແລ້ວພວກເຂົາບໍ່ເຄີຍຕ້ອງການ."</string>
+<string name="permlab_shutdown">"ພາກສ່ວນປິດເຄື່ອງ"</string>
+<string name="permdesc_shutdown">""</string>
+<string name="permlab_stopAppSwitches">"ຢຸດການສັບປ່ຽນໂປຣແກມປະຍຸກ"</string>
+<string name="permdesc_stopAppSwitches">"ປ້ອງກັນຜູ້ໃຊ້ຈາກການປ່ຽນໄປໃຊ້ໂປແກມອື່ນ."</string>
+<string name="permlab_runSetActivityWatcher">"ເລີ່ມຕົ້ນກວດສອບການໃຊ້ງານໂປຣແກມປະຍຸກທັງໝົດ"</string>
+<string name="permdesc_runSetActivityWatcher">""</string>
+<string name="permlab_broadcastPackageRemoved">"ແພດເກັດສົ່ງອອກອາກາດລົບ"</string>
+<string name="permdesc_broadcastPackageRemoved">"ຊ່ວຍໃຫ້ໂປແກມປະກາດແຈ້ງເຕືອນວ່າ ແພັກແກັດໂປແກມໄດ້ຖືກລົບອອກແລ້ວ. ໂປແກມທີ່ເປັນອັນຕະລາຍອາດນຳໃຊ້ວິທີນີ້ເພື່ອທຳລາຍໂປແກມອື່ນໆທີ່ກຳລັງໃຊ້ງານຢູ່."</string>
+<string name="permlab_broadcastSmsReceived">"ສົ່ງຂໍ້ຄວາມທີ່ໄດ້ຮັບການອອກອາກາດ"</string>
+<string name="permdesc_broadcastSmsReceived">"ຊ່ວຍໃຫ້ໂປແກມປະກາດແຈ້ງເຕືອນວ່າ ຂໍ້ຄວາມ SMS ໄດ້ຮັບແລ້ວ. ໂປແກມທີ່ເປັນອັນຕະລາຍອາດນຳໃຊ້ວິທີນີ້ເພື່ອປອມແປງຂໍ້ຄວາມ SMS ທີ່ເຂົ້າມາ."</string>
+<string name="permlab_broadcastWapPush">"ສົ່ງ WAP-PUSH ໄດ້ຮັບການກະຈາຍສຽງ"</string>
+<string name="permdesc_broadcastWapPush">"ຊ່ວຍໃຫ້ໂປແກມປະກາດແຈ້ງເຕືອນວ່າ ຂໍ້ຄວາມ WAP PUSH ໄດ້ຮັບແລ້ວ . ໂປແກມທີ່ເປັນອັນຕະລາຍອາດນຳໃຊ້ວິທີນີ້ເພື່ອປອມແປງຂໍ້ຄວາມ MMS ທີ່ໄດ້ຮັບ ຫຼື ເພື່ອແທນທີ່ເນື້ອຫາຂອງທຸກໆໜ້າເວບຢ່າງງຽບໆກັບຂໍ້ຄວາມແຕກຕ່າງທີ່ມີເຈດຕະນາບໍ່ດີ."</string>
+<string name="permlab_setProcessLimit">"ຂີດຈຳກັດຂອງຂະບວນການທຳງານ"</string>
+<string name="permdesc_setProcessLimit">"ຊ່ວຍໃຫ້ໂປແກມຄວບຄຸມຈຳນວນສູງສຸດຂອງຂະບວນການທີ່ຈະດຳເນີນງານ. ບໍ່ຈຳເປັນສຳລັບໂປແກມການໃຊ້ງານປົກກະຕິ."</string>
+<string name="permlab_setAlwaysFinish">"ເປີດການໃຊ້ງານພຶ້ນຫຼັງໂປຣແກມປະຍຸກທັງໝົດ"</string>
+<string name="permdesc_setAlwaysFinish">"ຊ່ວຍໃຫ້ໂປແກມຄວບຄຸມວ່າກິດຈະກຳຈະສຳເລັດສະເໝີໄວເທົ່າທີ່ພວກມັນກັບໄປທີ່ເບື້ອງຫຼັງ. ບໍ່ຈຳເປັນສຳລັບໂປແກມໃຊ້ງານທົ່ວໄປ."</string>
+<string name="permlab_batteryStats">"ແກ້ໄຂສະຖິຕິຂອງແບດເຕີລີ້"</string>
+<string name="permdesc_batteryStats">"ຊ່ວຍໃຫ້ປັບປ່ຽນແກ້ໄຂກ່ຽວກັບສະຖິຕິແບັດເຕີຣີທີ່ຖືກລວບລວມ. ບໍ່ແມ່ນສຳລັບການໃຊ້ກັບໂປແກມການໃຊ້ງານທົ່ວໄປ."</string>
+<string name="permlab_backup">"ຄວບຄຸມລະບົບສໍາຮອງຂໍ້ມູນແລະການກູ້ຄືນ"</string>
+<string name="permdesc_backup">"ຊ່ວຍໃຫ້ໂປແກມຄວບຄຸມ\ສຳລອງຂໍ້ມູນແລະວິທີການເອົາຂໍ້ມູນກັບຄືນ. ບໍ່ແມ່ນສຳລັບການໃຊ້ກັບໂປແກມການໃຊ້ງານທົ່ວໄປ."</string>
+<string name="permlab_internalSystemWindow">"ໜ້າຕ່າງບໍ່ໄດ້ຮັບອະນຸຍາດ"</string>
+<string name="permdesc_internalSystemWindow">"ຊ່ວຍໃຫ້ໂປແກມສ້າງວິນໂດ ທີ່ມີຈຸດປະສົງເພື່ອນຳໃຊ້ໂດຍຕິດຕໍ່ກັບຜູ້ໃຊ້ລະບົບພາຍໃນ. ບໍ່ແມ່ນເພື່ອໃຊ້ກັບໂປແກມທົ່ວໄປ."</string>
+<string name="permlab_systemAlertWindow">"ສະແດງການແຈ້ງເຕືອນໃນລະດັບລະບົບ"</string>
+<string name="permdesc_systemAlertWindow">"ຊ່ວຍໃຫ້ໂປແກມສະແດງລະລົບການເຕືອນວິນໂດ. ໂປແກມທີ່ເປັນອັນຕະລາຍສາມາດເຂົ້າໄປຄວບຄຸມໜ້າຈໍທັງໝົດຂອງໂທລະສັບ."</string>
+<string name="permlab_setAnimationScale">"ແກ້ໄຂຄວາມໄວໃນການເຄື່ອນໄຫວທັງໝົດ"</string>
+<string name="permdesc_setAnimationScale">"ຊ່ວຍໃຫ້ໂປແກມມີການປ່ຽນແປງຄວາມໄວຂອງການເຄື່ອນໄຫວທົ່ວໂລກ( ພາບເຄື່ອນໄຫວທີ່ໄວກວ່າ ຫຼື ຊ້າກວ່າ) ໄດ້ທຸກເວລາ."</string>
+<string name="permlab_manageAppTokens">"ຄວບຄຸມປ້າຍສັ່ງໂປຣແກມປະຍຸກ"</string>
+<string name="permdesc_manageAppTokens">"ຊ່ວຍໃຫ້ໂປແກມສ້າງແລະບໍລິຫານຈັດການກັບສັນຍານຂອງພວກມັນເອງ ໂດຍຜ່ານການຈັດລຽງ Z- ຕາມປົກກະຕິຂອງພວກມັນ. ບໍ່ຄວນທີ່ຈະຈຳເປັນສຳລັບໂປແກມໃຊ້ງານທົ່ວໄປ."</string>
+<string name="permlab_injectEvents">"ກົດປຸ່ມແລະປຸ່ມຄວບຄຸມ"</string>
+<string name="permdesc_injectEvents">"ຊ່ວຍໃຫ້ໂປແກມນຳສົ່ງເຫດການຂໍ້ມູນຂອງຕົວມັນເອງ(ກົດປຸ່ມ, ອື່ນໆ.) ໄປຍັງໂປແກມອື່ນໆ. ໂປແກມທີ່ເປັນອັນຕະລາຍສາມາດໃຊ້ສິ່ງນີ້ໃນການເຂົ້າຄວບຄຸມໂທລະສັບ."</string>
+<string name="permlab_readInputState">"ບັນທຶກສິ່ງທີ່ທ່ານພິມແລະດໍາເນີນການຂອງການກະທໍາ"</string>
+<string name="permdesc_readInputState">"ຊ່ວຍໃຫ້ໂປແກມຄອຍເບິ່ງປຸ່ມທີ່ທ່ານກົດ ເຖິງແມ່ນວ່າເມື່ອມີການໂຕ້ຕອບກັບໂປແກມອື່ນໆ( ເຊັ່ນ ການປ້ອນລະຫັດຜ່ານ). ບໍ່ຄວນທີ່ຈະຈຳເປັນສຳລັບໂປແກມໃຊ້ງານທົ່ວໄປ."</string>
+<string name="permlab_bindInputMethod">"ຜູກພັນກັບວິທີການປ້ອນຂໍ້ມູນ"</string>
+<string name="permdesc_bindInputMethod">"ຊ່ວຍໃຫ້ຜູ້ຄອບຄອງເຊື່ອມໂຍງເຂົ້າກັບອິນເຕີເຟກລະດັບສູງສຸດຂອງວິທີການປ້ອນຂໍ້ມູນ. ບໍ່ຄວນຈະຈຳເປັນສຳລັບໂປແກມການໃຊ້ງານທົ່ວໄປ."</string>
+<string name="permlab_bindWallpaper">"ຜູກພັນກັບວໍເປເປີ້"</string>
+<string name="permdesc_bindWallpaper">"ຊ່ວຍໃຫ້ຜູ້ຄອບຄອງເຊື່ອມໂຍງເຂົ້າກັບອິນເຕີເຟກລະດັບສຸງສຸດຂອງວໍເປເປີ. ບໍ່ຄວນຈະຈຳເປັນສຳລັບໂປແກມການໃຊ້ງານທົ່ວໄປ."</string>
+<string name="permlab_bindDeviceAdmin">"ໄດ້ປ່ຽນກັບອຸປະກອນເຄື່ອງຄວບຄຸມ"</string>
+<string name="permdesc_bindDeviceAdmin">"ຊ່ວຍໃຫ້ຜູ້ຄອບຄອງສົ່ງຈຸດປະສົງໄປຍັງຜູ້ດູແລລະບົບອຸປະກອນ. ບໍ່ຄວນຈຳຈຳເປັນສຳລັບໂປແກມການໃຊ້ງານທົ່ວໄປ."</string>
+<string name="permlab_setOrientation">"ສະແດງທິດທາງປ່ຽນໜ້າຈໍ"</string>
+<string name="permdesc_setOrientation">"ຊ່ວຍໃຫ້ໂປແກມປ່ຽນແປງການໝຸນຂອງໜ້າຈໍໄດ້ທຸກເວລາ. ບໍ່ຈຳເປັນສຳລັບໂປແກມທົ່ວໄປ."</string>
+<string name="permlab_signalPersistentProcesses">"ສົ່ງສັນຍານໄປຍັງໂປຣແກມປະຍຸກສັນຍານ Linux"</string>
+<string name="permdesc_signalPersistentProcesses">""</string>
+<string name="permlab_persistentActivity">"ໃຫ້ໂປຣແກມປະຍຸກເດໍາເນີນຕະຫຼອດເວລາ"</string>
+<string name="permdesc_persistentActivity">""</string>
+<string name="permlab_deletePackages">"ຮູບແບບການລົບ"</string>
+<string name="permdesc_deletePackages">"ຊ່ວຍໃຫ້ໂປແກມລົບແພັກແກັດ Android. ໂປແກມທີ່ເປັນອັນຕະລາຍສາມາດໃຊ້ສິ່ງນີ້ເພື່ອລົບໂປແກມທີ່ສຳຄັນ."</string>
+<string name="permlab_clearAppUserData">"ລົບຂໍ້ມູນຂອງໂປຣແກມປະຍຸກອື່ນໆ"</string>
+<string name="permdesc_clearAppUserData">"ອະນຸຍາດໃຫ້ການປະຍຸກໃຊ້ໃນການລ້າງຂໍ້ມູນຂອງຜູ້ໃຊ້."</string>
+<string name="permlab_deleteCacheFiles">"ລົບແຄຂອງໂປຣແກມປະຍຸກອື່ນໆ"</string>
+<string name="permdesc_deleteCacheFiles">"ຊ່ວຍໃຫ້ໂປແກມລົບໄຟລທີ່ຊຸກເຊື່ອງໄວ້."</string>
+<string name="permlab_getPackageSize">"ຄິດໄລ່ພຶ້ນທີ່ຈັດເກັບໂປຣແກມປະຍຸກ"</string>
+<string name="permdesc_getPackageSize">"ຊ່ວຍໃຫ້ໂປແກມໃນການດຶງເອົາລະຫັດ, ຂໍ້ມູນ, ແລະຂະໜາດຂອງແຄຊ໌."</string>
+<string name="permlab_installPackages">"ຕິດຕັ້ງໂປຣແກມປະຍຸກໂດຍກົງ"</string>
+<string name="permdesc_installPackages">""</string>
+<string name="permlab_clearAppCache">"ລົບຂໍ້ມູນໂປຣແກມປະຍຸກແຄທັງໝົດ"</string>
+<string name="permdesc_clearAppCache">"ຊ່ວຍໃຫ້ໂປແກມຈັດເກັບຂໍ້ມູນບໍລິຫານໂທຟຣີໂດຍການລົບໄຟລໃນສະໝຸດໂທລະສັບທີ່ເກັບໄວ້ໃນໂປແກມ. ປົກກະຕິແລ້ວ ການເຂົ້າເຖິງແມ່ນມີການຈຳກັດຫຼາຍໃນຂັ້ນຕອນການດຳເນີນງານຂອງລະບົບ."</string>
+<string name="permlab_movePackage">"ຂໍ້ມູນໂປຣແກມປະຍຸກມືຖື"</string>
+<string name="permdesc_movePackage">"ອະນຸຍາດໃຫ້ການໃຊ້ງານເພື່ອຍ້າຍໄປມາລະຫວ່ງສື່ພາຍໃນແລະພາຍນອກສື່ຂໍ້ມູນປະຍຸກໃຊ້."</string>
+<string name="permlab_readLogs">"ກວດອ່ານຂໍ້ມູນລະບົບທີ່ມີຄວາມສໍາຄັນ"</string>
+<string name="permdesc_readLogs">"ຊ່ວຍໃຫ້ໂປແກມອ່ານຈາກລະບົບແຟ້ມບັນທຶກ\'s ຕ່າງໆ. ນີ້ຈະຊ່ວຍໃຫ້ສາມາດຄົ້ນພົບຂໍ້ມູນທົ່ວໄປກ່ຽວກັບສິ່ງທີ່ທ່ານກຳລັງດຳເຮັດກັບໂທລະສັບ, ເຊິ່ງອາດຈະລວມເຖິງຂໍ້ມູນສ່ວນບຸກຄົນ ຫຼືຂໍ້ມູນທີ່ເປັນຄວາມລັບ."</string>
+<string name="permlab_diagnostic">"ອ່ານ/ຂຽນໄປຍັງແຫຼ່ງຂໍ້ມູນທີ່ເປັນເຈົ້າຂອງໂດຍການວິນິໄສ"</string>
+<string name="permdesc_diagnostic">"ຊ່ວຍໃຫ້ໂປແກມອ່ານແລະຂຽນທຸກຂໍ້ມູນທີ່ເປັນຂອງຕົນເອງໂດຍກຸ່ມຜູ້ກວດສອບ; ຕົວຢ່າງເຊັ່ນ, ໄຟລຢູ່ໃນ /dev. ສິ່ງນີ້ອາດຈະສົ່ງຜົນກະທົບຕໍ່ລະບົບແລະຄວາມປອດໄພ. ສິ່ງນີ້ຄວນຈະຖືກໃຊ້ສຳລັບການກວດສອບສະເພາະ-ຮາດແວ ໂດຍຜະລິດ ຫຼືຜູ້ໃຫ້ບໍລິການ."</string>
+<string name="permlab_changeComponentState">"ເປີດໃຊ້ຫຼືປິດການໃຊ້ງານຄອມໂພເນນຂອງໂປຣແກມປະຍຸກ"</string>
+<string name="permdesc_changeComponentState">"ຊ່ວຍໃຫ້ໂປແກມມີການປ່ຽນແປງເຖິງແມ່ນວ່າສ່ວນປະກອບຂອງໂປແກມອື່ນໆຖືກເປີດໃຊ້ງານຫຼືບໍ່. ໂປແກມທີ່ເປັນອັນຕະລາຍສາມາດນຳໃຊ້ວິທີນີ້ເພື່ອປິດການໃຊ້ງານຄວາມສາມາດຂອງໂທລະສັບທີ່ສຳຄັນ. ການດູແລຮັກສາຈຳເປັນຕ້ອງຖືກນຳໃຊ້ໂດຍຜ່ານການອະນຸຍາດ, ຍ້ອນວ່າມັນເປັນໄປໄດ້ທີ່ຈະໄດ້ຮັບສ່ວນປະກອບຂອງໂປແກມໃນສະພາວະທີ່ບໍ່ສາມາດໃຊ້ງານໄດ້, ບໍ່ສອດຄ່ອງກັນ, ຫຼືບໍ່ແນ່ນອນ. "</string>
+<string name="permlab_setPreferredApplications">"ຕັ້ງຄ່າໂປຣແກມປະຍຸກທີ່ເລືອກທໍາອິດ"</string>
+<string name="permdesc_setPreferredApplications">"ຊ່ວຍໃຫ້ໂປແກມປັບປຸງແກ້ໄຂໂປແກມໃຊ້ງານທີ່ທ່ານຕ້ອງການ. ສິ່ງນີ້ສາມາດເຮັດໃຫ້ໂປແກມທີ່ເປັນອັນຕະລາຍປ່ຽນໂປແກມທີ່ກຳລັງດຳເນີນງານຢູ່ຢ່າງງຽບໆ, ການປອມແປງໂປແກມທີ່ມີຢູ່ ເພື່ອລວບລວມຂໍ້ມູນສ່ວນຕົວຈາກທ່ານ."</string>
+<string name="permlab_writeSettings">"ແກ້ໄຂຕັ້ງຄ່າລະບົບຂໍ້ມູນທັງໝົດ"</string>
+<string name="permdesc_writeSettings">"ການເຂົ້າໃຈ"</string>
+<string name="permlab_writeSecureSettings">"ຕັ້ງຄ່າລະບົບແກ້ໄຂຄວາມປອດໄພ"</string>
+<string name="permdesc_writeSecureSettings">"ຊ່ວຍໃຫ້ໂປແກມປັບປຸງແກ້ໄຂລະບົບ\'s ການຕັ້ງຄ່າຮັກສາຄວາມປອດໄພຂໍ້ມູນ. ບໍ່ແມ່ນສຳລັບນຳໃຊ້ກັບໂປແກມທົ່ວໄປ."</string>
+<string name="permlab_writeGservices">"ແກ້ໄຂແຜ່ນທີ່ບໍລິການ Google "</string>
+<string name="permdesc_writeGservices">"ຍົກເລີກ"</string>
+<string name="permlab_receiveBootCompleted">"ເປີດອັດຕະໂນມັດເວລາເປີດເຄື່ອງ"</string>
+<string name="permdesc_receiveBootCompleted">"ຊ່ວຍໃຫ້ໂປແກມມີການເປີດເຄື່ອງດ້ວຍຕົວມັນເອງທັນທີທີ່ລະບົບສຳເລັດການບູດເຄື່ອງ. ວິທີນີ້ສາມາດເຮັດໃຫ້ມັນໃຊ້ເວລາດົນກວ່າໃນການເປີດໂທລະສັບແລະເຮັດໃຫ້ໂປແກມດຳເນີນງານຂອງໂທລະສັບທຸກດ້ານຊ້າລົງໂດຍການທຳງານຢູ່ຕະຫຼອດເວລາ."</string>
+<string name="permlab_broadcastSticky">"ສົ່ງອອກອາກາດດ້ານເທິງ"</string>
+<string name="permdesc_broadcastSticky">"ຊ່ວຍໃຫ້ໂປແກມໃນການສົ່ງປະກາດຂ່າວທີ່ຫຍຸ້ງຍາກ, ເຊິ່ງຢັງຄົງເຫຼືອຢູ່ຫຼັງຈາກການປະກາດຂ່າວຈົບລົງ. ໂປແກມທີ່ເປັນອັນຕະລາຍສາມາດເຮັດໃຫ້ໂທລະສັບຊ້າ ຫຼືບໍ່ສະຖຽນ ກໍ່ໃຫ້ເກີດການນຳໃຊ້ໜ່ວຍຄວາມຈຳຫຼາຍເກີນໄປ."</string>
+<string name="permlab_readContacts">"ອ່ານຂໍ້ມູນຜູ້ຕິດຕໍ່ພົວພັນ"</string>
+<string name="permdesc_readContacts">"ຊ່ວຍໃຫ້ໂປແກມໃນການອ່ານຂໍ້ມູນລາຍຊື່ຕິດຕໍ່ (ທີ່ຢູ່) ທັງໝົດທີ່ຖືກຈັດເກັບໄວ້ໃນໂທລະສັບຂອງທ່ານ. ໂປແກມທີ່ເປັນອັນຕະລາຍສາມາດນຳໃຊ້ວິທີນີ້ໃນການສົ່ງຂໍ້ມູນຂອງທ່ານໄປຍັງບຸກຄົນອື່ນ."</string>
+<string name="permlab_writeContacts">"ຂຽນເຂົ້າຂໍ້ມູນຕິດຕໍ່"</string>
+<string name="permdesc_writeContacts">"ລົບ"</string>
+<string name="permlab_readCalendar">"ອ່ານປະຕິທິນກິດຈະກໍາ"</string>
+<string name="permdesc_readCalendar">"ຊ່ວຍໃຫ້ໂປແກມອ່ານເຫດການທີ່ເກີດຂຶ້ນໃນປະຕິທິນທັງໝົດທີ່ຖືກຈັດເກັບໄວ້ໃນໂທລະສັບຂອງທ່ານ. ໂປແກມທີ່ເປັນອັນຕະລາຍສາມາດນຳໃຊ້ວິທີນີ້ສົ່ງເຫດການທີ່ເກີດຂຶ້ນໃນປະຕິທິນສົ່ງໄປຍັງບຸກຄົນອື່ນ."</string>
+<string name="permlab_writeCalendar">"ເພີ່ມຫຼືປັບປ່ຽນກິດຈະກໍາໃນປະຕິທິນແລະສົ່ງອີເມວໄປຫາຜູ້ເຂົ້າ"</string>
+<string name="permdesc_writeCalendar">"מאפשר ליישום להוסיף או לשנות את האירועים שבלוח השנה שלכם, כך שיהיה מסוגל לשלוח מכתבים בדוא"ל למוזמנים לאירוע. יישומי נזקה עשויים להשתמש בתכונה זו על מנת למחוק או לשנות את אירועי לוח השנה שלכם או בכדי לשלוח פרטי דוא"ל למוזמנים."</string>
+<string name="permlab_accessMockLocation">"ນໍາໃຊ້ຕໍາແໜ່ງຈໍາລອງສໍາລັບການທົດສອບ"</string>
+<string name="permdesc_accessMockLocation">"ສ້າງແຫຼ່ງຂໍ້ມູນຕຳແໜ່ງຈຳລອງເພື່ອທົດສອບ. ໂປແກມທີ່ເປັນອັນຕະລາຍສາມາດໃຊ້ສິ່ງນີ້ເພື່ອທົດແທນ ແລະ/ຫຼື ສະຖານະການກັບຄືນມາໂດຍຂໍ້ມູນຕຳແໜ່ງຕົວຈິງ ເຊັ່ນວ່າ GPS ຫຼື ຜູ້ໃຫ້ບໍລິການເຄື່ອຂ່າຍ ຫຼື ຕິດຕາມການເຄື່ອນໄຫວແລະລາຍງານຕຳແໜ່ງຂອງທ່ານໄປຍັງແຫຼ່ງຂໍ້ມູນພາຍນອກ."</string>
+<string name="permlab_accessLocationExtraCommands">"ເຂົ້າເຖິງຂໍ້ມຸນສະຖານທີ່ເພີ່ມເຕີມໃຫ້ຄໍາສັ່ງໂປຣແກມ"</string>
+<string name="permdesc_accessLocationExtraCommands">"ເຂົ້າເຖິງຄຳສັ່ງຂອງຜູ້ໃຫ້ບໍລິການສະຖານທີ່ພິເສດ. ໂປແກມທີ່ເປັນອັນຕະລາຍອາດນຳໃຊ້ວິທີນີ້ເພື່ອເຂົ້າໄປຫຍຸ້ງກ່ຽວກັບການທຳງານຂອງ GPS ຫຼື ແຫຼ່ງຂໍ້ມູນໃນສະຖານທີ່ອື່ນ."</string>
+<string name="permlab_installLocationProvider">"ອະນຸຍາດໃຫ້ຕິດຕັ້ງສະຖານທີ່ໃຫ້ບໍລິການຂໍ້ມູນ"</string>
+<string name="permdesc_installLocationProvider">"ສ້າງແຫຼ່ງຂໍ້ມູນຕຳແໜ່ງຈຳລອງເພື່ອທົດສອບ. ໂປແກມທີ່ເປັນອັນຕະລາຍສາມາດໃຊ້ສິ່ງນີ້ເພື່ອທົດແທນ ແລະ/ຫຼື ສະຖານະການກັບຄືນມາໂດຍຂໍ້ມູນຕຳແໜ່ງຕົວຈິງ ເຊັ່ນວ່າ GPS ຫຼື ຜູ້ໃຫ້ບໍລິການເຄື່ອຂ່າຍ ຫຼື ຕິດຕາມການເຄື່ອນໄຫວແລະລາຍງານຕຳແໜ່ງຂອງທ່ານໄປຍັງແຫຼ່ງຂໍ້ມູນພາຍນອກ."</string>
+<string name="permlab_accessFineLocation">"ຕໍາແໜ່ງທີ່ແນ່ນອນຂອງ (GPS)"</string>
+<string name="permdesc_accessFineLocation">""ແຫຼ່ງສະຖານທີ່ການເຂົ້າເຖິງປັບໄຫມເຊັ່ນ_x005F_x000D__x000D_
+         ລະບົບຕໍາແຫນ່ງຂອງໂລກຢູ່ໃນໂທລະສັບໄດ້, ບ່ອນທີ່ມີຢູ່._x005F_x000D__x000D_
+         ຄໍາຮ້ອງສະຫມັກລ້າຍ ສາມາດນໍາໃຊ້ນີ້ເພື່ອກໍານົດບ່ອນທີ່ທ່ານມີ, ແລະອາດຈະ_x005F_x000D__x000D_
+         ບໍລິໂພກພະລັງງານຫມໍ້ໄຟເພີ້ມເຕີມ.""</string>
+<string name="permlab_accessCoarseLocation">"(ພຶ້ນຖານເຄື່ອຄ່າຍຂອງ)ຕໍາແໜ່ງທີ່ບໍ່ແນ່ນອນ"</string>
+<string name="permdesc_accessCoarseLocation">"ເຂົ້າເຖິງຂໍ້ມູນໃນສະຖານທີ່ບໍ່ລະອຽດເຊັ່ນ ຖານຂໍ້ມູນເຄືອຂ່າຍໂທລະສັບມືຖືເພື່ອກວດສອບສະຖານທີ່ໂທລະສັບໃກ້ຄຽງ, ບ່ອນທີ່ສາມາດໃຊ້ໄດ້. ໂປແກມທີ່ເປັນອັນຕະລາຍສາມາດໃຊ້ວິທີນີ້ເພື່ອກວດສອບບ່ອນທີ່ທ່ານຢູ່ໂດຍປະມານ."</string>
+<string name="permlab_accessSurfaceFlinger">"ການເຂົ້າເຖິງພຶ້ນໜ້າ"</string>
+<string name="permdesc_accessSurfaceFlinger">"ຊ່ວຍໃຫ້ໂປແກມນຳໃຊ້ຄຸນລັກສະນະລະດັບຕ່ຳຂອງ SurfaceFlinger."</string>
+<string name="permlab_readFrameBuffer">""</string>
+<string name="permdesc_readFrameBuffer">"ຊ່ວຍໃຫ້ໂປແກມອ່ານເນື້ອໃນຂອງເຟຣມບັຟເຟີ."</string>
+<string name="permlab_modifyAudioSettings">"ປ່ຽນການຕັ້ງຄ່າສຽງຂອງທ່ານ"</string>
+<string name="permdesc_modifyAudioSettings">"ຊ່ວຍໃຫ້ໂປແກມມີປານປັບປ່ຽນການຕັ້ງຄ່າສຽງສ່ວນກາງ ເຊັ່ນ ລະດັບສຽງແລະການກຳນົດເສັ້ນທາງ."</string>
+<string name="permlab_recordAudio">"ອັດສຽງ"</string>
+<string name="permdesc_recordAudio">"ຊ່ວຍໃຫ້ໂປແກມເຂົ້າເຖິງວິທີທາງການບັນທຶກສຽງ."</string>
+<string name="permlab_camera">"ພາບຖ່າຍແລະວິດີໂອ"</string>
+<string name="permdesc_camera">"ຊ່ວຍໃຫ້ໂປແກມຖ່າຍພາບແລະຖ່າຍວິດີໂອດ້ວຍກ້ອງ. ສິ່ງນີ້ຈະຊ່ວຍໂປແກມໄດ້ທຸກເວລາໃນການລວບລວມຮູບພາບຈາກກ້ອງຖ່າຍຮູບທີ່ເຫັນ."</string>
+<string name="permlab_brick">"ຢຸດໃຊ້ມືຖືຕະຫຼອດໄປ"</string>
+<string name="permdesc_brick">"ຍົກເລີກ"</string>
+<string name="permlab_reboot">"ບັງຄັບເປີດມືຖືໃໝ່"</string>
+<string name="permdesc_reboot">""</string>
+<string name="permlab_mount_unmount_filesystems">"ໂຫຼດແລະລົບລະບົບໄຟ້"</string>
+<string name="permdesc_mount_unmount_filesystems">"ຊ່ວຍໃຫ້ໂປແກມຕິດຕັ້ງແລະຍົກເລີກການຕິດຕັ້ງລະບົບໄຟລສຳລັບການຈັດເກັບຂໍ້ມູນທີ່ສາມາດເຄື່ອນຍ້າຍໄດ້."</string>
+<string name="permlab_mount_format_filesystems">"ຟໍແມັດອຸປະກອນຈັດເກັບຂໍ້ມູນພາຍນອກ"</string>
+<string name="permdesc_mount_format_filesystems">"ຊ່ວຍໃຫ້ໂປແກມແກ້ໄຂການຈັດເກັບຂໍ້ມູນທີ່ສາມາດເຄື່ອນຍ້າຍໄດ້."</string>
+<string name="permlab_asec_access">"ຮັບຂໍ້ມູນກ່ຽວກັບອຸປະກອນຈັດເກັບຂໍ້ມູນພາຍໃນ"</string>
+<string name="permdesc_asec_access">"ຊ່ວຍໃຫ້ການໃຊ້ງານເພື່ອເຂົ້າໃນຂໍ້ມູນຢູ່ອຸປະກອນຈັດເກັບຂໍ້ມູນພາຍໃນ."</string>
+<string name="permlab_asec_create">"ສ້າງອຸປະກອນຈັດເກັບຂໍ້ມູນພາຍໃນ"</string>
+<string name="permdesc_asec_create">"ອະນຸຍາດໃຫ້ການໃຊ້ງານໃນການສ້າງອຸປະກອນຈັດເກັບຂໍ້ມູນພາຍໃນ."</string>
+<string name="permlab_asec_destroy">"ລ້າງອຸປະກອນຈັດເກັບຂໍ້ມູນພາຍໃນ"</string>
+<string name="permdesc_asec_destroy">"ອະນຸຍາດໃຫ້ການໃຊ້ງານເພື່ອລ້າງອຸປະກອນຈັດເກັບຂໍ້ມູນພາຍໃນ."</string>
+<string name="permlab_asec_mount_unmount">"ໂຫຼດ/ລົບອຸປະກອນຈັດເກັບຂໍ້ມູນພາຍໃນ"</string>
+<string name="permdesc_asec_mount_unmount">"ອະນຸຍາດໃຫ້ການໃຊ້ງານທີ່ຈະໂຫຼດ/ລົບອຸປະກອນຈັດເກັບຂໍ້ມູນພາຍໃນ."</string>
+<string name="permlab_asec_rename">"ໃສ່ຊື່ພາຍໃນອຸປະກອນຈັດເກັບຂໍ້ມູນ"</string>
+<string name="permdesc_asec_rename">"ອະນຸຍາດໃຫ້ການປະຍຸກໃຊ້ໃນການປ່ຽນຊື່ອຸປະກອນຈັດເກັບຂໍ້ມູນພາຍໃນ."</string>
+<string name="permlab_vibrate">"ຄວບຄຸມເຄື່ອງສັ່ນ"</string>
+<string name="permdesc_vibrate">"ຊ່ວຍໃຫ້ໂປແກມຄວບຄຸມການສັ່ນສະເທືອນ."</string>
+<string name="permlab_flashlight">"ແຟຣດຊ໌ຄວາມຄຸມ"</string>
+<string name="permdesc_flashlight">"ຊ່ວຍໃຫ້ໂປແກມຄວບຄຸມແສງແຝັຼຊ."</string>
+<string name="permlab_manageUsb">"ຄວບຄຸມການຕັ້ງຄ່າ USB ອຸປະກອນແລະສິດ"</string>
+<string name="permdesc_manageUsb">"ອະນຸຍາດໃຫ້ການໃຊ້ງານໃນການຈັດການຕັ້ງຄ່າອຸປະກອນ USB ແລະສິດທິພິເສດ."</string>
+<string name="permlab_hardware_test">"ທົດສອບຮາກແວ"</string>
+<string name="permdesc_hardware_test">"ຊ່ວຍໃຫ້ໂປແກມຄວບຄຸມອຸປະກອນຕໍ່ພວງຕ່າງໆສຳລັບຈຸດປະສົງຂອງການທົດສອບຮາດແວ."</string>
+<string name="permlab_callPhone">"ໂທໝາຍເລກໂທລະສັບໂດຍກົງ"</string>
+<string name="permdesc_callPhone">"ຊ່ວຍໃຫ້ໂປແກມໂທໄປຍັງເບີໂທລະສັບໂດຍປະສະຈາກການແຊກແຊງຂອງທ່ານ. ໂປແກມທີ່ເປັນອັນຕະລາຍອາດຈະກໍ່ໃຫ້ເກີດການໂທທີ່ບໍ່ຄາດຄິດໃນໃບບິນຄ່າໂທລະສັບຂອງທ່ານ. ໃຫ້ຮັບຮູ້ໄວ້ວ່າ ສິ່ງນີ້ບໍ່ອະນຸຍາດໃຫ້ໂປແກມໂທໄປຍັງເບີໂທສຸກເສີນ."</string>
+<string name="permlab_callPrivileged">"ໂທທຸກໝາຍເລກໂທລະສັບໂດຍກົງ"</string>
+<string name="permdesc_callPrivileged">"ຊ່ວຍໃຫ້ໂປແກມໂທໄປຫາທຸກເບີໂທລະສັບ, ລວມທັງເບີໂທສຸກເສີນ, ໂດຍປະສະຈາກການແຊກແຊງຂອງທ່ານ. ໂປແກມທີ່ເປັນອັນຕະລາຍອາດວາງສາຍທີ່ບໍ່ຈຳເປັນແລະສາຍທີ່ຜິດກົດໝາຍໃນກໍລະນີສຸກເສີນ."</string>
+<string name="permlab_performCdmaProvisioning">"ເປີດຕັ້ງຄ່າໂທລະສັບ CDMA ໂດຍກົງ"</string>
+<string name="permdesc_performCdmaProvisioning">"ຊ່ວຍໃຫ້ໂປແກມເລີ້ມຕົ້ນການຈັດຫາລະບົບ CDMA .ໂປແກມທີ່ເປັນອັນຕະລາຍອາດຈະບໍ່ຈຳເປັນໃນການຈັດຫາລະບົບ CDMA"</string>
+<string name="permlab_locationUpdates">"ຄວບຄຸມການແຈ້ງເຕືອນການປັບປຸງສະຖານທີ່"</string>
+<string name="permdesc_locationUpdates">"ຊ່ວຍໃນການເປີດໃຊ້ງານ/ປິດການໃຊ້ງານ ການແຈ້ງເຕືອນການປັບປຸງສະຖານທີ່ຈາກວິທະຍຸ. ບໍ່ແມ່ນສຳລັບການໃຊ້ກັບໂປແກມທົ່ວໄປ."</string>
+<string name="permlab_checkinProperties">"ເຂົ້າເຖິງເຊັກອີນຄຸນສົມບັດ"</string>
+<string name="permdesc_checkinProperties">"ຊ່ວຍໃນການອ່ານ/ການຂຽນ ເຂົ້າເຖິງສິດໃນການອັບໂຫຼດໂດຍການກວດສອບໃນການໃຫ້ບໍລິຫານ. ບໍ່ແມ່ນສຳລັບການໃຊ້ງານໂດຍໂປແກມທົ່ວໄປ."</string>
+<string name="permlab_bindGadget">"ເລືອກເຄື່ອງມືທັງໝາຍ"</string>
+<string name="permdesc_bindGadget">"ລົບລ້າງ"</string>
+<string name="permlab_modifyPhoneState">"ແກ້ໄຂສະຖານະມືຖື"</string>
+<string name="permdesc_modifyPhoneState">"ຊ່ວຍໃຫ້ໂປແກມຄວບຄຸມຄຸນລັກສະນະຂອງໂທລະສັບກ່ຽວກັບອຸປະກອນ. ໂປແກມທີ່ໄດ້ຮັບອະນຸຍາດນີ້ສາມາດສັບປ່ຽນເຄືອຂ່າຍ, ເປີດແລະປິດວິທະຍຸໃນໂທລະສັບແລະສິ່ງອື່ນໆທີ່ຄ້າຍຄືກັນ ໂດຍປາສະຈາກການແຈ້ງໃຫ້ທ່ານຊາບ."</string>
+<string name="permlab_readPhoneState">"ອ່ານຖານນະສະຖານະມືຖື"</string>
+<string name="permdesc_readPhoneState">"ຊ່ວຍໃຫ້ໂປແກມເຂົ້າເຖິງລັກສະນະໂທລະສັບກ່ຽວກັບອຸປະກອນ. ໂປແກມທີ່ໄດ້ຮັບອະນຸຍາດນີ້ສາມາດກວດສອບເບີໂທລະສັບ ແລະໝາຍເລກຂອງໂທລະສັບ, ເຖິງແມ່ນວ່າໂທລະສັບຍັງໃຊ້ງານຢູ່, ໝາຍເລກໂທລະສັບທີ່ໂທຖືກເຊື່ອມຕໍ່ແລະສິ່ງອື່ນໆທີ່ຄ້າຍຄືກັນ."</string>
+<string name="permlab_wakeLock">"ຢັບຢັ້ງມືຖືໂໝດນອນ"</string>
+<string name="permdesc_wakeLock">"ຊ່ວຍໃຫ້ໂປແກມປ້ອງກັນໂທລະສັບຈາກການດັບຊົ່ວຄາວ."</string>
+<string name="permlab_devicePower">"ເປີດຫຼືປິດເຄື່ອງ"</string>
+<string name="permdesc_devicePower">"ຊ່ວຍໃຫ້ໂປແກມເປີດ ຫຼື ປິດໂທລະສັບ."</string>
+<string name="permlab_factoryTest">"ໂໝດດໍາເນີນງານກ່ອນການອອກໂຮງງານ"</string>
+<string name="permdesc_factoryTest">"ໃຊ້ເປັນການທົດສອບກັບຜູ້ລະຜິດໃນລະດັບຕ່ຳ, ຊ່ວຍໃຫ້ເຂົ້າເຖິງຮາດແວຂອງໂທລະສັບໄດ້ສົມບູນແບບ. ໃຊ້ໄດ້ສະເພາະເມື່ອໂທລະສັບທຳງານໃນແບບຂອງການທົດສອບຈາກຜູ້ຜະລິດເທົ່ານັ້ນ."</string>
+<string name="permlab_setWallpaper">"ຕັ້ງຄ່າວໍເປເປີ້"</string>
+<string name="permdesc_setWallpaper">"ຊ່ວຍໃຫ້ໂປແກມຕັ້ງຄ່າລະບົບວໍເປເປີ."</string>
+<string name="permlab_setWallpaperHints">"ຕັ້ງຄ່າການແຈ້ງຂະໜາດວໍເປເປີ້ທີ່ກ່ຽວຂ້ອງ"</string>
+<string name="permdesc_setWallpaperHints">"ຊ່ວຍໃຫ້ໂປແກມຕັ້ງຄ່າລະບົບຄຳແນະນຳຂະໜາດຂອງ ວໍເປເປີ."</string>
+<string name="permlab_masterClear">"ການຄືນຄ່າລະບົບການຕັ້ງຄ່າໂຮງງານ"</string>
+<string name="permdesc_masterClear">"ຊ່ວຍໃຫ້ໂປແກມຕັ້ງຄ່າລະບົບໃໝ່ຢ່າງສົມບູນໃນການຕັ້ງຄ່າໂຮງງານ, ການລົບຂໍ້ມູນທັງໝົດ, ການກຳນົດຄ່າ, ແລະບັນດາໂປແກມທີ່ຖືກຕິດຕັ້ງ."</string>
+<string name="permlab_setTime">"ຕັ້ງເວລາ"</string>
+<string name="permdesc_setTime">""</string>
+<string name="permlab_setTimeZone">"ຕັ້ງຄ່າໂຊນເວລາ"</string>
+<string name="permdesc_setTimeZone">"ຊ່ວຍໃຫ້ໂປແກມມີການປ່ຽນແປງຂອບເຂດເວລາ\ຂອງໂທລະສັບ."</string>
+<string name="permlab_accountManagerService">"ສະແດງລະຄອນເປັນແອກເຄົ້າຄວບຄຸມບໍລິການ"</string>
+<string name="permdesc_accountManagerService">"ຊ່ວຍໃຫ້ໂປແກມສາມາດໂທຫາຜູ້ກວດສອບບັນຊີຜູ້ນຳໃຊ້"</string>
+<string name="permlab_getAccounts">"ໄດ້ພົບແອກເຄົ້າທີ່ຮູ້ຈັກ"</string>
+<string name="permdesc_getAccounts">""</string>
+<string name="permlab_authenticateAccounts">"ເປັນໂປຣແກມຢືນຢັນຖານະຂອງແອກເຄົ້າ"</string>
+<string name="permdesc_authenticateAccounts">"ຊ່ວຍໃຫ້ໂປແກມນຳໃຊ້ຄວາມສາມາດໃນການກວດສອບຄວາມຖືກຕ້ອງຂອງບັນຊີຜູ້ໃຊ້ ຂອງຜູ້ຈັດການການກວດສອບບັນຊີຜູ້ໃຊ້, ລວມທັງການສ້າງບັນຊີຜູ້ໃຊ້ແລະການຮັບແລະການສ້າງລະຫັດຜ່ານຂອງພວກເຂົາ."</string>
+<string name="permlab_manageAccounts">"ລາຍການຄວບຄຸມແອກເຄົ້າ"</string>
+<string name="permdesc_manageAccounts">"ຊ່ວຍໃຫ້ໂປແກມໃນການດຳເນີນການເຊັ່ນການເພີ້ມ, ແລະການລົບບັນຊີຜູ້ໃຊ້ ແລະການລົບລະຫັດຜ່ານຂອງພວກເຂົາ."</string>
+<string name="permlab_useCredentials">"ໃຊ້ຂໍ້ມູນປະຈຳຕົວຮັບຮອງຄວາມຖືກຕ້ອງຂອງບັນຊີຜູ້ໃຊ້"</string>
+<string name="permdesc_useCredentials">"ຊ່ວຍໃຫ້ໂປແກມຮ້ອງຂໍສັນຍານໃນການກວດສອບ."</string>
+<string name="permlab_accessNetworkState">"ເບິ່ງສະຖານະເຄື່ອຄ່າຍ"</string>
+<string name="permdesc_accessNetworkState">"ຊ່ວຍໃຫ້ໂປແກມສາມາດເບິ່ງສະພາບຂອງເຄື່ອຂ່າຍທັງໝົດ."</string>
+<string name="permlab_createNetworkSockets">"ການເຂົ້າເຖິງອີນເຕີນເນັດເຕັມຮູບແບບທີ່ຖືກຈໍາກັດ"</string>
+<string name="permdesc_createNetworkSockets">"ຊ່ວຍໃຫ້ໂປແກມສ້າງຖານເຄືອຂ່າຍ."</string>
+<string name="permlab_writeApnSettings">"ຂຽນເຂົ້າຊື່ຈຸດເຊື່ອມຕໍ່ຕັ້ງຄ່າ"</string>
+<string name="permdesc_writeApnSettings">""</string>
+<string name="permlab_changeNetworkState">"ປ່ຽນເຄື່ອຄ່າຍເຊື່ອມຕໍ່"</string>
+<string name="permdesc_changeNetworkState">"ຊ່ວຍໃຫ້ໂປແກມມີການປ່ຽນແປງສະຖານະຂອງການເຊື່ອມຕໍ່ເຄືອຂ່າຍ."</string>
+<string name="permlab_changeTetherState">"ປ່ຽນການເຊື່ອມຕໍ່ທີ່ມີຜົນຜູກພັນ"</string>
+<string name="permdesc_changeTetherState">"ຊ່ວຍໃຫ້ໂປແກມມີການປ່ຽນແປງສະຖານະຂອງການເຊື່ອມຕໍ່ເຄືອຂ່າຍແບບຜູກໂຍງ."</string>
+<string name="permlab_changeBackgroundDataSetting">"ປ່ຽນພຶ້ນຫຼັງຂໍ້ມູນການຕັ້ງຄ່າການໃຊ້ງານ"</string>
+<string name="permdesc_changeBackgroundDataSetting">"ຊ່ວຍໃຫ້ໂປແກມມີການປ່ຽນແປງການຕັ້ງຄ່າການນຳໃຊ້ຂໍ້ມູນເບື້ອງຫຼັງ."</string>
+<string name="permlab_accessWifiState">"ເບິ່ງສະຖານະ WLAN "</string>
+<string name="permdesc_accessWifiState">"ຊ່ວຍໃຫ້ໂປແກມສາມາດເບິ່ງຂໍ້ມູນກ່ຽວກັບສະຖານະຂອງລະບົບ WLAN."</string>
+<string name="permlab_changeWifiState">"ປ່ຽນສະຖານະ WLAN "</string>
+<string name="permdesc_changeWifiState">""</string>
+<string name="permlab_changeWifiMulticastState">"ຊ່ວຍໃນການຮັບສັນຍານຂອງຜູ້ຮັບຫຼາຍຄົນຈາກລະບົບ WLAN"</string>
+<string name="permdesc_changeWifiMulticastState">"ຊ່ວຍໃຫ້ໂປແກມໄດ້ຮັບແພັກແກັດທີ່ບໍ່ໄດ້ສົ່ງໂດຍຕົງເຖິງອຸປະກອນຂອງທ່ານ. ສິ່ງນີ້ຈະເປັນປະໂຫຍດເມື່ອການຄົ້ນພົບການບໍລິການທີ່ຖືກນຳສະເໜີຢູ່ແຖບໃກ້ຄຽງນັ້ນ. ໂດຍຈະໃຊ້ພະລັງງານຫຼາຍກວ່າຮູບແບບທີ່ບໍ່ແມ່ນຜູ້ຮັບ."</string>
+<string name="permlab_accessWimaxState">"ເບິ່ງສະຖານະ WiMAX "</string>
+<string name="permdesc_accessWimaxState">"ຊ່ວຍໃຫ້ໂປແກມສາມາດເບິ່ງຂໍ້ມູນກ່ຽວກັບສະຖານະຂອງລະບົບ WiMAX."</string>
+<string name="permlab_changeWimaxState">"ປ່ຽນສະຖານະ WiMAX "</string>
+<string name="permdesc_changeWimaxState">"ຊ່ວຍໃຫ້ໂປແກມໃນການເຊື່ອມຕໍ່ແລະຍົກເລີກການເຊື່ອມຕໍ່ຈາກເຄືອຂ່າຍ WiMAX."</string>
+<string name="permlab_bluetoothAdmin">"ການຄວບຄຸມບຣູທູດ"</string>
+<string name="permdesc_bluetoothAdmin">"ຊ່ວຍໃຫ້ໂປແກມໃນການກຳນົດບຣູທູດຂອງໂທລະສັບໃນເຂດທ້ອງຖິ່ນ, ແລະເພື່ອຄົ້ນຫາແລະຈັບຄູ່ກັບອຸປະກອນຈາກໄລຍະໄກ."</string>
+<string name="permlab_bluetooth">"ສ້າງບຣູທູດເຊື່ອມຕໍ່"</string>
+<string name="permdesc_bluetooth">"ຊ່ວຍໃຫ້ໂປແກມສາມາດເບິ່ງການຕັ້ງຄ່າຂອງບຣູທູດໃນໂທລະສັບທ້ອງຖິ່ນ, ແລະເພື່ອສ້າງແລະຍອມຮັບການເຊື່ອມຕໍ່ກັບອຸປະກອນທີ່ເປັນຄູ່ກັນ."</string>
+<string name="permlab_nfc">"ຄວບຄຸມການສື່ສານໄລຍະໃກ້"</string>
+<string name="permdesc_nfc">"ຊ່ວຍໃຫ້ໂປແກມມີການສື່ສານກັບປ້າຍສະໜາມທີ່ໃກ້, ບັດ, ແລະບັນດາຜູ້ອ່ານທັງຫຼາຍ."</string>
+<string name="permlab_disableKeyguard">"ຢຸດໃຊ້ປຸ່ມລ໋ອກ"</string>
+<string name="permdesc_disableKeyguard">"ຊ່ວຍໃຫ້ໂປແກມໃນການປິດການໃຊ້ງານປຸ່ມລ໋ອກແລະການຮັດສາຄວາມປອດໄພທຸກໆລະຫັດຜ່ານທີ່ກ່ຽວຂ້ອງ. ຕົວຢ່າງທີ່ຖືກຕ້ອງຂອງວິທີນີ້ຄືການປິດການໃຊ້ງານປຸ່ມລ໋ອກເມື່ອມີສາຍໂທເຂົ້າ, ຈາກນັ້ນດຳເນີນການເປີດໃຊ້ງານປຸ່ມລ໋ອກໃໝ່ອີກຄັ້ງເມື່ອການໂທຊິ້ນສຸດລົງ."</string>
+<string name="permlab_readSyncSettings">"ອ່ານໄປພ້ອມກັບການຕັ້ງຄ່າ"</string>
+<string name="permdesc_readSyncSettings">"ຊ່ວຍໃຫ້ໂປແກມອ່ານການຕັ້ງຄ່າຂອງການຊິງຄ໌, ເຊັ່ນວ່າການຊິງຄ໌ໄດ້ຖືກເປີດໃຊ້ງານສຳລັບລາຍຊື່ຜູ້ຕິດຕໍ່."</string>
+<string name="permlab_writeSyncSettings">"ຍົກເລີກ"</string>
+<string name="permdesc_writeSyncSettings">"ຊ່ວຍໃຫ້ໂປແກມປັບປຸງແກ້ໄຂການຕັ້ງຄ່າຂອງການຊິງຄ໌, ເຊັ່ນວ່າການຊິງຄ໌ໄດ້ຖືກເປີດໃຊ້ງານສຳລັບລາຍຊື່ຜູ້ຕິດຕໍ່."</string>
+<string name="permlab_readSyncStats">"ອ່ານໄປພ້ອມກັບຂໍ້ມູນສະຖິຕິ"</string>
+<string name="permdesc_readSyncStats">"ຊ່ວຍໃຫ້ໂປແກມອ່ານສະຖິຕິການຊິງຄ໌; ຕົວຢ່າງ., ປະຫວັດຂອງການຊິງຄ໌ທີ່ເຄີຍເກີດຂຶ້ນ."</string>
+<string name="permlab_subscribedFeedsRead">"ອ່ານຟີດສະມັກ"</string>
+<string name="permdesc_subscribedFeedsRead">"ອະນຸຍາດໃຫ້ການໃຊ້ງານເພື່ອໃຫ້ໄດ້ຂໍ້ມູນລາຍລະອຽດກ່ຽວກັບຟິດທີ່ໄປພ້ອມກັນ"</string>
+<string name="permlab_subscribedFeedsWrite">"ຂຽນຂໍ້ມູນສະໝັກເປັນສະມາຊິກ"</string>
+<string name="permdesc_subscribedFeedsWrite">"ຊ່ວຍໃຫ້ໂປແກມປັບປຸງແກ້ໄຂຟີດຊິງຄ໌ໃນປະຈຸບັນ. ສິ່ງນີ້ຈະເຮັດໃຫ້ໂປແກມທີ່ເປັນອັນຕະລາຍປ່ຽນຟີດຊິງຄ໌ຂອງທ່ານ."</string>
+<string name="permlab_readDictionary">"ອ່ານພົດຈະນານຸກົມທີ່ຜູ້ໃຊ້ກໍານົດ"</string>
+<string name="permdesc_readDictionary">"ຊ່ວຍໃຫ້ໂປແກມອ່ານຄຳເວົ້າທີ່ເປັນສ່ວນຕົວ, ຊື່ ແລະຖ້ອຍຄຳຕ່າງໆທີ່ຜູ້ໃຊ້ອາດຈະຈັດເກັບໄວ້ໃນພົດຈະນານຸກົມຂອງຜູ້ໃຊ້."</string>
+<string name="permlab_writeDictionary">"ຂຽນເຂົ້າພົດຈະນານຸກົມຂອງການກໍານົດຜູ້ໃຊ້"</string>
+<string name="permdesc_writeDictionary">"ຊ່ວຍໃຫ້ໂປແກມຂຽນຄຳໃໝ່ລົງໃສ່ວັດຈະນານຸກົມຂອງຜູ້ໃຊ້."</string>
+<string name="permlab_sdcardWrite" product="nosdcard">"ແກ້ໄຂ/ລົບເນື້ອໃນອຸປະກອນຈັດເກັບຂໍ້ມູນ USB "</string>
+<string name="permlab_sdcardWrite" product="default">"ແກ້ໄຂ/ລົບເນື້ອໃນຂອງ SD ກາດ"</string>
+<string name="permdesc_sdcardWrite" product="nosdcard">"ອະນຸຍາດໃຫ້ການປະຍຸກໃຊ້ໃນການຂຽນໄປເກັບຂໍ້ມູນ USB "</string>
+<string name="permdesc_sdcardWrite" product="default">"ອະນຸຍາດໃຫ້ການປະຍຸກໃຊ້ໃນການຂຽນລົງໃນ SD ກາດ."</string>
+<string name="permlab_cache_filesystem">"ເຂົ້າເຖິງລະບົບໄຟ້ແຄຣ໌"</string>
+<string name="permdesc_cache_filesystem">"ອະນຸຍາດໃຫ້ການໃຊ້ງານໃນການອ່ານແລະຂຽນລະບົບໄຟ້ແຄ."</string>
+<string name="permlab_use_sip">"ກົດໂທ/ຮັບສາຍອິນເຕີດເນັດ"</string>
+<string name="permdesc_use_sip">"ອະນຸຍາດໃຫ້ໂປຣແກມປະຍຸກເພື່ອໃຊ້ບໍລິການທີ່ຈະເຮັດໃຫ້ SIP ອອກ/ຮັບສາຍອິນເຕີເນັດ."</string>
+<string name="policylab_limitPassword">"ຕັ້ງຄ່າກົດຂອງລະຫັດຜ່ານ"</string>
+<string name="policydesc_limitPassword">"ຄວບຄຸມຄວາມຍາວແລະຕົວອັກສອນທີ່ອະນຸຍາດໃຫ້ໃສ່ລະຫັດປົດລ໋ອກໜ້າຈໍ"</string>
+<string name="policylab_watchLogin">"ຈໍານວນຫຼາຍລອງຄັ້ງໃນການກວດສອບປົດລ໋ອກໜ້າຈໍ"</string>
+<string name="policydesc_watchLogin">"ກວດສອບຈຳນວນຄັ້ງຂອງການປ້ອນລະຫັດຜ່ານທີ່ບໍ່ຖືກຕ້ອງເມື່ອປົດລ໋ອກໜ້າຈໍ, ແລະລ໋ອກໂທລະສັບ ຫຼືລົບຂ້ໍມູນທັງໝົດຂອງໂທລະສັບຖ້າວ່າມີລະຫັດຜ່ານທີ່ບໍ່ຖືກຕ້ອງປ້ອນເຂົ້າໄປຫຼາຍເກີນໄປ. "</string>
+<string name="policylab_resetPassword">"ປ່ຽນລະຫັດປົດລ໋ອກໜ້າຈໍ"</string>
+<string name="policydesc_resetPassword">"ປ່ຽນລະຫັດປົດລ໋ອກໜ້າຈໍ"</string>
+<string name="policylab_forceLock">"ກໍານົດລ໋ອກໜ້າຈໍ"</string>
+<string name="policydesc_forceLock">"ຮູບແບບການຄວບຄຸມລ໋ອກໜ້າຈໍແລະເວລາ"</string>
+<string name="policylab_wipeData">"ລ້າງຂໍ້ມູນທັງໝົດ"</string>
+<string name="policydesc_wipeData">"ຟຶ້ນຟູການຕັ້ງຄ່າໂຮງງານ,ຈະລົບຂໍ້ມູນຢູ່ໂທລະສັບໂດຍບໍ່ຕ້ອງສົ່ງການເຕືອນ"</string>
+<string-array name="phoneTypes">
+<item>"ບ້ານ"</item>
+<item>"ອຸປະກອນມືຖື"</item>
+<item>"ເບີໂທໜ່ວຍງານ"</item>
+<item>"ແຟ໋ກໜ່ວຍງານ"</item>
+<item>"ແຟ໋ກທີ່ຢູ່"</item>
+<item>"ເຜດເຈີ້"</item>
+<item>"ອື່ນໆ"</item>
+<item>"ກໍານົດເອງ"</item>
+</string-array>
+<string-array name="emailAddressTypes">
+<item>"ບ້ານ"</item>
+<item>"ເບີໂທໜ່ວຍງານ"</item>
+<item>"ອື່ນໆ"</item>
+<item>"ກໍານົດເອງ"</item>
+</string-array>
+<string-array name="postalAddressTypes">
+<item>"ບ້ານ"</item>
+<item>"ເບີໂທໜ່ວຍງານ"</item>
+<item>"ອື່ນໆ"</item>
+<item>"ກໍານົດເອງ"</item>
+</string-array>
+<string-array name="imAddressTypes">
+<item>"ບ້ານ"</item>
+<item>"ເບີໂທໜ່ວຍງານ"</item>
+<item>"ອື່ນໆ"</item>
+<item>"ກໍານົດເອງ"</item>
+</string-array>
+<string-array name="organizationTypes">
+<item>"ເບີໂທໜ່ວຍງານ"</item>
+<item>"ອື່ນໆ"</item>
+<item>"ກໍານົດເອງ"</item>
+</string-array>
+<string-array name="imProtocols">
+<item>AIM</item>
+<item>ວິນໂດສ໌ໄລຟ໌</item>
+<item>"ຢາຮູ"</item>
+<item>Skype</item>
+<item>QQ</item>
+<item>Google Talk</item>
+<item>ICQ</item>
+<item>Jabber</item>
+</string-array>
+<string name="phoneTypeCustom">"ກໍານົດເອງ"</string>
+<string name="phoneTypeHome">"ບ້ານ"</string>
+<string name="phoneTypeMobile">"ອຸປະກອນມືຖື"</string>
+<string name="phoneTypeWork">"ເບີໂທໜ່ວຍງານ"</string>
+<string name="phoneTypeFaxWork">"ແຟ໋ກໜ່ວຍງານ"</string>
+<string name="phoneTypeFaxHome">"ແຟ໋ກທີ່ຢູ່"</string>
+<string name="phoneTypePager">"ເຜດເຈີ້"</string>
+<string name="phoneTypeOther">"ອື່ນໆ"</string>
+<string name="phoneTypeCallback">"ໝາຍເລກໂທອີກຄັ້ງ"</string>
+<string name="phoneTypeCar">"ໃນລົດ"</string>
+<string name="phoneTypeCompanyMain">"ເບີໂທບໍລິສັດແມ່"</string>
+<string name="phoneTypeMain">"ເຄື່ອງຫຼັກ"</string>
+<string name="phoneTypeOtherFax">"ແຟ໋ກອື່ນ"</string>
+<string name="phoneTypeRadio">"ວິທະຍຸ"</string>
+<string name="phoneTypeTelex">"ໂທລະເລກ"</string>
+<string name="phoneTypeWorkMobile">"ມືຖືໜ່ວຍງານ"</string>
+<string name="phoneTypeWorkPager">"ເຮັດວຽກ Pager"</string>
+<string name="phoneTypeAssistant">"ຜູ້ຊ່ວຍ"</string>
+<string name="phoneTypeMms">MMS</string>
+<string name="eventTypeBirthday">"ວັນເກີດ"</string>
+<string name="eventTypeAnniversary">"ວັນທີ່ລະນືກ"</string>
+<string name="eventTypeOther">"ເຫດການ"</string>
+<string name="emailTypeCustom">"ກໍານົດເອງ"</string>
+<string name="emailTypeHome">"ບ້ານ"</string>
+<string name="emailTypeWork">"ເບີໂທໜ່ວຍງານ"</string>
+<string name="emailTypeOther">"ອື່ນໆ"</string>
+<string name="emailTypeMobile">"ອຸປະກອນມືຖື"</string>
+<string name="postalTypeCustom">"ກໍານົດເອງ"</string>
+<string name="postalTypeHome">"ບ້ານ"</string>
+<string name="postalTypeWork">"ເບີໂທໜ່ວຍງານ"</string>
+<string name="postalTypeOther">"ອື່ນໆ"</string>
+<string name="imTypeCustom">"ກໍານົດເອງ"</string>
+<string name="imTypeHome">"ບ້ານ"</string>
+<string name="imTypeWork">"ເບີໂທໜ່ວຍງານ"</string>
+<string name="imTypeOther">"ອື່ນໆ"</string>
+<string name="imProtocolCustom">"ກໍານົດເອງ"</string>
+<string name="imProtocolYahoo">"ຢາຮູ"</string>
+<string name="orgTypeWork">"ເບີໂທໜ່ວຍງານ"</string>
+<string name="orgTypeOther">"ອື່ນໆ"</string>
+<string name="orgTypeCustom">"ກໍານົດເອງ"</string>
+<string name="sipAddressTypeCustom">"ກໍານົດເອງ"</string>
+<string name="sipAddressTypeHome">"ບ້ານ"</string>
+<string name="sipAddressTypeWork">"ເບີໂທໜ່ວຍງານ"</string>
+<string name="sipAddressTypeOther">"ອື່ນໆ"</string>
+<string name="contact_status_update_attribution">"ຜ່ານ <xliff:g id="source" example="Google Talk">%1$s</xliff:g>"</string>
+<string name="contact_status_update_attribution_with_date">"<xliff:g id="date" example="3 hours ago">%1$s</xliff:g> ຜ່ານ <xliff:g id="source" example="Google%Talk">%2$s</xliff:g>"</string>
+<string name="keyguard_password_enter_pin_code">"ພິມລະຫັດ PIN "</string>
+<string name="keyguard_password_enter_password_code">"ພິມລະຫັດເພື່ອດໍາເນີນການປົດລ໋ອກ"</string>
+<string name="keyguard_password_wrong_pin_code">"ລະຫັດ PIN ບໍ່ຖືກຕ້ອງ!"</string>
+<string name="pinpuk_attempts">"\nຄັ້ງຄວາມພະຍາຍາມທີ່ຍັງເຫຼືອ :"</string>
+<string name="keyguard_label_text">"ຈະປົດລ໋ອກ,ກະລຸນາກ່ອນ MENU ແລ້ວກົດ 0."</string>
+<string name="emergency_call_dialog_number_for_display">"ເບີໂທສຸກເສີນ"</string>
+<string name="lockscreen_pin_locked_message">"ແຜ່ນ SIM/USIM ຖືກລອັກ."</string>
+<string name="lockscreen_sim_network_locked_message">"ເຄື່ອຄ່າຍໄດ້ລ໋ອກ"</string>
+<string name="sim1_puk_requried">"SIM1 PIN ລະຫັດໄດ້ລ໋ອຫ,ພິມ PUK ປົດລ໋ອກລະຫັດ"</string>
+<string name="sim2_puk_requried">"SIM2 PIN ລະຫັດໄດ້ລ໋ອຫ,ພິມ PUK ປົດລ໋ອກລະຫັດ"</string>
+<string name="sim_puk_requried">"SIM PIN ລະຫັດໄດ້ລ໋ອຫ,ພິມ PUK ປົດລ໋ອກລະຫັດ"</string>
+<string name="keyguard_password_enter_sim1_pin_code">"ພິມລະຫັກ SIM1 PIN "</string>
+<string name="keyguard_password_enter_sim2_pin_code">"ພິມລະຫັກ SIM2 PIN "</string>
+<string name="keyguard_password_enter_sim_pin_code">"ພິມລະຫັກ SIM PIN "</string>
+<string name="keyguard_sim1_pin_accepted">"SIM1 PIN ປົດລ໋ອກລະຫັດສໍາເລັດ"</string>
+<string name="keyguard_sim2_pin_accepted">"SIM2 PIN ປົດລ໋ອກລະຫັດສໍາເລັດ"</string>
+<string name="keyguard_sim_pin_accepted">"SIM PIN ປົດລ໋ອກລະຫັດສໍາເລັດ"</string>
+<string name="puk_accept">"ລະຫັດ PUK ໄດ້ຖືກຍອມຮັບ"</string>
+<string name="unblocking_fail">"ປົດລ໋ອກລົ້ມເຫຼວ,ກະລຸນາພິມລະຫັດ PUK ໃໝ່"</string>
+<string name="keyguard_password_wrong_puk_code">"ລະຫັດ PUK ບໍ່ຖືກຕ້ອງ!"</string>
+<string name="new_pin">"ພິມເລກ PIN ໃໝ່"</string>
+<string name="reenter">"ພິມ PIN ໃໝ່"</string>
+<string name="lockscreen_carrier_default">"(ບໍ່ມີການບໍລິການ)"</string>
+<string name="lockscreen_screen_locked">"ໜ້າຈໍຖືກລອກ"</string>
+<string name="lockscreen_instructions_when_pattern_enabled">"ກົດເມນູປົດລ໋ອກຫຼືດໍາເນີນການໂທດ່ວນ."</string>
+<string name="lockscreen_instructions_when_pattern_disabled">"ກົດເມນູປົດລ໋ອກ."</string>
+<string name="lockscreen_pattern_instructions">"ແຕ້ມຮູບແບບການປົດລ໋ອກ"</string>
+<string name="lockscreen_emergency_call">"ໂທສຸກເສີນ"</string>
+<string name="lockscreen_return_to_call">"ກັບຄືນການສົນທະນາ"</string>
+<string name="lockscreen_pattern_correct">"ຖືກຕ້ອງ!"</string>
+<string name="lockscreen_pattern_wrong">"ຂໍອະໄພຫຼາຍໆ,ກະລຸນາລອງອີກຄັ້ງ"</string>
+<string name="lockscreen_plugged_in">"ກໍາລັງສາກໄຟ (<xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g>)"</string>
+<string name="lockscreen_charged">"ໄດ້ສາກເຕັມ."</string>
+<string name="lockscreen_low_battery">"ເຊື່ອມຕໍ່ຫາເຄື່ອງສາກຂອງທ່ານ"</string>
+<string name="lockscreen_missing_sim_message_short">"ບໍ່ມີ SIM ກາດ."</string>
+<string name="lockscreen_missing_sim_message">"ໃນມືຖືບໍ່ມີ SIM ກາດ."</string>
+<string name="lockscreen_missing_sim_instructions">"ກະລຸນາສຽບ SIM ກາດ."</string>
+<string name="lockscreen_blocked_sim_message_short">"SIM ກາດຖືກລ໋ອກ."</string>
+<string name="emergency_calls_only">"ໂທສຸກເສີນເທົ່ານັ້ນ"</string>
+<string name="lockscreen_network_locked_message">"ເຄື່ອຂ່າຍຖືກລ໋ອກ"</string>
+<string name="lockscreen_sim_puk_locked_message">"SIM ກາດ ໄດ້ໃຊ້ PUK ລະຫັດລ໋ອກ"</string>
+<string name="lockscreen_sim_puk_locked_instructions">"ກະລຸນາເບິ່ງຄູ່ມືຂອງຜູ້ໃຊ້ໄດ້ຫຼືຕິດຕໍ່ດູແລລູກຄ້າ."</string>
+<string name="lockscreen_sim_locked_message">"SIM ກາດ ຖືກລ໋ອກ."</string>
+<string name="lockscreen_sim_unlock_progress_dialog_message">"ປົດລ໋ອກ SIM ກາດ\u2026"</string>
+<string name="lockscreen_too_many_failed_attempts_dialog_message">" ທ່ານໄດ້ແຕ້ມຮູບແບບການປົດລ໋ອກບໍ່ຖືກຕ້ອງ<xliff:g id="number">%d</xliff:g> ຫຼາຍຄັ້ງ. \n\nກະລຸນາລອງໃໝ່ອີກຄັ້ງໃນ <xliff:g id="number">%d</xliff:g> ອີກຈັກໜ່ອຍ. "</string>
+<string name="lockscreen_failed_attempts_almost_glogin">" ທ່ານແຕ້ມຮູບແບບການປົດລ໋ອກບໍ່ຖືກຕ້ອງ <xliff:g id="number">%d</xliff:g> ຫຼາຍຄັ້ງ. ຫຼັງຈາກ <xliff:g id="number">%d</xliff:g> ພະຍາຍາມຫຼາຍຄັ້ງແຕ່ບໍ່ປະສົບຜົນສຳເລັດ, ທ່ານຈະຖືກຂໍຮ້ອງໃຫ້ປົດລ໋ອກໂທລະສັບຂອງທ່ານ ໂດຍການລົງຊື່ເຂົ້າໃຊ້ Google.\n\n ກະລຸນາລອງໃໝ່ອີກຄັ້ງ <xliff:g id="number">%d</xliff:g> ອີກຈັກໜ່ອຍ. "</string>
+<string name="lockscreen_too_many_failed_attempts_countdown">"ລອງໃໝ່ອີກໃນ <xliff:g id="number">%d</xliff:g> ວິນາທີ."</string>
+<string name="lockscreen_forgot_pattern_button_text">"ລືມຮູບແບບພາບ?"</string>
+<string name="lockscreen_glogin_forgot_pattern">"ປົດລ໋ອກແອກເຄົ້າ"</string>
+<string name="lockscreen_glogin_too_many_attempts">"ແຜນພາບທີ່ພະຍາຍາມລອງຫຼາຍຄັ້ງເກີນໄປ!"</string>
+<string name="lockscreen_glogin_instructions">""</string>
+<string name="lockscreen_glogin_username_hint">"ຊື່ຜູ້ໃຊ້(ອີເມວ)"</string>
+<string name="lockscreen_glogin_password_hint">"ລະຫັດ"</string>
+<string name="lockscreen_glogin_submit_button">"ເຂົ້າສູ່ລະບົບ"</string>
+<string name="lockscreen_glogin_invalid_input">"ຊື່ຜູ້ໃຊ້ຫຼືລະຫັດຜ່ານບໍ່ຖືກຕ້ອງ"</string>
+<string name="lockscreen_glogin_checking_password">"ກໍາລັງກວດ..."</string>
+<string name="lockscreen_unlock_label">"ປົດລອກ"</string>
+<string name="lockscreen_sound_on_label">"ເປີດສຽງ"</string>
+<string name="lockscreen_sound_off_label">"ປິດສຽງ"</string>
+<string name="password_keyboard_label_symbol_key">"\<xliff:g id="song">%s</xliff:g>\ ຈະຖືກລົບອອກໄປຈາກບ່ອນເກັບຂໍ້ມູນ USB ຖາວອນ."</string>
+<string name="hour_ampm">"<xliff:g id="hour" example="3">%-l</xliff:g><xliff:g id="ampm" example="pm">%P</xliff:g>"</string>
+<string name="hour_cap_ampm">"<xliff:g id="hour" example="3">%-l</xliff:g><xliff:g id="ampm" example="pm">%P</xliff:g>"</string>
+<string name="factorytest_failed">"ທົດສອບອອກຈາກໂຮງງານຜິດພາດ"</string>
+<string name="factorytest_not_system">""</string>
+<string name="factorytest_no_action">"ບໍ່ມີແພັກແກັດຖືກຄົ້ນພົບໃນການດຳເນີນການທົດສອບຂອງໂຮງງານ."</string>
+<string name="factorytest_reboot">"ເປີດເຄື່ອງໃໝ່"</string>
+<string name="js_dialog_title">"ມາຈາກ<xliff:g id="title">%s</xliff:g> ທີ່ແຈ້ງ:"</string>
+<string name="js_dialog_before_unload">"ຈະໃຊ້ການນໍາທາງໄປຍັງສະຖານທີ່ອື່ນບໍ່?\n\n<xliff:g id="message">%s</xliff:g>\n\nເລືອກ“ຕົກລົງ”ເພື່ອດໍາເນີນການຕໍ່ຫຼືເລືອກ,ຍົກເລີກ,ເພື່ອຢູ່ໃນເວັບປັດຈຸບັນ."</string>
+<string name="save_password_label">"ຢືນຢັນ"</string>
+<string name="double_tap_toast">"ແຈ້ງ: ກົດສອງຄັ້ງສາມາດຂະຫຍາຍໃຫຍ່ແລະນ້ອຍ."</string>
+<string name="permlab_readHistoryBookmarks">"ອ່ານປະຫວັດບາວເຊີ້ແລະບຸກມາກ"</string>
+<string name="permdesc_readHistoryBookmarks">"ຊ່ວຍໃຫ້ໂປແກມສາມາດອ່ານທຸກ URLs ທີ່ບຣາວເຊີໄດ້ເຂົ້າຢ້ຽມຊົມ, ທຸກບຣາວເຊີ\ ບຸກມາກຄ໌."</string>
+<string name="permlab_writeHistoryBookmarks">"ຂຽນເຂົ້າປະຫັວດບັນທຶກບາວເຊີ້ແລະບຸກມາກ"</string>
+<string name="permdesc_writeHistoryBookmarks">"ຊ່ວຍໃຫ້ໂປແກມປັບປຸງແກ້ໄຂປະຫວັດຂອງ\ບຣາວເຊີ ຫຼືບຸກມາກຄ໌ທີ່ຖືກຈັດເກັບໃນໂທລະສັບຂອງທ່ານ. ໂປແກມທີ່ເປັນອັນຕະລາຍສາມາດນຳໃຊ້ວິທີນີ້ໃນການລົບຫຼືແກ້ໄຂຂໍ້ມູນ\ບຣາວເຊີຂອງທ່ານ."</string>
+<string name="permlab_setAlarm">"ກໍານັດຕັ້ງໂມງປຸກເຕືອນ"</string>
+<string name="permdesc_setAlarm">"ຊ່ວຍໃຫ້ໂປແກມໃນການຕັ້ງຄ່າສັນຍາເຕືອນໃນໂປແກມໂມງປຸກທີ່ຖືກຕິດຕັ້ງ. ບາງໂປແກມໂມງປຸກອາດຈະບໍ່ໃຊ້ຄຸນລັກສະນະນີ້."</string>
+<string name="permlab_writeGeolocationPermissions">"ແກ້ໄຂສິດທິຖານທີ່ດາວເຊີ້"</string>
+<string name="permdesc_writeGeolocationPermissions">"ຊ່ວຍໃຫ້ໂປແກມປັບປຸງແກ້ໄຂການອຸນຸຍາດທາງສະຖານທີ່ພູມມີສາດ\'s ຂອງບຣາວເຊີ. ໂປແກມທີ່ເປັນອັນຕະລາຍສາມາດນຳໃຊ້ວິທີນີ້ເພື່ອໃນການສົ່ງຂ້ໍມູນສະຖານທີ່ໄປຍັງເວບໄຊທົ່ວໄປ."</string>
+<string name="save_password_message">"ທ່ານຕ້ອງການບາວເຊີ້ທີ່ຈະຈື່ລະຫັດຜ່ານນີ້ໄດ້ຫຼືບໍ່?"</string>
+<string name="save_password_notnow">"ບໍ່ບັນທຶກເທື່ອ"</string>
+<string name="save_password_remember">"ຈົດຈໍາ"</string>
+<string name="save_password_never">"ບໍ່ເຄີຍ"</string>
+<string name="open_permission_deny">"ທ່ານບໍ່ມີສິດເປີດເວັບນີ້."</string>
+<string name="text_copied">"ຂໍ້ຄວາມໄດ້ຖືກກ໋ອບປີ້ໄປຍັງຄີບອດ."</string>
+<string name="more_item_label">"ເພີ້ມເຕີມ"</string>
+<string name="menu_space_shortcut_label">"ຍະຫວ່າງ"</string>
+<string name="menu_enter_shortcut_label">"ໃສ່"</string>
+<string name="menu_delete_shortcut_label">ລົບ</string>
+<string name="search_go">ຄົ້ນຫາ</string>
+<string name="oneMonthDurationPast">"1 ເດືອນກ່ອນ"</string>
+<string name="beforeOneMonthDurationPast">"ກ່ອນ 1 ເດືອນ"</string>
+<plurals name="num_seconds_ago">
+<item quantity="one">"1 ວີນາທີກ່ອນ"</item>
+<item quantity="other">"<xliff:g id="count">%d</xliff:g>ວິນາທີທີ່ຜ່ານມາ"</item>
+</plurals>
+<plurals name="num_minutes_ago">
+<item quantity="one">"1 ນາທີກ່ອນ"</item>
+<item quantity="other">"<xliff:g id="count">%d</xliff:g>ນາທີທີ່ຜ່ານມາ"</item>
+</plurals>
+<plurals name="num_hours_ago">
+<item quantity="one">"1 ຊົ່ວໂມງກ່ອນ"</item>
+<item quantity="other">"<xliff:g id="count">%d</xliff:g>ຊົ່ວໂມງທີ່ຜ່ານມາ"</item>
+</plurals>
+<plurals name="last_num_days">
+<item quantity="other">"ຜ່ານມາ <xliff:g id="count">%d</xliff:g> ວັນ"</item>
+</plurals>
+<string name="last_month">"ເດືອນທີ່ແລ້ວ"</string>
+<string name="older">"ໄປທາງໜ້າ"</string>
+<plurals name="num_days_ago">
+<item quantity="one">"ມື້ວານ"</item>
+<item quantity="other">"<xliff:g id="count">%d</xliff:g>ວັນທີ່ຜ່ານມາ"</item>
+</plurals>
+<plurals name="in_num_seconds">
+<item quantity="one">"ພາຍຫຼັງ 1 ວິນາທີ"</item>
+<item quantity="other">"ໃນ <xliff:g id="count">%d</xliff:g> ຫຼາຍວິນາທີ"</item>
+</plurals>
+<plurals name="in_num_minutes">
+<item quantity="one">"ພາຍຫຼັງ 1 ນາທີ"</item>
+<item quantity="other">"ໃນ <xliff:g id="count">%d</xliff:g> ຫຼາຍນາທີ"</item>
+</plurals>
+<plurals name="in_num_hours">
+<item quantity="one">"ພາຍຫຼັງ 1 ຊົ່ວໂມງ"</item>
+<item quantity="other">"ໃນ <xliff:g id="count">%d</xliff:g> ຫຼາຍຊົ່ວໂມງ"</item>
+</plurals>
+<plurals name="in_num_days">
+<item quantity="one">"ມື້ອື່ນ"</item>
+<item quantity="other">"ກໍາລັງນໍາເຂົ້າ SIM ຜູ້ຕິດຕໍ່ພົວພັນ"</item>
+</plurals>
+<plurals name="abbrev_num_seconds_ago">
+<item quantity="one">"1 ວິນາທີກ່ອນ"</item>
+<item quantity="other">"<xliff:g id="count">%d</xliff:g>ວິນາທີທີ່ຜ່ານມາ"</item>
+</plurals>
+<plurals name="abbrev_num_minutes_ago">
+<item quantity="one">"1 ນາທີກ່ອນ"</item>
+<item quantity="other">"<xliff:g id="count">%d</xliff:g>ນາທີທີ່ຜ່ານມາ"</item>
+</plurals>
+<plurals name="abbrev_num_hours_ago">
+<item quantity="one">"1 ຊົ່ວໂມງກ່ອນ"</item>
+<item quantity="other">"<xliff:g id="count">%d</xliff:g>ຊົ່ວໂມງທີ່ຜ່ານມາ"</item>
+</plurals>
+<plurals name="abbrev_num_days_ago">
+<item quantity="one">"ມື້ວານ"</item>
+<item quantity="other">"<xliff:g id="count">%d</xliff:g>ວັນທີ່ຜ່ານມາ"</item>
+</plurals>
+<plurals name="abbrev_in_num_seconds">
+<item quantity="one">"ພາຍຫຼັງ 1 ວິນາທີ"</item>
+<item quantity="other">"ໃນ <xliff:g id="count">%d</xliff:g> ຫຼາຍວິນາທີ"</item>
+</plurals>
+<plurals name="abbrev_in_num_minutes">
+<item quantity="one">"ພາຍຫຼັງ 1 ນາທີ"</item>
+<item quantity="other">"ໃນ <xliff:g id="count">%d</xliff:g> ຫຼາຍນາທີ"</item>
+</plurals>
+<plurals name="abbrev_in_num_hours">
+<item quantity="one">"ພາຍຫຼັງ 1 ຊົ່ວໂມງ"</item>
+<item quantity="other">"ໃນ <xliff:g id="count">%d</xliff:g> ຫຼາຍຊົ່ວໂມງ"</item>
+</plurals>
+<plurals name="abbrev_in_num_days">
+<item quantity="one">"ມື້ອື່ນ"</item>
+<item quantity="other">"ກໍາລັງນໍາເຂົ້າ SIM ຜູ້ຕິດຕໍ່ພົວພັນ"</item>
+</plurals>
+<string name="preposition_for_date">"ເມື່ອ <xliff:g id="date" example="May 29">%s</xliff:g>"</string>
+<string name="preposition_for_time">"ເວລາ <xliff:g id="time" example="2:33 am">%s</xliff:g>"</string>
+<string name="preposition_for_year">"ໃນ <xliff:g id="year" example="2003">%s</xliff:g>"</string>
+<string name="day">"ມື້"</string>
+<string name="days">"ວັນທີຈະໝົດອາຍຸ"</string>
+<string name="hour">"ຊົ່ວໂມງ"</string>
+<string name="hours">"ຫຼາຍຊົ່ວໂມງ"</string>
+<string name="minute">"ນາທີ"</string>
+<string name="minutes">"ນາທີ"</string>
+<string name="second">"ວິນາທີ"</string>
+<string name="seconds">"ວິນາທີ"</string>
+<string name="week">"ອາທິດ"</string>
+<string name="weeks">"ອາທິດ"</string>
+<string name="year">"ປີ"</string>
+<string name="years">"ປີ"</string>
+<string name="VideoView_error_title">"ບໍ່ສາມາດເປີດພາບໄດ້"</string>
+<string name="VideoView_error_text_invalid_progressive_playback">"ຂໍອະໄພ,ວິດີໂອນີ້ບໍ່ເໝາະສໍາລັບການເປີດຢູ່ອຸປະກອນນີ້."</string>
+<string name="VideoView_error_text_unknown">"ຂໍອະໄພຫຼາຍໆ,ບໍ່ສາມາດເປີດວິດີໂອນີ້ໄດ້."</string>
+<string name="VideoView_error_button"></string>
+<string name="relative_time">"<xliff:g id="date" example="4 hours ago">%1$s</xliff:g>, <xliff:g id="time" example="11:00 am">%2$s</xliff:g>"</string>
+<string name="noon">"ຕອນທ່ຽງ"</string>
+<string name="Noon">"ຕອນທ່ຽງ"</string>
+<string name="midnight">"ທ່ຽງຄືນ"</string>
+<string name="Midnight">"ທ່ຽງຄືນ"</string>
+<string name="elapsed_time_short_format_mm_ss">"<xliff:g id="minutes" example="1">%1$02d</xliff:g>:<xliff:g id="seconds" example="23">%2$02d</xliff:g>"</string>
+<string name="elapsed_time_short_format_h_mm_ss">"<xliff:g id="hours" example="1">%1$d</xliff:g>:<xliff:g id="minutes" example="43">%2$02d</xliff:g>:<xliff:g id="seconds" example="33">%3$02d</xliff:g>"</string>
+<string name="selectAll">ເລືອກທັງໝົດ</string>
+<string name="selectText">"ເລືອກຕົວອັກສອນ"</string>
+<string name="cut">"ຕັດ"</string>
+<string name="copy">"ກ໋ອບປີ້"</string>
+<string name="paste">"ຕິດເປະ"</string>
+<string name="copyUrl">"ກ໋ອບປີ້ເວັບ"</string>
+<string name="inputMethod">"ວິທີພິມ"</string>
+<string name="addToDictionary">"ຈະໄດ້\<xliff:g id="word" example="rickroll">%s</xliff:g>\ເພີ້ມໄປຍັງພົດຈະນານຸກົມ"</string>
+<string name="editTextMenuTitle">"ດັດແກ້ຕົວອັກສອນ"</string>
+<string name="low_internal_storage_view_title">"ເນື້ອທີ່ການເກັບຂໍ້ມູນບໍ່ພໍ"</string>
+<string name="low_internal_storage_view_text">"ພຶ້ນທີ່ການເກັບຂໍ້ມູນມືຖືຍັງຫວ່າງບໍ່ຫຼາຍແລ້ວ."</string>
+<string name="ok"></string>
+<string name="cancel">ຍົກເລີກ</string>
+<string name="yes"></string>
+<string name="no">ຍົກເລີກ</string>
+<string name="dialog_alert_title">"ຄວາມຕັ້ງໃຈ"</string>
+<string name="capital_on">"ເປິດໃຊ້ເເສງສະຫ່ວາງສາກຈໍ"</string>
+<string name="capital_off">"ປິດ"</string>
+<string name="whichApplication">"ໃຊ້ຮູບແບບນີ້ເປີດ"</string>
+<string name="alwaysUse">"ໃຊ້ຮູບແບບຄ່າເລີ່ມຕົ້ນນີ້."</string>
+<string name="clearDefaultHintMsg">"ຜ່ານໜ້າຈໍຫຼັກ ກາານຕັ້ງຄ່າ>ໂປຣແກມປະຍຸກ>ການຈັດການໂປຣແກມປະຍຸກເພື່ອລ້າງຄ່າເລີ້ມຕົ້ນ."</string>
+<string name="chooseActivity">"ເລືອກດໍາເນີນການໜຶ່ງລາຍການ"</string>
+<string name="chooseUsbActivity">"ເລືອກອຸປະກອນໂປຣແກມປະຍຸກທີ່ເໝາະສົມໃຊ້ USB "</string>
+<string name="noApplications">"ບໍ່ມີໂປຣແກມປະຍຸກທີ່ສາມາດຈັດການການດໍາເນີນການ."</string>
+<string name="crash_title">"ຂໍອະໄພ"</string>
+<string name="crash_application">""</string>
+<string name="crash_process">"<xliff:g id="process">%1$s</xliff:g>ຢຸດໂດຍບໍ່ຄາດຄິດ,ລະບົບພາຍະຍາມດັດແກ້ຫຼາຍຄັ້ງບໍ່ມີຜົນ,ກະລຸນາໃຊ້ໂປຣແກມທີ່ຄືກັນ."</string>
+<string name="aerr_title">"ຂໍອະໄພ"</string>
+<string name="aerr_application">""</string>
+<string name="aerr_process">""</string>
+<string name="anr_title">"ຂໍອະໄພ"</string>
+<string name="anr_activity_application">"ກິດຈະກໍາ <xliff:g id="activity">%1$s</xliff:g>(ໃນໃບຄໍາຮ້ອງ<xliff:g id="application">%2$s</xliff:g>) ບໍ່ໄດ້ຕອບສະຫນອງ."</string>
+<string name="anr_activity_process">"ກິດຈະກໍາ<xliff:g id="activity">%1$s</xliff:g>(ໃນຂະບວນການ <xliff:g id="process">%2$s</xliff:g>)ບໍ່ໄດ້ຕອບສະຫນອງ."</string>
+<string name="anr_application_process">"ສະມັກ <xliff:g id="application">%1$s</xliff:g> (ໃນຂະບວນການ<xliff:g id="process">%2$s</xliff:g>) ແມ່ນບໍ່ຕອບສະໜອງ."</string>
+<string name="anr_process">"ຂະບວນການ <xliff:g id="process">%1$s</xliff:g> ບໍ່ມີການຕອບສະໜອງ."</string>
+<string name="crash_close"></string>
+<string name="force_close">"ປິດບັງຄັບ"</string>
+<string name="report">"ລາຍງານ"</string>
+<string name="wait">"ລໍຖ້າ"</string>
+<string name="launch_warning_title">"ໂປຣແກມປະຍຸກທີ່ໄດ້ຮັບການປ່ຽນທິດທາງ"</string>
+<string name="launch_warning_replace">"<xliff:g id="app_name">%1$s</xliff:g>ກໍາລັງແລ່ນໃນຂະນະນີ້."</string>
+<string name="launch_warning_original">"<xliff:g id="app_name">%1$s</xliff:g>ໄດ້ໃຊ້ງານ."</string>
+<string name="smv_application">""</string>
+<string name="smv_process">""</string>
+<string name="heavy_weight_notification">"<xliff:g id="app">%1$s</xliff:g>ກໍາລັງແລ່ນ"</string>
+<string name="heavy_weight_notification_detail">"ເລືອກເພື່ອສະຫຼັບໄປຫາໂປຣແກມປະຍຸກ"</string>
+<string name="heavy_weight_switcher_title">"ຈະສັບປ່ຽນໂປຣແກມປະຍຸກບໍ່?"</string>
+<string name="heavy_weight_switcher_text">"ມີໂປແກມອື່ນໆທີ່ກຳລັງດຳເນີນງານຢູ່ແລ້ວ ຈະຕ້ອງຖືກຢຸດໄວ້ກ່ອນທີ່ທ່ານຈະເປີດໂປແກມໃໝ່."</string>
+<string name="old_app_action">"ກັບຄືນຫາ<xliff:g id="old_app">%1$s</xliff:g>"</string>
+<string name="old_app_description">"ບໍ່ເປີດໂປຣແກມປະຍຸກໃໝ່."</string>
+<string name="new_app_action">"ເລີ້ມຕົ້ນ<xliff:g id="old_app">%1$s</xliff:g>"</string>
+<string name="new_app_description">"ຢຸດໂປຣແກມປະຍຸກເກົ່າ,ແຕ່ບໍ່ບັນທຶກ."</string>
+<string name="sendText">"ເລືອກດໍາເນີນການທີ່ທ່ານຕ້ອງການດໍາເນີນການກັບຂໍ້ຄວາມ"</string>
+<string name="volume_ringtone">"ຄວາມດັງສຽງກິ່ງ"</string>
+<string name="volume_music">"ລະດັບສຽງມີເດຍ"</string>
+<string name="volume_fm">"ລະດັບສຽງວິທະຍຸ"</string>
+<string name="volume_music_hint_playing_through_bluetooth">"ກໍາລັງເປີດຜ່ານບຣູທູດ"</string>
+<string name="volume_music_hint_silent_ringtone_selected">"ເລືອກໂໝດງຽບ"</string>
+<string name="volume_music_hint_silent_sim1_ringtone_selected">"ເລືອກ SIM1 ແມ່ນລິງໂທນໂໝດງຽບ"</string>
+<string name="volume_music_hint_sim2_silent_ringtone_selected">"ເລືອກ SIM2 ແມ່ນລິງໂທນໂໝດງຽບ"</string>
+<string name="volume_music_hint_sim1_and_sim2_silent_ringtone_selected">"ເລືອກແມ່ນ SIM1 ກັບ SIM2 ລິງໂທນງຽບ"</string>
+<string name="volume_call">"ລະດັບສຽງໃນການໂທ"</string>
+<string name="volume_bluetooth_call">"ສຽງການສົນທະນາໃນເວລາໃຊ້ບຣູທູດ"</string>
+<string name="volume_alarm">"ສຽງໂມງປຸກ"</string>
+<string name="volume_notification">"ລະດັບສຽງແຈ້ງເຕືອນ"</string>
+<string name="volume_unknown">"ລະດັບສຽງ"</string>
+<string name="ringtone_default">"ລິງໂທນເລີ່ມຕົ້ນ"</string>
+<string name="ringtone_default_with_actual">"ລິງໂທນເລີ່ມຕົ້ນ(<xliff:g id="actual_ringtone">%1$s</xliff:g>)"</string>
+<string name="ringtone_silent">"ຄົ້ນຫາ"</string>
+<string name="ringtone_picker_title">"ລິງໂທນ"</string>
+<string name="ringtone_unknown">"ລິງໂທນທີ່ບໍ່ຮູ້"</string>
+<plurals name="wifi_available">
+<item quantity="one">"ເຄື່ອຄ່າຍ WLAN ທີ່ສາມາດໃຊ້ໄດ້"</item>
+<item quantity="other">"ເຄື່ອຄ່າຍ WLAN ທີ່ສາມາດໃຊ້ໄດ້"</item>
+</plurals>
+<plurals name="wifi_available_detailed">
+<item quantity="one">"ເປີດເຄື່ອຄ່າຍ WLAN ທີ່ໃຊ້"</item>
+<item quantity="other">"ເປີດຈໍານວນເຄື່ອຄ່າຍ WLAN ທີ່ໃຊ້ຫຼາຍ"</item>
+</plurals>
+<string name="select_character">"ແທ໋ກເຄື່ອງໝາຍອັກສອນ"</string>
+<string name="sms_control_default_app_name">"ໂປຣແກມປະຍຸກທີ່ບໍ່ຮູ້ຈັກ"</string>
+<string name="sms_control_title">"ກໍາລັງສົ່ງຂໍ້ຄວາມ"</string>
+<string name="sms_control_message">"ຈໍານວນຂະຫນາດໃຫຍ່ຂອງຂໍ້ຄວາມ SMS ແມ່ນໄດ້ຖືກສົ່ງໄປແລ້ວ.ເລືອກ\OK\ ຈະໄດ້ສືບຕໍ່,ຫຼື\ຍົກເລີກ\ຢຸດການສົ່ງ."</string>
+<string name="sms_control_yes"></string>
+<string name="sms_control_no">ຍົກເລີກ</string>
+<string name="date_time_set">"ຕັ້ງຄ່າ"</string>
+<string name="default_permission_group">"ໄດ້ຮັບການຍອມຮັບ"</string>
+<string name="no_permissions">"ບໍ່ຕ້ອງການການຈໍາກັດໃດໆ"</string>
+<string name="perms_hide">"<b>ເຊື່ອງ</b>"</string>
+<string name="perms_show_all">"<b>ສະແດງທັງໝົດ</b>"</string>
+<string name="usb_storage_activity_title">"ອຸປະກອນຈັດເກັບຂໍ້ມູນແບບ USB"</string>
+<string name="usb_storage_title">"USB ໄດ້ເຊື່ອມຕໍ່"</string>
+<string name="usb_storage_message" product="nosdcard">"ທ່ານໄດ້ຜ່ານທາງໂທລະສັບ USB ເຊື່ອມຕໍ່ກັບຄອມພິວເຕີ.ຖ້າທ່ານຕ້ອງການທີ່ຈະຄັດລອກໄຟ້ລະຫວ່າງຄອມພິວເຕີແລະ USB ຂອງອຸປະກອນຈັດເກັບຂໍ້ມູນ Android ຂອງທ່ານ,ກະລຸນາກົດປຸ່ມດ້ານລຸ່ມ."</string>
+<string name="usb_storage_message" product="default">"ທ່ານໄດ້ຜ່ານທາງໂທລະສັບ USB ເຊື່ອມຕໍ່ກັບຄອມພິວເຕີ.ຖ້າທ່ານຕ້ອງການທີ່ຈະຄັດລອກໄຟ້ລະຫວ່າງຄອມພິວເຕີແລະ SD ກາດຂອງ Android ຂອງທ່ານ,ກະລຸນາກົດປຸ່ມດ້ານລຸ່ມ."</string>
+<string name="usb_storage_button_mount">"ເປີດອຸປະກອນຈັດຈໍ້ມູນ USB"</string>
+<string name="usb_storage_error_message" product="nosdcard">"ໃຊ້ອຸປະກອນຈັດເກັບຂໍ້ມູນ USB ເປັນອຸປະກອນ USB ທີ່ບັນທຶກເປັນຈໍານວນຫຼາຍເກີດບັນຫາ."</string>
+<string name="usb_storage_error_message" product="default">"ໃຊ້ກາດ SD ເປັນອຸປະກອນຈັດເກັບຂໍ້ມູນແບບ USB."</string>
+<string name="usb_storage_notification_title">"USB ໄດ້ເຊື່ອມຕໍ່"</string>
+<string name="usb_storage_notification_message">"ເລືອກໄຟ້ໃນຄອມພິວເຕີ້ຂອງທ່ານຫຼືຄັດລອກຈາກຄອມພິວເຕີ້ໄປຍັງອຸປະກອນຈັດເກັບຂໍ້ມູນ."</string>
+<string name="usb_storage_stop_notification_title">"ປິດ USB ອຸປະກອນຈັດເກັບຂໍ້ມູນ"</string>
+<string name="usb_storage_stop_notification_message">"ເລືອກທີ່ຈະປິດອຸປະກອນຈັດເກັບຂໍ້ມູນ USB ."</string>
+<string name="usb_storage_stop_title">"ອຸປະກອນຈັດເກັບຂໍ້ມູນ USB ກໍາລັງໃຊ້ງານຢູ່"</string>
+<string name="usb_storage_stop_message" product="nosdcard">"ກ່ອນຈະປ່ຽນເປັນສີອອກຈາກການເກັບຮັກສາ USB, ໃຫ້ແນ່ໃຈວ່າທ່ານໄດ້ ລັບອອກ (\u201cອອກ\u201d) ຂອງທ່ານ Android ການເກັບຮັກສາ USB ຈາກຄອມພິວເຕີຂອງທ່ານ."</string>
+<string name="usb_storage_stop_message" product="default">"ກ່ອນຈະປ່ຽນເປັນສີອອກການເກັບຮັກສາ USB, ໃຫ້ແນ່ໃຈວ່າທ່ານໄດ້ລົບອອກ (\u201cອອກຈາກ\u201d) ຂອງທ່ານ Android ກາດ SD ຈາກຄອມພິວເຕີຂອງທ່ານ."</string>
+<string name="usb_storage_stop_button_mount">"ປິດ USB ອຸປະກອນຈັດເກັບຂໍ້ມູນ"</string>
+<string name="usb_storage_stop_error_message">"ປິດອຸປະກອນຈັດເກັບຂໍ້ມູນ USB ເກີດບັນຫາ.ກະລຸນາກວດສອບແນ່ໃຈວ່າຈະຖອນການຕິດຕັ້ງອຸປະກອນທີ່ສຽບ USB ,ຫຼັງຈາກນັ້ນລອງຄືນໃໝ່."</string>
+<string name="dlg_confirm_kill_storage_users_title">"ເປີດອຸປະກອນຈັດຈໍ້ມູນ USB"</string>
+<string name="dlg_confirm_kill_storage_users_text">"ຖ້າທ່ານເປີດອຸປະກອນເກັບຂໍ້ມູນ USB ,ທ່ານກໍາລັງໃຊ້ງານບາງຢ່າງຈຸຢຸດລົງແລະກ່ອນທີ່ຈະເປີດອຸປະກອນເກັບຂໍ້ມູນ USB ອາດໃຊ້ບໍ່ໄດ້."</string>
+<string name="dlg_error_title">"USB ດໍາເນີນການລົ້ມເຫຼວ"</string>
+<string name="dlg_ok"></string>
+<string name="extmedia_format_title" product="nosdcard">"ຟໍແມັດອຸປະກອນຈັດເກັບຂໍ້ມູນ USB "</string>
+<string name="extmedia_format_title" product="default">"ຟໍແມັດແຜ່ນ SD"</string>
+<string name="extmedia_format_message" product="nosdcard">"ຟໍແມັທ໌ຂໍ້ມູນທີ່ເກັບໄວ້ໃນ USB, ການລົບໄຟລທັງໝົດທີ່ຖືກຈັດເກັບໄວ້ທີ່ນັ້ນ? ການດຳເນີນການບໍ່ສາມາດຍ້ອນກັບໄດ້!"</string>
+<string name="extmedia_format_message" product="default">"ຈະຕ້ອງການຈັດຮູບແບບ SDກາດ ບໍ່?ຂໍ້ມູນຢູ່ໃນກາດນີ້ຈະສູນເສຍ."</string>
+<string name="extmedia_format_button_format">"ການລົບລ້າງ"</string>
+<string name="adb_active_notification_title">"ໄດ້ເຊື່ອມຕໍ່ USB ທົດລອງ"</string>
+<string name="adb_active_notification_message">"ເລືອກຢຸດໃຊ້ USB ທົດລອງ."</string>
+<string name="select_input_method">"ເລືອກວິທີພິມ"</string>
+<string name="fast_scroll_alphabet">" ABCDEFGHIJKLMNOPQRSTUVWXYZ"</string>
+<string name="fast_scroll_numeric_alphabet">" 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"</string>
+<string name="candidates_style">"<u>ເລືອກຕາມຫຼັງ</u>"</string>
+<string name="ext_media_checking_notification_title" product="nosdcard">"ໃນການກະກຽມການເກັບຮັກສາ"</string>
+<string name="ext_media_checking_notification_title" product="default">"ກຳລັງກະກຽໝ SD ກາດ"</string>
+<string name="ext_media_checking_notification_message">"ກໍາລັງກວດບ່າມີຂໍ້ຜິດພາດຫຼືບໍ່."</string>
+<string name="ext_media_nofs_notification_title" product="nosdcard">"USB ອຸປະກອນຈັດເກັບຂໍ້ມູນບໍ່ມີໄຟ້"</string>
+<string name="ext_media_nofs_notification_title" product="default">"ກາດSD ຫວ່າງເປົ່າ"</string>
+<string name="ext_media_nofs_notification_message" product="nosdcard">"ອຸປະກອນຈັດເກັບຂໍ້ມູນ USB,ໄຟ້ຫຼືໃຊ້ລະບົບແຟ້ມບໍ່ສະໜັບສະໜູນ."</string>
+<string name="ext_media_nofs_notification_message" product="default">"SD ກາດບໍ່ມີລະບົບໄຟ້,ຫຼືລະບົບໄຟ້ບໍ່ົດ້ຮັບການສະໜັບສະໜູນ."</string>
+<string name="ext_media_unmountable_notification_title" product="nosdcard">"ອຸປະກອນຈັດເກັບຂໍ້ມູນ USB ໄດ້ຮັບຄວາມເສຍຫາຍ"</string>
+<string name="ext_media_unmountable_notification_title" product="default">"SDກາດ ໄດ້ເສຍຫາຍ"</string>
+<string name="ext_media_unmountable_notification_message" product="nosdcard">"ອຸປະກອນຈັດເກັບຂໍ້ມູນ USB ໄດ້ເສຍຫາຍ,ທ່ານອາດຕ້ອງຟໍແມັດມັນ."</string>
+<string name="ext_media_unmountable_notification_message" product="default">"SD ກາດສູນເສຍ.ທ່ານຕ້ອງການຈະຟໍແມັດໃໝ່ບໍ່."</string>
+<string name="ext_media_badremoval_notification_title" product="nosdcard">"ອຸປະກອນຈັດເກັບຂໍ້ມູນ USB ຖືກລົບອອກຢ່າງບໍ່ຄາດຄິດ"</string>
+<string name="ext_media_badremoval_notification_title" product="default">"SD ກາດ ບໍ່ໄດ້ລົບປົກກະຕິ"</string>
+<string name="ext_media_badremoval_notification_message" product="nosdcard">"ກະລຸນາລົບອຸປະກອນຈັດເກັບຂໍ້ມູນ USB ອອກ,ຈາກນັ້ນຈຶ່ງອອກ,ເພື່ອປ້ອງກັນບໍ່ໃຫ້ຂໍ້ມູນສູນເສຍ."</string>
+<string name="ext_media_badremoval_notification_message" product="default">"ກະລຸນາລົບ SD ກາດ ອອກ,ກ່ອນທີ່ຈະລົບ,ເພື່ອປ້ອງກັນຂໍ້ມູນທີ່ສູນເສຍ."</string>
+<string name="ext_media_safe_unmount_notification_title" product="nosdcard">"ອຸປະກອນຈັດເກັບຂໍ້ມູນ USB ມີຄວາມປອດໄພທີ່ຈະລົບ"</string>
+<string name="ext_media_safe_unmount_notification_title" product="default">"SD ກາດໄດ້ຖືກລົບຢ່າງປອດໄພ"</string>
+<string name="ext_media_safe_unmount_notification_message" product="nosdcard">"ທ່ານສາມາດຖອດເຄື່ອງຈັດເກັບຂໍ້ມູນ USB ອອກໄດ້ຢ່າງປອດໄພ."</string>
+<string name="ext_media_safe_unmount_notification_message" product="default">"ທ່ານສາມາດອອກຈາກ SD ກາດ ຢ່າງປອດໄພ. "</string>
+<string name="ext_media_nomedia_notification_title" product="nosdcard">"USB ໄດ້ລົບອອກຈາກອຸປະກອນຈັດເກັບຂໍ້ມູນ"</string>
+<string name="ext_media_nomedia_notification_title" product="default">"ໄດ້ລົບອອກຈາກ SD ກາດ"</string>
+<string name="ext_media_nomedia_notification_message" product="nosdcard">"ອຸປະກອນຈັດເກັບຂໍ້ມູນ USB ຖືກລົບອອກ.ກະລຸນາໃສ່ມີເດຍໃໝ່."</string>
+<string name="ext_media_nomedia_notification_message" product="default">"SD ກາດໄດ້ຖືກລົບ.ກະລຸນາສຽບ SD ກາດໃໝ່."</string>
+<string name="activity_list_empty">"ບໍ່ມີການຄົ້ນພົບກິດຈະກຳການຈັບຄູ່"</string>
+<string name="permlab_pkgUsageStats">"ປັບປຸງສ່ວນປະກອບສະຖິຕິການໃນໃຊ້ງານ"</string>
+<string name="permdesc_pkgUsageStats">"ອະນຸຍາດໃຫ້ແກ້ໄຂສິດທີເກັບລວບລວມອົງປະກອບການໃຊ້ງານ.ໂປຣແກມສາມັນບໍ່ສາມາດໃຊ້ສີດທິນີ້."</string>
+<string name="permlab_copyProtectedData">"ອະນຸຍາດໃຫ້ຜູ້ບໍລິການພາຊະນະເລີ່ມຕົ້ນກ໋ອບປີ້ເນື້ອຫາ.ໂປຣແກມສາມັນບໍ່ໄດ້ຮັບອະນຸຍາດ."</string>
+<string name="permdesc_copyProtectedData">"ອະນຸຍາດໃຫ້ຜູ້ບໍລິການພາຊະນະເລີ່ມຕົ້ນກ໋ອບປີ້ເນື້ອຫາ.ໂປຣແກມສາມັນບໍ່ໄດ້ຮັບອະນຸຍາດ."</string>
+<string name="tutorial_double_tap_to_zoom_message_short">"ກົດສອງບາດເພື່ອດໍາເນີນການຄວບຄຸມການຫຍໍ້"</string>
+<string name="gadget_host_error_inflating">"ຂໍ້ມູນຜິດພາດຊຸມວີເກັດ"</string>
+<string name="ime_action_go">"ສົ່ງເຖິງ"</string>
+<string name="ime_action_search">ຄົ້ນຫາ</string>
+<string name="ime_action_send">"ສົ່ງ"</string>
+<string name="ime_action_next">"ຕໍ່ໄປ"</string>
+<string name="ime_action_done">ດຳເນີນການສຳເລັດ</string>
+<string name="ime_action_default">"ປະຕິບັດການ"</string>
+<string name="dial_number_using">"ກົດໂທ\n<xliff:g id="number" example="555">%s</xliff:g>"</string>
+<string name="create_contact_using">"ການເຂົ້າໃຈ"</string>
+<string name="accessibility_compound_button_selected">"ໄດ້ເລືອກ"</string>
+<string name="accessibility_compound_button_unselected">"ບໍ່ໄດ້ເລືອກ"</string>
+<string name="grant_credentials_permission_message_header">"ການໃຊ້ງານໜຶ່ງຫຼືຫຼາຍຂໍອະນຸຍາດໃນການເຂົ້າເຖິງແອກເຄົ້າຂອງທ່ານໄດ້ຮັບໃນຂະນະນີ້ແລະໃນອານາຄົດ."</string>
+<string name="grant_credentials_permission_message_footer">"ທ່ານເຫັນດີກັບການຮ້ອງຂໍນີ້ຫຼືບໍ່?"</string>
+<string name="grant_permissions_header_text">"ການຮ້ອງຂໍການເຂົ້າເຖິງ"</string>
+<string name="allow">"ອະນຸຍາດ"</string>
+<string name="deny">"ປະຕິເສດ"</string>
+<string name="permission_request_notification_title">"ໄດ້ຈໍາກັດການຮ້ອງຂໍ"</string>
+<string name="permission_request_notification_with_subtitle">"ບໍ່ອະນຸຍາດໃຫ້ໄດ້ຮັບການຮ້ອງຂໍ\nສໍາລັບແອກເຄົ້າ<xliff:g id="account" example="foo@gmail.com">%s</xliff:g>"</string>
+<string name="input_method_binding_label">"ວິທີພິມ"</string>
+<string name="sync_binding_label">"ໄປພ້ອມກັນ"</string>
+<string name="accessibility_binding_label">"ຄວາມສາມາດເຂົ້າເຖິງ"</string>
+<string name="wallpaper_binding_label">"ພາບພື້ນຫລັງ"</string>
+<string name="chooser_wallpaper">"ປ່ຽນລວໍ່ເປເປີ້"</string>
+<string name="pptp_vpn_description">"ຈຸດກັບຈຸດສັນຍາອຸໂມງ"</string>
+<string name="l2tp_vpn_description">"ຊັ້ນ 2 ຂໍ້ຕົກລົງອຸໂມງ"</string>
+<string name="l2tp_ipsec_psk_vpn_description">"ແຊກະແຈບົນພຶ້ນຖານຂອງ L2TP/IPSec VPN"</string>
+<string name="l2tp_ipsec_crt_vpn_description">"ຮັບຮອງຕາມ L2TP/IPSec VPN"</string>
+<string name="upload_file">"ເລືອກໄຟ້"</string>
+<string name="reset">"ຕັ້ງຄືນໃໝ່"</string>
+<string name="submit">"ການສົ່ງ"</string>
+<string name="description_star">"ສິ່ງທີ່ມັກ"</string>
+<string name="car_mode_disable_notification_title">"ໄດ້ເປີດໃຊ້ໂທລະສັບໃນລົດ"</string>
+<string name="car_mode_disable_notification_message">"ເລືອກໂໝດອອກຈາກລົດຍົນ."</string>
+<string name="tethered_notification_title">"USB ຜູກມັດແລະແບບພົກພາຮອດສະປອດໄດ້ເປີດໃຊ້"</string>
+<string name="cta_tethered_notification_title">"ກໍາລັງຕໍ່ສາຍ"</string>
+<string name="tethered_notification_message">"ການກໍານົດຄ່າລະບົບສໍາຜັດ"</string>
+<string name="throttle_warning_notification_title">"ມືຖືໃຊ້ເນັດຫຼາຍເກີນໄປ"</string>
+<string name="throttle_warning_notification_message">"ສໍາຜັດເບົາໆເພື່ອຮຽນຮູ້ເພີ່ມເຕີມກ່ຽວກັບລາຍລະອຽດຂອງການເຂົ້າຊົມໂທລະສັບ"</string>
+<string name="throttled_notification_title">"ຂໍ້ມູນມືຖືໄດ້ເກີນຂີດຈໍາກັດ"</string>
+<string name="throttled_notification_message">"ສໍາຜັດເບົາໆເພື່ອຮຽນຮູ້ເພີ່ມເຕີມກ່ຽວກັບລາຍລະອຽດຂອງການເຂົ້າຊົມໂທລະສັບ"</string>
+<string name="Low_Memory_Alert">"ພຶ້ນທີ່ເກັບຂໍ້ມູນເປັນເລື່ອງກ່ຽວກັບໂທລະສັບຈະໝົດ,ທ່ານຕ້ອງການລົບບາງສ່ວນຂອງຂໍ້ມູນໃນການສັ່ງຊື້ເພື່ອໃຫ້ໝັ້ນໃຈສະຖຽງລະພາບຂອງໂທລະສັບມືຖື."</string>
+<string name="Low_Memory_Free">"ເນື້ອທີ່ທີ່ຍັງເຫຼືອ"</string>
+<string name="Low_Memory_Application">"ແອບ"</string>
+<string name="Low_Memory_Mail">"ຈົດໝາຍ"</string>
+<string name="Low_Memory_Sms_Mms">"SMS/MMS"</string>
+<string name="Low_Memory_System">ລະບົບທົດສອບ</string>
+<string name="Btn_Select_Clear">"ເລືອກ / ລ້າງ"</string>
+<string name="myAppTip">"ກະລຸນາເລືອກລົບປໂຣແກມປະຍຸກ"</string>
+<string name="myApp_Start_Btn">"ເລີ່ມຕົ້ນ"</string>
+<string name="myApp_Move2Sd_ChkBox">"ຍ້າຍໄປ SD ກາດ"</string>
+<string name="myApp_ClearData_ChkBox">"ລ້າງຂໍ້ມູນ"</string>
+<string name="myApp_Uninstall_ChkBox">"ຖອນການຕິດຕັ້ງ"</string>
+<string name="myAppLoading">"ກໍາລັງໂຫຼດ\u2026"</string>
+<string name="myAppProcessing">"ກໍາລັງຕິດຕັ້ງ\u2026"</string>
+<string name="keyguard_password_enter_puk_code">"ພິມລະຫັດ PUK "</string>
+<string name="keyguard_password_enter_new_pin_first_code">"ພິມເລກ PIN ໃໝ່"</string>
+<string name="keyguard_password_enter_new_pin_second_code">"ພິມເລກ PIN ໃໝ່ອີກຄັ້ງ"</string>
+<string name="ums_active_notification_message">"ໄດ້ໃຊ້ບັນທຶກເປັນຈໍານວນຫຼາຍ"</string>
+<string name="modem_active_notification_title">"ໃຊ້ການແກ້ບັນຫາແບບໂມເດັມ"</string>
+<string name="modem_active_notification_message">"ໂໝດດີບັກໂມເດັມຖືກປິດໃຊ້ງານ"</string>
+<string name="china_mobile_numeric_values">"China Mobile"</string>
+<string name="china_unicom_numeric_values">"China Unicom"</string>
+<string name="china_telecom_numeric_values">"China Telecom"</string>
+<string name="stk_refresh_sim_init_message">"SIM ກາດ ກໍາລັງປັບປຸງ"</string>
+<string name="stk_refresh_sim_reset_message">"ມືຖືຈະເປີດເຄື່ອງໃໝ່"</string>
+<string name="custom_china_mobile">"China Mobile"</string>
+<string name="custom_china_unicom">"China Unicom"</string>
+<string name="charge_active_notification_message">"ໄດ້ເປີດໃຊ້ໂໝດພຽງສາກແບດ"</string>
+<string name="charge_active_notification_title">"ເມື່ອເຊື່ອມຕໍ່ USB ແລ້ວໂດຍໃຊ້ພຽງຟັງຊັ້ນສາກ"</string>
+<string name="shutdown_after_seconds">"ມືຖືຂອງທ່ານຈະ<xliff:g id="number">%d</xliff:g>ປິດເຄື່ອງພາຍໃນວິນາທີ."</string>
+<string name="lockscreen_password_error">"ລະຫັດຜິດພາດ,ກະລຸນາລອໃໝ່!"</string>
+<string name="lockscreen_too_many_password_failed_attempts_dialog_message">" ທ່ານໄດ້ປ້ອນລະຫັດຜ່ານຂອງທ່ານບໍ່ຖືກຕ້ອງ <xliff:g id="number">%d</xliff:g> ຫຼາຍຄັ້ງ. \n\nກະລຸນາລອງໃໝ່ອີກຄັ້ງໃນ<xliff:g id="number">%d</xliff:g> ອີກຈັກໜ່ອຍ."</string>
+<string name="progress_unmounting" product="nosdcard">"ກໍາລັງລົບອຸປະກອນຈັດເກັບຂໍ້ມູນ USB ອອກ..."</string>
+<string name="progress_unmounting" product="default">"ກໍາລັງລົບ SD ກາດອອກ..."</string>
+<string name="progress_erasing" product="nosdcard">"ກໍາລັງຟໍແມັດອຸປະກອນເກັບຂໍ້ມູນ USB... "</string>
+<string name="progress_erasing" product="default">"ກໍາລັງຟໍແມັດ SDກາດ..."</string>
+<string name="format_error" product="nosdcard">"USB ອຸປະກອນຈັດເກັບຂໍ້ມູນໃນຮູບແບບຄວາມມລົ້ມເຫຼວ."</string>
+<string name="format_error" product="default">"SD ກາດ ຟໍແມັດລົ້ມເຫຼວ"</string>
+<string name="media_bad_removal">"SD ກາດ ບໍ່ໄດ້ລົບແລະບໍ່ໄດ້ຍ້າຍອອກ."</string>
+<string name="media_checking" product="nosdcard">"ລະບົບກໍາລັງກວດ USB ອຸປະກອນຈັດເກັບຂໍ້ມູນ."</string>
+<string name="media_checking" product="default">"ກໍາລັງກວດ SD ກາດໃນຂະນະນີ້."</string>
+<string name="media_removed">"SD ກາດໄດ້ຖືກລົບ."</string>
+<string name="media_shared" product="nosdcard">"ອຸປະກອນຄອມພິວເຕີເກັບຂໍ້ມູນ USB ຖືກໃຊ້."</string>
+<string name="media_shared" product="default">"ມີຄອມພິມເຕີນໍາໃຊ້ SD ກາດໃນຕອນນີ້."</string>
+<string name="media_unknown_state">"ຊື່ພາຍນອກໃນສະພາວະບໍ່ຮູ້ຈັກ."</string>
+<string name="audio_play_failed">"ຂໍອະໄພຫຼາຍໆ,ບໍ່ສາມາດເປີດສຽງນີ້ໄດ້.ບໍ່ສາມາດຕັ້ງຄ່າສຽງລິງໂທນນີ້"</string>
+<string name="sms_full_title">"ຂໍ້ມູນບັນທຶກໄດ້ເຕັມ"</string>
+<string name="sms_full_body">"ພຶ້ນທີ່ຈັດເກັບເຕັມ,ບໍ່ສາມາດຮັບຂໍ້ມູນທີ່ເຂົ້າມາ,ກະລຸນາລົບຂໍ້ມູນເກົ່າ."</string>
+<string name="dialog_warning">"ຄຳເຕືອນ"</string>
+<string name="internal_memory_low">"SD ກາດ ກໍາລັງຈະຈັດເກັບສໍາເລັດ! ກະລຸນາລົບໄຟ້ບາງໄຟ້ເພື່ອເພີ່ມພຶ້ນທີ່ຫວ່າງ."</string>
+<string name="button_close">"ປິດ"</string>
+<string name="unlock_screen_pin_error">"ລະຫັດ Pin ຜິດພາດ!"</string>
+<string name="ap_disconnected">"ຕັດການເຊື່ອມຕໍ່"</string>
+<string name="sim_chooser_title">"ເລືອກ SIMກາດ"</string>
+<string name="lockscreen_miss_phone">"ບໍ່ໄດ້ຮັບສາຍ"</string>
+<string name="lockscreen_miss_mms">"ບໍ່ໄດ້ອ່ານຂໍ້ຄວາມ"</string>
+<string name="lockscreen_sim_card_locked_message">"SIM ກາດ ຖືກລ໋ອກ."</string>
+<string name="upload_file_size_too_large">"ໄຟ້ອັບໂຫຼດໃຫຍ່ເກີນໄປ,ກະລຸນາແບ່ງອັບໂຫຼດ"</string>
+<string name="cant_open_airplane_mode_when_phone_busy">"ບໍ່ສາມາດເປີດໂໝດເຮືອບິນໄດ້, ໂທລະສັບບໍ່ຫວ່າງດຽວນີ້."</string>
+<string name="staticip_invalid">""</string>
+</resources>

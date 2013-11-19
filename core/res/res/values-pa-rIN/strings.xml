@@ -1,0 +1,987 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+<string name="address_length">ਪਤਾ ਅਧਿਕਤਮ ਲੰਬਾਈ ਤੇ ਪਹੁੰਚਿਆ</string>
+<string name="fileSizeSuffix"><xliff:g id="number" example="123">%1$s</xliff:g><xliff:g id="unit" example="KB">%2$s</xliff:g></string>
+<string name="untitled">ਸਿਰਲੇਖਹੀਣ</string>
+<string name="ellipsis">\u2026</string>
+<string name="emptyPhoneNumber">(ਕੋਈ ਫੌਨ ਨੰਬਰ ਨਹੀਂ)</string>
+<string name="unknownName">(ਅਗਿਆਤ)</string>
+<string name="defaultVoiceMailAlphaTag">ਆਵਾਜ਼ ਸੰਦੇਸ਼</string>
+<string name="mmiError">ਕੁਨੈਕਸ਼ਨ ਸਮੱਸਿਆ ਜਾ ਅਪ੍ਰਮਾਣਿਤ  MMI ਕੋਡ।</string>
+<string name="mmiFdnError">ਸੰਚਾਲਨ ਕੇਵਲ ਫਿਕਸਡ ਡਾਇਲਿੰਗ ਨੰਬਰਾਂ ਲਈ ਪ੍ਰਤੀਬੰਧਿਤ ਹੈ।</string>
+<string name="serviceEnabled">ਸੇਵਾ ਸਕ੍ਰਿਅ ਹੋਈ।</string>
+<string name="serviceEnabledFor">ਲਈ ਸੇਵਾ ਸਕ੍ਰਿਅ ਹੋਈ :</string>
+<string name="serviceDisabled">ਸੇਵਾ ਨੂੰ ਅਸਕ੍ਰਿਅ ਕਰ ਦਿੱਤਾ ਗਿਆ ਹੈ।</string>
+<string name="serviceRegistered">ਰਜਿਸਟ੍ਰੇਸ਼ਨ ਸਫ਼ਲ ਸੀ।</string>
+<string name="serviceErased">ਮਿਟਾਉਣਾ ਸਫ਼ਲ ਸੀ।</string>
+<string name="passwordIncorrect">ਗਲਤ ਪਾਸਵਰਡ।</string>
+<string name="passwordChange">ਪਾਸਵਰਡ ਬਦਲਿਆ ਗਿਆ</string>
+<string name="mmiComplete">MMI ਪੂਰਾ ਹੋਇਆ।</string>
+<string name="badPin">ਪੁਰਾਣਾ PIN ਜੋ ਤੁਸੀ ਟਾਈਪ ਕੀਤਾ ਹੈ, ਸਹੀ ਨਹੀਂ ਹੈ।</string>
+<string name="badPin2">ਪੁਰਾਣਾ PIN2 ਜੋ ਤੁਸੀ ਟਾਈਪ ਕੀਤਾ ਹੈ, ਸਹੀ ਨਹੀਂ ਹੈ।</string>
+<string name="badPuk">ਜਿਹੜਾ PUK ਤੁਸੀ ਟਾਈਪ ਕੀਤਾ ਹੈ ਸਹੀ ਨਹੀਂ ਹੈ।</string>
+<string name="badPuk2">ਜਿਹੜਾ PUK2 ਤੁਸੀ ਟਾਈਪ ਕੀਤਾ ਹੈ ਸਹੀ ਨਹੀਂ ਹੈ।</string>
+<string name="mismatchPin">ਜੋ PIN ਤੁਸੀ ਭਰਿਆ ਹੈ, ਮੇਲ ਨਹੀਂ ਖਾਂਦਾ।</string>
+<string name="mismatchPin2">ਜੋ PIN2 ਤੁਸੀ ਭਰਿਆ ਹੈ, ਮੇਲ ਨਹੀਂ ਖਾਂਦਾ।</string>
+<string name="mismatchPuk">ਜੋ PUK ਤੁਸੀ ਭਰਿਆ ਹੈ, ਮੇਲ ਨਹੀਂ ਖਾਂਦਾ।</string>
+<string name="mismatchPuk2">ਜੋ PUK2 ਤੁਸੀ ਭਰਿਆ ਹੈ, ਮੇਲ ਨਹੀਂ ਖਾਂਦਾ।</string>
+<string name="invalidPin">PIN ਟਾਈਪ ਕਰੋ ਜੋ  4 ਤੋਂ 8 ਨੰਬਰਾਂ ਦਾ ਹੋਵੇ।</string>
+<string name="invalidPuk">PUK ਟਾਈਪ ਕਰੋ ਜੋ  8 ਨੰਬਰਾਂ ਦਾ ਜਾਂ ਇਸਤੋਂ ਲੰਬਾ ਹੋਵੇ।</string>
+<string name="needPuk">ਤੁਹਾਡੇ SIM ਕਾਰਡ ਦਾ PUK ਲਾੱਕ ਲੱਗ ਗਿਆ ਹੈ। ਇਸਨੂੰ ਲਾੱਕ ਖੋਲ੍ਹਣ ਲਈ PUK ਕੋਡ ਟਾਈਪ ਕਰੋ।</string>
+<string name="needPuk2">SIM ਕਾਰਡ ਅਨਬਲਾੱਕ ਕਰਨ ਲਈ PUK2 ਟਾਈਪ ਕਰੋ।</string>
+<string name="needPinLock">PIN ਲਈ ਜਰੂਰੀ PIN-ਲਾੱਕ ਸੈਟਿੰਗ ਬਦਲੋ।</string>
+<string name="ClipMmi">ਇਨਕਮਿੰਗ ਕਾੱਲਰ  ID</string>
+<string name="ClirMmi">ਆਊਟਗੋਇੰਗ  ਕਾੱਲਰ ID</string>
+<string name="ColpMmi">ਲਾਈਨ ਪਹਿਚਾਣ ਪ੍ਰਦਰਸ਼ਨ ਕੁਨੈਕਟ ਹੋਇਆ</string>
+<string name="ColrMmi">ਲਾਈਨ ਪਹਿਚਾਣ ਪ੍ਰਤੀਬੰਧ ਕੁਨੈਕਟ ਹੋਇਆ</string>
+<string name="CfMmi">ਕਾੱਲ ਫਾਰਵਰਡਿੰਗ</string>
+<string name="UnConditionCfMmi">ਸ਼ਰਤਹੀਣ ਕਾੱਲ ਫਾਰਵਰਡਿੰਗ</string>
+<string name="BusyCfMmi">ਜਦ ਕਾੱਲ ਫਾਰਵਰਡਿੰਗ ਵਿਅਸਤ ਹੋਵੇ</string>
+<string name="NoReplyCfMmi">ਜਦ ਕਾੱਲ ਫਾਰਵਰਡਿੰਗ ਦਾ ਕੋਈ ਉੱਤਰ ਨਾ ਆਵੇ</string>
+<string name="NotReachCfMmi">ਜਦ ਕਾੱਲ ਫਾਰਵਰਡਿੰਗ ਪਹੁੰਚ ਵਿੱਚ ਨਾ ਹੋਵੇ</string>
+<string name="AllCfMmi">ਸਾਰੇ ਕਾੱਲ ਫਾਰਵਰਡਿੰਗ</string>
+<string name="ConditionCfMmi">ਸ਼ਰਤਬੱਧ ਕਾੱਲ ਫਾਰਵਰਡਿੰਗ</string>
+<string name="CwMmi">ਕਾੱਲ ਵੇਟਿੰਗ</string>
+<string name="BaMmi">ਕਾੱਲ ਬਾਰਿੰਗ</string>
+<string name="BaocMmi">ਸਾਰੀਆਂ ਆਊਟਗੋਇੰਗ ਕਾੱਲਾਂ ਦੀ ਬਾਰਿੰਗ</string>
+<string name="BaoicMmi">ਸਾਰੀਆਂ ਆਊਟਗੋਇੰਗ ਅੰਤਰਰਾਸ਼ਟਰੀ ਕਾੱਲਾਂ ਦੀ ਬਾਰਿੰਗ</string>
+<string name="BaoicxhMmi">ਹੋਮ ਕੰਟਰੀ ਤੋਂ ਇਲਾਵਾ ਸਾਰੀਆਂ ਆਊਟਗੋਇੰਗ ਅੰਤਰਰਾਸ਼ਟਰੀ ਕਾੱਲਾਂ ਦੀ ਬਾਰਿੰਗ</string>
+<string name="BaicMmi">ਸਾਰੀਆਂ ਇਨਕਮਿੰਗ ਕਾੱਲਾਂ ਦੀ ਬਾਰਿੰਗ</string>
+<string name="BaicrMmi">ਰੋਮਿੰਗ ਦੌਰਾਨ ਸਾਰੀਆਂ ਇਨਕਮਿੰਗ ਕਾੱਲਾਂ ਦੀ ਬਾਰਿੰਗ</string>
+<string name="BaallMmi">ਸਾਰੀਆਂ ਮੁੱਢਲੀਆਂ ਸੇਵਾਵਾਂ ਸਾਰੇ ਬਾਰਿੰਗ</string>
+<string name="BamoMmi">ਸਾਰੀਆਂ ਮੁੱਢਲੀਆਂ ਸੇਵਾਵਾਂ ਲਈ ਸਾਰੀਆਂ ਆਊਟਗੋਇੰਗ</string>
+<string name="BamtMmi">ਸਾਰੀਆਂ ਮੁੱਢਲੀਆਂ ਸੇਵਾਵਾਂ ਲਈ ਸਾਰੀਆਂ ਇਨਕਮਿੰਗ</string>
+<string name="ActiveUnconCf">ਕਾੱਲ ਫਾਰਵਾਰਡਿੰਗ ਸ਼ਰਤਹੀਣ</string>
+<string name="ActiveConCf">ਕਾੱਲ ਫਾਰਵਾਰਡਿੰਗ ਸ਼ਰਤਬੱਧ</string>
+<string name="CallForwarded">ਕਾੱਲ ਫਾਰਵਰਡ</string>
+<string name="CallWaiting">ਕਾੱਲ ਵੇਟਿੰਗ</string>
+<string name="CugCall">CUG ਕਾੱਲ</string>
+<string name="OutCallBarred">ਆਊਟਗੋਇੰਗ ਕਾੱਲ ਬਾਰਡ ਹੋਈ</string>
+<string name="InCallBarred">ਇਨਕਮਿੰਗ ਕਾੱਲ ਬਾਰਡ ਕੀਤੀ ਗਈ</string>
+<string name="ClirRejected">CLIR ਰੋਕ ਖਾਰਿਜ</string>
+<string name="ForwardedCall">ਕਾੱਲ ਫਾਰਵਰਡ ਕੀਤੀ ਗਈ</string>
+<string name="CallHold">ਕਾੱਲ ਬਲਾੱਕ ਕੀਤੀ ਗਈ</string>
+<string name="CallRetrieved">ਕਾੱਲ ਪੁਨਰ ਪ੍ਰਾਪਤ ਕੀਤੀ ਗਈ</string>
+<string name="MultiCall">ਮਲਟੀ ਪਾਰਟੀ ਕਾੱਲ</string>
+<string name="HoldCallReleased">ਹੋਲਡ ਕਾੱਲ ਛੱਡੀ ਗਈ</string>
+<string name="ConnectingEct"> ECT ਨਾਲ ਕੁਨੈਕਟ ਹੋ ਰਿਹਾ ਹੈ</string>
+<string name="ConnectedEct"> ECT ਨਾਲ ਕੁਨੈਕਟ ਹੋਇਆ</string>
+<string name="IncomingCallForwarded">ਵਾਧੂ ਇਨਕਮਿੰਗ ਕਾੱਲਾਂ ਫਾਰਵਰਡ ਕੀਤੀਆਂ ਗਈਆਂ</string>
+<string name="PwdMmi">ਪਾਸਵਰਡ ਬਦਲੋ</string>
+<string name="PinMmi">PIN ਬਦਲੋ</string>
+<string name="Pin2Mmi">PIN2 ਬਦਲੋ</string>
+<string name="PukMmi">PIN ਅਨਲਾੱਕ</string>
+<string name="Puk2Mmi">PIN2 ਅਨਲਾੱਕ</string>
+<string name="CnipMmi">ਕਾੱਲਿੰਗ ਨੰਬਰ ਮੌਜੂਦ</string>
+<string name="CnirMmi">ਕਾੱਲਿੰਗ ਨੰਬਰ ਪ੍ਰਤੀਬੰਧਿਤ</string>
+<string name="ThreeWCMmi">ਤਿੰਨ ਤਰ੍ਹਾਂ ਦੀ ਕਾੱਲਿੰਗ</string>
+<string name="RuacMmi">ਅਣਚਾਹੀ ਕਸ਼ਟਦਾਇਕ ਕਾੱਲਾਂ ਦੀ ਨਾਮਨਜੂਰੀ</string>
+<string name="CndMmi">ਕਾੱਲਿੰਗ ਨੰਬਰ ਡਿਲੀਵਿਰੀ</string>
+<string name="DndMmi">ਪਰੇਸ਼ਾਨ ਨਾ ਕਰੋ</string>
+<string name="CLIRDefaultOnNextCallOn">ਕਾੱਲਰ ID ਡਿਫਾਲਟਸ ਤੋਂ ਪ੍ਰਤੀਬੰਧਿਤ। ਅਗਲੀ ਕਾੱਲ : ਪ੍ਰਤੀਬੰਧਿਤ</string>
+<string name="CLIRDefaultOnNextCallOff">ਕਾੱਲਰ ID ਡਿਫਾਲਟਸ ਤੋਂ ਪ੍ਰਤੀਬੰਧਿਤ। ਅਗਲੀ ਕਾੱਲ : ਪ੍ਰਤੀਬੰਧਿਤ ਨਹੀ</string>
+<string name="CLIRDefaultOffNextCallOn">ਕਾੱਲਰ ID ਡਿਫਾਲਟਸ ਤੋਂ ਪ੍ਰਤੀਬੰਧਿਤ ਨਹੀ। ਅਗਲੀ ਕਾੱਲ : ਪ੍ਰਤੀਬੰਧਿਤ</string>
+<string name="CLIRDefaultOffNextCallOff">ਕਾੱਲਰ ID ਡਿਫਾਲਟਸ ਤੋਂ ਪ੍ਰਤੀਬੰਧਿਤ ਨਹੀ। ਅਗਲੀ ਕਾੱਲ : ਪ੍ਰਤੀਬੰਧਿਤ ਨਹੀ</string>
+<string name="serviceNotProvisioned">ਪ੍ਰਬੰਧਿਤ ਨਾ ਕੀਤੀ ਗਈ ਸੇਵਾ।</string>
+<string name="CLIRPermanent">ਕਾੱਲਰ ID ਸੈਟਿੰਗ ਬਦਲੀ ਨਹੀਂ ਜਾ ਸਕਦੀ।</string>
+<string name="RestrictedChangedTitle">ਪ੍ਰਤੀਬੰਧਿਤ ਉਪਯੋਗ ਬਦਲਿਆ ਗਿਆ</string>
+<string name="RestrictedOnData">ਡਾਟਾ ਸੇਵਾ ਬਲਾੱਕ ਕੀਤੀ ਗਈ ਹੈ।</string>
+<string name="RestrictedOnEmergency">ਆਪਾਤਕਾਲੀਨ ਸੇਵਾ ਬਲਾੱਕ ਕੀਤੀ ਗਈ ਹੈ।</string>
+<string name="RestrictedOnNormal">ਵਾੱਇਸ ਸੇਵਾ ਬਲਾੱਕ ਕੀਤੀ ਗਈ ਹੈ।</string>
+<string name="RestrictedOnAllVoice">ਸਾਰੀਆਂ ਵਾੱਇਸ ਸੇਵਾਵਾਂ ਬਲਾੱਕ ਕੀਤੀਆਂ ਗਈਆਂ ਹਨ।</string>
+<string name="RestrictedOnSms">SMS ਸੇਵਾ ਬਲਾੱਕ ਕੀਤੀ ਗਈ ਹੈ।</string>
+<string name="RestrictedOnVoiceData">ਵਾੱਇਸ/ਡਾਟਾ ਸੇਵਾਵਾਂ ਬਲਾੱਕ ਕੀਤੀਆਂ ਗਈਆਂ ਹਨ।</string>
+<string name="RestrictedOnVoiceSms">ਵਾੱਇਸ/SMS ਸੇਵਾਵਾਂ ਬਲਾੱਕ ਕੀਤੀਆਂ ਗਈਆਂ ਹਨ।</string>
+<string name="RestrictedOnAll">ਸਾਰੀਆਂ ਵਾੱਇਸ/ਡਾਟਾ/SMS ਸੇਵਾਵਾਂ ਬਲਾੱਕ ਕੀਤੀਆਂ ਗਈਆਂ ਹਨ।</string>
+<string name="serviceClassVoice">ਆਵਾਜ਼</string>
+<string name="serviceClassData">ਡਾਟਾ</string>
+<string name="serviceClassFAX">ਫੈਕਸ</string>
+<string name="serviceClassSMS">SMS</string>
+<string name="serviceClassDataAsync">ਏਸਿੰਕ</string>
+<string name="serviceClassDataSync">ਸਿੰਕ</string>
+<string name="serviceClassPacket">ਪੈਕੇਟ</string>
+<string name="roamingText0">ਰੋਮਿੰਗ ਸੂਚਕ ਚਾਲੂ</string>
+<string name="roamingText1">ਰੋਮਿੰਗ ਸੂਚਕ ਬੰਦ</string>
+<string name="roamingText2">ਰੋਮਿੰਗ ਸੂਚਕ ਚਮਕ ਰਿਹਾ ਹੈ</string>
+<string name="roamingText3">ਗੁਆਂਢ ਤੋਂ ਬਾਹਰ</string>
+<string name="roamingText4">ਇਮਾਰਤ ਤੋਂ ਬਾਹਰ</string>
+<string name="roamingText5">ਰੋਮਿੰਗ- ਤਰਜ਼ੀਹ ਵਾਲਾ ਸਿਸਟਮ</string>
+<string name="roamingText6">ਰੋਮਿੰਗ-ਮੌਜੂਦ ਸਿਸਟਮ</string>
+<string name="roamingText7">ਰੋਮਿੰਗ-ਗਠਜੋੜ ਸਾਂਝੇਦਾਰ</string>
+<string name="roamingText8">ਰੋਮਿੰਗ-ਪ੍ਰੀਮੀਅਮ ਸਾਂਝੇਦਾਰ</string>
+<string name="roamingText9">ਰੋਮਿੰਗ-ਪੂਰਨ ਸੇਵਾ ਕਾਰਜ ਸ਼ੀਲਤਾ</string>
+<string name="roamingText10">ਰੋਮਿੰਗ-ਆਂਸ਼ਿਕ ਸੇਵਾ ਕਾਰਜ ਸ਼ੀਲਤਾ</string>
+<string name="roamingText11">ਰੋਮਿੰਗ ਬੇਨਰ ਚਾਲੂ</string>
+<string name="roamingText12">ਰੋਮਿੰਗ ਬੇਨਰ ਬੰਦ</string>
+<string name="roamingTextSearching">ਸੇਵਾ ਲਈ ਖੋਜ ਰਿਹਾ ਹੈ</string>
+<string name="cfTemplateNotForwarded"><xliff:g id="bearer_service_code">{0}</xliff:g>: ਫਾਰਵਰਡ ਨਹੀ ਕੀਤੀਆਂ ਗਈਆਂ</string>
+<string name="cfTemplateForwarded"><xliff:g id="bearer_service_code">{0}</xliff:g>: <xliff:g id="dialing_number">{1}</xliff:g></string>
+<string name="cfTemplateForwardedTime"><xliff:g id="bearer_service_code">{0}</xliff:g>: <xliff:g id="dialing_number">{1}</xliff:g> <xliff:g id="time_delay">{2}</xliff:g>ਸੈਕਿੰਡਾਂ ਬਾਅਦ</string>
+<string name="cfTemplateRegistered"><xliff:g id="bearer_service_code">{0}</xliff:g>: ਫਾਰਵਰਡ ਨਹੀ ਕੀਤੀਆਂ ਗਈਆਂ</string>
+<string name="cfTemplateRegisteredTime"><xliff:g id="bearer_service_code">{0}</xliff:g>: ਫਾਰਵਰਡ ਨਹੀ ਕੀਤੀਆਂ ਗਈਆਂ</string>
+<string name="fcComplete">ਵਿਸ਼ੇਸ਼ਤਾਵਾਂ ਕੋਡ ਪੂਰਨ।</string>
+<string name="fcError">ਕੁਨੈਕਸ਼ਨ ਸਮੱਸਿਆ ਜਾ ਅਪ੍ਰਮਾਣਿਤ ਸੁਵਿਧਾ ਕੋਡ।</string>
+<string name="httpErrorOk">OK</string>
+<string name="httpError">ਵੈਬਪੇਜ ਵਿੱਚ ਇੱਕ ਤਰੁੱਟੀ ਹੈ।</string>
+<string name="httpErrorLookup">URL ਦਾ ਪਤਾ ਨਹੀਂ ਲੱਗ ਸਕਿਆ।</string>
+<string name="httpErrorUnsupportedAuthScheme">ਸਾਈਟ ਪਰਮਾਣੀਕਰਨ ਸਕੀਮ ਸਮਰਥਨ ਨਹੀਂ ਦੇ ਰਹੀ।</string>
+<string name="httpErrorAuth">ਪ੍ਰਮਾਣੀਕਰਨ ਅਸਫ਼ਲ ਸੀ।</string>
+<string name="httpErrorProxyAuth">ਪ੍ਰਾੱਕਸੀ ਸਰਵਰ ਦੁਆਰਾ ਪ੍ਰਮਾਣੀਕਰਨ ਅਸਫ਼ਲ ਸੀ।</string>
+<string name="httpErrorConnect">ਸਰਵਰ ਨਾਲ ਕੁਨੈਕਸ਼ਨ ਅਸਫ਼ਲ ਸੀ।</string>
+<string name="httpErrorIO">ਸਰਵਰ ਸੰਚਾਰ ਕਰਨ ਵਿੱਚ ਅਸਫ਼ਲ। ਕਿਰਪਾ ਕਰਕੇ ਬਾਅਦ ਵਿੱਚ ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ।</string>
+<string name="httpErrorTimeout">ਸਰਵਰ ਨਾਲ ਕੁਨੈਕਸ਼ਨ ਦਾ ਸਮਾਂ ਸਮਾਪਤ ਹੋਇਆ।</string>
+<string name="httpErrorRedirectLoop">ਪੇਜ ਵਿੱਚ ਬਹੁਤ ਸਾਰੇ ਪੁਨਰਪ੍ਰੇਸ਼ਿਤ ਸ਼ਾਮਿਲ ਹਨ।</string>
+<string name="httpErrorUnsupportedScheme">ਪ੍ਰੋਟੋਕਾੱਲ ਸਮਰਥਨ ਨਹੀਂ ਦਿੰਦੀ।</string>
+<string name="httpErrorFailedSslHandshake">ਇੱਕ ਸੁਰੱਖਿਅਤ ਕੁਨੈਕਸ਼ਨ ਸਥਾਪਿਤ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ।</string>
+<string name="httpErrorBadUrl">ਪੇਜ ਖੁੱਲ੍ਹ ਨਹੀਂ ਸਕਦਾ ਕਿਉਂਕਿ URL ਅਪ੍ਰਮਾਣਿਕ ਨਹੀਂ ਹੈ।</string>
+<string name="httpErrorFile">ਫਾਇਲ ਮੁੱਲਾਂਕਣ ਨਹੀਂ ਹੋ ਸਕੀ।</string>
+<string name="httpErrorFileNotFound">ਬੇਨਤੀ ਕੀਤੀ ਫਾਇਲ ਨਹੀਂ ਮਿਲੀ।</string>
+<string name="httpErrorTooManyRequests">ਬਹੁਤ ਸਾਰੀਆਂ ਬੇਨਤੀਆਂ ਪ੍ਰਕਿਰਿਆ ਵਿੱਚ ਹਨ। ਬਾਅਦ ਵਿੱਚ ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ।</string>
+<string name="notification_title">r <xliff:g id="account" example="foo@gmail.com">%1$s</xliff:g>ਲਈ ਸਾਈਨ ਇਨ ਤਰੁੱਟੀ</string>
+<string name="contentServiceSync">ਸਿੰਕ</string>
+<string name="contentServiceSyncNotificationTitle">ਸਿੰਕ</string>
+<string name="contentServiceTooManyDeletesNotificationDesc">ਬਹੁਤ ਸਾਰੇ <xliff:g id="content_type">%s</xliff:g> ਮਿਟਾਈਆਂ ਗਈਆਂ ਮੱਦਾਂ।</string>
+<string name="low_memory">ਫੋਨ ਸਟੋਰੇਜ ਪੂਰਨ ਹੈ। ਜਗ੍ਹਾ ਖਾਲੀ ਕਰਨ ਲਈ ਕੁਝ ਫਾਇਲਾਂ ਮਿਟਾਓ।</string>
+<string name="me">ਮੈਨੂੰ</string>
+<string name="power_dialog">ਫੋਨ ਵਿਕਲਪ</string>
+<string name="silent_mode">ਸ਼ਾਂਤ ਮੋਡ</string>
+<string name="turn_on_radio">ਵਾਇਰਲੈਸ ਚਲਾਉ</string>
+<string name="turn_off_radio">ਵਾਇਰਲੈਸ ਬੰਦ ਕਰੋ</string>
+<string name="screen_lock">ਸਕਰੀਨ ਲਾੱਕ</string>
+<string name="power_off">ਪਾਵਰ ਬੰਦ</string>
+<string name="shutdown_progress">ਬੰਦ ਕਰਨਾ \u2026</string>
+<string name="shutdown_confirm">ਤੁਹਾਡਾ ਫੋਨ ਬੰਦ ਹੋ ਜਾਏਗਾ।</string>
+<string name="recent_tasks_title">ਹਾਲ ਹੀ ਵਿੱਚ</string>
+<string name="no_recent_tasks">ਹਾਲ ਹੀ ਵਿੱਚ ਕੋਈ ਅਨੁਪ੍ਰਯੋਗ ਨਹੀਂ।</string>
+<string name="global_actions">ਫੋਨ ਵਿਕਲਪ</string>
+<string name="global_action_lock">ਸਕਰੀਨ ਲਾੱਕ</string>
+<string name="global_action_power_off">ਪਾਵਰ ਬੰਦ</string>
+<string name="global_action_toggle_silent_mode">ਸ਼ਾਂਤ ਮੋਡ</string>
+<string name="global_action_silent_mode_on_status">ਆਵਾਜ਼ ਬੰਦ ਕਰੋ</string>
+<string name="global_action_silent_mode_off_status">ਆਵਾਜ਼ ਸ਼ੁਰੂ ਕਰੋ</string>
+<string name="global_actions_toggle_airplane_mode">ਹਵਾਈ ਜਹਾਜ਼ ਮੋਡ</string>
+<string name="global_actions_airplane_mode_on_status">ਹਵਾਈ ਜਹਾਜ਼ ਮੋਡ ਚਾਲੂ</string>
+<string name="global_actions_airplane_mode_off_status">ਹਵਾਈ ਜਹਾਜ਼ ਮੋਡ ਬੰਦ</string>
+<string name="safeMode">ਸੁਰੱਖਿਅਤ ਮੋਡ</string>
+<string name="android_system_label">ਐਨਡਰਾੱਇਡ ਸਿਸਟਮ</string>
+<string name="permgrouplab_costMoney">ਉਹ ਸੇਵਾਵਾਂ ਜਿਹਨਾਂ ਲਈ ਧਨ ਖਰਚ ਹੋਵੇ</string>
+<string name="permgroupdesc_costMoney">ਅਨੁਪ੍ਰਯੋਗਾਂ ਨੂੰ ਉਹ ਕੰਮ ਕਰਨ ਦੀ ਅਨੁਮਤੀ ਦਿਓ ਜਿਹਨਾਂ ਤੇ ਤੁਹਾਡਾ ਖਰਚ ਆ ਸਕਦਾ ਹੈ।</string>
+<string name="permgrouplab_messages">ਤੁਹਾਡੇ ਸੰਦੇਸ਼</string>
+<string name="permgroupdesc_messages">ਆਪਣੇ SMS,ਈ-ਮੇਲ ਅਤੇ ਹੋਰ ਸੁਨੇਹਿਆਂ ਨੂੰ ਪੜ੍ਹੋ ਅਤੇ ਲਿਖੋ।</string>
+<string name="permgrouplab_personalInfo">ਤੁਹਾਡੀ ਨਿੱਜੀ ਜਾਣਕਾਰੀ</string>
+<string name="permgroupdesc_personalInfo">ਫੋਨ ਤੇ ਸਟੋਰ ਕੀਤੇ ਤੁਹਾਡੇ ਸੰਪਰਕਾਂ ਤੇ ਕੈਲੰਡਰ ਤੱਕ ਸਿੱਧੀ ਪਹੁੰਚ।</string>
+<string name="permgrouplab_location">ਤੁਹਾਡਾ ਸਥਾਨ</string>
+<string name="permgroupdesc_location">ਆਪਣੀ ਸਰੀਰਿਕ ਸਥਿਤੀ ਦਾ ਨਿਰੀਕਣ ਕਰਨਾ</string>
+<string name="permgrouplab_network">ਨੈਟਵਰਕ ਸੰਚਾਰ</string>
+<string name="permgroupdesc_network">ਅਨੁਪ੍ਰਯੋਗਾਂ ਨੂੰ ਭਿੰਨ ਨੈਟਵਰਕ ਵਿਸ਼ੇਸ਼ਤਾਵਾਂ ਤੱਕ ਪਹੁੰਚ ਦੀ ਅਨੁਮਤੀ ਦਿਓ।</string>
+<string name="permgrouplab_accounts">ਤੁਹਾਡੇ ਖਾਤੇ</string>
+<string name="permgroupdesc_accounts">ਮੌਜੂਦ ਖਾਤੇ ਵਰਤੋ।</string>
+<string name="permgrouplab_hardwareControls">ਹਾਰਡਵੇਅਰ ਨਿਯੰਤਰਣ</string>
+<string name="permgroupdesc_hardwareControls">ਹੈਂਡਸੈਟ ਤੇ ਹਾਰਡਵੇਅਰ ਤੱਕ ਸਿੱਧੀ ਪਹੁੰਚ।</string>
+<string name="permgrouplab_phoneCalls">ਫੋਨ ਕਾੱਲਾਂ</string>
+<string name="permgroupdesc_phoneCalls">ਫੋਨ ਕਾਲਾਂ ਨੂੰ ਮਾਨੀਟਰ ਕਰੋ, ਰਿਕਾਰਡ ਕਰੋ ਅਤੇ ਪ੍ਰਕਿਰਿਆ ਕਰੋ।</string>
+<string name="permgrouplab_systemTools">ਸਿਸਟਮ ਉਪਕਰਨ</string>
+<string name="permgroupdesc_systemTools">ਸਿਸਟਮ ਦੀ ਘੱਟ-ਪੱਧਰ ਪਹੁੰਚ ਅਤੇ ਨਿਯੰਤ੍ਰਣ।</string>
+<string name="permgrouplab_developmentTools">ਵਿਕਾਸ ਯੰਤਰ</string>
+<string name="permgroupdesc_developmentTools">ਵਿਸ਼ੇਸ਼ਤਾਵਾਂ ਕੇਵਲ ਅਨੁਪ੍ਰਯੋਗ ਵਿਕਾਸਕਾਰਾਂ ਲਈ ਲੋੜੀਂਦੀਆਂ।</string>
+<string name="permgrouplab_storage">ਸਟੋਰੇਜ</string>
+<string name="permgroupdesc_storage" product="nosdcard">USB ਸਟੋਰੇਜ ਵਰਤੋ।</string>
+<string name="permgroupdesc_storage" product="default">SD ਕਾਰਡ ਵਰਤੋ।</string>
+<string name="permlab_statusBar">ਸਟੇਸ਼ਨ ਬਾਰ ਅਸਕ੍ਰਿਅ ਕਰੋ ਜਾਂ ਬਦਲੋ</string>
+<string name="permdesc_statusBar">ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਸਥਿਤੀ ਬਾਰ ਨੂੰ ਨਿਸ਼ਕ੍ਰਿਏ ਕਰਨ ਜਾਂ ਸਿਸਟਮ ਆਈਕਨਾਂ ਨੂੰ ਜੋੜਨ ਜਾਂ ਮਿਟਾਉਣ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ।</string>
+<string name="permlab_statusBarService">ਸਥਿਤੀ ਬਾਰ</string>
+<string name="permdesc_statusBarService">ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਸਟੇਟਸ ਬਾਰ ਤੇ ਰਹਿਣ ਦੀ ਇਜ਼ਾਜਤ ਦਿਓ।</string>
+<string name="permlab_expandStatusBar">ਵਿਸਤਾਰ ਕਰੋ/ਸਟੇਟਸ ਬਾਰ ਸੰਖਿਪਤ ਕਰੋ</string>
+<string name="permdesc_expandStatusBar">ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਸਥਿਤੀ ਬਾਰ ਦਾ ਵਿਸਤਾਰ ਕਰਨ ਜਾਂ ਇਸਨੂੰ ਅਸਫਲ ਕਰਨ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ।</string>
+<string name="permlab_processOutgoingCalls">ਆਊਟਗੋਇੰਗ ਕਾਲਾਂ ਵਿਚਕਾਰ ਰੋਕੋ</string>
+<string name="permdesc_processOutgoingCalls">ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਆਊਟਗੋਇੰਗ ਕਾਲਾਂ ਦੀ ਪ੍ਰਕਿਰਿਆ ਕਰਨ ਅਤੇ ਡਾਇਲ ਕੀਤੇ ਜਾਣ ਵਾਲੇ ਨੰਬਰਾਂ ਨੂੰ ਬਦਲਣ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ। ਖਰਾਬ ਅਨੁਪ੍ਰਯੋਗ ਆਊਟਗੋਇੰਗ ਕਾਲਾਂ ਨੂੰ ਮਾਨੀਟਰ, ਰੀਡਾਇਰੈਕਟ ਕਰ ਸਕਦੇ ਹਨ ਜਾਂ ਰੋਕ ਸਕਦੇ ਹਨ।</string>
+<string name="permlab_receiveSms">SMS ਪ੍ਰਾਪਤ ਕਰੋ</string>
+<string name="permdesc_receiveSms">ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ SMS ਸੁਨੇਹੇ ਪ੍ਰਾਪਤ ਕਰਨ ਅਤੇ ਪ੍ਰਕਿਰਿਆ ਕਰਨ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ। ਖਰਾਬ ਅਨੁਪ੍ਰਯੋਗ ਤੁਹਾਡੇ ਸੁਨੇਹਿਆਂ ਨੂੰ ਮਾਨੀਟਰ ਕਰ ਸਕਦੇ ਹਨ ਜਾਂ ਤੁਹਾਨੂੰ ਉਹਨਾਂ ਨੂੰ ਬਿਨਾਂ ਦਿਖਾਏ ਹੀ ਮਿਟਾ ਸਕਦੇ ਹਨ।</string>
+<string name="permlab_receiveMms">MMS ਪ੍ਰਾਪਤ ਕਰੋ</string>
+<string name="permdesc_receiveMms">ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ MMS ਸੁਨੇਹੇ ਪ੍ਰਾਪਤ ਕਰਨ ਅਤੇ ਪ੍ਰਕਿਰਿਆ ਕਰਨ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ। ਖਰਾਬ ਅਨੁਪ੍ਰਯੋਗ ਤੁਹਾਡੇ ਸੁਨੇਹਿਆਂ ਨੂੰ ਮਾਨੀਟਰ ਕਰ ਸਕਦੇ ਹਨ ਜਾਂ ਤੁਹਾਨੂੰ ਉਹਨਾਂ ਨੂੰ ਬਿਨਾਂ ਦਿਖਾਏ ਹੀ ਮਿਟਾ ਸਕਦੇ ਹਨ।</string>
+<string name="permlab_sendSms">SMS ਸੰਦੇਸ਼ ਭੇਜੋ</string>
+<string name="permdesc_sendSms">ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ SMS ਸੁਨੇਹੇ ਭੇਜਣ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ। ਖਰਾਬ ਅਨੁਪ੍ਰਯੋਗ ਤੁਹਾਡੀ ਪੁਸ਼ਟੀ ਤੋਂ ਬਿਨਾਂ ਤੁਹਾਡੇ ਤੋਂ ਸੁਨੇਹੇ ਭੇਜਣ ਦਾ ਖਰਚ ਲੈ ਸਕਦੇ ਹਨ।</string>
+<string name="permlab_readSms">SMS ਜਾਂ MMS ਪੜ੍ਹੋ</string>
+<string name="permdesc_readSms">ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਤੁਹਾਡੇ ਫੋਨ ਜਾਂ SIM ਕਾਰਡ ਤੇ ਸਟੋਰ ਕੀਤੇ SMS ਸੁਨੇਹੇ ਪੜ੍ਹਨ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ। ਖਰਾਬ ਅਨੁਪ੍ਰਯੋਗ ਤੁਹਾਡੇ ਗੁਪਤ ਸੁਨੇਹਿਆਂ ਨੂੰ ਪੜ੍ਹ ਸਕਦੇ ਹਨ।</string>
+<string name="permlab_writeSms">SMS ਜਾਂ MMS ਐਡਿਟ ਕਰੋ</string>
+<string name="permdesc_writeSms">ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਤੁਹਾਡੇ ਫੋਨ ਜਾਂ SIM ਕਾਰਡ ਤੇ ਸਟੋਰ ਕੀਤੇ SMS ਸੁਨੇਹੇ ਲਿਖਣ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ। ਖਰਾਬ ਅਨੁਪ੍ਰਯੋਗ ਤੁਹਾਡੇ ਸੁਨੇਹਿਆਂ ਨੂੰ ਮਿਟਾ ਸਕਦੇ ਹਨ।</string>
+<string name="permlab_receiveWapPush">WAP ਪ੍ਰਾਪਤ ਕਰੋ</string>
+<string name="permdesc_receiveWapPush">ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ WAP ਸੁਨੇਹੇ ਪ੍ਰਾਪਤ ਕਰਨ ਜਾਂ ਪ੍ਰਕਿਰਿਆ ਕਰਨ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ। ਖਰਾਬ ਅਨੁਪ੍ਰਯੋਗ ਤੁਹਾਡੇ ਸੁਨੇਹਿਆਂ ਨੂੰ ਮਾਨੀਟਰ ਕਰ ਸਕਦੇ ਹਨ ਜਾਂ ਤੁਹਾਨੂੰ ਉਹਨਾਂ ਨੂੰ ਬਿਨਾਂ ਦਿਖਾਏ ਹੀ ਮਿਟਾ ਸਕਦੇ ਹਨ।</string>
+<string name="permlab_getTasks">ਚਲ ਰਹੇ ਅਨੁਪ੍ਰਯੋਗਾਂ ਲਈ ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ</string>
+<string name="permdesc_getTasks">ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਇਸ ਵੇਲੇ ਅਤੇ ਹਾਲ ਵਿੱਚ ਹੀ ਚੱਲਣ ਵਾਲੇ ਕੰਮਾਂ ਬਾਰੇ ਜਾਣਕਾਰੀ ਮੁੜ ਪ੍ਰਾਪਤ ਕਰਨ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ। ਖਰਾਬ ਅਨੁਪ੍ਰਯੋਗਾਂ ਨੂੰ ਹੋਰ ਅਨੁਪ੍ਰਯੋਗਾਂ ਬਾਰੇ ਨਿਜੀ ਜਾਣਕਾਰੀ ਖੋਜਣ ਦੀ ਅਨੁਮਤੀ ਦੇ ਸਕਦਾ ਹੈ। </string>
+<string name="permlab_reorderTasks">ਚਲ ਰਹੇ ਅਨੁਪ੍ਰਯੋਗਾਂ ਨੂੰ ਪੁਨਰ ਕ੍ਰਮ ਵਿੱਚ ਲਗਾਓ</string>
+<string name="permdesc_reorderTasks">ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਕੰਮਾਂ ਨੂੰ ਅੱਗੇ ਅਤੇ ਪਿੱਛੇ ਭੇਜਣ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ। ਖਰਾਬ ਅਨੁਪ੍ਰਯੋਗ ਖੁਦ ਨੂੰ ਤੁਹਾਡੇ ਨਿਯੰਤ੍ਰਣ ਤੋਂ ਬਿਨਾਂ ਅੱਗੇ ਧੱਕ ਸਕਦੇ ਹਨ।</string>
+<string name="permlab_setDebugApp">ਡੀਬਗਿੰਗ ਅਨੁਪ੍ਰਯੋਗ ਸਕ੍ਰਿਅ ਕਰੋ</string>
+<string name="permdesc_setDebugApp">ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਦੂਜੇ ਅਨੁਪ੍ਰਯੋਗ ਲਈ ਡੀਬਗਿੰਗ ਚਾਲੂ ਕਰਨ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ। ਖਰਾਬ ਅਨੁਪ੍ਰਯੋਗ ਦੂਜੇ ਅਨੁਪ੍ਰਯੋਗਾਂ ਨੂੰ ਨਸ਼ਟ ਕਰਨ ਲਈ ਇਸਦਾ ਪ੍ਰਯੋਗ ਕਰ ਸਕਦੇ ਹਨ।l</string>
+<string name="permlab_changeConfiguration">ਆਪਣੀਆਂ UI ਸੈਟਿੰਗਾਂ ਬਦਲੋ</string>
+<string name="permdesc_changeConfiguration">ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਵਰਤਮਾਨ ਕੌਂਫੀਗੁਰੇਸ਼ਨ ਨੂੰ ਬਦਲਣ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ, ਜਿਵੇਂ ਸਥਾਨ ਜਾਂ ਸੰਪੂਰਣ ਫੌਂਟ ਆਕਾਰ। </string>
+<string name="permlab_enableCarMode">ਕਾਰ ਮੋਡ ਸਕ੍ਰਿਅ ਕਰੋ</string>
+<string name="permdesc_enableCarMode">ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਕਾਰ ਮੋਡ ਸਮਰਥ ਕਰਨ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ। </string>
+<string name="permlab_killBackgroundProcesses">ਬੈਕਗਰਾਊਂਡ ਪ੍ਰਕਿਰਿਆਵਾਂ ਰੱਦ ਕਰੋ</string>
+<string name="permdesc_killBackgroundProcesses">ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਹੋਰਾਂ ਅਨੁਪ੍ਰਯੋਗਾਂ ਦੀਆਂ ਪਿਛੋਕੜ ਪ੍ਰਕਿਰਿਆਵਾਂ ਨੂੰ ਨਸ਼ਟ ਕਰਨ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ, ਭਾਵੇਂ ਮੈਮਰੀ ਘੱਟ ਨਾ\ ਹੋਵੇ।  </string>
+<string name="permlab_forceStopPackages">ਦੂਜੇ ਅਨੁਪ੍ਰਯੋਗ ਜਬਰਦਸਤੀ ਰੋਕੋ</string>
+<string name="permdesc_forceStopPackages">ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਹੋਰਾਂ ਅਨੁਪ੍ਰਯੋਗਾਂ ਨੂੰ ਜਬਰਦਸਤੀ ਰੋਕਣ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ।</string>
+<string name="permlab_forceBack">ਜਬਰਦਸਤੀ ਬੰਦ ਕਰਨ ਲਈ ਅਨੁਪ੍ਰਯੋਗ</string>
+<string name="permdesc_forceBack">ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਕਿਸੇ ਅਜਿਹੀ ਕਿਰਿਆ ਤੇ ਜ਼ੋਰ ਦੇਣ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ ਜੋ ਬੰਦ ਕਰਨ ਲਈ ਅਤੇ ਪਿੱਛੇ ਜਾਣ ਲਈ ਅਗਲੇ ਪਾਸੇ ਵਿੱਚ ਹੈ। ਸਧਾਰਨ ਅਨੁਪ੍ਰਯੋਗਾਂ ਲਈ ਕਦੇ ਵੀ ਲੋੜੀਂਦੇ ਨਹੀਂ।</string>
+<string name="permlab_dump">ਅੰਦਰੂਨੀ ਸਥਿਤੀ ਸਿਸਟਮ ਲਈ ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ</string>
+<string name="permdesc_dump">ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਸਿਸਟਮ ਦੀ ਅੰਦਰੂਨੀ ਸਥਿਤੀ ਨੂੰ ਮੁੜ ਪ੍ਰਾਪਤ ਕਰਨ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ। ਖਰਾਬ ਅਨੁਪ੍ਰਯੋਗ ਅਜਿਹੀ ਨਿਜੀ ਅਤੇ ਸੁਰੱਖਿਅਤ ਜਾਣਕਾਰੀ ਦੀ ਇੱਕ ਵਿਸ਼ਾਲ ਵਿਵਧਤਾ ਨੂੰ ਮੁੜ ਪ੍ਰਾਪਤ ਕਰ ਸਕਦੇ ਹਨ ਜਿਸਦੀ ਲੋੜ ਆਮ ਤੌਰ ਤੇ ਕਦੇ ਵੀ ਨਹੀਂ ਹੋਵੇਗੀ।</string>
+<string name="permlab_shutdown">ਆਂਸ਼ਿਕ ਬੰਦ ਕਰੋ</string>
+<string name="permdesc_shutdown">ਕਿਰਿਆ ਪ੍ਰਬੰਧਕ ਨੂੰ ਸ਼ਟਡਾਊਨ ਸਥਿਤੀ ਵਿੱਚ ਪਾ ਦਿੰਦਾ ਹੈ। ਇੱਕ ਪੂਰਾ ਸ਼ਟਡਾਊਨ ਪੂਰਨ ਨਹੀਂ ਕਰਦਾ।</string>
+<string name="permlab_stopAppSwitches">ਅਨੁਪ੍ਰਯੋਗ ਸਵਿੱਚਾਂ ਨੂੰ ਰੋਕਦਾ ਹੈ</string>
+<string name="permdesc_stopAppSwitches">ਉਪਯੋਗਕਰਤਾ ਨੂੰ ਦੂਜੇ ਅਨੁਪ੍ਰਯੋਗ ਬਦਲਣ ਤੋਂ ਰੋਕਦਾ ਹੈ। </string>
+<string name="permlab_runSetActivityWatcher">ਸਾਰੇ ਸ਼ੁਰੂ ਕੀਤੇ ਅਨੁਪ੍ਰਯੋਗਾਂ ਨੂੰ ਨਿਯੰਤਰਿਤ ਕਰੋ ਅਤੇ ਇਹਨਾਂ ਦਾ ਨਿਰੀਖਣ ਕਰੋ</string>
+<string name="permdesc_runSetActivityWatcher">ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਇਹ ਮਾਨੀਟਰ ਅਤੇ ਨਿਯੰਤ੍ਰਣ ਕਰਨ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ ਕਿ ਸਿਸਟਮ ਕਿਵੇਂ ਕਿਰਿਆਵਾਂ ਦੀ ਸ਼ੁਰੂਆਤ ਕਰਦੇ ਹਨ। ਖਰਾਬ ਅਨੁਪ੍ਰਯੋਗ ਸਿਸਟਮ ਨਾਲ ਪੂਰੀ ਤਰ੍ਹਾਂ ਜੋਖਿਮ ਵਿੱਚ ਪਾ  ਸਕਦੇ ਹਨ। ਇਹ ਅਨੁਮਤੀ ਕੇਵਲ ਵਿਕਾਸ ਲਈ ਲੋੜੀਂਦੀ ਹੁੰਦੀ ਹੈ, ਸਧਾਰਨ ਫੋਨ ਪ੍ਰਯੋਗ ਲਈ ਨਹੀਂ।</string>
+<string name="permlab_broadcastPackageRemoved">ਪੈਕੇਜ ਹਟਾਇਆ ਪ੍ਰਸਾਰਣ ਭੇਜੋ</string>
+<string name="permdesc_broadcastPackageRemoved">ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਇੱਕ ਸੂਚਨਾ ਦਾ ਪ੍ਰਸਾਰਣ ਕਰਨ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ ਕਿ ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਪੈਕੇਜ ਮਿਟਾਇਆ ਗਿਆ ਹੈ। ਖਰਾਬ ਅਨੁਪ੍ਰਯੋਗ ਇਸਦਾ ਪ੍ਰਯੋਗ ਕਿਸੇ ਹੋਰ ਚੱਲ ਰਹੇ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਨਸ਼ਟ ਕਰਨ ਲਈ ਕਰ ਸਕਦੇ ਹਨ। </string>
+<string name="permlab_broadcastSmsReceived">SMS-ਪ੍ਰਾਪਤ ਪ੍ਰਸਾਰਣ ਭੇਜੋ</string>
+<string name="permdesc_broadcastSmsReceived">ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਇੱਕ ਸੂਚਨਾ ਦਾ ਪ੍ਰਸਾਰਣ ਕਰਨ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ ਕਿ ਇੱਕ  SMS ਸੁਨੇਹਾ ਪ੍ਰਾਪਤ ਹੋਇਆ ਹੈ। ਖਰਾਬ ਅਨੁਪ੍ਰਯੋਗ ਇਸਦਾ ਪ੍ਰਯੋਗ ਆਉਣ ਵਾਲੇ SMS ਸੁਨੇਹਿਆਂ ਨੂੰ ਵਿਕਸਿਤ ਕਰਨ ਲਈ ਕਰ ਸਕਦੇ ਹਨ।</string>
+<string name="permlab_broadcastWapPush">WAP-PUSH-ਪ੍ਰਾਪਤ ਪ੍ਰਸਾਰਣ ਭੇਜੋ</string>
+<string name="permdesc_broadcastWapPush">ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਇੱਕ ਸੂਚਨਾ ਦਾ ਪ੍ਰਸਾਰਣ ਕਰਨ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ ਕਿ ਇੱਕ  WAP PUSH ਸੁਨੇਹਾ ਪ੍ਰਾਪਤ ਹੋਇਆ ਹੈ। ਖਰਾਬ ਅਨੁਪ੍ਰਯੋਗ ਇਸਦਾ ਪ੍ਰਯੋਗ ਆਉਣ ਵਾਲੇ MMS ਸੁਨੇਹਾ ਪ੍ਰਾਪਤੀ ਨੂੰ ਵਿਕਸਿਤ ਕਰਨ ਲਈ ਜਾਂ ਖਰਾਬ ਰੂਪ-ਭੇਦਾਂ ਨਾਲ ਕਿਸੇ ਵੀ ਵੈਬ ਪੇਜ ਦੀ ਸਮੱਗਰੀ ਨੂੰ ਚੁਪਚਾਪ ਬਦਲਣ ਲਈ ਕਰ ਸਕਦੇ ਹਨ। </string>
+<string name="permlab_setProcessLimit">ਚਲ ਰਹੀਆਂ ਪ੍ਰਕਿਰਿਆਵਾਂ ਦੀ ਸੰਖਿਆ ਸੀਮਾ</string>
+<string name="permdesc_setProcessLimit">ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਅਧਿਕਤਮ ਸੰਖਿਆ ਵਿੱਚ ਉਹਨਾਂ ਪ੍ਰਕਿਰਿਆਵਾਂ ਤੇ ਨਿਯੰਤ੍ਰਣ ਪਾਉਣ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ ਜੋ ਚੱਲਣਗੀਆਂ। ਸਧਾਰਨ ਅਨੁਪ੍ਰਯੋਗਾਂ ਲਈ ਕਰਦੇ ਵੀ ਲੋੜੀਂਦਾ ਨਹੀਂ। </string>
+<string name="permlab_setAlwaysFinish">ਸਾਰੇ ਬੈਕਗਰਾਊਂਡ ਅਨੁਪ੍ਰਯੋਗ ਬੰਦ ਕਰੋ</string>
+<string name="permdesc_setAlwaysFinish">ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਇਹ ਨਿਯੰਤ੍ਰਣ ਕਰਨ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ ਕਿ ਕੀ ਕਿਰਿਆਵਾਂ ਹਮੇਸ਼ਾ ਪੂਰੀਆਂ ਹੁੰਦੀਆਂ ਹਨ ਜਿੰਨੀ ਜਲਦੀ ਉਹ ਪਿਛੋਕੜ ਵਿੱਚ ਜਾਂਦੀਆਂ ਹਨ। ਸਧਾਰਨ ਅਨੁਪ੍ਰਯੋਗਾਂ ਲਈ ਕਦੇ ਵੀ ਲੋੜੀਂਦਾ ਨਹੀਂ।</string>
+<string name="permlab_batteryStats">ਬੈਟਰੀ ਅੰਕੜੇ ਬਦਲੋ</string>
+<string name="permdesc_batteryStats">ਇਕੱਠੇ ਕੀਤੇ ਬੈਟਰੀ ਅੰਕੜਿਆਂ ਦਾ ਸੰਸ਼ੋਧਨ ਕਰਨ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ। ਸਧਾਰਨ ਅਨੁਪ੍ਰਯੋਗਾਂ ਦੇ ਪ੍ਰਯੋਗ ਲਈ ਨਹੀਂ। </string>
+<string name="permlab_backup">ਬੈਕਅਪ ਅਤੇ ਪੁਨਰਬਹਾਲੀ ਦੇ ਸਿਸਟਮ ਨੂੰ ਨਿਯੰਤਰਿਤ ਕਰੋ</string>
+<string name="permdesc_backup">ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਸਿਸਟਮ\ ਦੇ ਬੈਕਅਪ ਅਤੇ ਰੀਸਟੋਰ ਮਕੈਨਨਿਜ਼ਮ ਤੇ ਨਿਯੰਤ੍ਰਣ ਪਾਉਣ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ। ਸਧਾਰਨ ਅਨੁਪ੍ਰਯੋਗਾਂ ਦੇ ਪ੍ਰਯੋਗ ਲਈ ਨਹੀਂ। </string>
+<string name="permlab_internalSystemWindow">ਅਣ-ਅਧਿਕਾਰਿਤ ਵਿੰਡੋਸ ਦਿਖਾਓ</string>
+<string name="permdesc_internalSystemWindow">ਉਹਨਾਂ ਵਿੰਡੋਜ ਨੂੰ ਬਣਾਉਣ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ ਜੋ ਅੰਦਰੂਨੀ ਸਿਸਟਮ ਉਪਯੋਗਕਰਤਾ ਇੰਟਰਫੇਸ ਵੱਲੋਂ ਪ੍ਰਯੋਗ ਕੀਤੇ ਜਾਣ ਲਈ ਹਨ। ਸਧਾਰਨ ਅਨੁਪ੍ਰਯੋਗਾਂ ਦੇ ਪ੍ਰਯੋਗ ਲਈ ਨਹੀਂ। </string>
+<string name="permlab_systemAlertWindow">ਸਿਸਟਮ ਸਤਰ ਦੀਆਂ ਚੇਤਾਵਨੀਆਂ ਦਿਖਾਓ</string>
+<string name="permdesc_systemAlertWindow">ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਸਿਸਟਮ ਚੇਤਾਵਨੀ ਵਿੰਡੋਜ ਨੂੰ ਦਿਖਾਉਣ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ। ਖਰਾਬ ਅਨੁਪ੍ਰਯੋਗ ਫੋਨ ਦੇ ਸੰਪੂਰਣ ਸਿਸਟਮ ਤੇ ਕਬਜ਼ਾ ਕਰ ਸਕਦੇ ਹਨ। </string>
+<string name="permlab_setAnimationScale">ਗਲੋਬਲ ਐਨੀਮੇਸ਼ਨ ਗਤੀ ਬਦਲੋ</string>
+<string name="permdesc_setAnimationScale">ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਕਿਸੇ ਵੀ ਸਮੇਂ ਗਲੋਬਲ ਐਨੀਮੇਸ਼ਨ ਸਪੀਡ (ਤੇਜ਼ ਜਾਂ ਮੰਦ ਐਨੀਮੇਸ਼ਨਸ) ਨੂੰ ਬਦਲਣ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ। </string>
+<string name="permlab_manageAppTokens">ਅਨੁਪ੍ਰਯੋਗ ਟੋਕਨ ਪ੍ਰਬੰਧਿਤ ਕਰੋ</string>
+<string name="permdesc_manageAppTokens">ਅਨੁਪ੍ਰਯੋਗਾਂ ਨੂੰ ਉਹਨਾਂ ਦੇ ਆਪਣੇ ਟੋਕਨ ਬਣਾਉਣ ਅਤੇ ਪ੍ਰਬੰਧਨ ਕਰਨ ਅਤੇ ਉਹਨਾਂ ਦੇ ਸਧਾਰਨ Z-ਆਦੇਸ਼ ਦੀ ਅਣਗਹਿਲੀ ਕਰਨ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ। ਸਧਾਰਨ ਅਨੁਪ੍ਰਯੋਗਾਂ ਲਈ ਕਦੇ ਵੀ ਲੋੜ ਨਹੀਂ ਹੋਵੇਗੀ।</string>
+<string name="permlab_injectEvents">ਕੁੰਜੀਆਂ ਅਤੇ ਕੰਟਰੋਲ ਬਟਨ ਦਬਾਉ</string>
+<string name="permdesc_injectEvents">ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਹੋਰਾਂ ਅਨੁਪ੍ਰਯੋਗਾਂ ਲਈ ਇਸਦੇ ਆਪਣੇ ਇਨਪੁਟ ਕਾਰਜਕਰਮਾਂ (ਕੁੰਜੀ ਦਬਾਉਣਾ ਆਦਿ) ਨੂੰ ਡਿਲੀਵਰ ਕਰਨ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ। ਖਰਾਬ ਅਨੁਪ੍ਰਯੋਗ ਇਸਦਾ ਪ੍ਰਯੋਗ ਫੋਨ ਤੇ ਕਬਜ਼ਾ ਕਰਨ ਲਈ ਕਰ ਸਕਦੇ ਹਨ।</string>
+<string name="permlab_readInputState">ਤੁਸੀ ਜੋ ਟਾਈਪ ਕਰਦੇ ਹੋਂ ਜਾਂ ਤੁਸੀ ਕਾਰਵਾਈ ਕਰਦੇ ਹੋਂ, ਰਿਕਾਰਡ ਕਰੋ</string>
+<string name="permdesc_readInputState">ਅਨੁਪ੍ਰਯੋਗਾਂ ਨੂੰ ਤੁਹਾਡੇ ਵੱਲੋਂ ਦਬਾਈਆਂ ਜਾਣ ਵਾਲੀਆਂ ਕੁੰਜੀਆਂ ਨੂੰ ਦੇਖਣ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ ਜਦੋਂ ਤੁਸੀਂ ਦੂਜੇ ਅਨੁਪ੍ਰਯੋਗ ਨਾਲ ਪਰਸਪਰ ਕਿਰਿਆ ਕਰ ਰਹੇ ਹੋਵੋ (ਜਿਵੇਂ ਇੱਕ ਪਾਸਵਰਡ ਦਰਜ ਕਰਨਾ)। ਸਧਾਰਨ ਅਨੁਪ੍ਰਯੋਗਾਂ ਲਈ ਕਦੇ ਵੀ ਲੋੜ ਨਹੀਂ ਹੋਵੇਗੀ।</string>
+<string name="permlab_bindInputMethod">ਇਨਪੁਟ ਵਿਧੀ ਲਈ ਪੱਕਾ ਕਰਨਾ</string>
+<string name="permdesc_bindInputMethod">ਹੋਲਡਰ ਨੂੰ ਇੱਕ ਇਨਪੁਟ ਵਿਧੀ ਦੇ ਉੱਚ-ਪੱਧਰ ਦੇ ਇੰਟਰਫੇਸ ਨੂੰ ਜੋੜਨ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ। ਸਧਾਰਨ ਅਨੁਪ੍ਰਯੋਗਾਂ ਲਈ ਕਦੇ ਵੀ ਲੋੜ ਨਹੀਂ ਹੋਵੇਗੀ।</string>
+<string name="permlab_bindWallpaper">ਇੱਕ ਵਾਲਪੇਪਰ ਲਈ ਪੱਕਾ ਕਰਨਾ</string>
+<string name="permdesc_bindWallpaper">ਹੋਲਡਰ ਨੂੰ ਇੱਕ ਵਾਲਪੇਪਰ ਦੇ ਉੱਚ-ਪੱਧਰ ਦੇ ਇੰਟਰਫੇਸ ਨੂੰ ਜੋੜਨ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ। ਸਧਾਰਨ ਅਨੁਪ੍ਰਯੋਗਾਂ ਲਈ ਕਦੇ ਵੀ ਲੋੜ ਨਹੀਂ ਹੋਵੇਗੀ।</string>
+<string name="permlab_bindDeviceAdmin">ਉਪਕਰਨ ਪ੍ਰਬੰਧ ਨਾਲ ਵਾਰਤਾਲਾਪ</string>
+<string name="permdesc_bindDeviceAdmin">ਹੋਲਡਰ ਨੂੰ ਇੱਕ ਡਿਵਾਈਸ ਪ੍ਰਬੰਧਕ ਨੂੰ ਇਨਟੈਂਟਸ ਭੇਜਣ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ। ਸਧਾਰਨ ਅਨੁਪ੍ਰਯੋਗਾਂ ਲਈ ਕਦੇ ਵੀ ਲੋੜ ਨਹੀਂ ਹੋਵੇਗੀ।</string>
+<string name="permlab_setOrientation">ਸਕਰੀਨ ਅਨੁਕੂਲਨ ਬਦਲੋ</string>
+<string name="permdesc_setOrientation">ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਕਿਸੇ ਵੀ ਸਮੇਂ ਸਕ੍ਰੀਨ ਦੇ ਰੋਟੇਸ਼ਨ ਨੂੰ ਬਦਲਣ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ। ਸਧਾਰਨ ਅਨੁਪ੍ਰਯੋਗਾਂ ਲਈ ਕਦੇ ਵੀ ਲੋੜ ਨਹੀਂ ਹੋਵੇਗੀ।</string>
+<string name="permlab_signalPersistentProcesses">ਅਨੁਪ੍ਰਯੋਗਾਂ ਲਈ  Linux ਸੰਕੇਤ ਭੇਜੋ</string>
+<string name="permdesc_signalPersistentProcesses">ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਇਹ ਬੇਨਤੀ ਕਰਨ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ ਕਿ ਸਪਲਾਈ ਕੀਤੇ ਸਿਗਨਲ ਸਾਰੀਆਂ ਸਥਿਰ ਪ੍ਰਕਿਰਿਆਵਾਂ ਨੂੰ ਭੇਜੇ ਜਾਣਗੇ।</string>
+<string name="permlab_persistentActivity">ਅਨੁਪ੍ਰਯੋਗ ਹਮੇਸ਼ਾ ਚਲਾਉਂਦੇ ਰੱਖੋ</string>
+<string name="permdesc_persistentActivity">ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਇਸਦੇ ਖੁਦ ਦੇ ਪਾਰਟਸ ਨੂੰ ਸਥਿਰ ਬਣਾਉਣ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ, ਤਾਂ ਜੋ ਸਿਸਟਮ ਇਸਦਾ ਪ੍ਰਯੋਗ ਹੋਰਾਂ ਅਨੁਪ੍ਰਯੋਗਾਂ ਲਈ ਨਾ ਕਰ\ਸਕੇ। </string>
+<string name="permlab_deletePackages">ਅਨੁਪ੍ਰਯੋਗ ਮਿਟਾਓ</string>
+<string name="permdesc_deletePackages">ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਐਂਡਰੋਇਡ ਪੈਕੇਜਿਸ ਨੂੰ ਮਿਟਾਉਣ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ। ਖਰਾਬ ਅਨੁਪ੍ਰਯੋਗ ਇਸਦਾ ਪ੍ਰਯੋਗ ਮਹੱਤਵਪੂਰਣ ਅਨੁਪ੍ਰਯੋਗਾਂ ਨੂੰ ਮਿਟਾਉਣ ਲਈ ਕਰ ਸਕਦੇ ਹੋ।</string>
+<string name="permlab_clearAppUserData">ਦੂਜੇ ੳਨੁਪ੍ਰਯੋਗਾਂ ਦਾ ਡਾਟਾ ਮਿਟਾਓ</string>
+<string name="permdesc_clearAppUserData">ਉਪਭੋਗਤਾ ਡਾਟਾ ਮਿਟਾਉਣ ਲਈ ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਇਜ਼ਾਜ਼ਤ ਦਿਓ।</string>
+<string name="permlab_deleteCacheFiles">ਦੂਜੇ ਅਨੁਪਰਯੋਗਾਂ ਦਾ ਕੈਸ਼ੇ ਮਿਟਾਓ</string>
+<string name="permdesc_deleteCacheFiles">ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਕੈਚ ਫਾਈਲਾਂ ਨੂੰ ਮਿਟਾਉਣ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ। </string>
+<string name="permlab_getPackageSize">ਅਨੁਪ੍ਰਯੋਗ ਸਟੋਰੇਜ ਜਗ੍ਹਾ ਮਾਪੋ</string>
+<string name="permdesc_getPackageSize">ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਇਸਦੇ ਕੋਡ, ਡੇਟੇ ਅਤੇ ਕੈਚ ਆਕਾਰਾਂ ਨੂੰ ਮੁੜ ਪ੍ਰਾਪਤ ਕਰਨ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ। </string>
+<string name="permlab_installPackages">ਸਿੱਧੇ ਅਨੁਪ੍ਰਯੋਗ ਸਥਾਪਿਤ ਕਰੋ</string>
+<string name="permdesc_installPackages">ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਨਵੇਂ ਜਾਂ ਅਪਡੇਟ ਕੀਤੇ ਐਂਡਰੋਇਡ ਪੈਕੇਜਿਸ ਨੂੰ ਇੰਸਟਾਲ ਕਰਨ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ। ਖਰਾਬ ਅਨੁਪ੍ਰਯੋਗ ਇਸਦਾ ਪ੍ਰਯੋਗ ਮਨਮਾਨੇ ਢੰਗ ਨਾਲ ਤਾਕਤਵਰ ਅਨੁਮਤੀਆਂ ਵਾਲੇ ਨਵੇਂ ਅਨੁਪ੍ਰਯੋਗ ਜੋੜਨ ਲਈ ਕਰ ਸਕਦੇ ਹਨ। </string>
+<string name="permlab_clearAppCache">ਸਾਰਾ ਅਨੁਪ੍ਰਯੋਗ ਕੈਸ਼ੇ ਡਾਟਾ ਮਿਟਾਓ</string>
+<string name="permdesc_clearAppCache">ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਕੈਚ ਡਾਇਰੈਕਟਰੀ ਅਨੁਪ੍ਰਯੋਗ ਵਿੱਚ ਫਾਈਲਾਂ ਨੂੰ ਮਿਟਾ ਕੇ ਫੋਨ ਸਟੋਰੇਜ ਨੂੰ ਖਾਲੀ ਕਰਨ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ। ਸਿਸਟਮ ਪ੍ਰਕਿਰਿਆ ਲਈ ਆਮ ਤੌਰ ਤੇ ਪਹੁੰਚ ਕਾਫੀ ਪ੍ਰਤੀਬੰਧਤ ਹੁੰਦੀ ਹੈ। </string>
+<string name="permlab_movePackage">ਅਨੁਪ੍ਰਯੋਗ ਸਰੋਤਾਂ ਤੇ ਜਾਉ</string>
+<string name="permdesc_movePackage">ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਅਨੁਪ੍ਰਯੋਗ ਸਰੋਤਾਂ ਨੂੰ ਅੰਦਰੂਨੀ ਤੋਂ ਬਾਹਰੀ ਮੀਡੀਆ ਅਤੇ ਇਸ ਤਰ੍ਹਾਂ ਹੀ ਬਾਹਰੀ ਤੋਂ ਅੰਦਰੂਨੀ ਮੀਡੀਆ ਲੈ ਜਾਣ ਦੀ ਇਜ਼ਾਜਤ ਦਿਓ।</string>
+<string name="permlab_readLogs">ਸੰਵੇਦਨਸ਼ੀਲ ਲਾੱਗ ਡਾਟਾ ਪੜ੍ਹੋ</string>
+<string name="permdesc_readLogs">ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਸਿਸਟਮ \ਦੀਆਂ ਭਿੰਨ ਲੌਗ ਫਾਈਲਾਂ ਤੋਂ ਪੜ੍ਹਨ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ। ਇਹ ਇਸਨੂੰ ਤੁਸੀਂ ਫੋਨ ਤੇ ਕੀ ਕਰ ਰਹੇ ਹੋ ਇਸ ਬਾਰੇ ਸਧਾਰਨ ਜਾਣਕਾਰੀ ਖੋਜਣ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ, ਜਿਸ ਵਿੱਚ ਸੰਭਾਵਿਤ ਰੂਪ ਨਾਲ ਨਿਜੀ ਜਾਂ ਪ੍ਰਾਈਵੇਟ ਜਾਣਕਾਰੀ ਸ਼ਾਮਿਲ ਹੈ।</string>
+<string name="permlab_diagnostic">ਡਿਆਗ ਦੁਆਰਾ ਮਾਲਕੀ ਅਧੀਨ ਸਰੋਤਾਂ ਨੂੰ ਪੜ੍ਹਣਾ/ਲੋਖਣਾ</string>
+<string name="permdesc_diagnostic">ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਡਿਆਗ ਗਰੁੱਪ ਦੀ ਮਾਲਕੀ ਵਾਲੇ ਕਿਸੇ ਵੀ ਸ੍ਰੋਤ ਨੂੰ ਪੜ੍ਹਨ ਅਤੇ ਲਿਖਣ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ; ਉਦਾਹਰਨ ਲਈ, /dev ਵਿੱਚ ਫਾਈਲਾਂ। ਇਹ ਸੰਭਾਵਿਤ ਰੂਪ ਨਾਲ ਸਿਸਟਮ ਦੀ ਸਥਿਰਤਾ ਅਤੇ ਸੁਰੱਖਿਆ ਤੇ ਅਸਰ ਪਾ ਸਕਦਾ ਹੈ। ਇਸਦਾ ਪ੍ਰਯੋਗ ਕੇਵਲ ਨਿਰਮਾਤਾ ਜਾਂ ਆਪਰੇਟਰ ਵੱਲੋਂ ਹਾਰਡਵੇਅਰ-ਵਿਸ਼ੇਸ਼ ਨਿਦਾਨਾਂ ਲਈ ਕੀਤਾ ਜਾਣਾ ਚਾਹੀਦਾ ਹੈ।</string>
+<string name="permlab_changeComponentState">ਅਨੁਪ੍ਰਯੋਗ ਦੇ ਭਾਗ ਸਕ੍ਰਿਅ ਜਾਂ ਅਸਕ੍ਰਿਅ ਕਰੋ</string>
+<string name="permdesc_changeComponentState">ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਇਹ ਬਦਲਣ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ ਕਿ ਦੂਜੇ ਅਨੁਪ੍ਰਯੋਗ ਦਾ ਕੋਈ ਕੰਪੋਨੈਂਟ ਸਮਰਥਿਤ ਹੈ ਜਾਂ ਨਹੀਂ। ਖਰਾਬ ਅਨੁਪ੍ਰਯੋਗ ਇਸਦਾ ਪ੍ਰਯੋਗ ਮਹੱਤਵਪੂਰਨ ਫੋਨ ਸਮਰੱਥਤਾਵਾਂ ਨੂੰ ਨਿਸ਼ਕ੍ਰਿਏ ਕਰਨ ਲਈ ਕਰ ਸਕਦੇ ਹਨ। ਅਨੁਮਤੀ ਨਾਲ ਕੇਅਰ ਪ੍ਰਯੋਗ ਕੀਤੀ ਜਾਣੀ ਚਾਹੀਦੀ ਹੈ, ਕਿਉਂਕਿ ਇੱਕ ਅਣ ਉਪਯੋਗੀ, ਭਿੰਨ ਜਾਂ ਅਸਥਿਰ ਸਥਿਤੀ ਵਿੱਚ ਅਨੁਪ੍ਰਯੋਗ ਕੰਪੋਨੈਂਟ ਪ੍ਰਾਪਤ ਹੋਣਾ ਸੰਭਵ ਹੈ।</string>
+<string name="permlab_setPreferredApplications">ਤਰਜ਼ੀਹ ਵਾਲੇ ਅਨੁਪ੍ਰਯੋਗ ਸੈਟ ਕਰੋ</string>
+<string name="permdesc_setPreferredApplications">ਤੁਹਾਡੇ ਤਰਜੀਹੀ ਅਨੁਪ੍ਰਯੋਗਾਂ ਨੂੰ ਸੰਸ਼ੋਧਿਤ ਕਰਨ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ। ਇਸ ਖਰਾਬ ਅਨੁਪ੍ਰਯੋਗਾਂ ਨੂੰ ਚੱਲ ਰਹੇ ਅਨੁਪ੍ਰਯੋਗਾਂ ਨੂੰ ਚੁਪਚਾਪ ਬਦਲਣ ਅਤੇ ਤੁਹਾਡੇ ਤੋਂ ਨਿਜੀ ਡੇਟਾ ਲੈਣ ਲਈ ਤੁਹਾਡੇ ਮੌਜੂਦਾ ਅਨੁਪ੍ਰਯੋਗਾਂ ਨੂੰ ਝਾਂਸਾ ਦੇਣ ਦੀ ਅਨੁਮਤੀ ਦੇ ਸਕਦੇ ਹਨ।</string>
+<string name="permlab_writeSettings">ਗਲੋਬਲ ਸਿਸਟਮ ਸੈਟਿੰਗਾਂ ਬਦਲੋ</string>
+<string name="permdesc_writeSettings">ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਸਿਸਟਮ\ਦੇ ਸੈਟਿੰਗਸ ਡੇਟੇ ਨੂੰ ਸੰਸ਼ੋਧਿਤ ਕਰਨ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ। ਖਰਾਬ ਅਨੁਪ੍ਰਯੋਗ ਸਿਸਟਮ\ਦੇ ਕੌਂਫੀਗੁਰੇਸ਼ਨ ਨੂੰ ਕਰਪਟ ਕਰ ਸਕਦੇ ਹਨ। </string>
+<string name="permlab_writeSecureSettings">ਸੁਰੱਖਿਅਤ ਸਿਸਟਮ ਸੈਟਿੰਗਾਂ ਬਦਲੋ</string>
+<string name="permdesc_writeSecureSettings">ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਸਿਸਟਮ \ਦੇ ਸੁਰੱਖਿਅਤ ਸੈਟਿੰਗ ਡੇਟੇ ਨੂੰ ਸੰਸ਼ੋਧਿਤ ਕਰਨ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ। ਸਧਾਰਨ ਅਨੁਪ੍ਰਯੋਗਾਂ ਦੇ   ਪ੍ਰਯੋਗ ਲਈ ਨਹੀਂ।</string>
+<string name="permlab_writeGservices">Google ਸੇਵਾਵਾਂ ਨਕਸ਼ਾ ਬਦਲੋ</string>
+<string name="permdesc_writeGservices">ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ Google ਸੇਵਾ ਮੈਪ ਸੰਸ਼ੋਧਿਤ ਕਰਨ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ। ਸਧਾਰਨ ਅਨੁਪ੍ਰਯੋਗਾਂ ਦੇ ਪ੍ਰਯੋਗ ਲਈ ਨਹੀਂ।</string>
+<string name="permlab_receiveBootCompleted">ਆਟੋਮੈਟਿਕਲੀ ਬੂਟ ਤੇ ਸ਼ੁਰੂ ਕਰੋ</string>
+<string name="permdesc_receiveBootCompleted">ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਆਪਣੇ ਆਪ ਚਾਲੂ ਹੋਣ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ ਜਿਵੇਂ ਹੀ ਸਿਸਟਮ ਨੇ ਬੂਟਿੰਗ ਸਮਾਪਤ ਕਰ ਲਈ ਹੋਵੇ। ਇਸ ਨਾਲ ਫੋਨ ਨੂੰ ਚਾਲੂ ਹੋਣ ਵਿੱਚ ਵੱਧ ਸਮਾਂ ਲੱਗ ਸਕਦਾ ਹੈ ਅਤੇ ਇਹ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਪੂਰੇ ਫੋਨ ਨੂੰ ਹਮੇਸ਼ਾ ਚਾਲੂ ਕਰਕੇ ਮੰਦ ਕਰਨ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ।</string>
+<string name="permlab_broadcastSticky">ਸਟਿਕੀ ਪ੍ਰਸਾਰਣ ਭੇਜੋ</string>
+<string name="permdesc_broadcastSticky">ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਸਟਿੱਕੀ ਪ੍ਰਸਾਰਣ ਭੇਜਣ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ, ਜੋ ਪ੍ਰਸਾਰਣ ਦੇ ਖਤਮ ਹੋਣ ਤੋਂ ਬਾਅਦ ਰਹਿ ਜਾਂਦੇ ਹਨ। ਖਰਾਬ ਅਨੁਪ੍ਰਯੋਗ ਫੋਨ ਨੂੰ ਮੰਦ ਕਰ ਸਕਦੇ ਹਨ ਜਾਂ ਇਸਨੂੰ ਬਹੁਤ ਜ਼ਿਆਦਾ ਮੈਮਰੀ ਪ੍ਰਯੋਗ ਕਰਨ ਲਈ ਅਸਥਿਰ ਕਰ ਸਕਦੇ ਹਨ।</string>
+<string name="permlab_readContacts">ਸੰਪਰਕ ਡਾਟਾ ਪੜ੍ਹੋ</string>
+<string name="permdesc_readContacts">ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਤੁਹਾਡੇ ਫੋਨ ਤੇ ਸਟੋਰ ਕੀਤੇ ਸਾਰੇ ਸੰਪਰਕ (ਪਤਾ) ਡੇਟੇ ਨੂੰ ਪੜ੍ਹਨ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ। ਖਰਾਬ ਅਨੁਪ੍ਰਯੋਗ ਇਸਦਾ ਪ੍ਰਯੋਗ ਤੁਹਾਡਾ ਡੇਟਾ ਹੋਰ ਲੋਕਾਂ ਨੂੰ ਭੇਜਣ ਲਈ ਕਰ ਸਕਦੇ ਹਨ।</string>
+<string name="permlab_writeContacts">ਸੰਪਰਕ ਡਾਟਾ ਲਿਖੋ</string>
+<string name="permdesc_writeContacts">ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਤੁਹਾਡੇ ਫੋਨ ਤੇ ਸਟੋਰ ਕੀਤੇ ਸੰਪਰਕ (ਪਤਾ) ਡੇਟੇ ਨੂੰ ਸੰਸ਼ੋਧਿਤ ਕਰਨ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ। ਖਰਾਬ ਅਨੁਪ੍ਰਯੋਗ ਇਸਦਾ ਪ੍ਰਯੋਗ ਤੁਹਾਡੇ ਸੰਪਰਕ ਡੇਟੇ ਨੂੰ ਮਿਟਾਉਣ ਜਾਂ ਸੰਸ਼ੋਧਿਤ ਕਰਨ ਲਈ ਕਰ ਸਕਦੇ ਹਨ।</string>
+<string name="permlab_readCalendar">ਕਲੈਂਡਰ ਘਟਨਾਵਾਂ ਪੜ੍ਹੋ</string>
+<string name="permdesc_readCalendar">ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਤੁਹਾਡੇ ਫੋਨ ਤੇ ਸਟੋਰ ਕੀਤੇ ਸਾਰੇ ਕੈਲੰਡਰ ਕਾਰਜਕਰਮਾਂ ਨੂੰ ਪੜ੍ਹਨ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ। ਖਰਾਬ ਅਨੁਪ੍ਰਯੋਗ ਇਸਦਾ ਪ੍ਰਯੋਗ ਹੋਰ ਲੋਕਾਂ ਨੂੰ ਤੁਹਾਡੇ ਕੈਲੰਡਰ ਕਾਰਜਕਰਮ ਭੇਜਣ ਲਈ ਕਰ ਸਕਦੇ ਹਨ।</string>
+<string name="permlab_writeCalendar">ਕਲੈਂਡਰ ਘਟਨਾਵਾਂ ਨੂੰ ਜੋੜੋ ਜਾਂ ਬਦਲੋ ਅਤੇ ਮਹਿਮਾਨਾਂ ਨੁੰ ਈਮੇਲ ਭੇਜੋ</string>
+<string name="permdesc_writeCalendar">ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਤੁਹਾਡੇ ਕੈਲੰਡਰ ਤੇ ਕਾਰਜਕਰਮ ਜੋੜਨ ਜਾਂ ਬਦਲਣ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ, ਜੋ ਮਹਿਮਾਨਾਂ ਨੂੰ ਈਮੇਲ ਭੇਜ ਸਕਦਾ ਹੈ। ਖਰਾਬ ਅਨੁਪ੍ਰਯੋਗ ਇਸਦਾ ਪ੍ਰਯੋਗ ਤੁਹਾਡੇ ਕੈਲੰਡਰ ਕਾਰਜਕਰਮਾਂ ਨੂੰ ਮਿਟਾਉਣ ਜਾਂ ਸੰਸ਼ੋਧਿਤ ਕਰਨ ਜਾਂ ਮਹਿਮਾਨਾਂ ਨੂੰ ਈਮੇਲ ਭੇਜਣ ਲਈ ਕਰ ਸਕਦੇ ਹਨ।</string>
+<string name="permlab_accessMockLocation">ਜਾਂਚ ਲਈ ਬਨਾਵਟੀ ਸਥਿਤੀ ਸਰੋਤ</string>
+<string name="permdesc_accessMockLocation">ਜਾਂਚ ਲਈ ਨਕਲੀ ਸਥਾਨ ਸ੍ਰੋਤ ਬਣਾਓ। ਖਰਾਬ ਅਨੁਪ੍ਰਯੋਗ ਇਸਦਾ ਪ੍ਰਯੋਗ ਸਥਾਨ ਅਤੇ/ਜਾਂ GPS ਜਾਂ ਨੈਟਵਰਕ ਪ੍ਰਦਾਤਾਵਾਂ ਜਿਹੇ ਅਸਲੀ ਸਥਾਨ ਸ੍ਰੋਤਾਂ ਵੱਲੋਂ ਵਾਪਸ ਕੀਤੀ ਸਥਿਤੀ ਨੂੰ ਓਵਰਰਾਈਡ ਕਰਨ ਲਈ ਕਰ ਸਕਦੇ ਹਨ।</string>
+<string name="permlab_accessLocationExtraCommands">ਵਾਧੂ ਸਥਾਨ ਪ੍ਰਦਾਨ ਕਰਨ ਵਾਲੀਆਂ ਕਮਾਂਡਾਂ ਦਾ ਉਪਯੋਗ</string>
+<string name="permdesc_accessLocationExtraCommands">ਵਾਧੂ ਸਥਾਨ ਪ੍ਰਦਾਤਾ ਕਮਾਂਡਾਂ ਤੱਕ ਪਹੁੰਚ। ਖਰਾਬ ਅਨੁਪ੍ਰਯੋਗ ਇਸਦਾ ਪ੍ਰਯੋਗ GPS ਜਾਂ ਦੂਜੇ ਸਥਾਨ ਸ੍ਰੋਤਾਂ ਦੇ ਸੰਚਾਲਨ ਵਿੱਚ ਦਖਲ ਦੇਣ ਲਈ ਕਰ ਸਕਦੇ ਹਨ। </string>
+<string name="permlab_installLocationProvider">ਸਥਿਤੀ ਪ੍ਰਦਾਤਾ ਸਥਾਪਿਤ ਕਰਨ ਲਈ ਇਜ਼ਾਜ਼ਤ</string>
+<string name="permdesc_installLocationProvider">ਜਾਂਚ ਲਈ ਨਕਲੀ ਸਥਾਨ ਸ੍ਰੋਤ ਬਣਾਓ। ਖਰਾਬ ਅਨੁਪ੍ਰਯੋਗ ਇਸਦਾ ਪ੍ਰਯੋਗ ਸਥਾਨ ਅਤੇ/ਜਾਂ GPS ਜਾਂ ਨੈਟਵਰਕ ਪ੍ਰਦਾਤਾਵਾਂ ਜਿਹੇ ਅਸਲੀ ਸਥਾਨ ਸ੍ਰੋਤਾਂ ਵੱਲੋਂ ਵਾਪਸ ਕੀਤੀ ਸਥਿਤੀ ਨੂੰ ਓਵਰਰਾਈਡ ਕਰਨ ਜਾਂ ਤੁਹਾਡੇ ਸਥਾਨ ਨੂੰ ਮਾਨੀਟਰ ਕਰਨ ਅਤੇ ਕਿਸੇ ਬਾਹਰੀ ਸ੍ਰੋਤ ਨੂੰ ਸੂਚਨਾ ਦੇਣ ਲਈ ਕਰ ਸਕਦੇ ਹਨ।</string>
+<string name="permlab_accessFineLocation">ਵਧੀਆ (GPS) ਸਥਿਤੀ</string>
+<string name="permdesc_accessFineLocation">ਫਾਈਨ ਸਥਾਨ ਸ੍ਰੋਤਾਂ ਤੱਕ ਪਹੁੰਚ ਜਿਵੇਂ ਫੋਨ ਤੇ ਗਲੋਬਲ ਪੋਜੀਸ਼ਨਿੰਗ ਸਿਸਟਮ, ਜਿੱਥੇ ਵੀ ਉਪਲਬਧ ਹੋਵੇ। ਖਰਾਬ ਅਨੁਪ੍ਰਯੋਗ ਇਸਦਾ ਪ੍ਰਯੋਗ ਇਹ ਨਿਰਧਾਰਿਤ ਕਰਨ ਲਈ ਕਰ ਸਕਦੇ ਹਨ ਕਿ ਤੁਸੀਂ ਕਿੱਥੇ ਹੋ ਅਤੇ ਵਾਧੂ ਬੈਟਰੀ ਪਾਵਰ ਪ੍ਰਯੋਗ ਕਰ ਸਕਦੇ ਹਨ।</string>
+<string name="permlab_accessCoarseLocation">ਘਟੀਆ (ਨੈਟਵਰਕ ਆਧਾਰਿਤ )ਸਥਿਤੀ</string>
+<string name="permdesc_accessCoarseLocation">ਕੋਰਸ ਸਥਾਨ ਸ੍ਰੋਤਾਂ ਤੱਕ ਪਹੁੰਚ ਜਿਵੇਂ ਇੱਕ ਨੇੜੇ-ਤੇੜੇ ਦਾ ਫੋਨ ਸਥਾਨ ਨਿਰਧਾਰਿਤ ਕਰਨ ਲਈ ਸੈਲਿਊਲਰ ਨੈਟਵਰਕ ਡੇਟਾਬੇਸ, ਜਿੱਥੇ ਵੀ ਉਪਲਬਧ ਹੋਵੇ। ਖਰਾਬ ਅਨੁਪ੍ਰਯੋਗ ਇਸਦਾ ਪ੍ਰਯੋਗ ਤੁਹਾਡੇ ਨੇੜੇ-ਤੇੜੇ ਦਾ ਸਥਾਨ ਨਿਰਧਾਰਿਤ ਕਰਨ ਲਈ ਕਰ ਸਕਦੇ ਹਨ।</string>
+<string name="permlab_accessSurfaceFlinger">ਉਂਗਲ ਦੀ ਸਤਹਿ ਵਰਤੋ</string>
+<string name="permdesc_accessSurfaceFlinger">ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਸਰਫੇਸ ਫਲਿੰਜਰ ਘੱਟ-ਪੱਧਰ ਵਿਸ਼ੇਸ਼ਤਾਵਾਂ ਪ੍ਰਯੋਗ ਕਰਨ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ।</string>
+<string name="permlab_readFrameBuffer">ਫ੍ਰੇਮ ਬਫ਼ਰ ਪੜ੍ਹੋ</string>
+<string name="permdesc_readFrameBuffer">ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਫ੍ਰੇਮ ਬਫਰ ਦੀ ਸਮੱਗਰੀ ਨੂੰ ਪੜ੍ਹਨ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ।</string>
+<string name="permlab_modifyAudioSettings">ਆਪਣੀਆਂ ਆਡੀਓ ਸੈਟਿੰਗਾਂ ਬਦਲੋ</string>
+<string name="permdesc_modifyAudioSettings">ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਗਲੋਬਲ ਆਡਿਓ ਸੈਟਿੰਗਸ ਨੂੰ ਸੰਸ਼ੋਧਿਤ ਕਰਨ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ ਜਿਵੇਂ ਵੋਲਯੂਮ ਅਤੇ ਰਾਊਟਿੰਗ।</string>
+<string name="permlab_recordAudio">ਆਡੀਓ ਰਿਕਾਰਡ ਕਰੋ</string>
+<string name="permdesc_recordAudio">ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਆਡਿਓ ਰਿਕਾਰਡ ਮਾਰਗ ਤੱਕ ਪਹੁੰਚ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ।</string>
+<string name="permlab_camera">ਤਸਵੀਰਾਂ ਅਤੇ ਵੀਡਿਓ ਲਏ ਗਏ</string>
+<string name="permdesc_camera">ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਕੈਮਰੇ ਨਾਲ ਤਸਵੀਰਾਂ ਅਤੇ ਵੀਡਿਓ ਲੈਣ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ। ਇਹ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਕਿਸੇ ਵੀ ਸਮੇਂ ਉਹ ਚਿੱਤਰ ਲੈਣ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ ਜੋ ਕੈਮਰਾ ਦੇਖ ਰਿਹਾ ਹੋਵੇ।</string>
+<string name="permlab_brick">ਸਥਾਈ ਅਸਕ੍ਰਿਅ ਫੋਨ</string>
+<string name="permdesc_brick">ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਪੂਰੇ ਫੋਨ ਨੂੰ ਸਥਾਈ ਤੌਰ ਤੇ ਅਸਮਰਥ ਕਰਨ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ। ਇਹ ਬਹੁਤ ਖਤਰਨਾਕ ਹੈ।</string>
+<string name="permlab_reboot">ਜਬਰਦਸਤੀ ਫੋਨ ਦੁਬਾਰਾ ਬੂਟ ਕਰੋ</string>
+<string name="permdesc_reboot">ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਫੋਨ ਨੂੰ ਜਬਰਦਸਤੀ ਰੀਬੂਟ ਕਰਨ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ। </string>
+<string name="permlab_mount_unmount_filesystems">ਫਾਇਲ ਸਿਸਟਮਾਂ ਨੁੰ ਵਿਵਸਥਿਤ ਅਤੇ ਅਵਿਵਸਥਿਤ ਕਰੋ</string>
+<string name="permdesc_mount_unmount_filesystems">ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਮਿਟਾਉਣਯੋਗ ਸਟੋਰੇਜ ਲਈ ਫਾਈਲ ਸਿਸਟਮਾਂ ਨੂੰ ਮਾਊਂਟ ਅਤੇ ਅਨਮਾਊਂਟ ਕਰਨ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ।</string>
+<string name="permlab_mount_format_filesystems">ਬਾਹਰੀ ਸਟੋਰੇਜ ਫਾਰਮੈਟ ਕਰੋ</string>
+<string name="permdesc_mount_format_filesystems">ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਹਟਾਉਣਯੋਗ ਸਟੋਰੇਜ ਨੂੰ ਫਾਰਮੈਟ ਕਰਨ ਦੀ ਇਜ਼ਾਜਤ ਦਿਓ।</string>
+<string name="permlab_asec_access">ਅੰਦਰੂਨੀ ਸਟੋਰੇਜ ਤੇ ਜਾਣਕਾਰੀ ਪ੍ਰਾਪਤ ਕਰੋ</string>
+<string name="permdesc_asec_access">ਅੰਦਰੂਨੀ ਸਟੋਰੇਜ ਤੇ ਜਾਣਕਾਰੀ ਪ੍ਰਾਪਤ ਕਰਨ ਲਈ ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਨੁੰ ਇਜ਼ਾਜਤ ਦਿਓ।</string>
+<string name="permlab_asec_create">ਅੰਦਰਲਾ ਸਟੋਰੇਜ ਬਣਾਓ</string>
+<string name="permdesc_asec_create">ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਅੰਦਰੂਨੀ ਸਟੋਰੇਜ ਬਣਾਉਣ ਦੀ ਇਜ਼ਾਜਤ ਦਿਓ।</string>
+<string name="permlab_asec_destroy">ਅੰਦਰਲਾ ਸਟੋਰੇਜ ਮਿਟਾਓ</string>
+<string name="permdesc_asec_destroy">ਅੰਦਰੂਨੀ ਸਟੋਰੇਜ ਮਿਟਾਉਣ ਲਈ ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ    ਇਜ਼ਾਜਤ ਦਿਓ।</string>
+<string name="permlab_asec_mount_unmount">ਅੰਦਰੂਨੀ ਸਟੋਰੇਜ ਵਿਵਸਥਿਤ/ਅਵਿਵਸਥਿਤ ਕਰੋ</string>
+<string name="permdesc_asec_mount_unmount">ਅੰਦਰੂਨੀ ਸਟੋਰੇਜ ਨੂੰ ਵਿਵਸਥਿਤੀ ਅਵਿਵਸਥਿਤ ਕਰਨ ਲਈ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਇਜ਼ਾਜਤ ਦਿਓ</string>
+<string name="permlab_asec_rename">ਅੰਦਰੂਨੀ ਸਟੋਰੇਜ ਦਾ ਦੁਬਾਰਾ ਨਾਮ ਦਿਉ</string>
+<string name="permdesc_asec_rename">ਅੰਦਰੂਨੀ ਸਟੋਰੇਜ ਨੂੰ ਦੁਬਾਰਾ ਨਾਮ ਦੇਣ ਲਈ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਇਜ਼ਾਜਤ ਦਿਓ।</string>
+<string name="permlab_vibrate">ਵਾਇਬਰੇਟਰ ਨਿਯੰਤਰਿਤ ਕਰੋ</string>
+<string name="permdesc_vibrate">ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਵਾਈਬ੍ਰੇਟਰ ਤੇ ਨਿਯੰਤ੍ਰਣ ਪਾਉਣ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ।</string>
+<string name="permlab_flashlight">ਫਲੈਸ਼ ਲਾਈਟ ਨਿਯੰਤਰਿਤ ਕਰੋ</string>
+<string name="permdesc_flashlight">ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਫਲੈਸ਼ਲਾਈਟ ਤੇ ਨਿਯੰਤ੍ਰਣ ਪਾਉਣ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ।</string>
+<string name="permlab_manageUsb">USB ਉਪਕਰਨਾਂ ਲਈ ਪ੍ਰਾਥਮਿਕਤਾਵਾਂ ਅਤੇ ਇਜ਼ਾਜ਼ਤਾਂ ਪ੍ਰਬੰਧਿਤ ਕਰੋ</string>
+<string name="permdesc_manageUsb">ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ  USB ਉਪਕਰਨਾਂ ਲਈ ਪਸੰਦਾਂ ਅਤੇ ਇਜ਼ਾਜਤ ਦਾ ਪ੍ਰਬੰਧ ਕਰਨ ਲਈ ਇਜ਼ਾਜਤ ਦਿਓ</string>
+<string name="permlab_hardware_test">ਹਾਰਡਵੇਅਰ ਦੀ ਜਾਂਚ ਕਰਨਾ</string>
+<string name="permdesc_hardware_test">ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਹਾਰਡਵੇਅਰ ਸੈਟਿੰਗ ਦੇ ਮੰਤਵ ਲਈ ਭਿੰਨ ਪੈਰੀਫਰਲਾਂ ਤੇ ਨਿਯੰਤ੍ਰਣ ਪਾਉਣ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ।</string>
+<string name="permlab_callPhone">ਸਿੱਧਾ ਫੋਨ ਨੰਬਰਾਂ ਤੇ ਕਾੱਲ ਕਰੋ</string>
+<string name="permdesc_callPhone">ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਤੁਹਾਡੇ ਦਖਲ ਤੋਂ ਬਿਨਾਂ ਫੋਨ ਨੰਬਰਾਂ ਤੇ ਫੋਨ ਕਰਨ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ। ਖਰਾਬ ਅਨੁਪ੍ਰਯੋਗ ਤੁਹਾਡੇ ਫੋਨ ਬਿਲ ਤੇ ਬੇਲੋੜੀਆਂ ਕਾਲਾਂ ਕਰ ਸਕਦੇ ਹਨ। ਧਿਆਨ ਦਿਓ ਕਿ ਇਹ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਐਮਰਜੈਂਸੀ ਨੰਬਰਾਂ ਤੇ ਫੋਨ ਕਰਨ ਦੀ ਅਨੁਮਤੀ ਨਹੀਂ ਦਿੰਦਾ।</string>
+<string name="permlab_callPrivileged">ਸਿੱਧੇ ਕਿਸੇ ਵੀ ਫੋਨ ਨੰਬਰ ਤੇ ਕਾੱਲ ਕਰੋ</string>
+<string name="permdesc_callPrivileged">ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਤੁਹਾਡੇ ਦਖਲ ਤੋਂ ਬਿਨਾਂ, ਐਮਰਜੈਂਸੀ ਨੰਬਰਾਂ ਸਮੇਤ,ਕਿਸੇ ਵੀ ਫੋਨ ਨੰਬਰ ਤੇ ਫੋਨ ਕਰਨ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ। ਖਰਾਬ ਅਨੁਪ੍ਰਯੋਗ ਐਮਰਜੈਂਸੀ ਸੇਵਾਵਾਂ ਲਈ ਬੇਲੋੜੀਆਂ ਅਤੇ ਗੈਰਕਾਨੂੰਨੀ ਕਾਲਾਂ ਕਰ ਸਕਦੇ ਹਨ।</string>
+<string name="permlab_performCdmaProvisioning">ਸਿੱਧੇ ਹੀ  CDMA ਫੋਨ ਸੈਟਅਪ ਸ਼ੁਰੂ ਕਰੋ</string>
+<string name="permdesc_performCdmaProvisioning">ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ CDMA ਪ੍ਰੋਵਿਜਨਿੰਗ ਚਾਲੂ ਕਰਨ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ। ਖਰਾਬ ਅਨੁਪ੍ਰਯੋਗ ਬੇਲੋੜੀ CDMA ਪ੍ਰੋਵਿਜਨਿੰਗ ਚਾਲੂ ਕਰ ਸਕਦੇ ਹਨ।  </string>
+<string name="permlab_locationUpdates">ਸਥਿਤੀ ਅਪਡੇਟ ਸੂਚਨਾਵਾਂ ਨੂੰ ਨਿਯੰਤਰਿਤ ਕਰੋ</string>
+<string name="permdesc_locationUpdates">ਰੇਡੀਓ ਤੋਂ ਸਥਾਨ ਅਪਡੇਟ ਸੂਚਨਾਵਾਂ ਸਮਰਥਿਤ/ਅਸਮਰਥਿਤ ਕਕਰਨ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ। ਸਧਾਰਨ ਅਨੁਪ੍ਰਯੋਗਾਂ ਦੇ ਪ੍ਰਯੋਗ ਲਈ ਨਹੀਂ।</string>
+<string name="permlab_checkinProperties">ਚੈਕ-ਇਨ ਗੁਣਾਂ ਦਾ ਉਪਯੋਗ</string>
+<string name="permdesc_checkinProperties">ਚੈਕਇਨ ਸੇਵਾ ਵੱਲੋਂ ਅਪਲੋਡ ਕੀਤੀਆਂ ਪ੍ਰਾਪਰਟੀਜ ਤੱਕ ਪੜ੍ਹਨ/ਲਿਖਣ ਪਹੁੰਚ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ। ਸਧਾਰਨ ਅਨੁਪ੍ਰਯੋਗਾਂ ਦੇ ਪ੍ਰਯੋਗ ਲਈ ਨਹੀਂ।</string>
+<string name="permlab_bindGadget">ਵਿਡਗੈਟਸ ਚੁਣੋ</string>
+<string name="permdesc_bindGadget">ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਸਿਸਟਮ ਨੂੰ ਇਹ ਦੱਸਣ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ ਕਿ ਕਿਹੜੇ ਵਿਜੇਟ ਕਿਸ ਅਨੁਪ੍ਰਯੋਗ ਵੱਲੋਂ ਪ੍ਰਯੋਗ ਕੀਤੇ ਜਾ ਸਕਦੇ ਹਨ। ਇਸ ਅਨੁਮਤੀ ਨਾਲ, ਅਨੁਪ੍ਰਯੋਗ ਹੋਰਾਂ ਅਨੁਪ੍ਰਯੋਗਾਂ ਨੂੰ ਨਿਜੀ ਡੇਟੇ ਤੱਕ ਪਹੁੰਚ ਦੇ ਸਕਦੇ ਹਨ। ਸਧਾਰਨ ਅਨੁਪ੍ਰਯੋਗਾਂ ਦੇ ਪ੍ਰਯੋਗ ਲਈ ਨਹੀਂ।</string>
+<string name="permlab_modifyPhoneState">ਫੋਨ ਸਥਿਤੀ ਬਦਲੋ</string>
+<string name="permdesc_modifyPhoneState">ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਡਿਵਾਈਸ ਦੀਆਂ ਫੋਨ ਵਿਸ਼ੇਸ਼ਤਾਵਾਂ ਤੇ ਨਿਯੰਤ੍ਰਣ ਪਾਉਣ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ। ਇਸ ਅਨੁਮਤੀ ਵਾਲਾ ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਤੁਹਾਨੂੰ ਕਦੇ ਵੀ ਸੂਚਨਾ ਦਿੱਤੇ ਬਿਨਾਂ ਨੈਟਵਰਕਾਂ ਨੂੰ ਬਦਲ ਸਕਦਾ ਹੈ, ਫੋਨ ਰੇਡਿਓ ਨੂੰ ਚਾਲੂ ਅਤੇ ਬੰਦ ਕਰ ਸਕਦਾ ਹੈ।</string>
+<string name="permlab_readPhoneState">ਫੋਨ ਸਥਿਤੀ ਅਤੇ ਪਹਿਚਾਣ ਪੜ੍ਹੋ</string>
+<string name="permdesc_readPhoneState">ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਡਿਵਾਈਸ ਦੀਆਂ ਫੋਨ ਵਿਸ਼ੇਸ਼ਤਾਵਾਂ ਤੱਕ ਪਹੁੰਚ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ। ਇਸ ਅਨੁਮਤੀ ਵਾਲਾ ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਫੋਨ ਨੰਬਰ ਅਤੇ ਇਸ ਫੋਨ ਦਾ ਕ੍ਰਮ ਅੰਕ ਨਿਰਧਾਰਿਤ ਕਰ ਸਕਦਾ ਹੈ, ਜੇਕਰ ਇੱਕ ਕਾਲ ਸਕ੍ਰਿਏ ਹੈ, ਤਾਂ ਉਸ ਕਾਲ ਦਾ ਨੰਬਰ ਕਨੈਕਟ ਹੋਇਆ ਹੈ।</string>
+<string name="permlab_wakeLock">ਫੋਨ ਨੁੰ ਅਸਕ੍ਰਿਅ ਹੋਣ ਤੋਂ ਰੋਕਦਾ ਹੈ</string>
+<string name="permdesc_wakeLock">ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਫੋਨ ਨੂੰ ਸਲੀਪ ਤੇ ਜਾਣ ਤੋਂ ਰੋਕਣ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ।</string>
+<string name="permlab_devicePower">ਪਾਵਰ ਫੋਨ ਸ਼ੁਰੂ ਜਾਂ ਬੰਦ</string>
+<string name="permdesc_devicePower">ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਫੋਨ ਚਾਲੂ ਜਾਂ ਬੰਦ ਕਰਨ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ।</string>
+<string name="permlab_factoryTest">ਫੈਕਟਰੀ ਜਾਂਚ ਮੋਡ ਵਿੱਚ ਚਲਾਉ</string>
+<string name="permdesc_factoryTest">ਫੋਨ ਹਾਰਡਵੇਅਰ ਤੱਕ ਪੂਰੀ ਪਹੁੰਚ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦੇ ਹੋਏ, ਇੱਕ ਘੱਟ-ਪੱਧਰ ਦੇ ਨਿਰਮਾਤਾ ਜਾਂਚ ਦੇ ਤੌਰ ਤੇ ਚਲਾਓ। ਕੇਵਲ ਉਦੋਂ ਉਪਲਬਧ ਜਦੋਂ ਕੋਈ ਫੋਨ ਨਿਰਮਾਤਾ ਜਾਂਚ ਮੋਡ ਵਿੱਚ ਚੱਲ ਰਿਹਾ ਹੋਵੇ।</string>
+<string name="permlab_setWallpaper">ਵਾਲਪੇਪਰ  ਸੈਟ ਕਰੋ</string>
+<string name="permdesc_setWallpaper">ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਸਿਸਟਮ ਵਾਲਪੇਪਰ ਸੈਟ ਕਰਨ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ।</string>
+<string name="permlab_setWallpaperHints">ਵਾਲਪੇਪਰ ਸੈਟ ਕਰੋ ਆਕਾਰ ਸੰਕੇਤ</string>
+<string name="permdesc_setWallpaperHints">ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਸਿਸਟਮ ਵਾਲਪੇਪਰ ਆਕਾਰ ਸੰਕੇਤਾਂ ਨੂੰ ਸੈਟ ਕਰਨ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ।</string>
+<string name="permlab_masterClear">ਫੈਕਟਰੀ ਡਿਫਾਲਟਸ ਲਈ ਸਿਸਟਮ ਦੁਬਾਰਾ ਸੈਟ ਕਰੋ</string>
+<string name="permdesc_masterClear">ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਸਾਰੇ ਡੇਟਾ, ਕੌਂਫੀਗੁਰੇਸ਼ਨ ਮਿਟਾਉਂਦੇ ਹੋਏ ਅਤੇ ਇੰਸਟਾਲ ਕੀਤੇ ਅਨੁਪ੍ਰਯੋਗਾਂ ਨੂੰ ਇਸਦੀਆਂ ਫੈਕਟਰੀ ਸੈਟਿੰਗਸ ਵਿੱਚ ਪੂਰੀ ਤਰ੍ਹਾਂ ਦੁਬਾਰਾ ਸੈਟ ਕਰਨ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ।</string>
+<string name="permlab_setTime">ਸਮਾਂ ਸੈਟ ਕਰੋ</string>
+<string name="permdesc_setTime">ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਫੋਨ\ਦਾ ਕਲੌਕ ਸਮਾਂ ਬਦਲਣ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ।</string>
+<string name="permlab_setTimeZone">ਸਮਾਂ ਖੇਤਰ ਸੈਟ ਕਰੋ</string>
+<string name="permdesc_setTimeZone">ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਫੋਨ\ਦਾ ਸਮਾਂ ਜ਼ੋਨ ਨੂੰ ਬਦਲਣ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ।</string>
+<string name="permlab_accountManagerService">ਖਾਤਾ ਪ੍ਰਬੰਧਕ ਸੇਵਾ ਦੇ ਰੂਪ ਵਿੱਚ ਕਾਰਵਾਈ</string>
+<string name="permdesc_accountManagerService">ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਖਾਤਾ ਪ੍ਰਮਾਣੀਕਰਤਾਵਾਂ ਨੂੰ ਫੋਨ ਕਰਨ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ।</string>
+<string name="permlab_getAccounts">ਗਿਆਤ ਖਾਤੇ ਖੋਜੋ</string>
+<string name="permdesc_getAccounts">ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਫੋਨ ਵੱਲੋਂ ਗਿਆਤ ਖਾਤਿਆਂ ਦੀ ਸੂਚੀ ਪ੍ਰਾਪਤ ਕਰਨ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ।</string>
+<string name="permlab_authenticateAccounts">ਇੱਕ ਖਾਤਾ ਪ੍ਰਮਾਣ-ਪੱਤਰ ਦੇ ਰੂਪ ਵਿੱਚ ਕਾਰਵਾਈ</string>
+<string name="permdesc_authenticateAccounts">ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਖਾਤਾ ਪ੍ਰਬੰਧਕ ਦੀਆਂ ਖਾਤਾ ਪ੍ਰਮਾਣਕਰਤਾ ਸਮਰੱਥਾਵਾਂ ਨੂੰ ਪ੍ਰਯੋਗ ਕਰਨ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ, ਜਿਹਨਾਂ ਵਿੱਚ ਸ਼ਾਮਿਲ ਹਨ ਖਾਤੇ ਬਣਾਉਣਾ ਅਤੇ ਉਹਨਾਂ ਦੇ ਪਾਸਵਰਡ ਪ੍ਰਾਪਤ ਕਰਨਾ ਅਤੇ ਸੈਟ ਕਰਨਾ।</string>
+<string name="permlab_manageAccounts">ਖਾਤਾ ਸੂਚੀ ਪ੍ਰਬੰਧਿਤ ਕਰੋ</string>
+<string name="permdesc_manageAccounts">ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਸੰਚਾਲਨ ਕਰਨ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ ਜਿਵੇਂ ਖਾਤਿਆਂ ਨੂੰ ਜੋੜਨਾ ਅਤੇ ਮਿਟਾਉਣਾ ਅਤੇ ਉਹਨਾਂ ਦੇ ਪਾਸਵਰਡ ਮਿਟਾਉਣਾ।</string>
+<string name="permlab_useCredentials">ਇੱਕ ਖਾਤੇ ਦੇ ਪ੍ਰਮਾਣੀਕਰਨ ਪ੍ਰਮਾਣ ਪੱਤਰ ਪ੍ਰਯੋਗ ਕਰੋ</string>
+<string name="permdesc_useCredentials">ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਪ੍ਰਮਾਣੀਕਰਨ ਟੋਕਨਾਂ ਦੀ ਬੇਨਤੀ ਕਰਨ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ।</string>
+<string name="permlab_accessNetworkState">ਨੈਟਵਰਕ ਸਥਿਤੀ ਦੇਖੋ</string>
+<string name="permdesc_accessNetworkState">ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਸਾਰੇ ਨੈਟਵਰਕਾਂ ਦੀ ਸਥਿਤੀ ਦੇਖਣ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ।</string>
+<string name="permlab_createNetworkSockets">ਪੂਰਨ ਇੰਟਰਨੈਟ ਵਰਤੋ</string>
+<string name="permdesc_createNetworkSockets">ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਨੈਟਵਰਕ ਸੌਕੇਟ ਬਣਾਉਣ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ।</string>
+<string name="permlab_writeApnSettings">ਪਹੁੰਚ ਬਿੰਦੂ ਨਾਮ ਸੈਟਿੰਗਾਂ ਲਿਖੋ</string>
+<string name="permdesc_writeApnSettings">ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ APN ਸੈਟਿੰਗਸ ਨੂੰ ਸੰਸ਼ੋਧਿਤ ਕਰਨ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ ਜਿਵੇਂ ਕਿਸੇ ਵੀ APN ਦੀ ਪ੍ਰੌਕਸੀ ਅਤੇ ਪੋਰਟ।</string>
+<string name="permlab_changeNetworkState">ਨੈਟਵਰਕ ਕੁਨੈਕਟੀਵਿਟੀ ਬਦਲੋ</string>
+<string name="permdesc_changeNetworkState">ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ  ਨੈਟਵਰਕ ਕਨੈਕਟੀਵਿਟੀ ਦੀ ਸਥਿਤੀ ਬਦਲਣ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ।</string>
+<string name="permlab_changeTetherState">ਸੀਮਿਤ ਕੁਨੈਕਟੀਵਿਟੀ ਬਦਲੋ</string>
+<string name="permdesc_changeTetherState">ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਟੀਥਰ ਕੀਤੀ ਨੈਟਵਰਕ ਕਨੈਕਟੀਵਿਟੀ ਦੀ ਸਥਿਤੀ ਬਦਲਣ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ।</string>
+<string name="permlab_changeBackgroundDataSetting">ਸੈਟਿੰਗ ਵਰਤਦੇ ਹੋਏ ਬੈਕਗਰਾਊਂਡ ਡਾਟਾ ਬਦਲੋ</string>
+<string name="permdesc_changeBackgroundDataSetting">ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਪਿਛੋਕੜ ਡੇਟਾ ਪ੍ਰਯੋਗ ਸੈਟਿੰਗ ਨੂੰ ਬਦਲਣ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ।</string>
+<string name="permlab_accessWifiState">WLAN  ਦੀ ਸਥਿਤੀ ਦੇਖੋ</string>
+<string name="permdesc_accessWifiState">ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ WLAN ਦੀ ਸਥਿਤੀ ਬਾਰੇ ਜਾਣਕਾਰੀ ਨੂੰ ਦੇਖਣ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ। </string>
+<string name="permlab_changeWifiState">WLAN ਸਥਿਤੀ ਬਦਲੋ</string>
+<string name="permdesc_changeWifiState">ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ WLAN ਪਹੁੰਚ ਬਿੰਦੂਆਂ ਤੋਂ ਕਨੈਕਟ ਅਤੇ ਡਿਸਕਨੈਕਟ ਕਰਨ ਅਤੇ ਕੌਂਫੀਗਰ ਕੀਤੇ WLAN ਨੈਟਵਰਕਾਂ ਵਿੱਚ ਬਦਲਾਵ ਕਰਨ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ। </string>
+<string name="permlab_changeWifiMulticastState">WLAN ਮਲਟੀਕਾਸਟ ਰਿਸੈਪਸ਼ਨ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ</string>
+<string name="permdesc_changeWifiMulticastState">ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਤੁਹਾਡੀ ਡਿਵਾਈਸ ਤੇ ਸਿੱਧੇ ਪਤਾ ਨਾ ਲਗਾਏ ਪੈਕੇਟਾਂ ਨੂੰ ਪ੍ਰਾਪਤ ਕਰਨ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ। ਇਹ ਕੋਲ ਪੇਸ਼ਕਸ਼ ਕੀਤੀਆਂ ਸੇਵਾਵਾਂ ਨੂੰ ਖੋਜਦੇ ਸਮੇਂ ਉਪਯੋਗੀ ਹੋ ਸਕਦਾ ਹੈ। ਇਹ ਗੈਰ-ਮਲਟੀਕਾਸਟ ਮੋਡ ਤੋਂ ਵੱਧ ਪਾਵਰ ਪ੍ਰਯੋਗ ਕਰਦਾ ਹੈ।</string>
+<string name="permlab_accessWimaxState">WiMAX  ਦੀ ਸਥਿਤੀ ਦੇਖੋ</string>
+<string name="permdesc_accessWimaxState">ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ WiMAX ਦੀ ਸਥਿਤੀ ਬਾਰੇ ਜਾਣਕਾਰੀ ਦੇਖਣ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ।</string>
+<string name="permlab_changeWimaxState">WiMAX ਸਥਿਤੀ ਬਦਲੋ</string>
+<string name="permdesc_changeWimaxState">ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ WiMAX ਨੈਟਵਰਕ ਤੋਂ ਕਨੈਕਟ ਜਾਂ ਡਿਸਕਨੈਕਟ ਕਰਨ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ।</string>
+<string name="permlab_bluetoothAdmin">ਬਲੂਟੂਥ ਪ੍ਰਬੰਧਨ</string>
+<string name="permdesc_bluetoothAdmin">ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਸਥਾਨਕ ਬਲੂਟੁੱਥ ਫੋਨ ਨੂੰ ਕੌਂਫੀਗਰ ਕਰਨ, ਅਤੇ ਰਿਮੋਟ ਡਿਵਾਈਸਾਂ ਨੂੰ ਖੋਜਣ ਅਤੇ ਉਹਨਾਂ ਨਾਲ ਜੁੜਨ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ।</string>
+<string name="permlab_bluetooth">ਬਲੂਟੂਥ ਕੁਨੈਕਸ਼ਨ ਬਣਾਓ</string>
+<string name="permdesc_bluetooth">ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਸਥਾਨਕ ਬਲੂਟੁੱਥ ਫੋਨ ਦੀ ਕੌਂਫੀਗੁਰੇਸ਼ਨ ਨੂੰ ਦੇਖਣ ਅਤੇ ਜੋੜੀਆਂ ਗਈਆਂ ਡਿਵਾਈਸਾਂ ਨਾਲ ਕਨੈਕਸ਼ਨ ਬਣਾਉਣ ਅਤੇ ਸਵੀਕਾਰ ਕਰਨ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ।</string>
+<string name="permlab_nfc">ਨਜ਼ਦੀਕੀ ਖੇਤਰ ਸੰਚਾਰ ਨੂੰ ਨਿਯੰਤਰਿਤ ਕਰੋ</string>
+<string name="permdesc_nfc">ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਨੀਅਰ ਫੀਲਡ ਕਮਿਊਨਿਕੇਸ਼ੰਸ (NFC)ਟੈਗਸ, ਕਾਰਡਸ ਤੇ ਰੀਡਰਸ ਨਾਲ ਗੱਲਬਾਤ ਕਰਨ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ।</string>
+<string name="permlab_disableKeyguard">ਕੁੰਜੀਲਾੱਕ ਅਸਕ੍ਰਿਅ ਕਰੋ</string>
+<string name="permdesc_disableKeyguard">ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਕੀਲੌਕ ਅਤੇ ਕਿਸੇ ਵੀ ਜੁੜੀ ਪਾਸਵਰਡ ਸੁਰੱਖਿਆ ਨੂੰ ਅਸਮਰਥ ਕਰਨ ਲਈ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ। ਇਸ ਦਾ ਇੱਕ ਪ੍ਰਮਾਣਕ ਉਦਾਹਰਨ ਹੈ ਇੱਕ ਇਨਕਮਿੰਗ ਫੋਨ ਕਾਲ ਪ੍ਰਾਪਤ ਕਰਦੇ ਸਮੇਂ ਫੋਨ ਕੀਲੌਕ ਨੂੰ ਅਸਮਰਥਿਤ ਕਰਦਾ ਹੈ,ਫਿਰ ਕੀਲੌਕ ਨੂੰ ਸਮਰਥ ਕਰਨਾ ਜਦੋਂ ਕਾਲ ਖਤਮ ਹੋ ਜਾਂਦੀ ਹੈ। </string>
+<string name="permlab_readSyncSettings">ਸਿੰਕ ਸੈਟਿੰਗਾਂ ਪੜ੍ਹੋ</string>
+<string name="permdesc_readSyncSettings">ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਸਿੰਕ ਸੈਟਿੰਗਸ ਨੂੰ ਪੜ੍ਹਨ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ,ਜਿਵੇਂ ਜੇਕਰ ਸਿੰਕ ਸੰਪਰਕਾਂ ਲਈ ਸਮਰਥਿਤ ਹੈ।</string>
+<string name="permlab_writeSyncSettings">ਸਿੰਕ ਸੈਟਿੰਗ ਲਿਖੋ</string>
+<string name="permdesc_writeSyncSettings">ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਸਿੰਕ ਸੈਟਿੰਗਸ ਨੂੰ ਸੰਸ਼ੋਧਿਤ ਕਰਨ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ, ਜਿਵੇਂ ਜੇਕਰ ਸਿੰਕ ਸੰਪਰਕਾਂ ਲਈ ਸਮਰਥਿਤ ਹੈ।</string>
+<string name="permlab_readSyncStats">ਸਿੰਕ ਅੰਕੜੇ ਪੜ੍ਹੋ</string>
+<string name="permdesc_readSyncStats">ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਸਿੰਕ ਸਟੇਟਸ ਨੂੰ ਪੜ੍ਹਨ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ ਉਦਾਹਰਨ ਲਈ ਉਹਨਾਂ ਸਿੰਕਾਂ ਦਾ ਇਤਿਹਾਸ ਜੋ ਵਾਪਰੇ ਹਨ।</string>
+<string name="permlab_subscribedFeedsRead">ਸਬਸਕ੍ਰਾਈਬ ਕੀਤੇ ਫੀਡ ਪੜ੍ਹੋ</string>
+<string name="permdesc_subscribedFeedsRead">ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਵਰਤਮਾਨ ਸਿੰਕਡ ਫੀਡਸ ਬਾਰੇ ਵੇਰਵੇ ਪ੍ਰਾਪਤ ਕਰਨ ਦੀ ਇਜ਼ਾਜ਼ਤ ਦਿਓ।</string>
+<string name="permlab_subscribedFeedsWrite">ਸਬਸਕ੍ਰਾਈਬਰ ਕੀਤੀਆਂ ਫੀਡ ਲਿਖੋ</string>
+<string name="permdesc_subscribedFeedsWrite">ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਤੁਹਾਡੇ ਵਰਤਮਾਨ ਵਿੱਚ ਸਿੰਕ ਕੀਤੇ ਫੀਡਸ ਨੂੰ ਸੰਸ਼ੋਧਿਤ ਕਰਨ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ। ਇਹ ਇੱਕ  ਖਰਾਬ ਅਨੁਪ੍ਰਯੋਗਂ ਨੂੰ ਤੁਹਾਡੇ ਸਿੰਕ ਕੀਤੇ ਫੀਡਸ ਨੂੰ ਬਦਲਣ ਦੀ ਅਨੁਮਤੀ ਦੇ ਸਕਦਾ ਹੈ।  </string>
+<string name="permlab_readDictionary">ਉਪਭੋਗਤਾ ਪਰਿਭਾਸ਼ਿਤ ਸ਼ਬਦਕੋਸ਼ ਨੂੰ ਪੜ੍ਹੋ</string>
+<string name="permdesc_readDictionary">ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਕਿਸੇ ਵੀ ਨਿਜੀ ਸ਼ਬਦਾਂ,ਨਾਂਵਾਂ ਅਤੇ ਵਾਕਾਂਸ਼ਾਂ ਨੂੰ ਪੜ੍ਹਨ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ ਜੋ ਉਪਯੋਗਕਰਤਾ ਨੇ ਉਪਯੋਗਕਰਤਾ ਸ਼ਬਦਕੋਸ਼ ਵਿੱਚ ਸਟੋਰ ਕੀਤੇ ਹੋਏ ਹੋ ਸਕਦੇ ਹਨ।</string>
+<string name="permlab_writeDictionary">ਉਪਭੋਗਤਾ ਪਰਿਭਾਸ਼ਿਤ ਸ਼ਬਦ-ਕੋਸ਼ ਲਈ ਲਿਖਣਾ</string>
+<string name="permdesc_writeDictionary">ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਉਪਯੋਗਕਰਤਾ ਸ਼ਬਦਕੋਸ਼ ਵਿੱਚ ਨਵੇਂ ਸ਼ਬਦ ਲਿਖਣ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ।</string>
+<string name="permlab_sdcardWrite" product="nosdcard">USB ਸਟੋਰੇਜ ਸਮੱਗਰੀ ਬਦਲੋ/ਮਿਟਾਓ</string>
+<string name="permlab_sdcardWrite" product="default">SD ਸਟੋਰੇਜ ਸਮੱਗਰੀ ਬਦਲੋ/ਮਿਟਾਓ</string>
+<string name="permdesc_sdcardWrite" product="nosdcard">USB ਸਟੋਰੇਜ ਲਈ ਲਿਖਣ ਲਈ ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਇਜ਼ਾਜਤ ਦਿਓ।</string>
+<string name="permdesc_sdcardWrite" product="default">SD ਕਾਰਡ ਲਈ ਲਿਖਣ ਲਈ ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਇਜ਼ਾਜਤ ਦਿਓ।</string>
+<string name="permlab_cache_filesystem">ਕੈਸ਼ੇ ਫਾਇਲ ਸਿਸਟਮ ਵਰਤੋ</string>
+<string name="permdesc_cache_filesystem">ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਨੁੰ ਕੈਸ਼ੇ ਫਾਇਲ ਸਿਸਟਮ ਪੜ੍ਹਣ ਅਤੇ ਲਿਖਣ ਲਈ ਇਜ਼ਾਜਤ ਦਿਓ।</string>
+<string name="permlab_use_sip">ਇੰਟਰਨੈਟ ਕਾੱਲਾਂ ਕਰੋ। ਪ੍ਰਾਪਤ ਕਰੋ</string>
+<string name="permdesc_use_sip">ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਇੰਟਰਨੈਟ ਕਾੱਲਾਂ ਕਰਨ/ਪ੍ਰਾਪਤ ਕਰਨ ਲਈ SIP ਸੇਵਾ ਦੀ ਵਰਤੋਂ ਕਰਨ ਦੀ ਇਜ਼ਾਜਤ ਦਿਓ।</string>
+<string name="policylab_limitPassword">ਪਾਸਵਰਡ ਨਿਯਮ ਸੈਟ ਕਰੋ</string>
+<string name="policydesc_limitPassword">ਇਨਸਕ੍ਰੀਨ-ਅਨਲੌਕ ਪਾਸਵਰਡਾਂ ਦੀ ਅਨੁਮਤੀ ਦਿੱਤੀ ਲੰਬਾਈ ਅਤੇ ਅੱਖਰਾਂ ਤੇ ਨਿਯੰਤ੍ਰਣ ਪਾਓ</string>
+<string name="policylab_watchLogin">ਸਕਰੀਨ ਲਾੱਕ ਖੋਲ੍ਹਣ ਲਈ ਕੀਤੀਆਂ ਕੋਸ਼ਿਸ਼ਾਂ ਦਾ ਨਿਰੀਖਣ ਕਰੋ</string>
+<string name="policydesc_watchLogin">ਸਕ੍ਰੀਨ ਨੂੰ ਅਨਲੌਕ ਕਰਦੇ ਸਮੇਂ ਦਰਜ ਕੀਤੇ ਗਲਤ ਪਾਸਵਰਡਾਂ ਦੀ ਸੰਖਿਆ ਮਾਨੀਟਰ ਕਰੋ ਤੇ ਫੋਨ ਨੂੰ ਲੌਕ ਕਰੋ ਜਾਂ ਫੋਨ \ ਦਾ ਸਾਰਾ ਡੇਟਾ ਮਿਟਾਓ ਜੇਕਰ ਬਹੁਤ ਜ਼ਿਆਦਾ ਗਲਤ ਪਾਸਵਰਡ ਦਰਜ ਕੀਤੇ ਹਨ</string>
+<string name="policylab_resetPassword">ਸਕਰੀਨ ਲਾੱਕ ਖੋਲ੍ਹਣ ਵਾਲੀ ਪਾਸਵਰਡ ਬਦਲੋ</string>
+<string name="policydesc_resetPassword">ਸਕਰੀਨ ਲਾੱਕ ਖੋਲ੍ਹਣ ਵਾਲੀ ਪਾਸਵਰਡ ਬਦਲੋ</string>
+<string name="policylab_forceLock">ਸਕਰੀਨ ਲਾੱਕ ਕਰੋ</string>
+<string name="policydesc_forceLock">ਜਦ ਕਿਵੇ ਅਤੇ ਸਕਰੀਨ ਲਾੱਕ ਲੱਗਿਆ ਹੈ, ਨਿਯੰਤਰਿਤ ਕਰੋ</string>
+<string name="policylab_wipeData">ਸਾਰਾ ਡਾਟਾ ਮਿਟਾਓ</string>
+<string name="policydesc_wipeData">ਬਿਨਾਂ ਚੇਤਾਵਨੀ ਦੇ ਫੋਨ ਦਾ ਡਾਟਾ, ਫੈਕਟਰੀ ਡਾਟਾ ਜਾਂਚ ਕਰਕੇ ਮਿਟਾਓ</string>
+<string-array name="phoneTypes">
+<item>ਹੋਮ</item>
+<item>ਮੋਬਾਇਲ</item>
+<item>ਕੰਮ</item>
+<item>ਫੈਕਸ ਤੇ ਕੰਮ ਕਰਨਾ</item>
+<item>ਹੋਮ ਫੈਕਸ</item>
+<item>ਪੇਜਰ</item>
+<item>ਹੋਰ</item>
+<item>ਕਸਟਮ</item>
+</string-array>
+<string-array name="emailAddressTypes">
+<item>ਹੋਮ</item>
+<item>ਕੰਮ</item>
+<item>ਹੋਰ</item>
+<item>ਕਸਟਮ</item>
+</string-array>
+<string-array name="postalAddressTypes">
+<item>ਹੋਮ</item>
+<item>ਕੰਮ</item>
+<item>ਹੋਰ</item>
+<item>ਕਸਟਮ</item>
+</string-array>
+<string-array name="imAddressTypes">
+<item>ਹੋਮ</item>
+<item>ਕੰਮ</item>
+<item>ਹੋਰ</item>
+<item>ਕਸਟਮ</item>
+</string-array>
+<string-array name="organizationTypes">
+<item>ਕੰਮ</item>
+<item>ਹੋਰ</item>
+<item>ਕਸਟਮ</item>
+</string-array>
+<string-array name="imProtocols">
+<item>AIM</item>
+<item>Windows Live</item>
+<item>ਯਾਹੂ</item>
+<item>Skype</item>
+<item>QQ</item>
+<item>Google Talk</item>
+<item>ICQ</item>
+<item>ਗਪਸ਼ਪ</item>
+</string-array>
+<string name="phoneTypeCustom">ਕਸਟਮ</string>
+<string name="phoneTypeHome">ਹੋਮ</string>
+<string name="phoneTypeMobile">ਮੋਬਾਇਲ</string>
+<string name="phoneTypeWork">ਕੰਮ</string>
+<string name="phoneTypeFaxWork">ਫੈਕਸ ਤੇ ਕੰਮ ਕਰਨਾ</string>
+<string name="phoneTypeFaxHome">ਹੋਮ ਫੈਕਸ</string>
+<string name="phoneTypePager">ਪੇਜਰ</string>
+<string name="phoneTypeOther">ਹੋਰ</string>
+<string name="phoneTypeCallback">ਕਾੱਲਵਾਪਿਸੀ</string>
+<string name="phoneTypeCar">ਕਾਰ</string>
+<string name="phoneTypeCompanyMain">ਮੁੱਖ ਕੰਪਨੀ</string>
+<string name="phoneTypeMain">ਮੁੱਖ</string>
+<string name="phoneTypeOtherFax">ਹੋਰ ਫੈਕਸ</string>
+<string name="phoneTypeRadio">ਰੇਡੀਓ</string>
+<string name="phoneTypeTelex">ਟੈਲੈਕਸ</string>
+<string name="phoneTypeWorkMobile">ਮੋਬਾਇਲ ਤੇ ਕੰਮ ਕਰਨਾ</string>
+<string name="phoneTypeWorkPager">ਪੇਜਰ ਤੇ ਕੰਮ ਕਰਨਾ</string>
+<string name="phoneTypeAssistant">ਸਹਾਇਕ</string>
+<string name="phoneTypeMms">MMS</string>
+<string name="eventTypeBirthday">ਜਨਮਦਿਨ</string>
+<string name="eventTypeAnniversary">ਵਰ੍ਹੇਗੰਢ</string>
+<string name="eventTypeOther">ਘਟਨਾ</string>
+<string name="emailTypeCustom">ਕਸਟਮ</string>
+<string name="emailTypeHome">ਹੋਮ</string>
+<string name="emailTypeWork">ਕੰਮ</string>
+<string name="emailTypeOther">ਹੋਰ</string>
+<string name="emailTypeMobile">ਮੋਬਾਇਲ</string>
+<string name="postalTypeCustom">ਕਸਟਮ</string>
+<string name="postalTypeHome">ਹੋਮ</string>
+<string name="postalTypeWork">ਕੰਮ</string>
+<string name="postalTypeOther">ਹੋਰ</string>
+<string name="imTypeCustom">ਕਸਟਮ</string>
+<string name="imTypeHome">ਹੋਮ</string>
+<string name="imTypeWork">ਕੰਮ</string>
+<string name="imTypeOther">ਹੋਰ</string>
+<string name="imProtocolCustom">ਕਸਟਮ</string>
+<string name="imProtocolYahoo">ਯਾਹੂ</string>
+<string name="orgTypeWork">ਕੰਮ</string>
+<string name="orgTypeOther">ਹੋਰ</string>
+<string name="orgTypeCustom">ਕਸਟਮ</string>
+<string name="sipAddressTypeCustom">ਕਸਟਮ</string>
+<string name="sipAddressTypeHome">ਹੋਮ</string>
+<string name="sipAddressTypeWork">ਕੰਮ</string>
+<string name="sipAddressTypeOther">ਹੋਰ</string>
+<string name="contact_status_update_attribution"><xliff:g id="source" example="Google Talk">%1$s</xliff:g> ਦੁਆਰਾ</string>
+<string name="contact_status_update_attribution_with_date"><xliff:g id="date" example="3 hours ago">%1$s</xliff:g> ਵਿੱਚੋਂ <xliff:g id="source" example="Google Talk">%2$s</xliff:g></string>
+<string name="keyguard_password_enter_pin_code">PIN ਕੋਡ ਭਰੋ</string>
+<string name="keyguard_password_enter_password_code">ਲਾੱਕ ਖੋਲ੍ਹਣ ਲਈ ਪਾਸਵਰਡ ਭਰੋ</string>
+<string name="keyguard_password_wrong_pin_code">ਗਲਤ PIN ਕੋਡ!</string>
+<string name="pinpuk_attempts">\nਬਕਾਇਆ ਕੋਸ਼ਿਸ਼ਾਂ :</string>
+<string name="keyguard_label_text">ਲਾੱਕ ਖੋਲ੍ਹਣ ਲਈ ਮੀਨੂੰ  ਫਿਰ 0 ਦਬਾਉ।</string>
+<string name="emergency_call_dialog_number_for_display">ਆਪਾਤਕਾਲੀਨ ਨੰਬਰ</string>
+<string name="lockscreen_pin_locked_message">SIM/USIM  ਕਾਰਡ ਲਾੱਕ ਹੋ ਗਿਆ।</string>
+<string name="lockscreen_sim_network_locked_message">ਫੋਨ SIM ਨੈਟਵਰਕ ਲਾੱਕ ਹੋਇਆ ਹੈ</string>
+<string name="sim1_puk_requried">SIM1 PIN ਬਲਾੱਕ ਹੋਇਆ, ਅਨਬਲਾੱਕ ਕਰਨ ਲਈ PUK ਭਰੋ</string>
+<string name="sim2_puk_requried">SIM2 PIN ਬਲਾੱਕ ਹੋਇਆ, ਅਨਬਲਾੱਕ ਕਰਨ ਲਈ PUK ਭਰੋ</string>
+<string name="sim_puk_requried">SIM PIN blocked, Enter PUK to unblock</string>
+<string name="keyguard_password_enter_sim1_pin_code">SIM1 PIN ਕੋਡ ਭਰੋ</string>
+<string name="keyguard_password_enter_sim2_pin_code">SIM2 PIN ਕੋਡ ਭਰੋ</string>
+<string name="keyguard_password_enter_sim_pin_code">SIM PIN ਕੋਡ ਭਰੋ</string>
+<string name="keyguard_sim1_pin_accepted">SIM1 PIN ਦਾ ਲਾੱਕ ਖੋਲ੍ਹਣਾ ਸਫ਼ਲ</string>
+<string name="keyguard_sim2_pin_accepted">SIM2 PIN ਦਾ ਲਾੱਕ ਖੋਲ੍ਹਣਾ ਸਫ਼ਲ</string>
+<string name="keyguard_sim_pin_accepted">SIM PIN ਦਾ ਲਾੱਕ ਖੋਲ੍ਹਣਾ ਸਫ਼ਲ</string>
+<string name="puk_accept">PUK ਸਵੀਕਾਰ ਕੀਤਾ ਗਿਆ</string>
+<string name="unblocking_fail">ਬਲਾੱਕ ਕੀਤਾ ਖੋਲ੍ਹਣਾ ਅਸਫ਼ਲ ਹੋਇਆ,  PUK ਦੁਬਾਰਾ ਭਰੋ</string>
+<string name="keyguard_password_wrong_puk_code">ਗਲਤ PUK ਕੋਡ!</string>
+<string name="new_pin">ਇੱਕ ਨਵਾਂ PIN ਭਰੋ</string>
+<string name="reenter">PIN ਦੁਬਾਰਾ ਭਰੋ</string>
+<string name="lockscreen_carrier_default">(ਕੋਈ ਸੇਵਾ ਨਹੀਂ)</string>
+<string name="lockscreen_screen_locked">ਸਕਰੀਨ ਨੂੰ ਬੰਦ ਕਰ ਦਿੱਤਾ ਗਿਆ</string>
+<string name="lockscreen_instructions_when_pattern_enabled">ਲਾੱਕ ਖੋਲ੍ਹਣ ਲਈ ਮੀਨੂੰ ਦਬਾਉ ਜਾਂ ਆਪਾਤਕਾਲੀਨ ਕਾੱਲ ਕਰੋ।</string>
+<string name="lockscreen_instructions_when_pattern_disabled">ਲਾੱਕ ਖੋਲ੍ਹਣ ਲਈ ਮੀਨੂੰ ਦਬਾਉ।</string>
+<string name="lockscreen_pattern_instructions">ਲਾੱਕ ਖੋਲ੍ਹਣ ਲਈ ਪੈਟਰਨ ਤਿਆਰ ਕਰੋ</string>
+<string name="lockscreen_emergency_call">ਆਪਾਤਕਾਲੀਨ ਕਾੱਲ</string>
+<string name="lockscreen_return_to_call">ਕਾੱਲ ਲਈ ਵਾਪਿਸ ਆਓ</string>
+<string name="lockscreen_pattern_correct">ਸਹੀ!</string>
+<string name="lockscreen_pattern_wrong">ਅਫ਼ਸੋਸ, ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ</string>
+<string name="lockscreen_plugged_in">ਚਾਰਜਿੰਗ (<xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g>)</string>
+<string name="lockscreen_charged">ਚਾਰਜ ਹੋਇਆ।</string>
+<string name="lockscreen_low_battery">ਆਪਣੇ ਚਾਰਜਰ ਨਾਲ ਕੁਨੈਕਟ ਕਰੋ।</string>
+<string name="lockscreen_missing_sim_message_short">ਕੋਈ SIM ਕਾਰਡ ਨਹੀਂ ਹੈ।</string>
+<string name="lockscreen_missing_sim_message">ਫੋਨ ਵਿੱਚ ਕੋਈ SIM ਕਾਰਡ ਨਹੀਂ ਹੈ।</string>
+<string name="lockscreen_missing_sim_instructions">ਕਿਰਪਾ ਕਰਕੇ SIM ਕਾਰਡ ਪਾਉ।</string>
+<string name="lockscreen_blocked_sim_message_short">SIM ਕਾਰਡ ਬਲਾੱਕ ਹੈ।</string>
+<string name="emergency_calls_only">ਕੇਵਲ ਆਪਾਤਕਾਲੀਨ ਕਾੱਲਾਂ</string>
+<string name="lockscreen_network_locked_message"></string>
+<string name="lockscreen_sim_puk_locked_message">SIM ਕਾਰਡ ਦਾ PUK-ਲਾੱਕ ਹੋ ਗਿਆ ਹੈ।</string>
+<string name="lockscreen_sim_puk_locked_instructions">ਕਿਰਪਾ ਕਰਕੇ ਉਪਭੋਗਤਾ ਮਾਰਗਦਰਸ਼ਕ ਜਾਂ ਕਸਟਮਰ ਕੇਅਰ ਤੇ ਸੰਪਰਕ ਕਰੋ।</string>
+<string name="lockscreen_sim_locked_message">SIM ਕਾਰਡ ਦਾ ਲਾੱਕ ਲੱਗਿਆ ਹੋਇਆ ਹੈ।</string>
+<string name="lockscreen_sim_unlock_progress_dialog_message">SIM ਕਾਰਡ ਦਾ ਲਾੱਕ ਖੁੱਲ੍ਹ ਰਿਹਾ ਹੈ \u2026</string>
+<string name="lockscreen_too_many_failed_attempts_dialog_message"> ਤੁਸੀਂ <xliff:g id="number">%d</xliff:g> ਵਾਰ ਆਪਣੇ ਅਨਲੌਕ ਪੈਟਰਨ ਨੂੰ ਗਲਤ ਢੰਗ ਨਾਲ ਖਿੱਚਿਆ ਹੈ। \n\nਕਿਰਪਾ ਕਰਕੇ <xliff:g id="number">%d</xliff:g> ਸਕਿੰਟਾਂ ਵਿੱਚ ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ।</string>
+<string name="lockscreen_failed_attempts_almost_glogin"> ਤੁਸੀਂ ਆਪਣਾ ਅਨਲੌਕ ਪੈਟਰਨ <xliff:g id="number">%d</xliff:g> ਵਾਰੀ ਗਲਤ ਢੰਗ ਨਾਲ ਖਿੱਚਿਆ ਹੈ। <xliff:g id="number">%d</xliff:g> ਤੋਂ ਬਾਅਦ ਵੱਧ ਅਸਫਲ ਕੋਸ਼ਿਸ਼ਾਂ, ਤੁਹਾਨੂੰ ਆਪਣੇ Google ਸਾਈਨ-ਇਨ ਦਾ ਪ੍ਰਯੋਗ ਕਰਦੇ ਹੋਏ ਆਪਣਾ ਫੋਨ ਅਨਲੌਕ ਕਰਨ ਲਈ ਕਿਹਾ ਜਾਏਗਾ।  \n\n ਕਿਰਪਾ ਕਰਕੇ <xliff:g id="number">%d</xliff:g> ਸਕਿੰਟਾਂ ਵਿੱਚ ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ।</string>
+<string name="lockscreen_too_many_failed_attempts_countdown"><xliff:g id="number">%d</xliff:g> ਸੈਕਿੰਡਾਂ ਵਿੱਚ ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ।</string>
+<string name="lockscreen_forgot_pattern_button_text">ਕੀ ਤੁਸੀ ਪੈਟਰਨ ਭੁੱਲ ਗਏ?</string>
+<string name="lockscreen_glogin_forgot_pattern">ਖਾਤਾ ਅਨਲਾੱਕ</string>
+<string name="lockscreen_glogin_too_many_attempts">ਬਹੁਤ ਸਾਰੀਆਂ ਪੈਟਰਨ ਕੋਸ਼ਿਸ਼ਾਂ!</string>
+<string name="lockscreen_glogin_instructions">ਲਾੱਕ ਖੋਲ੍ਹਣ ਲਈ ਆਪਣੇ Google ਖਾਤੇ ਨਾਲ ਸਾਈਨ ਇਨ ਕਰੋ।</string>
+<string name="lockscreen_glogin_username_hint">ਉਪਭੋਗਤਾ ਦਾ ਨਾਮ (ਈਮੇਲ)</string>
+<string name="lockscreen_glogin_password_hint">ਪਾਸਵਰਡ</string>
+<string name="lockscreen_glogin_submit_button">ਸਾਈਨ ਇਨ</string>
+<string name="lockscreen_glogin_invalid_input">ਗਲਤ ਯੂਜ਼ਰ ਨਾਮ ਜਾਂ ਪਾਸਵਰਡ</string>
+<string name="lockscreen_glogin_checking_password">ਜਾਂਚ ਹੋ ਰਹੀ ਹੈ...</string>
+<string name="lockscreen_unlock_label">ਲਾੱਕ ਖੋਲ੍ਹੋ</string>
+<string name="lockscreen_sound_on_label">ਆਵਾਜ਼ ਸ਼ੁਰੂ ਕਰੋ</string>
+<string name="lockscreen_sound_off_label">ਆਵਾਜ਼ ਬੰਦ ਕਰੋ</string>
+<string name="password_keyboard_label_symbol_key">"\?123"</string>
+<string name="hour_ampm"><xliff:g id="hour" example="3">%-l</xliff:g><xliff:g id="ampm" example="pm">%P</xliff:g></string>
+<string name="hour_cap_ampm"><xliff:g id="hour" example="3">%-l</xliff:g><xliff:g id="ampm" example="pm">%P</xliff:g></string>
+<string name="factorytest_failed">ਫੈਕਟਰੀ ਜਾਂਚ ਅਸਫ਼ਲ ਹੋਈ</string>
+<string name="factorytest_not_system"></string>
+<string name="factorytest_no_action">ਕੋਈ ਵੀ ਅਜਿਹਾ ਪੈਕੇਜ ਨਹੀਂ ਮਿਲਿਆ ਸੀ ਜੋ ਫੈਕਟਰੀ _ਜਾਂਚ ਕਿਰਿਆ ਪ੍ਰਦਾਨ ਕਰਦਾ ਹੈ।</string>
+<string name="factorytest_reboot">ਦੁਬਾਰਾ ਬੂਟ ਕਰੋ</string>
+<string name="js_dialog_title">\'<xliff:g id="title">%s</xliff:g>\' ਤੇ ਪੇਜ ਕਹਿੰਦਾ ਹੈ :</string>
+<string name="js_dialog_before_unload">ਕੀ ਤੁਸੀ ਇਸ ਪੇਜ ਤੋਂ ਪਰ੍ਹਾਂ ਵੀ ਨੈਵੀਗੇਟ ਕਰਨਾ ਚਾਹੁੰਦੇ ਹੋਂ?\n\n<xliff:g id="message">%s</xliff:g>\n\nਜਾਰੀ ਰੱਖਣ ਲਈ OK ਚੁਣੋ, ਜਾਂ ਵਰਤਮਾਨ ਪੇਜ ਤੇ ਰਹਿਣ ਲਈ ਰੱਦ ਕਰੋ ਚੁਣੋ।</string>
+<string name="save_password_label">ਪੁਸ਼ਟੀ ਕਰੋ</string>
+<string name="double_tap_toast">ਟਿਪ: ਜ਼ੂਮ ਇਨ ਅਤੇ ਆਊਟ ਕਰਨ ਲਈ ਦੋਹਰਾ ਟੈਪ ਕਰੋ</string>
+<string name="permlab_readHistoryBookmarks">ਬਰਾਊਜ਼ਰ ਦੇ ਇਤਿਹਾਸ ਅਤੇ ਬੁਕਮਾਰਕ ਪੜ੍ਹੋ</string>
+<string name="permdesc_readHistoryBookmarks">ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਸਾਰੇ URLs ਜਿੱਥੇ ਬ੍ਰਾਊਜਰ ਗਿਆ,ਅਤੇ ਬ੍ਰਾਊਜਰ \ ਦੇ ਸਾਰੇ ਬੁੱਕਮਾਰਕਾਂ ਨੂੰ ਪੜ੍ਹਨ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ।</string>
+<string name="permlab_writeHistoryBookmarks">ਬਰਾਊਜ਼ਰ/ਰਾਂ ਦਾ ਇਤਿਹਾਸ ਅਤੇ ਬੁਕਮਾਰਕ ਲਿਖੋ</string>
+<string name="permdesc_writeHistoryBookmarks">ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਬ੍ਰਾਊਜਰ \ ਦੇ ਇਤਿਹਾਸ ਜਾਂ ਤੁਹਾਡੇ ਫੋਨ ਤੇ ਸਟੋਰ ਕੀਤੇ ਬੁੱਕਮਾਰਕਾਂ ਨੂੰ ਸੰਸ਼ੋਧਿਤ ਕਰਨ ਦੀ ਅਨੁਮਤੀ ਦੇ ਸਕਦਾ ਹੈ। ਖਰਾਬ ਅਨੁਪ੍ਰਯੋਗ ਇਸਦਾ ਪ੍ਰਯੋਗ ਤੁਹਾਡੇ ਬ੍ਰਾਊਜਰ \ ਦੇ ਡੇਟੇ ਨੂੰ ਮਿਟਾਉਣ ਜਾਂ ਸੰਸ਼ੋਧਿਤ ਕਰਨ ਲਈ ਕਰ ਸਕਦੇ ਹਨ।</string>
+<string name="permlab_setAlarm">ਅਲਾਰਮ ਘੜੀ ਵਿੱਚ ਅਲਾਰਮ ਸੈਟ ਕਰੋ</string>
+<string name="permdesc_setAlarm">ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਇੱਕ ਇੰਸਟਾਲ ਕੀਤੇ ਅਲਾਰਮ ਕਲੌਕ ਅਨੁਪ੍ਰਯੋਗ ਵਿੱਚ ਇੱਕ ਅਲਾਰਮ ਸੈਟ ਕਰਨ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ। ਕੁਝ ਅਲਾਰਮ ਕਲੌਕ ਅਨੁਪ੍ਰਯੋਗ ਇਸ ਵਿਸ਼ੇਸ਼ਤਾ ਤੇ ਲਾਗੂ ਨਹੀਂ ਹੋ ਸਕਦੇ।</string>
+<string name="permlab_writeGeolocationPermissions">ਬਰਾਊਜ਼ਰ ਭੂਗੋਲਿਕ ਸਥਾਨ ਇਜ਼ਾਜ਼ਤਾਂ ਬਦਲੋ</string>
+<string name="permdesc_writeGeolocationPermissions">ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਬ੍ਰਾਊਜਰ \ਦੀਆਂ  ਜਿਓਲੋਕੇਸ਼ਨ ਅਨੁਮਤੀਆਂ ਨੂੰ ਸੰਸ਼ੋਧਿਤ ਕਰਨ ਦੀ ਅਨੁਮਤੀ ਦਿੰਦਾ ਹੈ। ਖਰਾਬ ਅਨੁਪ੍ਰਯੋਗ ਇਸਦਾ ਪ੍ਰਯੋਗ ਵੈਬ ਸੈਈਟਾਂ ਨੂੰ ਮਨਮਾਨੇ ਢੰਗ ਨਾਲ ਸਥਾਨ ਜਾਣਕਾਰੀ ਭੇਜਣ ਦੀ ਅਨੁਮਤੀ ਦੇਣ ਲਈ ਕਰ ਸਕਦੇ ਹਨ।  </string>
+<string name="save_password_message">ਕੀ ਤੁਸੀ ਚਾਹੁੰਦੇ ਹੋਂ ਕਿ ਬਰਾਊਜ਼ਰ ਇਹ ਪਾਸਵਰਡ ਯਾਦ ਰੱਖੇ?</string>
+<string name="save_password_notnow">ਅਜੇ ਨਹੀਂ</string>
+<string name="save_password_remember">ਯਾਦ ਰੱਖੋ</string>
+<string name="save_password_never">ਕਦੇ ਨਹੀਂ</string>
+<string name="open_permission_deny">ਤੁਹਾਨੂੰ ਇਸ ਪੇਜ ਨੂੰ ਖੋਲ੍ਹਣ ਦੀ ਇਜ਼ਾਜਤ ਨਹੀਂ ਹੈ।</string>
+<string name="text_copied">ਕਲਿੱਪ ਬੋਰਡ ਲਈ ਕਾਪੀ ਕੀਤਾ ਵਿਸ਼ਾ-ਵਸਤੂ।</string>
+<string name="more_item_label"></string>
+<string name="menu_space_shortcut_label">ਜਗ੍ਹਾ</string>
+<string name="menu_enter_shortcut_label">ਭਰੋ</string>
+<string name="menu_delete_shortcut_label">ਮਿਟਾਓ</string>
+<string name="search_go">ਖੋਜੋ</string>
+<string name="oneMonthDurationPast">1 ਮਹੀਨਾ ਪਹਿਲਾਂ</string>
+<string name="beforeOneMonthDurationPast">ਪਹਿਲਾਂ1 ਮਹੀਨਾ ਪਹਿਲਾਂ</string>
+<plurals name="num_seconds_ago">
+<item quantity="one">1 ਸੈਕਿੰਡ ਪਹਿਲਾਂ</item>
+<item quantity="other"><xliff:g id="count">%d</xliff:g> ਸੈਕਿੰਡ ਪਹਿਲਾਂ</item>
+</plurals>
+<plurals name="num_minutes_ago">
+<item quantity="one">1 ਮਿੰਟ ਪਹਿਲਾਂ</item>
+<item quantity="other"><xliff:g id="count">%d</xliff:g> ਮਿੰਟ ਪਹਿਲਾਂ</item>
+</plurals>
+<plurals name="num_hours_ago">
+<item quantity="one">1 ਘੰਟਾ ਪਹਿਲਾਂ</item>
+<item quantity="other"><xliff:g id="count">%d</xliff:g> ਘੰਟੇ ਪਹਿਲਾਂ</item>
+</plurals>
+<plurals name="last_num_days">
+<item quantity="other">ਆਖਿਰੀ <xliff:g id="count">%d</xliff:g> ਦਿਨ</item>
+</plurals>
+<string name="last_month">ਆਖਿਰੀ ਮਹੀਨਾ</string>
+<string name="older">ਪੁਰਾਣਾ</string>
+<plurals name="num_days_ago">
+<item quantity="one">ਕੱਲ</item>
+<item quantity="other"><xliff:g id="count">%d</xliff:g> ਦਿਨ ਪਹਿਲਾਂ</item>
+</plurals>
+<plurals name="in_num_seconds">
+<item quantity="one">1 ਸੈਕਿੰਡ ਵਿੱਚ</item>
+<item quantity="other"><xliff:g id="count">%d</xliff:g> ਸੈਕਿੰਡਾਂ ਵਿੱਚ</item>
+</plurals>
+<plurals name="in_num_minutes">
+<item quantity="one">1 ਮਿੰਟ ਵਿੱਚ</item>
+<item quantity="other"><xliff:g id="count">%d</xliff:g> ਮਿੰਟਾਂ ਵਿੱਚ</item>
+</plurals>
+<plurals name="in_num_hours">
+<item quantity="one">1 ਘੰਟੇ ਵਿੱਚ</item>
+<item quantity="other"><xliff:g id="count">%d</xliff:g> ਘੰਟਿਆਂ ਵਿੱਚ</item>
+</plurals>
+<plurals name="in_num_days">
+<item quantity="one">ਕੱਲ</item>
+<item quantity="other"><xliff:g id="count">%d</xliff:g> ਦਿਨਾਂ ਵਿੱਚ</item>
+</plurals>
+<plurals name="abbrev_num_seconds_ago">
+<item quantity="one">1 ਸੈਕਿੰਡ ਪਹਿਲਾਂ</item>
+<item quantity="other"><xliff:g id="count">%d</xliff:g> ਸੈਕਿੰਡ ਪਹਿਲਾਂ</item>
+</plurals>
+<plurals name="abbrev_num_minutes_ago">
+<item quantity="one">1 ਮਿੰਟ ਪਹਿਲਾਂ</item>
+<item quantity="other"><xliff:g id="count">%d</xliff:g> ਮਿੰਟ ਪਹਿਲਾਂ</item>
+</plurals>
+<plurals name="abbrev_num_hours_ago">
+<item quantity="one">1 ਘੰਟਾ ਪਹਿਲਾਂ</item>
+<item quantity="other"><xliff:g id="count">%d</xliff:g> ਘੰਟੇ ਪਹਿਲਾਂ</item>
+</plurals>
+<plurals name="abbrev_num_days_ago">
+<item quantity="one">ਕੱਲ</item>
+<item quantity="other"><xliff:g id="count">%d</xliff:g> ਦਿਨ ਪਹਿਲਾਂ</item>
+</plurals>
+<plurals name="abbrev_in_num_seconds">
+<item quantity="one">1 ਸੈਕਿੰਡ ਵਿੱਚ</item>
+<item quantity="other"><xliff:g id="count">%d</xliff:g> ਸੈਕਿੰਡਾਂ ਵਿੱਚ</item>
+</plurals>
+<plurals name="abbrev_in_num_minutes">
+<item quantity="one">1 ਮਿੰਟ ਵਿੱਚ</item>
+<item quantity="other"><xliff:g id="count">%d</xliff:g> ਮਿੰਟਾਂ ਵਿੱਚ</item>
+</plurals>
+<plurals name="abbrev_in_num_hours">
+<item quantity="one">1 ਘੰਟੇ ਵਿੱਚ</item>
+<item quantity="other"><xliff:g id="count">%d</xliff:g> ਘੰਟਿਆਂ ਵਿੱਚ</item>
+</plurals>
+<plurals name="abbrev_in_num_days">
+<item quantity="one">ਕੱਲ</item>
+<item quantity="other"><xliff:g id="count">%d</xliff:g> ਦਿਨਾਂ ਵਿੱਚ</item>
+</plurals>
+<string name="preposition_for_date"><xliff:g id="date" example="May 29">%s</xliff:g> ਤੇ</string>
+<string name="preposition_for_time"><xliff:g id="time" example="2:33 am">%s</xliff:g> ਤੇ</string>
+<string name="preposition_for_year"><xliff:g id="year" example="2003">%s</xliff:g> ਵਿੱਚ</string>
+<string name="day">ਦਿਨ</string>
+<string name="days">ਦਿਨ</string>
+<string name="hour">ਘੰਟਾ</string>
+<string name="hours">ਘੰਟੇ</string>
+<string name="minute">ਨਿਊਨਤਮ</string>
+<string name="minutes">ਮਿੰਟ</string>
+<string name="second">ਸੈਕਿੰਡ</string>
+<string name="seconds">ਸੈਕਿੰਡ</string>
+<string name="week">ਹਫ਼ਤਾ</string>
+<string name="weeks">ਹਫ਼ਤੇ</string>
+<string name="year">ਸਾਲ</string>
+<string name="years">ਸਾਲ</string>
+<string name="VideoView_error_title">ਵੀਡਿਓ ਨਹੀਂ ਚਲਾਇਆ ਜਾ ਸਕਦਾ</string>
+<string name="VideoView_error_text_invalid_progressive_playback">ਅਫ਼ਸੋਸ, ਇਹ ਵੀਡਿਓ ਇਸ ਉਪਕਰਨ ਦੀ ਨਿਰੰਤਰਤਾ ਲਈ ਪ੍ਰਮਾਣਿਤ ਨਹੀਂ ਹੈ।</string>
+<string name="VideoView_error_text_unknown">ਅਫ਼ਸੋਸ, ਇਹ ਵੀਡਿਓ ਚਲਾਇਆ ਨਹੀਂ ਜਾ ਸਕਦਾ।</string>
+<string name="VideoView_error_button">OK</string>
+<string name="relative_time"><xliff:g id="date" example="4 hours ago">%1$s</xliff:g>, <xliff:g id="time" example="11:00 am">%2$s</xliff:g></string>
+<string name="noon">ਦੁਪਿਹਰ</string>
+<string name="Noon">ਦੁਪਿਹਰ</string>
+<string name="midnight">ਅੱਧੀ ਰਾਤ</string>
+<string name="Midnight">ਅੱਧੀ ਰਾਤ</string>
+<string name="elapsed_time_short_format_mm_ss"><xliff:g id="minutes" example="1">%1$02d</xliff:g>:<xliff:g id="seconds" example="23">%2$02d</xliff:g></string>
+<string name="elapsed_time_short_format_h_mm_ss"><xliff:g id="hours" example="1">%1$d</xliff:g>:<xliff:g id="minutes" example="43">%2$02d</xliff:g>:<xliff:g id="seconds" example="33">%3$02d</xliff:g></string>
+<string name="selectAll">ਸਾਰੇ ਚੁਣੋ</string>
+<string name="selectText">ਸ਼ਬਦ ਚੁਣੋ</string>
+<string name="cut">ਕੱਟ ਕਰੋ</string>
+<string name="copy">ਕਾਪੀ ਕਰੋ</string>
+<string name="paste">ਪੇਸਟ ਕਰੋ</string>
+<string name="copyUrl">URL ਕਾਪੀ ਕਰੋ</string>
+<string name="inputMethod">ਵਿਧੀ ਇਨਪੁਟ ਕਰੋ</string>
+<string name="addToDictionary">ਸ਼ਬਦਕੋਸ਼ ਵਿੱਚ \<xliff:g id="word" example="rickroll">%s</xliff:g>\ ਸ਼ਾਮਿਲ ਕਰੋ</string>
+<string name="editTextMenuTitle">ਪਾਠ ਐਡਿਟ ਕਰੋ</string>
+<string name="low_internal_storage_view_title">ਜਗ੍ਹਾ ਘੱਟ ਹੈ</string>
+<string name="low_internal_storage_view_text">ਫੋਨ ਸਟੋਰੇਜ ਜਗ੍ਹਾ ਘੱਟ ਹੋ ਰਹੀ ਹੈ।</string>
+<string name="ok">OK</string>
+<string name="cancel">ਰੱਦ ਕਰੋ</string>
+<string name="yes">OK</string>
+<string name="no">ਰੱਦ ਕਰੋ</string>
+<string name="dialog_alert_title">ਧਿਆਨ</string>
+<string name="capital_on">ਤੇ</string>
+<string name="capital_off">ਬੰਦ</string>
+<string name="whichApplication">ਵਰਤੀ ਗਈ ਕਾਰਵਾਈ ਪੂਰੀ ਕਰੋ</string>
+<string name="alwaysUse">ਇਸ ਕਾਰਵਾਈ ਲਈ ਬਾਈ ਡਿਫਾਲਟ ਦੀ ਵਰਤੋ ਕਰੋ।</string>
+<string name="clearDefaultHintMsg">ਹੋਮ ਸੈਟਿੰਗਾਂ ਵਿੱਚ ਡਿਫਾਲਟ ਅਨੁਪ੍ਰਯੋਗ > ਅਨੁਪ੍ਰਯੋਗ > ਪ੍ਰਬੰਧ ਮਿਟਾਓ।</string>
+<string name="chooseActivity">ਕਾਰਵਾਈ ਚੁਣੋ</string>
+<string name="chooseUsbActivity">USB ਉਪਕਰਨ ਲਈ ਇੱਕ ਅਨੁਪ੍ਰਯੋਗ ਚੁਣੋ</string>
+<string name="noApplications">ਕੋਈ ਅਨੁਪ੍ਰਯੋਗ ਇਹ ਕਾਰਵਾਈ ਨਹੀਂ ਕਰ ਸਕਦਾ।</string>
+<string name="crash_title">ਅਫ਼ਸੋਸ !</string>
+<string name="crash_application">ਅਨੁਪ੍ਰਯੋਗ <xliff:g id="application">%1$s</xliff:g>(process <xliff:g id="process">%2$s</xliff:g>) ਅਚਾਨਕ ਰੁਕ ਗਿਆ ਹੈ। ਸਿਸਟਮ ਅਸ਼ੁੱਧੀ ਨੂੰ ਠੀਕ ਕਰਨ ਵਿੱਚ ਅਸਫਲ ਹੋ ਗਿਆ। ਕਿਰਪਾ ਕਰਕੇ ਹੋਰ ਸੌਫਟਵੇਅਰ ਪ੍ਰਯੋਗ ਕਰੋ।</string>
+<string name="crash_process">ਪ੍ਰਕਿਰਿਆ <xliff:g id="process">%1$s</xliff:g> ਅਚਾਨਕ ਰੁੱਕ ਗਈ। ਤਰੁੱਟੀ ਦੀ ਮੁਰੰਮਤ ਕਰਨ ਵਿੱਚ ਸਿਸਟਮ ਅਸਫ਼ਲ।ਕਿਰਪਾ ਕਰਕੇ ਦੂਜੇ ਸਾੱਫਟਵੇਅਰ ਦੀ ਵਰਤੋ ਕਰੋ।</string>
+<string name="aerr_title">ਅਫ਼ਸੋਸ !</string>
+<string name="aerr_application">ਅਨੁਪ੍ਰਯੋਗ <xliff:g id="application">%1$s</xliff:g>(process <xliff:g id="process">%2$s</xliff:g>)ਅਚਾਨਕ ਰੁਕ ਗਿਆ ਹੈ। ਕਿਰਪਾ ਕਰਕੇ ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ।</string>
+<string name="aerr_process">ਪ੍ਰਕਿਰਿਆ <xliff:g id="process">%1$s</xliff:g> ਅਚਾਨਕ ਰੁਕ ਗਈ ਹੈ। ਕਿਰਪਾ ਕਰਕੇ ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ।</string>
+<string name="anr_title">ਅਫ਼ਸੋਸ !</string>
+<string name="anr_activity_application">ਪ੍ਰਕਿਰਆ <xliff:g id="activity">%1$s</xliff:g> (ਅਨੁਪ੍ਰਯੋਗ ਵਿੱਚ <xliff:g id="application">%2$s</xliff:g>)  ਦਾ ਉੱਤਰ ਨਹੀ ਮਿਲ ਰਿਹਾ ਹੈ।</string>
+<string name="anr_activity_process">ਗਤੀਵਿਧੀ <xliff:g id="activity">%1$s</xliff:g> ( ਪ੍ਰਕਿਰਿਆ ਵਿੱਚ  <xliff:g id="process">%2$s</xliff:g>) ਪ੍ਰਤੀਕ੍ਰਿਆ ਨਹੀਂ ਦੇ ਰਹੀ।</string>
+<string name="anr_application_process">ਅਨੁਪ੍ਰਯੋਗ <xliff:g id="application">%1$s</xliff:g> (ਪ੍ਰਕਿਰਿਆ ਵਿੱਚ <xliff:g id="process">%2$s</xliff:g>) ਪ੍ਰਤੀਕ੍ਰਿਆ ਨਹੀਂ ਦੇ ਰਿਹਾ।</string>
+<string name="anr_process">ਪ੍ਰਕਿਰਿਆ <xliff:g id="process">%1$s</xliff:g> ਪ੍ਰਤੀਕ੍ਰਿਆ ਨਹੀਂ ਦੇ ਰਹੀ।</string>
+<string name="crash_close">OK</string>
+<string name="force_close">ਜਬਰਦਸਤੀ ਬੰਦ ਕਰੋ</string>
+<string name="report">ਰਿਪੋਰਟ</string>
+<string name="wait">ਇੰਤਜ਼ਾਰ ਕਰੋ</string>
+<string name="launch_warning_title">ਅਨੁਪ੍ਰਯੋਗ ਪੁਨਰਵਾਪਸੀ</string>
+<string name="launch_warning_replace"><xliff:g id="app_name">%1$s</xliff:g>  ਨੂੰ ਹੁਣ ਚਲ ਰਹੀ ਹੈ।</string>
+<string name="launch_warning_original"><xliff:g id="app_name">%1$s</xliff:g> ਨੂੰ ਅਸਲ ਵਿੱਚ ਲਾਂਚ ਕੀਤਾ।</string>
+<string name="smv_application">ਅਨੁਪ੍ਰਯੋਗ <xliff:g id="application">%1$s</xliff:g>(process <xliff:g id="process">%2$s</xliff:g>)ਨੇ ਆਪਣੀ ਸਵੈ-ਲਾਗੂ ਸਟ੍ਰਿਕਟਮੋਡ ਪਾਲਿਸੀ ਦੀ ਉਲੰਘਣਾ ਕੀਤੀ ਹੈ।</string>
+<string name="smv_process">ਪ੍ਰਕਿਰਿਆ <xliff:g id="process">%1$s</xliff:g> ਨੇ ਆਪਣੀ ਸਵੈ-ਲਾਗੂ ਸਟ੍ਰਿਕਟਮੋਡ ਪਾਲਿਸੀ ਦੀ ਉਲੰਘਣਾ ਕੀਤੀ ਹੈ।</string>
+<string name="heavy_weight_notification"><xliff:g id="app">%1$s</xliff:g>ਚਲ ਰਿਹਾ ਹੈ</string>
+<string name="heavy_weight_notification_detail">ਅਨੁਪ੍ਰਯੋਗ ਨੂੰ ਸਵਿੱਚ ਕਰਨ ਕਈ ਚੁਣੋ</string>
+<string name="heavy_weight_switcher_title">ਕੀ ਅਨੁਪ੍ਰਯੋਗਾਂ ਤੇ ਸਵਿੱਚ ਕਰਨਾ ਚਾਹੁੰਦੇ ਹੋਂ?</string>
+<string name="heavy_weight_switcher_text">ਦੂਜਾ ਅਨੁਪ੍ਰਯੋਗ ਪਹਿਲਾਂ ਹੀ ਚੱਲ ਰਿਹਾ ਜਿਸ ਨੂੰ ਰੋਕਣਾ ਜ਼ਰੂਰੀ ਹੈ ਇਸਤੋਂ ਪਹਿਲਾਂ ਕਿ ਤੁਸੀਂ ਇੱਕ ਨਵਾਂ ਚਾਲੂ ਕਰ ਸਕੋ।</string>
+<string name="old_app_action"><xliff:g id="old_app">%1$s</xliff:g> ਤੇ ਵਾਪਿਸੀ</string>
+<string name="old_app_description">ਨਵਾਂ ਅਨੁਪ੍ਰਯੋਗ ਸ਼ੁਰੁ ਨਾ ਕਰੋ।</string>
+<string name="new_app_action"><xliff:g id="old_app">%1$s</xliff:g> ਸ਼ੁਰੂ ਕਰੋ</string>
+<string name="new_app_description">ਪੁਰਾਣੇ ਅਨੁਪ੍ਰਯੋਗ ਸੁਰੱਖਿਅਤ ਕੀਤੇ ਬਿਨਾਂ ਰੋਕੋ।</string>
+<string name="sendText">ਵਿਸ਼ਾ-ਵਸਤੂ ਲਈ ਇੱਕ ਕਾਰਵਾਈ ਚੁਣੋ</string>
+<string name="volume_ringtone">ਘੰਟੀ ਦੀ ਆਵਾਜ਼</string>
+<string name="volume_music">ਮੀਡੀਆ ਦੀ ਮਾਤਰਾ</string>
+<string name="volume_fm">FM ਆਵਾਜ਼</string>
+<string name="volume_music_hint_playing_through_bluetooth">ਬਲੂਟੂਥ ਦੁਆਰਾ ਚਲਾਉਣਾ</string>
+<string name="volume_music_hint_silent_ringtone_selected">ਸ਼ਾਂਤ ਰਿੰਗਟੋਨ ਚੁਣੀ ਗਈ</string>
+<string name="volume_music_hint_silent_sim1_ringtone_selected">SIM1 ਸ਼ਾਂਤ ਰਿੰਗਟੋਨ ਚੁਣੀ ਗਈ</string>
+<string name="volume_music_hint_sim2_silent_ringtone_selected">SIM2 ਸ਼ਾਂਤ ਰਿੰਗਟੋਨ ਚੁਣੀ ਗਈ</string>
+<string name="volume_music_hint_sim1_and_sim2_silent_ringtone_selected">SIM1 ਅਤੇ SIM2 ਤੇ ਸ਼ਾਂਤ ਰਿੰਗਟੋਨ ਚੁਣੀ ਗਈ</string>
+<string name="volume_call">ਕਾੱਲ ਦੌਰਾਨ ਆਵਾਜ਼</string>
+<string name="volume_bluetooth_call">ਬਲੂਟੂਥ ਕਾੱਲ ਦੌਰਾਨ ਆਵਾਜ਼</string>
+<string name="volume_alarm">ਅਲਾਰਮ ਦੀ ਆਵਾਜ਼</string>
+<string name="volume_notification">ਸੂਚਨਾ ਮਾਤਰਾ</string>
+<string name="volume_unknown">ਵੋਲਯੂਮ</string>
+<string name="ringtone_default">ਡਿਫਾਲਟ ਰਿੰਗਟੋਨ</string>
+<string name="ringtone_default_with_actual">ਡਿਫਾਲਟ ਰਿੰਗਟੋਨ (<xliff:g id="actual_ringtone">%1$s</xliff:g>)</string>
+<string name="ringtone_silent">ਚੁਪਚਾਪ</string>
+<string name="ringtone_picker_title">ਰਿੰਗਟੋਨਾਂ</string>
+<string name="ringtone_unknown">ਅਗਿਆਤ ਰਿੰਗਟੋਨ</string>
+<plurals name="wifi_available">
+<item quantity="one">wlan ਮੌਜੂਦ ਨਹੀਂ ਹੈ</item>
+<item quantity="other">ਮੌਜੂਦ WLAN ਨੈਟਵਰਕ</item>
+</plurals>
+<plurals name="wifi_available_detailed">
+<item quantity="one">ਮੌਜੂਦ WLAN ਨੈਟਵਰਕ ਖੋਲ੍ਹਣਾ</item>
+<item quantity="other">ਮੌਜੂਦ WLAN ਨੈਟਵਰਕ ਖੋਲ੍ਹੋ</item>
+</plurals>
+<string name="select_character">ਅੱਖਰ ਲਗਾਉ</string>
+<string name="sms_control_default_app_name">ਅਗਿਆਤ ਅਨੁਪ੍ਰਯੋਗ</string>
+<string name="sms_control_title">SMS ਸੰਦੇਸ਼ ਭੇਜੇ ਜਾ ਰਹੇ ਹਨ</string>
+<string name="sms_control_message">ਇੱਕ ਵੱਡੀ ਗਿਣਤੀ ਵਿੱਚ SMS ਸੰਦੇਸ਼ ਭੇਜੇ ਗਏ ਹਨ। ਜਾਰੀ ਰੱਖਣ ਲਈ \ਠੀਕ ਹੈ \ ਚੁਣੋ, ਜਾਂ ਸੈਕਿੰਡ ਰੋਕਣ ਲਈ\ਰੱਦ ਕਰੋl\  ਚੁਣੋ।</string>
+<string name="sms_control_yes">OK</string>
+<string name="sms_control_no">ਰੱਦ ਕਰੋ</string>
+<string name="date_time_set">ਸੈਟ ਕਰੋ</string>
+<string name="default_permission_group">ਡਿਫਾਲਟ</string>
+<string name="no_permissions">ਕੋਈ ਜਰੂਰੀ ਇਜ਼ਾਜਤ ਨਹੀਂ</string>
+<string name="perms_hide"><b>ਲੁਕਾਓ</b></string>
+<string name="perms_show_all"><b>ਸਾਰੇ ਦਿਖਾਓ</b></string>
+<string name="usb_storage_activity_title">USB ਮਾਸ ਸਟੋਰੇਜ</string>
+<string name="usb_storage_title">USB ਕੁਨੈਕਟ ਹੋਇਆ</string>
+<string name="usb_storage_message" product="nosdcard">ਤੁਸੀ USB ਦੇ ਜਰੀਏ ਆਪਣੇ ਫੋਨ ਨੂੰ ਆਪਣੇ ਕੰਪਿਊਟਰ ਨਾਲ ਕੁਨੈਕਟ ਕੀਤਾ ਹੈ। ਹੇਠਾਂ ਦਿੱਤਾ ਬਟਨ ਚੁਣੋ ਜੇਕਰ ਤੁਸੀ ਆਪਣੇ ਕੰਪਿਊਟਰ ਅਤੇ ਆਪਣੇ  Android\u2018s USB ਸਟੋਰੇਜ ਵਿਚਕਾਰ ਫਾਇਲਾਂ ਕਾਪੀ ਕਰਨਾ ਚਾਹੁੰਦੇ ਹੋਂ।</string>
+<string name="usb_storage_message" product="default">ਤੁਸੀ USB ਦੇ ਜਰੀਏ ਆਪਣੇ ਫੋਨ ਨੂੰ ਆਪਣੇ ਕੰਪਿਊਟਰ ਨਾਲ ਕੁਨੈਕਟ ਕੀਤਾ ਹੈ। ਹੇਠਾਂ ਦਿੱਤਾ ਬਟਨ ਚੁਣੋ ਜੇਕਰ ਤੁਸੀ ਆਪਣੇ ਕੰਪਿਊਟਰ ਅਤੇ ਆਪਣੇ Android\u2018s SD ਕਾਰਡ ਵਿਚਕਾਰ ਫਾਇਲਾਂ ਕਾਪੀ ਕਰਨਾ ਚਾਹੁੰਦੇ ਹੋਂ।</string>
+<string name="usb_storage_button_mount">USB ਸਟੋਰੇਜ ਤੇ ਚਲਾਉ</string>
+<string name="usb_storage_error_message" product="nosdcard">ਇੱਥੇ USB ਮਾਸ ਸਟੋਰੇਜ ਲਈ ਤੁਹਾਡੇ USB ਸਟੋਰੇਜ ਦੀ ਵਰਤੋਂ ਕਰਨ ਵਿੱਚ ਸਮੱਸਿਆ ਹੈ।</string>
+<string name="usb_storage_error_message" product="default">ਇੱਥੇ USB ਮਾਸ ਸਟੋਰੇਜ ਤੁਹਾਡੇ SD ਕਾਰਡ ਦੀ ਵਰਤੋਂ ਕਰਨ ਵਿੱਚ ਸਮੱਸਿਆ ਹੈ।</string>
+<string name="usb_storage_notification_title">USB ਕੁਨੈਕਟ ਹੋਇਆ</string>
+<string name="usb_storage_notification_message">ਆਪਣੇ ਕੰਪਿਊਟਰ ਤੋਂ/ਤੇ ਫਾਇਲਾਂ ਕਾਪੀ ਕਰਨ ਲਈ ਚੁਣੋ।</string>
+<string name="usb_storage_stop_notification_title">USB ਸਟੋਰੇਜ ਬੰਦ ਕਰੋ</string>
+<string name="usb_storage_stop_notification_message">USB ਸਟੋਰੇਜ ਬੰਦ ਕਰਨ ਲਈ ਚੁਣੋ</string>
+<string name="usb_storage_stop_title">USB ਸਟੋਰੇਜ ਵਰਤੋ ਵਿੱਚ</string>
+<string name="usb_storage_stop_message" product="nosdcard">USB ਸਟੋਰੇਜ ਬੰਦ ਕਰਨ ਤੋਂ ਪਹਿਲਾਂ ਇਹ ਸੁਨਿਸ਼ਚਿਤ ਕਰੋ ਕਿ ਤੁਸੀ ਆਪਣੇ ਕੰਪਿਊਟਰ ਤੋਂ ਆਪਣੇ Android\u2018s USB ਸਟੋਰੇਜ ਨੂੰ ਅਵਿਵਸਥਿਤ(\u201cਬਾਹਰ ਕੱਢੀ ਗਈ \u201d) ਕਰ ਲਿਆ ਹੈ।</string>
+<string name="usb_storage_stop_message" product="default">USB ਸਟੋਰੇਜ ਬੰਦ ਕਰਨ ਤੋਂ ਪਹਿਲਾਂ ਇਹ ਸੁਨਿਸ਼ਚਿਤ ਕਰੋ ਕਿ ਤੁਸੀ ਆਪਣੇ ਕੰਪਿਊਟਰ ਤੋਂ ਆਪਣੇ Android\u2018s SD ਕਾਰਡ ਨੂੰ ਅਵਿਵਸਥਿਤ(\u201cਬਾਹਰ ਕੱਢੀ ਗਈ \u201d) ਕਰ ਲਿਆ ਹੈ।</string>
+<string name="usb_storage_stop_button_mount">USB ਸਟੋਰੇਜ ਬੰਦ ਕਰੋ</string>
+<string name="usb_storage_stop_error_message">USB ਸਟੋਰੇਜ ਬੰਦ ਕਰਨ ਵਿੱਚ ਸਮੱਸਿਆ ਆਈ। ਇਹ ਸੁਨਿਸ਼ਚਿਤ ਕਰਨ ਲਈ ਜਾਂਚੋ ਕਿ ਤੁਸੀ USB ਹਾੱਸਟ ਨੂੰ ਅਵਿਵਸਥਿਤ ਕਰ ਦਿੱਤਾ ਹੈ, ਫਿਰ ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ।</string>
+<string name="dlg_confirm_kill_storage_users_title">USB ਸਟੋਰੇਜ ਤੇ ਚਲਾਉ</string>
+<string name="dlg_confirm_kill_storage_users_text">ਜੇਕਰ ਤੁਸੀ USB ਕਾਰਡ ਨੂੰ ਅਵਿਵਸਥਿਤ ਕਰਦੇ ਹੋਂ ਤਾਂ ਕੁਝ ਅਨੁਪ੍ਰਯੋਗ ਜੋ ਤੁਸੀ ਵਰਤ ਰਹੇ ਸੀ, ਤੁਹਾਨੂੰ ਬੰਦ ਕਰਨੇ ਪੈਣਗੇ ਅਤੇ ਉਨੀ ਦੇਰ ਤੱਕ ਗੈਰ ਮੌਜੂਦ ਰਹਿ ਸਕਦੇ ਹਨ, ਜਦ ਤੱਕ ਤੁਸੀ USB ਕਾਰਡ ਪੁਨਰ ਵਿਵਸਤਿਤ ਨਹੀਂ  ਕਰਦੇ।</string>
+<string name="dlg_error_title">USB ਸੰਚਾਲਨ ਅਸਫ਼ਲ</string>
+<string name="dlg_ok">OK</string>
+<string name="extmedia_format_title" product="nosdcard">USB ਸਟੋਰੇਜ ਫਾਰਮੈਟ ਕਰੋ</string>
+<string name="extmedia_format_title" product="default">SD  ਕਾਰਡ ਫਾਰਮੈਟ ਕਰੋ</string>
+<string name="extmedia_format_message" product="nosdcard">ਕੀ ਉੱਥੇ ਸਟੋਰ ਕੀਤੀਆਂ ਸਾਰੀਆਂ ਫਾਈਲਾਂ ਨੂੰ ਮਿਟਾਉਂਦੇ ਹੋਏ,USB ਸਟੋਰੇਜ ਨੂੰ ਫੌਰਮੈਟ ਕਰਨਾ ਹੈ? ਕਿਰਿਆ ਰੱਦ ਨਹੀਂ ਕੀਤੀ ਜਾ ਸਕੇਗੀ!</string>
+<string name="extmedia_format_message" product="default">ਕੀ ਤੁਸੀ SD ਕਾਰਡ ਨੂੰ ਫਾਰਮੈਟ ਕਰਨ ਲਈ ਸੁਚਿਸ਼ਚਿਤ ਹੋਂ? ਤੁਹਾਡੇ ਕਾਰਡ ਤੇ ਮੌਜੂਦ ਸਾਰਾ ਡਾਟਾ ਖੁੰਝ ਜਾਵੇਗਾ।</string>
+<string name="extmedia_format_button_format">ਫਾਰਮੈਟ ਕਰੋ</string>
+<string name="adb_active_notification_title">USB ਡਿਬਗਿੰਗ ਕੁਨੈਕਟ ਹੋਇਆ</string>
+<string name="adb_active_notification_message">USB ਡੀਬਗਿੰਗ ਅਸਕ੍ਰਿਅ ਕਰਨ ਲਈ ਚੁਣੋ।</string>
+<string name="select_input_method">ਇਨਪੁਟ ਵਿਧੀ ਚੁਣੋ</string>
+<string name="fast_scroll_alphabet">\u0020(ਕੇਵਲ ਪੜ੍ਹਣ ਲਈ)</string>
+<string name="fast_scroll_numeric_alphabet">\u0020(ਕੇਵਲ ਪੜ੍ਹਣ ਲਈ)</string>
+<string name="candidates_style"><u>ਉਮੀਦਵਾਰ</u></string>
+<string name="ext_media_checking_notification_title" product="nosdcard">USB ਸਟੋਰੇਜ ਤਿਆਰ ਕਰਨਾ</string>
+<string name="ext_media_checking_notification_title" product="default">SD ਕਾਰਡ ਤਿਆਰ ਕਰਨਾ</string>
+<string name="ext_media_checking_notification_message">ਤੁਰੱਟੀਆਂ ਲਈ ਜਾਂਚ ਹੋ ਰਹੀ ਹੈ।</string>
+<string name="ext_media_nofs_notification_title" product="nosdcard">ਖਾਲੀ USB ਸਟੋਰੇਜ</string>
+<string name="ext_media_nofs_notification_title" product="default">ਖਾਲੀ SD ਕਾਰਡ</string>
+<string name="ext_media_nofs_notification_message" product="nosdcard">USB ਸਟੋਰੇਜ ਖਾਲੀ ਜਾਂ ਫਾਇਲ ਸਿਸਟਮ ਦਾ ਸਮਰਥਨ ਨਹੀਂ ਕਰਦਾ।</string>
+<string name="ext_media_nofs_notification_message" product="default">SD ਕਾਰਡ ਖਾਲੀ ਜਾਂ ਫਾਇਲ ਸਿਸਟਮ ਦਾ ਸਮਰਥਨ ਨਹੀਂ ਕਰਦਾ।</string>
+<string name="ext_media_unmountable_notification_title" product="nosdcard">ਹਾਨੀਗ੍ਰਸਤ USB ਸਟੋਰੇਜ</string>
+<string name="ext_media_unmountable_notification_title" product="default">ਹਾਨੀਗ੍ਰਸਤ SD ਕਾਰਡ</string>
+<string name="ext_media_unmountable_notification_message" product="nosdcard">USB ਸਟੋਰੇਜ ਹਾਨੀਗ੍ਰਸਤ ਹੋਈ। ਤੁਹਾਨੂੰ ਇਸਨੂੰ ਦੁਬਾਰਾ ਫਾਰਮੈਟ ਕਰਨਾ ਪਵੇਗਾ।</string>
+<string name="ext_media_unmountable_notification_message" product="default">SD ਕਾਰਡ ਹਾਨੀਗ੍ਰਸਤ। ਤੁਹਾਨੂੰ ਇਸਨੂੰ ਦੁਬਾਰਾ ਫਾਰਮੈਟ ਕਰਨਾ ਪੈ ਸਕਦਾ ਹੈ।</string>
+<string name="ext_media_badremoval_notification_title" product="nosdcard">USB ਅਚਾਨਕ ਹਟਾਇਆ ਗਿਆ</string>
+<string name="ext_media_badremoval_notification_title" product="default">SD ਕਾਰਡ ਅਚਾਨਕ ਹਟਾਇਆ ਗਿਆ</string>
+<string name="ext_media_badremoval_notification_message" product="nosdcard">ਡਾਟਾ ਦੀ ਹਾਨੀ ਤੋਂ ਬਚਣ ਲਈ ਹਟਾਉਣ ਤੋਂ ਪਹਿਲਾਂ,  USB  ਸਟੋਰੇਜ ਨੂੰ ਅਵਿਵਸਥਿਤ ਕਰੋ।</string>
+<string name="ext_media_badremoval_notification_message" product="default">ਡਾਟਾ ਦੀ ਹਾਨੀ ਤੋਂ ਬਚਣ ਲਈ ਹਟਾਉਣ ਤੋਂ ਪਹਿਲਾਂ,  SD ਕਾਰਡ ਨੂੰ ਅਵਿਵਸਥਿਤ ਕਰੋ।</string>
+<string name="ext_media_safe_unmount_notification_title" product="nosdcard">USB ਸਟੋਰੇਜ ਹਟਾਉਣ ਲਈ ਸੁਰੱਖਿਅਤ</string>
+<string name="ext_media_safe_unmount_notification_title" product="default">SD ਕਾਰਡ ਹਟਾਉਣ ਲਈ ਸੁਰੱਖਿਅਤ ਹੈ</string>
+<string name="ext_media_safe_unmount_notification_message" product="nosdcard">ਤੁਸੀ ਸੁਰੱਖਿਅਤ ਤਰੀਕੇ ਨਾਲ USB ਸਟੋਰੇਜ ਹਟਾ ਸਕਦੇ ਹੋਂ।</string>
+<string name="ext_media_safe_unmount_notification_message" product="default">ਤੁਸੀ ਸੁਰੱਖਿਅਤ ਤਰੀਕੇ ਨਾਲ SD ਕਾਰਡ ਹਟਾ ਸਕਦੇ ਹੋਂ।</string>
+<string name="ext_media_nomedia_notification_title" product="nosdcard">USB ਸਟੋਰੇਜ ਹਟਾਇਆ ਗਿਆ</string>
+<string name="ext_media_nomedia_notification_title" product="default">SD ਕਾਰਡ ਹਟਾਇਆ ਗਿਆ</string>
+<string name="ext_media_nomedia_notification_message" product="nosdcard">USB ਸਟੋਰੇਜ ਹਟਾਇਆ ਗਿਆ। ਨਵਾਂ ਮੀਡੀਆ ਲਗਾਉ।</string>
+<string name="ext_media_nomedia_notification_message" product="default">SD ਕਾਰਡ ਹਟਾਇਆ ਗਿਆ। ਇੱਕ ਨਵਾਂ ਲਗਾਉ।</string>
+<string name="activity_list_empty">ਕੋਈ ਮੇਲ ਖਾਂਦੀਆਂ ਗਤੀਵਿਧੀਆਂ ਨਹੀਂ ਮਿਲਿਆ</string>
+<string name="permlab_pkgUsageStats">ਭਾਗ ਵਰਤੋਂ ਅੰਕੜੇ ਅਪਡੇਟ ਕਰੋ</string>
+<string name="permdesc_pkgUsageStats">ਕੁਲੈਕਟ ਕੀਤੇ ਭਾਗ ਵਰਤੋ ਆਂਕੜਿਆਂ ਦੇ ਬਦਲਾਅ ਦੀ ਆਗਿਆ ਦਿਓ। ਸਧਾਰਨ ਅਨੁਪ੍ਰਯੋਗਾਂ ਦੁਆਰਾ ਨਾ ਵਰਤਿਆ ਜਾਵੇ।</string>
+<string name="permlab_copyProtectedData">ਡਿਫਾਲਟ ਕੰਟੇਨਰ ਸੇਵਾ ਨੂੰ ਸਮੱਗਰੀ ਕਾਪੀ ਕਰਨ ਦੀ ਆਗਿਆ ਦਿੰਦਾ ਹੈ। ਸਧਾਰਨ ਅਨੁਪ੍ਰਯੋਗਾਂ ਦੁਆਰਾ ਨਾ ਵਰਤਿਆ ਜਾਵੇ।</string>
+<string name="permdesc_copyProtectedData">ਡਿਫਾਲਟ ਕੰਟੇਨਰ ਸੇਵਾ ਨੂੰ ਸਮੱਗਰੀ ਕਾਪੀ ਕਰਨ ਦੀ ਆਗਿਆ ਦਿੰਦਾ ਹੈ। ਸਧਾਰਨ ਅਨੁਪ੍ਰਯੋਗਾਂ ਦੁਆਰਾ ਨਾ ਵਰਤਿਆ ਜਾਵੇ।</string>
+<string name="tutorial_double_tap_to_zoom_message_short">ਜ਼ੂਮ ਨਿਯੰਤਰਣ ਲਈ ਦੋ ਵਾਰ ਟੈਪ ਕਰੋ</string>
+<string name="gadget_host_error_inflating">ਇਨਫਲੇਟਿੰਗ ਵਿਡਗੈਟ ਤੁਰੱਟੀ</string>
+<string name="ime_action_go">ਜਾਓ</string>
+<string name="ime_action_search">ਖੋਜੋ</string>
+<string name="ime_action_send">ਭੇਜੋ</string>
+<string name="ime_action_next">ਅਗਲਾ</string>
+<string name="ime_action_done">ਪੂਰਾ ਹੋਇਆ</string>
+<string name="ime_action_default">ਸੰਚਾਲਿਤ ਕਰੋ</string>
+<string name="dial_number_using"><xliff:g id="number" example="555">%s</xliff:g>  ਦੀ ਵਰਤੋਂ ਕਰਦੇ ਹੋਏ \n ਨੰਬਰ ਡਾਇਲ ਕਰੋ</string>
+<string name="create_contact_using">ਸੰਪਰਕ/ਨਰਸਿੰਗ <xliff:g id="number" example="555">%s</xliff:g> ਬਣਾਓ</string>
+<string name="accessibility_compound_button_selected">ਜਾਂਚੀ ਗਈ</string>
+<string name="accessibility_compound_button_unselected">ਜਾਂਚ ਨਹੀਂ ਕੀਤਾ ਗਿਆ</string>
+<string name="grant_credentials_permission_message_header">ਹੇਠਾਂ ਦਿੱਤੀਆਂ ਇੱਕ ਜਾਂ ਇੱਕ ਤੋਂ ਜ਼ਿਆਦਾ ਅਨੁਪ੍ਰਯੋਗ ਬੇਨਤੀਆਂ ਤੇ ਤੁਹਾਡਾ ਹੁਣ ਅਤੇ ਭਵਿੱਖ ਵਿੱਚ ਖਾਤਾ ਚਲਾਉਣ ਦੀ ਆਗਿਆ।</string>
+<string name="grant_credentials_permission_message_footer">ਕੀ ਤੁਸੀ ਇਸ ਬੇਨਤੀ ਲਈ ਆਗਿਆ ਦੇਣਾ ਚਾਹੁੰਦੇ ਹੋਂ?</string>
+<string name="grant_permissions_header_text">ਵਰਤੋ ਬੇਨਤੀ</string>
+<string name="allow">ਇਜ਼ਾਜ਼ਤ ਦਿਓ</string>
+<string name="deny">ਅਸਵੀਕਾਰ ਕਰੋ</string>
+<string name="permission_request_notification_title">ਇਜ਼ਾਜ਼ਤ ਲਈ ਬੇਨਤੀ ਕੀਤੀ ਗਈ</string>
+<string name="permission_request_notification_with_subtitle"><xliff:g id="account" example="foo@gmail.com">%s</xliff:g> ਖਾਤੇ ਦੀ \n ਇਜ਼ਾਜ਼ਤ ਲਈ ਬੇਨਤੀ ਕੀਤੀ ਗਈ</string>
+<string name="input_method_binding_label">ਵਿਧੀ ਇਨਪੁਟ ਕਰੋ</string>
+<string name="sync_binding_label">ਸਿੰਕ</string>
+<string name="accessibility_binding_label">ਪਹੁੰਚ</string>
+<string name="wallpaper_binding_label">ਵਾਲਪੇਪਰ</string>
+<string name="chooser_wallpaper">ਵਾਲਪੇਪਰ ਬਦਲੋ</string>
+<string name="pptp_vpn_description">ਪੁਆਇੰਟ ਤੋਂ ਪੁਆਇੰਟ ਟਨਲਿੰਗ ਪ੍ਰੋਟੋਕਾੱਲ</string>
+<string name="l2tp_vpn_description">ਤਹਿ 2 ਟਨਲਿੰਗ ਪ੍ਰੋਟੋਕਾੱਲ</string>
+<string name="l2tp_ipsec_psk_vpn_description">ਪੂਰਵ ਸਾਂਝੀ ਕੀਤੀ ਕੁੰਜੀ ਆਧਾਰਿਤ L2TP/IPSec VPN</string>
+<string name="l2tp_ipsec_crt_vpn_description">ਪ੍ਰਮਾਣ-ਪੱਤਰ ਅਧਾਰਿਤ L2TP/IPSec VPN</string>
+<string name="upload_file">ਫਾਇਲ ਚੁਣੋ</string>
+<string name="reset">ਦੁਬਾਰਾ ਸੈਟੇ ਕਰੋ</string>
+<string name="submit">ਸਬਮਿਟ ਕਰੋ</string>
+<string name="description_star">ਪਸੰਦੀਦਾ</string>
+<string name="car_mode_disable_notification_title">ਕਾਰ ਮੋਡ ਸਕ੍ਰਿਅ ਹੋਇਆ</string>
+<string name="car_mode_disable_notification_message">ਕਾਰ ਮੋਡ ਤੋਂ ਬਾਹਰ ਜਾਣ ਲਈ ਚੁਣੋ।</string>
+<string name="tethered_notification_title">ਸੀਮਿਤ ਕਰਨਾ ਜਾਂ ਹਾੱਟਸਪਾੱਟ ਸਕ੍ਰਿਅ ਕਰਨਾ</string>
+<string name="cta_tethered_notification_title">ਟੇਦਰਿੰਗ</string>
+<string name="tethered_notification_message">ਕਨਫੀਗਰ ਕਰਨ ਲਈ ਟਚ ਕਰੋ</string>
+<string name="throttle_warning_notification_title">ਉੱਚ ਮੋਬਾਇਲ ਡਾਟਾ ਵਰਤੋਂ</string>
+<string name="throttle_warning_notification_message">ਮੋਬਾਇਲ ਡਾਟਾ ਵਰਤਣ ਬਾਰੇ ਜ਼ਿਆਦਾ ਜਾਣਨ ਲਈ ਟਚ ਕਰੋ</string>
+<string name="throttled_notification_title">ਮੋਬਾਇਲ ਡਾਟਾ ਸੀਮਾ</string>
+<string name="throttled_notification_message">ਮੋਬਾਇਲ ਡਾਟਾ ਵਰਤਣ ਬਾਰੇ ਜ਼ਿਆਦਾ ਜਾਣਨ ਲਈ ਟਚ ਕਰੋ</string>
+<string name="Low_Memory_Alert">ਫੋਨ ਸਟੋਰੇਜ ਜਗ੍ਹਾ ਘੱਟ ਹੈ। ਫੋਨ ਦਿ ਸਥਿਰਤਾ ਸੁਨਿਸ਼ਚਿਤ ਕਰਨ ਲਈ ਕਿਰਪਾ ਕਰਕੇ ਕੁਝ ਡਾਟਾ ਮਿਟਾਓ।</string>
+<string name="Low_Memory_Free">ਮੁਫ਼ਤ</string>
+<string name="Low_Memory_Application">ਅਨੁਪ੍ਰਯੋਗ</string>
+<string name="Low_Memory_Mail">ਮੇਲ</string>
+<string name="Low_Memory_Sms_Mms">SMS/MMS</string>
+<string name="Low_Memory_System">ਸਿਸਟਮ</string>
+<string name="Btn_Select_Clear">ਚੁਣੋ / ਮਿਟਾਓ</string>
+<string name="myAppTip">ਨਿਪਟਣ ਲਈ ਅਨੁਪ੍ਰਯੋਗ ਚੁਣੋ</string>
+<string name="myApp_Start_Btn">ਸ਼ੁਰੂ ਕਰੋ</string>
+<string name="myApp_Move2Sd_ChkBox">SD ਤੇ ਜਾਉ</string>
+<string name="myApp_ClearData_ChkBox">ਡਾਟਾ ਮਿਟਾਓ</string>
+<string name="myApp_Uninstall_ChkBox">ਅਸਥਾਪਿਤ ਕਰੋ</string>
+<string name="myAppLoading">ਲੋਡ ਹੋ ਰਹੀ ਹੈ\u2026</string>
+<string name="myAppProcessing">ਪ੍ਰੋਫਾਈਲ\u2026</string>
+<string name="keyguard_password_enter_puk_code">PUK ਕੋਡ ਭਰੋ</string>
+<string name="keyguard_password_enter_new_pin_first_code">ਨਵਾਂ PIN ਕੋਡ ਭਰੋ</string>
+<string name="keyguard_password_enter_new_pin_second_code">ਨਵਾਂ PIN ਕੋਡ ਦੁਬਾਰਾ ਭਰੋ</string>
+<string name="ums_active_notification_message">usb ਮਾਸ ਸਟੋਰੇਜ ਸਕ੍ਰਿਅ ਹੋਇਆ</string>
+<string name="modem_active_notification_title">ਮੋਡਮ ਡੀਬਗ ਮੋਡ ਦੀ ਵਰਤੋ ਕਰੋ</string>
+<string name="modem_active_notification_message">ਮੋਡਮ ਡੀਬਗ ਮੋਡ ਸਕ੍ਰਿਅ ਹੋਇਆ</string>
+<string name="china_mobile_numeric_values">ਚੀਨੀ ਮੋਬਾਇਲ</string>
+<string name="china_unicom_numeric_values">ਚੀਨੀ ਯੂਨੀਕਾੱਮ</string>
+<string name="china_telecom_numeric_values">ਚੀਨੀ ਟੈਲੀਕਾੱਮ</string>
+<string name="stk_refresh_sim_init_message">SIM ਕਾਰਡ ਅਪਡੇਟ ਹੋ ਰਿਹਾ ਹੈ</string>
+<string name="stk_refresh_sim_reset_message">ਫੋਨ ਦੁਬਾਰਾ ਬੂਟ ਹੋਵੇਗਾ</string>
+<string name="custom_china_mobile">ਚੀਨੀ ਮੋਬਾਇਲ</string>
+<string name="custom_china_unicom">ਚੀਨੀ ਯੂਨੀਕਾੱਮ</string>
+<string name="charge_active_notification_message">ਕੇਵਲ ਚਾਰਜ ਮੋਡ ਸਕ੍ਰਿਅ ਹੋਇਆ</string>
+<string name="charge_active_notification_title">ਜਦ usb ਨਾਲ ਕੁਨੈਕਟ ਕੀਤਾ ਗਿਆ ਹੋਵੇ ਕੇਵਲ ਚਾਰਜ ਕਰੋ</string>
+<string name="shutdown_after_seconds">ਫੋਨ <xliff:g id="number">%d</xliff:g> ਸਕਿੰਟਾਂ ਤੋਂ ਬਾਅਦ ਬੰਦ ਹੋ ਜਾਏਗਾ।</string>
+<string name="lockscreen_password_error">ਪਾਸਵਰਡ ਵਿੱਚ ਤਰੁੱਟੀ ਹੈ, ਕਿਰਪਾ ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ!</string>
+<string name="lockscreen_too_many_password_failed_attempts_dialog_message"> ਤੁਸੀਂ ਆਪਣਾ ਅਨਲੌਕ ਪਾਸਵਰਡ <xliff:g id="number">%d</xliff:g> ਵਾਰੀ ਗਲਤ ਢੰਗ ਨਾਲ ਇਨਪੁਟ ਕੀਤਾ ਹੈ। \n\nਕਿਰਪਾ ਕਰਕੇ <xliff:g id="number">%d</xliff:g> ਸਕਿੰਟਾਂ ਵਿੱਚ ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ।</string>
+<string name="progress_unmounting" product="nosdcard">USB ਸਟੋਰੇਜ ਅਵਿਵਸਥਿਤ ਕਰਨਾ...</string>
+<string name="progress_unmounting" product="default">SD ਕਾਰਡ ਅਵਿਵਸਥਿਤ ਕਰਨਾ...</string>
+<string name="progress_erasing" product="nosdcard">USB ਸਟੋਰੇਜ ਮਿਟਾਇਆ ਜਾ ਰਿਹਾ ਹੈ...</string>
+<string name="progress_erasing" product="default">SD ਕਾਰਡ ਮਿਟਾਇਆ ਜਾ ਰਿਹਾ ਹੈ...</string>
+<string name="format_error" product="nosdcard">USB ਸਟੋਰੇਜ ਮਿਟਾਉਣ ਵਿੱਚ ਅਸਫ਼ਲ ਹੋਇਆ</string>
+<string name="format_error" product="default">SD ਕਾਰਡ ਮਿਟਾਉਣ ਵਿੱਚ ਅਸਫ਼ਲ ਹੋਇਆ</string>
+<string name="media_bad_removal">SD ਕਾਰਡ ਅਵਿਵਸਥਿਤ ਕਰਨ ਤੋਂ ਪਹਿਲਾਂ ਹਟਾਇਆ ਗਿਆ।</string>
+<string name="media_checking" product="nosdcard">USB ਸਟੋਰੇਜ ਦੀ ਵਰਤਮਾਨ ਵਿੱਚ ਜਾਂਚ ਹੋਈ ਹੈ।</string>
+<string name="media_checking" product="default">SD ਕਾਰਡ ਵਰਤਮਾਨ ਵਿੱਚ ਜਾਂਚਿਆ ਗਿਆ ਹੈ।</string>
+<string name="media_removed">SD ਕਾਰਡ ਹਟਾਇਆ ਗਿਆ</string>
+<string name="media_shared" product="nosdcard">USB ਸਟੋਰੇਜ ਵਰਤਮਾਨ ਵਿੱਚ ਇੱਕ ਕੰਪਿਊਟਰ ਦੁਆਰਾ ਵਰਤੋ ਵਿੱਚ ਹੈ।</string>
+<string name="media_shared" product="default">SD ਕਾਰਡ ਵਰਤਮਾਨ ਵਿੱਚ ਇੱਕ ਕੰਪਿਊਟਰ ਦੁਆਰਾ ਵਰਤੋਂ ਵਿੱਚ ਹੈ।</string>
+<string name="media_unknown_state">ਆਗਿਆਤ ਸਥਿਤੀ ਵਿੱਚ ਬਾਹਰੀ ਮੀਡੀਆ।</string>
+<string name="audio_play_failed">ਅਫ਼ਸੋਸ, ਇਹ ਆਡੀਓ ਚਲਾਇਆ ਨਹੀਂ ਜਾ ਸਕਦਾ। ਇਸ ਰਿੰਗਟੋਨ ਨੂੰ ਸੈਟ ਨਾ ਕਰੋ।</string>
+<string name="sms_full_title">ਵਿਸ਼ਾ-ਵਸਤੂ ਸੰਦੇਸ਼ ਮੈਮੋਰੀ ਪੂਰਨ</string>
+<string name="sms_full_body">ਪੂਰਵ ਮੈਮੋਰੀ ਕਾਰਨ ਖਾਰਿਜ ਕੀਤੇ ਇਨਕਮਿੰਗ ਸੰਦੇਸ਼। ਕਿਰਪਾ ਕਰਕੇ ਪੁਰਾਣੇ ਸੰਦੇਸ਼ ਮਿਟਾਓ।</string>
+<string name="dialog_warning">ਚੇਤਾਵਨੀ</string>
+<string name="internal_memory_low">SD ਕਾਰਡ ਸਟੋਰੇਜ ਪੂਰਨ ਹੋਣ ਦੇ ਨਜ਼ਦੀਕ ਹੈ! ਕਿਰਪਾ ਕਰਕੇ ਖਾਲੀ ਜਗ੍ਹਾ ਲਈ ਕੁਝ ਫਾਇਲਾਂ ਮਿਟਾਓ।</string>
+<string name="button_close">ਬੰਦ ਕਰੋ</string>
+<string name="unlock_screen_pin_error">ਪਿਨ ਤਰੁੱਟੀ ਹੈ!</string>
+<string name="ap_disconnected">ਡਿਸਕੁਨੈਕਟ ਹੋਇਆ</string>
+<string name="sim_chooser_title">SIM ਚੁਣੋ</string>
+<string name="lockscreen_miss_phone">ਮਿਸ ਫੋਨ</string>
+<string name="lockscreen_miss_mms">ਮਿਸ sms</string>
+<string name="lockscreen_sim_card_locked_message">SIM ਕਾਰਡ ਦਾ ਲਾੱਕ ਲੱਗਿਆ ਹੋਇਆ ਹੈ।</string>
+<string name="upload_file_size_too_large">ਤੁਹਾਡੀ ਅਪਲੋਡ ਕਰਨ ਵਾਲੀ ਫਾਇਲ ਬਹੁਤ ਵੱਡੀ ਹੈ, ਕਿਰਪਾ ਕਰਕੇ ਛੋਟੀਆਂ ਫਾਇਲਾਂ ਵਿੱਚ ਵੰਡੋ</string>
+<string name="cant_open_airplane_mode_when_phone_busy">ਹਵਾਈ ਜਹਾਜ਼ ਮੋਡ ਖੋਲ੍ਹਿਆ ਨਹੀਂ ਜਾ ਸਕਦਾ, ਫੋਨ  ਹੁਣ ਵਿਅਸਤ ਹੈ।</string>
+<string name="staticip_invalid">ਸਟੇਟਿਕ Ip ਸੈਟਿੰਗ ਅਸ਼ੁੱਧੀ,ਸਟੇਟਿਗ Ip ਕੌਂਫੀਗੁਰੇਸ਼ਨ।</string>
+</resources>
