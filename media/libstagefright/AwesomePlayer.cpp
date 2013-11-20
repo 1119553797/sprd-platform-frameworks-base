@@ -1637,6 +1637,17 @@ void AwesomePlayer::onVideoEvent() {
                     postVideoEvent_l(100000ll);
                     return;
                 }
+
+                if ((err == -ETIMEDOUT) && !strncasecmp("http://", mUri.string(), 7)) {
+                    LOGE("Timed out during reading");
+                    if (!mVideoBuffer) {
+                        mVideoBuffer->release();
+                        mVideoBuffer = NULL;
+                    }
+
+                    postVideoEvent_l();
+                    return;
+                }
                 // So video playback is complete, but we may still have
                 // a seek request pending that needs to be applied
                 // to the audio track.
@@ -1646,7 +1657,7 @@ void AwesomePlayer::onVideoEvent() {
                 finishSeekIfNecessary(-1);
 
                 mFlags |= VIDEO_AT_EOS;
-		LOGV("video stream ended err2:%d !",err);
+                LOGV("video stream ended err2:%d !",err);
 
                 postStreamDoneEvent_l(err);
                 return;
