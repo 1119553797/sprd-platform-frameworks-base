@@ -19,6 +19,7 @@ package android.os;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.SystemProperties;
 import android.util.Log;
 
 import java.io.ByteArrayInputStream;
@@ -65,6 +66,10 @@ public class RecoverySystem {
 
     /** Send progress to listeners no more often than this (in ms). */
     private static final long PUBLISH_PROGRESS_INTERVAL_MS = 500;
+
+    private static final String PROPERTY_CACHE_ON_SD = "persist.sys.cache_on_sd";
+    private static final String RECOVERY_DIR_STR = "/cache/recovery";
+    private static final String RECOVERY_DIR_STR2 = "/cache2/recovery";
 
     /** Used to communicate with recovery. See bootable/recovery/recovery.c. */
     private static File RECOVERY_DIR = new File("/cache/recovery");
@@ -368,12 +373,21 @@ public class RecoverySystem {
         }
     }
 
+    private static void initRecoveryDir() {
+        RECOVERY_DIR =
+            new File(SystemProperties.getBoolean(PROPERTY_CACHE_ON_SD, false)?
+                     RECOVERY_DIR_STR2 : RECOVERY_DIR_STR);
+        COMMAND_FILE = new File(RECOVERY_DIR, "command");
+        LOG_FILE = new File(RECOVERY_DIR, "log");
+    }
     /**
      * Reboot into the recovery system with the supplied argument.
      * @param arg to pass to the recovery utility.
      * @throws IOException if something goes wrong.
      */
     private static void bootCommand(Context context, String arg) throws IOException {
+        initRecoveryDir();
+
         RECOVERY_DIR.mkdirs();  // In case we need it
         COMMAND_FILE.delete();  // In case it's not writable
         LOG_FILE.delete();
@@ -400,6 +414,7 @@ public class RecoverySystem {
      * @hide
      */
     public static String handleAftermath() {
+        initRecoveryDir();
         // Record the tail of the LOG_FILE
         String log = null;
         try {
