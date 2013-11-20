@@ -496,6 +496,11 @@ public final class ActivityManagerService extends ActivityManagerNative
             = new SparseArray<ProcessRecord>();
 
     /**
+     *process name and its client pid in hash table
+    **/
+    final  Hashtable<String, Integer> clientProcessList 
+            = new Hashtable<String, Integer>();
+    /**
      * All of the processes that have been forced to be foreground.  The key
      * is the pid of the caller who requested it (we hold a death
      * link on it).
@@ -3858,7 +3863,78 @@ public final class ActivityManagerService extends ActivityManagerNative
 
         return true;
     }
+   private boolean isActivityApp(String processName,int  clientId){
+           boolean result = false;
+       synchronized (clientProcessList){
+          if(clientProcessList != null && processName != null){
+                int id =-1;	         
+	        if (clientProcessList.containsKey(processName)) id = clientProcessList.get(processName);
+	       if(DEBUG)Slog.d("AcitivityManagerService", "isActivityApp packageName:" + processName + ", clientid: "  +clientId + ", id:" + id);		
+                if(clientId ==id) result = true;
+   	   }
+       }
+   	  if(DEBUG) Slog.d("AcitivityManagerService", "isActivityApp packageName:" + processName 
+                    + ", clientid: "  +clientId + ", clientProcessList:" + clientProcessList);	
+	   return result;
+   }
+   public final  void regesterClient(String packageName,int  clientId) {
+	    if(DEBUG)Slog.d("AcitivityManagerService", "regesterClient packageName:" + packageName 
+                          + ", clientid: "  +clientId);
+            boolean updateadj = false; 
+            synchronized (clientProcessList){
+                 if(clientProcessList != null && packageName != null){
+		      ApplicationInfo ai = null;
+		      try {
+		            ai = mContext.getPackageManager().getApplicationInfo( packageName, 0);
+		        } catch (PackageManager.NameNotFoundException e) {
+		        }
+		       String procName = (ai != null ? ai.processName :null);
+                       if(procName != null){
+		          if (clientProcessList.containsKey(procName)) clientProcessList.remove(procName);
+                          clientProcessList.put(procName, clientId);
+                          if(lastLaunchEndApp != null && lastLaunchEndApp.pid == clientId){
+                               	updateadj = true;
+                            }
+                       }
+		  }
+             }
+             if(updateadj)startUpdateOomAdj();
+    }
+    public final  void unRegesterClient(String packageName,int  clientId) {
+	 if(DEBUG)Slog.d("AcitivityManagerService", "unRegesterClient packageName:" + packageName 
+                     + ", clientid: "  +clientId);
+          boolean updateadj = false; 
+          synchronized (clientProcessList){
+              if(clientProcessList != null &&clientProcessList.size() > 0 && packageName != null ){
+                  ApplicationInfo ai = null;
+		  try {
+		       ai = mContext.getPackageManager().getApplicationInfo( packageName, 0);
+		   } catch (PackageManager.NameNotFoundException e) {
+		   }
+		   String procName = (ai != null ? ai.processName :null);
+                   if(procName != null){
+                       if(clientProcessList.containsKey(procName) ){
+                           clientProcessList.remove(procName);
+                           if(lastLaunchEndApp != null && lastLaunchEndApp.pid == clientId){
+                                  updateadj = true;
+                            }
+                       }
+                  }
+	      }
+         }
+         if(updateadj)startUpdateOomAdj();
+    }
+    private void startUpdateOomAdj() {
+      mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                 synchronized (this) {
+                      updateOomAdjLocked();
+                 }
+            }
 
+        });
+    }	
     public final void attachApplication(IApplicationThread thread) {
         synchronized (this) {
             int callingPid = Binder.getCallingPid();
@@ -12244,8 +12320,11 @@ public final class ActivityManagerService extends ActivityManagerNative
     }
     private final int computeOomAdjLocked(ProcessRecord app, int hiddenAdj,
             ProcessRecord TOP_APP, boolean recursed) {
+            if(DEBUG)Slog.i(TAG, "<<<<<<<<<<<<<<<<<<computeOomAdjLocked enter  recursed: " 
+               +recursed + ", app :" + app+  ", top:" +TOP_APP);
         if (mAdjSeq == app.adjSeq) {
-            // This adjustment has already been computed.  If we are calling
+           // This adjustment has already been computed.  If we are calling
+            // this adjustment has already been computed.  If we are calling
             // from the top, we may have already computed our adjustment with
             // an earlier hidden adjustment that isn't really for us... if
             // so, use the new hidden adjustment.
@@ -12254,6 +12333,7 @@ public final class ActivityManagerService extends ActivityManagerNative
             }
             //LC_RAM_SUPPORT
             raiseToFixAdj(app);
+            if(DEBUG) Slog.i(TAG, "computeOomAdjLocked 1:  app.curAd: "+ app.curAdj +", app:" + app);
             return app.curAdj;
         }
         if (app.thread == null) {
@@ -12262,6 +12342,7 @@ public final class ActivityManagerService extends ActivityManagerNative
             app.curAdj=EMPTY_APP_ADJ;
             //LC_RAM_SUPPORT
             raiseToFixAdj(app);
+            if(DEBUG)Slog.i(TAG, "computeOomAdjLocked 2:  app.curAd: "+ app.curAdj +", app:" + app);
             return app.curAdj;
         }
         final int activitiesSize = app.activities.size();
@@ -12294,6 +12375,7 @@ public final class ActivityManagerService extends ActivityManagerNative
                     }
                 }
             }            
+            if(DEBUG)Slog.i(TAG, "computeOomAdjLocked 3:  app.curAd: "+ app.curAdj +", app:" + app);
             return app.curAdj;
         }
 
@@ -12309,7 +12391,7 @@ public final class ActivityManagerService extends ActivityManagerNative
         int adj;
         int schedGroup;
         int N;
-        if (app == TOP_APP) {
+        if (app == TOP_APP || (TOP_APP != null &&isActivityApp(app.processName, TOP_APP.pid))) {
             // The last app on the list is the foreground app.
             adj = FOREGROUND_APP_ADJ;
             schedGroup = Process.THREAD_GROUP_DEFAULT;
@@ -12587,7 +12669,7 @@ public final class ActivityManagerService extends ActivityManagerNative
         //if (LC_RAM_SUPPORT) {
             raiseToFixAdj(app);
         //}
-
+        if(DEBUG)Slog.i(TAG, ">>>>>>>>>>>>>>>>>>computeOomAdjLocked exit  app.curAdj: " +app.curAdj + ", app:" + app);
         return app.curAdj;
     }
 
