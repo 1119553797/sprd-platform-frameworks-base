@@ -13530,8 +13530,6 @@ public final class ActivityManagerService extends ActivityManagerNative
             }
         } else if (func == ActivityManager.CANCEL_KILL_STOP_TIMEOUT) {
             Slog.w(TAG, "CANCEL_KILL_STOP_TIMEOUT,mStopingPid=" + mStopingPid);
-            mIsKillStop = false;
-            mStopingPid = -1;
             mHandler.removeMessages(KILL_STOP_TIMEOUT);
         } else {
             Slog.w(TAG, "mResumeActivity is null or app is system app");
