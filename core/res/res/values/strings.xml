@@ -2360,7 +2360,7 @@
     <!-- Shown when external media is unmountable (corrupt)) [CHAR LIMIT=30] -->
     <string name="ext_media_unmountable_notification_title" product="nosdcard">Damaged USB storage</string>
     <!-- Shown when external media is unmountable (corrupt)) -->
-    <string name="ext_media_unmountable_notification_title" product="default">Damaged SD card</string>
+    <string name="ext_media_unmountable_notification_title" product="default">SD card abnormal，please try it again.</string>
     <!-- Shown when USB storage cannot be read.  [CHAR LIMIT=NONE] -->
     <string name="ext_media_unmountable_notification_message" product="nosdcard">USB storage damaged. You may have to reformat it.</string>
     <string name="ext_media_unmountable_notification_message" product="default">SD card damaged. You may have to reformat it.</string>
