@@ -246,9 +246,13 @@ bool SoftAMR::isConfigured() const {
 }
 
 static size_t getFrameSize(unsigned FT) {
-    static const size_t kFrameSizeWB[9] = {
-        132, 177, 253, 285, 317, 365, 397, 461, 477
+    static const size_t kFrameSizeWB[10] = {
+        132, 177, 253, 285, 317, 365, 397, 461, 477,40
     };
+
+    if (FT >= 10) {
+        return 1;
+    }
 
     size_t frameSize = kFrameSizeWB[FT];
 
@@ -324,17 +328,33 @@ void SoftAMR::onQueueFilled(OMX_U32 portIndex) {
             }
         } else {
             int16 mode = ((inputPtr[0] >> 3) & 0x0f);
+
+            if (mode >= 10 && mode <= 13) {
+               LOGE("encountered illegal frame type %d in AMR WB content.",
+                     mode);
+
+               notify(OMX_EventError, OMX_ErrorUndefined, 0, NULL);
+               mSignalledError = true;
+
+               return;
+            }
+
             size_t frameSize = getFrameSize(mode);
             CHECK_GE(inHeader->nFilledLen, frameSize);
 
-            int16 frameType;
-            RX_State_wb rx_state;
-            mime_unsorting(
-                    const_cast<uint8_t *>(&inputPtr[1]),
-                    mInputSampleBuffer,
-                    &frameType, &mode, 1, &rx_state);
-
             int16_t *outPtr = (int16_t *)outHeader->pBuffer;
+
+           if (mode >= 9) {
+               // Produce silence instead of comfort noise and for
+               // speech lost/no data.
+               memset(outPtr, 0, kNumSamplesPerFrameWB * sizeof(int16_t));
+           } else if (mode < 9) {
+               int16 frameType;
+               RX_State_wb rx_state;
+               mime_unsorting(
+                       const_cast<uint8_t *>(&inputPtr[1]),
+                       mInputSampleBuffer,
+                       &frameType, &mode, 1, &rx_state);
 
             int16_t numSamplesOutput;
             pvDecoder_AmrWb(
@@ -349,7 +369,7 @@ void SoftAMR::onQueueFilled(OMX_U32 portIndex) {
                 /* Delete the 2 LSBs (14-bit output) */
                 outPtr[i] &= 0xfffC;
             }
-
+          }
             numBytesRead = frameSize;
         }
 
