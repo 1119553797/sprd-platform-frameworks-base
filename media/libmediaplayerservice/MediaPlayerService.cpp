@@ -686,7 +686,6 @@ void MediaPlayerService::Client::disconnect()
         Mutex::Autolock l(mLock);
         p = mPlayer;
     }
-    mClient.clear();
 
     mPlayer.clear();
 
@@ -701,6 +700,8 @@ void MediaPlayerService::Client::disconnect()
 #endif
         p->reset();
     }
+
+    mClient.clear();
 
     IPCThreadState::self()->flushCommands();
 }

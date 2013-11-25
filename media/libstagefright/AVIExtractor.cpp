@@ -168,22 +168,33 @@ status_t AVIExtractor::AVISource::read(
         }
     }
 
-    for (;;) {
+    for (int i = 0; ; i++) {
+
         if (mSplitter != NULL) {
+
             status_t err = mSplitter->read(buffer);
-
             if (err == OK) {
-		int16_t channel_data = 0 ;
-		int32_t channel_data_old = 0 ;	
-		mSplitter->readparam(0 , channel_data);
 
-		mTrack.mMeta->findInt32(kKeyChannelCount, &channel_data_old);
-		if ( channel_data_old != channel_data)
-		{
-			mTrack.mMeta->setInt32(kKeyChannelCount, channel_data);
-		}
+                int16_t channel_data = 0;
+                int32_t channel_data_old = 0;
+
+                mSplitter->readparam(0 , channel_data);
+                mTrack.mMeta->findInt32(kKeyChannelCount, &channel_data_old);
+
+                if (channel_data_old != channel_data) {
+                    mTrack.mMeta->setInt32(kKeyChannelCount, channel_data);
+                }
+
                 break;
-            } else if (err != -EAGAIN) {
+            } else if (err == -EAGAIN) {
+
+                if( i > 100) {
+                   //avoid dead loop.
+                   LOGE("AVIExtractor, mSplitter read() failed > 100 times, stop.");
+                   return ERROR_END_OF_STREAM;
+                }
+            } else {
+
                 return err;
             }
         }
@@ -198,7 +209,11 @@ status_t AVIExtractor::AVISource::read(
         ++mSampleIndex;
 
         if (err != OK) {
-            return ERROR_END_OF_STREAM;
+            if( mSampleIndex < mTrack.mSamples.size() ) {
+                continue;
+            } else {
+                return ERROR_END_OF_STREAM;
+            }
         }
 
         MediaBuffer *out;
@@ -336,8 +351,6 @@ bool AVIExtractor::MP3Splitter::resync() {
 
             mBuffer->setRange(0, mBuffer->size() - offset);
             break;
-        }else{
-            mFindSync = false;
         }
     }
 
@@ -366,9 +379,10 @@ status_t AVIExtractor::MP3Splitter::read(MediaBuffer **out) {
     int channel_mode;
     if (!GetMPEGAudioFrameSize(
                 header, &frameSize, &sampleRate, &channel_mode, NULL, &numSamples)) {
-        return ERROR_END_OF_STREAM;
+        clear();
+        return -EAGAIN;
     }
-   nChannelnum = channel_mode ;
+    nChannelnum = channel_mode ;
 
     if (mBuffer->size() < frameSize) {
         return -EAGAIN;
@@ -394,7 +408,7 @@ status_t AVIExtractor::MP3Splitter::readparam(int type,int16_t & param_value)
 {
     param_value = nChannelnum;
 
-   return	OK;
+    return OK;
 
 }
 
@@ -503,7 +517,10 @@ status_t AVIExtractor::parseHeaders() {
             err = OK;
 
             if (!strcasecmp(mime.c_str(), MEDIA_MIMETYPE_VIDEO_MPEG4)) {
-                err = addMPEG4CodecSpecificData(i);
+                if( OK != addMPEG4CodecSpecificData(i) )
+                {
+                    LOGE("parseHeaders, addMPEG4CodecSpecificData failed, trackidx=%d",i);
+                }
             } else if (!strcasecmp(mime.c_str(), MEDIA_MIMETYPE_VIDEO_AVC)) {
                 err = addH264CodecSpecificData(i);
             }
@@ -614,8 +631,11 @@ ssize_t AVIExtractor::parseChunk(off64_t offset, off64_t size, int depth) {
 
             case FOURCC('i', 'd', 'x', '1'):
             {
-                err = parseIdx1(offset + 8, chunkSize);
-                mIndexType = IDX1;
+                if(mIndexType == NO_INDEX) //IF indx found, don't care idx1
+                {
+                    err = parseIdx1(offset + 8, chunkSize);
+                    mIndexType = IDX1;
+                }
                 break;
             }
             case FOURCC('i', 'n', 'd', 'x'):
@@ -778,6 +798,14 @@ status_t AVIExtractor::parseStreamHeader(off64_t offset, size_t size) {
     meta->setCString(kKeyMIMEType, mime);
 
     //set duration and maxsamplesize first anyway, may be changed in parseIndex()
+    if(scale == 0) {
+        scale = 1;
+    }
+
+    if(rate == 0) {
+        rate = 1;
+    }
+
     meta->setInt64(kKeyDuration, (int64_t)(length * 1000000ll * rate / scale));
     meta->setInt32(kKeyMaxInputSize, maxSampleSize);
 
@@ -908,6 +936,7 @@ bool AVIExtractor::IsCorrectChunkType(
         case Track::VIDEO:
         {
             if (chunkBase != FOURCC(0, 0, 'd', 'c')
+                    && chunkBase != FOURCC(0, 0, 's', 'b')
                     && chunkBase != FOURCC(0, 0, 'd', 'b')) {
                 return false;
             }

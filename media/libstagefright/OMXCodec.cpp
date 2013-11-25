@@ -74,6 +74,9 @@ namespace android {
 
 static const int OMX_QCOM_COLOR_FormatYVU420SemiPlanar = 0x7FA30C00;
 
+// For http streaming, wait 3s for Buffer filled event
+static const int64_t kBufferFilledEventTimeOutNs = 3000000000ll;
+
 struct CodecInfo {
     const char *mime;
     const char *codec;
@@ -3336,7 +3339,21 @@ status_t OMXCodec::read(
         }
 
         while (mSeekTimeUs >= 0) {
-            mBufferFilled.wait(mLock);
+            status_t err = OK;
+            if (mIsEncoder) {
+                // For recording, we can't wait a relative time
+                // just keep waiting
+                err = mBufferFilled.wait(mLock);
+            } else {
+                err = mBufferFilled.waitRelative(mLock, kBufferFilledEventTimeOutNs);
+            }
+
+            if (err != OK) {
+                CODEC_LOGI("Failed to wait for Buffer Filled: %d/%d",
+                            countBuffersWeOwn(mPortBuffers[kPortIndexInput]),
+                            countBuffersWeOwn(mPortBuffers[kPortIndexOutput]));
+                return err;
+            }
         }
     }
 	
@@ -3356,9 +3373,21 @@ status_t OMXCodec::read(
 #endif //FEATURE_MINIMUM_BUFFER
 
     while (mState != ERROR && !mNoMoreOutputData && mFilledBuffers.empty()) {
-		CODEC_LOGV("mNoMoreOutputData: %d, mFilledBuffers.empty(): %d", mNoMoreOutputData, mFilledBuffers.empty());
-        mBufferFilled.wait(mLock);
-		CODEC_LOGV("continue");
+       status_t err = OK;
+       if (mIsEncoder) {
+           // For recording, we can't wait a relative time
+           // just keep waiting
+           err = mBufferFilled.wait(mLock);
+       } else {
+           err = mBufferFilled.waitRelative(mLock, kBufferFilledEventTimeOutNs);
+       }
+
+       if (err != OK) {
+           CODEC_LOGE("Failed to wait for Buffer Filled: %d/%d",
+                       countBuffersWeOwn(mPortBuffers[kPortIndexInput]),
+                       countBuffersWeOwn(mPortBuffers[kPortIndexOutput]));
+           return err;
+       }
     }
 
     if (mState == ERROR) {
