@@ -542,6 +542,9 @@
         <item>4059=Reliance</item>
         <item>40510=Reliance</item>
         <item>40513=Reliance</item>
+        <!-- SPRD: add for bug243791 -->
+        <item>40515=Reliance</item>
+        <item>40522=Reliance</item>
         <item>40525=TATA Teleservice</item>
         <item>40526=TATA Teleservice</item>
         <item>40527=TATA Teleservice</item>
@@ -568,7 +571,7 @@
         <item>40554=AirTel</item>
         <item>40555=Airtel</item>
         <item>40556=AirTel</item>
-        <item>40566=Vodafone IN</item>
+        <item>40566=Vodafone</item>
         <item>40570=IDEA</item>
         <item>405750=Vodafone IN</item>
         <item>405751=Vodafone IN</item>

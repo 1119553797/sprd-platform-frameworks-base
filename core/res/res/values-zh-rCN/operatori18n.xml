@@ -782,6 +782,8 @@
         <item>Orange MG=Orange MG</item>
         <item>ORANGE ML=ORANGE ML</item>
         <item>ORANGE UGANDA=ORANGE UGANDA</item>
+        <!-- owen.chen for 187167 -->
+        <item>Vodafon=Vodafone</item>
         <item>MobiFone=MobiFone</item>
         <item>Vinaphone=Vinaphone</item>
         <item>S-Fone=S-Fone</item>
