@@ -74,7 +74,7 @@ import android.view.inputmethod.InputMethod;
 import android.view.inputmethod.InputMethodInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.view.inputmethod.EditorInfo;
-
+import com.android.server.am.ActivityManagerService;
 import java.io.FileDescriptor;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -773,7 +773,6 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
                 }
             }
         }
-
         return startInputInnerLocked();
     }
 
@@ -1072,6 +1071,8 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
         }
     }
 
+    private boolean mHadChangeAdj = false;
+
     boolean showCurrentInputLocked(int flags, ResultReceiver resultReceiver) {
         mShowRequested = true;
         if ((flags&InputMethodManager.SHOW_IMPLICIT) == 0) {
@@ -1085,7 +1086,14 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
         if (!mSystemReady) {
             return false;
         }
-
+        if(!mHadChangeAdj) {
+            int N = mMethodList.size();
+            for (int i=0; i<N; i++) {
+                InputMethodInfo info = mMethodList.get(i);
+                ActivityManagerService.self().regesterClient(info.getPackageName(),mCurClient.pid);
+            }
+            mHadChangeAdj = true;
+        }
         boolean res = false;
         if (mCurMethod != null) {
             executeOrSendMessage(mCurMethod, mCaller.obtainMessageIOO(
@@ -1149,6 +1157,14 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
             if (DEBUG) Slog.v(TAG,
                     "Not hiding: forced show not cancelled by not-always hide");
             return false;
+        }
+        if(mHadChangeAdj) {
+            int N = mMethodList.size();
+            for (int i=0; i<N; i++) {
+                InputMethodInfo info = mMethodList.get(i);
+                ActivityManagerService.self().unRegesterClient(info.getPackageName(),mCurClient.pid);
+            }
+            mHadChangeAdj = false;
         }
         boolean res;
         if (mInputShown && mCurMethod != null) {
@@ -1344,6 +1360,7 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
 
     public boolean handleMessage(Message msg) {
         HandlerCaller.SomeArgs args;
+        if(DEBUG)Slog.d(TAG, "handleMessage msg.what:" +msg.what);
         switch (msg.what) {
             case MSG_SHOW_IM_PICKER:
                 showInputMethodMenu();
@@ -1353,9 +1370,9 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
 
             case MSG_UNBIND_INPUT:
                 try {
-                    ((IInputMethod)msg.obj).unbindInput();
-                } catch (RemoteException e) {
-                    // There is nothing interesting about the method dying.
+                      ((IInputMethod)msg.obj).unbindInput();
+                  } catch (RemoteException e) {
+                   // There is nothing interesting about the method dying.
                 }
                 return true;
             case MSG_BIND_INPUT:
