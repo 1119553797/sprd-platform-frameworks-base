@@ -167,7 +167,7 @@ class Installer {
 		}
 	}
 
-    public int install(String name, boolean useEncryptedFilesystem, int uid, int gid) {
+    public int install(String name, boolean useEncryptedFilesystem, int uid, int gid, int flag) {
         StringBuilder builder = new StringBuilder("install");
         builder.append(' ');
         builder.append(name);
@@ -181,6 +181,9 @@ class Installer {
         builder.append(uid);
         builder.append(' ');
         builder.append(gid);
+        builder.append(' ');
+        builder.append(flag);
+        Log.v("PackageManager","install builder = " + builder.toString());
         return execute(builder.toString());
     }
 
@@ -210,7 +213,7 @@ class Installer {
         return execute(builder.toString());
     }
 
-    public int remove(String name, boolean useEncryptedFilesystem) {
+    public int remove(String name, boolean useEncryptedFilesystem, int flag) {
         StringBuilder builder = new StringBuilder("remove");
         builder.append(' ');
         builder.append(name);
@@ -220,10 +223,12 @@ class Installer {
         } else {
             builder.append('0');
         }
+        builder.append(' ');
+        builder.append(flag);
         return execute(builder.toString());
     }
 
-    public int rename(String oldname, String newname, boolean useEncryptedFilesystem) {
+    public int rename(String oldname, String newname, boolean useEncryptedFilesystem, int flag) {
         StringBuilder builder = new StringBuilder("rename");
         builder.append(' ');
         builder.append(oldname);
@@ -235,10 +240,12 @@ class Installer {
         } else {
             builder.append('0');
         }
+        builder.append(' ');
+        builder.append(flag);
         return execute(builder.toString());
     }
 
-    public int deleteCacheFiles(String name, boolean useEncryptedFilesystem) {
+    public int deleteCacheFiles(String name, boolean useEncryptedFilesystem, int flag) {
         StringBuilder builder = new StringBuilder("rmcache");
         builder.append(' ');
         builder.append(name);
@@ -248,10 +255,12 @@ class Installer {
         } else {
             builder.append('0');
         }
+        builder.append(' ');
+        builder.append(flag);
         return execute(builder.toString());
     }
 
-    public int clearUserData(String name, boolean useEncryptedFilesystem) {
+    public int clearUserData(String name, boolean useEncryptedFilesystem,int flag) {
         StringBuilder builder = new StringBuilder("rmuserdata");
         builder.append(' ');
         builder.append(name);
@@ -261,6 +270,8 @@ class Installer {
         } else {
             builder.append('0');
         }
+        builder.append(' ');
+        builder.append(flag);
         return execute(builder.toString());
     }
 

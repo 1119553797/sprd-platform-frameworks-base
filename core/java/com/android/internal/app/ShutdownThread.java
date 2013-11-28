@@ -164,6 +164,18 @@ public final class ShutdownThread extends Thread {
         pd.show();
 
 	SystemProperties.set("ctl.start", "boot_complete");
+	
+        if (mRebootReason.equals("recovery")) {
+            final IMountService mount = IMountService.Stub.asInterface(ServiceManager
+                    .checkService("mount"));
+            try {
+                Log.e(TAG, "formatVolume mnt/.sprd/data");
+                mount.formatVolume("mnt/.sprd/data");
+                Log.e(TAG, "formatVolume finish");
+            } catch (RemoteException ex) {
+                Log.e(TAG, "formatVolume remout");
+            }
+        }
 
         // start the thread that initiates shutdown
         sInstance.mContext = context;

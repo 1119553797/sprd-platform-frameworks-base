@@ -145,6 +145,7 @@ class MountService extends IMountService.Stub
         public static final int VolumeDiskInserted             = 630;
         public static final int VolumeDiskRemoved              = 631;
         public static final int VolumeBadRemoval               = 632;
+        public static final int FormatSprdDate                 = 650;
     }
 
     private Context                               mContext;
@@ -703,7 +704,7 @@ class MountService extends IMountService.Stub
                     builder.append(" " + str);
                 }
             }
-            Slog.i(TAG, builder.toString());
+            Slog.i(TAG, builder.toString() + "code = " + code);
         }
         if (code == VoldResponseCode.VolumeStateChange) {
             /*
@@ -810,7 +811,11 @@ class MountService extends IMountService.Stub
             } else {
                 Slog.e(TAG, String.format(Locale.US, "Unknown code {%d}", code));
             }
-        } else {
+        } else if(code == VoldResponseCode.FormatSprdDate){
+            Slog.e(TAG, "format mnt/.sprd/data");
+            mReady = true;
+            return false;
+        }else{
             return false;
         }
 
@@ -1425,10 +1430,20 @@ class MountService extends IMountService.Stub
     }
 
     public int formatVolume(String path) {
-        validatePermission(android.Manifest.permission.MOUNT_FORMAT_FILESYSTEMS);
-        waitForReady();
+        if ("mnt/.sprd/data".equals(path)) {
+            Log.i(TAG,"fomatVolume path = " + path);
+            mReady = false;
+            int ret = doFormatVolume(path);
+            Log.i(TAG,"fomatVolume path1 = " + path);
+            waitForReady();
+            Log.i(TAG,"fomatVolume path2= " + path);
+            return ret;
+        } else {
+            validatePermission(android.Manifest.permission.MOUNT_FORMAT_FILESYSTEMS);
+            waitForReady();
 
-        return doFormatVolume(path);
+            return doFormatVolume(path);
+        }
     }
 
     public int []getStorageUsers(String path) {

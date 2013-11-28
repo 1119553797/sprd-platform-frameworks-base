@@ -362,6 +362,9 @@ public class PackageParser {
     public final static int PARSE_FORWARD_LOCK = 1<<4;
     public final static int PARSE_ON_SDCARD = 1<<5;
     public final static int PARSE_IS_SYSTEM_DIR = 1<<6;
+    public final static int PARSE_IS_MYAPP = 1<<7;
+    public final static int PARSE_IS_PROLOADAPP = 1<<8;
+    public final static int PARSE_IS_PROLOADAPP_SYS = 1<<9;
 
     public int getParseError() {
         return mParseError;

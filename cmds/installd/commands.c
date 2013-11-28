@@ -16,7 +16,9 @@
 
 #include "installd.h"
 
-int install(const char *pkgname, int encrypted_fs_flag, uid_t uid, gid_t gid)
+const char* selectdir(int flag);
+
+int install(const char *pkgname, int encrypted_fs_flag, uid_t uid, gid_t gid, int flag)
 {
     char pkgdir[PKG_PATH_MAX];
     char libdir[PKG_PATH_MAX];
@@ -27,9 +29,10 @@ int install(const char *pkgname, int encrypted_fs_flag, uid_t uid, gid_t gid)
     }
 
     if (encrypted_fs_flag == USE_UNENCRYPTED_FS) {
-        if (create_pkg_path(pkgdir, PKG_DIR_PREFIX, pkgname, PKG_DIR_POSTFIX))
+        const char * p = selectdir(flag);
+        if (create_pkg_path(pkgdir, p, pkgname, PKG_DIR_POSTFIX))
             return -1;
-        if (create_pkg_path(libdir, PKG_LIB_PREFIX, pkgname, PKG_LIB_POSTFIX))
+        if (create_pkg_path(libdir, selectdir(flag), pkgname, PKG_LIB_POSTFIX))
             return -1;
     } else {
         if (create_pkg_path(pkgdir, PKG_SEC_DIR_PREFIX, pkgname, PKG_DIR_POSTFIX))
@@ -61,12 +64,12 @@ int install(const char *pkgname, int encrypted_fs_flag, uid_t uid, gid_t gid)
     return 0;
 }
 
-int uninstall(const char *pkgname, int encrypted_fs_flag)
+int uninstall(const char *pkgname, int encrypted_fs_flag, int flag)
 {
     char pkgdir[PKG_PATH_MAX];
 
     if (encrypted_fs_flag == USE_UNENCRYPTED_FS) {
-        if (create_pkg_path(pkgdir, PKG_DIR_PREFIX, pkgname, PKG_DIR_POSTFIX))
+        if (create_pkg_path(pkgdir, selectdir(flag), pkgname, PKG_DIR_POSTFIX))
             return -1;
     } else {
         if (create_pkg_path(pkgdir, PKG_SEC_DIR_PREFIX, pkgname, PKG_DIR_POSTFIX))
@@ -81,15 +84,15 @@ int uninstall(const char *pkgname, int encrypted_fs_flag)
     return ret;
 }
 
-int renamepkg(const char *oldpkgname, const char *newpkgname, int encrypted_fs_flag)
+int renamepkg(const char *oldpkgname, const char *newpkgname, int encrypted_fs_flag, int flag)
 {
     char oldpkgdir[PKG_PATH_MAX];
     char newpkgdir[PKG_PATH_MAX];
 
     if (encrypted_fs_flag == USE_UNENCRYPTED_FS) {
-        if (create_pkg_path(oldpkgdir, PKG_DIR_PREFIX, oldpkgname, PKG_DIR_POSTFIX))
+        if (create_pkg_path(oldpkgdir, selectdir(flag), oldpkgname, PKG_DIR_POSTFIX))
             return -1;
-        if (create_pkg_path(newpkgdir, PKG_DIR_PREFIX, newpkgname, PKG_DIR_POSTFIX))
+        if (create_pkg_path(newpkgdir, selectdir(flag), newpkgname, PKG_DIR_POSTFIX))
             return -1;
     } else {
         if (create_pkg_path(oldpkgdir, PKG_SEC_DIR_PREFIX, oldpkgname, PKG_DIR_POSTFIX))
@@ -105,12 +108,12 @@ int renamepkg(const char *oldpkgname, const char *newpkgname, int encrypted_fs_f
     return 0;
 }
 
-int delete_user_data(const char *pkgname, int encrypted_fs_flag)
+int delete_user_data(const char *pkgname, int encrypted_fs_flag, int flag)
 {
     char pkgdir[PKG_PATH_MAX];
 
     if (encrypted_fs_flag == USE_UNENCRYPTED_FS) {
-        if (create_pkg_path(pkgdir, PKG_DIR_PREFIX, pkgname, PKG_DIR_POSTFIX))
+        if (create_pkg_path(pkgdir, selectdir(flag), pkgname, PKG_DIR_POSTFIX))
             return -1;
     } else {
         if (create_pkg_path(pkgdir, PKG_SEC_DIR_PREFIX, pkgname, PKG_DIR_POSTFIX))
@@ -121,12 +124,12 @@ int delete_user_data(const char *pkgname, int encrypted_fs_flag)
     return delete_dir_contents(pkgdir, 0, "lib");
 }
 
-int delete_cache(const char *pkgname, int encrypted_fs_flag)
+int delete_cache(const char *pkgname, int encrypted_fs_flag, int flag)
 {
     char cachedir[PKG_PATH_MAX];
 
     if (encrypted_fs_flag == USE_UNENCRYPTED_FS) {
-        if (create_pkg_path(cachedir, CACHE_DIR_PREFIX, pkgname, CACHE_DIR_POSTFIX))
+        if (create_pkg_path(cachedir, selectdir(flag), pkgname, CACHE_DIR_POSTFIX))
             return -1;
     } else {
         if (create_pkg_path(cachedir, CACHE_SEC_DIR_PREFIX, pkgname, CACHE_DIR_POSTFIX))
@@ -280,13 +283,15 @@ int move_dex(const char *src, const char *dst)
     char src_dex[PKG_PATH_MAX];
     char dst_dex[PKG_PATH_MAX];
 
+    LOGE("fangyu move_dex src = %s dst = %s \n", src, dst);
     if (!is_valid_apk_path(src)) return -1;
     if (!is_valid_apk_path(dst)) return -1;
 
     if (create_cache_path(src_dex, src)) return -1;
     if (create_cache_path(dst_dex, dst)) return -1;
 
-    LOGI("move %s -> %s\n", src_dex, dst_dex);
+    
+    LOGI("fangyu move %s -> %s\n", src_dex, dst_dex);
 
     int retCode = rename(src_dex, dst_dex);
     if (errno == EXDEV) {
@@ -490,7 +495,12 @@ done:
  */
 static int hasMntHead(const char *path) {
     if (path[0] == '/' && path[1] == 'm' && path[2] == 'n' && path[3] == 't') {
-        return 1;
+        if (path[5] == '.') {
+            return 2;
+        } else {
+            return 1;
+        }
+
     }
     return 0;
 }
@@ -503,7 +513,7 @@ int create_cache_path(char path[PKG_PATH_MAX], const char *src)
     int srclen;
     int dstlen;
     int tPath = 0;
-
+LOGE("fangyu create_cache_path path = %s src = %s \n", path, src);
     srclen = strlen(src);
 
         /* demand that we are an absolute path */
@@ -531,19 +541,43 @@ int create_cache_path(char path[PKG_PATH_MAX], const char *src)
             tPath = 1;
         }
     }
-
-    sprintf(path,"%s%s%s",
-            DALVIK_CACHE_PREFIX,
-            src + 1, /* skip the leading / */
-            DALVIK_CACHE_POSTFIX);
-
-
-    for(tmp = path + strlen(tPath == 0 ? DALVIK_CACHE_PREFIX : T_DALVIK_CACHE_PREFIX); *tmp; tmp++) {
-        if (*tmp == '/') {
-            *tmp = '@';
+    //app is installed in mnt/.sprd/data
+    if (hasMntHead(src) == 2) {
+        if (access(DATA_DALVIK_CACHE_PATH, F_OK) == -1 && mkdir(DATA_DALVIK_CACHE_PATH, 0775) < 0) {
+            LOGE(".Dalcache is not exist,and create is failed.");
+            return -1;
+        } else {
+            tPath = 2;
         }
     }
 
+    if(tPath == 2){
+       sprintf(path,"%s%s%s",
+            DATA_DALVIK_CACHE_PREFIX,
+            src + 1, /* skip the leading / */
+            DALVIK_CACHE_POSTFIX);
+    
+        LOGE("fangyu create_cache_path path = %s \n", path);
+
+       for(tmp = path + strlen(DATA_DALVIK_CACHE_PREFIX); *tmp; tmp++) {
+           if (*tmp == '/') {
+               *tmp = '@';
+           }
+       }
+    } else {
+  	 sprintf(path,"%s%s%s",
+    	        tPath == 0 ? DALVIK_CACHE_PREFIX : T_DALVIK_CACHE_PREFIX,
+    	        src + 1, /* skip the leading / */
+       	     DALVIK_CACHE_POSTFIX);
+	
+    	 LOGE("fangyu create_cache_path path = %s \n", path);
+
+   	 for(tmp = path + strlen(tPath == 0 ? DALVIK_CACHE_PREFIX : T_DALVIK_CACHE_PREFIX); *tmp; tmp++) {
+   	     if (*tmp == '/') {
+            *tmp = '@';
+   	     }
+   	 }
+    }
     return 0;
 }
 
@@ -614,22 +648,25 @@ int dexopt(const char *apk_path, uid_t uid, int is_public)
     /* platform-specific flags affecting optimization and verification */
     property_get("dalvik.vm.dexopt-flags", dexopt_flags, "");
 
+    LOGE("fangyu dex_path1 = %s \n", dex_path);
     strcpy(dex_path, apk_path);
+LOGE("fangyu dex_path2 = %s \n", dex_path);
     end = strrchr(dex_path, '.');
+LOGE("fangyu dex_path3 = %s \n", dex_path);
     if (end != NULL) {
         strcpy(end, ".odex");
         if (stat(dex_path, &dex_stat) == 0) {
             return 0;
         }
     }
-
+LOGE("fangyu dex_path4 = %s \n", dex_path);
     if (create_cache_path(dex_path, apk_path)) {
         return -1;
     }
-
+LOGE("fangyu dex_path5 = %s \n", dex_path);
     memset(&apk_stat, 0, sizeof(apk_stat));
     stat(apk_path, &apk_stat);
-
+LOGE("fangyu dex_path6 = %s \n", dex_path);
     zip_fd = open(apk_path, O_RDONLY, 0);
 
     if (zip_fd < 0) {
@@ -986,6 +1023,7 @@ int unbinddata(const char* dataDir) {
 }
 
 int binddata(const char* asecDir, const char* pkgDir,  int uid) {
+    LOGE("fangyu binddata asecDir = %s pkgDir = %s" ,asecDir, pkgDir);
     mkdir(asecDir, 0751);
     chown(asecDir, uid, uid) ;
 
@@ -1154,3 +1192,30 @@ out:
 
     return rc;
 }
+
+    const char* selectdir(int flag){
+        LOGE("PackageManager selectdir flag = %d", flag);
+	switch(flag){
+	case 0 :
+		/*
+		if (0 == strcmp("lib", a)) {
+			dir = "system/lib";
+		}
+		*/
+		return PKG_DIR_PREFIX;
+	case 1 :
+		/*
+		if (0 == strcmp("app", a)) {
+			int len = strlen(PKG_DIR_PREFIX) + 3 + 1;
+			dir = malloc(len);
+			dir[len - 1] = '\0';
+			strncpy(dir, PKG_DIR_PREFIX, strlen(PKG_DIR_PREFIX));
+			strncpy(dir + strlen(PKG_DIR_PREFIX), "app", strlen("app"));
+		}
+		*/
+	        return  APK_PKG_DIR_PREFIX;
+	default :
+	        return PKG_DIR_PREFIX;
+	}
+        return "";
+    }

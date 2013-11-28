@@ -745,7 +745,7 @@ public final class Pm {
         }
 
         String apkFilePath = nextArg();
-        System.err.println("\tpkg: " + apkFilePath);
+        System.out.println("\tpkg: " + apkFilePath);
         if (apkFilePath == null) {
             System.err.println("Error: no package specified");
             showUsage();

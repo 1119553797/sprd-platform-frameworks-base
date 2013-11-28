@@ -64,6 +64,7 @@
 
 #define APK_DIR_PREFIX         "/data/app/"
 
+#define APK_PKG_DIR_PREFIX     "/mnt/.sprd/data/"
 /* Encrypted File SYstems constants */
 #define USE_ENCRYPTED_FS       1
 #define USE_UNENCRYPTED_FS     0
@@ -81,6 +82,8 @@
 #define UPDATE_COMMANDS_DIR_PREFIX  "/system/etc/updatecmds/"
 #define T_DALVIK_CACHE_PREFIX  "/mnt/sdcard/.Dalcache/"
 #define T_DALVIK_CACHE_PATH     "/mnt/sdcard/.Dalcache"
+#define DATA_DALVIK_CACHE_PREFIX  "/mnt/.sprd/data/Dalcache/"
+#define DATA_DALVIK_CACHE_PATH     "/mnt/.sprd/data/Dalcache"
 
 #define PKG_NAME_MAX  128   /* largest allowed package name */
 #define PKG_PATH_MAX  256   /* max size of any path we use */
@@ -103,11 +106,11 @@ int delete_dir_contents_fd(int dfd, const char *name);
 
 /* commands.c */
 
-int install(const char *pkgname, int encrypted_fs_flag, uid_t uid, gid_t gid);
-int uninstall(const char *pkgname, int encrypted_fs_flag);
-int renamepkg(const char *oldpkgname, const char *newpkgname, int encrypted_fs_flag);
-int delete_user_data(const char *pkgname, int encrypted_fs_flag);
-int delete_cache(const char *pkgname, int encrypted_fs_flag);
+int install(const char *pkgname, int encrypted_fs_flag, uid_t uid, gid_t gid, int flag);
+int uninstall(const char *pkgname, int encrypted_fs_flag, int flag);
+int renamepkg(const char *oldpkgname, const char *newpkgname, int encrypted_fs_flag, int flag);
+int delete_user_data(const char *pkgname, int encrypted_fs_flag, int flag);
+int delete_cache(const char *pkgname, int encrypted_fs_flag, int flag);
 int move_dex(const char *src, const char *dst);
 int rm_dex(const char *path);
 int protect(char *pkgname, gid_t gid);

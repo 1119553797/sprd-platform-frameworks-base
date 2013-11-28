@@ -269,7 +269,13 @@ public class ApplicationInfo extends PackageItemInfo implements Parcelable {
      * @hide
      */
     public static final int FLAG_SUPPORTS_XLARGE_SCREENS = 1<<19;
+
+    public static final int FLAG_PRELOAD = 1 << 20;
+    public static final int FLAG_MYAPP = 1 << 21;
     
+    public static final int FLAG_PRELOAD_EXTERNAL = 1 << 22;
+    public static final int FLAG_PRELOAD_SYS = 1 << 23;
+
     /**
      * Value for {@link #flags}: this is true if the application has set
      * its android:neverEncrypt to true, false otherwise. It is used to specify

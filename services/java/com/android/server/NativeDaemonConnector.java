@@ -223,8 +223,13 @@ final class NativeDaemonConnector implements Runnable {
      */
     public synchronized ArrayList<String> doCommand(String cmd)
             throws NativeDaemonConnectorException  {
+        Slog.v(TAG,"doCommand cdm = " + cmd);
         mResponseQueue.clear();
         sendCommand(cmd);
+        if(cmd.equals("volume format mnt/.sprd/data")){
+            return null;
+        }
+        Slog.v(TAG,"doCommand1");
 
         ArrayList<String> response = new ArrayList<String>();
         boolean complete = false;
@@ -243,7 +248,7 @@ final class NativeDaemonConnector implements Runnable {
                             String.format("Invalid response from daemon (%s)", line));
                 }
 
-                if ((code >= 200) && (code < 600)) {
+                if (((code >= 200) && (code < 600))) {
                     complete = true;
                 }
                 response.add(line);

@@ -67,6 +67,10 @@ public class PackageHelper {
 
         // Create mount point via MountService
         IMountService mountService = getMountService();
+        if(mountService == null){
+            Log.e("sunway","mountService = null");
+            return null;
+        }
         int sizeMb = (int) (sizeBytes >> 20);
         if ((sizeBytes - (sizeMb * 1024 * 1024)) > 0) {
             sizeMb++;
