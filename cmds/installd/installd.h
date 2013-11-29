@@ -66,8 +66,6 @@
 
 #define DALVIK_CACHE_PREFIX    "/data/dalvik-cache/"
 #define DALVIK_CACHE_POSTFIX   "/classes.dex"
-#define T_DALVIK_CACHE_PREFIX  "/mnt/sdcard/.Dalcache/"
-#define T_DALVIK_CACHE_PATH     "/mnt/sdcard/.Dalcache"
 
 #define UPDATE_COMMANDS_DIR_PREFIX  "/system/etc/updatecmds/"
 
