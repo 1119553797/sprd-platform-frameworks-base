@@ -8747,7 +8747,7 @@ public final class ActivityManagerService extends ActivityManagerNative
         // Look for these and clean up if found.
         // XXX Commented out for now.  Trying to figure out a way to reproduce
         // the actual situation to identify what is actually going on.
-        if (false) {
+        if (true) {
             for (int i=0; i<NL; i++) {
                 ContentProviderRecord cpr = (ContentProviderRecord)
                         mLaunchingProviders.get(i);
