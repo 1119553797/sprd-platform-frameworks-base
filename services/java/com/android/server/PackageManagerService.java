@@ -1073,14 +1073,14 @@ class PackageManagerService extends IPackageManager.Stub {
                     mPreInstallDirToSD = new File(Environment.getRootDirectory(),
                             "preloadapp/AppsToSD");
                     mPreInstallObserverToSD = new AppDirObserver(
-                            mPreInstallDirToSD.getPath(), OBSERVER_EVENTS, false);
+                            mPreInstallDirToSD.getPath(), OBSERVER_EVENTS, false, PackageParser.PARSE_IS_PROLOADAPP);
                     mPreInstallObserverToSD.startWatching();
 //                    scanDirLI(mPreInstallDirToSD, PackageParser.PARSE_IS_PROLOADAPP, scanMode, 0);
 
                     mPreInstallDirToSys = new File(Environment.getRootDirectory(),
                             "preloadapp/AppsToSys");
                     mPreInstallObserverToSys = new AppDirObserver(
-                            mPreInstallDirToSys.getPath(), OBSERVER_EVENTS, false);
+                            mPreInstallDirToSys.getPath(), OBSERVER_EVENTS, false, PackageParser.PARSE_IS_PROLOADAPP_SYS);
                     mPreInstallObserverToSys.startWatching();
 //                    scanDirLI(mPreInstallDirToSys, PackageParser.PARSE_IS_PROLOADAPP_SYS, scanMode,
 //                            0);
@@ -1571,12 +1571,10 @@ class PackageManagerService extends IPackageManager.Stub {
             if(ps.pkg == null) {
                 PackageInfo pInfo = generatePackageInfoFromSettingsLP(packageName, flags);
                 if(pInfo != null) {
-                    Log.v("fangyu","generateApplicationInfoFromSettingsLP flag = " + Integer.toBinaryString(pInfo.applicationInfo.flags));
                     return pInfo.applicationInfo;
                 }
                 return null;
             }
-            Log.v("fangyu","generateApplicationInfoFromSettingsLP ps.pkg.applicationInfo.flags = " + Integer.toBinaryString(ps.pkg.applicationInfo.flags));
             return PackageParser.generateApplicationInfo(ps.pkg, flags);
         }
         return null;
@@ -1608,7 +1606,6 @@ class PackageManagerService extends IPackageManager.Stub {
                     + ": " + p);
             if (p != null) {
                 // Note: isEnabledLP() does not apply here - always return info
-                Log.v("fangyu","getApplicationInfo flag = " + Integer.toBinaryString(p.applicationInfo.flags));
                 return PackageParser.generateApplicationInfo(p, flags);
             }
             if ("android".equals(packageName)||"system".equals(packageName)) {
@@ -2673,11 +2670,9 @@ class PackageManagerService extends IPackageManager.Stub {
             if ((flags & PackageParser.PARSE_IS_PROLOADAPP) != 0) {
                 flags |= PackageManager.INSTALL_EXTERNAL;
                 Uri appToSdUri = Uri.parse("file://" + file.getPath());
-                Log.v(TAG, "uri = " + appToSdUri);
                 PackageParser.Package pkgInfo;
                 pkgInfo = getPackageInfo(appToSdUri);
                 String pkgName = pkgInfo.packageName;
-                Log.v(TAG, "pkgInfo.packageName = " + pkgName);
 
                 if (!mAppToSDpackagePath.contains(pkgName)) {
                     installPackage(appToSdUri, observer, flags);
@@ -2695,7 +2690,7 @@ class PackageManagerService extends IPackageManager.Stub {
             }
             
             if((pkg != null) && (((flags & PackageParser.PARSE_IS_MYAPP) != 0) || ((flags & PackageParser.PARSE_IS_PROLOADAPP_SYS) != 0))){
-                Log.v(TAG, "scanDirLI update launch when myApp or proloadApp");
+                Log.v(TAG, "scanDirLI update launch when myApp or proloadApp pkg.applicationInfo = " + pkg.applicationInfo);
                 Bundle extras = new Bundle(1);
                 if (pkg.applicationInfo != null) {
                     extras.putInt(Intent.EXTRA_UID, pkg.applicationInfo.uid);
@@ -3065,7 +3060,6 @@ class PackageManagerService extends IPackageManager.Stub {
         if ((pkg.applicationInfo.flags&ApplicationInfo.FLAG_HAS_CODE) != 0 && mInstaller != null) {
             String path = pkg.mScanPath;
             int ret = 0;
-            Log.v(TAG,"perforDexOptLI path = " + path + "forceDex = " + forceDex);
             try {
                 if (forceDex || dalvik.system.DexFile.isDexOptNeeded(path)) {
                     ret = mInstaller.dexopt(path, pkg.applicationInfo.uid,
@@ -3142,38 +3136,61 @@ class PackageManagerService extends IPackageManager.Stub {
             return null;
         }
 
-        if ((parseFlags&PackageParser.PARSE_IS_SYSTEM) != 0) {
-            pkg.applicationInfo.flags |= ApplicationInfo.FLAG_SYSTEM;
-        }
+		if ((parseFlags & PackageParser.PARSE_IS_SYSTEM) != 0) {
+			pkg.applicationInfo.flags |= ApplicationInfo.FLAG_SYSTEM;
+		}
 
-        if ((parseFlags & PackageParser.PARSE_IS_MYAPP) != 0) {
-            pkg.applicationInfo.flags |= ApplicationInfo.FLAG_MYAPP;
-            if((pkg.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0){
-                pkg.applicationInfo.flags ^= ApplicationInfo.FLAG_SYSTEM;
-                parseFlags ^= PackageParser.PARSE_IS_SYSTEM;
-            }
-        }
-        
-        if(mAppToSDpackagePath.contains(pkg.packageName)){
-            parseFlags |= PackageParser.PARSE_IS_PROLOADAPP;
-        }
-        Log.d(TAG, "pkg.mScanPath = " + pkg.mScanPath);
-        Log.d(TAG, "pkgflags1 = " + Integer.toBinaryString(parseFlags));
-        if ((parseFlags & PackageParser.PARSE_IS_PROLOADAPP) != 0) {
-            pkg.applicationInfo.flags |= ApplicationInfo.FLAG_PRELOAD_EXTERNAL;
-            
-            if((pkg.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0){
-                pkg.applicationInfo.flags ^= ApplicationInfo.FLAG_SYSTEM;
-                parseFlags ^= PackageParser.PARSE_IS_SYSTEM;
-            }
-            mAppToSDpackagePath.add(pkg.packageName);
-            writeAppToSDPathConfig(mAppToSDpackagePath);
-        }
-        Log.d(TAG, "pkgflags2 = " + Integer.toBinaryString(parseFlags));
+		if (mAppToSDpackagePath.contains(pkg.packageName)) {
+			parseFlags |= PackageParser.PARSE_IS_PROLOADAPP;
+		} else if (mAppToSyspackagePath.contains(pkg.packageName)) {
+			parseFlags |= PackageParser.PARSE_IS_PROLOADAPP_SYS;
+		} else if (mAppToMyApppackagePath.contains(pkg.packageName)) {
+			parseFlags |= PackageParser.PARSE_IS_MYAPP;
+		}
 
-        if ((parseFlags & PackageParser.PARSE_IS_PROLOADAPP_SYS) != 0) {
-            pkg.applicationInfo.flags |= ApplicationInfo.FLAG_PRELOAD_SYS;
-        }
+		if ((parseFlags & PackageParser.PARSE_IS_MYAPP) != 0) {
+			pkg.applicationInfo.flags |= ApplicationInfo.FLAG_MYAPP;
+			if ((pkg.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0) {
+				pkg.applicationInfo.flags ^= ApplicationInfo.FLAG_SYSTEM;
+				parseFlags ^= PackageParser.PARSE_IS_SYSTEM;
+			}
+			if ((parseFlags & PackageParser.PARSE_ON_SDCARD) != 0) {
+				pkg.applicationInfo.flags |= ApplicationInfo.FLAG_UPDATED_SYSTEM_APP;
+			}
+			mAppToMyApppackagePath.add(pkg.packageName);
+			writeAppPathConfig(mAppToMyApppackagePath,
+					PackageParser.PARSE_IS_MYAPP);
+		}
+
+		if ((parseFlags & PackageParser.PARSE_IS_PROLOADAPP) != 0) {
+			pkg.applicationInfo.flags |= ApplicationInfo.FLAG_PRELOAD_EXTERNAL;
+
+			if ((pkg.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0) {
+				pkg.applicationInfo.flags ^= ApplicationInfo.FLAG_SYSTEM;
+				parseFlags ^= PackageParser.PARSE_IS_SYSTEM;
+			}
+			if ((parseFlags & PackageParser.PARSE_ON_SDCARD) != 0) {
+				pkg.applicationInfo.flags |= ApplicationInfo.FLAG_UPDATED_SYSTEM_APP;
+			}
+			mAppToSDpackagePath.add(pkg.packageName);
+			writeAppPathConfig(mAppToSDpackagePath,
+					PackageParser.PARSE_IS_PROLOADAPP);
+		}
+
+		if ((parseFlags & PackageParser.PARSE_IS_PROLOADAPP_SYS) != 0) {
+			pkg.applicationInfo.flags |= ApplicationInfo.FLAG_PRELOAD_SYS;
+
+			if ((pkg.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0) {
+				pkg.applicationInfo.flags ^= ApplicationInfo.FLAG_SYSTEM;
+				parseFlags ^= PackageParser.PARSE_IS_SYSTEM;
+			}
+			if ((parseFlags & PackageParser.PARSE_ON_SDCARD) != 0) {
+				pkg.applicationInfo.flags |= ApplicationInfo.FLAG_UPDATED_SYSTEM_APP;
+			}
+			mAppToSyspackagePath.add(pkg.packageName);
+			writeAppPathConfig(mAppToSyspackagePath,
+					PackageParser.PARSE_IS_PROLOADAPP_SYS);
+		}
 
         if (pkg.packageName.equals("android")) {
             synchronized (mPackages) {
@@ -3719,7 +3736,6 @@ class PackageManagerService extends IPackageManager.Stub {
             }
 
             int N = pkg.providers.size();
-            Log.v("Pfangyu","providers N = " + N);
             StringBuilder r = null;
             int i;
             for (i=0; i<N; i++) {
@@ -4857,8 +4873,7 @@ class PackageManagerService extends IPackageManager.Stub {
                 if ((event&ADD_EVENTS) != 0) {
                     if (p == null) {
                         p = scanPackageLI(fullPath,
-                                (mIsRom ? PackageParser.PARSE_IS_SYSTEM
-                                        | PackageParser.PARSE_IS_SYSTEM_DIR: 0) |
+                                getFlag() |
                                 PackageParser.PARSE_CHATTY |
                                 PackageParser.PARSE_MUST_BE_APK,
                                 SCAN_MONITOR | SCAN_NO_PATHS | SCAN_UPDATE_TIME,
@@ -4927,7 +4942,6 @@ class PackageManagerService extends IPackageManager.Stub {
             newUri = Uri.parse(packageURI + "canNotInstall");
             Log.w(TAG, "can not install: flags " + flags + " packageURI: " + packageURI + " status: " + status);
         }
-        Log.w(TAG, "packagename = " + installerPackageName + "uri = " + packageURI + "flag = " + Integer.toString(flag));
         Message msg = mHandler.obtainMessage(INIT_COPY);
         msg.obj = new InstallParams(newUri, observer, flags,
                 installerPackageName);
@@ -5065,12 +5079,10 @@ class PackageManagerService extends IPackageManager.Stub {
             this.packageURI = packageURI;
             this.flags = flags;
             //add bug#214621: in 6820lc, cat't allow install apk in the internal storage
-            Log.v(TAG,"installParams before this.flags = " + Integer.toBinaryString(this.flags));
             if (SystemProperties.getBoolean("ro.ulc.ram", false) && (flags & PackageManager.INSTALL_INTERNAL) != 0) {
                 this.flags &= ~PackageManager.INSTALL_INTERNAL;
                 this.flags |= PackageManager.INSTALL_EXTERNAL;
             }
-            Log.v(TAG,"installParams after this.flags = " + Integer.toBinaryString(this.flags));
             //end add bug#214621
             this.observer = observer;
             this.installerPackageName = installerPackageName;
@@ -6076,7 +6088,6 @@ class PackageManagerService extends IPackageManager.Stub {
                         deletedPackage.applicationInfo.publicSourceDir,
                         deletedPackage.applicationInfo.nativeLibraryDir);
             } else {
-                Log.v(TAG,"else");
                 res.removedInfo.args = null;
             }
         }
@@ -6170,7 +6181,6 @@ class PackageManagerService extends IPackageManager.Stub {
 
         if ((res.returnCode = moveDexFilesLI(newPackage))
                 != PackageManager.INSTALL_SUCCEEDED) {
-            Log.v(TAG,"updateSetingLI res.returncode = false");
             // Discontinue if moving dex files failed.
             return;
         }
@@ -6200,7 +6210,6 @@ class PackageManagerService extends IPackageManager.Stub {
     private void installPackageLI(InstallArgs args,
             boolean newInstall, PackageInstalledInfo res) {
         int pFlags = args.flags;
-        Log.v(TAG,"installPackageLI pFlags = " + Integer.toBinaryString(pFlags));
         String installerPackageName = args.installerPackageName;
         File tmpPackageFile = new File(args.getCodePath());
         boolean forwardLocked = ((pFlags & PackageManager.INSTALL_FORWARD_LOCK) != 0);
@@ -6219,7 +6228,6 @@ class PackageManagerService extends IPackageManager.Stub {
         if ((pFlags & PackageParser.PARSE_IS_PROLOADAPP) != 0) {
             parseFlags |= PackageParser.PARSE_IS_PROLOADAPP;
         }
-        Log.v(TAG,"installPackageLI parseFlags = " + Integer.toBinaryString(parseFlags));
         PackageParser pp = new PackageParser(tmpPackageFile.getPath());
         pp.setSeparateProcesses(mSeparateProcesses);
         final PackageParser.Package pkg = pp.parsePackage(tmpPackageFile,
@@ -6521,7 +6529,14 @@ class PackageManagerService extends IPackageManager.Stub {
 
         if(res && sendBroadCast) {
             boolean systemUpdate = info.isRemovedPackageSystemUpdate;
-            info.sendBroadcast(deleteCodeAndResources, systemUpdate);
+			if (mAppToMyApppackagePath.contains(packageName)
+					|| mAppToSyspackagePath.contains(packageName)) {
+				if (!mMediaMounted) {
+					info.sendBroadcast(deleteCodeAndResources, systemUpdate);
+				}
+			} else {
+				info.sendBroadcast(deleteCodeAndResources, systemUpdate);
+			}
 
             // If the removed package was a system update, the old system packaged
             // was re-enabled; we need to broadcast this information
@@ -6588,7 +6603,6 @@ class PackageManagerService extends IPackageManager.Stub {
         synchronized (mPackages) {
             deletedPs = mSettings.mPackages.get(packageName);
         }
-        Log.v(TAG,"removePackageDataLI flags = " + Integer.toBinaryString(flags));
         if ((flags&PackageManager.DONT_DELETE_DATA) == 0) {
             boolean useEncryptedFSDir = useEncryptedFilesystemForPackage(p);
             if (mInstaller != null) {
@@ -6658,7 +6672,37 @@ class PackageManagerService extends IPackageManager.Stub {
         }
         if (ps == null) {
             Slog.w(TAG, "Attempt to delete unknown system package "+ p.packageName);
-            return false;
+            if (mMediaMounted && (isMyApp(p) || isAppToSysApp(p))) {
+                boolean ret = deleteInstalledPackageLI(p, true, flags, outInfo,
+                        writeSettings);
+
+                synchronized (mPackages) {
+                    // Reinstate the old system package
+                    mSettings.enableSystemPackageLP(p.packageName);
+                    // Remove any native libraries from the upgraded package.
+                    NativeLibraryHelper
+                            .removeNativeBinariesLI(p.applicationInfo.nativeLibraryDir);
+                }
+
+				Bundle extras = new Bundle(1);
+				if (p.applicationInfo != null) {
+					extras.putInt(Intent.EXTRA_UID, p.applicationInfo.uid);
+					extras.putBoolean(Intent.EXTRA_DATA_REMOVED, true);
+					sendPackageBroadcast(Intent.ACTION_PACKAGE_REMOVED,
+							p.applicationInfo.packageName, extras, null);
+				}
+
+               if (isMyApp(p)) {
+                    scanDirLI(mMyInstallDir, PackageParser.PARSE_IS_MYAPP,
+                            mScanMode, 0);
+                } else {
+                    scanDirLI(mPreInstallDirToSys,
+                            PackageParser.PARSE_IS_PROLOADAPP_SYS, mScanMode, 0);
+                }
+                return ret;
+            }else {
+                return false;
+            }
         } else {
             Log.i(TAG, "Deleting system pkg from data partition");
         }
@@ -6803,7 +6847,6 @@ class PackageManagerService extends IPackageManager.Stub {
             }
             
             //when format Sd card,this opration must be excute
-            Log.v(TAG, "deletePackageLI path = " + mAppToSDpackagePath.toString());
             if(mAppToSDpackagePath.contains(p.packageName)){
                 mAppToSDpackagePath.remove(p.packageName);
                 
@@ -8593,7 +8636,6 @@ class PackageManagerService extends IPackageManager.Stub {
                 return false;
             }
             PackageSetting dp = mDisabledSysPackages.get(name);
-            Log.v(TAG,"disableSystemPackageLP dp = " + dp);
             // always make sure the system package code and resource paths dont change
             if (dp == null) {
                 if((p.pkg != null) && (p.pkg.applicationInfo != null)) {
@@ -8606,7 +8648,6 @@ class PackageManagerService extends IPackageManager.Stub {
                 // version.  so at this point we need a new PackageSetting that
                 // is okay to muck with.
                 PackageSetting newp = new PackageSetting(p);
-                Log.v(TAG,"disableSystemPackageLP newp = " + newp);
                 replacePackageLP(name, newp);
                 return true;
             }
@@ -10343,7 +10384,9 @@ class PackageManagerService extends IPackageManager.Stub {
             if (DEBUG_SD_INSTALL)
                 Log.i(TAG, "Loading packages");
 
-            ReadAppToSDPathConfig(mAppToSDpackagePath);
+            ReadAppPathConfig(mAppToSDpackagePath,PackageParser.PARSE_IS_PROLOADAPP);
+            ReadAppPathConfig(mAppToSyspackagePath,PackageParser.PARSE_IS_PROLOADAPP_SYS);
+            ReadAppPathConfig(mAppToMyApppackagePath,PackageParser.PARSE_IS_MYAPP);
             loadMediaPackages(processCids, uidArr, removeCids);
             startCleaningPackages();
             scanDirLI(mMyInstallDir, PackageParser.PARSE_IS_MYAPP, mScanMode, 0);
@@ -10769,17 +10812,31 @@ class PackageManagerService extends IPackageManager.Stub {
 
     private HashSet<String> mBoundAsecDataDir = new HashSet<String>();
     private HashSet<String> mAppToSDpackagePath = new HashSet<String>();
+    private HashSet<String> mAppToSyspackagePath = new HashSet<String>();
+    private HashSet<String> mAppToMyApppackagePath = new HashSet<String>();
     private static final String APP_TOSD_PAKNAME_PATH = "/mnt/sdcard/.Dalcache/path.conf";
+    private static final String APP_TOSYS_PAKNAME_PATH = "/mnt/sdcard/.Dalcache/ToSyspath.conf";
+    private static final String APP_MYAPP_PAKNAME_PATH = "/mnt/sdcard/.Dalcache/myApppath.conf";
     
-    private void writeAppToSDPathConfig(HashSet<String> appToSDpackagePath) {
-        Log.v(TAG, "writeAppToSDPathConfig path = " + appToSDpackagePath.toString());
+    private String getAppPath(int flag) {
+        if ((flag & PackageParser.PARSE_IS_PROLOADAPP) != 0) {
+            return APP_TOSD_PAKNAME_PATH;
+        } else if ((flag & PackageParser.PARSE_IS_PROLOADAPP_SYS) != 0) {
+            return APP_TOSYS_PAKNAME_PATH;
+        } else {
+            return APP_MYAPP_PAKNAME_PATH;
+        }
+    }
+    private void writeAppPathConfig(HashSet<String> apppackagePath, int flag) {
+        Log.v(TAG, "writeAppToSDPathConfig path = " + apppackagePath.toString());
         byte[] buffer = null;
         String spliter = "%";
         FileOutputStream fwriter = null;
+        String pathConfigString = getAppPath(flag);
         try {
-            fwriter = new FileOutputStream(APP_TOSD_PAKNAME_PATH);
+            fwriter = new FileOutputStream(pathConfigString);
             String path = new String();
-            for (String pathDir: appToSDpackagePath) {
+            for (String pathDir: apppackagePath) {
               path += pathDir;
               path += spliter;
             }
@@ -10800,17 +10857,20 @@ class PackageManagerService extends IPackageManager.Stub {
         }
     }
     
-    private void ReadAppToSDPathConfig(HashSet<String> appToSDpackagePath) {
+    private void ReadAppPathConfig(HashSet<String> apppackagePath, int flag) {
+        for (String path : apppackagePath) {
+            apppackagePath.remove(path);
+        }
         try {
-            FileInputStream freader = new FileInputStream(APP_TOSD_PAKNAME_PATH);
-            decodeInputStream(freader, appToSDpackagePath);
+            FileInputStream freader = new FileInputStream(getAppPath(flag));
+            decodeInputStream(freader, apppackagePath);
         } catch (Exception e) {
             Log.e(TAG, "file not found");
             return;
         }
     }
     
-    private void decodeInputStream(InputStream freader, HashSet<String> appToSDpackagePath) {
+    private void decodeInputStream(InputStream freader, HashSet<String> apppackagePath) {
         byte[] buffer = null;
         try {
             buffer = new byte[freader.available()];
@@ -10832,8 +10892,8 @@ class PackageManagerService extends IPackageManager.Stub {
         if (result != null) {
             String[] pathArray = result.split("%");
             for (int i = 0; i < pathArray.length; i++) {
-                mAppToSDpackagePath.add(pathArray[i]);
-                Log.i(TAG,"AppToSDpackageName = " + pathArray[i]);
+                apppackagePath.add(pathArray[i]);
+                Log.i(TAG,"ApppackageName = " + pathArray[i]);
             }
         } else {
             Log.e(TAG, "result == null.");
