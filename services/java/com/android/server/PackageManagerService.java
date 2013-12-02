@@ -6717,10 +6717,17 @@ class PackageManagerService extends IPackageManager.Stub {
             // Preserve data by setting flag
             flags |= PackageManager.DONT_DELETE_DATA;
         }
+		if (isMyApp(p) || isAppToSysApp(p)) {
+			killApplication(p.packageName, p.applicationInfo.uid);
+		}
         boolean ret = deleteInstalledPackageLI(p, true, flags, outInfo,
                 writeSettings);
         if (!ret) {
             return false;
+        }
+        if(!mMediaMounted && (isMyApp(p) || isAppToSysApp(p))){
+            Slog.w(TAG,"Do not restore system package");
+            return true;
         }
         synchronized (mPackages) {
             // Reinstate the old system package
@@ -6729,10 +6736,6 @@ class PackageManagerService extends IPackageManager.Stub {
             NativeLibraryHelper.removeNativeBinariesLI(p.applicationInfo.nativeLibraryDir);
         }
         
-        if(!mMediaMounted && (isMyApp(p) || isAppToSysApp(p))){
-            Slog.w(TAG,"Do not restore system package");
-            return true;
-        }
         // Install the system package
         PackageParser.Package newPkg = scanPackageLI(ps.codePath,
                 PackageParser.PARSE_MUST_BE_APK
