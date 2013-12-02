@@ -283,15 +283,11 @@ int move_dex(const char *src, const char *dst)
     char src_dex[PKG_PATH_MAX];
     char dst_dex[PKG_PATH_MAX];
 
-    LOGE("fangyu move_dex src = %s dst = %s \n", src, dst);
     if (!is_valid_apk_path(src)) return -1;
     if (!is_valid_apk_path(dst)) return -1;
 
     if (create_cache_path(src_dex, src)) return -1;
     if (create_cache_path(dst_dex, dst)) return -1;
-
-    
-    LOGI("fangyu move %s -> %s\n", src_dex, dst_dex);
 
     int retCode = rename(src_dex, dst_dex);
     if (errno == EXDEV) {
@@ -513,7 +509,6 @@ int create_cache_path(char path[PKG_PATH_MAX], const char *src)
     int srclen;
     int dstlen;
     int tPath = 0;
-LOGE("fangyu create_cache_path path = %s src = %s \n", path, src);
     srclen = strlen(src);
 
         /* demand that we are an absolute path */
@@ -556,8 +551,6 @@ LOGE("fangyu create_cache_path path = %s src = %s \n", path, src);
             DATA_DALVIK_CACHE_PREFIX,
             src + 1, /* skip the leading / */
             DALVIK_CACHE_POSTFIX);
-    
-        LOGE("fangyu create_cache_path path = %s \n", path);
 
        for(tmp = path + strlen(DATA_DALVIK_CACHE_PREFIX); *tmp; tmp++) {
            if (*tmp == '/') {
@@ -569,8 +562,6 @@ LOGE("fangyu create_cache_path path = %s src = %s \n", path, src);
     	        tPath == 0 ? DALVIK_CACHE_PREFIX : T_DALVIK_CACHE_PREFIX,
     	        src + 1, /* skip the leading / */
        	     DALVIK_CACHE_POSTFIX);
-	
-    	 LOGE("fangyu create_cache_path path = %s \n", path);
 
    	 for(tmp = path + strlen(tPath == 0 ? DALVIK_CACHE_PREFIX : T_DALVIK_CACHE_PREFIX); *tmp; tmp++) {
    	     if (*tmp == '/') {
@@ -648,25 +639,22 @@ int dexopt(const char *apk_path, uid_t uid, int is_public)
     /* platform-specific flags affecting optimization and verification */
     property_get("dalvik.vm.dexopt-flags", dexopt_flags, "");
 
-    LOGE("fangyu dex_path1 = %s \n", dex_path);
     strcpy(dex_path, apk_path);
-LOGE("fangyu dex_path2 = %s \n", dex_path);
     end = strrchr(dex_path, '.');
-LOGE("fangyu dex_path3 = %s \n", dex_path);
     if (end != NULL) {
         strcpy(end, ".odex");
         if (stat(dex_path, &dex_stat) == 0) {
             return 0;
         }
     }
-LOGE("fangyu dex_path4 = %s \n", dex_path);
+
     if (create_cache_path(dex_path, apk_path)) {
         return -1;
     }
-LOGE("fangyu dex_path5 = %s \n", dex_path);
+
     memset(&apk_stat, 0, sizeof(apk_stat));
     stat(apk_path, &apk_stat);
-LOGE("fangyu dex_path6 = %s \n", dex_path);
+
     zip_fd = open(apk_path, O_RDONLY, 0);
 
     if (zip_fd < 0) {
@@ -1023,7 +1011,6 @@ int unbinddata(const char* dataDir) {
 }
 
 int binddata(const char* asecDir, const char* pkgDir,  int uid) {
-    LOGE("fangyu binddata asecDir = %s pkgDir = %s" ,asecDir, pkgDir);
     mkdir(asecDir, 0751);
     chown(asecDir, uid, uid) ;
 
@@ -1194,7 +1181,6 @@ out:
 }
 
     const char* selectdir(int flag){
-        LOGE("PackageManager selectdir flag = %d", flag);
 	switch(flag){
 	case 0 :
 		/*

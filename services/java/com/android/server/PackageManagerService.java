@@ -1082,8 +1082,9 @@ class PackageManagerService extends IPackageManager.Stub {
                     mPreInstallObserverToSys = new AppDirObserver(
                             mPreInstallDirToSys.getPath(), OBSERVER_EVENTS, false, PackageParser.PARSE_IS_PROLOADAPP_SYS);
                     mPreInstallObserverToSys.startWatching();
-//                    scanDirLI(mPreInstallDirToSys, PackageParser.PARSE_IS_PROLOADAPP_SYS, scanMode,
-//                            0);
+                    ReadAppPathConfig(mAppToSyspackagePath,PackageParser.PARSE_IS_PROLOADAPP_SYS);
+                    scanDirLI(mPreInstallDirToSys, PackageParser.PARSE_IS_PROLOADAPP_SYS, scanMode,
+                            0);
                     // end scan
 
                 mDrmAppInstallObserver = new AppDirObserver(
@@ -3154,7 +3155,7 @@ class PackageManagerService extends IPackageManager.Stub {
 				pkg.applicationInfo.flags ^= ApplicationInfo.FLAG_SYSTEM;
 				parseFlags ^= PackageParser.PARSE_IS_SYSTEM;
 			}
-			if ((parseFlags & PackageParser.PARSE_ON_SDCARD) != 0) {
+			if ((parseFlags & PackageParser.PARSE_UPDATE_APP) != 0) {
 				pkg.applicationInfo.flags |= ApplicationInfo.FLAG_UPDATED_SYSTEM_APP;
 			}
 			mAppToMyApppackagePath.add(pkg.packageName);
@@ -3169,7 +3170,7 @@ class PackageManagerService extends IPackageManager.Stub {
 				pkg.applicationInfo.flags ^= ApplicationInfo.FLAG_SYSTEM;
 				parseFlags ^= PackageParser.PARSE_IS_SYSTEM;
 			}
-			if ((parseFlags & PackageParser.PARSE_ON_SDCARD) != 0) {
+			if ((parseFlags & PackageParser.PARSE_UPDATE_APP) != 0) {
 				pkg.applicationInfo.flags |= ApplicationInfo.FLAG_UPDATED_SYSTEM_APP;
 			}
 			mAppToSDpackagePath.add(pkg.packageName);
@@ -3184,7 +3185,7 @@ class PackageManagerService extends IPackageManager.Stub {
 				pkg.applicationInfo.flags ^= ApplicationInfo.FLAG_SYSTEM;
 				parseFlags ^= PackageParser.PARSE_IS_SYSTEM;
 			}
-			if ((parseFlags & PackageParser.PARSE_ON_SDCARD) != 0) {
+			if ((parseFlags & PackageParser.PARSE_UPDATE_APP) != 0) {
 				pkg.applicationInfo.flags |= ApplicationInfo.FLAG_UPDATED_SYSTEM_APP;
 			}
 			mAppToSyspackagePath.add(pkg.packageName);
@@ -6672,7 +6673,8 @@ class PackageManagerService extends IPackageManager.Stub {
         }
         if (ps == null) {
             Slog.w(TAG, "Attempt to delete unknown system package "+ p.packageName);
-            if (mMediaMounted && (isMyApp(p) || isAppToSysApp(p))) {
+			if (mMediaMounted && (isMyApp(p) || isAppToSysApp(p))) {
+				killApplication(p.packageName, p.applicationInfo.uid);
                 boolean ret = deleteInstalledPackageLI(p, true, flags, outInfo,
                         writeSettings);
 
@@ -6868,17 +6870,18 @@ class PackageManagerService extends IPackageManager.Stub {
             // end add for bug#140293
             ret = deleteInstalledPackageLI(p, deleteCodeAndResources, flags, outInfo,
                     writeSettings);
-            
-            synchronized (mPackages) {
-                // Reinstate the old system package
-                mSettings.enableSystemPackageLP(p.packageName);
-                // Remove any native libraries from the upgraded package.
-                NativeLibraryHelper.removeNativeBinariesLI(p.applicationInfo.nativeLibraryDir);
-            }
-            if(reInstall){
-                scanDirLI(mPreInstallDirToSD, PackageParser.PARSE_IS_PROLOADAPP, mScanMode, 0);
-            }
-        }
+
+			if (reInstall) {
+				synchronized (mPackages) {
+	                // Reinstate the old system package
+	                mSettings.enableSystemPackageLP(p.packageName);
+	                // Remove any native libraries from the upgraded package.
+	                NativeLibraryHelper.removeNativeBinariesLI(p.applicationInfo.nativeLibraryDir);
+	            }
+				scanDirLI(mPreInstallDirToSD,
+						PackageParser.PARSE_IS_PROLOADAPP, mScanMode, 0);
+			}
+		}
         return ret;
     }
 
@@ -10346,18 +10349,41 @@ class PackageManagerService extends IPackageManager.Stub {
                    // The package status is changed only if the code path
                    // matches between settings and the container id.
                    Log.i(TAG,"ps = " + ps + " args.getcodePath = " + args.getCodePath());
-                   if (ps != null && ps.codePathString != null &&
-                           ps.codePathString.equals(args.getCodePath())) {
-                       if (DEBUG_SD_INSTALL) Log.i(TAG, "Container : " + cid +
-                               " corresponds to pkg : " + pkgName +
-                               " at code path: " + ps.codePathString);
-                       // We do have a valid package installed on sdcard
-                       processCids.put(args, ps.codePathString);
-                       int uid = ps.userId;
-                       if (uid != -1) {
-                           uidList[num++] = uid;
-                       }
-                   } else {
+					if (ps != null && ps.codePathString != null) {
+						if (DEBUG_SD_INSTALL)
+							Log.i(TAG, "Container : " + cid
+									+ " corresponds to pkg : " + pkgName
+									+ " at code path: " + ps.codePathString);
+						// We do have a valid package installed on sdcard
+						if (ps.codePathString.equals(args.getCodePath())) {
+							processCids.put(args, ps.codePathString);
+						} else if(mAppToSyspackagePath.contains(pkgName)){
+							PackageParser.Package oldPkg;
+							PackageSetting oldPkgSetting;
+							synchronized (mPackages) {
+								oldPkg = ps.pkg;
+								if ((oldPkg == null)
+										|| (oldPkg.applicationInfo == null)) {
+									Slog.w(TAG, "Couldn't remove package");
+									continue;
+								}
+							}
+
+							killApplication(pkgName, oldPkg.applicationInfo.uid);
+							// Remove existing system package
+							removePackageLI(oldPkg, true);
+							synchronized (mPackages) {
+								mSettings.enableSystemPackageLP(pkgName);
+								mSettings.writeLP();
+							}
+
+							processCids.put(args, args.getCodePath());
+						}
+						int uid = ps.userId;
+						if (uid != -1) {
+							uidList[num++] = uid;
+						}
+					} else {
                        // Stale container on sdcard. Just delete
                        if (DEBUG_SD_INSTALL) Log.i(TAG, "Container : " + cid + " stale");
                        removeCids.add(cid);
@@ -10385,13 +10411,13 @@ class PackageManagerService extends IPackageManager.Stub {
                 Log.i(TAG, "Loading packages");
 
             ReadAppPathConfig(mAppToSDpackagePath,PackageParser.PARSE_IS_PROLOADAPP);
-            ReadAppPathConfig(mAppToSyspackagePath,PackageParser.PARSE_IS_PROLOADAPP_SYS);
+          //  ReadAppPathConfig(mAppToSyspackagePath,PackageParser.PARSE_IS_PROLOADAPP_SYS);
             ReadAppPathConfig(mAppToMyApppackagePath,PackageParser.PARSE_IS_MYAPP);
             loadMediaPackages(processCids, uidArr, removeCids);
             startCleaningPackages();
             scanDirLI(mMyInstallDir, PackageParser.PARSE_IS_MYAPP, mScanMode, 0);
-            scanDirLI(mPreInstallDirToSys, PackageParser.PARSE_IS_PROLOADAPP_SYS, mScanMode,
-                    0);
+          //  scanDirLI(mPreInstallDirToSys, PackageParser.PARSE_IS_PROLOADAPP_SYS, mScanMode,
+          //          0);
             scanDirLI(mPreInstallDirToSD, PackageParser.PARSE_IS_PROLOADAPP, mScanMode, 0);
         } else {
            if (DEBUG_SD_INSTALL) Log.i(TAG, "Unloading packages");
@@ -10447,7 +10473,7 @@ class PackageManagerService extends IPackageManager.Stub {
                    continue;
                }
                // Parse package
-               int parseFlags = PackageParser.PARSE_ON_SDCARD | mDefParseFlags;
+               int parseFlags = PackageParser.PARSE_ON_SDCARD | mDefParseFlags | PackageParser.PARSE_UPDATE_APP;
                doGc = true;
                synchronized (mInstallLock) {
                    final PackageParser.Package pkg =  scanPackageLI(new File(codePath),
@@ -10815,7 +10841,7 @@ class PackageManagerService extends IPackageManager.Stub {
     private HashSet<String> mAppToSyspackagePath = new HashSet<String>();
     private HashSet<String> mAppToMyApppackagePath = new HashSet<String>();
     private static final String APP_TOSD_PAKNAME_PATH = "/mnt/sdcard/.Dalcache/path.conf";
-    private static final String APP_TOSYS_PAKNAME_PATH = "/mnt/sdcard/.Dalcache/ToSyspath.conf";
+    private static final String APP_TOSYS_PAKNAME_PATH = "/data/system/ToSyspath.conf";
     private static final String APP_MYAPP_PAKNAME_PATH = "/mnt/sdcard/.Dalcache/myApppath.conf";
     
     private String getAppPath(int flag) {

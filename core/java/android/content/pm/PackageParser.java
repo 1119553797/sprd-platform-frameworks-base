@@ -365,6 +365,7 @@ public class PackageParser {
     public final static int PARSE_IS_MYAPP = 1<<7;
     public final static int PARSE_IS_PROLOADAPP = 1<<8;
     public final static int PARSE_IS_PROLOADAPP_SYS = 1<<9;
+    public final static int PARSE_UPDATE_APP = 1<<10;
 
     public int getParseError() {
         return mParseError;
