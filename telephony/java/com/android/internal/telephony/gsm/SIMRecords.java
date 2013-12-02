@@ -1592,7 +1592,7 @@ public final class SIMRecords extends IccRecords {
             }
         } else {
             rule = SPN_RULE_SHOW_PLMN;
-            if ((spnDisplayCondition & 0x02) == 0x00) {
+            if ((spnDisplayCondition & 0x02) == 0x00 && plmn != null) {
                 // SPN required if not registered to HPLMN or PLMN in EF_SPDI
                 rule |= SPN_RULE_SHOW_SPN;
             }
@@ -1616,6 +1616,16 @@ public final class SIMRecords extends IccRecords {
                 if (plmn.equals(spdiNet)) {
                     return true;
                 }
+            }
+        }
+        //MNC of CHINA MOBILE: 00,02,07
+        String operNum = getSIMOperatorNumeric();
+        if (operNum != null &&
+           (operNum.equals("46000") ||
+            operNum.equals("46002") ||
+            operNum.equals("46007"))) {
+            if (plmn.equals("46000") || plmn.equals("46002") || plmn.equals("46007")) {
+                return true;
             }
         }
         return false;
