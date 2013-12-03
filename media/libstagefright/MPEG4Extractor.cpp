@@ -700,7 +700,12 @@ status_t MPEG4Extractor::parseChunk(off64_t *offset, int depth) {
                     }
                 }
 
-                mLastTrack->sampleTable = new SampleTable(mDataSource);
+               if (mLastTrack) {
+                    mLastTrack->sampleTable = new SampleTable(mDataSource);
+               } else {
+                    ALOGE("mLastTrack is NULL, ERROR_MALFORMED !!!");
+                    return ERROR_MALFORMED;
+               }
             }
 
             bool isTrack = false;
@@ -813,7 +818,12 @@ status_t MPEG4Extractor::parseChunk(off64_t *offset, int depth) {
                 return ERROR_IO;
             }
 
-            mLastTrack->timescale = ntohl(timescale);
+           if (mLastTrack) {
+                mLastTrack->timescale = ntohl(timescale);
+           } else {
+                ALOGE("mLastTrack is NULL, ERROR_MALFORMED !!!");
+                return ERROR_MALFORMED;
+           }
 
             int64_t duration;
             if (version == 1) {
@@ -1045,9 +1055,15 @@ status_t MPEG4Extractor::parseChunk(off64_t *offset, int depth) {
 
         case FOURCC('s', 't', 's', 'c'):
         {
-            status_t err =
+           status_t err = OK;
+           if (mLastTrack) {
+             err =
                 mLastTrack->sampleTable->setSampleToChunkParams(
                         data_offset, chunk_data_size);
+           } else {
+                ALOGE("mLastTrack is NULL, ERROR_MALFORMED !!!");
+                return ERROR_MALFORMED;
+           }
 
             if (err != OK) {
                 return err;
@@ -1102,9 +1118,15 @@ status_t MPEG4Extractor::parseChunk(off64_t *offset, int depth) {
 
         case FOURCC('s', 't', 't', 's'):
         {
-            status_t err =
+           status_t err = OK;
+           if (mLastTrack) {
+             err =
                 mLastTrack->sampleTable->setTimeToSampleParams(
                         data_offset, chunk_data_size);
+           } else {
+                ALOGE("mLastTrack is NULL, ERROR_MALFORMED !!!");
+                return ERROR_MALFORMED;
+           }
 
             if (err != OK) {
                 return err;
@@ -1116,9 +1138,15 @@ status_t MPEG4Extractor::parseChunk(off64_t *offset, int depth) {
 
         case FOURCC('c', 't', 't', 's'):
         {
-            status_t err =
+           status_t err = OK;
+           if (mLastTrack) {
+             err =
                 mLastTrack->sampleTable->setCompositionTimeToSampleParams(
                         data_offset, chunk_data_size);
+           } else {
+                ALOGE("mLastTrack is NULL, ERROR_MALFORMED !!!");
+                return ERROR_MALFORMED;
+           }
 
             if (err != OK) {
                 return err;
@@ -1130,9 +1158,15 @@ status_t MPEG4Extractor::parseChunk(off64_t *offset, int depth) {
 
         case FOURCC('s', 't', 's', 's'):
         {
-            status_t err =
+           status_t err = OK;
+           if (mLastTrack) {
+             err =
                 mLastTrack->sampleTable->setSyncSampleParams(
                         data_offset, chunk_data_size);
+           } else {
+                ALOGE("mLastTrack is NULL, ERROR_MALFORMED !!!");
+                return ERROR_MALFORMED;
+           }
 
             if (err != OK) {
                 return err;
