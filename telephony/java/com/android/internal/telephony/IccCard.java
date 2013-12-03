@@ -490,7 +490,7 @@ public abstract class IccCard {
                 && newState == State.NETWORK_LOCKED);
         transitionedIntoIccBlocked = (oldState != State.BLOCKED && newState == State.BLOCKED);
         transitionedIntoSimBlocked = (oldState != State.SIM_LOCKED && newState == State.SIM_LOCKED);
-        transitionedIntoCardPresent =  !transitionedIntoAbsent;
+        transitionedIntoCardPresent = (!transitionedIntoAbsent && newState != State.ABSENT);
         transitionedIntoIccReady = (oldState != State.READY && newState == State.READY);
         if (transitionedIntoPinLocked) {
             if(mDbg) log("Notify SIM pin or puk locked.");
@@ -860,7 +860,7 @@ public abstract class IccCard {
             Log.e(mLogTag, "getIccCardState where you called:");
         if (mIccCardStatus == null) {
             Log.e(mLogTag, "[IccCard] IccCardStatus is null");
-            return IccCard.State.ABSENT;
+            return IccCard.State.UNKNOWN;
         }
 
         // this is common for all radio technologies

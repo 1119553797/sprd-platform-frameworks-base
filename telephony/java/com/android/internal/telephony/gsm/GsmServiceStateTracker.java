@@ -168,6 +168,12 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
     static final int PS_NOTIFICATION = 888;  // Id to update and cancel PS restricted
     static final int CS_NOTIFICATION = 999;  // Id to update and cancel CS restricted
 
+    private static int noSimFlag = 0;
+    /** the state of canSetRadioPower() **/
+    static final int RADIO_POWER_DISABLED        = 0;  // setRadioPower(true) is not allowed
+    static final int RADIO_POWER_CURRENT_ENABLED = 1;  // current phoneId to be used
+    static final int RADIO_POWER_DEFAULT_ENABLED = 2;  // default phoneId to be used
+
     static final int MAX_NUM_DATA_STATE_READS = 20;
     private boolean isSntpStart = false;
     private boolean mLocalLanguageChange = false;// local Language change,true
@@ -187,6 +193,12 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
             		getIntExtra("phone_id",-1)==phone.getPhoneId()){
             	Log.d(LOG_TAG, " intent.getIntExtra(phone_id,-1)=" + intent.getIntExtra("phone_id",-1));
                 mLocalLanguageChange = false;
+                Message msg=new Message();
+                msg.what=EVENT_ICC_STATUS_CHANGED;
+                GsmServiceStateTracker.this.handleMessage(msg);
+            }else if(TelephonyIntents.ACTION_SIM_STATE_CHANGED.equals(intent.getAction())&&
+                     intent.getIntExtra("phone_id",-1)==phone.getPhoneId() &&
+                     IccCard.INTENT_VALUE_ICC_ABSENT.equals(intent.getStringExtra(IccCard.INTENT_KEY_ICC_STATE))){
                 Message msg=new Message();
                 msg.what=EVENT_ICC_STATUS_CHANGED;
                 GsmServiceStateTracker.this.handleMessage(msg);
@@ -249,6 +261,7 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_LOCALE_CHANGED);
         filter.addAction(TelephonyIntents.SIM_CARD_PRESENT);
+        filter.addAction(TelephonyIntents.ACTION_SIM_STATE_CHANGED);
         phone.getContext().registerReceiver(mIntentReceiver, filter);
     }
 
@@ -622,20 +635,49 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
         }
     }
 
+    private int canSetRadioPower() {
+        Log.d(LOG_TAG, "canSetRadioPower getIccCardState() = " + phone.getIccCard().getIccCardState());
+        if (phone.getIccCard().getIccCardState() == IccCard.State.UNKNOWN)
+            return RADIO_POWER_DISABLED;
+
+        int phoneCount = PhoneFactory.getPhoneCount();
+        Log.d(LOG_TAG, "canSetRadioPower phoneCount = " + phoneCount);
+        boolean simPresent = phone.getIccCard().getIccCardState() != IccCard.State.ABSENT;
+        Log.d(LOG_TAG, "canSetRadioPower simPresent = " + simPresent);
+
+        if (phoneCount < 2 || simPresent) {
+            return RADIO_POWER_CURRENT_ENABLED;
+        }
+
+        int phoneId = phone.getPhoneId();
+        int defaultPhoneId = PhoneFactory.getDefaultPhoneId();
+
+        noSimFlag |= (1<<phoneId);
+        Log.d(LOG_TAG, "canSetRadioPower " + "defaultPhoneId = " + defaultPhoneId + " phoneId = " + phoneId + " noSimFlag = " + noSimFlag);
+
+        if ((noSimFlag & ((1<<phoneCount)-1)) == ((1<<phoneCount)-1)) {
+            if (defaultPhoneId == phoneId)
+                return RADIO_POWER_CURRENT_ENABLED;
+            else
+                return RADIO_POWER_DEFAULT_ENABLED;
+        } else
+            return RADIO_POWER_DISABLED;
+    }
+
     protected void setPowerStateToDesired(boolean force) {
         Log.d(LOG_TAG, "setPowerStateToDesired " + "phone="+phone.getPhoneId()+" mDesiredPowerState="+mDesiredPowerState+" cm.getRadioState().isOn="+cm.getRadioState().isOn());
         // If we want it on and it's off, turn it on
         if (mDesiredPowerState
             && (cm.getRadioState() == CommandsInterface.RadioState.RADIO_OFF)) {
-            if(force || phone.getIccCard().getIccCardState() != IccCard.State.ABSENT && phone.getIccCard().getIccCardState() != IccCard.State.UNKNOWN){
-                cm.setRadioPower(true, null);
+            int state = canSetRadioPower();
+            Log.d(LOG_TAG, "setPowerStateToDesired state = " + state);
+            if(force || state != RADIO_POWER_DISABLED){
                 Log.v(LOG_TAG, "GsmServiceStateTracker.java---card "+phone.getPhoneId()+"RadioPower true.");
+                if (state == RADIO_POWER_CURRENT_ENABLED)
+                    cm.setRadioPower(true, null);
+                else
+                    PhoneFactory.getDefaultCM().setRadioPower(true, null);
             }
-            //modify for <Bug125400> start
-            if(phone.getIccCard().getIccCardState() == IccCard.State.ABSENT) {
-                this.sendEmptyMessageDelayed(EVENT_RADIO_RESET,5*1000);
-            }
-            //modify for <Bug125400> end
         } else if (!mDesiredPowerState && cm.getRadioState().isOn()) {
             DataConnectionTracker dcTracker = phone.mDataConnection;
             if (! dcTracker.isDataConnectionAsDesired()) {
