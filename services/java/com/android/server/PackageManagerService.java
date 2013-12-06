@@ -4944,7 +4944,7 @@ class PackageManagerService extends IPackageManager.Stub {
             Log.w(TAG, "can not install: flags " + flags + " packageURI: " + packageURI + " status: " + status);
         }
         Message msg = mHandler.obtainMessage(INIT_COPY);
-        msg.obj = new InstallParams(newUri, observer, flags,
+        msg.obj = new InstallParams(newUri, observer, flag,
                 installerPackageName);
         mHandler.sendMessage(msg);
     }
