@@ -8644,6 +8644,9 @@ public final class ActivityManagerService extends ActivityManagerNative
                     && capp.pid != 0
                     && capp.pid != MY_PID
                     && capp.tmpCurAdj == ProcessRecord.TMP_CUR_ADJ_DEFAULT) {
+                if(!canKillProviderClientProc(cpr, capp)) {
+                    continue;
+                }
                 Slog.e(TAG, "Kill " + capp.processName
                         + " (pid " + capp.pid + "): provider " + cpr.info.name
                         + " in dying process " + proc.processName);
@@ -13626,5 +13629,17 @@ public final class ActivityManagerService extends ActivityManagerNative
         } else {
             return (mMainStack.mResumedActivity.app.info.flags & (ApplicationInfo.FLAG_SYSTEM)) == 0;
         }
+    }
+
+    static final String DOWNLOAD_PROVIDER_NAME = "com.android.providers.downloads.DownloadProvider";
+
+    private boolean canKillProviderClientProc(ContentProviderRecord cpr, ProcessRecord clientProc) {
+        if(cpr != null && clientProc != null && DOWNLOAD_PROVIDER_NAME.equals(cpr.info.name)) {
+            if(mMainStack.mResumedActivity != null && clientProc.processName.equals(mMainStack.mResumedActivity.app.processName)) {
+                Slog.d("wxx", "canKillProviderClientProc, clientProcName: " + clientProc.processName + " downloadProvider: " + DOWNLOAD_PROVIDER_NAME);
+                return false;
+            }
+        }
+        return true;
     }
 }
