@@ -516,7 +516,9 @@ public abstract class IccCard {
         } else if(transitionedIntoIccReady){
             if(mDbg) log("Notify SIM ready.");
             broadcastGetIccStatusDoneIntent();
-        } else if(transitionedIntoCardPresent){
+        }
+
+        if(transitionedIntoCardPresent){
             if(mDbg) log("Notify SIM present.");
             broadcastIccCardPresentIntent();
         }
