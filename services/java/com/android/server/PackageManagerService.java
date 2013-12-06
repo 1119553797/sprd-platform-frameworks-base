@@ -10887,9 +10887,10 @@ class PackageManagerService extends IPackageManager.Stub {
     }
     
     private void ReadAppPathConfig(HashSet<String> apppackagePath, int flag) {
-        for (String path : apppackagePath) {
-            apppackagePath.remove(path);
-        }
+        //for (String path : apppackagePath) {
+        //    apppackagePath.remove(path);
+        //}
+        apppackagePath.clear();
         try {
             FileInputStream freader = new FileInputStream(getAppPath(flag));
             decodeInputStream(freader, apppackagePath);
