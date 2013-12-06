@@ -18,20 +18,21 @@ include $(CLEAR_VARS)
 copy_from :=                \
     DroidSans.ttf           \
     DroidSans-Bold.ttf      \
-    DroidKufi-Regular.ttf     \
-    DroidNaskh-Regular.ttf     \
+    DroidKufi-Regular.ttf   \
+    DroidNaskh-Regular.ttf  \
     DroidSansHebrew.ttf     \
     DroidSansThai.ttf       \
     DroidSerif-Regular.ttf  \
     DroidSerif-Bold.ttf     \
     DroidSerif-Italic.ttf   \
     DroidSerif-BoldItalic.ttf   \
-    DroidSansMono.ttf        \
+    DroidSansMono.ttf       \
     Clockopia.ttf
 
-ifeq ($(MULTILANGUAGE_SUPPORT),true)
-    copy_from += Lohit-Tamil.ttf \
-                 Lohit-Telugu.ttf 
+ifeq ($(MULTILANGUAGE_SUPPORT), true)
+    copy_from += Lohit-Tamil.ttf  \
+                 Lohit-Telugu.ttf \
+                 Lohit-Devanagari.ttf
 endif
 
 ifneq ($(NO_FALLBACK_FONT),true)
