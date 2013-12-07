@@ -1293,6 +1293,18 @@ public class StatusBarPolicy {
             return;
         }
 
+        if (mServiceState[subscription] != null && mServiceState[subscription].getState() ==
+                ServiceState.STATE_OUT_OF_SERVICE && mServiceState[subscription].isEmergencyOnly()) {
+            Log.d(TAG,  "emergency calls only");
+            if (airplane) {
+                mPhoneSignalIconId[subscription] = R.drawable.stat_sys_signal_flightmode;
+            } else {
+                mPhoneSignalIconId[subscription] = R.drawable.stat_sys_signal_null;
+            }
+            mService.setIcon(mSignalIcon[subscription], mPhoneSignalIconId[subscription], 0);
+            return;
+        }
+
         if (!isCdma(subscription)) {
             int asu = mSignalStrength[subscription].getGsmSignalStrength();
 
