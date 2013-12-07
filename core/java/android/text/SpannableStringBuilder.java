@@ -730,7 +730,9 @@ implements CharSequence, GetChars, Spannable, Editable, Appendable,
             if (spanEnd > gapstart) {
                 spanEnd -= gaplen;
             }
-
+            if(spanStart > spanEnd) {
+                continue;
+            }
             if (spanStart > queryEnd) {
                 continue;
             }
