@@ -904,10 +904,10 @@
     <string name="ext_media_nofs_notification_title" product="default" msgid="780477838241212997">"空 SD 卡"</string>
     <string name="ext_media_nofs_notification_message" product="nosdcard" msgid="8623130522556087311">"USB 存储设备中无文件或使用了不支持的文件系统。"</string>
     <string name="ext_media_nofs_notification_message" product="default" msgid="3817704088027829380">"SD 卡无文件系统，或文件系统不受支持。"</string>
-    <string name="ext_media_unmountable_notification_title" product="nosdcard" msgid="2090046769532713563">"USB 存储设备已损坏"</string>
-    <string name="ext_media_unmountable_notification_title" product="default" msgid="6410723906019100189">"SD 卡异常，请重试"</string>
-    <string name="ext_media_unmountable_notification_message" product="nosdcard" msgid="529021299294450667">"USB 存储设备已损坏，您可能需要对其重新格式化。"</string>
-    <string name="ext_media_unmountable_notification_message" product="default" msgid="6902531775948238989">"SD 卡已损坏。您可能必须将其重新格式化。"</string>
+    <string name="ext_media_unmountable_notification_title" product="nosdcard" msgid="2090046769532713563">"USB 存储设备异常，请重试。"</string>
+    <string name="ext_media_unmountable_notification_title" product="default" msgid="6410723906019100189">"SD 卡异常，请重试。"</string>
+    <string name="ext_media_unmountable_notification_message" product="nosdcard" msgid="529021299294450667">"USB 存储设备异常，请重试。"</string>
+    <string name="ext_media_unmountable_notification_message" product="default" msgid="6902531775948238989">"SD 卡异常，请重试。"</string>
     <string name="ext_media_badremoval_notification_title" product="nosdcard" msgid="1661683031330951073">"USB 存储设备已意外移除"</string>
     <string name="ext_media_badremoval_notification_title" product="default" msgid="6872152882604407837">"SD 卡未正常移除"</string>
     <string name="ext_media_badremoval_notification_message" product="nosdcard" msgid="4329848819865594241">"请先卸载 USB 存储设备，再将其移除，以防数据丢失。"</string>
