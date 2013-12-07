@@ -10843,9 +10843,9 @@ class PackageManagerService extends IPackageManager.Stub {
     private HashSet<String> mAppToSDpackagePath = new HashSet<String>();
     private HashSet<String> mAppToSyspackagePath = new HashSet<String>();
     private HashSet<String> mAppToMyApppackagePath = new HashSet<String>();
-    private static final String APP_TOSD_PAKNAME_PATH = "/mnt/sdcard/.Dalcache/path.conf";
+    private static final String APP_TOSD_PAKNAME_PATH = "/data/system/path.conf";
     private static final String APP_TOSYS_PAKNAME_PATH = "/data/system/ToSyspath.conf";
-    private static final String APP_MYAPP_PAKNAME_PATH = "/mnt/sdcard/.Dalcache/myApppath.conf";
+    private static final String APP_MYAPP_PAKNAME_PATH = "/data/system/myApppath.conf";
     
     private String getAppPath(int flag) {
         if ((flag & PackageParser.PARSE_IS_PROLOADAPP) != 0) {
