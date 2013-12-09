@@ -1086,7 +1086,7 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
         if (!mSystemReady) {
             return false;
         }
-        if(!mHadChangeAdj) {
+        if(!mHadChangeAdj && mCurClient != null) {
             int N = mMethodList.size();
             for (int i=0; i<N; i++) {
                 InputMethodInfo info = mMethodList.get(i);
@@ -1159,10 +1159,12 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
             return false;
         }
         if(mHadChangeAdj) {
-            int N = mMethodList.size();
-            for (int i=0; i<N; i++) {
-                InputMethodInfo info = mMethodList.get(i);
-                ActivityManagerService.self().unRegesterClient(info.getPackageName(),mCurClient.pid);
+            if(mCurClient != null) {
+                int N = mMethodList.size();
+                for (int i=0; i<N; i++) {
+                    InputMethodInfo info = mMethodList.get(i);
+                    ActivityManagerService.self().unRegesterClient(info.getPackageName(),mCurClient.pid);
+                }
             }
             mHadChangeAdj = false;
         }
