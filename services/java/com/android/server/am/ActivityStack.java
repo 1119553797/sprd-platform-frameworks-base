@@ -902,6 +902,7 @@ public class ActivityStack {
         // If the top activity is not fullscreen, then we need to
         // make sure any activities under it are now visible.
         final int count = mHistory.size();
+        int N = count;
         int i = count-1;
         while (mHistory.get(i) != top) {
             i--;
@@ -980,6 +981,18 @@ public class ActivityStack {
             // Aggregate current change flags.
             configChanges |= r.configChangeFlags;
 
+            int size = mHistory.size();
+            if(size < N) {
+                Slog.w(TAG, "mHistory remove some element, orginal size: " + N + ", current size: " + size);
+                int j = mHistory.lastIndexOf(r);
+                if(j > 0 && j != i) {
+                    i -= N - size;
+                } else if(i > size) {
+                    i = size;
+                }
+                N = size;
+            }
+
             if (r.fullscreen) {
                 // At this point, nothing else needs to be shown
                 if (DEBUG_VISBILITY) Slog.v(
@@ -992,8 +1005,7 @@ public class ActivityStack {
 
         // Now for any activities that aren't visible to the user, make
         // sure they no longer are keeping the screen frozen.
-        int size = mHistory.size();
-        while (i >= 0 && i < size) {
+        while (i >= 0) {
             r = (ActivityRecord)mHistory.get(i);
             if (DEBUG_VISBILITY) Slog.v(
                     TAG, "Make invisible? " + r + " finishing=" + r.finishing
