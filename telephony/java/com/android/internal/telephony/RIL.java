@@ -306,7 +306,9 @@ public abstract class RIL extends BaseCommands implements CommandsInterface {
     protected String[] responseOperatorString(String response[], int index) {
         Log.d(LOG_TAG, "change before:long " + response[index] + "short =" + response[index + 1]
                 + "numeric=" + response[index + 2]);
-        if ((response[index] == null) && (response[index + 1] == null)) {
+        if (((response[index] == null) && (response[index + 1] == null)) 
+               || ("40522" == response[index + 2])
+               || ("40566" == response[index + 2])) {
             String mcc = response[index + 2].substring(0, 3);
             String mnc = response[index + 2].substring(3);
             int mncShort = Integer.parseInt(mnc);
