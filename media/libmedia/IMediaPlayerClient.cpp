@@ -16,10 +16,16 @@
 */
 
 #include <utils/RefBase.h>
+#include <utils/Log.h>
 #include <binder/IInterface.h>
 #include <binder/Parcel.h>
 
 #include <media/IMediaPlayerClient.h>
+
+#ifndef LOG_TAG
+#undef LOG_TAG
+#define LOG_TAG "DEBUG_231012_IMediaPlayerClient"
+#endif
 
 namespace android {
 
@@ -42,10 +48,26 @@ public:
         data.writeInt32(msg);
         data.writeInt32(ext1);
         data.writeInt32(ext2);
+
+        /* ace add for debug bug 231012 - null pointer */
+        unsigned long thistor3 = *((unsigned long *)this);
+        unsigned long r3tor4 = *((unsigned long *)((char *)thistor3 + 20));
+
         //fix bug 21444 low memory causes
-        if (remote())
-        {
+        if (remote() && r3tor4) {
             remote()->transact(NOTIFY, data, &reply, IBinder::FLAG_ONEWAY);
+        /* ace add for debug bug 231012 - null pointer */
+        } else if (!remote()) {
+            LOGE("ERROR: remote() == NULL !!!");
+        } else {
+            for(int i = 16; i > 0; i = i - 4) {
+                unsigned long addrress = *((unsigned long *)((char *)thistor3 + 20 - i));
+                LOGE("_Debug_231012: address around transact: %p\n", (void *)addrress);
+        }
+            for(int i = 0; i < 17; i = i + 4) {
+                unsigned long addrress = *((unsigned long *)((char *)thistor3 + 20 + i));
+                LOGE("_Debug_231012: address around transact: %p\n", (void *)addrress);
+            }
         }
     }
 };
