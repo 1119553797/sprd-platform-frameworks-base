@@ -26,6 +26,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.security.GeneralSecurityException;
@@ -387,16 +388,17 @@ public class RecoverySystem {
      */
     private static void bootCommand(Context context, String arg) throws IOException {
         initRecoveryDir();
-
         RECOVERY_DIR.mkdirs();  // In case we need it
         COMMAND_FILE.delete();  // In case it's not writable
         LOG_FILE.delete();
 
-        FileWriter command = new FileWriter(COMMAND_FILE);
+        FileOutputStream command = new FileOutputStream(COMMAND_FILE);
         try {
-            command.write(arg);
-            command.write("\n");
-        } finally {
+            command.write(arg.getBytes());
+            command.write("\n".getBytes());
+        }finally {
+            command.flush();
+            command.getFD().sync();
             command.close();
         }
 
