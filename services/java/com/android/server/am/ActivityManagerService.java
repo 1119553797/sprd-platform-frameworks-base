@@ -3928,7 +3928,7 @@ public final class ActivityManagerService extends ActivityManagerNative
       mHandler.post(new Runnable() {
             @Override
             public void run() {
-                 synchronized (this) {
+                 synchronized (ActivityManagerService.this) {
                       updateOomAdjLocked();
                  }
             }
