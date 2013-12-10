@@ -104,7 +104,7 @@ class PatternUnlockScreen extends LinearLayoutWithDefaultTouchRecepient
 
     private ViewGroup mFooterNormal;
     private ViewGroup mFooterForgotPattern;
-    
+
     private Status[] mStatus = new Status[2];
     private int[] mResId = {R.id.carrier, R.id.carrier_sub2};
 
@@ -129,6 +129,8 @@ class PatternUnlockScreen extends LinearLayoutWithDefaultTouchRecepient
     private Button mEmergencyAlone;
     private Button mEmergencyTogether;
     private int mCreationOrientation;
+
+    private boolean isClearn = false;
 
     enum FooterMode {
         Normal,
@@ -193,7 +195,7 @@ class PatternUnlockScreen extends LinearLayoutWithDefaultTouchRecepient
         }
 
         //mCarrier = (TextView) findViewById(R.id.carrier);
-        
+
         int numPhones = TelephonyManager.getPhoneCount();
         // Sim States for the subscription
         mStatus = new Status[numPhones];
@@ -209,8 +211,8 @@ class PatternUnlockScreen extends LinearLayoutWithDefaultTouchRecepient
                             mUpdateMonitor.getTelephonyPlmn(i),
                             mUpdateMonitor.getTelephonySpn(i)));
         }
-        
-        
+
+
         mDate = (TextView) findViewById(R.id.date);
 
         mDateFormatString = getContext().getString(R.string.full_wday_month_day_no_year);
@@ -231,6 +233,9 @@ class PatternUnlockScreen extends LinearLayoutWithDefaultTouchRecepient
         // emergency call buttons
         final OnClickListener emergencyClick = new OnClickListener() {
             public void onClick(View v) {
+                if (isClearn) {
+                    return;
+                }
                 mCallback.takeEmergencyCallAction(mCallSub);
             }
         };
@@ -248,6 +253,9 @@ class PatternUnlockScreen extends LinearLayoutWithDefaultTouchRecepient
         mForgotPatternButton.setOnClickListener(new OnClickListener() {
 
             public void onClick(View v) {
+                if (isClearn) {
+                    return;
+                }
                 mCallback.forgotPattern(true);
             }
         });
@@ -288,7 +296,7 @@ class PatternUnlockScreen extends LinearLayoutWithDefaultTouchRecepient
         //Modify start on 2012-01-16 for 8930/8932
     }
 
- 
+
     //Add start on 2012-01-16 for 8930/8932
     public  CharSequence getSprdCarrierString(CharSequence telephonyPlmn, CharSequence telephonySpn) {
         CharSequence radioType = mUpdateMonitor.getRadioType();
@@ -317,7 +325,7 @@ class PatternUnlockScreen extends LinearLayoutWithDefaultTouchRecepient
         mLockPatternUtils.updateEmergencyCallButtonState(mEmergencyAlone);
         mLockPatternUtils.updateEmergencyCallButtonState(mEmergencyTogether);
     }
-    
+
     private void refreshEmergencyButtonText(int sub) {
         mLockPatternUtils.updateEmergencyCallButtonState(mEmergencyAlone,sub);
         mLockPatternUtils.updateEmergencyCallButtonState(mEmergencyTogether,sub);
@@ -538,6 +546,7 @@ class PatternUnlockScreen extends LinearLayoutWithDefaultTouchRecepient
 
     /** {@inheritDoc} */
     public void cleanUp() {
+        isClearn = true;
         mUpdateMonitor.removeCallback(this);
         mLockPatternUtils = null;
         mUpdateMonitor = null;
@@ -564,6 +573,9 @@ class PatternUnlockScreen extends LinearLayoutWithDefaultTouchRecepient
         }
 
         public void onPatternCellAdded(List<Cell> pattern) {
+            if (isClearn) {
+                return;
+            }
             // To guard against accidental poking of the wakelock, look for
             // the user actually trying to draw a pattern of some minimal length.
             if (pattern.size() > MIN_PATTERN_BEFORE_POKE_WAKELOCK) {
@@ -575,6 +587,9 @@ class PatternUnlockScreen extends LinearLayoutWithDefaultTouchRecepient
         }
 
         public void onPatternDetected(List<LockPatternView.Cell> pattern) {
+            if (isClearn) {
+                return;
+            }
             if (mLockPatternUtils.checkPattern(pattern)) {
                 mLockPatternView
                         .setDisplayMode(LockPatternView.DisplayMode.Correct);
