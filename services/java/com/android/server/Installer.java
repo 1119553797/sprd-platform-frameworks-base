@@ -375,16 +375,17 @@ class Installer {
         return execute(builder.toString());
     }
 
-    public int bind(String from, String to,  int uid) {
-	Log.e ("sunway","Installer.java:392:" + "bind:" +  from + " / " +to +" / " + uid);
+    public int bind(String from, String to,  String lib, int uid) {
+        Log.e ("sunway","Installer.java:392:" + "bind:" +  from + " / " +to +" / " + uid + " lib: " + lib);
         StringBuilder builder = new StringBuilder("bind ");
         builder.append(from);
         builder.append(' ');
         builder.append(to);
         builder.append(' ');
-	builder.append(uid);
+        builder.append(lib);
+        builder.append(' ');
+	    builder.append(uid);
         return execute(builder.toString());
-
     }
 
 }

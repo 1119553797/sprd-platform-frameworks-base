@@ -3678,9 +3678,15 @@ class PackageManagerService extends IPackageManager.Stub {
                         NativeLibraryHelper.copyNativeBinariesLI(scanFile, nativeLibraryDir);
                     }
                 } else {
-                    Slog.i(TAG, "Linking native library dir for " + path);
-                    mInstaller.linkNativeLibraryDirectory(dataPathString,
-                            pkg.applicationInfo.nativeLibraryDir);
+                     int tmpFlag = ApplicationInfo.FLAG_EXTERNAL_STORAGE | ApplicationInfo.FLAG_PRELOAD_EXTERNAL | 
+                             ApplicationInfo.FLAG_MYAPP;
+                     if((pkg.applicationInfo.flags & tmpFlag) == 0) {
+                         Slog.i(TAG, "Linking native library dir for " + path);
+                         mInstaller.linkNativeLibraryDirectory(dataPathString,
+                               pkg.applicationInfo.nativeLibraryDir);
+                     } else {
+                         Slog.i(TAG, "don't link native library dir for " + path);
+                     }
                 }
             }
             pkg.mScanPath = path;
@@ -10935,7 +10941,8 @@ class PackageManagerService extends IPackageManager.Stub {
     private int bindAsecDataDirForPkg(PackageParser.Package pkg) {
 	String dataContainer = getOrCreateAsecDataImage(); // /mnt/asec/data/
 	if (dataContainer!=null) {
-	    mInstaller.bind(dataContainer+"/"+pkg.packageName, pkg.applicationInfo.dataDir, pkg.applicationInfo.uid);
+	    mInstaller.bind(dataContainer+"/"+pkg.packageName, pkg.applicationInfo.dataDir, 
+	            pkg.applicationInfo.nativeLibraryDir, pkg.applicationInfo.uid);
 	    mBoundAsecDataDir.add(pkg.applicationInfo.dataDir);
 	} else {
 	    Log.e("sunway","getOrCreateAsecDataImage failed");

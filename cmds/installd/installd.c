@@ -108,7 +108,7 @@ static int do_linklib(char **arg, char reply[REPLY_MAX])
 
 static int do_bind(char **arg, char reply[REPLY_MAX])
 {
-    return binddata(arg[0], arg[1], atoi(arg[2]));
+    return binddata(arg[0], arg[1], arg[2], atoi(arg[3]));
 }
 
 static int do_unbind(char **arg, char reply[REPLY_MAX])
@@ -143,7 +143,7 @@ struct cmdinfo cmds[] = {
     { "movefiles",            0, do_movefiles },
     { "linklib",              2, do_linklib },
     { "unlinklib",            1, do_unlinklib },
-    { "bind",                 3, do_bind },
+    { "bind",                 4, do_bind },
     { "unbind",               1, do_unbind },
 };
 

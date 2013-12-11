@@ -1010,21 +1010,26 @@ int unbinddata(const char* dataDir) {
     return umount(dataDir);
 }
 
-int binddata(const char* asecDir, const char* pkgDir,  int uid) {
+int binddata(const char* asecDir, const char* pkgDir,  const char* asecLibDir, int uid) {
     mkdir(asecDir, 0751);
-    chown(asecDir, uid, uid) ;
-
+    // chown(asecDir, uid, uid) ;
     mount(asecDir, pkgDir, 0, MS_BIND, 0);
     chmod(pkgDir, 0751);
 
     char libdir[PKG_PATH_MAX];
-    snprintf(libdir,sizeof(libdir), "%s/%s", pkgDir, PKG_LIB_POSTFIX);
+    snprintf(libdir,sizeof(libdir), "%s%s", pkgDir, PKG_LIB_POSTFIX);
 
     mkdir(libdir, 0755);
     chmod(libdir, 0755);
     chown(libdir, AID_SYSTEM, AID_SYSTEM);
-
-    chown(pkgDir, uid, uid) ;
+    const char* tmpCmd = "busybox cp -r";
+    char cmdstr[2 * PKG_PATH_MAX + strlen(tmpCmd) + 3];
+    snprintf(cmdstr,sizeof(cmdstr), "%s %s/* %s", tmpCmd, asecLibDir, libdir);
+    LOGW("run binddata, cmdstr: %s", cmdstr);
+    if(system(cmdstr) != 0) {
+        LOGE("run system cmd: %s failed, %s", cmdstr, strerror(errno));
+    }
+    // chown(pkgDir, uid, uid) ;
     return 0;
 }
 
