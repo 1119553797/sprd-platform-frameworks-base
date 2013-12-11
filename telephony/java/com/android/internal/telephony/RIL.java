@@ -304,17 +304,19 @@ public abstract class RIL extends BaseCommands implements CommandsInterface {
     }
 
     protected String[] responseOperatorString(String response[], int index) {
-        Log.d(LOG_TAG, "change before:long " + response[index] + "short =" + response[index + 1]
-                + "numeric=" + response[index + 2]);
+        Log.d(LOG_TAG, "responseOperatorString before:long=" + response[index] + ", short =" + response[index + 1]
+                + ", numeric=" + response[index + 2]);
+
+        String mcc = response[index + 2].substring(0, 3);
+        String mnc = response[index + 2].substring(3);
+        int mncShort = Integer.parseInt(mnc);
+        String tmpMccMnc = "";
+        tmpMccMnc = mcc + mncShort;
+        Log.d(LOG_TAG, " responseOperatorString tmpMccMnc = " + tmpMccMnc);
+
         if (((response[index] == null) && (response[index + 1] == null)) 
-               || ("40522" == response[index + 2])
-               || ("40566" == response[index + 2])) {
-            String mcc = response[index + 2].substring(0, 3);
-            String mnc = response[index + 2].substring(3);
-            int mncShort = Integer.parseInt(mnc);
-            String tmpMccMnc = "";
-            tmpMccMnc = mcc + mncShort;
-            Log.d(LOG_TAG, " responseOperatorString tmpMccMnc = " + tmpMccMnc);
+               || tmpMccMnc.equals("40522")) {
+            Log.d(LOG_TAG, "before getCarrierNameByNumeric");
 
             response[index] = getCarrierNameByNumeric(tmpMccMnc);
             response[index + 1] = getCarrierNameByNumeric(tmpMccMnc);
@@ -326,8 +328,8 @@ public abstract class RIL extends BaseCommands implements CommandsInterface {
         // i18n
         response[index] = changeOperator(response[index]);
         response[index + 1] = changeOperator(response[index + 1]);
-        Log.d(LOG_TAG, " ending change:long " + response[0] + "short=" + response[1] + "numeric ="
-                + response[2]);
+        Log.d(LOG_TAG, " responseOperatorString:long " + response[index] + "short=" + response[index + 1] + "numeric ="
+                + response[index + 2]);
         return response;
     }
     public String changeOperator(String name){
