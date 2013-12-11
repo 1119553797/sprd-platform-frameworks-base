@@ -120,6 +120,6 @@ int free_cache(int64_t free_size);
 int dexopt(const char *apk_path, uid_t uid, int is_public);
 int movefiles();
 int linklib(const char* target, const char* source);
-int binddata(const char* from, const char* to,  int uid);
+int binddata(const char* from, const char* to,  const char* lib, int uid);
 int unbinddata(const char* from);
 int unlinklib(const char* libPath);
