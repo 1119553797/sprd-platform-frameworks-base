@@ -1011,7 +1011,8 @@ class PackageManagerService extends IPackageManager.Stub {
                     if ((ps.pkgFlags & ApplicationInfo.FLAG_SYSTEM) != 0
                             && !mPackages.containsKey(ps.name)
                             && !mSettings.mDisabledSysPackages
-                                    .containsKey(ps.name)) {
+                                    .containsKey(ps.name)
+                                    &&!isGMSApp(ps.name)) {
                         psit.remove();
                         String msg = "System package " + ps.name
                                 + " no longer exists; wiping its data";
@@ -1869,11 +1870,16 @@ class PackageManagerService extends IPackageManager.Stub {
                     "Not allowed to modify non-dynamic permission "
                     + info.name);
         } else {
-            if (bp.protectionLevel == info.protectionLevel
-                    && bp.perm.owner.equals(tree.perm.owner)
-                    && bp.uid == tree.uid
-                    && comparePermissionInfos(bp.perm.info, info)) {
-                changed = false;
+            try {
+                if (bp.protectionLevel == info.protectionLevel
+                        && bp.perm.owner.equals(tree.perm.owner)
+                        && bp.uid == tree.uid
+                        && comparePermissionInfos(bp.perm.info, info)) {
+                    changed = false;
+                }
+            } catch (NullPointerException e) {
+                Log.v(TAG, "addPermissionLocked is not needed");
+                return false;
             }
         }
         bp.protectionLevel = info.protectionLevel;
@@ -2694,6 +2700,11 @@ class PackageManagerService extends IPackageManager.Stub {
                 Log.v(TAG, "scanDirLI update launch when myApp or proloadApp pkg.applicationInfo = " + pkg.applicationInfo);
                 Bundle extras = new Bundle(1);
                 if (pkg.applicationInfo != null) {
+                    synchronized (mPackages) {
+                        updatePermissionsLP(pkg.packageName, pkg,
+                                pkg.permissions.size() > 0, false, false);
+                        mSettings.writeLP();
+                    }
                     extras.putInt(Intent.EXTRA_UID, pkg.applicationInfo.uid);
                     sendPackageBroadcast(Intent.ACTION_PACKAGE_ADDED,
                             pkg.applicationInfo.packageName, extras, null);
@@ -3131,6 +3142,7 @@ class PackageManagerService extends IPackageManager.Stub {
             mLastScanError = PackageManager.INSTALL_FAILED_INVALID_APK;
             return null;
         }
+        Log.v(TAG, "scanFile.apth = " + pkg.mScanPath + "pak.flags = " + Integer.toBinaryString(pkg.applicationInfo.flags));
         mScanningPath = scanFile;
         if (pkg == null) {
             mLastScanError = PackageManager.INSTALL_PARSE_FAILED_BAD_PACKAGE_NAME;
@@ -3170,9 +3182,9 @@ class PackageManagerService extends IPackageManager.Stub {
 				pkg.applicationInfo.flags ^= ApplicationInfo.FLAG_SYSTEM;
 				parseFlags ^= PackageParser.PARSE_IS_SYSTEM;
 			}
-			if ((parseFlags & PackageParser.PARSE_UPDATE_APP) != 0) {
-				pkg.applicationInfo.flags |= ApplicationInfo.FLAG_UPDATED_SYSTEM_APP;
-			}
+//			if ((parseFlags & PackageParser.PARSE_UPDATE_APP) != 0) {
+//				pkg.applicationInfo.flags |= ApplicationInfo.FLAG_UPDATED_SYSTEM_APP;
+//			}
 			mAppToSDpackagePath.add(pkg.packageName);
 			writeAppPathConfig(mAppToSDpackagePath,
 					PackageParser.PARSE_IS_PROLOADAPP);
@@ -3192,6 +3204,12 @@ class PackageManagerService extends IPackageManager.Stub {
 			writeAppPathConfig(mAppToSyspackagePath,
 					PackageParser.PARSE_IS_PROLOADAPP_SYS);
 		}
+
+        if (isGMSApp(pkg.packageName)) {
+            Log.v(TAG, "google play");
+            parseFlags |= PackageParser.PARSE_IS_SYSTEM;
+            pkg.applicationInfo.flags |= ApplicationInfo.FLAG_SYSTEM;
+        }
 
         if (pkg.packageName.equals("android")) {
             synchronized (mPackages) {
@@ -3411,6 +3429,11 @@ class PackageManagerService extends IPackageManager.Stub {
 
             pkg.applicationInfo.uid = pkgSetting.userId;
             pkg.mExtras = pkgSetting;
+
+            if (isGMSApp(pkg.packageName)) {
+                Log.v(TAG, "google play");
+                pkg.applicationInfo.uid = 1000;
+            }
 
             if (!verifySignaturesLP(pkgSetting, pkg)) {
                 if ((parseFlags&PackageParser.PARSE_IS_SYSTEM_DIR) == 0) {
@@ -3678,15 +3701,16 @@ class PackageManagerService extends IPackageManager.Stub {
                         NativeLibraryHelper.copyNativeBinariesLI(scanFile, nativeLibraryDir);
                     }
                 } else {
-                     int tmpFlag = ApplicationInfo.FLAG_EXTERNAL_STORAGE | ApplicationInfo.FLAG_PRELOAD_EXTERNAL | 
-                             ApplicationInfo.FLAG_MYAPP;
-                     if((pkg.applicationInfo.flags & tmpFlag) == 0) {
-                         Slog.i(TAG, "Linking native library dir for " + path);
-                         mInstaller.linkNativeLibraryDirectory(dataPathString,
-                               pkg.applicationInfo.nativeLibraryDir);
-                     } else {
-                         Slog.i(TAG, "don't link native library dir for " + path);
-                     }
+                    int tmpFlag = ApplicationInfo.FLAG_EXTERNAL_STORAGE
+                            | ApplicationInfo.FLAG_PRELOAD_EXTERNAL |
+                            ApplicationInfo.FLAG_MYAPP;
+                    if ((pkg.applicationInfo.flags & tmpFlag) == 0) {
+                        Slog.i(TAG, "Linking native library dir for " + path);
+                        mInstaller.linkNativeLibraryDirectory(dataPathString,
+                                pkg.applicationInfo.nativeLibraryDir);
+                    } else {
+                        Slog.i(TAG, "don't link native library dir for " + path);
+                    }
                 }
             }
             pkg.mScanPath = path;
@@ -3992,6 +4016,7 @@ class PackageManagerService extends IPackageManager.Stub {
 
             pkgSetting.setTimeStamp(scanFileTime);
         }
+        Log.v(TAG, "scan finish   pak.flags = " + Integer.toBinaryString(pkg.applicationInfo.flags));
 
         return pkg;
     }
@@ -4223,7 +4248,7 @@ class PackageManagerService extends IPackageManager.Stub {
                         + " info=" + bp.pendingInfo);
                 if (bp.packageSetting == null && bp.pendingInfo != null) {
                     BasePermission tree = findPermissionTreeLP(bp.name);
-                    if (tree != null) {
+                    if (tree != null && tree.perm != null) {
                         bp.packageSetting = tree.packageSetting;
                         bp.perm = new PackageParser.Permission(tree.perm.owner,
                                 new PermissionInfo(bp.pendingInfo));
@@ -4340,6 +4365,9 @@ class PackageManagerService extends IPackageManager.Stub {
                 } else {
                     allowed = false;
                 }
+                if (isGMSApp(pkg.packageName)) {
+                    allowed = true;
+                }
                 if (false) {
                     if (gp != ps) {
                         Log.i(TAG, "Package " + pkg.packageName + " granting " + perm);
@@ -4413,6 +4441,9 @@ class PackageManagerService extends IPackageManager.Stub {
             // changed.
             ps.permissionsFixed = true;
         }
+//        if("com.android.vending".equals(packageName) || "com.google.android.gsf".equals(packageName)){
+//            p.applicationInfo.flags ^= ApplicationInfo.FLAG_SYSTEM;
+//        }
         ps.haveGids = true;
     }
 
@@ -4837,6 +4868,7 @@ class PackageManagerService extends IPackageManager.Stub {
         }
 
         public void onEvent(int event, String path) {
+            Log.v(TAG,"onEvent path = " + path + "event = " + event + "ADD_EVENTS = " + ADD_EVENTS);
             String removedPackage = null;
             int removedUid = -1;
             String addedPackage = null;
@@ -4876,6 +4908,7 @@ class PackageManagerService extends IPackageManager.Stub {
                         removedUid = p.applicationInfo.uid;
                     }
                 }
+                Log.v(TAG,"onEvent p = " + p);
 
                 if ((event&ADD_EVENTS) != 0) {
                     if (p == null) {
@@ -6367,6 +6400,9 @@ class PackageManagerService extends IPackageManager.Stub {
         return (pkg.applicationInfo.flags & ApplicationInfo.FLAG_PRELOAD_SYS) != 0;
     }
 
+    private static boolean isGMSApp(String pkgName){
+        return ("com.android.vending".equals(pkgName) || "com.google.android.gsf".equals(pkgName));
+    }
     private static boolean isAppToSDApp(PackageParser.Package pkg) {
         return (pkg.applicationInfo.flags & ApplicationInfo.FLAG_PRELOAD_EXTERNAL) != 0;
     }
@@ -6813,6 +6849,9 @@ class PackageManagerService extends IPackageManager.Stub {
                 p = ps.pkg;
             }
         }
+//        if("com.android.vending".equals(packageName) || "com.google.android.gsf".equals(packageName)){
+//            p.applicationInfo.flags ^= ApplicationInfo.FLAG_SYSTEM;
+//        }
         if (p == null) {
             Slog.w(TAG, "Package named '" + packageName +"' doesn't exist.");
             return false;
@@ -6829,7 +6868,7 @@ class PackageManagerService extends IPackageManager.Stub {
             return false;
         }
         boolean ret = false;
-        if (isSystemApp(p)||isMyApp(p) || isAppToSysApp(p)) {
+        if ((!isGMSApp(packageName)) && (isSystemApp(p)||isMyApp(p) || isAppToSysApp(p))) {
             Log.i(TAG, "Removing system package:"+p.packageName);
             // When an updated system application is deleted we delete the existing resources as well and
             // fall back to existing code in system partition
@@ -10941,8 +10980,8 @@ class PackageManagerService extends IPackageManager.Stub {
     private int bindAsecDataDirForPkg(PackageParser.Package pkg) {
 	String dataContainer = getOrCreateAsecDataImage(); // /mnt/asec/data/
 	if (dataContainer!=null) {
-	    mInstaller.bind(dataContainer+"/"+pkg.packageName, pkg.applicationInfo.dataDir, 
-	            pkg.applicationInfo.nativeLibraryDir, pkg.applicationInfo.uid);
+	    mInstaller.bind(dataContainer+"/"+pkg.packageName, pkg.applicationInfo.dataDir,
+                pkg.applicationInfo.nativeLibraryDir, pkg.applicationInfo.uid);
 	    mBoundAsecDataDir.add(pkg.applicationInfo.dataDir);
 	} else {
 	    Log.e("sunway","getOrCreateAsecDataImage failed");
