@@ -3189,6 +3189,7 @@ class PackageManagerService extends IPackageManager.Stub {
 //			if ((parseFlags & PackageParser.PARSE_UPDATE_APP) != 0) {
 //				pkg.applicationInfo.flags |= ApplicationInfo.FLAG_UPDATED_SYSTEM_APP;
 //			}
+			mAppToSDINasec.add(pkg.packageName);
 			mAppToSDpackagePath.add(pkg.packageName);
 			writeAppPathConfig(mAppToSDpackagePath,
 					PackageParser.PARSE_IS_PROLOADAPP);
@@ -10505,6 +10506,7 @@ class PackageManagerService extends IPackageManager.Stub {
        ArrayList<String> pkgList = new ArrayList<String>();
        Set<SdInstallArgs> keys = processCids.keySet();
        boolean doGc = false;
+       mAppToSDINasec.clear();
        for (SdInstallArgs args : keys) {
            String codePath = processCids.get(args);
            if (DEBUG_SD_INSTALL) Log.i(TAG, "Loading container : "
@@ -10551,6 +10553,12 @@ class PackageManagerService extends IPackageManager.Stub {
                }
            }
        }
+        mAppToSDpackagePath.clear();
+        for (String string : mAppToSDINasec) {
+            mAppToSDpackagePath.add(string);
+        }
+        writeAppPathConfig(mAppToSDpackagePath,
+                PackageParser.PARSE_IS_PROLOADAPP);
        synchronized (mPackages) {
            // If the platform SDK has changed since the last time we booted,
            // we need to re-grant app permission to catch any new ones that
@@ -10892,6 +10900,7 @@ class PackageManagerService extends IPackageManager.Stub {
     private HashSet<String> mAppToSDpackagePath = new HashSet<String>();
     private HashSet<String> mAppToSyspackagePath = new HashSet<String>();
     private HashSet<String> mAppToMyApppackagePath = new HashSet<String>();
+    private HashSet<String> mAppToSDINasec = new HashSet<String>();
     private static final String APP_TOSD_PAKNAME_PATH = "/data/system/path.conf";
     private static final String APP_TOSYS_PAKNAME_PATH = "/data/system/ToSyspath.conf";
     private static final String APP_MYAPP_PAKNAME_PATH = "/data/system/myApppath.conf";
