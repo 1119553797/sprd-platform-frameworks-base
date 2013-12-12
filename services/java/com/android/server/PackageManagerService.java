@@ -1066,7 +1066,7 @@ class PackageManagerService extends IPackageManager.Stub {
                     mMyInstallDir = new File("/mnt/.sprd/app/");
                     mMyInstallObserver = new AppDirObserver(mMyInstallDir.getPath(),
                             OBSERVER_EVENTS, false, PackageParser.PARSE_IS_MYAPP);
-                    mMyInstallObserver.startWatching();
+                    //mMyInstallObserver.startWatching();
                    // scanDirLI(mMyInstallDir, PackageParser.PARSE_IS_MYAPP, scanMode, 0);
                     // end scan myapp
                     
@@ -1075,7 +1075,7 @@ class PackageManagerService extends IPackageManager.Stub {
                             "preloadapp/AppsToSD");
                     mPreInstallObserverToSD = new AppDirObserver(
                             mPreInstallDirToSD.getPath(), OBSERVER_EVENTS, false, PackageParser.PARSE_IS_PROLOADAPP);
-                    mPreInstallObserverToSD.startWatching();
+                    //mPreInstallObserverToSD.startWatching();
 //                    scanDirLI(mPreInstallDirToSD, PackageParser.PARSE_IS_PROLOADAPP, scanMode, 0);
 
                     mPreInstallDirToSys = new File(Environment.getRootDirectory(),
@@ -2679,6 +2679,10 @@ class PackageManagerService extends IPackageManager.Stub {
                 Uri appToSdUri = Uri.parse("file://" + file.getPath());
                 PackageParser.Package pkgInfo;
                 pkgInfo = getPackageInfo(appToSdUri);
+                if(pkgInfo == null){
+                    Log.v(TAG, "Failed to get the information of apk file");
+                    continue;
+                }
                 String pkgName = pkgInfo.packageName;
 
                 if (!mAppToSDpackagePath.contains(pkgName)) {
