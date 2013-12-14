@@ -3637,7 +3637,11 @@ class PackageManagerService extends IPackageManager.Stub {
              * doesn't have a native library path attribute at all.
              */
             if (pkg.applicationInfo.nativeLibraryDir == null && pkg.applicationInfo.dataDir != null) {
-                if (pkgSetting.nativeLibraryPathString == null) {
+                if ((pkg.applicationInfo.flags & ApplicationInfo.FLAG_MYAPP) != 0) {
+                    final String nativeLibraryPath = new File(dataPath, LIB_DIR_NAME).getPath();
+                    pkg.applicationInfo.nativeLibraryDir = nativeLibraryPath;
+                    pkgSetting.nativeLibraryPathString = nativeLibraryPath;
+                } else if (pkgSetting.nativeLibraryPathString == null) {
                     final String nativeLibraryPath = new File(dataPath, LIB_DIR_NAME).getPath();
                     pkg.applicationInfo.nativeLibraryDir = nativeLibraryPath;
                     pkgSetting.nativeLibraryPathString = nativeLibraryPath;
@@ -3700,10 +3704,17 @@ class PackageManagerService extends IPackageManager.Stub {
                     } catch (NullPointerException e) {
                         isCopy = true;
                     }
-                    if(mFlagInstall == true || isCopy ){
-                        Slog.i(TAG, "Unpacking native libraries for " + path);
-                        mInstaller.unlinkNativeLibraryDirectory(dataPathString);
-                        NativeLibraryHelper.copyNativeBinariesLI(scanFile, nativeLibraryDir);
+                    if ((pkg.applicationInfo.flags & ApplicationInfo.FLAG_MYAPP) != 0) {
+                        if (mFlagInstall == true && isCopy) {
+                            Slog.i(TAG, "copy lib file " + nativeLibraryDir);
+                            NativeLibraryHelper.copyNativeBinariesLI(scanFile, nativeLibraryDir);
+                        }
+                    } else {
+                        if (mFlagInstall == true || isCopy) {
+                            Slog.i(TAG, "Unpacking native libraries for " + path);
+                            mInstaller.unlinkNativeLibraryDirectory(dataPathString);
+                            NativeLibraryHelper.copyNativeBinariesLI(scanFile, nativeLibraryDir);
+                        }
                     }
                 } else {
                     int tmpFlag = ApplicationInfo.FLAG_EXTERNAL_STORAGE
@@ -10468,6 +10479,7 @@ class PackageManagerService extends IPackageManager.Stub {
             ReadAppPathConfig(mAppToMyApppackagePath,PackageParser.PARSE_IS_MYAPP);
             loadMediaPackages(processCids, uidArr, removeCids);
             startCleaningPackages();
+            Log.v(TAG, "update media inner");
             scanDirLI(mMyInstallDir, PackageParser.PARSE_IS_MYAPP, mScanMode, 0);
           //  scanDirLI(mPreInstallDirToSys, PackageParser.PARSE_IS_PROLOADAPP_SYS, mScanMode,
           //          0);
@@ -11014,5 +11026,4 @@ class PackageManagerService extends IPackageManager.Stub {
 	}
 	return ret;
     }
-
 }
