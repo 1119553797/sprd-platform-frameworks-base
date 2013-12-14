@@ -55,7 +55,6 @@ class AudioResampler;
 #define LIKELY( exp )       (__builtin_expect( (exp) != 0, true  ))
 #define UNLIKELY( exp )     (__builtin_expect( (exp) != 0, false ))
 
-
 // ----------------------------------------------------------------------------
 
 static const nsecs_t kStandbyTimeInNsecs = seconds(3);
@@ -549,6 +548,9 @@ private:
 
             // Maximum number of pending buffers allocated by OutputTrack::write()
             static const uint8_t kMaxOverFlowBuffers = 10;
+
+            static const uint8_t kWaterMarkBuffer = 3;
+
 
             Vector < Buffer* >          mBufferQueue;
             AudioBufferProvider::Buffer mOutBuffer;

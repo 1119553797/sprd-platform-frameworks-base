@@ -1734,7 +1734,17 @@ uint32_t AudioFlinger::MixerThread::prepareTracks_l(const SortedVector< wp<Track
         // The first time a track is added we wait
         // for all its buffers to be filled before processing it
         mAudioMixer->setActiveTrack(track->name());
-        if (cblk->framesReady() && track->isReady() &&
+
+        uint32_t minFrames = 1;
+        if (!track->isStopped() && !track->isPausing() && (track->mRetryCount >= kMaxTrackRetries)) {
+            if (t->sampleRate() == (int)mSampleRate) {
+                minFrames = mFrameCount;
+            } else {
+                minFrames = (mFrameCount * t->sampleRate()) / mSampleRate + 1;
+            }
+        }
+
+        if (cblk->framesReady() >= minFrames && track->isReady() &&
                 !track->isPaused() && !track->isTerminated())
         {
             //LOGV("track %d u=%08x, s=%08x [OK] on thread %p", track->name(), cblk->user, cblk->server, this);
@@ -2750,6 +2760,12 @@ bool AudioFlinger::DuplicatingThread::outputsReady(SortedVector< sp<OutputTrack>
             LOGW("DuplicatingThread::outputsReady() could not promote thread on output track %p", outputTracks[i].get());
             return false;
         }
+        else if (!outputTracks[i]->isActive())
+        {
+            LOGD("DuplicatingThread::outputsReady() track not active on output track %p", outputTracks[i].get());
+            return false;
+        }
+
         PlaybackThread *playbackThread = (PlaybackThread *)thread.get();
         if (playbackThread->standby() && !playbackThread->isSuspended()) {
             LOGV("DuplicatingThread output track %p on thread %p Not Ready", outputTracks[i].get(), thread.get());
@@ -3414,6 +3430,25 @@ bool AudioFlinger::PlaybackThread::OutputTrack::write(int16_t* data, uint32_t fr
                 } else {
                     LOGW ("OutputTrack::write() %p no more buffers in queue", this);
                 }
+            }
+        }
+    }
+
+    // Before play sound, first add data into queue buffer.
+    if (inBuffer.frameCount) {
+        sp<ThreadBase> thread = mThread.promote();
+        if (thread != 0 && !thread->standby()) {
+            if (mBufferQueue.size() < kWaterMarkBuffer) {
+                pInBuffer = new Buffer;
+                pInBuffer->mBuffer = new int16_t[inBuffer.frameCount * channelCount];
+                pInBuffer->frameCount = inBuffer.frameCount;
+                pInBuffer->i16 = pInBuffer->mBuffer;
+                memcpy(pInBuffer->raw, inBuffer.raw, inBuffer.frameCount * channelCount * sizeof(int16_t));
+                mBufferQueue.add(pInBuffer);
+                LOGV("OutputTrack::write() %p thread %p adding cache buffering %d", this, mThread.unsafe_get(), mBufferQueue.size());
+                return false;
+            } else {
+                LOGW("OutputTrack::write() %p thread %p no more overflow buffers", mThread.unsafe_get(), this);
             }
         }
     }
