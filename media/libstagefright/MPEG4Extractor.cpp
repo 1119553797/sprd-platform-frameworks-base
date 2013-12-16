@@ -967,6 +967,11 @@ status_t MPEG4Extractor::parseChunk(off64_t *offset, int depth) {
                    chunk, num_channels, sample_size, sample_rate);
 #endif
 
+            if(!mLastTrack){
+                   ALOGE("mLastTrack is NULL, ERROR_MALFORMED !!!");
+                   return ERROR_MALFORMED;
+            }
+
             mLastTrack->meta->setCString(kKeyMIMEType, FourCC2MIME(chunk_type));
             mLastTrack->meta->setInt32(kKeyChannelCount, num_channels);
             mLastTrack->meta->setInt32(kKeySampleRate, sample_rate);
@@ -1019,6 +1024,11 @@ status_t MPEG4Extractor::parseChunk(off64_t *offset, int depth) {
             // printf("*** coding='%s' width=%d height=%d\n",
             //        chunk, width, height);
 
+            if(!mLastTrack){
+                   ALOGE("mLastTrack is NULL, ERROR_MALFORMED !!!");
+                   return ERROR_MALFORMED;
+            }
+
             mLastTrack->meta->setCString(kKeyMIMEType, FourCC2MIME(chunk_type));
             mLastTrack->meta->setInt32(kKeyWidth, width);
             mLastTrack->meta->setInt32(kKeyHeight, height);
@@ -1041,9 +1051,15 @@ status_t MPEG4Extractor::parseChunk(off64_t *offset, int depth) {
         case FOURCC('s', 't', 'c', 'o'):
         case FOURCC('c', 'o', '6', '4'):
         {
-            status_t err =
+           status_t err = OK;
+           if (mLastTrack && (mLastTrack->sampleTable).get()) {
+             err =
                 mLastTrack->sampleTable->setChunkOffsetParams(
                         chunk_type, data_offset, chunk_data_size);
+           } else {
+                ALOGE("mLastTrack is NULL, ERROR_MALFORMED !!!");
+                return ERROR_MALFORMED;
+           }
 
             if (err != OK) {
                 return err;
@@ -1056,7 +1072,7 @@ status_t MPEG4Extractor::parseChunk(off64_t *offset, int depth) {
         case FOURCC('s', 't', 's', 'c'):
         {
            status_t err = OK;
-           if (mLastTrack) {
+           if (mLastTrack && (mLastTrack->sampleTable).get()) {
              err =
                 mLastTrack->sampleTable->setSampleToChunkParams(
                         data_offset, chunk_data_size);
@@ -1076,9 +1092,15 @@ status_t MPEG4Extractor::parseChunk(off64_t *offset, int depth) {
         case FOURCC('s', 't', 's', 'z'):
         case FOURCC('s', 't', 'z', '2'):
         {
-            status_t err =
+           status_t err = OK;
+           if (mLastTrack && (mLastTrack->sampleTable).get()) {
+                err =
                 mLastTrack->sampleTable->setSampleSizeParams(
                         chunk_type, data_offset, chunk_data_size);
+           } else {
+                ALOGE("mLastTrack is NULL, ERROR_MALFORMED !!!");
+                return ERROR_MALFORMED;
+           }
 
             if (err != OK) {
                 return err;
@@ -1119,7 +1141,7 @@ status_t MPEG4Extractor::parseChunk(off64_t *offset, int depth) {
         case FOURCC('s', 't', 't', 's'):
         {
            status_t err = OK;
-           if (mLastTrack) {
+           if (mLastTrack && (mLastTrack->sampleTable).get()) {
              err =
                 mLastTrack->sampleTable->setTimeToSampleParams(
                         data_offset, chunk_data_size);
@@ -1139,7 +1161,7 @@ status_t MPEG4Extractor::parseChunk(off64_t *offset, int depth) {
         case FOURCC('c', 't', 't', 's'):
         {
            status_t err = OK;
-           if (mLastTrack) {
+           if (mLastTrack && (mLastTrack->sampleTable).get()) {
              err =
                 mLastTrack->sampleTable->setCompositionTimeToSampleParams(
                         data_offset, chunk_data_size);
@@ -1159,7 +1181,7 @@ status_t MPEG4Extractor::parseChunk(off64_t *offset, int depth) {
         case FOURCC('s', 't', 's', 's'):
         {
            status_t err = OK;
-           if (mLastTrack) {
+           if (mLastTrack && (mLastTrack->sampleTable).get()) {
              err =
                 mLastTrack->sampleTable->setSyncSampleParams(
                         data_offset, chunk_data_size);
@@ -1232,6 +1254,11 @@ status_t MPEG4Extractor::parseChunk(off64_t *offset, int depth) {
                 return ERROR_MALFORMED;
             }
 
+            if(!mLastTrack){
+                   ALOGE("mLastTrack is NULL, ERROR_MALFORMED !!!");
+                   return ERROR_MALFORMED;
+            }
+
             mLastTrack->meta->setData(
                     kKeyESDS, kTypeESDS, &buffer[4], chunk_data_size - 4);
 
@@ -1266,6 +1293,11 @@ status_t MPEG4Extractor::parseChunk(off64_t *offset, int depth) {
                 return ERROR_IO;
             }
 
+            if(!mLastTrack){
+                   ALOGE("mLastTrack is NULL, ERROR_MALFORMED !!!");
+                   return ERROR_MALFORMED;
+            }
+
             mLastTrack->meta->setData(
                     kKeyAVCC, kTypeAVCC, buffer, chunk_data_size);
 
@@ -1298,6 +1330,10 @@ status_t MPEG4Extractor::parseChunk(off64_t *offset, int depth) {
                 return ERROR_IO;
             }
 
+            if(!mLastTrack){
+                   ALOGE("mLastTrack is NULL, ERROR_MALFORMED !!!");
+                   return ERROR_MALFORMED;
+            }
             mLastTrack->meta->setData(kKeyD263, kTypeD263, buffer, chunk_data_size);
 
             *offset += chunk_size;
@@ -1717,6 +1753,39 @@ status_t MPEG4Extractor::parseMetaData(off64_t offset, size_t size) {
     return OK;
 }
 
+static status_t VerifyMetaData(const sp<MetaData> &format)
+{
+    const char *mime;
+    bool IsAVC = false;
+    bool success = format->findCString(kKeyMIMEType, &mime);
+    if(!success)
+    {
+        return ERROR_MALFORMED;
+    }
+
+    IsAVC = !strcasecmp(mime, MEDIA_MIMETYPE_VIDEO_AVC);
+    if (IsAVC)
+    {
+        uint32_t type;
+        const void *data;
+        size_t size;
+
+        success = format->findData(kKeyAVCC, &type, &data, &size);
+        if(!success)
+        {
+            return ERROR_MALFORMED;
+        }
+
+        const uint8_t *ptr = (const uint8_t *)data;
+
+        if((size < 7) || (1u != (unsigned)ptr[0]))
+        {
+            return ERROR_MALFORMED;
+        }
+    }
+    return OK;
+}
+
 sp<MediaSource> MPEG4Extractor::getTrack(size_t index) {
     status_t err;
     if ((err = readMetaData()) != OK) {
@@ -1734,6 +1803,10 @@ sp<MediaSource> MPEG4Extractor::getTrack(size_t index) {
     }
 
     if (track == NULL) {
+        return NULL;
+    }
+
+    if(OK != VerifyMetaData(track->meta)){
         return NULL;
     }
 
@@ -1761,6 +1834,9 @@ status_t MPEG4Extractor::verifyTrack(Track *track) {
             return ERROR_MALFORMED;
         }
     }
+
+    if((NULL == track) || (NULL ==  (track->sampleTable).get()))
+        return ERROR_MALFORMED;
 
     if (!track->sampleTable->isValid()) {
         // Make sure we have all the metadata we need.
