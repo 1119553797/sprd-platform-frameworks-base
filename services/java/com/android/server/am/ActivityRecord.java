@@ -220,7 +220,6 @@ class ActivityRecord extends IApplicationToken.Stub {
         thumbnailNeeded = false;
         idle = false;
         hasBeenLaunched = false;
-
         if (aInfo != null) {
             if (aInfo.targetActivity == null
                     || aInfo.launchMode == ActivityInfo.LAUNCH_MULTIPLE
@@ -601,6 +600,9 @@ class ActivityRecord extends IApplicationToken.Stub {
     	}
     	Debug.getMemoryInfo(app.pid, memInfo);    		
     	StringBuilder sb = new StringBuilder(256);
+	if(app != null){
+		app.lastPss = memInfo.getTotalPss();
+	}
     	sb.append("processName: ");
     	sb.append(app.processName);
     	sb.append(",pid: ");

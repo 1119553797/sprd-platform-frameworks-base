@@ -344,6 +344,19 @@ public class ActivityStack {
         return null;
     }
 
+    final boolean activityLaunching() {
+       boolean result = false;
+	int i = mHistory.size()-1;
+	if( i >= 0){
+	         ActivityRecord r = (ActivityRecord)mHistory.get(i);
+		 if (!r.nowVisible ){		
+			result = true;
+		}
+	}
+	Slog.w(TAG, "activityLaunching: " + result);
+       return result;
+    }
+
     /**
      * This is a simplified version of topRunningActivityLocked that provides a number of
      * optional skip-over modes.  It is intended for use with the ActivityController hook only.

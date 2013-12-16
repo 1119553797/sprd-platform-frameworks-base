@@ -268,6 +268,7 @@ class ProcessRecord {
         curAdj = setAdj = -100;
         persistent = false;
         removed = false;
+	lastPss = 0;
     }
 
     public void setPid(int _pid) {
@@ -312,6 +313,8 @@ class ProcessRecord {
         sb.append(Integer.toHexString(System.identityHashCode(this)));
         sb.append(' ');
         sb.append(pid);
+        sb.append(";pss:");
+        sb.append(lastPss);		
         sb.append(':');
         sb.append(processName);
         sb.append('/');
