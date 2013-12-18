@@ -302,7 +302,7 @@ public class MobileDataStateTracker extends NetworkStateTracker {
                     mNetworkInfo.setIsAvailable(!unavailable);
 
                     if (isApnSupport(intent,apnTypeList)) {
-                        if (mEnabled == false) {
+                        if (mEnabled == false && mMobileDataState == state) {
                             // if we're not enabled but the APN Type is supported by this connection
                             // we should record the interface name if one's provided.  If the user
                             // turns on this network we will need the interfacename but won't get
