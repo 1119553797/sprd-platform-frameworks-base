@@ -307,6 +307,9 @@ public abstract class RIL extends BaseCommands implements CommandsInterface {
         Log.d(LOG_TAG, "responseOperatorString before:long=" + response[index] + ", short =" + response[index + 1]
                 + ", numeric=" + response[index + 2]);
 
+        if (response[index + 2] == null || response[index + 2].length() == 0)
+            return response;
+
         String mcc = response[index + 2].substring(0, 3);
         String mnc = response[index + 2].substring(3);
         int mncShort = Integer.parseInt(mnc);

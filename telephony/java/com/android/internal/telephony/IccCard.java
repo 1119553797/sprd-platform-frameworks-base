@@ -129,6 +129,11 @@ public abstract class IccCard {
         public boolean isPinLocked() {
             return ((this == PIN_REQUIRED) || (this == PUK_REQUIRED));
         }
+
+        public boolean iccCardExist() {
+            return ((this == PIN_REQUIRED) || (this == PUK_REQUIRED)
+                    || (this == NETWORK_LOCKED) || (this == READY));
+        }
     }
 
     public State getState() {
@@ -490,8 +495,10 @@ public abstract class IccCard {
                 && newState == State.NETWORK_LOCKED);
         transitionedIntoIccBlocked = (oldState != State.BLOCKED && newState == State.BLOCKED);
         transitionedIntoSimBlocked = (oldState != State.SIM_LOCKED && newState == State.SIM_LOCKED);
-        transitionedIntoCardPresent = (!transitionedIntoAbsent && newState != State.ABSENT);
         transitionedIntoIccReady = (oldState != State.READY && newState == State.READY);
+        transitionedIntoCardPresent = (
+                (oldState == null || !oldState.iccCardExist())
+              &&(newState != null && newState.iccCardExist()));
         if (transitionedIntoPinLocked) {
             if(mDbg) log("Notify SIM pin or puk locked.");
             mPinLockedRegistrants.notifyRegistrants();
@@ -691,7 +698,7 @@ public abstract class IccCard {
 
             switch (msg.what) {
                 case EVENT_RADIO_OFF_OR_NOT_AVAILABLE:
-                    //mState = null;
+                    mState = null;
                     // updateStateProperty();
                     //broadcastIccStateChangedIntent(INTENT_VALUE_ICC_NOT_READY, null);
                     if(Config.DEBUG)Log.d(mLogTag, "EVENT_RADIO_OFF_OR_NOT_AVAILABLE,update property");
