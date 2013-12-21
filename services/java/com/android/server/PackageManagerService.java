@@ -6915,9 +6915,11 @@ class PackageManagerService extends IPackageManager.Stub {
             //when format Sd card,this opration must be excute
             if(mAppToSDpackagePath.contains(p.packageName)){
                 mAppToSDpackagePath.remove(p.packageName);
+                writeAppPathConfig(mAppToSDpackagePath,
+                        PackageParser.PARSE_IS_PROLOADAPP);
                 
                 outInfo.isRemovedPackageSystemUpdate = true;
-                if (ps != null) {
+                if (ps != null && mMediaMounted) {
                     if (ps.versionCode < p.mVersionCode) {
                         // Delete data for downgrades
                         flags &= ~PackageManager.DONT_DELETE_DATA;
