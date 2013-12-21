@@ -330,8 +330,9 @@ public final class ActivityManagerService extends ActivityManagerNative
     // Memory pages are 4K.
     static final int PAGE_SIZE = 4*1024;
 
-    // Memory Reserved 1M.
-    static final int RESERVED_MEMORY = 1024;	
+    // Memory Reserved 2M.
+    static final int RESERVED_MEMORY = 2048;	
+    static final int HEAVY_APP_MEMORY = 10*1024; //10M
     // Corresponding memory levels for above adjustments.
     static final int EMPTY_APP_MEM;
     static final int HIDDEN_APP_MEM;
@@ -9076,15 +9077,15 @@ public final class ActivityManagerService extends ActivityManagerNative
         // GB: 2048,3072,4096,6144,7168,8192
         // HC: 8192,10240,12288,14336,16384,20480
     }
-    private long getTopProcessPss(){
-		if(lastLaunchEndApp != null){
+   private int getProcessPss(ProcessRecord app){
+		if(app != null){
 			int[] pids=  new int[1];;
-			pids[0]=lastLaunchEndApp.pid;
+			pids[0]=app.pid;
 			 try {
 			Debug.MemoryInfo[] mem = getProcessMemoryInfo(pids);
 			if(mem != null){
 				return mem[0].getTotalPss();
-			}}catch(RemoteException e){Slog.i(TAG, "getTopProcessPss error " );}
+			}}catch(RemoteException e){Slog.i(TAG, "getProcessPss error " );}
 		}
 		return 0;
     	}
@@ -9121,23 +9122,26 @@ public final class ActivityManagerService extends ActivityManagerNative
         //if (needDelay) 
         
 	{
-            //if (r.hasFixAdj) 
+            if ( !mMainStack.activityLaunching())
               {
                 long curClock = SystemClock.uptimeMillis();
-                if (mRecentAvailMem == 0 || (curClock > mRecentAvailMemClock + 10 * 1000)) 
-		{
-                    mRecentAvailMem = readAvailMemory();
-		    mTopProcessPss = getTopProcessPss()*1024;
-                    mRecentAvailMemClock = curClock;
-                }
                 int adjustment = SERVICE_B_ADJ;
                 if (r.appAdj != ProcessRecord.TMP_CUR_ADJ_DEFAULT) {
                     adjustment = r.appAdj ;
                 }
-                long serviceNeedMem = getMemLevel(adjustment) >> 10 + RESERVED_MEMORY;
-		//Slog.w(TAG, "ServicesDelayRestart: Restart service[" + r.shortName + "]" + ", serviceNeedMem:" + serviceNeedMem +", mRecentAvailMem:" + mRecentAvailMem);
+                long serviceNeedMem = getMemLevel(adjustment) >> 10 + RESERVED_MEMORY;	
+                 if(r.app != null && r.app.lastPss > serviceNeedMem){
+			 serviceNeedMem =  r.app.lastPss;
+		}
+                if (mRecentAvailMem == 0 || (curClock > mRecentAvailMemClock + 10 * 1000) || serviceNeedMem < mRecentAvailMem) 
+		{
+                    mRecentAvailMem = readAvailMemory();
+		    mTopProcessPss = getProcessPss(lastLaunchEndApp);
+                    mRecentAvailMemClock = curClock;
+                }
+		Slog.w(TAG, "ServicesDelayRestart: Restart service[" + r.shortName + "]" + ", serviceNeedMem:" + serviceNeedMem +", mRecentAvailMem:" + mRecentAvailMem);
                 if (mRecentAvailMem > serviceNeedMem &&
-		     (mTopProcessPss < 10*1024*1024//10MB
+		     (mTopProcessPss < HEAVY_APP_MEMORY//10MB
            	     || mRecentAvailMem  >= 30720 //30MB
 		     ) 
 		   )
@@ -9648,6 +9652,7 @@ public final class ActivityManagerService extends ActivityManagerNative
     private static HashSet<String> cantChangeAdjProcWhenPtaskRunning;
     private static HashSet<String> cantChangeAdjServiceInPtask;
     private static Set<String> canKillFrontSystemApp;
+    private static String[] blockList = {"com.qihoo360.mobilesafe"};
 
     static {
 	 whiteList = new HashSet<String>();
@@ -9656,8 +9661,7 @@ public final class ActivityManagerService extends ActivityManagerNative
 	 //whiteList.add("com.android.contacts");
 	 //whiteList.add("com.android.mms");
 	 //whiteList.add("android.process.acore");
-	 whiteList.add("com.android.systemui");
-
+	whiteList.add("com.android.systemui");      
         hasAlarmList = new HashSet<String>();
 	hasAlarmList.add("com.baidu.searchbox");
 	hasAlarmList.add("com.baidu.searchbox:pushservice_v1");
@@ -9676,8 +9680,8 @@ public final class ActivityManagerService extends ActivityManagerNative
         fixAdjList.put("android.process.ptask", -12);
         fixAdjList.put("com.thunderst.radio", 2);
         fixAdjList.put("com.whatsapp", 2);
-       	fixAdjList.put("com.facebook.katana", 2);
-	fixAdjList.put("com.facebook.katana:nodex", 2); 
+       	//fixAdjList.put("com.facebook.katana", 2);
+	//fixAdjList.put("com.facebook.katana:nodex", 2); 
         launchDownloadAction = new HashSet<String>();
         launchDownloadAction.add("com.android.providers.downloads/.DownloadProvider");
         launchDownloadAction.add("com.android.providers.downloads/.DownloadService");
@@ -12483,8 +12487,10 @@ public final class ActivityManagerService extends ActivityManagerNative
             }
         }
 
-        if (app.services.size() != 0 && (adj > FOREGROUND_APP_ADJ
-                || schedGroup == Process.THREAD_GROUP_BG_NONINTERACTIVE)) {
+        if (app.services.size() != 0 
+	         &&app.lastPss < HEAVY_APP_MEMORY
+		 && (adj > FOREGROUND_APP_ADJ
+                         || schedGroup == Process.THREAD_GROUP_BG_NONINTERACTIVE)) {
             final long now = SystemClock.uptimeMillis();
             // This process is more important if the top activity is
             // bound to the service.
@@ -12672,7 +12678,23 @@ public final class ActivityManagerService extends ActivityManagerNative
         //if (LC_RAM_SUPPORT) {
             raiseToFixAdj(app);
         //}
-        if(DEBUG)Slog.i(TAG, ">>>>>>>>>>>>>>>>>>computeOomAdjLocked exit  app.curAdj: " +app.curAdj + ", app:" + app);
+        if(app.curAdj >= PREVIOUS_APP_ADJ && app.lastPss >= HEAVY_APP_MEMORY){
+              app.curAdj = HIDDEN_APP_MAX_ADJ;
+	     //Slog.i(TAG, "computeOomAdjLocked heavy app:" + app +", curAdj:" + app.curAdj);
+	}
+	if(app.processName != null){
+		for(String str : blockList){
+			if(app.processName.startsWith(str)){
+		                if(app.curAdj > FOREGROUND_APP_ADJ){
+					app.curAdj = PREVIOUS_APP_ADJ;
+		                }
+				//Slog.i(TAG, "computeOomAdjLocked  blacklist  app.curAdj: " +app.curAdj + ", app:" + app);
+			        break;
+				//
+			}
+		}
+	}
+        //Slog.i(TAG, ">>>>>>>>>>>>>>>>>>computeOomAdjLocked exit  app.curAdj: " +app.curAdj + ", app:" + app);
         return app.curAdj;
     }
 
