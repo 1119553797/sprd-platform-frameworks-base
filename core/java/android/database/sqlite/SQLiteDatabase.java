@@ -37,8 +37,6 @@ import android.util.Pair;
 import dalvik.system.BlockGuard;
 
 import java.io.File;
-import java.io.FileFilter;
-import java.util.List;
 import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -826,120 +824,20 @@ public class SQLiteDatabase extends SQLiteClosable {
             if (SQLiteDebug.DEBUG_SQL_TIME) {
                 sqliteDatabase.enableSqlProfiling(path);
             }
-        } catch (SQLiteException e) {
+        } catch (SQLiteDatabaseCorruptException e) {
             // Try to recover from this, if we can.
             // TODO: should we do this for other open failures?
-
-            if (e instanceof SQLiteDiskIOException) {
-                Log.e(TAG, "Deleting and re-creating corrupt database " + path);
-                deleteBadDatabase(sqliteDatabase, path);
-                sqliteDatabase = new SQLiteDatabase(path, factory, flags);
-            } else if (e instanceof SQLiteDatabaseCorruptException) {
-                Log.e(TAG, "Deleting and re-creating corrupt database " + path, e);
-                EventLog.writeEvent(EVENT_DB_CORRUPT, path);
-                if (!path.equalsIgnoreCase(":memory")) {
-                    // delete is only for non-memory database files
-                    new File(path).delete();
-                }
-                sqliteDatabase = new SQLiteDatabase(path, factory, flags);
+            Log.e(TAG, "Deleting and re-creating corrupt database " + path, e);
+            EventLog.writeEvent(EVENT_DB_CORRUPT, path);
+            if (!path.equalsIgnoreCase(":memory")) {
+                // delete is only for non-memory database files
+                new File(path).delete();
             }
+            sqliteDatabase = new SQLiteDatabase(path, factory, flags);
         }
         ActiveDatabases.getInstance().mActiveDatabases.add(
                 new WeakReference<SQLiteDatabase>(sqliteDatabase));
         return sqliteDatabase;
-    }
-
-    private static void deleteBadDatabase(SQLiteDatabase dbObj, String path) {
-        if(dbObj == null){
-            Log.e(TAG, "Corruption reported by sqlite on database: " + path);
-            deleteDatabaseFile(path);
-            return;
-        }
-         Log.e(TAG, "Corruption reported by sqlite on database: " + dbObj.getPath());
-
-        // is the corruption detected even before database could be 'opened'?
-        if (!dbObj.isOpen()) {
-            deleteDatabaseFile(dbObj.getPath());
-            return;
-        }
-
-        List<Pair<String, String>> attachedDbs = null;
-        try {
-            // Close the database, which will cause subsequent operations to fail.
-            // before that, get the attached database list first.
-            try {
-                attachedDbs = getAttachedDbs(dbObj);
-            } catch (SQLiteException e) {
-                /* ignore */
-            }
-            try {
-                dbObj.close();
-            } catch (SQLiteException e) {
-                /* ignore */
-            }
-        } finally {
-            // Delete all files of this corrupt database and/or attached databases
-            if (attachedDbs != null) {
-                for (Pair<String, String> p : attachedDbs) {
-                    deleteDatabaseFile(p.second);
-                }
-            } else {
-                // attachedDbs = null is possible when the database is so corrupt that even
-                // "PRAGMA database_list;" also fails. delete the main database file
-                deleteDatabaseFile(dbObj.getPath());
-            }
-        }
-    }
-
-    private static void deleteDatabaseFile(String fileName) {
-        if (fileName.equalsIgnoreCase(":memory:") || fileName.trim().length() == 0) {
-            return;
-        }
-        Log.e(TAG, "deleting the database file: " + fileName);
-        try {
-            /* SPRD: When deleting a db file, all db related files has to be deleted together like journal, wal, shm etc. @{ */
-            // @orig
-            // new File(fileName).delete();
-            SQLiteDatabase.deleteDatabase(new File(fileName));
-            /* @} */
-        } catch (Exception e) {
-            /* print warning and ignore exception */
-            Log.w(TAG, "delete failed: " + e.getMessage());
-        }
-    }
-
-    /**
-     * Deletes a database including its journal file and other auxiliary files
-     * that may have been created by the database engine.
-     *
-     * @param file The database file path.
-     * @return True if the database was successfully deleted.
-     */
-    private static boolean deleteDatabase(File file) {
-        if (file == null) {
-            throw new IllegalArgumentException("file must not be null");
-        }
-
-        boolean deleted = false;
-        deleted |= file.delete();
-        deleted |= new File(file.getPath() + "-journal").delete();
-        deleted |= new File(file.getPath() + "-shm").delete();
-        deleted |= new File(file.getPath() + "-wal").delete();
-
-        File dir = file.getParentFile();
-        if (dir != null) {
-            final String prefix = file.getName() + "-mj";
-            final FileFilter filter = new FileFilter() {
-                @Override
-                public boolean accept(File candidate) {
-                    return candidate.getName().startsWith(prefix);
-                }
-            };
-            for (File masterJournal : dir.listFiles(filter)) {
-                deleted |= masterJournal.delete();
-            }
-        }
-        return deleted;
     }
 
     /**
