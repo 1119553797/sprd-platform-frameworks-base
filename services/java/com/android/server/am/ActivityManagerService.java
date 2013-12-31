@@ -2799,8 +2799,7 @@ public final class ActivityManagerService extends ActivityManagerNative
         if (app.pid == pid && app.thread != null &&
                 app.thread.asBinder() == thread.asBinder()) {
             if (!app.killedBackground) {
-                Slog.i(TAG, "Process " + app.processName + " (pid " + pid
-                        + ") has died.");
+                Slog.i(TAG, "Process " + app.processName + " (pid " + pid + ") has died.");
             }
             EventLog.writeEvent(EventLogTags.AM_PROC_DIED, app.pid, app.processName);
 	    if (localLOGV) Slog.v(
@@ -8645,9 +8644,6 @@ public final class ActivityManagerService extends ActivityManagerNative
                     && capp.pid != 0
                     && capp.pid != MY_PID
                     && capp.tmpCurAdj == ProcessRecord.TMP_CUR_ADJ_DEFAULT) {
-                if(!canKillProviderClientProc(cpr, capp)) {
-                    continue;
-                }
                 Slog.e(TAG, "Kill " + capp.processName
                         + " (pid " + capp.pid + "): provider " + cpr.info.name
                         + " in dying process " + proc.processName);
@@ -8860,7 +8856,7 @@ public final class ActivityManagerService extends ActivityManagerNative
     // =========================================================
     private ProcessRecord lastLaunchEndApp = null;
     private ActivityRecord lastResumeRecord = null;
-	
+    
     void resumeLaunch(ActivityRecord ar) {
         lastResumeRecord = ar;
     }
@@ -8868,7 +8864,7 @@ public final class ActivityManagerService extends ActivityManagerNative
     void launchEnd(ActivityRecord ar) {
         if (ar == lastResumeRecord) {
             lastLaunchEndApp = ar.app;
-        }		
+        }
         if (ar.isHomeActivity) {
             //Slog.v(TAG, "[lom]Lunch home activity end");
             ReduceServicesRestartDelay();
@@ -10145,10 +10141,10 @@ public final class ActivityManagerService extends ActivityManagerNative
     public void setProcessAdj(int pid, int adj, boolean reset) {
         String ptaskName = "android.process.ptask";
         ProcessRecord ptask = null;
+        ProcessRecord changeAdjProc = null;
         boolean canSetAdj = false;
         boolean curProcCanChange = false;
-        for (int index = mLruProcesses.size() - 1; index >= 0; index--) {
-            ProcessRecord app = mLruProcesses.get(index);
+        for (ProcessRecord app : mLruProcesses) {
             if(ptaskName.equals(app.processName)) {
                 ptask = app;
             }
@@ -10167,12 +10163,39 @@ public final class ActivityManagerService extends ActivityManagerNative
                     app.curAdj = adj;
                     app.curRawAdj = adj;
                 }
+                changeAdjProc = app;
                 canSetAdj = true;
                 adj = app.curAdj;
                 curProcCanChange = cantChangeAdjProcWhenPtaskRunning.contains(app.processName);
             }
         }
-        if(curProcCanChange && ptask != null && !reset) {
+        if(changeAdjProc == null) {
+            return;
+        }
+        if(!fixAdjList.containsKey(changeAdjProc.processName) || ptask == changeAdjProc) {
+            changeAdjProc.fixAdj = ProcessRecord.TMP_FIX_ADJ_DEFAULT;
+        }
+        
+        if(ptask == changeAdjProc || reset) {
+            Process.setOomAdj(pid, adj);
+            return;
+        }
+        
+        for(ContentProviderRecord cpr : changeAdjProc.pubProviders.values()) {
+            for(ProcessRecord pr : cpr.clients) {
+                if(pr.processName.equals(mMainStack.mResumedActivity.app.processName)) {
+                    Log.d(TAG, "can not changeAdj, " + changeAdjProc.processName + 
+                            " have provider client " + pr.processName);
+                    canSetAdj = false;
+                    break;
+                }
+            }
+            if(!canSetAdj) {
+                break;
+            }
+        }
+        
+        if(canSetAdj && curProcCanChange && ptask != null) {
             for(ServiceRecord sr : ptask.services) {
                 if(sr.name == null) {
                     continue;
@@ -10183,7 +10206,6 @@ public final class ActivityManagerService extends ActivityManagerNative
                     break;
                 }
             }
-        } else {
         }
         if(canSetAdj) {
             Process.setOomAdj(pid, adj);
@@ -13653,15 +13675,4 @@ public final class ActivityManagerService extends ActivityManagerNative
         }
     }
 
-    static final String DOWNLOAD_PROVIDER_NAME = "com.android.providers.downloads.DownloadProvider";
-
-    private boolean canKillProviderClientProc(ContentProviderRecord cpr, ProcessRecord clientProc) {
-        if(cpr != null && clientProc != null && DOWNLOAD_PROVIDER_NAME.equals(cpr.info.name)) {
-            if(mMainStack.mResumedActivity != null && clientProc.processName.equals(mMainStack.mResumedActivity.app.processName)) {
-                Slog.d("wxx", "canKillProviderClientProc, clientProcName: " + clientProc.processName + " downloadProvider: " + DOWNLOAD_PROVIDER_NAME);
-                return false;
-            }
-        }
-        return true;
-    }
 }
