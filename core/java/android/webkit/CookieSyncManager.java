@@ -22,6 +22,7 @@ import android.webkit.CookieManager.Cookie;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import android.os.Message;
 
 /**
  * The CookieSyncManager is used to synchronize the browser cookie store
@@ -83,6 +84,12 @@ public final class CookieSyncManager extends WebSyncManager {
                             + "before CookieSyncManager::getInstance()");
         }
         return sRef;
+    }
+
+    public void SendSyncMessage()
+    {
+        Message msg = mHandler.obtainMessage(SYNC_MESSAGE);
+        mHandler.sendMessage(msg);
     }
 
     /**

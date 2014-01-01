@@ -398,6 +398,7 @@ public final class CookieManager {
                 cookieList.add(cookie);
             }
         }
+        CookieSyncManager.getInstance().SendSyncMessage();
     }
 
     /**
