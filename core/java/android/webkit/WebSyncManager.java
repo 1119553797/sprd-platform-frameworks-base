@@ -25,7 +25,7 @@ import android.util.Log;
 
 abstract class WebSyncManager implements Runnable {
     // message code for sync message
-    private static final int SYNC_MESSAGE = 101;
+    protected static final int SYNC_MESSAGE = 101;
     // time delay in millisec for a sync (now) message
     private static int SYNC_NOW_INTERVAL = 100; // 100 millisec
     // time delay in millisec for a sync (later) message
