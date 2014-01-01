@@ -2656,6 +2656,10 @@ class PackageManagerService extends IPackageManager.Stub {
     }
 
     private void scanDirLI(File dir, int flags, int scanMode, long currentTime) {
+        if (dir == null) {
+            Log.d(TAG, "engModeEnable do not install any apk");
+            return;
+        }
         String[] files = dir.list();
         if (files == null) {
             Log.d(TAG, "No files in app dir " + dir);
