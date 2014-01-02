@@ -1,3 +1,4 @@
+ifeq ($(strip $(SPRDROID4.0_DEV)),true)
 LOCAL_PATH := $(call my-dir)
 
 common_src_files := \
@@ -39,3 +40,4 @@ LOCAL_MODULE := installd
 LOCAL_MODULE_TAGS := optional
 
 include $(BUILD_EXECUTABLE)
+endif

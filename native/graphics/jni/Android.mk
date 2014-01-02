@@ -1,3 +1,4 @@
+ifeq ($(strip $(SPRDROID4.0_DEV)),true)
 BASE_PATH := $(call my-dir)
 LOCAL_PATH:= $(call my-dir)
 
@@ -31,4 +32,4 @@ LOCAL_C_INCLUDES += \
 LOCAL_MODULE:= libjnigraphics
 
 include $(BUILD_SHARED_LIBRARY)
-
+endif
