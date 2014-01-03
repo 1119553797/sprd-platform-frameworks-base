@@ -2795,9 +2795,6 @@ class PackageManagerService extends IPackageManager.Stub {
 
     private boolean collectCertificatesLI(PackageParser pp, PackageSetting ps,
             PackageParser.Package pkg, File srcFile, int parseFlags) {
-        if(isExternal(pkg)) {
-            return true;
-        }
         if (GET_CERTIFICATES) {
             if (ps != null
                     && ps.codePath.equals(srcFile)
@@ -6306,7 +6303,7 @@ class PackageManagerService extends IPackageManager.Stub {
                 return;
             }
         }
-        if (!isExternal(pkg) && GET_CERTIFICATES && !pp.collectCertificates(pkg, parseFlags)) {
+        if (GET_CERTIFICATES && !pp.collectCertificates(pkg, parseFlags)) {
             res.returnCode = pp.getParseError();
             return;
         }
