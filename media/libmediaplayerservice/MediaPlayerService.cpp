@@ -683,7 +683,7 @@ status_t MediaPlayerService::Client::setDataSource(
     if (strncmp(url, "content://", 10) == 0) {
         // get a filedescriptor for the content Uri and
         // pass it to the setDataSource(fd) method
-
+#if 0
         String16 url16(url);
         int fd = android::openContentProviderFile(url16);
         if (fd < 0)
@@ -694,6 +694,8 @@ status_t MediaPlayerService::Client::setDataSource(
         setDataSource(fd, 0, 0x7fffffffffLL); // this sets mStatus
         close(fd);
         return mStatus;
+#endif
+        return UNKNOWN_ERROR;
     } else {
         player_type playerType = getPlayerType(url);
         LOGV("player type = %d", playerType);

@@ -24,7 +24,6 @@ LOCAL_SHARED_LIBRARIES :=     		\
 	libsonivox            			\
 	libmedia              			\
 	libcamera_client      			\
-	libandroid_runtime    			\
 	libstagefright        			\
 	libstagefright_omx    			\
 	libstagefright_foundation       \

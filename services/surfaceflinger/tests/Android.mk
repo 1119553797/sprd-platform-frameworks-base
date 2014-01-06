@@ -1,4 +1,5 @@
 # Build the unit tests,
+ifeq ($(strip $(SPRDROID4.0_DEV)),true)
 LOCAL_PATH:= $(call my-dir)
 include $(CLEAR_VARS)
 
@@ -37,4 +38,5 @@ include $(BUILD_NATIVE_TEST)
 # team really wants is to build the stuff defined by this makefile.
 ifeq (,$(ONE_SHOT_MAKEFILE))
 include $(call first-makefiles-under,$(LOCAL_PATH))
+endif
 endif
