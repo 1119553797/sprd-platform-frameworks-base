@@ -9693,6 +9693,7 @@ public final class ActivityManagerService extends ActivityManagerNative
         canKillFrontSystemApp.add("com.android.camera");
         canKillFrontSystemApp.add("com.android.browser");
         canKillFrontSystemApp.add("com.cooliris.media");
+        canKillFrontSystemApp.add("com.android.gallery");
         canKillFrontSystemApp.add("com.thunderst.radio");
     }
 
@@ -13636,7 +13637,7 @@ public final class ActivityManagerService extends ActivityManagerNative
                     break;
                 }
             }
-            if(hasBackApp) {
+            if(mSystemUiIsAlive && hasBackApp) {
                 Process.sendSignal(pid, Process.SINGLE_STOP);
                 if (!mHandler.hasMessages(KILL_STOP_TIMEOUT)) {
                     Slog.d(TAG, "send kill_stop_timeout");
