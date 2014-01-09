@@ -86,7 +86,7 @@ public class PduParser {
      * The log tag.
      */
     private static final String LOG_TAG = "PduParser";
-    private static final boolean DEBUG = false;
+    private static final boolean DEBUG = true;
     private static final boolean LOCAL_LOGV = DEBUG ? Config.LOGD : Config.LOGV;
 
     /**
@@ -105,7 +105,9 @@ public class PduParser {
      *         null if parsing error happened or mandatory fields are not set.
      */
     public GenericPdu parse(int phoneId){
+        log("Begin to parse pdu.");
         if (mPduDataStream == null) {
+            log("The pdu data stream is null");
             return null;
         }
 
@@ -113,6 +115,7 @@ public class PduParser {
         mHeaders = parseHeaders(mPduDataStream);
         if (null == mHeaders) {
             // Parse headers failed.
+            log("Parse headers failed.");
             return null;
         }
 
@@ -131,6 +134,7 @@ public class PduParser {
             mBody = parseParts(mPduDataStream);
             if (null == mBody) {
                 // Parse parts failed.
+                log("Parse parts failed.");
                 return null;
             }
         }
@@ -156,6 +160,7 @@ public class PduParser {
 
                 byte[] contentType = retrieveConf.getContentType();
                 if (null == contentType) {
+                    log("content-type is null.");
                     return null;
                 }
                 String ctTypeStr = new String(contentType);
@@ -201,7 +206,9 @@ public class PduParser {
      * @return headers in PduHeaders structure, null when parse fail
      */
     protected PduHeaders parseHeaders(ByteArrayInputStream pduDataStream){
+        log("Begin to parse headers.");
         if (pduDataStream == null) {
+            log("The pdu data stream is null.");
             return null;
         }
 
@@ -225,6 +232,7 @@ public class PduParser {
                 case PduHeaders.MESSAGE_TYPE:
                 {
                     int messageType = extractByteValue(pduDataStream);
+                    log("messageType is: "+messageType);
                     switch (messageType) {
                         // We don't support these kind of messages now.
                         case PduHeaders.MESSAGE_TYPE_FORWARD_REQ:
@@ -470,11 +478,13 @@ public class PduParser {
 
                     /* Address-present-token or Insert-address-token */
                     int fromToken = extractByteValue(pduDataStream);
+                    log("from token is: "+fromToken);
 
                     /* Address-present-token or Insert-address-token */
                     if (PduHeaders.FROM_ADDRESS_PRESENT_TOKEN == fromToken) {
                         /* Encoded-string-value */
                         from = parseEncodedStringValue(pduDataStream);
+                        log("from is: "+ from);
                         if (null != from) {
                             byte[] address = from.getTextString();
                             if (null != address) {
@@ -516,6 +526,7 @@ public class PduParser {
                     /* Message-class-value = Class-identifier | Token-text */
                     pduDataStream.mark(1);
                     int messageClass = extractByteValue(pduDataStream);
+                    log("message calss is: " + messageClass);
 
                     if (messageClass >= PduHeaders.MESSAGE_CLASS_PERSONAL) {
                         /* Class-identifier */
@@ -733,7 +744,9 @@ public class PduParser {
      * @return parts in PduBody structure
      */
     protected static PduBody parseParts(ByteArrayInputStream pduDataStream) {
+        log("Begin to parse pdu parts.");
         if (pduDataStream == null) {
+            log("The pdu data stream is null.");
             return null;
         }
 
@@ -747,6 +760,7 @@ public class PduParser {
             int startPos = pduDataStream.available();
             if (startPos <= 0) {
                 // Invalid part.
+                log("No bytes remaining to be read from the input buffer ");
                 return null;
             }
 
@@ -777,10 +791,12 @@ public class PduParser {
             if (partHeaderLen > 0) {
                 if (false == parsePartHeaders(pduDataStream, part, partHeaderLen)) {
                     // Parse part header faild.
+                    log("parse pdu header failed.");
                     return null;
                 }
             } else if (partHeaderLen < 0) {
                 // Invalid length of content-type.
+                log("The content-type length is invalid");
                 return null;
             }
 
@@ -864,6 +880,7 @@ public class PduParser {
          * The maximum size of a uintvar is 32 bits.
          * So it will be encoded in no more than 5 octets.
          */
+        log("Begin to parse unsinged interger");
         assert(null != pduDataStream);
         int result = 0;
         int temp = pduDataStream.read();
@@ -882,7 +899,8 @@ public class PduParser {
 
         result = result << 7;
         result |= temp & 0x7F;
-
+        
+        log("result is: "+result);
         return result;
     }
 
@@ -901,6 +919,7 @@ public class PduParser {
          * Length = Uintvar-integer
          * Uintvar-integer = 1*5 OCTET
          */
+        log("Begin to parse value length.");
         assert(null != pduDataStream);
         int temp = pduDataStream.read();
         assert(-1 != temp);
@@ -969,6 +988,7 @@ public class PduParser {
      */
     protected static byte[] parseWapString(ByteArrayInputStream pduDataStream,
             int stringType) {
+        log("Begin to parse Text-String or Quoted-String.");
         assert(null != pduDataStream);
         /**
          * From wap-230-wsp-20010705-a.pdf
@@ -1145,9 +1165,11 @@ public class PduParser {
          * octet value with the most significant bit set to one (1xxx xxxx)
          * and with the value in the remaining least significant bits.
          */
+        log("Begin to parse Short-Integer.");
         assert(null != pduDataStream);
         int temp = pduDataStream.read();
         assert(-1 != temp);
+        log("temp = "+ temp);
         return temp & 0x7F;
     }
 
@@ -1168,6 +1190,7 @@ public class PduParser {
          * The minimum number of octets must be used to encode the value.
          * Short-length = <Any octet 0-30>
          */
+        log("Begin to parse Long-Integer.");
         assert(null != pduDataStream);
         int temp = pduDataStream.read();
         assert(-1 != temp);
@@ -1176,7 +1199,7 @@ public class PduParser {
         if (count > LONG_INTEGER_LENGTH_MAX) {
             throw new RuntimeException("Octet count greater than 8 and I can't represent that!");
         }
-
+        
         long result = 0;
 
         for (int i = 0 ; i < count ; i++) {
@@ -1185,7 +1208,7 @@ public class PduParser {
             result <<= 8;
             result += (temp & 0xFF);
         }
-
+        log("result = "+result);
         return result;
     }
 
@@ -1200,6 +1223,7 @@ public class PduParser {
          * From wap-230-wsp-20010705-a.pdf
          * Integer-Value = Short-integer | Long-integer
          */
+        log("Begin to parse Integer-Value");
         assert(null != pduDataStream);
         pduDataStream.mark(1);
         int temp = pduDataStream.read();
@@ -1452,6 +1476,7 @@ public class PduParser {
          * Content-general-form = Value-length Media-type
          * Media-type = (Well-known-media | Extension-Media) *(Parameter)
          */
+        log("Begin to parse content type");
         assert(null != pduDataStream);
 
         byte[] contentType = null;
@@ -1503,7 +1528,9 @@ public class PduParser {
             contentType =
                 (PduContentTypes.contentTypes[parseShortInteger(pduDataStream)]).getBytes();
         }
-
+        if(contentType != null){
+            log("content type length is: "+contentType.length);
+        }
         return contentType;
     }
 
@@ -1517,6 +1544,7 @@ public class PduParser {
      */
     protected static boolean parsePartHeaders(ByteArrayInputStream pduDataStream,
             PduPart part, int length) {
+        log("Begin to parse part headers.");
         assert(null != pduDataStream);
         assert(null != part);
         assert(length > 0);
@@ -1544,7 +1572,8 @@ public class PduParser {
             int header = pduDataStream.read();
             assert(-1 != header);
             lastLen--;
-
+            
+            log("Bytes available is: "+header);
             if (header > TEXT_MAX) {
                 // Number assigned headers.
                 switch (header) {
@@ -1712,7 +1741,7 @@ public class PduParser {
                 }
             }
         }
-
+        log("checkPartPosition. THE_LAST_PART ="+THE_LAST_PART);
         return THE_LAST_PART;
     }
 
@@ -1723,17 +1752,22 @@ public class PduParser {
      * @return true if the pdu has all of the mandatory headers, false otherwise.
      */
     protected static boolean checkMandatoryHeader(PduHeaders headers) {
+        log("Check mandatory header.");
         if (null == headers) {
+            log("headers is null.");
             return false;
         }
 
         /* get message type */
         int messageType = headers.getOctet(PduHeaders.MESSAGE_TYPE);
+        
+        log("message type is: "+messageType);
 
         /* check Mms-Version field */
         int mmsVersion = headers.getOctet(PduHeaders.MMS_VERSION);
         if (0 == mmsVersion) {
             // Every message should have Mms-Version field.
+            log("mms version = " + mmsVersion);
             return false;
         }
 
@@ -1777,11 +1811,13 @@ public class PduParser {
                 // Content-Location field.
                 byte[] niContentLocation = headers.getTextString(PduHeaders.CONTENT_LOCATION);
                 if (null == niContentLocation) {
+                    log("The content location is null.");
                     return false;
                 }
 
                 // Expiry field.
                 long niExpiry = headers.getLongInteger(PduHeaders.EXPIRY);
+                log("niExpiry = "+niExpiry);
                 if (-1 == niExpiry) {
                     return false;
                 }
@@ -1789,11 +1825,13 @@ public class PduParser {
                 // Message-Class field.
                 byte[] niMessageClass = headers.getTextString(PduHeaders.MESSAGE_CLASS);
                 if (null == niMessageClass) {
+                    log("message class is null.");
                     return false;
                 }
 
                 // Message-Size field.
                 long niMessageSize = headers.getLongInteger(PduHeaders.MESSAGE_SIZE);
+                log("message size is: "+niMessageSize);
                 if (-1 == niMessageSize) {
                     return false;
                 }
@@ -1801,6 +1839,7 @@ public class PduParser {
                 // Transaction-Id field.
                 byte[] niTransactionId = headers.getTextString(PduHeaders.TRANSACTION_ID);
                 if (null == niTransactionId) {
+                    log("transactionInd is null");
                     return false;
                 }
 
@@ -1809,12 +1848,14 @@ public class PduParser {
                 // Status field.
                 int nriStatus = headers.getOctet(PduHeaders.STATUS);
                 if (0 == nriStatus) {
+                    log("status filed is 0.");
                     return false;
                 }
 
                 // Transaction-Id field.
                 byte[] nriTransactionId = headers.getTextString(PduHeaders.TRANSACTION_ID);
                 if (null == nriTransactionId) {
+                    log("Transaction-Id filed is null.");
                     return false;
                 }
 
@@ -1823,11 +1864,13 @@ public class PduParser {
                 // Content-Type field.
                 byte[] rcContentType = headers.getTextString(PduHeaders.CONTENT_TYPE);
                 if (null == rcContentType) {
+                    log("Content-Type field is null");
                     return false;
                 }
 
                 // Date field.
                 long rcDate = headers.getLongInteger(PduHeaders.DATE);
+                log("Date filed is: "+ rcDate);
                 if (-1 == rcDate) {
                     return false;
                 }
