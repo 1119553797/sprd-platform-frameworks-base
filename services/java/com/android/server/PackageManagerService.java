@@ -4069,7 +4069,7 @@ class PackageManagerService extends IPackageManager.Stub {
 
     void removePackageLI(PackageParser.Package pkg, boolean chatty) {
         if (chatty && Config.LOGD) Log.d(
-            TAG, "Removing package " + pkg.applicationInfo.packageName );
+            TAG, "Removing package " + pkg.applicationInfo.packageName);
 
         synchronized (mPackages) {
             clearPackagePreferredActivitiesLP(pkg.packageName);
@@ -6616,9 +6616,12 @@ class PackageManagerService extends IPackageManager.Stub {
         Runtime.getRuntime().gc();
         // Delete the resources here after sending the broadcast to let
         // other processes clean up before deleting resources.
-        if (info.args != null) {
-            synchronized (mInstallLock) {
-                info.args.doPostDeleteLI(deleteCodeAndResources);
+        if (!mAppToMyApppackagePath.contains(packageName)
+                && !mAppToSyspackagePath.contains(packageName)) {
+            if (info.args != null) {
+                synchronized (mInstallLock) {
+                    info.args.doPostDeleteLI(deleteCodeAndResources);
+                }
             }
         }
         return res;
@@ -6739,6 +6742,29 @@ class PackageManagerService extends IPackageManager.Stub {
 				killApplication(p.packageName, p.applicationInfo.uid);
                 boolean ret = deleteInstalledPackageLI(p, true, flags, outInfo,
                         writeSettings);
+                final PackageRemovedInfo newInfo = outInfo;
+                synchronized (mPackages) {
+                    mSettings.disableSystemPackageLP(p.packageName);
+                    mSettings.writeLP();
+                }
+                Bundle extras = new Bundle(1);
+                if (p.applicationInfo != null) {
+                    extras.putInt(Intent.EXTRA_UID, p.applicationInfo.uid);
+                    extras.putBoolean(Intent.EXTRA_DATA_REMOVED, true);
+                    sendPackageBroadcast(Intent.ACTION_PACKAGE_REMOVED,
+                            p.applicationInfo.packageName, extras, new IIntentReceiver.Stub() {
+                                public void performReceive(Intent intent, int resultCode, String data,
+                                        Bundle extras,
+                                        boolean ordered, boolean sticky) throws RemoteException {
+                                    Runtime.getRuntime().gc();
+                                    if (newInfo.args != null) {
+                                        synchronized (mInstallLock) {
+                                            newInfo.args.doPostDeleteLI(true);
+                                        }
+                                    }
+                                }
+                            });
+                }
 
                 synchronized (mPackages) {
                     // Reinstate the old system package
@@ -6747,14 +6773,6 @@ class PackageManagerService extends IPackageManager.Stub {
                     NativeLibraryHelper
                             .removeNativeBinariesLI(p.applicationInfo.nativeLibraryDir);
                 }
-
-				Bundle extras = new Bundle(1);
-				if (p.applicationInfo != null) {
-					extras.putInt(Intent.EXTRA_UID, p.applicationInfo.uid);
-					extras.putBoolean(Intent.EXTRA_DATA_REMOVED, true);
-					sendPackageBroadcast(Intent.ACTION_PACKAGE_REMOVED,
-							p.applicationInfo.packageName, extras, null);
-				}
 
                if (isMyApp(p)) {
                     scanDirLI(mMyInstallDir, PackageParser.PARSE_IS_MYAPP,
@@ -6772,13 +6790,16 @@ class PackageManagerService extends IPackageManager.Stub {
         }
         // Delete the updated package
         outInfo.isRemovedPackageSystemUpdate = true;
-        if (ps.versionCode < p.mVersionCode) {
-            // Delete data for downgrades
-            flags &= ~PackageManager.DONT_DELETE_DATA;
-        } else {
-            // Preserve data by setting flag
-            flags |= PackageManager.DONT_DELETE_DATA;
+        if (mMediaMounted) {
+            if (ps.versionCode < p.mVersionCode) {
+                // Delete data for downgrades
+                flags &= ~PackageManager.DONT_DELETE_DATA;
+            } else {
+                // Preserve data by setting flag
+                flags |= PackageManager.DONT_DELETE_DATA;
+            }
         }
+
 		if (isMyApp(p) || isAppToSysApp(p)) {
 			killApplication(p.packageName, p.applicationInfo.uid);
 		}
@@ -6791,6 +6812,32 @@ class PackageManagerService extends IPackageManager.Stub {
             Slog.w(TAG,"Do not restore system package");
             return true;
         }
+        if (isMyApp(p) || isAppToSysApp(p)) {
+            final PackageRemovedInfo newInfo = outInfo;
+            synchronized (mPackages) {
+                mSettings.disableSystemPackageLP(p.packageName);
+                mSettings.writeLP();
+            }
+            Bundle extras = new Bundle(1);
+            if (p.applicationInfo != null) {
+                extras.putInt(Intent.EXTRA_UID, p.applicationInfo.uid);
+                extras.putBoolean(Intent.EXTRA_DATA_REMOVED, true);
+                sendPackageBroadcast(Intent.ACTION_PACKAGE_REMOVED,
+                        p.applicationInfo.packageName, extras, new IIntentReceiver.Stub() {
+                            public void performReceive(Intent intent, int resultCode, String data,
+                                    Bundle extras,
+                                    boolean ordered, boolean sticky) throws RemoteException {
+                                Runtime.getRuntime().gc();
+                                if (newInfo.args != null) {
+                                    synchronized (mInstallLock) {
+                                        newInfo.args.doPostDeleteLI(true);
+                                    }
+                                }
+                            }
+                        });
+            }
+        }
+
         synchronized (mPackages) {
             // Reinstate the old system package
             mSettings.enableSystemPackageLP(p.packageName);
@@ -6917,11 +6964,13 @@ class PackageManagerService extends IPackageManager.Stub {
             }
             
             //when format Sd card,this opration must be excute
-            if(mAppToSDpackagePath.contains(p.packageName)){
-                mAppToSDpackagePath.remove(p.packageName);
-                writeAppPathConfig(mAppToSDpackagePath,
-                        PackageParser.PARSE_IS_PROLOADAPP);
-                
+            if (mAppToSDpackagePath.contains(p.packageName)) {
+                if (reInstall) {
+                    mAppToSDpackagePath.remove(p.packageName);
+                    writeAppPathConfig(mAppToSDpackagePath,
+                            PackageParser.PARSE_IS_PROLOADAPP);
+
+                }
                 outInfo.isRemovedPackageSystemUpdate = true;
                 if (ps != null && mMediaMounted) {
                     if (ps.versionCode < p.mVersionCode) {
@@ -10392,6 +10441,7 @@ class PackageManagerService extends IPackageManager.Stub {
        // Collection of packages on external media with valid containers.
        HashMap<SdInstallArgs, String> processCids = new HashMap<SdInstallArgs, String>();
        // Get list of secure containers.
+       HashSet<String> removePkgName = new HashSet<String>();
        final String list[] = PackageHelper.getSecureContainerList();
        if (list == null || list.length == 0) {
            Log.i(TAG, "No secure containers on sdcard");
@@ -10440,12 +10490,13 @@ class PackageManagerService extends IPackageManager.Stub {
 							}
 
 							killApplication(pkgName, oldPkg.applicationInfo.uid);
-							// Remove existing system package
-							removePackageLI(oldPkg, true);
-							synchronized (mPackages) {
-								mSettings.enableSystemPackageLP(pkgName);
-								mSettings.writeLP();
-							}
+                            // Remove existing system package
+                            removePackageLI(oldPkg, true);
+                            synchronized (mPackages) {
+                                mSettings.disableSystemPackageLP(pkgName);
+                                mSettings.writeLP();
+                            }
+                            removePkgName.add(pkgName);
 
 							processCids.put(args, args.getCodePath());
 						}
@@ -10460,6 +10511,22 @@ class PackageManagerService extends IPackageManager.Stub {
                    }
                }
            }
+            for (String rmPkgName : removePkgName) {
+                PackageParser.Package rmPkg;
+                synchronized (mPackages) {
+                    PackageSetting psInner = mSettings.mPackages.get(rmPkgName);
+                    rmPkg = psInner.pkg;
+                }
+
+                Bundle extras = new Bundle(1);
+                if (rmPkg.applicationInfo != null) {
+                    extras.putInt(Intent.EXTRA_UID, rmPkg.applicationInfo.uid);
+                    extras.putBoolean(Intent.EXTRA_DATA_REMOVED, true);
+                    sendPackageBroadcast(Intent.ACTION_PACKAGE_REMOVED,
+                            rmPkg.applicationInfo.packageName, extras, null);
+                }
+            }
+            removePkgName.clear();
 
            if (num > 0) {
                // Sort uid list
