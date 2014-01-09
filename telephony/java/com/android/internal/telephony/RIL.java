@@ -318,7 +318,8 @@ public abstract class RIL extends BaseCommands implements CommandsInterface {
         Log.d(LOG_TAG, " responseOperatorString tmpMccMnc = " + tmpMccMnc);
 
         if (((response[index] == null) && (response[index + 1] == null)) 
-               || tmpMccMnc.equals("40522")) {
+               || tmpMccMnc.equals("40522")
+               || response[index + 2].equals(response[index])) {
             Log.d(LOG_TAG, "before getCarrierNameByNumeric");
 
             response[index] = getCarrierNameByNumeric(tmpMccMnc);
