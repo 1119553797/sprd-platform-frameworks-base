@@ -46,6 +46,7 @@ import android.telephony.PhoneNumberUtils;
 import android.telephony.SmsManager;
 import android.telephony.SmsMessage;
 import android.telephony.TelephonyManager;
+import android.text.TextUtils;
 import android.util.Config;
 import android.util.Log;
 
@@ -316,8 +317,7 @@ public abstract class RIL extends BaseCommands implements CommandsInterface {
         String tmpMccMnc = "";
         tmpMccMnc = mcc + mncShort;
         Log.d(LOG_TAG, " responseOperatorString tmpMccMnc = " + tmpMccMnc);
-
-        if (((response[index] == null) && (response[index + 1] == null)) 
+        if ((TextUtils.isEmpty(response[index]) && TextUtils.isEmpty(response[index + 1]))
                || tmpMccMnc.equals("40522")
                || response[index + 2].equals(response[index])) {
             Log.d(LOG_TAG, "before getCarrierNameByNumeric");
