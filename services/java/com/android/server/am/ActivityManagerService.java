@@ -13629,27 +13629,9 @@ public final class ActivityManagerService extends ActivityManagerNative
         if (func == ActivityManager.KILL_STOP_FRONT_APP
             && curProcCanKill()) {
             int pid = mMainStack.mResumedActivity.app.pid;
-            Slog.d(TAG, "KILL_STOP_FRONT_APP.activity=" + mMainStack.mResumedActivity.packageName + " pid: " + pid + " HOME_APP_ADJ: " + HOME_APP_ADJ);
-            boolean hasBackApp = false;
-            for(ProcessRecord pr :  mLruProcesses) {
-                if(pr.thread != null && pr.curAdj >= HOME_APP_ADJ) {
-                    hasBackApp = true;
-                    break;
-                }
-            }
-            if(mSystemUiIsAlive && hasBackApp) {
-                Process.sendSignal(pid, Process.SINGLE_STOP);
-                if (!mHandler.hasMessages(KILL_STOP_TIMEOUT)) {
-                    Slog.d(TAG, "send kill_stop_timeout");
-                    mIsKillStop = true;
-                    mStopingPid = pid;
-                    Message msg = mHandler.obtainMessage(KILL_STOP_TIMEOUT);
-                    mHandler.sendMessageDelayed(msg, KILL_STOP_TIMEOUT_DELAY);
-                }
-            } else {
-                Slog.w(TAG, "kill the front app anyway");
-                Process.killProcessQuiet(pid);
-            }
+            Slog.d(TAG, "KILL_STOP_FRONT_APP.activity=" + mMainStack.mResumedActivity.packageName + " pid: " + pid + " kill the proc");
+            Process.killProcessQuiet(pid);
+            mIsKillStop = true;
         } else if (func == ActivityManager.KILL_CONT_STOPPED_APP) {
             Slog.w(TAG, "KILL_CONT_STOPPED_APP.mStopingPid=" + mStopingPid);
             mIsKillStop = false;
