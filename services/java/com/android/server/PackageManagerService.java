@@ -1011,8 +1011,7 @@ class PackageManagerService extends IPackageManager.Stub {
                     if ((ps.pkgFlags & ApplicationInfo.FLAG_SYSTEM) != 0
                             && !mPackages.containsKey(ps.name)
                             && !mSettings.mDisabledSysPackages
-                                    .containsKey(ps.name)
-                                    &&!isGMSApp(ps.name)) {
+                                    .containsKey(ps.name)) {
                         psit.remove();
                         String msg = "System package " + ps.name
                                 + " no longer exists; wiping its data";
@@ -3214,12 +3213,6 @@ class PackageManagerService extends IPackageManager.Stub {
 					PackageParser.PARSE_IS_PROLOADAPP_SYS);
 		}
 
-        if (isGMSApp(pkg.packageName)) {
-            Log.v(TAG, "google play");
-            parseFlags |= PackageParser.PARSE_IS_SYSTEM;
-            pkg.applicationInfo.flags |= ApplicationInfo.FLAG_SYSTEM;
-        }
-
         if (pkg.packageName.equals("android")) {
             synchronized (mPackages) {
                 if (mAndroidApplication != null) {
@@ -3438,11 +3431,6 @@ class PackageManagerService extends IPackageManager.Stub {
 
             pkg.applicationInfo.uid = pkgSetting.userId;
             pkg.mExtras = pkgSetting;
-
-            if (isGMSApp(pkg.packageName)) {
-                Log.v(TAG, "google play");
-                pkg.applicationInfo.uid = 1000;
-            }
 
             if (!verifySignaturesLP(pkgSetting, pkg)) {
                 if ((parseFlags&PackageParser.PARSE_IS_SYSTEM_DIR) == 0) {
@@ -4385,9 +4373,7 @@ class PackageManagerService extends IPackageManager.Stub {
                 } else {
                     allowed = false;
                 }
-                if (isGMSApp(pkg.packageName)) {
-                    allowed = true;
-                }
+
                 if (false) {
                     if (gp != ps) {
                         Log.i(TAG, "Package " + pkg.packageName + " granting " + perm);
@@ -6935,7 +6921,7 @@ class PackageManagerService extends IPackageManager.Stub {
             return false;
         }
         boolean ret = false;
-        if ((!isGMSApp(packageName)) && (isSystemApp(p)||isMyApp(p) || isAppToSysApp(p))) {
+        if (isSystemApp(p)||isMyApp(p) || isAppToSysApp(p)) {
             Log.i(TAG, "Removing system package:"+p.packageName);
             // When an updated system application is deleted we delete the existing resources as well and
             // fall back to existing code in system partition
