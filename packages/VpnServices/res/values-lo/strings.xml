@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 <string name="app_label">"ສະເພາະເຊີເວີ້ເຄື່ອຄ່າຍບໍລິການ"</string>
-<string name="vpn_notification_title_connected">"VPN&amp;amp;lt;xliff:g id=profilename&amp;amp;gt;%s&amp;amp;lt;/xliff:g&amp;amp;gt;ໄດເຊື່ອມຕໍ່"</string>
-<string name="vpn_notification_title_disconnected">"VPN&amp;amp;lt;xliff:g id=profilename&amp;amp;gt;%s&amp;amp;lt;/xliff:g&amp;amp;gt;ໄດ້ຂາດການເຊື່ອມຕໍ່"</string>
+<string name="vpn_notification_title_connected">"VPN<xliff:g id="profilename">%s</xliff:g>ໄດເຊື່ອມຕໍ່"</string>
+<string name="vpn_notification_title_disconnected">"VPN<xliff:g id="profilename">%s</xliff:g>ໄດ້ຂາດການເຊື່ອມຕໍ່"</string>
 <string name="vpn_notification_hint_disconnected">"ສໍາຜັດເບົາໆສາມາດເຊື່ອມຕໍ່ໄປຍັງເຄື່ອຄ່າຍສ່ວນຕົວສະເພາະ."</string>
 </resources>
