@@ -269,7 +269,7 @@
     <string name="permlab_signalPersistentProcesses">অ্যাপ্লিকেশনের জন্য Linux সংকেত প্রেরণ</string>
     <string name="permdesc_signalPersistentProcesses">একটি অ্যাপ্লিকেশনের যে সরবরাহ সংকেত  ক্রমাগত প্রসেস থেকে পাঠানো অনুরোধ করতে পারবেন.</string>
     <string name="permlab_persistentActivity">করা আবেদন সবসময় চালানো</string>
-    <string name="permdesc_persistentActivity">"একটি আবেদন নিজেই অংশ ক্রমাগত করে, তাই সিস্টেম অন্যান্য অ্যাপ্লিকেশনের জন্য 'এটি ব্যবহার করতে পারে না."</string>
+    <string name="permdesc_persistentActivity">"একটি আবেদন নিজেই অংশ ক্রমাগত করে, তাই সিস্টেম অন্যান্য অ্যাপ্লিকেশনের জন্য \'এটি ব্যবহার করতে পারে না."</string>
     <string name="permlab_deletePackages">অ্যাপ্লিকেশন মুছে ফেলা</string>
     <string name="permdesc_deletePackages">একটি আবেদন অ্যান্ড্রয়েড প্যাকেজ মুছে ফেলতে পারবে. অনিষ্টকারী অ্যাপ্লিকেশনের ক্ষেত্রে গুরুত্বপূর্ণ অ্যাপ্লিকেশন মুছে ফেলার কাজে এই ব্যবহার করা যাবে .</string>
     <string name="permlab_clearAppUserData">অন্যান্য অ্যাপ্লিকেশন \তথ্য মুছে ফেলা হোক</string>
@@ -756,7 +756,7 @@
     <string name="select_character">অক্ষর ঢোকান</string>
     <string name="sms_control_default_app_name">অজানা অ্যাপ্লিকেশন</string>
     <string name="sms_control_title">SMS বার্তা প্রেরণ</string>
-    <string name="sms_control_message">"একটি বড় আকার SMS বার্তা প্রেরিত হয়. \ "ঠিক আছে \" অগ্রসর হন অথবা \ "বাতিল \" প্রেরণ বন্ধ  'করার জন্য নির্বাচন করুন."</string>
+    <string name="sms_control_message">"একটি বড় আকার SMS বার্তা প্রেরিত হয়. \ "ঠিক আছে \" অগ্রসর হন অথবা \ "বাতিল \" প্রেরণ বন্ধ  \'করার জন্য নির্বাচন করুন."</string>
     <string name="date_time_set">সেট</string>
     <string name="no_permissions">কোন প্রয়োজন অনুমতি নেই</string>
     <string name="usb_storage_activity_title">USB মাস স্টোরেজ</string>
@@ -880,7 +880,7 @@
     <string name="permlab_changeWimaxState">WiMAX অবস্থা পরিবর্তন</string>
     <string name="permdesc_changeWimaxState">একটি আবেদন সংযোগ স্থাপন করতে সক্ষম
        এবং WiMAX নেটওয়ার্ক থেকে বিযুক্ত করা.</string>
-    <string name="permlab_nfc">"নিয়ার ফিল্ড কমিউনিকেশন 'নিয়ন্ত্রণ"</string>
+    <string name="permlab_nfc">"নিয়ার ফিল্ড কমিউনিকেশন \'নিয়ন্ত্রণ"</string>
     <string name="permdesc_nfc">একটি আবেদন যোগাযোগ করতে সক্ষম হবেন
        সঙ্গে নিয়ার ফিল্ড কমিউনিকেশন (NFC) ট্যাগ, কার্ড, এবং পাঠকদের.</string>
     <string name="permdesc_disableKeyguard">একটি আবেদন কীলক এবং সংযুক্ত পাসওয়ার্ড নিরাপত্তা নিষ্ক্রিয় করতে পারবেন. এই বৈধ উদাহরণ হল ফোন কীলক  নিষ্ক্রিয় যখন একটি অন্তর্মুখী ফোন, তারপর কীলক  যখন কল সমাপ্ত হয় পুনরায় সক্রিয় গ্রহণ.</string>

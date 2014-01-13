@@ -1030,5 +1030,5 @@
   <string name="upload_file_size_too_large">Il caricamento del file è troppo grande, dividilo in file di piccole dimensioni per favore</string>
   <string name="lockscreen_pin_locked_message">Carta SIM/USIM bloccata.</string>
   <string name="cant_open_airplane_mode_when_phone_busy">Impossibile aprire la modalità aereo, il telefono è occupato.</string>
-  <string name="staticip_invalid">"Errore nell'impostazione dell'IP statico, disabilita la configurazione dell'IP statico"</string>
+  <string name="staticip_invalid">"Errore nell\'impostazione dell\'IP statico, disabilita la configurazione dell\'IP statico"</string>
 </resources>

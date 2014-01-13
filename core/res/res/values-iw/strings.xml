@@ -976,8 +976,8 @@
   <string name="reenter">הזן מחדש את קוד ה-PIN</string>
   <string name="lockscreen_blocked_sim_message_short">כרטיס SIM חסום.</string>
   <string name="crash_title">סליחה!</string>
-  <string name="crash_application">היישום &amp;amp;lt;xliff:g id=application&amp;amp;gt;%1$s&amp;amp;lt;/xliff:g&amp;amp;gt; ( תהליך &amp;amp;lt;xliff:g id=process&amp;amp;gt;%2$s&amp;amp;lt;/xliff:g&amp;amp;gt;) הופסק באופן בלתי צפוי. המערכת לא הצליחה לתקן את השגיאה. אנא השתמשו בתוכנה אחרת.</string>
-  <string name="crash_process">התהליך &amp;amp;lt;xliff:g id=process&amp;amp;gt;%1$s&amp;amp;lt;/xliff:g&amp;amp;gt; הופסק באופן בלתי צפוי. המערכת לא הצליחה לתקן את השגיאה. אנא השתמשו בתוכנה אחרת.</string>
+  <string name="crash_application">היישום <xliff:g id="application">%1$s</xliff:g> ( תהליך <xliff:g id="process">%2$s</xliff:g>) הופסק באופן בלתי צפוי. המערכת לא הצליחה לתקן את השגיאה. אנא השתמשו בתוכנה אחרת.</string>
+  <string name="crash_process">התהליך <xliff:g id="process">%1$s</xliff:g> הופסק באופן בלתי צפוי. המערכת לא הצליחה לתקן את השגיאה. אנא השתמשו בתוכנה אחרת.</string>
   <string name="crash_close">אישור</string>
   <string name="volume_fm">עוצמת קול FM</string>
   <string name="volume_music_hint_silent_sim1_ringtone_selected">נבחר צלצול שקט עבור SIM1</string>
@@ -1013,7 +1013,7 @@
   <string name="custom_china_unicom">China Unicom</string>
   <string name="charge_active_notification_message">מצב טעינה בלבד פעיל</string>
   <string name="charge_active_notification_title">השתמש בטעינה רק כאשר USB מחובר</string>
-  <string name="shutdown_after_seconds">הטלפון יכבה בעוד &amp;amp;lt;xliff:g id=NUMBER&amp;amp;gt;%d&amp;amp;lt;/xliff:g&amp;amp;gt; שניות</string>
+  <string name="shutdown_after_seconds">הטלפון יכבה בעוד <xliff:g id="NUMBER">%d</xliff:g> שניות</string>
   <string name="lockscreen_password_error">הסיסמה שגויה, נסו שנית!</string>
   <string name="lockscreen_too_many_password_failed_attempts_dialog_message">הכנסת באופן שגוי את סיסמת הנעילה שלך<xliff:g id="number">%d</xliff:g> פעמים.n\n\ תנסה שוב בעוד<xliff:g id="number">%d</xliff:g>שניות.</string>
   <string name="audio_play_failed">סליחה, אודיו זה לא ניתן לנגן. אל\ תגדיר את הצלצול הזה.</string>

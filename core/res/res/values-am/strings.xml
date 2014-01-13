@@ -2,7 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 <string name="address_length">"የአድራሻው ጽሁፍ የተፈቀደው መጠን ላይ ደርሷል"</string>
 <string name="fileSizeSuffix">"<xliff:g id="NUMBER">%1$s</xliff:g><xliff:g id="UNIT">%2$s</xliff:g>"</string>
-<string name="untitled">"&amp;amp;amp;amp;lt;ያልተሰየመ&amp;amp;amp;amp;gt;"</string>
+<string name="untitled">"&lt;ያልተሰየመ&gt;"</string>
 <string name="ellipsis">"\u2026"</string>
 <string name="emptyPhoneNumber">"(ስልክ ቁጥር የለም)"</string>
 <string name="unknownName">"(ያልታወቀ)"</string>
@@ -754,7 +754,7 @@
 <string name="capital_off">"አጥፋ"</string>
 <string name="whichApplication">"ድርጊቱን"</string>
 <string name="alwaysUse">"ለዚህ እርምጃ ነባሪ ተጠቀም"</string>
-<string name="clearDefaultHintMsg">"የቤት ውስጥ ነባሪዎች ቅንብሮችን አጽዳ &amp;amp;amp;amp;gt; መተግበሪያዎች &amp;amp;amp;amp;gt; መተግበሪያዎችን አስተዳድር፡፡"</string>
+<string name="clearDefaultHintMsg">"የቤት ውስጥ ነባሪዎች ቅንብሮችን አጽዳ &amp;gt; መተግበሪያዎች &amp;gt; መተግበሪያዎችን አስተዳድር፡፡"</string>
 <string name="chooseActivity">"ድርጊት ምረጥ"</string>
 <string name="chooseUsbActivity">"ለUSB መሳሪያዎች መተግበሪያ ምረጥ"</string>
 <string name="noApplications">"ምንም መተግበሪያ ይህንን መስራት አይችልም ፡፡"</string>

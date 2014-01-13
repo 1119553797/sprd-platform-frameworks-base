@@ -610,7 +610,7 @@
   <string name="keyguard_sim1_pin_accepted">SIM1 ที่ประสบความสำเร็จปลดล็อกขา</string>
   <string name="keyguard_sim2_pin_accepted">ปลดบล็อค PIN ของซิม2 แล้ว</string>
   <string name="keyguard_sim_pin_accepted">PIN ของซิมได้รับการปลดบล็อคแล้วเรียบร้อย</string>
-  <string name="puk_accept">"ยอมรับ 'PUK"</string>
+  <string name="puk_accept">"ยอมรับ \'PUK"</string>
   <string name="unblocking_fail">ปลดบล๊อคล้มเหลวป้อนรหัส PUK</string>
   <string name="keyguard_password_wrong_puk_code">PUK code!ไม่ถูกต้อง</string>
   <string name="new_pin">ใส่ PINใหม่</string>
