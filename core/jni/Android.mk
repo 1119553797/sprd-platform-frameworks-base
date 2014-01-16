@@ -1,4 +1,3 @@
-ifeq ($(strip $(SPRDROID4.0_DEV)),true)
 LOCAL_PATH:= $(call my-dir)
 include $(CLEAR_VARS)
 
@@ -245,4 +244,3 @@ LOCAL_MODULE:= libandroid_runtime
 include $(BUILD_SHARED_LIBRARY)
 
 include $(call all-makefiles-under,$(LOCAL_PATH))
-endif

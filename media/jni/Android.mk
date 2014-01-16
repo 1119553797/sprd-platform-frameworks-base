@@ -1,4 +1,3 @@
-ifeq ($(strip $(SPRDROID4.0_DEV)),true)
 LOCAL_PATH:= $(call my-dir)
 include $(CLEAR_VARS)
 
@@ -56,4 +55,3 @@ include $(BUILD_SHARED_LIBRARY)
 # build libsoundpool.so
 # build libaudioeffect_jni.so
 include $(call all-makefiles-under,$(LOCAL_PATH))
-endif
